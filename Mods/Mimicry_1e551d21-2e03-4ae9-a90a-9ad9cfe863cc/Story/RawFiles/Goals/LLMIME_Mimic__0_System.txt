@@ -1,0 +1,325 @@
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+LLMIME_Mime_InitSettings();
+
+//DB_LLMIME_Mime_BlockedSkillTypes(_SkillType, _GlobalFlag, _EnabledState)
+//DB_LLMIME_Mime_BlockedSkills(_Skill)
+//DB_LLMIME_Mime_BlockedSkillElements(_SkillType, _SkillElement)
+//DB_LLMIME_Mime_BlockedSkillPrefixes(_Prefix)
+KBSECTION
+//REGION SETTINGS
+PROC
+LLMIME_Mime_InitSettings()
+THEN
+DB_LLMIME_Mime_BlockedSkillTypes("Path", "Mimicry_Mimic_SkillType_Path_Enabled", 1);
+DB_LLMIME_Mime_BlockedSkillTypes("Summon", "Mimicry_Mimic_SkillType_Summons_Enabled", 1);
+DB_LLMIME_Mime_BlockedSkillElements("Shout", ""); // Special type shout skills, typically used for toggle abilities in mods
+DB_LLMIME_Mime_BlockedSkills("Shout_FavourableWind");
+DB_LLMIME_Mime_BlockedSkillPrefixes("_CA_");
+//END_REGION
+
+//REGION BLACKLIST_CHECK
+QRY
+LLMIME_QRY_SkillIsNotBlocked((STRING)_Skill)
+AND
+NOT DB_LLMIME_Mime_BlockedSkills(_Skill)
+AND
+NOT DB_LLMIME_SkillData(_Skill, _, _)
+THEN
+DB_NOOP(1);
+
+QRY
+LLMIME_QRY_SkillIsNotBlocked((STRING)_Skill)
+AND
+NOT DB_LLMIME_Mime_BlockedSkills(_Skill)
+AND
+DB_LLMIME_SkillData(_Skill, _SkillType, _SkillElement)
+AND
+LLMIME_QRY_Internal_BlockedSkillTypeIsEnabled(_SkillType)
+AND
+NOT DB_LLMIME_Mime_BlockedSkillElements(_SkillType, _SkillElement)
+AND
+NOT LLMIME_QRY_Internal_SkillNameMatchesBlocked(_Skill)
+THEN
+DB_NOOP(1);
+
+QRY
+LLMIME_QRY_Internal_BlockedSkillTypeIsEnabled((STRING)_SkillType)
+AND
+DB_LLMIME_Mime_BlockedSkillTypes(_SkillType, _GlobalFlag, _EnabledState)
+AND
+GlobalGetFlag(_GlobalFlag, _EnabledState)
+THEN
+DB_NOOP(1);
+
+QRY
+LLMIME_QRY_Internal_BlockedSkillTypeIsEnabled((STRING)_SkillType)
+AND
+NOT DB_LLMIME_Mime_BlockedSkillTypes(_SkillType, _, _)
+THEN
+DB_NOOP(1);
+
+QRY
+LLMIME_QRY_Internal_SkillNameMatchesBlocked((STRING)_Skill)
+AND
+DB_LLMIME_Mime_BlockedSkillPrefixes(_Prefix)
+AND
+StringContains(_Skill, _Prefix, 1)
+THEN
+DB_NOOP(1);
+//END_REGION
+
+//REGION CHECK_QUERIES
+QRY
+LLMIME_QRY_Mime_CanMimicCharacter((CHARACTERGUID)_Character, (CHARACTERGUID)_Mime)
+AND
+_Character != _Mime
+AND
+NOT LLMIME_QRY_CharacterIsAMime(_Character) // Endless loops are bad!
+AND
+LLMIME_QRY_Mime_CombatConditionsMet(_Character, _Mime)
+AND
+LLMIME_QRY_Mime_PartyConditionsMet(_Character, _Mime)
+AND
+LLMIME_QRY_Mime_CanMimicSummon(_Character)
+THEN
+DB_NOOP(1);
+
+QRY
+LLMIME_QRY_Mime_CombatConditionsMet((CHARACTERGUID)_Character, (CHARACTERGUID)_Mime)
+AND
+GlobalGetFlag("Mimicry_Mimic_CombatOnlyDisabled", 1)
+THEN
+DB_NOOP(1);
+
+QRY
+LLMIME_QRY_Mime_CombatConditionsMet((CHARACTERGUID)_Character, (CHARACTERGUID)_Mime)
+AND
+NOT GlobalGetFlag("Mimicry_Mimic_CombatOnlyDisabled", 1)
+AND
+DB_LeaderLib_Combat_Objects(_CombatID, _Character)
+AND
+DB_LeaderLib_Combat_Objects(_CombatID, _Mime) // Same combat as the target to copy
+THEN
+DB_NOOP(1);
+
+QRY
+LLMIME_QRY_Mime_PartyConditionsMet((CHARACTERGUID)_Character, (CHARACTERGUID)_Mime)
+AND
+GlobalGetFlag("Mimicry_Mimic_PartyOnlyDisabled", 1)
+THEN
+DB_NOOP(1);
+
+QRY
+LLMIME_QRY_Mime_PartyConditionsMet((CHARACTERGUID)_Character, (CHARACTERGUID)_Mime)
+AND
+NOT GlobalGetFlag("Mimicry_Mimic_PartyOnlyDisabled", 1)
+AND
+CharacterIsInPartyWith(_Character, _Mime, 1)
+THEN
+DB_NOOP(1);
+
+QRY
+LLMIME_QRY_Mime_CanMimicSummon((CHARACTERGUID)_Character)
+AND
+CharacterIsSummon(_Character, 0)
+THEN
+DB_NOOP(1);
+
+QRY
+LLMIME_QRY_Mime_CanMimicSummon((CHARACTERGUID)_Character)
+AND
+CharacterIsSummon(_Character, 1)
+AND
+GlobalGetFlag("Mimicry_Mimic_CopySummonedCreatureSkills_Enabled", 1)
+THEN
+DB_NOOP(1);
+
+QRY
+LLMIME_QRY_Mime_CanMimicSourceSkill((STRING)_Skill)
+AND
+IsSourceSkill(_Skill, 0)
+THEN
+DB_NOOP(1);
+
+QRY
+LLMIME_QRY_Mime_CanMimicSourceSkill((STRING)_Skill)
+AND
+IsSourceSkill(_Skill, 1)
+AND
+GlobalGetFlag("Mimicry_Mimic_CopySourceSkills_Enabled", 1)
+THEN
+DB_NOOP(1);
+
+QRY
+LLMIME_QRY_Mime_CanMimicSkill((STRING)_Skill)
+AND
+LLMIME_QRY_Mime_CanMimicSourceSkill(_Skill)
+AND
+LLMIME_QRY_SkillIsNotBlocked(_Skill)
+THEN
+DB_NOOP(1);
+
+QRY
+LLMIME_QRY_Mime_CharacterIsMimickable((CHARACTERGUID)_Character)
+AND
+CharacterIsPlayer(_Character, 1)
+THEN
+DB_NOOP(1);
+
+QRY
+LLMIME_QRY_Mime_CharacterIsMimickable((CHARACTERGUID)_Character)
+AND
+CharacterIsPlayer(_Character, 0)
+AND
+CharacterIsSummon(_Character, 1)
+AND
+GlobalGetFlag("Mimicry_Mimic_CopySummonedCreatureSkills_Enabled", 1)
+AND
+CharacterGetOwner(_Character, _Owner)
+AND
+CharacterIsPlayer(_Owner, 1)
+THEN
+DB_NOOP(1);
+
+QRY
+LLMIME_QRY_Mime_CasterAndTargetMatch((CHARACTERGUID)_Character, (GUIDSTRING)_Target, (STRING)_SkillType)
+AND
+_SkillType == "Shout"
+THEN
+DB_NOOP(1);
+
+QRY
+LLMIME_QRY_Mime_CasterAndTargetMatch((CHARACTERGUID)_Character, (GUIDSTRING)_Target, (STRING)_SkillType)
+AND
+(GUIDSTRING)_Character == _Target
+THEN
+DB_NOOP(1);
+
+QRY
+LLMIME_QRY_CharacterIsAMime((CHARACTERGUID)_Character)
+AND
+IsTagged(_Character, "LLMIME_MIME", 1)
+THEN
+DB_NOOP(1);
+
+QRY
+LLMIME_QRY_CharacterIsAMime((CHARACTERGUID)_Character)
+AND
+DB_LLMIME_Mime_MimicNextAction(_Character)
+THEN
+DB_NOOP(1);
+
+QRY
+LLMIME_QRY_MimeShouldBeMimicking((CHARACTERGUID)_Mime)
+AND
+HasActiveStatus(_Mime, "LLMIME_MIME", 1)
+AND
+GlobalGetFlag("Mimicry_Mimic_CombatOnlyDisabled", 1)
+THEN
+DB_NOOP(1);
+
+QRY
+LLMIME_QRY_MimeShouldBeMimicking((CHARACTERGUID)_Mime)
+AND
+HasActiveStatus(_Mime, "LLMIME_MIME", 1)
+AND
+NOT GlobalGetFlag("Mimicry_Mimic_CombatOnlyDisabled", 1)
+AND
+CharacterIsInCombat(_Mime, 1)
+AND
+NOT DB_LeaderLib_Combat_ActiveObject(_, _Mime)
+THEN
+DB_NOOP(1);
+//END_REGION
+
+//REGION MIMICKING_STATUS
+IF
+CharacterStatusApplied(_Mime, "LLMIME_MIME", _)
+AND
+HasActiveStatus(_Mime, "LLMIME_MIMICKING", 1)
+AND
+NOT LLMIME_QRY_MimeShouldBeMimicking(_Mime)
+THEN
+RemoveStatus(_Mime, "LLMIME_MIMICKING");
+
+IF
+CharacterStatusApplied(_Mime, "LLMIME_MIME", _)
+AND
+HasActiveStatus(_Mime, "LLMIME_MIMICKING", 0)
+AND
+LLMIME_QRY_MimeShouldBeMimicking(_Mime)
+THEN
+ApplyStatus(_Mime, "LLMIME_MIMICKING", -1.0);
+
+IF
+GlobalFlagSet("Mimicry_Mimic_CombatOnlyDisabled")
+AND
+DB_IsPlayer(_Mime)
+AND
+HasActiveStatus(_Mime, "LLMIME_MIME", 1)
+AND
+HasActiveStatus(_Mime, "LLMIME_MIMICKING", 0)
+AND
+LLMIME_QRY_MimeShouldBeMimicking(_Mime)
+THEN
+ApplyStatus(_Mime, "LLMIME_MIMICKING", -1.0);
+
+IF
+GlobalFlagCleared("Mimicry_Mimic_CombatOnlyDisabled")
+AND
+DB_IsPlayer(_Mime)
+AND
+HasActiveStatus(_Mime, "LLMIME_MIME", 1)
+AND
+HasActiveStatus(_Mime, "LLMIME_MIMICKING", 1)
+AND
+NOT LLMIME_QRY_MimeShouldBeMimicking(_Mime)
+THEN
+RemoveStatus(_Mime, "LLMIME_MIMICKING");
+
+IF
+ObjectTurnStarted((CHARACTERGUID)_Mime)
+AND
+HasActiveStatus(_Mime, "LLMIME_MIME", 1)
+AND
+HasActiveStatus(_Mime, "LLMIME_MIMICKING", 1)
+THEN
+RemoveStatus(_Mime, "LLMIME_MIMICKING");
+CharacterStatusText(_Mime, "<font color='#FF7F50'>Mimicking Ended</font>");
+
+IF
+ObjectTurnEnded((CHARACTERGUID)_Mime)
+AND
+HasActiveStatus(_Mime, "LLMIME_MIME", 1)
+THEN
+ApplyStatus(_Mime, "LLMIME_MIMICKING", -1.0);
+
+IF
+ObjectLeftCombat(_Mime, _CombatID)
+AND
+HasActiveStatus(_Mime, "LLMIME_MIME", 1)
+THEN
+RemoveStatus(_Mime, "LLMIME_MIMICKING");
+
+IF
+CharacterStatusRemoved(_Mime, "LLMIME_MIMICKING", _)
+AND
+DB_LLMIME_Mime_MimicNextAction(_Mime)
+THEN
+NOT DB_LLMIME_Mime_MimicNextAction(_Mime);
+
+IF
+CharacterStatusApplied(_Mime, "LLMIME_MIMICKING", _)
+AND
+NOT DB_LLMIME_Mime_MimicNextAction(_Mime)
+AND
+NOT DB_LeaderLib_Combat_ActiveObject(_, (GUIDSTRING)_Mime)
+THEN
+DB_LLMIME_Mime_MimicNextAction((CHARACTERGUID)_Mime);
+//END_REGION
+EXITSECTION
+
+ENDEXITSECTION
+ParentTargetEdge "LaughingLeader_Mimicry"

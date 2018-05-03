@@ -1,0 +1,67 @@
+INIT
+	FLOAT3:%EmptyPos = null
+	CHARACTER:%NullChar = null
+	EXTERN STATUS:%Passive_IsMime = LLMIME_MIME
+	EXTERN STATUS:%Passive_Brawler = LLMIME_BRAWLER
+	EXTERN STATUS:%Passive_Beastmaster = LLMIME_BEASTMASTER
+	EXTERN STATUS:%Passive_Concentration = LLMIME_CONCENTRATION
+EVENTS
+
+EVENT Mime_Setup
+VARS
+	CHARACTER:_Mime
+ON
+	OnCharacterEvent(_Mime, "LLMIME_Events_InitMime")
+ACTIONS
+	AddStatusInfluence(_Mime, %Passive_IsMime, 99, "", 0, 1)
+	AddStatusInfluence(_Mime, %Passive_Brawler, 99, "", 0, 1)
+	AddStatusInfluence(_Mime, %Passive_Beastmaster, 99, "", 0, 1)
+	AddStatusInfluence(_Mime, %Passive_Concentration, 99, "", 0, 1)
+	SetTag(_Mime, "LLMIME_MIME")
+	
+EVENT Mime_Remove
+VARS
+	CHARACTER:_Mime
+ON
+	OnCharacterEvent(_Mime, "LLMIME_Events_RemoveMime")
+ACTIONS
+	RemoveStatusInfluence(_Mime, %Passive_IsMime, 9999999)
+	RemoveStatusInfluence(_Mime, %Passive_Brawler, 9999999)
+	RemoveStatusInfluence(_Mime, %Passive_Beastmaster, 9999999)
+	RemoveStatusInfluence(_Mime, %Passive_Concentration, 9999999)
+	ClearTag(_Mime, "LLMIME_MIME")
+
+/*
+EVENT OnAttackStart_Object
+VARS
+	CHARACTER:_Attacker
+	CHARACTER:_Defender
+	CHARACTER:_AttackerOwner
+	ITEM:_DefenderItem
+ON
+	OnCharacterStartAttackObject(_Defender, _DefenderItem, _AttackerOwner, _Attacker)
+ACTIONS
+	SetVar(_Attacker, "LLMIME_AttackerOwner", _AttackerOwner)
+	CharacterCharacterEvent(_Attacker, _Defender, "LLMIME_Events_OnCharacterStartAttack_Target")
+
+EVENT OnAttackStart_Position
+VARS
+	CHARACTER:_Attacker
+	CHARACTER:_AttackerOwner
+	FLOAT3:_Position
+ON
+	OnCharacterStartAttackPosition(_Position, _AttackerOwner, _Attacker)
+ACTIONS
+	SetVar(_Attacker, "LLMIME_AttackPosition", _Position)
+	CharacterEvent(_Attacker, "LLMIME_Events_OnCharacterStartAttack_Position")
+	
+	
+EVENT ClearAttackVars
+VARS
+	CHARACTER:_Character
+ON
+	OnCharacterEvent(_Character, "LLMIME_Commands_ClearAttackVars")
+ACTIONS
+	SetVar(_Character, "LLMIME_AttackPosition", %EmptyPos)
+	SetVar(_Character, "LLMIME_AttackerOwner", %NullChar)
+	*/

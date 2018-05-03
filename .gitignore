@@ -1,0 +1,56 @@
+#TestLevel stuff. Nothing special here. Just a basic level.
+Mods/Mimicry_1e551d21-2e03-4ae9-a90a-9ad9cfe863cc/Levels/*
+Mods/Mimicry_1e551d21-2e03-4ae9-a90a-9ad9cfe863cc/Levels/LLLE_TestLevel/*
+Mods/Mimicry_1e551d21-2e03-4ae9-a90a-9ad9cfe863cc/Globals/*
+Editor/Mods/Mimicry_1e551d21-2e03-4ae9-a90a-9ad9cfe863cc/Levels/*
+
+#Story files that can be compiled by the user (only raw files needed).
+Mods/Mimicry_1e551d21-2e03-4ae9-a90a-9ad9cfe863cc/meta.lsx
+Mods/Mimicry_1e551d21-2e03-4ae9-a90a-9ad9cfe863cc/Story/log.txt
+Mods/Mimicry_1e551d21-2e03-4ae9-a90a-9ad9cfe863cc/Story/goals.div
+Mods/Mimicry_1e551d21-2e03-4ae9-a90a-9ad9cfe863cc/Story/goals.raw
+Mods/Mimicry_1e551d21-2e03-4ae9-a90a-9ad9cfe863cc/Story/story.div
+Mods/Mimicry_1e551d21-2e03-4ae9-a90a-9ad9cfe863cc/Story/story.div.osi
+Mods/Mimicry_1e551d21-2e03-4ae9-a90a-9ad9cfe863cc/Story/story_ac.dat
+Mods/Mimicry_1e551d21-2e03-4ae9-a90a-9ad9cfe863cc/Story/RawFiles/story_definitions.div
+Mods/Mimicry_1e551d21-2e03-4ae9-a90a-9ad9cfe863cc/Story/RawFiles/story_header.div
+
+#Assets
+Editor/Mods/Mimicry_1e551d21-2e03-4ae9-a90a-9ad9cfe863cc/Assets/Effects/*
+Public/Mimicry_1e551d21-2e03-4ae9-a90a-9ad9cfe863cc/Assets/*
+Public/Mimicry_1e551d21-2e03-4ae9-a90a-9ad9cfe863cc/GUI/*
+
+#Log files, etc
+*.log
+*.ailog
+StatsEditorConfig.xml
+DockPanel.config
+EditorBrowserMetadata_e19e4cc5-7fa7-45ed-8fbb-e5e02eb1d60e.xml
+EffectEditorConfig.xml
+personallog.txt
+
+#Binary Files
+*.bik
+*.bnk
+*.bshd
+*.bullet
+*.cur
+*.dat
+*.data
+*.dds
+*.fnt
+*.gr2
+*.iggy
+*.iggytex
+*.lsb
+*.lsf
+*.lsfx
+*.lsmg
+*.osi
+*.patch
+*.png
+*.swf
+*.shd
+*.tga
+*.tmpl
+*.ttf

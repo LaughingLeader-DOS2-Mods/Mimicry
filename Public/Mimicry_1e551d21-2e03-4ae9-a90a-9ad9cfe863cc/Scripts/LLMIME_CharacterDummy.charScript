@@ -1,0 +1,36 @@
+INIT
+	CHARACTER:__Me
+	FIXEDSTRING:%ResetTimerName = ""
+	EXTERN FLOAT:%ResetTimerDelay = 5.0
+EVENTS
+
+EVENT DeleteRogueDummies
+ON
+	OnInit()
+ACTIONS
+IF "!c1"
+	HasGlobalFlag("LLMIME_CreatingDummy")
+THEN
+	CharacterEvent(__Me, "LLMIME_Events_DummyInitialized")
+ENDIF
+
+EVENT StartIDResetTimer
+VARS
+	STRING:_UUID
+	STRING:_TimerStr
+ON
+	OnCharacterEvent(__Me, "LLMIME_Events_DummyIDSet")
+ACTIONS
+IF "c1"
+	GetVar(_UUID, __Me, "LLMIME_UUID")
+THEN
+	Print(_TimerStr, "LLMIME_Timers_ResetID_[1]", _UUID)
+	Cast(%ResetTimerName, _TimerStr)
+	StartTimer(%ResetTimerName, %ResetTimerDelay, 0)
+ENDIF
+
+EVENT ResetTimerFinished
+ON
+	OnTimer(%ResetTimerName)
+ACTIONS
+	CharacterEvent(__Me, "LLMIME_Events_ResetDummyID")

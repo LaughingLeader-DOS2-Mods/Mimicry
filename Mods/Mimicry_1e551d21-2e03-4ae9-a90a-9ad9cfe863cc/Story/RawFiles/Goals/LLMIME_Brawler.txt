@@ -1,0 +1,231 @@
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+//DB_LLMIME_Brawler_BonusAttackTimer(_TimerName, _Mime, _Target)
+//DB_LLMIME_Brawler_SpawnedFist(_Mime, _Fist)
+KBSECTION
+IF
+CharacterStartAttackObject(_Target, _Owner, _Attacker)
+AND
+HasActiveStatus(_Attacker, "LLMIME_MIME", 1)
+AND
+ObjectGetFlag(_Attacker, "LLMIME_UNARMED", 1)
+THEN
+DB_NOOP(1);
+
+IF
+AttackedByObject(_Target, _Owner, _Mime, _DamageType, _DamageSource)
+AND
+HasActiveStatus(_Mime, "LLMIME_MIME", 1)
+AND
+ObjectGetFlag(_Mime, "LLMIME_UNARMED", 1)
+THEN
+LeaderLog_Log("DEBUG", "[LLMIME:Mime:AttackedByObject] Mime attacked something. DamageType[",_DamageType,"] DamageSource[",_DamageSource,"].");
+
+IF
+CharacterReceivedDamage(_Target, _Percentage, (CHARACTERGUID)_Mime)
+AND
+HasActiveStatus(_Mime, "LLMIME_MIME", 1)
+AND
+ObjectGetFlag(_Mime, "LLMIME_UNARMED", 1)
+AND
+IntegertoString(_Percentage, _DamageStr)
+THEN
+LeaderLog_Log("DEBUG", "[LLMIME:Mime:CharacterReceivedDamage] Mime did [",_DamageStr,"]% damage. Whatever that means.");
+
+//REGION BONUS_DAMAGE
+IF
+AttackedByObject(_Target, _Owner, (CHARACTERGUID)_Mime, _DamageType, "Attack")
+AND
+HasActiveStatus(_Mime, "LLMIME_MIME", 1)
+AND
+ObjectGetFlag(_Mime, "LLMIME_UNARMED", 1)
+AND
+NOT DB_LLMIME_Brawler_BonusAttackTimer(_, _Mime, _Target)
+AND
+GetUUID(_Mime, _MimeID)
+AND
+StringConcatenate("LLMIME_Timers_BrawlerBonusAttack_", _MimeID, _TimerName)
+THEN
+LLMIME_Brawler_ApplyBonusDamage(_Mime, _Target);
+DB_LLMIME_Brawler_BonusAttackTimer(_TimerName, _Mime, _Target);
+TimerLaunch(_TimerName, 25); // Prevents multiple bonus damage calls in a single frame
+
+IF
+TimerFinished(_TimerName)
+AND
+DB_LLMIME_Brawler_BonusAttackTimer(_TimerName, _Mime, _Target)
+THEN
+NOT DB_LLMIME_Brawler_BonusAttackTimer(_TimerName, _Mime, _Target);
+
+PROC
+LLMIME_Brawler_ApplyBonusDamage((CHARACTERGUID)_Mime, (GUIDSTRING)_Target)
+AND
+CharacterGetLevel(_Mime, _Level)
+AND
+IntegerProduct(_Level, 5, _Damage)
+THEN
+ApplyDamage(_Target, _Damage, "Physical", _Mime);
+//END_REGION
+
+//REGION DOUBLE_ATTACK
+IF
+AttackedByObject(_Target, _Owner, (CHARACTERGUID)_Mime, _DamageType, "Attack")
+AND
+HasActiveStatus(_Mime, "LLMIME_MIME", 1)
+AND
+ObjectGetFlag(_Mime, "LLMIME_UNARMED", 1)
+AND
+ObjectGetFlag(_Mime, "LLMIME_CAN_DOUBLE_ATTACK", 1)
+AND
+NOT DB_LLMIME_Brawler_ExtraAttackTimer(_, _Mime, _)
+AND
+GetUUID(_Mime, _MimeID)
+AND
+StringConcatenate("LLMIME_Timers_BrawlerExtraAttack_", _MimeID, _TimerName)
+THEN
+DB_LLMIME_Brawler_ExtraAttackTimer(_TimerName, _Mime, _Target);
+TimerLaunch(_TimerName, 500);
+
+IF
+TimerFinished(_TimerName)
+AND
+DB_LLMIME_Brawler_ExtraAttackTimer(_TimerName, _Mime, _Target)
+THEN
+NOT DB_LLMIME_Brawler_ExtraAttackTimer(_TimerName, _Mime, _Target);
+//CharacterUseSkill(_Mime, "Target_LLMIME_UnarmedAttack1", _Target, 1, 1, 1);
+CharacterAttack(_Mime, _Target);
+//END_REGION
+
+//REGION BRAWLER_FIST
+//ITEMGUID_WPN_LLMIME_BrawlerFist_e1bda904-93c2-4f6f-8136-1a547279fd1f
+PROC
+LLMIME_Brawler_RegisterFist((CHARACTERGUID)_Mime, (ITEMGUID)_Fist)
+THEN
+DB_LLMIME_Brawler_SpawnedFist(_Mime, _Fist);
+
+IF
+CharacterStatusApplied(_Mime, "LLMIME_BRAWLER_BONUS", _)
+AND
+DB_LLMIME_Brawler_SpawnedFist(_Mime, _Fist)
+AND
+ObjectExists(_Fist, 0)
+THEN
+NOT DB_LLMIME_Brawler_SpawnedFist(_Mime, _Fist);
+
+IF
+CharacterStatusApplied(_Mime, "LLMIME_BRAWLER_BONUS", _)
+AND
+DB_LLMIME_Brawler_SpawnedFist(_Mime, _Fist)
+AND
+NOT LLMIME_QRY_ItemIsInWeaponSlot(_Mime, _Fist)
+THEN
+ItemToInventory(_Fist, _Mime, 1, 0, 1);
+
+IF
+CharacterStatusApplied(_Mime, "LLMIME_BRAWLER_BONUS", _)
+AND
+NOT DB_LLMIME_Brawler_SpawnedFist(_Mime, _)
+AND
+GetItemForItemTemplateInInventory(_Mime, "WPN_LLMIME_BrawlerFist_e1bda904-93c2-4f6f-8136-1a547279fd1f", _Fist)
+THEN
+LLMIME_Brawler_RegisterFist(_Mime, _Fist);
+
+IF
+CharacterStatusApplied(_Mime, "LLMIME_BRAWLER_BONUS", _)
+AND
+NOT DB_LLMIME_Brawler_SpawnedFist(_Mime, _)
+AND
+GetPosition(_Mime, _x, _y, _z)
+AND
+CreateItemTemplateAtPosition("WPN_LLMIME_BrawlerFist_e1bda904-93c2-4f6f-8136-1a547279fd1f", _x, _y, _z, _Fist)
+AND
+CharacterGetLevel(_Mime, _Level)
+THEN
+ItemLevelUpTo(_Fist, _Level);
+CharacterEquipItem(_Mime, _Fist);
+LLMIME_Brawler_RegisterFist(_Mime, _Fist);
+
+IF
+ItemDestroyed(_Fist)
+AND
+DB_LLMIME_Brawler_SpawnedFist(_Mime, _Fist)
+THEN
+NOT DB_LLMIME_Brawler_SpawnedFist(_Mime, _Fist);
+
+IF
+CharacterLeveledUp(_Mime)
+AND
+DB_LLMIME_Brawler_SpawnedFist(_Mime, _Fist)
+AND
+CharacterGetLevel(_Mime, _Level)
+THEN
+ItemLevelUpTo(_Fist, _Level);
+
+IF
+ItemEquipped(_Fist, _Character)
+AND
+IsTagged(_Fist, "LLMIME_BrawlerFist", 1)
+AND
+HasActiveStatus(_Character, "LLMIME_MIME", 0)
+THEN
+CharacterUnequipItem(_Character, _Fist);
+CharacterStatusText(_Character, "<font color='#FF0000'>You try to use the Mime's hand, but it is futile.");
+
+IF
+ItemDropped(_Fist)
+AND
+IsTagged(_Fist, "LLMIME_BrawlerFist", 1)
+AND
+DB_LLMIME_Brawler_SpawnedFist(_Mime, _Fist)
+THEN
+ItemToInventory(_Fist, _Mime, 0, 1);
+
+/*
+IF
+ItemMoved(_Fist)
+AND
+IsTagged(_Fist, "LLMIME_BrawlerFist", 1)
+AND
+DB_LLMIME_Brawler_SpawnedFist(_Mime, _Fist)
+AND
+ItemIsInCharacterInventory(_Fist, _Mime, 0)
+THEN
+ItemToInventory(_Fist, _Mime, 0, 1);
+*/
+
+IF
+ItemDropped(_Fist)
+AND
+IsTagged(_Fist, "LLMIME_BrawlerFist", 1)
+AND
+NOT DB_LLMIME_Brawler_SpawnedFist(_, _Fist)
+THEN
+ItemDestroy(_Fist);
+
+IF
+CharacterUsedItem(_Mime, _Fist)
+AND
+IsTagged(_Fist, "LLMIME_BrawlerFist", 1)
+AND
+DB_LLMIME_Brawler_SpawnedFist(_Mime, _Fist)
+THEN
+ItemDestroy(_Fist);
+NOT DB_LLMIME_Brawler_SpawnedFist(_Mime, _Fist);
+CharacterStatusText(_Mime, "<font color='#32CD32'>You relax your hand.</font>");
+
+IF
+CharacterUsedItem(_Character, _Fist)
+AND
+IsTagged(_Fist, "LLMIME_BrawlerFist", 1)
+AND
+NOT DB_LLMIME_Brawler_SpawnedFist(_Character, _Fist)
+AND
+DB_LLMIME_Brawler_SpawnedFist(_Mime, _Fist)
+THEN
+ItemToInventory(_Fist, _Mime, 0, 1);
+//END_REGION
+EXITSECTION
+
+ENDEXITSECTION
+ParentTargetEdge "LaughingLeader_Mimicry"

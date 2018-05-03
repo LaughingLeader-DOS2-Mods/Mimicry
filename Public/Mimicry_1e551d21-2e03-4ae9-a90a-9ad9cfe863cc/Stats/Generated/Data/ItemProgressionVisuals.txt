@@ -1,0 +1,11 @@
+new itemgroup "ARM_UNIQUE_LLMIME_MimeMask_A"
+
+add levelgroup 0,0,"All"
+add rootgroup "8e66ce79-8c8e-4c22-a8ea-5a99977f4ea8",""
+add namegroup "ARM_UNIQUE_LLMIME_MimeMask_A","",""
+
+new itemgroup "LLMIME_BrawlerFist"
+
+add levelgroup 0,0,"All"
+add rootgroup "e1bda904-93c2-4f6f-8136-1a547279fd1f",""
+add namegroup "LLMIME_BrawlerFist","",""

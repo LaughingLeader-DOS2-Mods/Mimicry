@@ -1,0 +1,241 @@
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+//Skill types with the "UseWeaponDamage" column
+DB_LLMIME_Mime_Skills_WeaponSkillTypes("Target");
+DB_LLMIME_Mime_Skills_WeaponSkillTypes("Shout");
+DB_LLMIME_Mime_Skills_WeaponSkillTypes("Projectile");
+DB_LLMIME_Mime_Skills_WeaponSkillTypes("ProjectileStrike");
+DB_LLMIME_Mime_Skills_WeaponSkillTypes("Cone");
+DB_LLMIME_Mime_Skills_WeaponSkillTypes("Zone");
+DB_LLMIME_Mime_Skills_WeaponSkillTypes("MultiStrike");
+DB_LLMIME_Mime_Skills_WeaponSkillTypes("Rush");
+DB_LLMIME_Mime_Skills_WeaponSkillTypes("Rain");
+
+//DB_LLMIME_Mime_Temp_CasterWeapons(_Caster, _MainHand, _Offhand)
+KBSECTION
+//REGION SKILL_TRACKING
+IF
+CharacterUsedSkillOnTarget(_Caster, (CHARACTERGUID)_Target, _Skill, _SkillType)
+AND
+LLMIME_QRY_Mime_CharacterIsMimickable(_Caster)
+AND
+_Caster != _Target
+AND
+LLMIME_QRY_Mime_CanMimicSkill(_Skill)
+AND
+DB_LLMIME_Mime_MimicNextAction(_Mime)
+AND
+LLMIME_QRY_Mime_CanMimicCharacter(_Caster, _Mime)
+AND
+CharacterIsEnemy(_Caster, _Target, _IsEnemy)
+AND
+GetPosition(_Target, _TargetX, _TargetY, _TargetZ)
+THEN
+LeaderLog_Log("DEBUG", "[LLMIME:Mime:CharacterUsedSkillOnTarget] Queueing up next mimic skill [",_Skill,"] on character.");
+LLMIME_Mime_QueueNextAction(_Mime, _Caster, _Skill, "Skill", _TargetX, _TargetY, _TargetZ, _IsEnemy, 1);
+
+IF
+CharacterUsedSkillOnTarget(_Caster, (CHARACTERGUID)_Target, _Skill, _SkillType)
+AND
+LLMIME_QRY_Mime_CharacterIsMimickable(_Caster)
+AND
+_Caster == _Target
+AND
+LLMIME_QRY_Mime_CanMimicSkill(_Skill)
+AND
+DB_LLMIME_Mime_MimicNextAction(_Mime)
+AND
+LLMIME_QRY_Mime_CanMimicCharacter(_Caster, _Mime)
+THEN
+LeaderLog_Log("DEBUG", "[LLMIME:Mime:CharacterUsedSkillOnTarget] Queueing up next mimic self-target skill [",_Skill,"].");
+LLMIME_Mime_QueueNextSelfAction(_Mime, _Caster, _Skill, "Skill");
+
+IF
+CharacterUsedSkillOnTarget(_Caster, _Target, _Skill, _SkillType)
+AND
+LLMIME_QRY_Mime_CharacterIsMimickable(_Caster)
+AND
+_Caster != _Target
+AND
+LLMIME_QRY_Mime_CanMimicSkill(_Skill)
+AND
+ObjectIsItem(_Target, 1)
+AND
+DB_LLMIME_Mime_MimicNextAction(_Mime)
+AND
+LLMIME_QRY_Mime_CanMimicCharacter(_Caster, _Mime)
+AND
+GetPosition(_Target, _TargetX, _TargetY, _TargetZ)
+AND
+GetUUID(_Caster, _CasterID)
+AND
+GetUUID(_Target, _TargetID)
+THEN
+LeaderLog_Log("DEBUG", "[LLMIME:Mime:CharacterUsedSkillOnTarget] Queuing up next mimic skill [",_Skill,"] on item.");
+// Casting the target to ITEMGUID in the event still ran this rule, even when the target was the caster, and clearly not an item
+//LeaderLog_Log("DEBUG", "[LLMIME:Mime:CharacterUsedSkillOnTarget] Wtf? ", _CasterID, " == ", _TargetID," ?");
+LLMIME_Mime_QueueNextAction(_Mime, _Caster, _Skill, "Skill", _TargetX, _TargetY, _TargetZ, -1, 1);
+
+//Delay by a frame or two so target events will fire first
+IF
+CharacterUsedSkillAtPosition(_Caster, _TargetX, _TargetY, _TargetZ, _Skill, _SkillType)
+AND
+LLMIME_QRY_Mime_CharacterIsMimickable(_Caster)
+AND
+LLMIME_QRY_Mime_CanMimicSkill(_Skill)
+AND
+DB_LLMIME_Mime_MimicNextAction(_Mime)
+AND
+NOT DB_LLMIME_Timers_SkillCastAtPosition(_, _Caster, _TargetX, _TargetY, _TargetZ, _Skill, _SkillType)
+AND
+LLMIME_QRY_Mime_CanMimicCharacter(_Caster, _Mime)
+AND
+GetUUID(_Caster, _CasterID)
+AND
+StringConcatenate("LLMIME_Events_SkillCastAtPosition_", _CasterID, _TimerName)
+THEN
+DB_LLMIME_Timers_SkillCastAtPosition(_TimerName, _Caster, _TargetX, _TargetY, _TargetZ, _Skill, _SkillType);
+TimerLaunch(_TimerName,5);
+
+IF
+TimerFinished(_TimerName)
+AND
+DB_LLMIME_Timers_SkillCastAtPosition(_TimerName, _Caster, _TargetX, _TargetY, _TargetZ, _Skill, _SkillType)
+AND
+NOT DB_LLMIME_Mime_MimicQueue_Self(_, _Caster, _Skill, "Skill")
+AND
+NOT DB_LLMIME_Mime_MimicQueue(_, _Caster, _Skill, "Skill", _, _, _, _TargetX, _TargetY, _TargetZ, _, 1)
+THEN
+LLMIME_Mime_OnSkillCastAtPosition(_Caster, _TargetX, _TargetY, _TargetZ, _Skill, _SkillType);
+
+IF
+TimerFinished(_TimerName)
+AND
+DB_LLMIME_Timers_SkillCastAtPosition(_TimerName, _Caster, _TargetX, _TargetY, _TargetZ, _Skill, _SkillType)
+THEN
+NOT DB_LLMIME_Timers_SkillCastAtPosition(_TimerName, _Caster, _TargetX, _TargetY, _TargetZ, _Skill, _SkillType);
+
+PROC
+LLMIME_Mime_OnSkillCastAtPosition((CHARACTERGUID)_Caster, (REAL)_TargetX, (REAL)_TargetY, (REAL)_TargetZ, (STRING)_Skill, "shout")
+AND
+DB_LLMIME_Mime_MimicNextAction(_Mime)
+AND
+LLMIME_QRY_Mime_CanMimicCharacter(_Caster, _Mime)
+THEN
+LeaderLog_Log("DEBUG", "[LLMIME:Mime:OnSkillCastAtPosition] Queuing up next mimic shout skill [",_Skill,"].");
+LLMIME_Mime_QueueNextSelfAction(_Mime, _Caster, _Skill, "Skill");
+
+PROC
+LLMIME_Mime_OnSkillCastAtPosition((CHARACTERGUID)_Caster, (REAL)_TargetX, (REAL)_TargetY, (REAL)_TargetZ, (STRING)_Skill, (STRING)_SkillType)
+AND
+_SkillType != "shout"
+AND
+DB_LLMIME_Mime_MimicNextAction(_Mime)
+AND
+LLMIME_QRY_Mime_CanMimicCharacter(_Caster, _Mime)
+AND
+GetPosition(_Caster, _StartX, _StartY, _StartZ)
+THEN
+LeaderLog_Log("DEBUG", "[LLMIME:Mime:CharacterUsedSkillAtPosition] Queuing up next mimic positional skill [",_Skill,"].");
+LLMIME_Mime_QueueNextAction(_Mime, _Caster, _Skill, "Skill", _TargetX, _TargetY, _TargetZ, -1);
+
+IF
+CharacterUsedSkill(_Caster, _Skill, _SkillElement)
+AND
+LLMIME_Mime_QRY_ActionQueued(_Caster, _Skill, "Skill")
+AND
+GetUUID(_Caster, _ID)
+AND
+StringConcatenate(_Skill, _ID, _Str)
+AND
+StringConcatenate("LLMIME_Timers_CastFailTimer_", _Str, _TimerName)
+THEN
+DB_LLMIME_Mime_CastFallbackTimer(_TimerName, _Caster, _Skill);
+TimerLaunch(_TimerName, 2000);
+
+IF
+SkillCast(_Caster, _Skill, _SkillElement)
+AND
+LLMIME_Mime_QRY_ActionQueued(_Caster, _Skill, "Skill")
+THEN
+LLMIME_Mime_StartNextMimic(_Caster, _Skill, "Skill");
+
+PROC
+LLMIME_Mime_StartNextMimic((CHARACTERGUID)_Caster, (STRING)_Action, (STRING)_ActionType)
+AND
+DB_LLMIME_Mime_CastFallbackTimer(_TimerName, _Caster, _Action)
+THEN
+NOT DB_LLMIME_Mime_CastFallbackTimer(_TimerName, _Caster, _Action);
+TimerCancel(_TimerName);
+
+PROC
+LLMIME_Mime_StartNextMimic((CHARACTERGUID)_Caster, (STRING)_Action, (STRING)_ActionType)
+AND
+GetUUID(_Caster, _ID)
+AND
+StringConcatenate(_ActionType, "_", _Str1)
+AND
+StringConcatenate(_Str1, _Action, _Str2)
+AND
+StringConcatenate(_Str2, "_", _Str3)
+AND
+StringConcatenate(_Str3, _ID, _TimerID)
+AND
+StringConcatenate("LLMIME_Timers_MimicActionTimer_", _TimerID, _TimerName)
+THEN
+DB_LLMIME_Mime_MimicActionTimer(_TimerName, _Caster, _Action, _ActionType);
+TimerLaunch(_TimerName, 500);
+
+IF
+TimerFinished(_TimerName)
+AND
+DB_LLMIME_Mime_MimicActionTimer(_TimerName, _Caster, _Action, _ActionType)
+THEN
+NOT DB_LLMIME_Mime_MimicActionTimer(_TimerName, _Caster, _Action, _ActionType);
+LLMIME_Mime_MimicAction(_Caster, _Action, _ActionType);
+//END_REGION
+
+//REGION SKILL_MIMIC
+PROC
+LLMIME_Mime_MimicAction((CHARACTERGUID)_Caster, (STRING)_Skill, "Skill")
+AND
+DB_LLMIME_Mime_MimicQueue_Self(_Mime, _Caster, _Skill, "Skill")
+THEN
+CharacterUseSkill(_Mime, _Skill, _Mime, 1, 1, 1);
+NOT DB_LLMIME_Mime_MimicQueue_Self(_Mime, _Caster, _Skill, "Skill");
+
+PROC
+LLMIME_Mime_MimicActionOnTarget((CHARACTERGUID)_Mime, (CHARACTERGUID)_Caster, (GUIDSTRING)_Target, (STRING)_Skill, "Skill")
+THEN
+CharacterUseSkill(_Mime, _Skill, _Target, 1, 1, 1);
+
+IF
+SkillCast(_Mime, _Skill, _)
+AND
+DB_LLMIME_Mime_Temp_ResetDummyAfterCast(_Mime, _Target, _Skill, "Skill")
+THEN
+NOT DB_LLMIME_Mime_Temp_ResetDummyAfterCast(_Mime, _Target, _Skill, "Skill");
+LLMIME_Dummy_ResetDummy((GUIDSTRING)_Target);
+//END_REGION
+
+//REGION FAIL_TIMER_CANCELLING
+IF
+CharacterUsedSkill(_Mime, _Skill, _)
+THEN
+LLMIME_Mime_OnMimicSuccess(_Mime, _Skill, "Skill");
+
+IF
+CharacterUsedSkillOnZoneWithTarget(_Mime, _Target, _Skill, _SkillType)
+THEN
+LLMIME_Mime_OnMimicSuccess(_Mime, _Skill, "Skill");
+
+IF
+CharacterUsedSkillOnTarget(_Mime, _Target, _Skill, _SkillType)
+THEN
+LLMIME_Mime_OnMimicSuccess(_Mime, _Skill, "Skill");
+//END_REGION
+EXITSECTION
+
+ENDEXITSECTION
+ParentTargetEdge "LaughingLeader_Mimicry"

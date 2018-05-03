@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<save>
+    <header version="2" time="1525357726" />
+    <version major="3" minor="1" revision="7" build="0" />
+    <region id="Tags">
+        <node id="root">
+            <children>
+                <node id="Tag">
+                    <attribute id="Description" value="A warrior who has abandoned their own identity, instead mimicking the actions of allies in battle." type="23" />
+                    <attribute id="Name" value="LLMIME_MIME" type="23" />
+                    <children>
+                        <node id="Categories">
+                            <children>
+                                <node id="Category">
+                                    <attribute id="Name" value="Code" type="23" />
+                                </node>
+                                <node id="Category">
+                                    <attribute id="Name" value="Origin" type="23" />
+                                </node>
+                                <node id="Category">
+                                    <attribute id="Name" value="Profession" type="23" />
+                                </node>
+                            </children>
+                        </node>
+                    </children>
+                </node>
+                <node id="Tag">
+                    <attribute id="Description" value="A dummy character used for scripting purposes." type="23" />
+                    <attribute id="Name" value="LLMIME_DUMMY" type="23" />
+                    <children>
+                        <node id="Categories">
+                            <children>
+                                <node id="Category">
+                                    <attribute id="Name" value="Code" type="23" />
+                                </node>
+                            </children>
+                        </node>
+                    </children>
+                </node>
+                <node id="Tag">
+                    <attribute id="Description" value="The spawned fist for Brawlers. Enabled scaled unarmed damage." type="23" />
+                    <attribute id="Name" value="LLMIME_BrawlerFist" type="23" />
+                    <children>
+                        <node id="Categories">
+                            <children>
+                                <node id="Category">
+                                    <attribute id="Name" value="Code" type="23" />
+                                </node>
+                            </children>
+                        </node>
+                    </children>
+                </node>
+            </children>
+        </node>
+    </region>
+</save>

@@ -1,0 +1,203 @@
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+Proc_LLMIME_IterateGameAlreadyStarted();
+KBSECTION
+IF
+GameStarted(_,_)
+THEN
+DB_LLMIME_Debug_GameStarted(1);
+TimerLaunch("LLMIME_Debug_Start", 100);
+TimerLaunch("LLMIME_Debug_Test", 5000);
+
+IF
+RegionEnded(_)
+THEN
+NOT DB_LLMIME_Debug_GameStarted(1);
+NOT DB_LLMIME_Debug_IteratingPlayers(1);
+
+IF
+TimerFinished("LLMIME_Debug_Start")
+AND
+NOT DB_LLMIME_Debug_IteratingPlayers(_)
+THEN
+DB_LLMIME_Debug_IteratingPlayers(1);
+CharacterLaunchIterator("LLMIME_Events_Debug_IterateCharacters");
+
+IF
+StoryEvent((CHARACTERGUID)_Player, "LLMIME_Events_Debug_IterateCharacters")
+AND
+IsTagged(_Player, "COMPANION", 0)
+AND
+CharacterIsPlayer(_Player, 1)
+AND
+GetPosition(_Player, _x, _y, _z)
+AND
+CreateItemTemplateAtPosition("LOOT_BackPack_A_6c70c298-aa29-418f-a659-f8e0b5f5fa60", _x, _y, _z, _Backpack)
+THEN
+SetTag(_Backpack, "LLMIME_DEBUG_DELETEALL");
+MoveAllItemsTo(_Player, _Backpack, 1, 1, 1);
+CharacterAddSkill(_Player, "Shout_LLMIME_Mimic");
+CharacterLevelUpTo(_Player, 10);
+CharacterAddAttribute(_Player, "Finesse", 5);
+CharacterAddAttribute(_Player, "Strength", 5);
+CharacterAddAttribute(_Player, "Wits", 5);
+CharacterAddAttribute(_Player, "Intelligence", 5);
+CharacterAddAttribute(_Player, "Constitution", 5);
+SetStoryEvent(_Player, "LLMIME_Events_InitMime");
+CharacterTransformAppearanceToWithEquipmentSet(_Player, _Player, "Class_Ranger_Act2", 0);
+ItemTemplateAddTo("EQ_Clothing_LLMIME_MimeMask_A_8e66ce79-8c8e-4c22-a8ea-5a99977f4ea8", _Player, 1);
+DB_LLMIME_Debug_HostPlayer(_Player);
+DB_LLMIME_Debug_DeleteBackpack(_Backpack);
+
+IF
+StoryEvent((CHARACTERGUID)_Character, "LLMIME_Events_Debug_IterateCharacters")
+AND
+IsTagged(_Character, "COMPANION", 1)
+AND
+CharacterGetHostCharacter(_Player)
+AND
+_Character != _Player
+AND
+IsTagged(_Player, "COMPANION", 0)
+THEN
+CharacterRecruitCharacter(_Character, _Player);
+
+IF
+StoryEvent(NULL_00000000-0000-0000-0000-000000000000, "LLMIME_Events_Debug_IterateCharacters")
+THEN
+NOT DB_LLMIME_Debug_IteratingPlayers(1);
+TimerLaunch("LLMINE_Events_UnequipDummy", 300);
+IterateParties("LLMIME_Events_Debug_AddPlayers");
+
+IF
+TimerFinished("LLMINE_Events_UnequipDummy")
+AND
+DB_LLMIME_Debug_HostPlayer(_Player)
+THEN
+LLMIME_Debug_UnequipInSlot(_Player, "Weapon");
+LLMIME_Debug_UnequipInSlot(_Player, "Helmet");
+
+PROC
+LLMIME_Debug_UnequipInSlot((CHARACTERGUID)_Player, (STRING)_Slot)
+AND
+CharacterGetEquippedItem(_Player, _Slot, (ITEMGUID)_Item)
+AND
+DB_LLMIME_Debug_DeleteBackpack(_Backpack)
+THEN
+CharacterUnequipItem(_Player, _Item);
+ItemToInventory(_Item, _Backpack);
+
+IF
+TimerFinished("LLMINE_Events_UnequipDummy")
+THEN
+TimerLaunch("LLMINE_Events_Debug_DeleteBackpacks", 500);
+
+IF
+ItemAddedToContainer(_Item, _Backpack)
+AND
+IsTagged(_Backpack, "LLMIME_DEBUG_DELETEALL", 1)
+THEN
+ItemDestroy(_Item);
+
+IF
+TimerFinished("LLMINE_Events_Debug_DeleteBackpacks")
+AND
+DB_LLMIME_Debug_DeleteBackpack(_Backpack)
+THEN
+ItemDestroy(_Backpack);
+
+PROC
+Proc_LLMIME_IterateGameAlreadyStarted()
+AND
+DB_LLMIME_Debug_GameStarted(1)
+THEN
+TimerLaunch("LLMIME_Debug_Start", 100);
+
+IF
+StoryEvent((CHARACTERGUID)_Player, "LLMIME_Events_Debug_AddPlayers")
+AND
+NOT DB_IsPlayer(_Player)
+THEN
+DB_IsPlayer(_Player);
+CharacterOverrideMaxSourcePoints(_Player, 10);
+CharacterAddSourcePoints(_Player, 10);
+
+IF
+CharacterUsedSkill(_Character,_,_)
+THEN
+CharacterResetCooldowns(_Character);
+
+IF
+CharacterUsedItem(_Character, ITEMGUID_LLMIME_TestLevel_Lever_ToggleGlobalFlags_32ee1fc8-3a1f-4293-85eb-45c59dc25d83)
+AND
+NOT DB_LLMIME_Debug_LeverToggle(ITEMGUID_LLMIME_TestLevel_Lever_ToggleGlobalFlags_32ee1fc8-3a1f-4293-85eb-45c59dc25d83)
+AND
+GlobalGetFlag("Mimicry_Mimic_CombatOnlyDisabled", 0)
+THEN
+GlobalSetFlag("Mimicry_Mimic_CombatOnlyDisabled");
+DisplayText(ITEMGUID_LLMIME_TestLevel_Lever_ToggleGlobalFlags_32ee1fc8-3a1f-4293-85eb-45c59dc25d83, "Mimic Enabled Outside of Combat");
+DB_LLMIME_Debug_LeverToggle(ITEMGUID_LLMIME_TestLevel_Lever_ToggleGlobalFlags_32ee1fc8-3a1f-4293-85eb-45c59dc25d83);
+
+IF
+CharacterUsedItem(_Character, ITEMGUID_LLMIME_TestLevel_Lever_ToggleGlobalFlags_32ee1fc8-3a1f-4293-85eb-45c59dc25d83)
+AND
+NOT DB_LLMIME_Debug_LeverToggle(ITEMGUID_LLMIME_TestLevel_Lever_ToggleGlobalFlags_32ee1fc8-3a1f-4293-85eb-45c59dc25d83)
+AND
+GlobalGetFlag("Mimicry_Mimic_CombatOnlyDisabled", 1)
+THEN
+GlobalClearFlag("Mimicry_Mimic_CombatOnlyDisabled");
+DisplayText(ITEMGUID_LLMIME_TestLevel_Lever_ToggleGlobalFlags_32ee1fc8-3a1f-4293-85eb-45c59dc25d83, "Mimic Disabled Outside of Combat");
+DB_LLMIME_Debug_LeverToggle(ITEMGUID_LLMIME_TestLevel_Lever_ToggleGlobalFlags_32ee1fc8-3a1f-4293-85eb-45c59dc25d83);
+
+IF
+CharacterUsedItem(_Character, ITEMGUID_LLMIME_TestLevel_Lever_ToggleGlobalFlags_32ee1fc8-3a1f-4293-85eb-45c59dc25d83)
+AND
+DB_LLMIME_Debug_LeverToggle(ITEMGUID_LLMIME_TestLevel_Lever_ToggleGlobalFlags_32ee1fc8-3a1f-4293-85eb-45c59dc25d83)
+THEN
+NOT DB_LLMIME_Debug_LeverToggle(ITEMGUID_LLMIME_TestLevel_Lever_ToggleGlobalFlags_32ee1fc8-3a1f-4293-85eb-45c59dc25d83);
+
+//REGION TEXT_EVENTS
+/*
+IF
+TextEventSet("mimicdummy")
+AND
+DB_LLMIME_MimicNextAction(_Mime)
+AND
+GetPosition(_Mime, _x, _y, _z)
+AND
+CreateItemTemplateAtPosition("LLMIME_TargetDummy_7384531c-c7ba-45df-ad84-909fa0208047", _x, _y, _z, _Dummy)
+//CreateItemTemplateAtPosition("LLMIME_CONT_Barrel_A_Water_a2573a2d-5556-4c82-b004-aa7d5130b1e6", _x, _y, _z, _Dummy)
+THEN
+DebugBreak("[LLMIME:Position] Spawned skill dummy.");
+*/
+
+IF
+TextEventSet("mimicdupe")
+AND
+GlobalGetFlag("LLMIME_DUPLICATE_ITEMS", _Val)
+AND
+IntegerSubtract(1, _Val, _NextVal)
+THEN
+LLMIME_Debug_SetGlobalFlag("LLMIME_DUPLICATE_ITEMS", _NextVal);
+
+PROC
+LLMIME_Debug_SetGlobalFlag((STRING)_Flag, 0)
+AND
+StringConcatenate(_Flag, " cleared.", _Message)
+THEN
+DebugBreak(_Message);
+GlobalClearFlag(_Flag);
+
+PROC
+LLMIME_Debug_SetGlobalFlag((STRING)_Flag, 1)
+AND
+StringConcatenate(_Flag, " set.", _Message)
+THEN
+DebugBreak(_Message);
+GlobalSetFlag(_Flag);
+//END_REGION
+EXITSECTION
+
+ENDEXITSECTION
+ParentTargetEdge "LLMIME_DebugLevel"

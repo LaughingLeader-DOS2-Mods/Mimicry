@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<stats stat_object_definition_id="239de60a-29b5-4010-bf7d-f6169d4ddd8a">
+  <stat_objects>
+    <stat_object index="0" is_substat="false">
+      <fields>
+        <field name="Name" type="NameStatObjectFieldDefinition" clear_inherited_value="false" value="ARM_UNIQUE_LLMIME_MimeMask_A" />
+        <field name="Using" type="BaseClassStatObjectFieldDefinition" clear_inherited_value="false" value="_ClothHelmet" />
+        <field name="Act part" type="EnumerationStatObjectFieldDefinition" clear_inherited_value="false" value="0" enumeration_type_name="ActPart" />
+        <field name="ComboCategory" type="StringStatObjectFieldDefinition" clear_inherited_value="false" value="ClothHelmet,Helmet" />
+        <field name="ObjectCategory" type="StringStatObjectFieldDefinition" clear_inherited_value="false" value="ClothHelmet" />
+        <field name="MinAmount" type="IntegerStatObjectFieldDefinition" clear_inherited_value="false" value="1" />
+        <field name="MaxAmount" type="IntegerStatObjectFieldDefinition" clear_inherited_value="false" value="1" />
+        <field name="Priority" type="IntegerStatObjectFieldDefinition" clear_inherited_value="false" value="1" />
+        <field name="MinLevel" type="IntegerStatObjectFieldDefinition" clear_inherited_value="false" value="1" />
+        <field name="ItemGroup" type="StringStatObjectFieldDefinition" clear_inherited_value="false" value="ARM_UNIQUE_LLMIME_MimeMask_A" />
+        <field name="Unique" type="IntegerStatObjectFieldDefinition" clear_inherited_value="false" value="1" />
+      </fields>
+    </stat_object>
+  </stat_objects>
+</stats>

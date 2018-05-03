@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<stats stat_object_definition_id="9fd4ac7a-fad7-424f-83df-0893eae93c38">
+  <stat_objects>
+    <stat_object index="0" is_substat="false">
+      <fields>
+        <field name="Name" type="NameStatObjectFieldDefinition" clear_inherited_value="false" value="LLMIME_Mimic" />
+        <field name="SkillType" type="StringStatObjectFieldDefinition" clear_inherited_value="false" value="Shout" />
+        <field name="ForGameMaster" type="EnumerationStatObjectFieldDefinition" clear_inherited_value="false" value="1" enumeration_type_name="YesNo" />
+        <field name="Ability" type="EnumerationStatObjectFieldDefinition" clear_inherited_value="false" value="4" enumeration_type_name="SkillAbility" />
+        <field name="ActionPoints" type="IntegerStatObjectFieldDefinition" clear_inherited_value="false" value="4" />
+        <field name="Cooldown" type="IntegerStatObjectFieldDefinition" clear_inherited_value="false" value="0" />
+        <field name="AIFlags" type="EnumerationStatObjectFieldDefinition" clear_inherited_value="false" value="0" enumeration_type_name="AIFlags" />
+        <field name="AddWeaponRange" type="EnumerationStatObjectFieldDefinition" clear_inherited_value="false" value="0" enumeration_type_name="YesNo" />
+        <field name="TargetConditions" type="StringStatObjectFieldDefinition" clear_inherited_value="false" value="Self" />
+        <field name="UseCharacterStats" type="EnumerationStatObjectFieldDefinition" clear_inherited_value="false" value="0" enumeration_type_name="YesNo" />
+        <field name="UseWeaponDamage" type="EnumerationStatObjectFieldDefinition" clear_inherited_value="false" value="0" enumeration_type_name="YesNo" />
+        <field name="UseWeaponProperties" type="EnumerationStatObjectFieldDefinition" clear_inherited_value="false" value="0" enumeration_type_name="YesNo" />
+        <field name="Autocast" type="EnumerationStatObjectFieldDefinition" clear_inherited_value="false" value="1" enumeration_type_name="YesNo" />
+        <field name="Icon" type="StringStatObjectFieldDefinition" clear_inherited_value="false" value="Mood Panel_a" />
+        <field name="DisplayName" type="TranslatedStringStatObjectFieldDefinition" clear_inherited_value="false" value="Mimic" />
+        <field name="Description" type="TranslatedStringStatObjectFieldDefinition" clear_inherited_value="false" value="Mime job command. Imitate an ally's actions." />
+        <field name="FXScale" type="IntegerStatObjectFieldDefinition" clear_inherited_value="false" value="50" />
+        <field name="PrepareAnimationInit" type="StringStatObjectFieldDefinition" clear_inherited_value="false" value="noprepare" />
+        <field name="PrepareAnimationLoop" type="StringStatObjectFieldDefinition" clear_inherited_value="false" value="noprepare" />
+        <field name="CastAnimation" type="StringStatObjectFieldDefinition" clear_inherited_value="false" value="skill_cast_shout_01_cast" />
+        <field name="CastTextEvent" type="StringStatObjectFieldDefinition" clear_inherited_value="false" value="cast" />
+        <field name="Magic Cost" type="IntegerStatObjectFieldDefinition" clear_inherited_value="false" value="0" />
+        <field name="CanTargetCharacters" type="EnumerationStatObjectFieldDefinition" clear_inherited_value="false" value="1" enumeration_type_name="YesNo" />
+      </fields>
+    </stat_object>
+  </stat_objects>
+</stats>

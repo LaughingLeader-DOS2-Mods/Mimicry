@@ -1,0 +1,13 @@
+new entry "ARM_UNIQUE_LLMIME_MimeMask_A"
+type "Armor"
+using "_ClothHelmet"
+data "ItemGroup" "ARM_UNIQUE_LLMIME_MimeMask_A"
+data "Act part" "0"
+data "ComboCategory" "ClothHelmet,Helmet"
+data "ObjectCategory" "ClothHelmet"
+data "MinAmount" "1"
+data "MaxAmount" "1"
+data "Priority" "1"
+data "Unique" "1"
+data "MinLevel" "1"
+

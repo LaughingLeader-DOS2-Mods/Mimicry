@@ -1,0 +1,272 @@
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+LLMIME_System_InitSettings();
+//DB_LLMIME_SkillData(_Skill, _SkillType, _SkillElement)
+//DB_LLMIME_PassiveData(_Status, _InfoStatus, _DisableFlag)
+KBSECTION
+//REGION SETTINGS
+PROC
+LLMIME_System_InitSettings()
+THEN
+DB_LLMIME_PassiveData("LLMIME_BRAWLER_BONUS", "LLMIME_BRAWLER_INFO", "LLMIME_HideMimePassives");
+DB_LLMIME_PassiveData("LLMIME_BEASTMASTER", "LLMIME_BEASTMASTER_INFO", "LLMIME_HideMimePassives");
+DB_LLMIME_PassiveData("LLMIME_CONCENTRATION_BONUS", "LLMIME_CONCENTRATION_INFO", "LLMIME_HideMimePassives");
+//END_REGION
+
+//REGION SKILL_DATA
+IF
+CharacterUsedSkillAtPosition(_,_,_,_, _Skill, _SkillType)
+THEN
+LLMIME_System_UpdateSkillDataType(_Skill, _SkillType);
+
+IF
+CharacterUsedSkillOnTarget(_,_, _Skill, _SkillType)
+THEN
+LLMIME_System_UpdateSkillDataType(_Skill, _SkillType);
+
+IF
+CharacterUsedSkill(_, _Skill, _SkillElement)
+THEN
+LLMIME_System_UpdateSkillDataElement(_Skill, _SkillElement);
+
+IF
+SkillCast(_, _Skill, _SkillElement)
+THEN
+LLMIME_System_UpdateSkillDataElement(_Skill, _SkillElement);
+
+PROC
+LLMIME_System_UpdateSkillDataType((STRING)_Skill, (STRING)_SkillType)
+AND
+DB_LLMIME_SkillData(_Skill, _PastSkillType, _SkillElement)
+AND
+_PastSkillType != _SkillType
+THEN
+NOT DB_LLMIME_SkillData(_Skill, _PastSkillType, _SkillElement);
+DB_LLMIME_SkillData(_Skill, _SkillType, _SkillElement);
+
+PROC
+LLMIME_System_UpdateSkillDataType((STRING)_Skill, (STRING)_SkillType)
+AND
+NOT DB_LLMIME_SkillData(_Skill, _SkillType, _)
+THEN
+DB_LLMIME_SkillData(_Skill, _SkillType, "");
+
+PROC
+LLMIME_System_UpdateSkillDataElement((STRING)_Skill, (STRING)_SkillElement)
+AND
+DB_LLMIME_SkillData(_Skill, _SkillType, _PastSkillElement)
+AND
+_PastSkillElement != _SkillElement
+THEN
+NOT DB_LLMIME_SkillData(_Skill, _SkillType, _PastSkillElement);
+DB_LLMIME_SkillData(_Skill, _SkillType, _SkillElement);
+
+PROC
+LLMIME_System_UpdateSkillDataElement((STRING)_Skill, (STRING)_SkillElement)
+AND
+NOT DB_LLMIME_SkillData(_Skill, _, _SkillElement)
+THEN
+DB_LLMIME_SkillData(_Skill, "", _SkillElement);
+
+QRY
+LLMIME_QRY_SkillIsType((STRING)_Skill, (STRING)_CheckType)
+AND
+DB_LLMIME_SkillData(_Skill, _CheckType, _SkillElement)
+THEN
+DB_NOOP(1);
+//END_REGION
+
+//REGION UNARMED_FLAG
+QRY
+LLMIME_QRY_WeaponIsBrawlerFist((ITEMGUID)_Item)
+AND
+GetTemplate(_Item, "WPN_LLMIME_BrawlerFist_e1bda904-93c2-4f6f-8136-1a547279fd1f")
+THEN
+DB_NOOP(1);
+
+QRY
+LLMIME_QRY_WeaponIsBrawlerFistTemplate((STRING)_Template)
+AND
+_Template == "WPN_LLMIME_BrawlerFist_e1bda904-93c2-4f6f-8136-1a547279fd1f"
+THEN
+DB_NOOP(1);
+
+QRY
+LLMIME_QRY_WeaponEquippedInMainHand((CHARACTERGUID)_Mime)
+AND
+CharacterGetEquippedItem(_Mime, "Weapon", _Item)
+AND
+NOT LLMIME_QRY_WeaponIsBrawlerFist(_Item)
+THEN
+DB_NOOP(1);
+
+QRY
+LLMIME_QRY_WeaponEquippedInOffHand((CHARACTERGUID)_Mime)
+AND
+CharacterGetEquippedItem(_Mime, "Shield", _Item)
+AND
+GetTemplate(_Item, _Template)
+AND
+StringContains(_Template, "_Shield_", 0)
+AND
+NOT LLMIME_QRY_WeaponIsBrawlerFist(_Item)
+THEN
+DB_NOOP(1);
+
+QRY
+LLMIME_QRY_NoWeaponsEquipped((CHARACTERGUID)_Mime)
+AND
+NOT LLMIME_QRY_WeaponEquippedInMainHand(_Mime)
+AND
+NOT LLMIME_QRY_WeaponEquippedInOffHand(_Mime)
+THEN
+DB_NOOP(1);
+
+QRY
+LLMIME_QRY_ItemIsWeapon((CHARACTERGUID)_Mime, (ITEMGUID)_Item)
+AND
+CharacterGetEquippedItem(_Mime, "Weapon", _Item)
+AND
+NOT LLMIME_QRY_WeaponIsBrawlerFist(_Item)
+THEN
+DB_NOOP(1);
+
+QRY
+LLMIME_QRY_ItemIsWeapon((CHARACTERGUID)_Mime, (ITEMGUID)_Item)
+AND
+CharacterGetEquippedItem(_Mime, "Shield", _Item)
+AND
+GetTemplate(_Item, _Template)
+AND
+NOT LLMIME_QRY_WeaponIsBrawlerFistTemplate(_Template)
+AND
+StringContains(_Template, "_Shield_", 0)
+THEN
+DB_NOOP(1);
+
+QRY
+LLMIME_QRY_ItemIsInWeaponSlot((CHARACTERGUID)_Mime, (ITEMGUID)_Item)
+AND
+CharacterGetEquippedItem(_Mime, "Weapon", _Item)
+THEN
+DB_NOOP(1);
+
+QRY
+LLMIME_QRY_ItemIsInWeaponSlot((CHARACTERGUID)_Mime, (ITEMGUID)_Item)
+AND
+CharacterGetEquippedItem(_Mime, "Shield", _Item)
+THEN
+DB_NOOP(1);
+
+IF
+ItemEquipped(_Item, _Mime)
+AND
+HasActiveStatus(_Mime, "LLMIME_MIME", 1)
+AND
+LLMIME_QRY_ItemIsWeapon(_Mime, _Item)
+THEN
+ObjectClearFlag(_Mime, "LLMIME_UNARMED");
+
+IF
+ItemUnEquipped(_Item, _Mime)
+AND
+HasActiveStatus(_Mime, "LLMIME_MIME", 1)
+AND
+ObjectGetFlag(_Mime, "LLMIME_UNARMED", 0)
+AND
+LLMIME_QRY_NoWeaponsEquipped(_Mime)
+THEN
+ObjectSetFlag(_Mime, "LLMIME_UNARMED");
+
+IF
+CharacterStatusApplied(_Mime, "LLMIME_MIME", _)
+AND
+ObjectGetFlag(_Mime, "LLMIME_UNARMED", 0)
+AND
+LLMIME_QRY_NoWeaponsEquipped(_Mime)
+THEN
+ObjectSetFlag(_Mime, "LLMIME_UNARMED");
+//END_REGION
+
+//REGION BRAWLER_BONUS
+IF
+ObjectFlagSet("LLMIME_UNARMED", (CHARACTERGUID)_Mime, _)
+AND
+HasActiveStatus(_Mime, "LLMIME_BRAWLER", 1)
+AND
+HasActiveStatus(_Mime, "LLMIME_BRAWLER_BONUS", 0)
+THEN
+ApplyStatus(_Mime, "LLMIME_BRAWLER_BONUS", -1.0, 1);
+
+IF
+ObjectFlagCleared("LLMIME_UNARMED", (CHARACTERGUID)_Mime, _)
+AND
+HasActiveStatus(_Mime, "LLMIME_BRAWLER_BONUS", 1)
+THEN
+RemoveStatus(_Mime, "LLMIME_BRAWLER_BONUS");
+//END_REGION
+
+//REGION CONCENTRATION_BONUS
+IF
+ObjectFlagSet("LLMIME_UNARMED", (CHARACTERGUID)_Mime, _)
+AND
+HasActiveStatus(_Mime, "LLMIME_CONCENTRATION", 1)
+AND
+HasActiveStatus(_Mime, "LLMIME_CONCENTRATION_BONUS", 0)
+THEN
+ApplyStatus(_Mime, "LLMIME_CONCENTRATION_BONUS", -1.0, 1);
+
+IF
+ObjectFlagCleared("LLMIME_UNARMED", (CHARACTERGUID)_Mime, _)
+AND
+HasActiveStatus(_Mime, "LLMIME_CONCENTRATION_BONUS", 1)
+THEN
+RemoveStatus(_Mime, "LLMIME_CONCENTRATION_BONUS");
+//END_REGION
+
+//REGION PASSIVE_INFO
+IF
+CharacterStatusApplied(_Mime, _Status, _)
+AND
+DB_LLMIME_PassiveData(_Status, _InfoStatus, _DisableFlag)
+AND
+NOT UserGetFlag(_Mime, _DisableFlag, 1)
+AND
+HasActiveStatus(_Mime, _InfoStatus, 0)
+THEN
+ApplyStatus(_Mime, _InfoStatus, -1.0, 1);
+
+IF
+CharacterStatusRemoved(_Mime, _Status, _)
+AND
+DB_LLMIME_PassiveData(_Status, _InfoStatus, _DisableFlag)
+AND
+HasActiveStatus(_Mime, _InfoStatus, 1)
+THEN
+RemoveStatus(_Mime, _InfoStatus);
+
+IF
+ObjectFlagSet(_DisableFlag, _Mime, _)
+AND
+DB_LLMIME_PassiveData(_Status, _InfoStatus, _DisableFlag)
+AND
+HasActiveStatus(_Mime, _Status, 1)
+AND
+HasActiveStatus(_Mime, _InfoStatus, 0)
+THEN
+ApplyStatus(_Mime, _InfoStatus, -1.0, 1);
+
+IF
+ObjectFlagCleared(_DisableFlag, _Mime, _)
+AND
+DB_LLMIME_PassiveData(_Status, _InfoStatus, _DisableFlag)
+AND
+HasActiveStatus(_Mime, _InfoStatus, 1)
+THEN
+RemoveStatus(_Mime, _InfoStatus);
+//END_REGION
+EXITSECTION
+
+ENDEXITSECTION
+ParentTargetEdge "LaughingLeader_Mimicry"

@@ -1,0 +1,18 @@
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+
+KBSECTION
+IF
+RegionStarted("TestLevel_LL_Mimicry")
+THEN
+GoalCompleted;
+
+IF
+GameStarted("TestLevel_LL_Mimicry", _)
+THEN
+GoalCompleted;
+EXITSECTION
+
+ENDEXITSECTION
+ParentTargetEdge "LaughingLeader_Mimicry"

@@ -1,0 +1,197 @@
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+LLMIME_InitSettings_Beastmaster();
+
+//DB_LLMIME_MonsterSkill_Templates(_Template, _Skill, _Type)
+//DB_LLMIME_MonsterSkill_Tags(_Tag, _Skill, _Type)
+//DB_LLMIME_MonsterSkill_BadBreathStatus(_Status, _Turns, _Chance)
+KBSECTION
+//REGION SETTINGS
+PROC
+LLMIME_InitSettings_Beastmaster()
+THEN
+LLMIME_MonsterSkill_RegisterToTemplate("Summons_BloatedCorpse_40c6a905-74c3-4d89-9ffe-d3493a22cabd",	"Teleportation_EnemyNetherswap", "Skill");
+LLMIME_MonsterSkill_RegisterToTemplate("Summons_BonePile_2a923cb8-beeb-48be-9a3a-5da981b1e3fe",			"Target_EnemyCripplingBlow", "Skill");
+LLMIME_MonsterSkill_RegisterToTemplate("Summons_Cat_4f7cdf30-0d44-44d2-bcf2-91850728107d",			 	"Shout_EnemyFear", "Skill");
+LLMIME_MonsterSkill_RegisterToTemplate("Summons_Condor_0441f88d-4a0a-40ec-ac69-3a4fe7906cdf",			"Shout_EnemyFavourableWind", "Skill");
+LLMIME_MonsterSkill_RegisterToTemplate("Summons_FireOoze_67a658f4-8312-4993-966a-cd2871da7ee0",			"Projectile_EnemyFireball", "Skill");
+LLMIME_MonsterSkill_RegisterToTemplate("Summons_FireSlug_163befcc-d8f6-4c3a-ba1d-536d1f7568bc",			"Projectile_EnemyFireball", "Skill");
+LLMIME_MonsterSkill_RegisterToTemplate("Summons_GiantIncarnate_13f9314d-e744-4dc5-acf2-c6bf77a04892",	"Shout_EnemyOverthrow", "Skill");
+LLMIME_MonsterSkill_RegisterToTemplate("Summons_Incarnate_118d7359-b7d5-41ea-8c55-86ce27afceba",		"Target_SingleHandedAttack", "Skill");
+LLMIME_MonsterSkill_RegisterToTemplate("Summons_OilBlob_e61da3a2-6dfd-4f2e-8f62-6bfbddb5a7f9",			"Target_TargetedOilSurface", "Skill");
+LLMIME_MonsterSkill_RegisterToTemplate("Summons_Plant_e63a712f-fc87-4469-8848-fd8941043afd",			"Cone_LLMIME_MonsterCorrosiveSpray", "Skill");
+LLMIME_MonsterSkill_RegisterToTemplate("Summons_PoisonOoze_7ecb0aa4-376f-4e9a-99d6-6eff900c3c77",		"Projectile_EnemyPoisonDart", "Skill");
+LLMIME_MonsterSkill_RegisterToTemplate("Summons_SoulWolf_53f49a2d-36a1-4c47-8cef-91c0f3ae0ef9",			"Rush_BullRush", "Skill");
+LLMIME_MonsterSkill_RegisterToTemplate("Summons_WaterOoze_b4fc88e6-1e7f-425e-b901-0be379f19168",		"ProjectileStrike_EnemyHailStrike", "Skill");
+LLMIME_MonsterSkill_RegisterToTag("TOTEM", "ENRAGED", "Status");
+
+DB_LLMIME_MonsterSkill_BadBreathStatus("SLOWED", 90, 9.0);
+DB_LLMIME_MonsterSkill_BadBreathStatus("POISONED", 80, 9.0);
+DB_LLMIME_MonsterSkill_BadBreathStatus("BLIND", 75, 9.0);
+DB_LLMIME_MonsterSkill_BadBreathStatus("SLEEP", 30, 9.0);
+DB_LLMIME_MonsterSkill_BadBreathStatus("DISARMED", 25, 9.0);
+DB_LLMIME_MonsterSkill_BadBreathStatus("MUTED", 20, 9.0);
+DB_LLMIME_MonsterSkill_BadBreathStatus("LLMIME_TOAD", 10, 12.0);
+//END_REGION
+
+//REGION REGISTER
+PROC
+LLMIME_MonsterSkill_RegisterToTemplate((STRING)_Template, (STRING)_Skill, (STRING)_Type)
+AND
+NOT DB_LLMIME_MonsterSkill_Templates(_Template, _Skill, _Type)
+THEN
+DB_LLMIME_MonsterSkill_Templates(_Template, _Skill, _Type);
+
+PROC
+LLMIME_MonsterSkill_RegisterToTag((STRING)_Tag, (STRING)_Skill, (STRING)_Type)
+AND
+NOT DB_LLMIME_MonsterSkill_Tags(_Tag, _Skill, _Type)
+THEN
+DB_LLMIME_MonsterSkill_Tags(_Tag, _Skill, _Type);
+//END_REGION
+
+//REGION TYPECHECK_EVENTS
+IF
+CharacterStatusApplied(_Summon, "LLMIME_BEASTMASTER_TYPECHECK", _Mime)
+AND
+CharacterIsSummon(_Summon, 1)
+THEN
+ApplyStatus(_Summon, "LLMIME_BEASTMASTER_MONSTERSKILL", -1.0, 1, _Mime);
+
+IF
+CharacterStatusRemoved(_Summon, "LLMIME_BEASTMASTER_TYPECHECK", _Mime)
+AND
+HasActiveStatus(_Summon, "LLMIME_BEASTMASTER_MONSTERSKILL", 1)
+THEN
+RemoveStatus(_Summon, "LLMIME_BEASTMASTER_MONSTERSKILL");
+//END_REGION
+
+//REGION MONSTERSKILL_EVENTS
+IF
+CharacterStatusApplied(_Summon, "LLMIME_BEASTMASTER_MONSTERSKILL", _Mime)
+THEN
+LLMIME_Beastmaster_AddMonsterSkill(_Summon);
+
+IF
+CharacterStatusRemoved(_Summon, "LLMIME_BEASTMASTER_MONSTERSKILL", _Mime)
+THEN
+LLMIME_Beastmaster_RemoveMonsterSkill(_Summon);
+//END_REGION
+
+//REGION MONSTER_SKILLS
+PROC
+LLMIME_Beastmaster_AddMonsterSkill((CHARACTERGUID)_Summon)
+AND
+GetTemplate(_Summon, _Template)
+AND
+DB_LLMIME_MonsterSkill_Templates(_Template, _Skill, "Skill")
+THEN
+CharacterAddSkill(_Summon, _Skill);
+
+PROC
+LLMIME_Beastmaster_AddMonsterSkill((CHARACTERGUID)_Summon)
+AND
+DB_LLMIME_MonsterSkill_Tags(_Tag, _Skill, "Skill")
+AND
+IsTagged(_Summon, _Tag, 1)
+THEN
+CharacterAddSkill(_Summon, _Skill);
+
+PROC
+LLMIME_Beastmaster_RemoveMonsterSkill((CHARACTERGUID)_Summon)
+AND
+GetTemplate(_Summon, _Template)
+AND
+DB_LLMIME_MonsterSkill_Templates(_Template, _Skill, "Skill")
+THEN
+CharacterRemoveSkill(_Summon, _Skill);
+
+PROC
+LLMIME_Beastmaster_RemoveMonsterSkill((CHARACTERGUID)_Summon)
+AND
+DB_LLMIME_MonsterSkill_Tags(_Tag, _Skill, "Skill")
+AND
+IsTagged(_Summon, _Tag, 1)
+THEN
+CharacterRemoveSkill(_Summon, _Skill);
+//END_REGION
+
+//Like skills, but for buffs instead
+//REGION MONSTER_STATUS
+PROC
+LLMIME_Beastmaster_AddMonsterStatus((CHARACTERGUID)_Summon)
+AND
+GetTemplate(_Summon, _Template)
+AND
+DB_LLMIME_MonsterSkill_Templates(_Template, _Skill, "Status")
+THEN
+ApplyStatus(_Summon, _Skill, -1.0);
+
+PROC
+LLMIME_Beastmaster_AddMonsterStatus((CHARACTERGUID)_Summon)
+AND
+DB_LLMIME_MonsterSkill_Tags(_Tag, _Skill, "Status")
+AND
+IsTagged(_Summon, _Tag, 1)
+THEN
+RemoveStatus(_Summon, _Skill);
+
+PROC
+LLMIME_Beastmaster_RemoveMonsterSkill((CHARACTERGUID)_Summon)
+AND
+GetTemplate(_Summon, _Template)
+AND
+DB_LLMIME_MonsterSkill_Templates(_Template, _Skill, "Status")
+THEN
+ApplyStatus(_Summon, _Skill, -1.0);
+
+PROC
+LLMIME_Beastmaster_RemoveMonsterSkill((CHARACTERGUID)_Summon)
+AND
+DB_LLMIME_MonsterSkill_Tags(_Tag, _Skill, "Status")
+AND
+IsTagged(_Summon, _Tag, 1)
+THEN
+RemoveStatus(_Summon, _Skill);
+//END_REGION
+
+//REGION BAD_BREATH
+IF
+CharacterStatusApplied(_Character, "LLMIME_BAD_BREATH", _Enemy)
+THEN
+LLMIME_MonsterSkill_RollBadBreath(_Character, _Enemy);
+
+PROC
+LLMIME_MonsterSkill_RollBadBreath((CHARACTERGUID)_Character, (GUIDSTRING)_Enemy)
+AND
+Random(99999, _Seed)
+AND
+Random(_Seed, _Ran)
+AND
+IntegerModulo(_Ran, 99, _Roll)
+AND
+IntegertoString(_Roll, _RollStr)
+AND
+LLMIME_QRY_Debug(_RollStr)
+AND
+DB_LLMIME_MonsterSkill_BadBreathStatus(_Status, _Chance, _Turns)
+AND
+_Roll <= _Chance
+AND
+StringConcatenate("Bad Breath: ", _Status, _Str)
+THEN
+ApplyStatus(_Character, _Status, _Turns, 0, _Enemy);
+DebugBreak(_Str);
+
+QRY
+LLMIME_QRY_Debug((STRING)_RollStr)
+AND
+StringConcatenate("Bad Breath roll: ", _RollStr, _Str)
+THEN
+DebugBreak(_Str);
+//END_REGION
+EXITSECTION
+
+ENDEXITSECTION
+ParentTargetEdge "LaughingLeader_Mimicry"

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<save>
+    <header version="2" time="1523927734" />
+    <version major="3" minor="1" revision="7" build="0" />
+    <region id="MetaData">
+        <node id="root">
+            <attribute id="Module" value="1e551d21-2e03-4ae9-a90a-9ad9cfe863cc" type="23" />
+            <attribute id="Name" value="Mimicry" type="23" />
+            <attribute id="Type" value="Add-on" type="23" />
+            <attribute id="UUID" value="79b220a8-374b-4c36-9179-cfaecaf1f911" type="23" />
+        </node>
+    </region>
+</save>

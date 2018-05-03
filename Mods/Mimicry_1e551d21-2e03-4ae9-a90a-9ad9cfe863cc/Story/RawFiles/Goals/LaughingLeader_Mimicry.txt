@@ -1,0 +1,36 @@
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+LLMIME_Start_Internal_CompleteIfStarted(); // Existing saves
+
+KBSECTION
+PROC
+LLMIME_Internal_StartMime()
+THEN
+DebugBreak("[LLMIME] Mimicry starting.");
+GoalCompleted;
+
+IF
+GameEventSet("GAMEEVENT_GameStarted")
+THEN
+LLMIME_Internal_StartMime();
+
+PROC
+LLMIME_Start_Internal_CompleteIfStarted()
+AND
+DB_StoryStarted(_)
+THEN
+DebugBreak("[LLMIME] Existing save detected. Starting Mimicry.");
+LLMIME_Internal_StartMime();
+
+// For saves where this goal is active, but wasn't completed
+IF
+SavegameLoaded(_,_,_,_)
+AND
+DB_StoryStarted(_)
+THEN
+DebugBreak("[LLMIME] Existing save detected. Starting Mimicry.");
+LLMIME_Internal_StartMime();
+EXITSECTION
+
+ENDEXITSECTION
