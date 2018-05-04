@@ -251,6 +251,19 @@ DB_LLMIME_Mimicking_MimicFailTimer(_TimerName, _Mime, _Caster, _Action, _ActionT
 THEN
 NOT DB_LLMIME_Mimicking_MimicFailTimer(_TimerName, _Mime, _Caster, _Action, _ActionType);
 LLMIME_Mimicking_OnMimicFailed(_Mime, _Caster, _Action, _ActionType);
+
+PROC
+LLMIME_Mimicking_ResetFailTimer((CHARACTERGUID)_Mime, (CHARACTERGUID)_Caster, (STRING)_Action, (STRING)_ActionType)
+THEN
+LLMIME_Mimicking_ResetFailTimer(_Mime, _Caster, _Action, _ActionType, 2000);
+
+PROC
+LLMIME_Mimicking_ResetFailTimer((CHARACTERGUID)_Mime, (CHARACTERGUID)_Caster, (STRING)_Action, (STRING)_ActionType, (INTEGER)_Delay)
+AND
+DB_LLMIME_Mimicking_MimicFailTimer(_TimerName, _Mime, _Caster, _Action, _ActionType)
+THEN
+TimerCancel(_TimerName);
+TimerLaunch(_TimerName, _Delay);
 //END_REGION
 
 //REGION MIMIC_START_NEXT
@@ -509,7 +522,7 @@ LLMIME_Mimicking_TrackWeapons(_Mime, _Caster, _Skill, "Skill");
 PROC
 LLMIME_Mimicking_TrackWeapons((CHARACTERGUID)_Mime, (CHARACTERGUID)_Caster, (STRING)_Action, (STRING)_ActionType)
 AND
-CharacterGetEquippedWeapon(_Caster, _MainHand)
+CharacterGetEquippedItem(_Mime, "Weapon", (ITEMGUID)_MainHand)
 AND
 NOT DB_LLMIME_Mimicking_Temp_CasterWeapons(_Caster, _, _, _Action, _ActionType)
 THEN
@@ -518,7 +531,7 @@ DB_LLMIME_Mimicking_Temp_CasterWeapons(_Caster, _MainHand, NULL_00000000-0000-00
 PROC
 LLMIME_Mimicking_TrackWeapons((CHARACTERGUID)_Mime, (CHARACTERGUID)_Caster, (STRING)_Action, (STRING)_ActionType)
 AND
-CharacterGetEquippedShield(_Caster, _Offhand)
+CharacterGetEquippedItem(_Mime, "Shield", (ITEMGUID)_Offhand)
 AND
 DB_LLMIME_Mimicking_Temp_CasterWeapons(_Caster, _MainHand, NULL_00000000-0000-0000-0000-000000000000, _Action, _ActionType)
 THEN
@@ -528,7 +541,7 @@ DB_LLMIME_Mimicking_Temp_CasterWeapons(_Caster, _MainHand, _Offhand, _Action, _A
 PROC
 LLMIME_Mimicking_TrackWeapons((CHARACTERGUID)_Mime, (CHARACTERGUID)_Caster, (STRING)_Action, (STRING)_ActionType)
 AND
-CharacterGetEquippedShield(_Caster, _Offhand)
+CharacterGetEquippedItem(_Mime, "Shield", (ITEMGUID)_Offhand)
 AND
 NOT DB_LLMIME_Mimicking_Temp_CasterWeapons(_Caster, _, _, _Action, _ActionType)
 THEN

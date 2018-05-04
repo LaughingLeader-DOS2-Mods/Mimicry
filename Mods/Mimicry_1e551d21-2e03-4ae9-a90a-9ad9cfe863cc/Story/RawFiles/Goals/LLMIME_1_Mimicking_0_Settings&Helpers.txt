@@ -28,7 +28,7 @@ DB_LLMIME_Mimicking_Blacklist_ItemTemplates("CON_Potion_BloodRose_8c89072f-820b-
 DB_LLMIME_Mimicking_Blacklist_ItemTemplates("CON_Potion_Source_A_23cdecb1-06a4-4290-bb2c-de300cba5dd0");
 DB_LLMIME_Mimicking_Blacklist_ItemTemplates("LOOT_Source_Orb_106a7107-cf36-4331-b5b5-6de71969f370");
 
-//Skill types with the "UseWeaponDamage" column
+//Skill types with the "UseWeaponDamage" property
 DB_LLMIME_Mimicking_Whitelist_WeaponCopy_SkillTypes("Target");
 DB_LLMIME_Mimicking_Whitelist_WeaponCopy_SkillTypes("Shout");
 DB_LLMIME_Mimicking_Whitelist_WeaponCopy_SkillTypes("Projectile");
@@ -266,6 +266,7 @@ LLMIME_QRY_MimeShouldBeMimicking(_Mime)
 THEN
 ApplyStatus(_Mime, "LLMIME_MIMICKING", -1.0);
 
+/* Handled in behavior script, since it can iterate by tag
 IF
 GlobalFlagSet("Mimicry_Mimic_CombatOnlyDisabled")
 AND
@@ -291,6 +292,7 @@ AND
 NOT LLMIME_QRY_MimeShouldBeMimicking(_Mime)
 THEN
 RemoveStatus(_Mime, "LLMIME_MIMICKING");
+*/
 
 IF
 ObjectTurnStarted((CHARACTERGUID)_Mime)

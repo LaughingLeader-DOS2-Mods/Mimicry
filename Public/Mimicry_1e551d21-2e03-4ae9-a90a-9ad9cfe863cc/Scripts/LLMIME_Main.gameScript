@@ -33,6 +33,44 @@ ACTIONS
 	RemoveStatusInfluence(_Mime, %Passive_Concentration, 9999999)
 	ClearTag(_Mime, "LLMIME_MIME")
 
+EVENT Apply_Mimicking_Start
+ON
+	OnGlobalFlagSet("Mimicry_Mimic_CombatOnlyDisabled")
+ACTIONS
+	IterateCharacters("LLMIME_Events_RequestMimicking", Lowest, Distance, "LLMIME_MIME")
+	
+EVENT Apply_Mimicking
+VARS
+	CHARACTER:_Mime
+ON
+	OnCharacterEvent(_Mime, "LLMIME_Events_RequestMimicking")
+ACTIONS
+IF "c1&!c2"
+	CharacterHasStatus(_Mime, LLMIME_MIME)
+	CharacterHasStatus(_Mime, LLMIME_MIMICKING)
+THEN
+	CharacterApplyStatus(_Mime, LLMIME_MIMICKING, -1)
+ENDIF
+
+EVENT Remove_Mimicking_Start
+ON
+	OnGlobalFlagCleared("Mimicry_Mimic_CombatOnlyDisabled")
+ACTIONS
+	IterateCharacters("LLMIME_Events_RemoveMimicking", Lowest, Distance, "LLMIME_MIME")
+
+EVENT Remove_Mimicking
+VARS
+	CHARACTER:_Mime
+ON
+	OnCharacterEvent(_Mime, "LLMIME_Events_RemoveMimicking")
+ACTIONS
+IF "c1&!c2"
+	CharacterHasStatus(_Mime, LLMIME_MIMICKING)
+	IsInCombat(_Mime)
+THEN
+	CharacterRemoveStatus(_Mime, LLMIME_MIMICKING)
+ENDIF
+
 EVENT Debug_Item
 VARS
 	CHARACTER:_Char

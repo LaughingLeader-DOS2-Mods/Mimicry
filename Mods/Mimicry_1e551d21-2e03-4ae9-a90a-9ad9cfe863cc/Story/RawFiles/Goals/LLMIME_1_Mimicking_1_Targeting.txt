@@ -81,6 +81,45 @@ THEN
 NOT DB_LeaderLog_Temp_CombinedString(_DummyTaskID);
 DB_LLMIME_Targeting_Temp_NextDummy(_DummyTaskID, _Caster, _Mime, _TargetX, _TargetY, _TargetZ, _TargetPriority, _Action, _ActionType);
 LLMIME_Dummy_CreateCharacterDummy(_DummyTaskID, _TargetX, _TargetY, _TargetZ);
+LLMIME_Mimicking_ResetFailTimer(_Mime, _Caster, _Action, _ActionType, 1500);
+
+QRY
+LLMIME_Mimicking_Targeting_QRY_PositionMismatch((CHARACTERGUID)_Dummy, (REAL)_TargetX, (REAL)_TargetY, (REAL)_TargetZ)
+AND
+GetDistanceToPosition(_Dummy, _TargetX, _TargetY, _TargetZ, _Dist)
+AND
+_Dist >= 5
+THEN
+DB_NOOP(1);
+
+IF
+StoryEvent((CHARACTERGUID)_Dummy, _DummyTaskID) // Fires when the dummy is teleported
+AND
+DB_LLMIME_Targeting_Temp_NextDummy(_DummyTaskID, _Caster, _Mime, _TargetX, _TargetY, _TargetZ, _TargetPriority, _Action, _ActionType)
+AND
+DB_LLMIME_Dummy_NextCharacterDummy(_DummyTaskID, _Dummy)
+AND
+NOT LLMIME_Mimicking_Targeting_QRY_PositionMismatch(_Dummy, _TargetX, _TargetY, _TargetZ)
+THEN
+NOT DB_LLMIME_Targeting_Temp_NextDummy(_DummyTaskID, _Caster, _Mime, _TargetX, _TargetY, _TargetZ, _TargetPriority, _Action, _ActionType);
+NOT DB_LLMIME_Dummy_NextCharacterDummy(_DummyTaskID, _Dummy);
+ObjectClearFlag(_Dummy, "LLMIME_Target_ItemIteratorFinished");
+LLMIME_Mimicking_ResetFailTimer(_Mime, _Caster, _Action, _ActionType, 1500);
+LLMIME_Mimic_Target_StartDummyIteration(_Dummy, _Caster, _Mime, _TargetX, _TargetY, _TargetZ, _TargetPriority, _Action, _ActionType);
+
+IF
+StoryEvent((CHARACTERGUID)_Dummy, _DummyTaskID)
+AND
+DB_LLMIME_Targeting_Temp_NextDummy(_DummyTaskID, _Caster, _Mime, _TargetX, _TargetY, _TargetZ, _TargetPriority, _Action, _ActionType)
+AND
+DB_LLMIME_Dummy_NextCharacterDummy(_DummyTaskID, _Dummy)
+AND
+LLMIME_Mimicking_Targeting_QRY_PositionMismatch(_Dummy, _TargetX, _TargetY, _TargetZ)
+THEN
+ObjectClearFlag(_Dummy, "LLMIME_Target_ItemIteratorFinished");
+NOT DB_LLMIME_Dummy_NextCharacterDummy(_DummyTaskID, _Dummy);
+LLMIME_Mimicking_ResetFailTimer(_Mime, _Caster, _Action, _ActionType, 1500);
+CharacterMoveToPosition(_Dummy, _TargetX, _TargetY, _TargetZ, 1, _DummyTaskID);
 
 IF
 StoryEvent((CHARACTERGUID)_Dummy, _DummyTaskID)
@@ -91,17 +130,6 @@ DB_LLMIME_Targeting_Temp_NextDummy(_DummyTaskID, _Caster, _Mime, _TargetX, _Targ
 THEN
 NOT DB_LLMIME_Targeting_Temp_NextDummy(_DummyTaskID, _Caster, _Mime, _TargetX, _TargetY, _TargetZ, _TargetPriority, _Action, _ActionType);
 LLMIME_Mimic_Target_StartDummyIteration(_Dummy, _Caster, _Mime, _TargetX, _TargetY, _TargetZ, _TargetPriority, _Action, _ActionType);
-
-IF
-StoryEvent((CHARACTERGUID)_Dummy, _DummyTaskID) // Fires when the dummy is teleported
-AND
-DB_LLMIME_Targeting_Temp_NextDummy(_DummyTaskID, _Caster, _Mime, _TargetX, _TargetY, _TargetZ, _TargetPriority, _Action, _ActionType)
-AND
-DB_LLMIME_Dummy_NextCharacterDummy(_DummyTaskID, _Dummy)
-THEN
-ObjectClearFlag(_Dummy, "LLMIME_Target_ItemIteratorFinished");
-NOT DB_LLMIME_Dummy_NextCharacterDummy(_DummyTaskID, _Dummy);
-CharacterMoveToPosition(_Dummy, _TargetX, _TargetY, _TargetZ, 1, _DummyTaskID); // Bypass the teleport placement
 
 /*
 //Is the target outside the bounds of the map?
@@ -133,6 +161,7 @@ THEN
 //LeaderLog_Log("TRACE", "[LLMIME:Mime:Targeting] Starting dummy character iterator for [",_Action, _ActionType,"].");
 DB_LLMIME_Mimic_Temp_TargetIterator(_Caster, _Mime, _Dummy, _TargetX, _TargetY, _TargetZ, _EventName, _TargetPriority, _Action, _ActionType);
 CharacterLaunchIteratorAroundCharacter(_Dummy, 1.75, _EventName);
+LLMIME_Mimicking_ResetFailTimer(_Mime, _Caster, _Action, _ActionType, 3000);
 
 IF
 StoryEvent((CHARACTERGUID)_CheckChar, _EventName)
@@ -327,6 +356,7 @@ StringConcatenate(_EventName, "_Item", _NextEventName)
 AND
 StringConcatenate(_EventName, "_Timer", _TimerName)
 THEN
+LLMIME_Mimicking_ResetFailTimer(_Mime, _Caster, _Action, _ActionType, 1500);
 LeaderLog_Log("DEBUG", "[LLMIME:Mime:Targeting:OnIteratorFinished] No characters found. Searching for nearby items with event [",_NextEventName,"].");
 DB_LLMIME_Mimic_Temp_TargetItemIterator(_Caster, _Mime, _Dummy, _TargetX, _TargetY, _TargetZ, _NextEventName, _TargetPriority, _Action, _ActionType, _TimerName);
 SetVarFixedString(_Dummy, "LLMIME_Dummy_IterationEvent", _NextEventName);
@@ -410,6 +440,7 @@ _Target == _Dummy
 AND
 ObjectGetFlag(_Dummy, "LLMIME_Target_ItemIteratorFinished", 1)
 THEN
+LeaderLog_Log("DEBUG", "[LLMIME:Mime:Targeting:OnIteratorFinished] Target is dummy.");
 ObjectClearFlag(_Dummy, "LLMIME_Target_ItemIteratorFinished");
 LLMIME_Mimicking_Targeting_OnTargetSearchFinished(_Caster, _Mime, _Dummy, _Action, _ActionType, _TargetPriority);
 
@@ -420,6 +451,7 @@ DB_LLMIME_Mimic_Temp_MimicTarget(_Mime, _Caster, _Target)
 AND
 _Target != _Dummy
 THEN
+LeaderLog_Log("DEBUG", "[LLMIME:Mime:Targeting:OnIteratorFinished] Target is not dummy.");
 ObjectClearFlag(_Dummy, "LLMIME_Target_ItemIteratorFinished");
 LLMIME_Mimicking_Targeting_OnTargetSearchFinished(_Caster, _Mime, _Dummy, _Action, _ActionType, _TargetPriority);
 //END_REGION
@@ -450,6 +482,7 @@ LLMIME_Dummy_QRY_CreateItemDummy(_DummyID, _x, _y, _z)
 AND
 DB_LLMIME_Dummy_NextItemDummy(_DummyID, _TargetDummy)
 THEN
+LeaderLog_Log("DEBUG", "[LLMIME:Mime:Targeting:OnTargetSearchFinished] Using item dummy for actual target.");
 NOT DB_LLMIME_Mimic_Temp_MimicTarget(_Mime, _Caster, _Target);
 NOT DB_LLMIME_Dummy_NextItemDummy(_DummyID, _TargetDummy);
 LLMIME_Mimicking_TargetSystem_SetFinalTarget(_Caster, _Mime, _Dummy, _Action, _ActionType, _TargetDummy, _TargetPriority);
@@ -484,7 +517,7 @@ LLMIME_Mimicking_TargetSystem_SetFinalTarget((CHARACTERGUID)_Caster, (CHARACTERG
 AND
 _Target == _Dummy
 AND
-_TargetPriority == 1
+_TargetPriority >= 1
 THEN
 SetFaction(_Dummy,"Evil NPC");
 //LeaderLog_Log("TRACE", "[LLMIME:Mime:Targeting] Set dummy faction to [Evil NPC] for next mimic skill [",_Action, _ActionType,"].");
@@ -494,7 +527,7 @@ LLMIME_Mimicking_TargetSystem_SetFinalTarget((CHARACTERGUID)_Caster, (CHARACTERG
 AND
 _Target == _Dummy
 AND
-_TargetPriority == -1
+_TargetPriority <= -1
 THEN
 SetFaction(_Dummy,"Neutral NPC");
 //LeaderLog_Log("TRACE", "[LLMIME:Mime:Targeting] Set dummy faction to [Neutral NPC] for next mimic skill [",_Action, _ActionType,"].");
@@ -510,7 +543,7 @@ LeaderLog_QRY_Log("COMBINE","LLMIME_EventTimer_TargetAcquired_", _MimeID, "_", _
 AND
 DB_LeaderLog_Temp_CombinedString(_EventTimerName)
 THEN
-//LeaderLog_Log("TRACE", "[LLMIME:Mime:Targeting] Launching final timer and then event for [",_Action, _ActionType,"].");
+LeaderLog_Log("DEBUG", "[LLMIME:Mime:Targeting] Launching final timer and then event for [",_ActionType,"][",_Action,"].");
 NOT DB_LeaderLog_Temp_CombinedString(_EventTimerName);
 DB_LLMIME_Mimicking_Temp_FinalMimicTarget(_Mime, _Caster, _Target, _Action, _ActionType, _EventTimerName);
 TimerLaunch(_EventTimerName, 5); // Frames for the dummy's position to update
@@ -520,9 +553,9 @@ TimerFinished(_EventTimerName)
 AND
 DB_LLMIME_Mimicking_Temp_FinalMimicTarget(_Mime, _Caster, _Target, _Action, _ActionType, _EventTimerName)
 THEN
-//LeaderLog_Log("TRACE", "[LLMIME:Mime:Targeting] Sending final target completion event [",_EventTimerName,"].");
+LeaderLog_Log("DEBUG", "[LLMIME:Mime:Targeting] Sending final target completion event [",_EventTimerName,"].");
+LLMIME_Mimicking_ResetFailTimer(_Mime, _Caster, _Action, _ActionType, 1500);
 SetStoryEvent(_Mime, _EventTimerName);
-
 //END_REGION
 
 //REGION DEBUG

@@ -37,14 +37,14 @@ CreateItemTemplateAtPosition("LOOT_BackPack_A_6c70c298-aa29-418f-a659-f8e0b5f5fa
 THEN
 SetTag(_Backpack, "LLMIME_DEBUG_DELETEALL");
 MoveAllItemsTo(_Player, _Backpack, 1, 1, 1);
-CharacterAddSkill(_Player, "Shout_LLMIME_Mimic");
+CharacterAddSkill(_Player, "Summon_LLMIME_Mime");
 CharacterLevelUpTo(_Player, 10);
 CharacterAddAttribute(_Player, "Finesse", 5);
 CharacterAddAttribute(_Player, "Strength", 5);
 CharacterAddAttribute(_Player, "Wits", 5);
 CharacterAddAttribute(_Player, "Intelligence", 5);
 CharacterAddAttribute(_Player, "Constitution", 5);
-SetStoryEvent(_Player, "LLMIME_Events_InitMime");
+//SetStoryEvent(_Player, "LLMIME_Events_InitMime");
 CharacterTransformAppearanceToWithEquipmentSet(_Player, _Player, "Class_Ranger_Act2", 0);
 ItemTemplateAddTo("EQ_Clothing_LLMIME_MimeMask_A_8e66ce79-8c8e-4c22-a8ea-5a99977f4ea8", _Player, 1);
 DB_LLMIME_Debug_HostPlayer(_Player);
@@ -62,6 +62,7 @@ AND
 IsTagged(_Player, "COMPANION", 0)
 THEN
 CharacterRecruitCharacter(_Character, _Player);
+CharacterStopFollow(_Character);
 
 IF
 StoryEvent(NULL_00000000-0000-0000-0000-000000000000, "LLMIME_Events_Debug_IterateCharacters")

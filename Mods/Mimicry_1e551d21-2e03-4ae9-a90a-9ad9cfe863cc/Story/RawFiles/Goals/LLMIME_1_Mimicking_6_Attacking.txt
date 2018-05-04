@@ -117,6 +117,7 @@ NOT DB_LLMIME_Mimicking_MimicQueue_Self(_Mime, _Caster, _Action, "Attack");
 PROC
 LLMIME_Mimicking_MimicActionOnTarget((CHARACTERGUID)_Mime, (CHARACTERGUID)_Caster, (GUIDSTRING)_Target, (STRING)_Action, "Attack")
 THEN
+ApplyStatus(_Mime, "LLMIME_MIMIC_ATTACK_ROOT", 9.0, 1);
 CharacterAttack(_Mime, _Target);
 ObjectClearFlag(_Mime, "LLMIME_MIMIC_PREFER_ITEM_TARGET");
 LLMIME_Mimicking_Attack_StartSuccessTimer(_Mime, _Target, _Action);
@@ -155,6 +156,7 @@ AND
 DB_LLMIME_Timers_AttackSuccessTimer(_TimerName, _Mime, _Target, _Action)
 THEN
 NOT DB_LLMIME_Timers_AttackSuccessTimer(_TimerName, _Mime, _Target, _Action);
+RemoveStatus(_Mime, "LLMIME_MIMIC_ATTACK_ROOT");
 LLMIME_Mimicking_OnMimicSuccess(_Mime, _Action, "Attack");
 
 IF
