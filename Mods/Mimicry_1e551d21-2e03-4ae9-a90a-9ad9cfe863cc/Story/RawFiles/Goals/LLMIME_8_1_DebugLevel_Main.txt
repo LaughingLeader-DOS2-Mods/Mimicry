@@ -200,4 +200,4 @@ GlobalSetFlag(_Flag);
 EXITSECTION
 
 ENDEXITSECTION
-ParentTargetEdge "LLMIME_DebugLevel"
+ParentTargetEdge "LLMIME_8_0_DebugLevel"

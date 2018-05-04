@@ -217,6 +217,29 @@ IsTagged(_Dummy, "LLMIME_DUMMY", 1)
 THEN
 SetOnStage(_Dummy, 0);
 LeaderLog_Log("DEBUG", "[LLMIME:Mimic:Dummy:ResetDummy] Set dummy off stage.");
+
+PROC
+LLMIME_Dummy_ResetDummyAfterDelay((GUIDSTRING)_Dummy, (INTEGER)_Delay)
+AND
+IsTagged(_Dummy, "LLMIME_DUMMY", 1)
+AND
+NOT DB_LLMIME_ResetDummyTimer(_, _Dummy)
+AND
+GetUUID(_Dummy, _ID)
+AND
+StringConcatenate("LLMIME_Timers_ResetDummyAfterDelay_", _ID, _TimerName)
+THEN
+LeaderLog_Log("DEBUG", "[LLMIME:Mimic:Dummy:ResetDummyAfterDelay] Resetting dummy [",_ID,"] after delay.");
+DB_LLMIME_ResetDummyTimer(_TimerName, _Dummy);
+TimerLaunch(_TimerName, _Delay);
+
+IF
+TimerFinished(_TimerName)
+AND
+DB_LLMIME_ResetDummyTimer(_TimerName, _Dummy)
+THEN
+NOT DB_LLMIME_ResetDummyTimer(_TimerName, _Dummy);
+LLMIME_Dummy_ResetDummy(_Dummy);
 //END_REGION
 
 //REGION CLEANUP

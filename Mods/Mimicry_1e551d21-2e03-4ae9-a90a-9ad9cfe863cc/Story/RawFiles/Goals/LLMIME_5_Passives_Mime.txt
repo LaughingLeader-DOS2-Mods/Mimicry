@@ -1,7 +1,7 @@
 Version 1
 SubGoalCombiner SGC_AND
 INITSECTION
-
+LLMIME_MimesStatus_InitSettings();
 KBSECTION
 
 EXITSECTION

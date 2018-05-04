@@ -5,6 +5,7 @@ INIT
 	EXTERN STATUS:%Passive_Brawler = LLMIME_BRAWLER
 	EXTERN STATUS:%Passive_Beastmaster = LLMIME_BEASTMASTER
 	EXTERN STATUS:%Passive_Concentration = LLMIME_CONCENTRATION
+	
 EVENTS
 
 EVENT Mime_Setup
@@ -31,6 +32,14 @@ ACTIONS
 	RemoveStatusInfluence(_Mime, %Passive_Concentration, 9999999)
 	ClearTag(_Mime, "LLMIME_MIME")
 
+EVENT Debug_Item
+VARS
+	CHARACTER:_Char
+	ITEM:_Item
+ON
+	OnUseItem(_Char, _Item)
+ACTIONS
+	CharacterItemEvent(_Char, _Item, "LLMIME_Events_OnItemUse")
 /*
 EVENT OnAttackStart_Object
 VARS

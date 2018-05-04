@@ -17,9 +17,9 @@ NOT DB_LLMIME_Mimic_Temp_MimicTarget(_Mime, _Character, _Target);
 PROC
 LLMIME_Mime_ClearTargetData((CHARACTERGUID)_Mime, (CHARACTERGUID)_Character, (REAL)_StartX, (REAL)_StartY, (REAL)_StartZ, (REAL)_TargetX, (REAL)_TargetY, (REAL)_TargetZ, (INTEGER)_TargetPriority, (STRING)_Action, (STRING)_ActionType)
 AND
-DB_LLMIME_Mime_Temp_FinalMimicTarget(_Mime, _Character, _Target, _Action, _ActionType, _EventTimerName)
+DB_LLMIME_Mimicking_Temp_FinalMimicTarget(_Mime, _Character, _Target, _Action, _ActionType, _EventTimerName)
 THEN
-NOT DB_LLMIME_Mime_Temp_FinalMimicTarget(_Mime, _Character, _Target, _Action, _ActionType, _EventTimerName);
+NOT DB_LLMIME_Mimicking_Temp_FinalMimicTarget(_Mime, _Character, _Target, _Action, _ActionType, _EventTimerName);
 
 PROC
 LLMIME_Mime_ClearTargetData((CHARACTERGUID)_Mime, (CHARACTERGUID)_Character, (REAL)_StartX, (REAL)_StartY, (REAL)_StartZ, (REAL)_TargetX, (REAL)_TargetY, (REAL)_TargetZ, (INTEGER)_TargetPriority, (STRING)_Action, (STRING)_ActionType)
@@ -300,6 +300,8 @@ LeaderLog_Log("DEBUG", "[LLMIME:Mime:Targeting] [ERROR] No target set! How can t
 PROC
 LLMIME_Mime_TargetSystem_CleanupIterator((CHARACTERGUID)_Character, (CHARACTERGUID)_Mime, (CHARACTERGUID)_Dummy, (STRING)_Action, (STRING)_ActionType, (INTEGER)_TargetPriority)
 AND
+GlobalGetFlag("LLMIME_MIMIC_PREFER_ITEM_TARGET", 1)
+AND
 DB_LLMIME_Mimic_Temp_MimicTarget(_Mime, _Character, _Target)
 AND
 _Target == _Dummy
@@ -374,13 +376,13 @@ DB_LeaderLog_Temp_CombinedString(_EventTimerName)
 THEN
 //LeaderLog_Log("TRACE", "[LLMIME:Mime:Targeting] Launching final timer and then event for [",_Action, _ActionType,"].");
 NOT DB_LeaderLog_Temp_CombinedString(_EventTimerName);
-DB_LLMIME_Mime_Temp_FinalMimicTarget(_Mime, _Character, _Target, _Action, _ActionType, _EventTimerName);
+DB_LLMIME_Mimicking_Temp_FinalMimicTarget(_Mime, _Character, _Target, _Action, _ActionType, _EventTimerName);
 TimerLaunch(_EventTimerName, 5); // Frames for the dummy's position to update
 
 IF
 TimerFinished(_EventTimerName)
 AND
-DB_LLMIME_Mime_Temp_FinalMimicTarget(_Mime, _Character, _Target, _Action, _ActionType, _EventTimerName)
+DB_LLMIME_Mimicking_Temp_FinalMimicTarget(_Mime, _Character, _Target, _Action, _ActionType, _EventTimerName)
 THEN
 //LeaderLog_Log("TRACE", "[LLMIME:Mime:Targeting] Sending final target completion event [",_EventTimerName,"].");
 SetStoryEvent(_Mime, _EventTimerName);

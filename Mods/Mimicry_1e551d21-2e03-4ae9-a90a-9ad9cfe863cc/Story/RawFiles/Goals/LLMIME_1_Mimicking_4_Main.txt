@@ -1,19 +1,19 @@
 Version 1
 SubGoalCombiner SGC_AND
 INITSECTION
-//DB_LLMIME_Mime_MimicNextAction(_Mime)
-//DB_LLMIME_Mime_MimicQueue(_Mime, _Caster, _Action, _ActionType, _CastX, _CastY, _CastZ, _TargetX, _TargetY, _TargetZ, _TargetPriority, _IsTarget)
-//DB_LLMIME_Mime_MimicFinalQueue(_Mime, _Caster, _Action, _ActionType, _CastX, _CastY, _CastZ, _TargetX, _TargetY, _TargetZ, _TargetPriority, _IsTarget)
-//DB_LLMIME_Mime_MimicQueue_Self(_Mime, _Caster, _Action, _ActionType)
+//DB_LLMIME_Mimicking_MimicNextAction(_Mime)
+//DB_LLMIME_Mimicking_MimicQueue(_Mime, _Caster, _Action, _ActionType, _CastX, _CastY, _CastZ, _TargetX, _TargetY, _TargetZ, _TargetPriority, _IsTarget)
+//DB_LLMIME_Mimicking_MimicFinalQueue(_Mime, _Caster, _Action, _ActionType, _CastX, _CastY, _CastZ, _TargetX, _TargetY, _TargetZ, _TargetPriority, _IsTarget)
+//DB_LLMIME_Mimicking_MimicQueue_Self(_Mime, _Caster, _Action, _ActionType)
 
-//DB_LLMIME_Mime_CastFallbackTimer(_TimerName, _Caster, _Skill)
-//DB_LLMIME_Mime_MimicActionTimer(_TimerName, _Caster, _Action)
+//DB_LLMIME_Mimicking_CastFallbackTimer(_TimerName, _Caster, _Skill)
+//DB_LLMIME_Mimicking_MimicActionTimer(_TimerName, _Caster, _Action)
 
-//DB_LLMIME_Mime_ActionPosition(_Caster, _Action, _ActionType, _CastX, _CastY, _CastZ)
-//DB_LLMIME_Mime_ResetActionPositionTimer(_TimerName, _Caster, _Action, _ActionType, _CastX, _CastY, _CastZ)
+//DB_LLMIME_Mimicking_ActionPosition(_Caster, _Action, _ActionType, _CastX, _CastY, _CastZ)
+//DB_LLMIME_Mimicking_ResetActionPositionTimer(_TimerName, _Caster, _Action, _ActionType, _CastX, _CastY, _CastZ)
 /*TEMP*/
-//DB_LLMIME_Mime_Temp_ResetDummyAfterCast(_Mime, _Target)
-//DB_LLMIME_Mime_LastEquipped(_Mime, _Slot, _Item)
+//DB_LLMIME_Mimicking_Temp_ResetDummyAfterCast(_Mime, _Target)
+//DB_LLMIME_Mimicking_LastEquipped(_Mime, _Slot, _Item)
 KBSECTION
 //This is used to calculate the correct target position. Important to catch this before the player is moved by an animation.
 //REGION ACTION_POSITION
@@ -24,11 +24,11 @@ CharacterIsPlayer(_Caster, 1)
 AND
 LLMIME_QRY_Mime_CanMimicSkill(_Skill)
 AND
-NOT DB_LLMIME_Mime_ActionPosition(_Caster, _Skill, "Skill", _,_,_)
+NOT DB_LLMIME_Mimicking_ActionPosition(_Caster, _Skill, "Skill", _,_,_)
 AND
 GetPosition(_Caster, _x,_y,_z)
 THEN
-DB_LLMIME_Mime_ActionPosition(_Caster, _Skill, "Skill", _x,_y,_z);
+DB_LLMIME_Mimicking_ActionPosition(_Caster, _Skill, "Skill", _x,_y,_z);
 
 IF
 CharacterUsedSkillAtPosition(_Caster, _,_,_, _Skill, _SkillType)
@@ -37,11 +37,11 @@ CharacterIsPlayer(_Caster, 1)
 AND
 LLMIME_QRY_Mime_CanMimicSkill(_Skill)
 AND
-NOT DB_LLMIME_Mime_ActionPosition(_Caster, _Skill, "Skill", _,_,_)
+NOT DB_LLMIME_Mimicking_ActionPosition(_Caster, _Skill, "Skill", _,_,_)
 AND
 GetPosition(_Caster, _x,_y,_z)
 THEN
-DB_LLMIME_Mime_ActionPosition(_Caster, _Skill, "Skill", _x,_y,_z);
+DB_LLMIME_Mimicking_ActionPosition(_Caster, _Skill, "Skill", _x,_y,_z);
 
 IF
 CharacterUsedSkillOnTarget(_Caster, _, _Skill, _SkillType)
@@ -50,14 +50,14 @@ CharacterIsPlayer(_Caster, 1)
 AND
 LLMIME_QRY_Mime_CanMimicSkill(_Skill)
 AND
-NOT DB_LLMIME_Mime_ActionPosition(_Caster, _Skill, "Skill", _,_,_)
+NOT DB_LLMIME_Mimicking_ActionPosition(_Caster, _Skill, "Skill", _,_,_)
 AND
 GetPosition(_Caster, _x,_y,_z)
 THEN
-DB_LLMIME_Mime_ActionPosition(_Caster, _Skill, "Skill", _x,_y,_z);
+DB_LLMIME_Mimicking_ActionPosition(_Caster, _Skill, "Skill", _x,_y,_z);
 
 IF
-DB_LLMIME_Mime_ActionPosition(_Caster, _Action, _ActionType, _CastX, _CastY, _CastZ)
+DB_LLMIME_Mimicking_ActionPosition(_Caster, _Action, _ActionType, _CastX, _CastY, _CastZ)
 AND
 GetUUID(_Caster, _ID)
 AND
@@ -71,24 +71,24 @@ StringConcatenate(_Str3, _ID, _TimerID)
 AND
 StringConcatenate("LLMIME_Timers_ResetActionPosition_", _TimerID, _TimerName)
 THEN
-DB_LLMIME_Mime_ResetActionPositionTimer(_TimerName, _Caster, _Action, _ActionType, _CastX, _CastY, _CastZ);
+DB_LLMIME_Mimicking_ResetActionPositionTimer(_TimerName, _Caster, _Action, _ActionType, _CastX, _CastY, _CastZ);
 TimerLaunch(_TimerName, 1000);
 
 IF
 TimerFinished(_TimerName)
 AND
-DB_LLMIME_Mime_ResetActionPositionTimer(_TimerName, _Caster, _Action, _ActionType, _CastX, _CastY, _CastZ)
+DB_LLMIME_Mimicking_ResetActionPositionTimer(_TimerName, _Caster, _Action, _ActionType, _CastX, _CastY, _CastZ)
 AND
-DB_LLMIME_Mime_ActionPosition(_Caster, _Action, _ActionType, _CastX, _CastY, _CastZ)
+DB_LLMIME_Mimicking_ActionPosition(_Caster, _Action, _ActionType, _CastX, _CastY, _CastZ)
 THEN
-NOT DB_LLMIME_Mime_ActionPosition(_Caster, _Action, _ActionType, _CastX, _CastY, _CastZ);
+NOT DB_LLMIME_Mimicking_ActionPosition(_Caster, _Action, _ActionType, _CastX, _CastY, _CastZ);
 
 IF
 TimerFinished(_TimerName)
 AND
-DB_LLMIME_Mime_ResetActionPositionTimer(_TimerName, _Caster, _Action, _ActionType, _CastX, _CastY, _CastZ)
+DB_LLMIME_Mimicking_ResetActionPositionTimer(_TimerName, _Caster, _Action, _ActionType, _CastX, _CastY, _CastZ)
 THEN
-NOT DB_LLMIME_Mime_ResetActionPositionTimer(_TimerName, _Caster, _Action, _ActionType, _CastX, _CastY, _CastZ);
+NOT DB_LLMIME_Mimicking_ResetActionPositionTimer(_TimerName, _Caster, _Action, _ActionType, _CastX, _CastY, _CastZ);
 //END_REGION
 
 //REGION QUEUE
@@ -97,7 +97,7 @@ LLMIME_Mime_QueueNextSelfAction((CHARACTERGUID)_Mime, (CHARACTERGUID)_Caster, (S
 AND
 NOT LLMIME_Mime_QRY_ActionQueued(_Mime, _Caster, _Action, _ActionType)
 THEN
-DB_LLMIME_Mime_MimicQueue_Self(_Mime, _Caster, _Action, _ActionType);
+DB_LLMIME_Mimicking_MimicQueue_Self(_Mime, _Caster, _Action, _ActionType);
 
 PROC
 LLMIME_Mime_QueueNextAction((CHARACTERGUID)_Mime, (CHARACTERGUID)_Caster, (STRING)_Action, (STRING)_ActionType, (REAL)_TargetX, (REAL)_TargetY, (REAL)_TargetZ, (INTEGER)_TargetPriority)
@@ -109,9 +109,9 @@ LLMIME_Mime_QueueNextAction((CHARACTERGUID)_Mime, (CHARACTERGUID)_Caster, (STRIN
 AND
 NOT LLMIME_Mime_QRY_ActionQueued(_Mime, _Caster, _Action, _ActionType)
 AND
-DB_LLMIME_Mime_ActionPosition(_Caster, _Action, _ActionType, _CastX, _CastY, _CastZ)
+DB_LLMIME_Mimicking_ActionPosition(_Caster, _Action, _ActionType, _CastX, _CastY, _CastZ)
 THEN
-DB_LLMIME_Mime_MimicQueue(_Mime, _Caster, _Action, _ActionType, _CastX, _CastY, _CastZ, _TargetX, _TargetY, _TargetZ, _TargetPriority, _IsTarget);
+DB_LLMIME_Mimicking_MimicQueue(_Mime, _Caster, _Action, _ActionType, _CastX, _CastY, _CastZ, _TargetX, _TargetY, _TargetZ, _TargetPriority, _IsTarget);
 LLMIME_Mime_ActionQueued(_Mime, _Caster, _Action, _ActionType);
 
 PROC
@@ -122,28 +122,42 @@ DB_NOOP(1);
 QRY
 LLMIME_Mime_QRY_ActionQueued((CHARACTERGUID)_Mime, (CHARACTERGUID)_Caster, (STRING)_Action, (STRING)_ActionType)
 AND
-DB_LLMIME_Mime_MimicQueue_Self(_Mime, _Caster, _Action, _ActionType)
+DB_LLMIME_Mimicking_MimicQueue_Self(_Mime, _Caster, _Action, _ActionType)
 THEN
 DB_NOOP(1);
 
 QRY
 LLMIME_Mime_QRY_ActionQueued((CHARACTERGUID)_Mime, (CHARACTERGUID)_Caster, (STRING)_Action, (STRING)_ActionType)
 AND
-DB_LLMIME_Mime_MimicQueue(_Mime, _Caster, _Action, _ActionType, _CastX, _CastY, _CastZ, _TargetX, _TargetY, _TargetZ, _TargetPriority, _IsTarget)
+DB_LLMIME_Mimicking_MimicQueue(_Mime, _Caster, _Action, _ActionType, _CastX, _CastY, _CastZ, _TargetX, _TargetY, _TargetZ, _TargetPriority, _IsTarget)
 THEN
 DB_NOOP(1);
 
 QRY
 LLMIME_Mime_QRY_ActionQueued((CHARACTERGUID)_Caster, (STRING)_Action, (STRING)_ActionType)
 AND
-DB_LLMIME_Mime_MimicQueue_Self(_Mime, _Caster, _Action, _ActionType)
+DB_LLMIME_Mimicking_MimicQueue_Self(_Mime, _Caster, _Action, _ActionType)
 THEN
 DB_NOOP(1);
 
 QRY
 LLMIME_Mime_QRY_ActionQueued((CHARACTERGUID)_Caster, (STRING)_Action, (STRING)_ActionType)
 AND
-DB_LLMIME_Mime_MimicQueue(_Mime, _Caster, _Action, _ActionType, _CastX, _CastY, _CastZ, _TargetX, _TargetY, _TargetZ, _TargetPriority, _IsTarget)
+DB_LLMIME_Mimicking_MimicQueue(_Mime, _Caster, _Action, _ActionType, _CastX, _CastY, _CastZ, _TargetX, _TargetY, _TargetZ, _TargetPriority, _IsTarget)
+THEN
+DB_NOOP(1);
+
+QRY
+LLMIME_Mime_QRY_ActionTypeQueued((CHARACTERGUID)_Caster, (STRING)_ActionType)
+AND
+DB_LLMIME_Mimicking_MimicQueue_Self(_Mime, _Caster, _Action, _ActionType)
+THEN
+DB_NOOP(1);
+
+QRY
+LLMIME_Mime_QRY_ActionTypeQueued((CHARACTERGUID)_Caster, (STRING)_ActionType)
+AND
+DB_LLMIME_Mimicking_MimicQueue(_Mime, _Caster, _Action, _ActionType, _CastX, _CastY, _CastZ, _TargetX, _TargetY, _TargetZ, _TargetPriority, _IsTarget)
 THEN
 DB_NOOP(1);
 //END_REGION
@@ -152,31 +166,31 @@ DB_NOOP(1);
 PROC
 LLMIME_Mime_ClearQueue((CHARACTERGUID)_Mime, (CHARACTERGUID)_Caster, (STRING)_Action, (STRING)_ActionType)
 AND
-DB_LLMIME_Mime_MimicQueue(_Mime, _Caster, _Action, _ActionType, _CastX, _CastY, _CastZ, _TargetX, _TargetY, _TargetZ, _TargetPriority, _IsTarget)
+DB_LLMIME_Mimicking_MimicQueue(_Mime, _Caster, _Action, _ActionType, _CastX, _CastY, _CastZ, _TargetX, _TargetY, _TargetZ, _TargetPriority, _IsTarget)
 THEN
 LLMIME_Mime_ClearTargetData(_Mime, _Caster, _CastX, _CastY, _CastZ, _TargetX, _TargetY, _TargetZ, _TargetPriority, _Action, _ActionType);
-NOT DB_LLMIME_Mime_MimicQueue(_Mime, _Caster, _Action, _ActionType, _CastX, _CastY, _CastZ, _TargetX, _TargetY, _TargetZ, _TargetPriority, _IsTarget);
+NOT DB_LLMIME_Mimicking_MimicQueue(_Mime, _Caster, _Action, _ActionType, _CastX, _CastY, _CastZ, _TargetX, _TargetY, _TargetZ, _TargetPriority, _IsTarget);
 
 PROC
 LLMIME_Mime_ClearQueue((CHARACTERGUID)_Mime, (CHARACTERGUID)_Caster, (STRING)_Action, (STRING)_ActionType)
 AND
-DB_LLMIME_Mime_MimicQueue_Self(_Mime, _Caster, _Action, _ActionType)
+DB_LLMIME_Mimicking_MimicQueue_Self(_Mime, _Caster, _Action, _ActionType)
 THEN
-NOT DB_LLMIME_Mime_MimicQueue_Self(_Mime, _Caster, _Action, _ActionType);
+NOT DB_LLMIME_Mimicking_MimicQueue_Self(_Mime, _Caster, _Action, _ActionType);
 
 PROC
 LLMIME_Mime_ClearQueue((CHARACTERGUID)_Mime, (CHARACTERGUID)_Caster, (STRING)_Action, (STRING)_ActionType)
 AND
-DB_LLMIME_Mime_MimicFinalQueue(_Mime, _Caster, _Action, _ActionType, _CastX, _CastY, _CastZ, _TargetX, _TargetY, _TargetZ, _TargetPriority, _IsTarget)
+DB_LLMIME_Mimicking_MimicFinalQueue(_Mime, _Caster, _Action, _ActionType, _CastX, _CastY, _CastZ, _TargetX, _TargetY, _TargetZ, _TargetPriority, _IsTarget)
 THEN
-NOT DB_LLMIME_Mime_MimicFinalQueue(_Mime, _Caster, _Action, _ActionType, _CastX, _CastY, _CastZ, _TargetX, _TargetY, _TargetZ, _TargetPriority, _IsTarget);
+NOT DB_LLMIME_Mimicking_MimicFinalQueue(_Mime, _Caster, _Action, _ActionType, _CastX, _CastY, _CastZ, _TargetX, _TargetY, _TargetZ, _TargetPriority, _IsTarget);
 //END_REGION
 
 //REGION FAIL_TIMER
 PROC
 LLMIME_Mime_MimicAction((CHARACTERGUID)_Caster, (STRING)_Action, (STRING)_ActionType)
 AND
-DB_LLMIME_Mime_MimicQueue(_Mime, _Caster, _Action, _ActionType, _, _, _, _, _, _, _, _)
+DB_LLMIME_Mimicking_MimicQueue(_Mime, _Caster, _Action, _ActionType, _, _, _, _, _, _, _, _)
 THEN
 LLMIME_Mime_StartFailTimer(_Mime, _Caster, _Action, _ActionType);
 
@@ -195,16 +209,23 @@ StringConcatenate(_Str3, _ID, _TimerID)
 AND
 StringConcatenate("LLMIME_Timers_MimicFailTimer_", _TimerID, _TimerName)
 THEN
-DB_LLMIME_Mime_MimicFailTimer(_TimerName, _Mime, _Caster, _Action, _ActionType);
+DB_LLMIME_Mimicking_MimicFailTimer(_TimerName, _Mime, _Caster, _Action, _ActionType);
 TimerLaunch(_TimerName, 2000);
 
 IF
 TimerFinished(_TimerName)
 AND
-DB_LLMIME_Mime_MimicFailTimer(_TimerName, _Mime, _Caster, _Action, _ActionType)
+DB_LLMIME_Mimicking_MimicFailTimer(_TimerName, _Mime, _Caster, _Action, _ActionType)
 THEN
-NOT DB_LLMIME_Mime_MimicFailTimer(_TimerName, _Mime, _Caster, _Action, _ActionType);
+NOT DB_LLMIME_Mimicking_MimicFailTimer(_TimerName, _Mime, _Caster, _Action, _ActionType);
 LLMIME_Mime_OnMimicFailed(_Mime, _Caster, _Action, _ActionType);
+
+PROC
+LLMIME_Mime_OnMimicFailed((CHARACTERGUID)_Mime, (CHARACTERGUID)_Caster, (STRING)_Action, (STRING)_ActionType)
+AND
+CharacterGetDisplayName(_Caster, _, _Name)
+THEN
+LeaderLog_Log("DEBUG", "[LLMIME:Mime:OnMimicSuccess] Mime failed to mimic [",_ActionType,"][",_Action,"] for character [",_Name,"].");
 
 PROC
 LLMIME_Mime_OnMimicFailed((CHARACTERGUID)_Mime, (CHARACTERGUID)_Caster, (STRING)_Action, (STRING)_ActionType)
@@ -220,55 +241,96 @@ PlayAnimation(_Mime, "emotion_angry");
 PROC
 LLMIME_Mime_OnMimicFailed((CHARACTERGUID)_Mime, (CHARACTERGUID)_Caster, (STRING)_Action, (STRING)_ActionType)
 AND
-DB_LLMIME_Mime_Temp_ResetDummyAfterCast(_Mime, _Target, _Action, _ActionType)
+DB_LLMIME_Mimicking_Temp_ResetDummyAfterCast(_Mime, _Target, _Action, _ActionType)
 THEN
-NOT DB_LLMIME_Mime_Temp_ResetDummyAfterCast(_Mime, _Target, _Action, _ActionType);
+NOT DB_LLMIME_Mimicking_Temp_ResetDummyAfterCast(_Mime, _Target, _Action, _ActionType);
 LLMIME_Dummy_ResetDummy((GUIDSTRING)_Target);
+//END_REGION
+
+//REGION MIMIC_START_NEXT
+PROC
+LLMIME_Mime_StartNextMimic((CHARACTERGUID)_Caster, (STRING)_Action, (STRING)_ActionType)
+AND
+DB_LLMIME_Mimicking_CastFallbackTimer(_TimerName, _Caster, _Action)
+THEN
+NOT DB_LLMIME_Mimicking_CastFallbackTimer(_TimerName, _Caster, _Action);
+TimerCancel(_TimerName);
+
+PROC
+LLMIME_Mime_StartNextMimic((CHARACTERGUID)_Caster, (STRING)_Action, (STRING)_ActionType)
+AND
+GetUUID(_Caster, _ID)
+AND
+StringConcatenate(_ActionType, "_", _Str1)
+AND
+StringConcatenate(_Str1, _Action, _Str2)
+AND
+StringConcatenate(_Str2, "_", _Str3)
+AND
+StringConcatenate(_Str3, _ID, _TimerID)
+AND
+StringConcatenate("LLMIME_Timers_MimicActionTimer_", _TimerID, _TimerName)
+THEN
+DB_LLMIME_Mimicking_MimicActionTimer(_TimerName, _Caster, _Action, _ActionType);
+TimerLaunch(_TimerName, 500);
+
+IF
+TimerFinished(_TimerName)
+AND
+DB_LLMIME_Mimicking_MimicActionTimer(_TimerName, _Caster, _Action, _ActionType)
+THEN
+NOT DB_LLMIME_Mimicking_MimicActionTimer(_TimerName, _Caster, _Action, _ActionType);
+LLMIME_Mime_MimicAction(_Caster, _Action, _ActionType);
 //END_REGION
 
 //REGION MIMIC_ACTION_START
 PROC
 LLMIME_Mime_MimicAction((CHARACTERGUID)_Caster, (STRING)_Action, (STRING)_ActionType)
 AND
-DB_LLMIME_Mime_MimicQueue(_Mime, _Caster, _Action, _ActionType, _CastX, _CastY, _CastZ, _TargetX, _TargetY, _TargetZ, _TargetPriority, _IsTarget)
+DB_LLMIME_Mimicking_MimicQueue(_Mime, _Caster, _Action, _ActionType, _CastX, _CastY, _CastZ, _TargetX, _TargetY, _TargetZ, _TargetPriority, _IsTarget)
 THEN
-NOT DB_LLMIME_Mime_MimicQueue(_Mime, _Caster, _Action, _ActionType, _CastX, _CastY, _CastZ, _TargetX, _TargetY, _TargetZ, _TargetPriority, _IsTarget);
-DB_LLMIME_Mime_MimicFinalQueue(_Mime, _Caster, _Action, _ActionType, _CastX, _CastY, _CastZ, _TargetX, _TargetY, _TargetZ, _TargetPriority, _IsTarget);
+NOT DB_LLMIME_Mimicking_MimicQueue(_Mime, _Caster, _Action, _ActionType, _CastX, _CastY, _CastZ, _TargetX, _TargetY, _TargetZ, _TargetPriority, _IsTarget);
+DB_LLMIME_Mimicking_MimicFinalQueue(_Mime, _Caster, _Action, _ActionType, _CastX, _CastY, _CastZ, _TargetX, _TargetY, _TargetZ, _TargetPriority, _IsTarget);
 LeaderLog_Log("DEBUG", "[LLMIME:Mime:MimicAction] Starting target calculation for [",_ActionType,"][",_Action,"].");
 LLMIME_Mimic_CalculateTarget(_Mime, _Caster, _CastX, _CastY, _CastZ, _TargetX, _TargetY, _TargetZ, _TargetPriority, _Action, _ActionType);
 
 IF
 StoryEvent((CHARACTERGUID)_Mime, _EventName)
 AND
-DB_LLMIME_Mime_Temp_FinalMimicTarget(_Mime, _Caster, _Target, _Action, _ActionType, _EventName)
+DB_LLMIME_Mimicking_Temp_FinalMimicTarget(_Mime, _Caster, _Target, _Action, _ActionType, _EventName)
 AND
 IsTagged(_Target, "LLMIME_DUMMY", 1)
 AND
-DB_LLMIME_Mime_MimicFinalQueue(_Mime, _Caster, _Action, _ActionType, _CastX, _CastY, _CastZ, _TargetX, _TargetY, _TargetZ, _TargetPriority, _IsTarget)
+DB_LLMIME_Mimicking_MimicFinalQueue(_Mime, _Caster, _Action, _ActionType, _CastX, _CastY, _CastZ, _TargetX, _TargetY, _TargetZ, _TargetPriority, _IsTarget)
 THEN
 LeaderLog_Log("DEBUG", "[LLMIME:Mime:",_EventName,"] Added dummy to the reset after action DB.");
-DB_LLMIME_Mime_Temp_ResetDummyAfterCast(_Mime, _Target, _Action, _ActionType);
+DB_LLMIME_Mimicking_Temp_ResetDummyAfterCast(_Mime, _Target, _Action, _ActionType);
 
 IF
 StoryEvent((CHARACTERGUID)_Mime, _EventName)
 AND
-DB_LLMIME_Mime_Temp_FinalMimicTarget(_Mime, _Caster, _Target, _Action, _ActionType, _EventName)
+DB_LLMIME_Mimicking_Temp_FinalMimicTarget(_Mime, _Caster, _Target, _Action, _ActionType, _EventName)
 AND
-DB_LLMIME_Mime_MimicFinalQueue(_Mime, _Caster, _Action, _ActionType, _CastX, _CastY, _CastZ, _TargetX, _TargetY, _TargetZ, _TargetPriority, _IsTarget)
+DB_LLMIME_Mimicking_MimicFinalQueue(_Mime, _Caster, _Action, _ActionType, _CastX, _CastY, _CastZ, _TargetX, _TargetY, _TargetZ, _TargetPriority, _IsTarget)
 THEN
 LeaderLog_Log("DEBUG", "[LLMIME:Mime:",_EventName,"] Running final mimic action [",_Action,"][",_ActionType,"] for mime.");
-NOT DB_LLMIME_Mime_MimicFinalQueue(_Mime, _Caster, _Action, _ActionType, _CastX, _CastY, _CastZ, _TargetX, _TargetY, _TargetZ, _TargetPriority, _IsTarget);
-NOT DB_LLMIME_Mime_Temp_FinalMimicTarget(_Mime, _Caster, _Target, _Action, _ActionType, _EventName);
+NOT DB_LLMIME_Mimicking_MimicFinalQueue(_Mime, _Caster, _Action, _ActionType, _CastX, _CastY, _CastZ, _TargetX, _TargetY, _TargetZ, _TargetPriority, _IsTarget);
+NOT DB_LLMIME_Mimicking_Temp_FinalMimicTarget(_Mime, _Caster, _Target, _Action, _ActionType, _EventName);
 LLMIME_Mime_MimicActionOnTarget(_Mime, _Caster, _Target, _Action, _ActionType);
 //END_REGION
 
 //REGION MIMIC_SUCCESS
 PROC
 LLMIME_Mime_OnMimicSuccess((CHARACTERGUID)_Mime, (STRING)_Action, (STRING)_ActionType)
-AND
-DB_LLMIME_Mime_MimicFailTimer(_TimerName, _Mime, _Caster, _Action, _ActionType)
 THEN
-NOT DB_LLMIME_Mime_MimicFailTimer(_TimerName, _Mime, _Caster, _Action, _ActionType);
+LeaderLog_Log("DEBUG", "[LLMIME:Mime:OnMimicSuccess] Mime successfully mimicked [",_ActionType,"][",_Action,"].");
+
+PROC
+LLMIME_Mime_OnMimicSuccess((CHARACTERGUID)_Mime, (STRING)_Action, (STRING)_ActionType)
+AND
+DB_LLMIME_Mimicking_MimicFailTimer(_TimerName, _Mime, _Caster, _Action, _ActionType)
+THEN
+NOT DB_LLMIME_Mimicking_MimicFailTimer(_TimerName, _Mime, _Caster, _Action, _ActionType);
 TimerCancel(_TimerName);
 //END_REGION
 
@@ -277,7 +339,18 @@ TimerCancel(_TimerName);
 QRY
 LLMIME_Mime_Skills_QRY_WeaponSkillTypeMatch((STRING)_Skill, (STRING)_SkillType)
 AND
-DB_LLMIME_Mime_Skills_WeaponSkillTypes(_SkillType)
+DB_LLMIME_Mimicking_Skills_WeaponSkillTypes(_SkillType)
+AND
+NOT LLMIME_Mime_Skills_QRY_IgnoredSkillStringMatch(_Skill)
+THEN
+DB_NOOP(1);
+
+QRY
+LLMIME_Mime_Skills_QRY_IgnoredSkillStringMatch((STRING)_Skill)
+AND
+DB_LLMIME_Mimicking_Skills_IgnoreWeaponSkillWith(_Str)
+AND
+StringContains(_Skill, _Str, 1)
 THEN
 DB_NOOP(1);
 
@@ -295,40 +368,40 @@ LLMIME_Mime_TrackWeapons((CHARACTERGUID)_Mime, (CHARACTERGUID)_Caster, (STRING)_
 AND
 CharacterGetEquippedWeapon(_Caster, _MainHand)
 AND
-NOT DB_LLMIME_Mime_Temp_CasterWeapons(_Caster, _, _)
+NOT DB_LLMIME_Mimicking_Temp_CasterWeapons(_Caster, _, _)
 THEN
-DB_LLMIME_Mime_Temp_CasterWeapons(_Caster, _MainHand, NULL_00000000-0000-0000-0000-000000000000);
+DB_LLMIME_Mimicking_Temp_CasterWeapons(_Caster, _MainHand, NULL_00000000-0000-0000-0000-000000000000);
 
 PROC
 LLMIME_Mime_TrackWeapons((CHARACTERGUID)_Mime, (CHARACTERGUID)_Caster, (STRING)_Skill, (STRING)_SkillType, (STRING)_SkillElement)
 AND
 CharacterGetEquippedShield(_Caster, _Offhand)
 AND
-DB_LLMIME_Mime_Temp_CasterWeapons(_Caster, _MainHand, NULL_00000000-0000-0000-0000-000000000000)
+DB_LLMIME_Mimicking_Temp_CasterWeapons(_Caster, _MainHand, NULL_00000000-0000-0000-0000-000000000000)
 THEN
-NOT DB_LLMIME_Mime_Temp_CasterWeapons(_Caster, _MainHand, NULL_00000000-0000-0000-0000-000000000000);
-DB_LLMIME_Mime_Temp_CasterWeapons(_Caster, _MainHand, _Offhand);
+NOT DB_LLMIME_Mimicking_Temp_CasterWeapons(_Caster, _MainHand, NULL_00000000-0000-0000-0000-000000000000);
+DB_LLMIME_Mimicking_Temp_CasterWeapons(_Caster, _MainHand, _Offhand);
 
 PROC
 LLMIME_Mime_TrackWeapons((CHARACTERGUID)_Mime, (CHARACTERGUID)_Caster, (STRING)_Skill, (STRING)_SkillType, (STRING)_SkillElement)
 AND
 CharacterGetEquippedShield(_Caster, _Offhand)
 AND
-NOT DB_LLMIME_Mime_Temp_CasterWeapons(_Caster, _, _)
+NOT DB_LLMIME_Mimicking_Temp_CasterWeapons(_Caster, _, _)
 THEN
-DB_LLMIME_Mime_Temp_CasterWeapons(_Caster, NULL_00000000-0000-0000-0000-000000000000, _Offhand);
+DB_LLMIME_Mimicking_Temp_CasterWeapons(_Caster, NULL_00000000-0000-0000-0000-000000000000, _Offhand);
 
 PROC
 LLMIME_Mime_MarkItemForOneTimeUse((CHARACTERGUID)_Mime, (ITEMGUID)_Weapon, (STRING)_Action, (STRING)_ActionType)
 THEN
-DB_LLMIME_Mime_Temp_MimicWeapon(_Mime, _Weapon, _Action, _ActionType);
+DB_LLMIME_Mimicking_Temp_MimicWeapon(_Mime, _Weapon, _Action, _ActionType);
 
 PROC
 LLMIME_Mime_MimicActionOnTarget((CHARACTERGUID)_Mime, (CHARACTERGUID)_Caster, (GUIDSTRING)_Target, (STRING)_Action, (STRING)_ActionType)
 AND
 _ActionType != "Item"
 AND
-DB_LLMIME_Mime_Temp_CasterWeapons(_Caster, _MainHand, _Offhand)
+DB_LLMIME_Mimicking_Temp_CasterWeapons(_Caster, _MainHand, _Offhand)
 AND
 _MainHand != NULL_00000000-0000-0000-0000-000000000000
 AND
@@ -340,6 +413,7 @@ CreateItemTemplateAtPosition(_Template, _x, _y, _z, _Weapon)
 AND
 CharacterGetLevel(_Caster, _Level)
 THEN
+SetTag(_Weapon, "LLMIME_MIMICKED_WEAPON");
 LLMIME_Mime_SaveEquippedWeapons(_Mime);
 ItemLevelUpTo(_Weapon, _Level);
 CharacterEquipItem(_Mime, _Weapon);
@@ -350,7 +424,7 @@ LLMIME_Mime_MimicActionOnTarget((CHARACTERGUID)_Mime, (CHARACTERGUID)_Caster, (G
 AND
 _ActionType != "Item"
 AND
-DB_LLMIME_Mime_Temp_CasterWeapons(_Caster, _MainHand, _Offhand)
+DB_LLMIME_Mimicking_Temp_CasterWeapons(_Caster, _MainHand, _Offhand)
 AND
 _Offhand != NULL_00000000-0000-0000-0000-000000000000
 AND
@@ -362,6 +436,7 @@ CreateItemTemplateAtPosition(_Template, _x, _y, _z, _Weapon)
 AND
 CharacterGetLevel(_Caster, _Level)
 THEN
+SetTag(_Weapon, "LLMIME_MIMICKED_WEAPON");
 LLMIME_Mime_SaveEquippedWeapons(_Mime);
 ItemLevelUpTo(_Weapon, _Level);
 CharacterEquipItem(_Mime, _Weapon);
@@ -372,14 +447,14 @@ LLMIME_Mime_SaveEquippedWeapons((CHARACTERGUID)_Mime)
 AND
 CharacterGetEquippedItem(_Mime, "Weapon", (ITEMGUID)_Item)
 THEN
-DB_LLMIME_Mime_LastEquipped(_Mime, "Weapon", _Item);
+DB_LLMIME_Mimicking_LastEquipped(_Mime, "Weapon", _Item);
 
 PROC
 LLMIME_Mime_SaveEquippedWeapons((CHARACTERGUID)_Mime)
 AND
 CharacterGetEquippedItem(_Mime, "Shield", (ITEMGUID)_Item)
 THEN
-DB_LLMIME_Mime_LastEquipped(_Mime, "Shield", _Item);
+DB_LLMIME_Mimicking_LastEquipped(_Mime, "Shield", _Item);
 //END_REGION
 
 //REGION WEAPON_RESET
@@ -397,22 +472,24 @@ LLMIME_Mime_StartDeleteOneTimeUseWeaponsTimer(_Mime, _Action, _ActionType);
 IF
 ItemUnEquipped(_Weapon, _Mime)
 AND
-DB_LLMIME_Mime_Temp_MimicWeapon(_Mime, _Weapon, _Action, _ActionType)
+DB_LLMIME_Mimicking_Temp_MimicWeapon(_Mime, _Weapon, _Action, _ActionType)
 THEN
 CharacterUnequipItem(_Mime, _Weapon);
 ItemDestroy(_Weapon);
 SetOnStage(_Weapon, 0);
-NOT DB_LLMIME_Mime_Temp_MimicWeapon(_Mime, _Weapon, _Action, _ActionType);
+NOT DB_LLMIME_Mimicking_Temp_MimicWeapon(_Mime, _Weapon, _Action, _ActionType);
 
 QRY
 LLMIME_Mime_QRY_HasOneTimeUseWeapons((CHARACTERGUID)_Mime, (STRING)_Action, (STRING)_ActionType)
 AND
-DB_LLMIME_Mime_Temp_MimicWeapon(_Mime, _Weapon, _Action, _ActionType)
+DB_LLMIME_Mimicking_Temp_MimicWeapon(_Mime, _Weapon, _Action, _ActionType)
 THEN
 DB_NOOP(1);
 
 PROC
 LLMIME_Mime_StartDeleteOneTimeUseWeaponsTimer((CHARACTERGUID)_Mime, (STRING)_Action, (STRING)_ActionType)
+AND
+NOT DB_LLMIME_Mimicking_DeleteOneTimeUseWeaponsTimer(_, _Mime, _Action, _ActionType)
 AND
 LLMIME_Mime_QRY_HasOneTimeUseWeapons(_Mime, _Action, _ActionType)
 AND
@@ -428,13 +505,13 @@ StringConcatenate(_Str3, _ID, _TimerID)
 AND
 StringConcatenate("LLMIME_Timers_DeleteOneTimeUseWeapons_", _TimerID, _TimerName)
 THEN
-DB_LLMIME_Mime_DeleteOneTimeUseWeaponsTimer(_TimerName, _Mime, _Action, _ActionType);
+DB_LLMIME_Mimicking_DeleteOneTimeUseWeaponsTimer(_TimerName, _Mime, _Action, _ActionType);
 TimerLaunch(_TimerName, 4000);
 
 IF
 SkillCast(_Mime, _Action, _)
 AND
-DB_LLMIME_Mime_DeleteOneTimeUseWeaponsTimer(_TimerName, _Mime, _Action, _ActionType)
+DB_LLMIME_Mimicking_DeleteOneTimeUseWeaponsTimer(_TimerName, _Mime, _Action, _ActionType)
 THEN
 TimerCancel(_TimerName);
 TimerLaunch(_TimerName, 2000);
@@ -442,36 +519,36 @@ TimerLaunch(_TimerName, 2000);
 IF
 TimerFinished(_TimerName)
 AND
-DB_LLMIME_Mime_DeleteOneTimeUseWeaponsTimer(_TimerName, _Mime, _Action, _ActionType)
+DB_LLMIME_Mimicking_DeleteOneTimeUseWeaponsTimer(_TimerName, _Mime, _Action, _ActionType)
 THEN
-NOT DB_LLMIME_Mime_DeleteOneTimeUseWeaponsTimer(_TimerName, _Mime, _Action, _ActionType);
+NOT DB_LLMIME_Mimicking_DeleteOneTimeUseWeaponsTimer(_TimerName, _Mime, _Action, _ActionType);
 LLMIME_Mime_DeleteOneTimeUseWeapons(_Mime, _Action, _ActionType);
 
 PROC
 LLMIME_Mime_DeleteOneTimeUseWeapons((CHARACTERGUID)_Mime, (STRING)_Action, (STRING)_ActionType)
 AND
-DB_LLMIME_Mime_Temp_MimicWeapon(_Mime, _Weapon, _Action, _ActionType)
+DB_LLMIME_Mimicking_Temp_MimicWeapon(_Mime, _Weapon, _Action, _ActionType)
 THEN
 CharacterUnequipItem(_Mime, _Weapon);
 ItemDestroy(_Weapon);
 SetOnStage(_Weapon, 0);
-NOT DB_LLMIME_Mime_Temp_MimicWeapon(_Mime, _Weapon, _Action, _ActionType);
+NOT DB_LLMIME_Mimicking_Temp_MimicWeapon(_Mime, _Weapon, _Action, _ActionType);
 
 PROC
 LLMIME_Mime_DeleteOneTimeUseWeapons((CHARACTERGUID)_Mime, (STRING)_Action, (STRING)_ActionType)
 AND
-DB_LLMIME_Mime_LastEquipped(_Mime, "Weapon", _Item)
+DB_LLMIME_Mimicking_LastEquipped(_Mime, "Weapon", _Item)
 THEN
 CharacterEquipItem(_Mime, _Item);
-NOT DB_LLMIME_Mime_LastEquipped(_Mime, "Weapon", _Item);
+NOT DB_LLMIME_Mimicking_LastEquipped(_Mime, "Weapon", _Item);
 
 PROC
 LLMIME_Mime_DeleteOneTimeUseWeapons((CHARACTERGUID)_Mime, (STRING)_Action, (STRING)_ActionType)
 AND
-DB_LLMIME_Mime_LastEquipped(_Mime, "Shield", _Item)
+DB_LLMIME_Mimicking_LastEquipped(_Mime, "Shield", _Item)
 THEN
 CharacterEquipItem(_Mime, _Item);
-NOT DB_LLMIME_Mime_LastEquipped(_Mime, "Shield", _Item);
+NOT DB_LLMIME_Mimicking_LastEquipped(_Mime, "Shield", _Item);
 //END_REGION
 
 /*

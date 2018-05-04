@@ -81,7 +81,14 @@ DB_NOOP(1);
 QRY
 LLMIME_QRY_WeaponIsBrawlerFist((ITEMGUID)_Item)
 AND
-GetTemplate(_Item, "WPN_LLMIME_BrawlerFist_e1bda904-93c2-4f6f-8136-1a547279fd1f")
+IsTagged(_Item, "UNARMED_WEAPON", 1)
+THEN
+DB_NOOP(1);
+
+QRY
+LLMIME_QRY_WeaponIsBrawlerFist((ITEMGUID)_Item)
+AND
+IsTagged(_Item, "LLMIME_BrawlerFist", 1)
 THEN
 DB_NOOP(1);
 
@@ -95,22 +102,26 @@ DB_NOOP(1);
 QRY
 LLMIME_QRY_WeaponEquippedInMainHand((CHARACTERGUID)_Mime)
 AND
-CharacterGetEquippedItem(_Mime, "Weapon", _Item)
+CharacterGetEquippedItem(_Mime, "Weapon", (ITEMGUID)_Item)
 AND
 NOT LLMIME_QRY_WeaponIsBrawlerFist(_Item)
+AND
+NOT IsTagged(_Item, "LLMIME_MIMICKED_WEAPON", 1)
 THEN
 DB_NOOP(1);
 
 QRY
 LLMIME_QRY_WeaponEquippedInOffHand((CHARACTERGUID)_Mime)
 AND
-CharacterGetEquippedItem(_Mime, "Shield", _Item)
+CharacterGetEquippedItem(_Mime, "Shield", (ITEMGUID)_Item)
 AND
 GetTemplate(_Item, _Template)
 AND
 StringContains(_Template, "_Shield_", 0)
 AND
 NOT LLMIME_QRY_WeaponIsBrawlerFist(_Item)
+AND
+NOT IsTagged(_Item, "LLMIME_MIMICKED_WEAPON", 1)
 THEN
 DB_NOOP(1);
 
@@ -129,6 +140,8 @@ AND
 CharacterGetEquippedItem(_Mime, "Weapon", _Item)
 AND
 NOT LLMIME_QRY_WeaponIsBrawlerFist(_Item)
+AND
+NOT IsTagged(_Item, "LLMIME_MIMICKED_WEAPON", 1)
 THEN
 DB_NOOP(1);
 
@@ -137,11 +150,13 @@ LLMIME_QRY_ItemIsWeapon((CHARACTERGUID)_Mime, (ITEMGUID)_Item)
 AND
 CharacterGetEquippedItem(_Mime, "Shield", _Item)
 AND
+NOT LLMIME_QRY_WeaponIsBrawlerFist(_Item)
+AND
 GetTemplate(_Item, _Template)
 AND
-NOT LLMIME_QRY_WeaponIsBrawlerFistTemplate(_Template)
-AND
 StringContains(_Template, "_Shield_", 0)
+AND
+NOT IsTagged(_Item, "LLMIME_MIMICKED_WEAPON", 1)
 THEN
 DB_NOOP(1);
 

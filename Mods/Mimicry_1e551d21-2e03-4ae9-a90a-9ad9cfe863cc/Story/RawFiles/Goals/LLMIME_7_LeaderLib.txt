@@ -1,0 +1,28 @@
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+
+KBSECTION
+IF
+StoryEvent(_, "LeaderLib_Initialized")
+AND
+NOT DB_LLMIME_RegisteredLeaderLibSettings(_)
+THEN
+LLMIME_LeaderLib_RegisterSettings();
+DB_LLMIME_RegisteredLeaderLibSettings(1);
+
+PROC
+LLMIME_LeaderLib_RegisterSettings()
+THEN
+LeaderLib_Register_ModMenu("LaughingLeader_Mimicry", "[Mimicry] Settings", "LLMIME_SettingsMenu", "Mimicry", "LaughingLeader");
+
+PROC
+LLMIME_LeaderLib_RegisterSettings()
+THEN
+LLLIB_Trader_Register_Position("LLLIB_LeaderTrader", "TestLevel_LL_Mimicry", 12.0, 0.0, 8.0);
+LLLIB_Trader_Register_StartingGold("LLLIB_LeaderTrader", "TestLevel_LL_Mimicry", 9999);
+//LLLIB_Trader_Register_PositionObject("LLLIB_LeaderTrader", "LLNWIZ_DebugLevel", ITEMGUID_WPN_Dwarves_Shield_A_000_ef289002-e5b3-4a3e-8ad5-1d68ac847f67);
+EXITSECTION
+
+ENDEXITSECTION
+ParentTargetEdge "LaughingLeader_Mimicry"

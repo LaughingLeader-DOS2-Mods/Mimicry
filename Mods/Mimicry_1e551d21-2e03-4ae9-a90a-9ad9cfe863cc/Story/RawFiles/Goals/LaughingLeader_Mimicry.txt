@@ -1,11 +1,11 @@
 Version 1
 SubGoalCombiner SGC_AND
 INITSECTION
-LLMIME_Start_Internal_CompleteIfStarted(); // Existing saves
+LLMIME_Internal_CompleteIfStarted(); // Existing saves
 
 KBSECTION
 PROC
-LLMIME_Internal_StartMime()
+LLMIME_Internal_Start()
 THEN
 DebugBreak("[LLMIME] Mimicry starting.");
 GoalCompleted;
@@ -13,15 +13,15 @@ GoalCompleted;
 IF
 GameEventSet("GAMEEVENT_GameStarted")
 THEN
-LLMIME_Internal_StartMime();
+LLMIME_Internal_Start();
 
 PROC
-LLMIME_Start_Internal_CompleteIfStarted()
+LLMIME_Internal_CompleteIfStarted()
 AND
 DB_StoryStarted(_)
 THEN
 DebugBreak("[LLMIME] Existing save detected. Starting Mimicry.");
-LLMIME_Internal_StartMime();
+LLMIME_Internal_Start();
 
 // For saves where this goal is active, but wasn't completed
 IF
@@ -30,7 +30,7 @@ AND
 DB_StoryStarted(_)
 THEN
 DebugBreak("[LLMIME] Existing save detected. Starting Mimicry.");
-LLMIME_Internal_StartMime();
+LLMIME_Internal_Start();
 EXITSECTION
 
 ENDEXITSECTION

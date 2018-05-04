@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <save>
-    <header version="2" time="1525357726" />
+    <header version="2" time="1525414847" />
     <version major="3" minor="1" revision="7" build="0" />
     <region id="Tags">
         <node id="root">
@@ -40,6 +40,19 @@
                 <node id="Tag">
                     <attribute id="Description" value="The spawned fist for Brawlers. Enabled scaled unarmed damage." type="23" />
                     <attribute id="Name" value="LLMIME_BrawlerFist" type="23" />
+                    <children>
+                        <node id="Categories">
+                            <children>
+                                <node id="Category">
+                                    <attribute id="Name" value="Code" type="23" />
+                                </node>
+                            </children>
+                        </node>
+                    </children>
+                </node>
+                <node id="Tag">
+                    <attribute id="Description" value="Tags this weapon as an unarmed weapon, allowing it to pass the unarmed checks." type="23" />
+                    <attribute id="Name" value="UNARMED_WEAPON" type="23" />
                     <children>
                         <node id="Categories">
                             <children>

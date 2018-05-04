@@ -1,0 +1,28 @@
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+LeaderUpdater_Register_Mod("Mimicry", "LaughingLeader", "1.0.0.0");
+LeaderUpdater_Register_ActiveGoal("Mimicry", "LaughingLeader", "LLMIME_ZZZ_Updater");
+LLMIME_Updater_RegisterDatabasesOnce();
+KBSECTION
+PROC
+LLMIME_Updater_RegisterDatabasesOnce()
+THEN
+DB_NOOP(1);
+
+IF
+GameStarted(_,_)
+AND
+LeaderUpdater_QRY_ModUpdateNeeded("Mimicry", "LaughingLeader", "1.0.0.0")
+THEN
+LeaderUpdater_Register_Mod("Mimicry", "LaughingLeader", "1.0.0.0");
+LLMIME_System_UpdateDatabases();
+
+PROC
+LLMIME_System_UpdateDatabases()
+THEN
+LeaderLog_Log("DEBUG", "[LLMIME:Updater] Databases updated.");
+EXITSECTION
+
+ENDEXITSECTION
+ParentTargetEdge "LaughingLeader_Mimicry"

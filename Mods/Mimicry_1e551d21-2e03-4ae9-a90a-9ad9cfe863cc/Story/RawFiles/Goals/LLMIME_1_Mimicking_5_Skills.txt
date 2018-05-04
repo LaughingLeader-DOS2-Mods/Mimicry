@@ -1,18 +1,7 @@
 Version 1
 SubGoalCombiner SGC_AND
 INITSECTION
-//Skill types with the "UseWeaponDamage" column
-DB_LLMIME_Mime_Skills_WeaponSkillTypes("Target");
-DB_LLMIME_Mime_Skills_WeaponSkillTypes("Shout");
-DB_LLMIME_Mime_Skills_WeaponSkillTypes("Projectile");
-DB_LLMIME_Mime_Skills_WeaponSkillTypes("ProjectileStrike");
-DB_LLMIME_Mime_Skills_WeaponSkillTypes("Cone");
-DB_LLMIME_Mime_Skills_WeaponSkillTypes("Zone");
-DB_LLMIME_Mime_Skills_WeaponSkillTypes("MultiStrike");
-DB_LLMIME_Mime_Skills_WeaponSkillTypes("Rush");
-DB_LLMIME_Mime_Skills_WeaponSkillTypes("Rain");
-
-//DB_LLMIME_Mime_Temp_CasterWeapons(_Caster, _MainHand, _Offhand)
+//DB_LLMIME_Mimicking_Temp_CasterWeapons(_Caster, _MainHand, _Offhand)
 KBSECTION
 //REGION SKILL_TRACKING
 IF
@@ -24,7 +13,7 @@ _Caster != _Target
 AND
 LLMIME_QRY_Mime_CanMimicSkill(_Skill)
 AND
-DB_LLMIME_Mime_MimicNextAction(_Mime)
+DB_LLMIME_Mimicking_MimicNextAction(_Mime)
 AND
 LLMIME_QRY_Mime_CanMimicCharacter(_Caster, _Mime)
 AND
@@ -44,7 +33,7 @@ _Caster == _Target
 AND
 LLMIME_QRY_Mime_CanMimicSkill(_Skill)
 AND
-DB_LLMIME_Mime_MimicNextAction(_Mime)
+DB_LLMIME_Mimicking_MimicNextAction(_Mime)
 AND
 LLMIME_QRY_Mime_CanMimicCharacter(_Caster, _Mime)
 THEN
@@ -62,7 +51,7 @@ LLMIME_QRY_Mime_CanMimicSkill(_Skill)
 AND
 ObjectIsItem(_Target, 1)
 AND
-DB_LLMIME_Mime_MimicNextAction(_Mime)
+DB_LLMIME_Mimicking_MimicNextAction(_Mime)
 AND
 LLMIME_QRY_Mime_CanMimicCharacter(_Caster, _Mime)
 AND
@@ -85,7 +74,7 @@ LLMIME_QRY_Mime_CharacterIsMimickable(_Caster)
 AND
 LLMIME_QRY_Mime_CanMimicSkill(_Skill)
 AND
-DB_LLMIME_Mime_MimicNextAction(_Mime)
+DB_LLMIME_Mimicking_MimicNextAction(_Mime)
 AND
 NOT DB_LLMIME_Timers_SkillCastAtPosition(_, _Caster, _TargetX, _TargetY, _TargetZ, _Skill, _SkillType)
 AND
@@ -103,9 +92,9 @@ TimerFinished(_TimerName)
 AND
 DB_LLMIME_Timers_SkillCastAtPosition(_TimerName, _Caster, _TargetX, _TargetY, _TargetZ, _Skill, _SkillType)
 AND
-NOT DB_LLMIME_Mime_MimicQueue_Self(_, _Caster, _Skill, "Skill")
+NOT DB_LLMIME_Mimicking_MimicQueue_Self(_, _Caster, _Skill, "Skill")
 AND
-NOT DB_LLMIME_Mime_MimicQueue(_, _Caster, _Skill, "Skill", _, _, _, _TargetX, _TargetY, _TargetZ, _, 1)
+NOT DB_LLMIME_Mimicking_MimicQueue(_, _Caster, _Skill, "Skill", _, _, _, _TargetX, _TargetY, _TargetZ, _, 1)
 THEN
 LLMIME_Mime_OnSkillCastAtPosition(_Caster, _TargetX, _TargetY, _TargetZ, _Skill, _SkillType);
 
@@ -119,7 +108,7 @@ NOT DB_LLMIME_Timers_SkillCastAtPosition(_TimerName, _Caster, _TargetX, _TargetY
 PROC
 LLMIME_Mime_OnSkillCastAtPosition((CHARACTERGUID)_Caster, (REAL)_TargetX, (REAL)_TargetY, (REAL)_TargetZ, (STRING)_Skill, "shout")
 AND
-DB_LLMIME_Mime_MimicNextAction(_Mime)
+DB_LLMIME_Mimicking_MimicNextAction(_Mime)
 AND
 LLMIME_QRY_Mime_CanMimicCharacter(_Caster, _Mime)
 THEN
@@ -131,7 +120,7 @@ LLMIME_Mime_OnSkillCastAtPosition((CHARACTERGUID)_Caster, (REAL)_TargetX, (REAL)
 AND
 _SkillType != "shout"
 AND
-DB_LLMIME_Mime_MimicNextAction(_Mime)
+DB_LLMIME_Mimicking_MimicNextAction(_Mime)
 AND
 LLMIME_QRY_Mime_CanMimicCharacter(_Caster, _Mime)
 AND
@@ -151,7 +140,7 @@ StringConcatenate(_Skill, _ID, _Str)
 AND
 StringConcatenate("LLMIME_Timers_CastFailTimer_", _Str, _TimerName)
 THEN
-DB_LLMIME_Mime_CastFallbackTimer(_TimerName, _Caster, _Skill);
+DB_LLMIME_Mimicking_CastFallbackTimer(_TimerName, _Caster, _Skill);
 TimerLaunch(_TimerName, 2000);
 
 IF
@@ -160,50 +149,16 @@ AND
 LLMIME_Mime_QRY_ActionQueued(_Caster, _Skill, "Skill")
 THEN
 LLMIME_Mime_StartNextMimic(_Caster, _Skill, "Skill");
-
-PROC
-LLMIME_Mime_StartNextMimic((CHARACTERGUID)_Caster, (STRING)_Action, (STRING)_ActionType)
-AND
-DB_LLMIME_Mime_CastFallbackTimer(_TimerName, _Caster, _Action)
-THEN
-NOT DB_LLMIME_Mime_CastFallbackTimer(_TimerName, _Caster, _Action);
-TimerCancel(_TimerName);
-
-PROC
-LLMIME_Mime_StartNextMimic((CHARACTERGUID)_Caster, (STRING)_Action, (STRING)_ActionType)
-AND
-GetUUID(_Caster, _ID)
-AND
-StringConcatenate(_ActionType, "_", _Str1)
-AND
-StringConcatenate(_Str1, _Action, _Str2)
-AND
-StringConcatenate(_Str2, "_", _Str3)
-AND
-StringConcatenate(_Str3, _ID, _TimerID)
-AND
-StringConcatenate("LLMIME_Timers_MimicActionTimer_", _TimerID, _TimerName)
-THEN
-DB_LLMIME_Mime_MimicActionTimer(_TimerName, _Caster, _Action, _ActionType);
-TimerLaunch(_TimerName, 500);
-
-IF
-TimerFinished(_TimerName)
-AND
-DB_LLMIME_Mime_MimicActionTimer(_TimerName, _Caster, _Action, _ActionType)
-THEN
-NOT DB_LLMIME_Mime_MimicActionTimer(_TimerName, _Caster, _Action, _ActionType);
-LLMIME_Mime_MimicAction(_Caster, _Action, _ActionType);
 //END_REGION
 
 //REGION SKILL_MIMIC
 PROC
 LLMIME_Mime_MimicAction((CHARACTERGUID)_Caster, (STRING)_Skill, "Skill")
 AND
-DB_LLMIME_Mime_MimicQueue_Self(_Mime, _Caster, _Skill, "Skill")
+DB_LLMIME_Mimicking_MimicQueue_Self(_Mime, _Caster, _Skill, "Skill")
 THEN
 CharacterUseSkill(_Mime, _Skill, _Mime, 1, 1, 1);
-NOT DB_LLMIME_Mime_MimicQueue_Self(_Mime, _Caster, _Skill, "Skill");
+NOT DB_LLMIME_Mimicking_MimicQueue_Self(_Mime, _Caster, _Skill, "Skill");
 
 PROC
 LLMIME_Mime_MimicActionOnTarget((CHARACTERGUID)_Mime, (CHARACTERGUID)_Caster, (GUIDSTRING)_Target, (STRING)_Skill, "Skill")
@@ -213,25 +168,31 @@ CharacterUseSkill(_Mime, _Skill, _Target, 1, 1, 1);
 IF
 SkillCast(_Mime, _Skill, _)
 AND
-DB_LLMIME_Mime_Temp_ResetDummyAfterCast(_Mime, _Target, _Skill, "Skill")
+DB_LLMIME_Mimicking_Temp_ResetDummyAfterCast(_Mime, _Target, _Skill, "Skill")
 THEN
-NOT DB_LLMIME_Mime_Temp_ResetDummyAfterCast(_Mime, _Target, _Skill, "Skill");
-LLMIME_Dummy_ResetDummy((GUIDSTRING)_Target);
+NOT DB_LLMIME_Mimicking_Temp_ResetDummyAfterCast(_Mime, _Target, _Skill, "Skill");
+LLMIME_Dummy_ResetDummyAfterDelay((GUIDSTRING)_Target, 1000);
 //END_REGION
 
 //REGION FAIL_TIMER_CANCELLING
 IF
 CharacterUsedSkill(_Mime, _Skill, _)
+AND
+LLMIME_QRY_CurrentlyMimicking(_Mime)
 THEN
 LLMIME_Mime_OnMimicSuccess(_Mime, _Skill, "Skill");
 
 IF
 CharacterUsedSkillOnZoneWithTarget(_Mime, _Target, _Skill, _SkillType)
+AND
+LLMIME_QRY_CurrentlyMimicking(_Mime)
 THEN
 LLMIME_Mime_OnMimicSuccess(_Mime, _Skill, "Skill");
 
 IF
 CharacterUsedSkillOnTarget(_Mime, _Target, _Skill, _SkillType)
+AND
+LLMIME_QRY_CurrentlyMimicking(_Mime)
 THEN
 LLMIME_Mime_OnMimicSuccess(_Mime, _Skill, "Skill");
 //END_REGION
