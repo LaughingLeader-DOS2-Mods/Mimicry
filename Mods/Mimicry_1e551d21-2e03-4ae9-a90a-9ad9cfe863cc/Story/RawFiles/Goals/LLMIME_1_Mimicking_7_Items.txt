@@ -1,27 +1,28 @@
 Version 1
 SubGoalCombiner SGC_AND
 INITSECTION
-
+//DB_LLMIME_Mimicking_Items_DestroyNext(_Mime, _Item, _Action, _Caster)
+//DB_LLMIME_Mimicking_Items_DelayTimer(_TimerName, _Caster, _Template)
 KBSECTION
 //REGION ITEM_TRACKING
 IF
 CharacterUsedItem(_Caster, _Item)
 AND
-LLMIME_QRY_ItemIsAllowed(_Item)
+LLMIME_Mimicking_QRY_ItemIsAllowed(_Item)
 AND
 GetTemplate(_Item, _Template)
 AND
 DB_LLMIME_Mimicking_MimicNextAction(_Mime)
 AND
-LLMIME_QRY_Mime_CanMimicCharacter(_Caster, _Mime)
+LLMIME_Mimicking_QRY_CanMimicCharacter(_Caster, _Mime)
 THEN
 LeaderLog_Log("DEBUG", "[LLMIME:Mime:CharacterUsedItem] Queueing up next item mimic [",_Template,"] on mime.");
-LLMIME_Mime_QueueNextSelfAction(_Mime, _Caster, _Template, "Item");
+LLMIME_Mimicking_QueueNextSelfAction(_Mime, _Caster, _Template, "Item");
 
 IF
 CharacterUsedItem(_Caster, _Item)
 AND
-LLMIME_Mime_QRY_ActionTypeQueued(_Caster, "Item")
+LLMIME_Mimicking_QRY_ActionTypeQueued(_Caster, "Item")
 AND
 GetTemplate(_Item, _Template)
 AND
@@ -31,21 +32,21 @@ StringConcatenate(_Template, _ID, _Str)
 AND
 StringConcatenate("LLMIME_Timers_MimicItemDelayTimer_", _Str, _TimerName)
 THEN
-DB_LLMIME_Mimicking_Item_DelayTimer(_TimerName, _Caster, _Template);
+DB_LLMIME_Mimicking_Items_DelayTimer(_TimerName, _Caster, _Template);
 TimerLaunch(_TimerName, 500);
 
 IF
 TimerFinished(_TimerName)
 AND
-DB_LLMIME_Mimicking_Item_DelayTimer(_TimerName, _Caster, _Template)
+DB_LLMIME_Mimicking_Items_DelayTimer(_TimerName, _Caster, _Template)
 THEN
-NOT DB_LLMIME_Mimicking_Item_DelayTimer(_TimerName, _Caster, _Template);
-LLMIME_Mime_StartNextMimic(_Caster, _Template, "Item");
+NOT DB_LLMIME_Mimicking_Items_DelayTimer(_TimerName, _Caster, _Template);
+LLMIME_Mimicking_StartNextMimic(_Caster, _Template, "Item");
 //END_REGION
 
 //REGION ITEM_MIMIC
 PROC
-LLMIME_Mime_MimicAction((CHARACTERGUID)_Caster, (STRING)_Template, "Item")
+LLMIME_Mimicking_MimicAction((CHARACTERGUID)_Caster, (STRING)_Template, "Item")
 AND
 DB_LLMIME_Mimicking_MimicQueue_Self(_Mime, _Caster, _Template, "Item")
 AND
@@ -67,7 +68,7 @@ DB_LLMIME_Mimicking_Items_DestroyNext(_Mime, _Item, _Template, _Caster)
 THEN
 ItemDestroy(_Item);
 SetOnStage(_Item, 0);
-LLMIME_Mime_OnMimicFailed(_Mime, _Caster, _Template, "Item");
+LLMIME_Mimicking_OnMimicFailed(_Mime, _Caster, _Template, "Item");
 NOT DB_LLMIME_Mimicking_Items_DestroyNext(_Mime, _Item, _Template, _Caster);
 
 IF
@@ -86,22 +87,21 @@ AND
 DB_LLMIME_Mimicking_Items_DestroyNext(_Mime, _Item, _Template, _Caster)
 THEN
 NOT DB_LLMIME_Mimicking_Items_DestroyNext(_Mime, _Item, _Template, _Caster);
-LLMIME_Mime_OnMimicSuccess(_Mime, _Template, "Item");
+LLMIME_Mimicking_OnMimicSuccess(_Mime, _Template, "Item");
 
 PROC
-LLMIME_Mime_MimicActionOnTarget((CHARACTERGUID)_Mime, (CHARACTERGUID)_Caster, (GUIDSTRING)_Target, (STRING)_Template, "Item")
+LLMIME_Mimicking_MimicActionOnTarget((CHARACTERGUID)_Mime, (CHARACTERGUID)_Caster, (GUIDSTRING)_Target, (STRING)_Template, "Item")
 AND
-DB_LLMIME_Mimicking_Temp_ResetDummyAfterCast(_Mime, _Target, _Template, "Item")
+DB_LLMIME_Mimicking_Temp_ResetDummyAfterMimicAction(_Mime, _Target, _Template, "Item")
 THEN
-NOT DB_LLMIME_Mimicking_Temp_ResetDummyAfterCast(_Mime, _Target, _Template, "Item");
+NOT DB_LLMIME_Mimicking_Temp_ResetDummyAfterMimicAction(_Mime, _Target, _Template, "Item");
 LLMIME_Dummy_ResetDummy((GUIDSTRING)_Target);
 //END_REGION
 
-//REGION CLEAR
+//REGION CLEAR_QUEUE_ITEM_DESTROY
 //Destroy mimicked items in case the use events never triggered
-
 PROC
-LLMIME_Mime_ClearQueue((CHARACTERGUID)_Mime, (CHARACTERGUID)_Caster, (STRING)_Action, (STRING)_ActionType)
+LLMIME_Mimicking_ClearQueue((CHARACTERGUID)_Mime, (CHARACTERGUID)_Caster, (STRING)_Action, (STRING)_ActionType)
 AND
 DB_LLMIME_Mimicking_Items_DestroyNext(_Mime, _Item, _Action, _Caster)
 AND
@@ -111,13 +111,38 @@ ItemDestroy(_Item);
 SetOnStage(_Item, 0);
 
 PROC
-LLMIME_Mime_ClearQueue((CHARACTERGUID)_Mime, (CHARACTERGUID)_Caster, (STRING)_Action, (STRING)_ActionType)
+LLMIME_Mimicking_ClearQueue((CHARACTERGUID)_Mime, (CHARACTERGUID)_Caster, (STRING)_Action, (STRING)_ActionType)
 AND
 DB_LLMIME_Mimicking_Items_DestroyNext(_Mime, _Item, _Action, _Caster)
 THEN
 NOT DB_LLMIME_Mimicking_Items_DestroyNext(_Mime, _Item, _Action, _Caster);
 //END_REGION
 
+//REGION CLEAR_MIME
+IF
+StoryEvent((CHARACTERGUID)_Mime, "LLMIME_Events_ClearMimeBonuses")
+THEN
+LLMIME_Mimicking_Items_ClearAllDataForMime(_Mime);
+
+PROC
+LLMIME_Mimicking_Items_ClearAllDataForMime((CHARACTERGUID)_Mime)
+AND
+DB_LLMIME_Mimicking_Items_DelayTimer(_TimerName, _Caster, _Template)
+THEN
+NOT DB_LLMIME_Mimicking_Items_DelayTimer(_TimerName, _Caster, _Template);
+TimerCancel(_TimerName);
+
+PROC
+LLMIME_Mimicking_Items_ClearAllDataForMime((CHARACTERGUID)_Mime)
+AND
+DB_LLMIME_Mimicking_Items_DestroyNext(_Mime, _Item, _Action, _Caster)
+AND
+ItemIsDestroyed(_Item, 0)
+THEN
+ItemDestroy(_Item);
+SetOnStage(_Item, 0);
+NOT DB_LLMIME_Mimicking_Items_DestroyNext(_Mime, _Item, _Action, _Caster);
+//END_REGION
 
 //REGION DEBUG
 IF

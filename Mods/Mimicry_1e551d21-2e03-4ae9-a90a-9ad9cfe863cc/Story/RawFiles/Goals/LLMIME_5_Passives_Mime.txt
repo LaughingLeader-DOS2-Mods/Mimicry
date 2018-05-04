@@ -1,9 +1,41 @@
 Version 1
 SubGoalCombiner SGC_AND
 INITSECTION
-LLMIME_MimesStatus_InitSettings();
+LLMIME_Mime_InitSettings();
 KBSECTION
+PROC
+LLMIME_Mime_InitSettings()
+THEN
+DB_LLMIME_Mime_MimeActivatingEquipmentTags("LLMIME_ACTIVATE_MIME");
 
+QRY
+LLMIME_Mime_QRY_IsMimeItem((ITEMGUID)_Item)
+AND
+DB_LLMIME_Mime_MimeActivatingEquipmentTags(_Tag)
+AND
+IsTagged(_Item, _Tag, 1)
+THEN
+DB_NOOP(1);
+
+//REGION MIME_TOGGLING
+IF
+ItemEquipped(_Item, _Mime)
+AND
+LLMIME_Mime_QRY_IsMimeItem(_Item)
+AND
+NOT LLMIME_QRY_CharacterIsAMime(_Mime)
+THEN
+SetStoryEvent(_Mime, "LLMIME_Events_InitMime");
+
+IF
+ItemUnEquipped(_Item, _Mime)
+AND
+LLMIME_Mime_QRY_IsMimeItem(_Item)
+AND
+LLMIME_QRY_CharacterIsAMime(_Mime)
+THEN
+SetStoryEvent(_Mime, "LLMIME_Events_RemoveMime");
+//END_REGION
 EXITSECTION
 
 ENDEXITSECTION

@@ -1,9 +1,189 @@
 Version 1
 SubGoalCombiner SGC_AND
 INITSECTION
+/*
+DB_LLMIME_Timers_AttackAtPositionTimer(_TimerName, _Caster, _TargetX, _TargetY, _TargetZ)
 
+*/
 KBSECTION
+//REGION ATTACK_TRACKING
+IF
+CharacterStartAttackObject(_Target, _Owner, _Caster)
+AND
+LLMIME_Mimicking_QRY_CharacterIsMimickable(_Caster)
+AND
+_Caster != _Target
+AND
+LLMIME_Mimicking_QRY_GetTargetPriority(_Caster, _Target, 2)
+AND
+DB_LLMIME_Mimicking_Temp_TargetPriority(_Caster, _Target, _TargetPriority)
+AND
+DB_LLMIME_Mimicking_MimicNextAction(_Mime)
+AND
+LLMIME_Mimicking_QRY_CanMimicCharacter(_Caster, _Mime)
+AND
+GetPosition(_Target, _TargetX, _TargetY, _TargetZ)
+AND
+GetUUID(_Target, _Action)
+THEN
+LeaderLog_Log("DEBUG", "[LLMIME:Mime:CharacterStartAttackObject] Queueing up mimic weapon attack on target.");
+ObjectSetFlag(_Mime, "LLMIME_MIMIC_PREFER_ITEM_TARGET"); // Prefer the item dummy, since all weapons can attack items
+LLMIME_Mimicking_QueueNextAction(_Mime, _Caster, _Action, "Attack", _TargetX, _TargetY, _TargetZ, _TargetPriority, 1);
 
+IF
+CharacterStartAttackObject(_Target, _Owner, _Caster)
+AND
+DB_LLMIME_Mimicking_Temp_TargetPriority(_Caster, _Target, _TargetPriority)
+THEN
+NOT DB_LLMIME_Mimicking_Temp_TargetPriority(_Caster, _Target, _TargetPriority);
+
+//Delay by a few frames so the target event sticks first, if possible
+IF
+CharacterStartAttackPosition(_TargetX, _TargetY, _TargetZ, _Owner, _Caster)
+AND
+NOT DB_LLMIME_Timers_AttackAtPositionTimer(_, _Caster, _TargetX, _TargetY, _TargetZ)
+AND
+LLMIME_Mimicking_QRY_CharacterIsMimickable(_Caster)
+AND
+LLMIME_Mimicking_QRY_MimesAvailable()
+AND
+GetUUID(_Caster, _CasterID)
+AND
+StringConcatenate("LLMIME_Timers_AttackAtPositionTimer_", _CasterID, _TimerName)
+THEN
+DB_LLMIME_Timers_AttackAtPositionTimer(_TimerName, _Caster, _TargetX, _TargetY, _TargetZ);
+TimerLaunch(_TimerName,5);
+
+IF
+TimerFinished(_TimerName)
+AND
+DB_LLMIME_Timers_AttackAtPositionTimer(_TimerName, _Caster, _TargetX, _TargetY, _TargetZ)
+AND
+NOT DB_LLMIME_Mimicking_MimicQueue_Self(_, _Caster, _, "Attack")
+AND
+NOT DB_LLMIME_Mimicking_MimicQueue(_, _Caster, _, "Attack", _, _, _, _TargetX, _TargetY, _TargetZ, _, 1)
+THEN
+LLMIME_Mimicking_OnAttackAtPosition(_Caster, _TargetX, _TargetY, _TargetZ);
+
+IF
+TimerFinished(_TimerName)
+AND
+DB_LLMIME_Timers_AttackAtPositionTimer(_TimerName, _Caster, _TargetX, _TargetY, _TargetZ)
+THEN
+NOT DB_LLMIME_Timers_AttackAtPositionTimer(_TimerName, _Caster, _TargetX, _TargetY, _TargetZ);
+
+PROC
+LLMIME_Mimicking_OnAttackAtPosition((CHARACTERGUID)_Caster, (REAL)_TargetX, (REAL)_TargetY, (REAL)_TargetZ)
+AND
+DB_LLMIME_Mimicking_MimicNextAction(_Mime)
+AND
+LLMIME_Mimicking_QRY_CanMimicCharacter(_Caster, _Mime)
+AND
+GetPosition(_Caster, _StartX, _StartY, _StartZ)
+AND
+GetUUID(_Caster, _Action)
+THEN
+LeaderLog_Log("DEBUG", "[LLMIME:Mime:OnAttackAtPosition] Queuing up next mimic attack position.");
+LLMIME_Mimicking_QueueNextAction(_Mime, _Caster, _Action, "Attack", _TargetX, _TargetY, _TargetZ, 2);
+
+IF
+CharacterStartAttackObject(_Target, _Owner, _Caster)
+AND
+LLMIME_Mimicking_QRY_ActionTypeQueued(_Caster, "Attack")
+AND
+GetUUID(_Target, _Action)
+THEN
+LLMIME_Mimicking_StartNextMimic(_Caster, _Action, "Attack", 1000);
+
+PROC
+LLMIME_Mimicking_OnAttackAtPosition((CHARACTERGUID)_Caster, (REAL)_TargetX, (REAL)_TargetY, (REAL)_TargetZ)
+AND
+LLMIME_Mimicking_QRY_ActionTypeQueued(_Caster, "Attack")
+AND
+GetUUID(_Caster, _Action)
+THEN
+LLMIME_Mimicking_StartNextMimic(_Caster, _Action, "Attack", 1000);
+//END_REGION
+
+//REGION ATTACK_MIMIC
+PROC
+LLMIME_Mimicking_MimicAction((CHARACTERGUID)_Caster, (STRING)_Action, "Attack")
+AND
+DB_LLMIME_Mimicking_MimicQueue_Self(_Mime, _Caster, _Action, "Attack")
+THEN
+CharacterAttack(_Mime, _Mime);
+NOT DB_LLMIME_Mimicking_MimicQueue_Self(_Mime, _Caster, _Action, "Attack");
+
+PROC
+LLMIME_Mimicking_MimicActionOnTarget((CHARACTERGUID)_Mime, (CHARACTERGUID)_Caster, (GUIDSTRING)_Target, (STRING)_Action, "Attack")
+THEN
+CharacterAttack(_Mime, _Target);
+ObjectClearFlag(_Mime, "LLMIME_MIMIC_PREFER_ITEM_TARGET");
+LLMIME_Mimicking_Attack_StartSuccessTimer(_Mime, _Target, _Action);
+
+PROC
+LLMIME_Mimicking_Attack_StartSuccessTimer((CHARACTERGUID)_Mime, (GUIDSTRING)_Target, (STRING)_Action)
+AND
+DB_LLMIME_Mimicking_MimicFailTimer(_TimerName, _Mime, _Caster, _Action, _ActionType)
+THEN
+NOT DB_LLMIME_Mimicking_MimicFailTimer(_TimerName, _Mime, _Caster, _Action, _ActionType);
+TimerCancel(_TimerName);
+
+PROC
+LLMIME_Mimicking_Attack_StartSuccessTimer((CHARACTERGUID)_Mime, (GUIDSTRING)_Target, (STRING)_Action)
+AND
+GetUUID(_Mime, _MimeID)
+AND
+StringConcatenate("LLMIME_Timers_AttackSuccessTimer_", _MimeID, _TimerName)
+THEN
+DB_LLMIME_Timers_AttackSuccessTimer(_TimerName, _Mime, _Target, _Action);
+TimerLaunch(_TimerName, 1200);
+
+IF
+TimerFinished(_TimerName)
+AND
+DB_LLMIME_Timers_AttackSuccessTimer(_TimerName, _Mime, _Target, _Action)
+AND
+DB_LLMIME_Mimicking_Temp_ResetDummyAfterMimicAction(_Mime, _Target, _Action, "Attack")
+THEN
+NOT DB_LLMIME_Mimicking_Temp_ResetDummyAfterMimicAction(_Mime, _Target, _Action, "Attack");
+LLMIME_Dummy_ResetDummyAfterDelay((GUIDSTRING)_Target, 1000);
+
+IF
+TimerFinished(_TimerName)
+AND
+DB_LLMIME_Timers_AttackSuccessTimer(_TimerName, _Mime, _Target, _Action)
+THEN
+NOT DB_LLMIME_Timers_AttackSuccessTimer(_TimerName, _Mime, _Target, _Action);
+LLMIME_Mimicking_OnMimicSuccess(_Mime, _Action, "Attack");
+
+IF
+AttackedByObject(_Target, _Owner, (CHARACTERGUID)_Mime, _, "Attack")
+AND
+DB_LLMIME_Mimicking_Temp_ResetDummyAfterMimicAction(_Mime, _Target, _Action, "Attack")
+THEN
+NOT DB_LLMIME_Mimicking_Temp_ResetDummyAfterMimicAction(_Mime, _Target, _Action, "Attack");
+LLMIME_Dummy_ResetDummyAfterDelay((GUIDSTRING)_Target, 1000);
+
+IF
+AttackedByObject(_Target, _Owner, (CHARACTERGUID)_Mime, _, "Attack")
+AND
+DB_LLMIME_Timers_AttackSuccessTimer(_TimerName, _Mime, _Target, _Action)
+THEN
+TimerCancel(_TimerName);
+NOT DB_LLMIME_Timers_AttackSuccessTimer(_TimerName, _Mime, _Target, _Action);
+LLMIME_Mimicking_OnMimicSuccess(_Mime, _Action, "Attack");
+//END_REGION
+
+//REGION CLEAR_MIME
+IF
+StoryEvent((CHARACTERGUID)_Mime, "LLMIME_Events_ClearMimeBonuses")
+AND
+DB_LLMIME_Timers_AttackAtPositionTimer(_TimerName, _Caster, _TargetX, _TargetY, _TargetZ)
+THEN
+NOT DB_LLMIME_Timers_AttackAtPositionTimer(_TimerName, _Caster, _TargetX, _TargetY, _TargetZ);
+TimerCancel(_TimerName);
+//END_REGION
 EXITSECTION
 
 ENDEXITSECTION

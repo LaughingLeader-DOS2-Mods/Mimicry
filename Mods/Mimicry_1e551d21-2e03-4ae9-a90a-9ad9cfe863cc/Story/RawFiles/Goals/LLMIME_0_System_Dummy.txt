@@ -73,7 +73,7 @@ LeaderLog_Log("DEBUG", "[LLMIME:Mimic:Dummy:SpawnDummy(Character)] Spawned dummy
 SetTag(_Dummy, "LLMIME_DUMMY");
 LLMIME_Dummy_SetDummyID(_Dummy, _ID);
 CharacterSetImmortal(_Dummy, 1);
-SetVisible(_Dummy, 0);
+//SetVisible(_Dummy, 0);
 DB_LLMIME_Dummy_CharacterDummies(_Dummy);
 DB_LLMIME_Dummy_NextCharacterDummy(_ID, _Dummy);
 GlobalClearFlag("LLMIME_CreatingDummy");

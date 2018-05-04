@@ -1,4 +1,5 @@
 INIT
+	FIXEDSTRING:%EmptyFixedStr = ""
 	FLOAT3:%EmptyPos = null
 	CHARACTER:%NullChar = null
 	EXTERN STATUS:%Passive_IsMime = LLMIME_MIME
@@ -40,37 +41,31 @@ ON
 	OnUseItem(_Char, _Item)
 ACTIONS
 	CharacterItemEvent(_Char, _Item, "LLMIME_Events_OnItemUse")
-/*
-EVENT OnAttackStart_Object
-VARS
-	CHARACTER:_Attacker
-	CHARACTER:_Defender
-	CHARACTER:_AttackerOwner
-	ITEM:_DefenderItem
-ON
-	OnCharacterStartAttackObject(_Defender, _DefenderItem, _AttackerOwner, _Attacker)
-ACTIONS
-	SetVar(_Attacker, "LLMIME_AttackerOwner", _AttackerOwner)
-	CharacterCharacterEvent(_Attacker, _Defender, "LLMIME_Events_OnCharacterStartAttack_Target")
 
-EVENT OnAttackStart_Position
+EVENT Dummy_Iterate_NearbyItems
 VARS
-	CHARACTER:_Attacker
-	CHARACTER:_AttackerOwner
-	FLOAT3:_Position
+	CHARACTER:_Dummy
+	FIXEDSTRING:_EventName
+	FLOAT:_Radius
 ON
-	OnCharacterStartAttackPosition(_Position, _AttackerOwner, _Attacker)
+	OnCharacterEvent(_Dummy, "LLMIME_Events_StartDummyItemIterator")
 ACTIONS
-	SetVar(_Attacker, "LLMIME_AttackPosition", _Position)
-	CharacterEvent(_Attacker, "LLMIME_Events_OnCharacterStartAttack_Position")
-	
-	
-EVENT ClearAttackVars
+IF "c1&c2"
+	GetVar(_Radius, _Dummy, "LLMIME_Dummy_IterationRange")
+	GetVar(_EventName, _Dummy, "LLMIME_Dummy_IterationEvent")
+	//IsEqual(_EventName, %EmptyFixedStr)
+THEN
+	IterateItemsNear(_Dummy, _Radius, _EventName)
+	SetVar(_Dummy, "LLMIME_Dummy_IterationEvent", %EmptyFixedStr)
+ENDIF
+
+EVENT Dummy_OnIterate
 VARS
-	CHARACTER:_Character
+	ITEM:_Item
+	FIXEDSTRING:_EventName
+	STRING:_EventNameStr
 ON
-	OnCharacterEvent(_Character, "LLMIME_Commands_ClearAttackVars")
+	OnIterateItem(_Item, _EventName)
 ACTIONS
-	SetVar(_Character, "LLMIME_AttackPosition", %EmptyPos)
-	SetVar(_Character, "LLMIME_AttackerOwner", %NullChar)
-	*/
+	Cast(_EventNameStr, _EventName)
+	ItemEvent(_Item, _EventNameStr)

@@ -1,56 +1,56 @@
 Version 1
 SubGoalCombiner SGC_AND
 INITSECTION
-LLMIME_Mime_InitSettings();
+LLMIME_Mimicking_InitSettings();
 
-//DB_LLMIME_Mimicking_BlockedSkillTypes(_SkillType, _GlobalFlag, _EnabledState)
-//DB_LLMIME_Mimicking_BlockedSkills(_Skill)
-//DB_LLMIME_Mimicking_BlockedSkillElements(_SkillType, _SkillElement)
-//DB_LLMIME_Mimicking_BlockedSkillPrefixes(_Prefix)
+//DB_LLMIME_Mimicking_Blacklist_SkillTypes(_SkillType, _GlobalFlag, _EnabledState)
+//DB_LLMIME_Mimicking_Blacklist_Skills(_Skill)
+//DB_LLMIME_Mimicking_Blacklist_SkillElements(_SkillType, _SkillElement)
+//DB_LLMIME_Mimicking_Blacklist_SkillPrefixes(_Prefix)
 KBSECTION
 //REGION SETTINGS
 PROC
-LLMIME_Mime_InitSettings()
+LLMIME_Mimicking_InitSettings()
 THEN
-DB_LLMIME_Mimicking_BlockedSkillTypes("Path", "Mimicry_Mimic_SkillType_Path_Enabled", 1);
-DB_LLMIME_Mimicking_BlockedSkillTypes("Summon", "Mimicry_Mimic_SkillType_Summons_Enabled", 1);
-DB_LLMIME_Mimicking_BlockedSkillElements("Shout", ""); // Special type shout skills, typically used for toggle abilities in mods
-DB_LLMIME_Mimicking_BlockedSkills("Shout_FavourableWind");
-DB_LLMIME_Mimicking_BlockedSkillPrefixes("_CA_");
+DB_LLMIME_Mimicking_Blacklist_SkillTypes("Path", "Mimicry_Mimic_SkillType_Path_Enabled", 1);
+DB_LLMIME_Mimicking_Blacklist_SkillTypes("Summon", "Mimicry_Mimic_SkillType_Summons_Enabled", 1);
+DB_LLMIME_Mimicking_Blacklist_SkillElements("Shout", ""); // Special type shout skills, typically used for toggle abilities in mods
+DB_LLMIME_Mimicking_Blacklist_Skills("Shout_FavourableWind");
+DB_LLMIME_Mimicking_Blacklist_SkillPrefixes("_CA_");
 
-DB_LLMIME_Mimicking_AllowedItemTags("Potion");
-DB_LLMIME_Mimicking_AllowedItemTags("POTIONS");
-DB_LLMIME_Mimicking_AllowedItemTags("DRINK");
-DB_LLMIME_Mimicking_AllowedItemTags("FOOD");
+DB_LLMIME_Mimicking_Whitelist_ItemTags("Potion");
+DB_LLMIME_Mimicking_Whitelist_ItemTags("POTIONS");
+DB_LLMIME_Mimicking_Whitelist_ItemTags("DRINK");
+DB_LLMIME_Mimicking_Whitelist_ItemTags("FOOD");
 
-//DB_LLMIME_Mimicking_BlockedItemTags("");
-DB_LLMIME_Mimicking_BlockedItemTemplates("CON_Potion_BloodRose_8c89072f-820b-46cb-83af-757b3d469c93");
-DB_LLMIME_Mimicking_BlockedItemTemplates("CON_Potion_Source_A_23cdecb1-06a4-4290-bb2c-de300cba5dd0");
-DB_LLMIME_Mimicking_BlockedItemTemplates("LOOT_Source_Orb_106a7107-cf36-4331-b5b5-6de71969f370");
+//DB_LLMIME_Mimicking_Blacklist_ItemTags("");
+DB_LLMIME_Mimicking_Blacklist_ItemTemplates("CON_Potion_BloodRose_8c89072f-820b-46cb-83af-757b3d469c93");
+DB_LLMIME_Mimicking_Blacklist_ItemTemplates("CON_Potion_Source_A_23cdecb1-06a4-4290-bb2c-de300cba5dd0");
+DB_LLMIME_Mimicking_Blacklist_ItemTemplates("LOOT_Source_Orb_106a7107-cf36-4331-b5b5-6de71969f370");
 
 //Skill types with the "UseWeaponDamage" column
-DB_LLMIME_Mimicking_Skills_WeaponSkillTypes("Target");
-DB_LLMIME_Mimicking_Skills_WeaponSkillTypes("Shout");
-DB_LLMIME_Mimicking_Skills_WeaponSkillTypes("Projectile");
-DB_LLMIME_Mimicking_Skills_WeaponSkillTypes("ProjectileStrike");
-DB_LLMIME_Mimicking_Skills_WeaponSkillTypes("Cone");
-DB_LLMIME_Mimicking_Skills_WeaponSkillTypes("Zone");
-DB_LLMIME_Mimicking_Skills_WeaponSkillTypes("MultiStrike");
-DB_LLMIME_Mimicking_Skills_WeaponSkillTypes("Rush");
-DB_LLMIME_Mimicking_Skills_WeaponSkillTypes("Rain");
+DB_LLMIME_Mimicking_Whitelist_WeaponCopy_SkillTypes("Target");
+DB_LLMIME_Mimicking_Whitelist_WeaponCopy_SkillTypes("Shout");
+DB_LLMIME_Mimicking_Whitelist_WeaponCopy_SkillTypes("Projectile");
+DB_LLMIME_Mimicking_Whitelist_WeaponCopy_SkillTypes("ProjectileStrike");
+DB_LLMIME_Mimicking_Whitelist_WeaponCopy_SkillTypes("Cone");
+DB_LLMIME_Mimicking_Whitelist_WeaponCopy_SkillTypes("Zone");
+DB_LLMIME_Mimicking_Whitelist_WeaponCopy_SkillTypes("MultiStrike");
+DB_LLMIME_Mimicking_Whitelist_WeaponCopy_SkillTypes("Rush");
+DB_LLMIME_Mimicking_Whitelist_WeaponCopy_SkillTypes("Rain");
 
-DB_LLMIME_Mimicking_Skills_IgnoreWeaponSkillWith("_Grenade_");
+DB_LLMIME_Mimicking_Blacklist_WeaponCopy_IgnoreSkillsWith("_Grenade_");
 //END_REGION
 
 //REGION BLACKLIST_CHECK_ITEMS
 QRY
-LLMIME_QRY_ItemIsAllowed((ITEMGUID)_Item)
+LLMIME_Mimicking_QRY_ItemIsAllowed((ITEMGUID)_Item)
 AND
 GetTemplate(_Item, _Template)
 AND
-NOT DB_LLMIME_Mimicking_BlockedItemTemplates(_Template)
+NOT DB_LLMIME_Mimicking_Blacklist_ItemTemplates(_Template)
 AND
-DB_LLMIME_Mimicking_AllowedItemTags(_Tag)
+DB_LLMIME_Mimicking_Whitelist_ItemTags(_Tag)
 AND
 IsTagged(_Item, _Tag, 1)
 THEN
@@ -59,49 +59,49 @@ DB_NOOP(1);
 
 //REGION BLACKLIST_CHECK_SKILLS
 QRY
-LLMIME_QRY_SkillIsNotBlocked((STRING)_Skill)
+LLMIME_Mimicking_QRY_SkillIsAllowed((STRING)_Skill)
 AND
-NOT DB_LLMIME_Mimicking_BlockedSkills(_Skill)
+NOT DB_LLMIME_Mimicking_Blacklist_Skills(_Skill)
 AND
 NOT DB_LLMIME_SkillData(_Skill, _, _)
 THEN
 DB_NOOP(1);
 
 QRY
-LLMIME_QRY_SkillIsNotBlocked((STRING)_Skill)
+LLMIME_Mimicking_QRY_SkillIsAllowed((STRING)_Skill)
 AND
-NOT DB_LLMIME_Mimicking_BlockedSkills(_Skill)
+NOT DB_LLMIME_Mimicking_Blacklist_Skills(_Skill)
 AND
 DB_LLMIME_SkillData(_Skill, _SkillType, _SkillElement)
 AND
-LLMIME_QRY_Internal_BlockedSkillTypeIsEnabled(_SkillType)
+LLMIME_Mimicking_QRY_Internal_BlockedSkillTypeIsEnabled(_SkillType)
 AND
-NOT DB_LLMIME_Mimicking_BlockedSkillElements(_SkillType, _SkillElement)
+NOT DB_LLMIME_Mimicking_Blacklist_SkillElements(_SkillType, _SkillElement)
 AND
-NOT LLMIME_QRY_Internal_SkillNameMatchesBlocked(_Skill)
+NOT LLMIME_Mimicking_QRY_Internal_SkillNameMatchesBlocked(_Skill)
 THEN
 DB_NOOP(1);
 
 QRY
-LLMIME_QRY_Internal_BlockedSkillTypeIsEnabled((STRING)_SkillType)
+LLMIME_Mimicking_QRY_Internal_BlockedSkillTypeIsEnabled((STRING)_SkillType)
 AND
-DB_LLMIME_Mimicking_BlockedSkillTypes(_SkillType, _GlobalFlag, _EnabledState)
+DB_LLMIME_Mimicking_Blacklist_SkillTypes(_SkillType, _GlobalFlag, _EnabledState)
 AND
 GlobalGetFlag(_GlobalFlag, _EnabledState)
 THEN
 DB_NOOP(1);
 
 QRY
-LLMIME_QRY_Internal_BlockedSkillTypeIsEnabled((STRING)_SkillType)
+LLMIME_Mimicking_QRY_Internal_BlockedSkillTypeIsEnabled((STRING)_SkillType)
 AND
-NOT DB_LLMIME_Mimicking_BlockedSkillTypes(_SkillType, _, _)
+NOT DB_LLMIME_Mimicking_Blacklist_SkillTypes(_SkillType, _, _)
 THEN
 DB_NOOP(1);
 
 QRY
-LLMIME_QRY_Internal_SkillNameMatchesBlocked((STRING)_Skill)
+LLMIME_Mimicking_QRY_Internal_SkillNameMatchesBlocked((STRING)_Skill)
 AND
-DB_LLMIME_Mimicking_BlockedSkillPrefixes(_Prefix)
+DB_LLMIME_Mimicking_Blacklist_SkillPrefixes(_Prefix)
 AND
 StringContains(_Skill, _Prefix, 1)
 THEN
@@ -110,31 +110,31 @@ DB_NOOP(1);
 
 //REGION CHECK_QUERIES
 QRY
-LLMIME_QRY_Mime_CanMimicCharacter((CHARACTERGUID)_Character, (CHARACTERGUID)_Mime)
+LLMIME_Mimicking_QRY_CanMimicCharacter((CHARACTERGUID)_Character, (CHARACTERGUID)_Mime)
 AND
-NOT LLMIME_QRY_CurrentlyMimicking(_Mime)
+NOT LLMIME_QRY_MimeIsCurrentlyMimicking(_Mime)
 AND
 _Character != _Mime
 AND
 NOT LLMIME_QRY_CharacterIsAMime(_Character) // Endless loops are bad!
 AND
-LLMIME_QRY_Mime_CombatConditionsMet(_Character, _Mime)
+LLMIME_Mimicking_QRY_CombatConditionsMet(_Character, _Mime)
 AND
-LLMIME_QRY_Mime_PartyConditionsMet(_Character, _Mime)
+LLMIME_Mimicking_QRY_PartyConditionsMet(_Character, _Mime)
 AND
-LLMIME_QRY_Mime_CanMimicSummon(_Character)
+LLMIME_Mimicking_QRY_CanMimicSummon(_Character)
 THEN
 DB_NOOP(1);
 
 QRY
-LLMIME_QRY_Mime_CombatConditionsMet((CHARACTERGUID)_Character, (CHARACTERGUID)_Mime)
+LLMIME_Mimicking_QRY_CombatConditionsMet((CHARACTERGUID)_Character, (CHARACTERGUID)_Mime)
 AND
 GlobalGetFlag("Mimicry_Mimic_CombatOnlyDisabled", 1)
 THEN
 DB_NOOP(1);
 
 QRY
-LLMIME_QRY_Mime_CombatConditionsMet((CHARACTERGUID)_Character, (CHARACTERGUID)_Mime)
+LLMIME_Mimicking_QRY_CombatConditionsMet((CHARACTERGUID)_Character, (CHARACTERGUID)_Mime)
 AND
 NOT GlobalGetFlag("Mimicry_Mimic_CombatOnlyDisabled", 1)
 AND
@@ -145,14 +145,14 @@ THEN
 DB_NOOP(1);
 
 QRY
-LLMIME_QRY_Mime_PartyConditionsMet((CHARACTERGUID)_Character, (CHARACTERGUID)_Mime)
+LLMIME_Mimicking_QRY_PartyConditionsMet((CHARACTERGUID)_Character, (CHARACTERGUID)_Mime)
 AND
 GlobalGetFlag("Mimicry_Mimic_PartyOnlyDisabled", 1)
 THEN
 DB_NOOP(1);
 
 QRY
-LLMIME_QRY_Mime_PartyConditionsMet((CHARACTERGUID)_Character, (CHARACTERGUID)_Mime)
+LLMIME_Mimicking_QRY_PartyConditionsMet((CHARACTERGUID)_Character, (CHARACTERGUID)_Mime)
 AND
 NOT GlobalGetFlag("Mimicry_Mimic_PartyOnlyDisabled", 1)
 AND
@@ -161,14 +161,14 @@ THEN
 DB_NOOP(1);
 
 QRY
-LLMIME_QRY_Mime_CanMimicSummon((CHARACTERGUID)_Character)
+LLMIME_Mimicking_QRY_CanMimicSummon((CHARACTERGUID)_Character)
 AND
 CharacterIsSummon(_Character, 0)
 THEN
 DB_NOOP(1);
 
 QRY
-LLMIME_QRY_Mime_CanMimicSummon((CHARACTERGUID)_Character)
+LLMIME_Mimicking_QRY_CanMimicSummon((CHARACTERGUID)_Character)
 AND
 CharacterIsSummon(_Character, 1)
 AND
@@ -177,14 +177,14 @@ THEN
 DB_NOOP(1);
 
 QRY
-LLMIME_QRY_Mime_CanMimicSourceSkill((STRING)_Skill)
+LLMIME_Mimicking_QRY_CanMimicSourceSkill((STRING)_Skill)
 AND
 IsSourceSkill(_Skill, 0)
 THEN
 DB_NOOP(1);
 
 QRY
-LLMIME_QRY_Mime_CanMimicSourceSkill((STRING)_Skill)
+LLMIME_Mimicking_QRY_CanMimicSourceSkill((STRING)_Skill)
 AND
 IsSourceSkill(_Skill, 1)
 AND
@@ -193,23 +193,23 @@ THEN
 DB_NOOP(1);
 
 QRY
-LLMIME_QRY_Mime_CanMimicSkill((STRING)_Skill)
+LLMIME_Mimicking_QRY_CanMimicSkill((STRING)_Skill)
 AND
-LLMIME_QRY_Mime_CanMimicSourceSkill(_Skill)
+LLMIME_Mimicking_QRY_CanMimicSourceSkill(_Skill)
 AND
-LLMIME_QRY_SkillIsNotBlocked(_Skill)
+LLMIME_Mimicking_QRY_SkillIsAllowed(_Skill)
 THEN
 DB_NOOP(1);
 
 QRY
-LLMIME_QRY_Mime_CharacterIsMimickable((CHARACTERGUID)_Character)
+LLMIME_Mimicking_QRY_CharacterIsMimickable((CHARACTERGUID)_Character)
 AND
 CharacterIsPlayer(_Character, 1)
 THEN
 DB_NOOP(1);
 
 QRY
-LLMIME_QRY_Mime_CharacterIsMimickable((CHARACTERGUID)_Character)
+LLMIME_Mimicking_QRY_CharacterIsMimickable((CHARACTERGUID)_Character)
 AND
 CharacterIsPlayer(_Character, 0)
 AND
@@ -224,61 +224,25 @@ THEN
 DB_NOOP(1);
 
 QRY
-LLMIME_QRY_Mime_CasterAndTargetMatch((CHARACTERGUID)_Character, (GUIDSTRING)_Target, (STRING)_SkillType)
+LLMIME_Mimicking_QRY_MimesAvailable()
+AND
+DB_LLMIME_Mimicking_MimicNextAction(_Mime)
+AND
+NOT LLMIME_QRY_MimeIsCurrentlyMimicking(_Mime)
+THEN
+DB_NOOP(1);
+
+QRY
+LLMIME_Mimicking_QRY_CasterAndTargetMatch((CHARACTERGUID)_Character, (GUIDSTRING)_Target, (STRING)_SkillType)
 AND
 _SkillType == "Shout"
 THEN
 DB_NOOP(1);
 
 QRY
-LLMIME_QRY_Mime_CasterAndTargetMatch((CHARACTERGUID)_Character, (GUIDSTRING)_Target, (STRING)_SkillType)
+LLMIME_Mimicking_QRY_CasterAndTargetMatch((CHARACTERGUID)_Character, (GUIDSTRING)_Target, (STRING)_SkillType)
 AND
 (GUIDSTRING)_Character == _Target
-THEN
-DB_NOOP(1);
-
-QRY
-LLMIME_QRY_CharacterIsAMime((CHARACTERGUID)_Character)
-AND
-IsTagged(_Character, "LLMIME_MIME", 1)
-THEN
-DB_NOOP(1);
-
-QRY
-LLMIME_QRY_CharacterIsAMime((CHARACTERGUID)_Character)
-AND
-DB_LLMIME_Mimicking_MimicNextAction(_Character)
-THEN
-DB_NOOP(1);
-
-QRY
-LLMIME_QRY_MimeShouldBeMimicking((CHARACTERGUID)_Mime)
-AND
-HasActiveStatus(_Mime, "LLMIME_MIME", 1)
-AND
-GlobalGetFlag("Mimicry_Mimic_CombatOnlyDisabled", 1)
-THEN
-DB_NOOP(1);
-
-QRY
-LLMIME_QRY_MimeShouldBeMimicking((CHARACTERGUID)_Mime)
-AND
-HasActiveStatus(_Mime, "LLMIME_MIME", 1)
-AND
-NOT GlobalGetFlag("Mimicry_Mimic_CombatOnlyDisabled", 1)
-AND
-CharacterIsInCombat(_Mime, 1)
-AND
-NOT DB_LeaderLib_Combat_ActiveObject(_, _Mime)
-THEN
-DB_NOOP(1);
-
-QRY
-LLMIME_QRY_CurrentlyMimicking((CHARACTERGUID)_Mime)
-AND
-HasActiveStatus(_Mime, "LLMIME_MIME", 1)
-AND
-DB_LLMIME_Mimicking_MimicFailTimer(_TimerName, _Mime, _Caster, _Action, _ActionType)
 THEN
 DB_NOOP(1);
 //END_REGION
