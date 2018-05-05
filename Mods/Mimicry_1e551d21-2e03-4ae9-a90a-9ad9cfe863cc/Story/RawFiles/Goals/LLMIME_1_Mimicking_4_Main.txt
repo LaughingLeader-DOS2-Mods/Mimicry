@@ -422,7 +422,7 @@ AND
 DB_LLMIME_Mimicking_Temp_ResetDummyAfterMimicAction(_Mime, _Target, _Action, _ActionType)
 THEN
 NOT DB_LLMIME_Mimicking_Temp_ResetDummyAfterMimicAction(_Mime, _Target, _Action, _ActionType);
-LLMIME_Dummy_ResetDummy((GUIDSTRING)_Target);
+LLMIME_Dummy_ResetDummyAfterDelay((GUIDSTRING)_Target, 500);
 //END_REGION
 
 //REGION MIMIC_SUCCESS
@@ -507,11 +507,15 @@ DB_NOOP(1);
 
 PROC
 LLMIME_Mimicking_ActionQueued((CHARACTERGUID)_Mime, (CHARACTERGUID)_Caster, (STRING)_AttackID, "Attack")
+AND
+IsTagged(_Mime, "SUMMON", 0) // Summons can't equip items
 THEN
 LLMIME_Mimicking_TrackWeapons(_Mime, _Caster, _AttackID, "Attack");
 
 PROC
 LLMIME_Mimicking_ActionQueued((CHARACTERGUID)_Mime, (CHARACTERGUID)_Caster, (STRING)_Skill, "Skill")
+AND
+IsTagged(_Mime, "SUMMON", 0)
 AND
 DB_LLMIME_SkillData(_Skill, _SkillType, _SkillElement)
 AND
@@ -569,6 +573,7 @@ CreateItemTemplateAtPosition(_Template, _x, _y, _z, _Weapon)
 AND
 CharacterGetLevel(_Caster, _Level)
 THEN
+LeaderLog_Log("DEBUG", "[LLMIME:Mime:EquipWeaponsForAction] Equipped a one-time use main hand weapon on mime.");
 LLMIME_Mimicking_MarkItemForOneTimeUse(_Mime, _Weapon, _Action, _ActionType);
 SetTag(_Weapon, "LLMIME_MIMICKED_WEAPON");
 ItemLevelUpTo(_Weapon, _Level);
@@ -591,6 +596,7 @@ CreateItemTemplateAtPosition(_Template, _x, _y, _z, _Weapon)
 AND
 CharacterGetLevel(_Caster, _Level)
 THEN
+LeaderLog_Log("DEBUG", "[LLMIME:Mime:EquipWeaponsForAction] Equipped a one-time use offhand hand weapon on mime.");
 LLMIME_Mimicking_MarkItemForOneTimeUse(_Mime, _Weapon, _Action, _ActionType);
 SetTag(_Weapon, "LLMIME_MIMICKED_WEAPON");
 ItemLevelUpTo(_Weapon, _Level);

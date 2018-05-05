@@ -547,6 +547,7 @@ LeaderLog_Log("DEBUG", "[LLMIME:Mime:Targeting] Launching final timer and then e
 NOT DB_LeaderLog_Temp_CombinedString(_EventTimerName);
 DB_LLMIME_Mimicking_Temp_FinalMimicTarget(_Mime, _Caster, _Target, _Action, _ActionType, _EventTimerName);
 TimerLaunch(_EventTimerName, 5); // Frames for the dummy's position to update
+LLMIME_Dummy_ResetDummyAfterDelay((GUIDSTRING)_Dummy, 8000); // Fallback
 
 IF
 TimerFinished(_EventTimerName)

@@ -36,6 +36,66 @@ LLMIME_QRY_CharacterIsAMime(_Mime)
 THEN
 SetStoryEvent(_Mime, "LLMIME_Events_RemoveMime");
 //END_REGION
+
+//REGION SUMMONING
+IF
+GameStarted(_,_)
+AND
+DB_LLMIME_SummonedMime(_Caster, _Mime)
+AND
+ObjectExists(_Mime, 0)
+THEN
+NOT DB_LLMIME_SummonedMime(_Caster, _Mime);
+LLMIME_Mime_SummonMime(_Caster);
+
+PROC
+LLMIME_Mime_SummonMime((CHARACTERGUID)_Caster)
+AND
+NOT DB_LLMIME_SummonedMime(_Caster, _)
+AND
+GetPosition(_Caster, _cx, _cy, _cz)
+AND
+TemporaryCharacterCreateAtPosition(_cx, _cy, _cz, "LLMIME_Elves_Male_Mime_d8b7efbb-6e60-4700-af8a-4295b0c1ed41", 1, _Mime)
+THEN
+DB_LLMIME_SummonedMime(_Caster, _Mime);
+CharacterAddToPlayerCharacter(_Mime, _Caster);
+
+IF
+SkillCast(_Caster, "Shout_LLMIME_Mime", _)
+AND
+NOT DB_LLMIME_Temp_Summoning(_Caster)
+AND
+NOT DB_LLMIME_SummonedMime(_Caster, _)
+THEN
+DB_LLMIME_Temp_Summoning(_Caster);
+LLMIME_Mime_SummonMime(_Caster);
+
+IF
+SkillCast(_Character, "Shout_LLMIME_Mime", _)
+AND
+NOT DB_LLMIME_Temp_Summoning(_Character)
+AND
+DB_LLMIME_SummonedMime(_Character, _Mime)
+THEN
+DB_LLMIME_Temp_Summoning(_Character);
+CharacterRemoveFromPlayerCharacter(_Mime, _Character);
+Poof(_Mime);
+
+IF
+CharacterWentOnStage(_Mime, 0)
+AND
+DB_LLMIME_SummonedMime(_Character, _Mime)
+THEN
+NOT DB_LLMIME_SummonedMime(_Character, _Mime);
+CharacterDie(_Mime, 0, "");
+
+IF
+SkillCast(_Character, "Shout_LLMIME_Mime", _)
+AND
+DB_LLMIME_Temp_Summoning(_Character)
+THEN
+NOT DB_LLMIME_Temp_Summoning(_Character);
+//END_REGION
 EXITSECTION
 
 ENDEXITSECTION

@@ -37,7 +37,7 @@ CreateItemTemplateAtPosition("LOOT_BackPack_A_6c70c298-aa29-418f-a659-f8e0b5f5fa
 THEN
 SetTag(_Backpack, "LLMIME_DEBUG_DELETEALL");
 MoveAllItemsTo(_Player, _Backpack, 1, 1, 1);
-CharacterAddSkill(_Player, "Summon_LLMIME_Mime");
+CharacterAddSkill(_Player, "Shout_LLMIME_Mime");
 CharacterLevelUpTo(_Player, 10);
 CharacterAddAttribute(_Player, "Finesse", 5);
 CharacterAddAttribute(_Player, "Strength", 5);

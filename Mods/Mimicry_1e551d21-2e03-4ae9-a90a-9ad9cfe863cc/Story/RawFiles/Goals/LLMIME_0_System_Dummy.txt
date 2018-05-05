@@ -45,6 +45,7 @@ SetVarString(_Dummy, "LLMIME_UUID", _DummyID);
 LeaderLog_Log("DEBUG", "[LLMIME:Mimic:Dummy:SpawnDummy(Item)] Spawned dummy and set ID to [",_ID,"].");
 SetTag(_Dummy, "LLMIME_DUMMY");
 LLMIME_Dummy_SetDummyID(_Dummy, _ID);
+SetVisible(_Dummy, 0);
 SetInvulnerable_UseProcSetInvulnerable(_Dummy, 1);
 DB_LLMIME_Dummy_ItemDummies(_Dummy);
 DB_LLMIME_Dummy_NextItemDummy(_ID, _Dummy);
@@ -73,7 +74,8 @@ LeaderLog_Log("DEBUG", "[LLMIME:Mimic:Dummy:SpawnDummy(Character)] Spawned dummy
 SetTag(_Dummy, "LLMIME_DUMMY");
 LLMIME_Dummy_SetDummyID(_Dummy, _ID);
 CharacterSetImmortal(_Dummy, 1);
-//SetVisible(_Dummy, 0);
+SetVisible(_Dummy, 0);
+SetInvulnerable_UseProcSetInvulnerable(_Dummy, 1);
 DB_LLMIME_Dummy_CharacterDummies(_Dummy);
 DB_LLMIME_Dummy_NextCharacterDummy(_ID, _Dummy);
 GlobalClearFlag("LLMIME_CreatingDummy");
@@ -214,9 +216,22 @@ PROC
 LLMIME_Dummy_ResetDummy((GUIDSTRING)_Dummy)
 AND
 IsTagged(_Dummy, "LLMIME_DUMMY", 1)
+AND
+ObjectIsOnStage(_Dummy, 1)
 THEN
 SetOnStage(_Dummy, 0);
 LeaderLog_Log("DEBUG", "[LLMIME:Mimic:Dummy:ResetDummy] Set dummy off stage.");
+
+PROC
+LLMIME_Dummy_ResetDummyAfterDelay((GUIDSTRING)_Dummy, (INTEGER)_Delay)
+AND
+DB_LLMIME_ResetDummyTimer(_TimerName, _Dummy)
+AND
+GetUUID(_Dummy, _ID)
+THEN
+LeaderLog_Log("DEBUG", "[LLMIME:Mimic:Dummy:ResetDummyAfterDelay] Timer for dummy [",_ID,"] already running. Resetting timer.");
+TimerCancel(_TimerName);
+TimerLaunch(_TimerName, _Delay);
 
 PROC
 LLMIME_Dummy_ResetDummyAfterDelay((GUIDSTRING)_Dummy, (INTEGER)_Delay)

@@ -165,12 +165,14 @@ LLMIME_Mimicking_MimicAction((CHARACTERGUID)_Caster, (STRING)_Skill, "Skill")
 AND
 DB_LLMIME_Mimicking_MimicQueue_Self(_Mime, _Caster, _Skill, "Skill")
 THEN
+LLMIME_Mimicking_ResetFailTimer(_Mime, _Caster, _Skill, "Skill", 2500);
 CharacterUseSkill(_Mime, _Skill, _Mime, 1, 1, 1);
 NOT DB_LLMIME_Mimicking_MimicQueue_Self(_Mime, _Caster, _Skill, "Skill");
 
 PROC
 LLMIME_Mimicking_MimicActionOnTarget((CHARACTERGUID)_Mime, (CHARACTERGUID)_Caster, (GUIDSTRING)_Target, (STRING)_Skill, "Skill")
 THEN
+LLMIME_Mimicking_ResetFailTimer(_Mime, _Caster, _Skill, "Skill", 2500);
 CharacterUseSkill(_Mime, _Skill, _Target, 1, 1, 1);
 
 IF
