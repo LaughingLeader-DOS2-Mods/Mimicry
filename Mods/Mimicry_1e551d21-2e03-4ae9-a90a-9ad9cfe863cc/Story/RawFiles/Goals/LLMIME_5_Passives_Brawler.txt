@@ -81,13 +81,14 @@ ApplyDamage(_Target, _Damage, "Physical", _Mime);
 
 //REGION DOUBLE_ATTACK
 IF
-AttackedByObject(_Target, _Owner, (CHARACTERGUID)_Mime, _DamageType, "Attack")
+CharacterCriticalHitBy(_Target, _Owner, _Mime)
+//AttackedByObject(_Target, _Owner, (CHARACTERGUID)_Mime, _DamageType, "Attack")
 AND
 LLMIME_QRY_CharacterIsAMime(_Mime)
 AND
 ObjectGetFlag(_Mime, "LLMIME_UNARMED", 1)
 AND
-ObjectGetFlag(_Mime, "LLMIME_CAN_DOUBLE_ATTACK", 1)
+ObjectGetFlag(_Mime, "LLMIME_CANNOT_DOUBLE_ATTACK", 0)
 AND
 NOT DB_LLMIME_Brawler_ExtraAttackTimer(_, _Mime, _)
 AND
@@ -95,6 +96,7 @@ GetUUID(_Mime, _MimeID)
 AND
 StringConcatenate("LLMIME_Timers_BrawlerExtraAttack_", _MimeID, _TimerName)
 THEN
+ObjectSetFlag(_Mime, "LLMIME_CANNOT_DOUBLE_ATTACK");
 DB_LLMIME_Brawler_ExtraAttackTimer(_TimerName, _Mime, _Target);
 TimerLaunch(_TimerName, 500);
 
@@ -106,6 +108,7 @@ THEN
 NOT DB_LLMIME_Brawler_ExtraAttackTimer(_TimerName, _Mime, _Target);
 //CharacterUseSkill(_Mime, "Target_LLMIME_UnarmedAttack1", _Target, 1, 1, 1);
 CharacterAttack(_Mime, _Target);
+ObjectClearFlag(_Mime, "LLMIME_CANNOT_DOUBLE_ATTACK");
 //END_REGION
 
 //REGION BRAWLER_FIST

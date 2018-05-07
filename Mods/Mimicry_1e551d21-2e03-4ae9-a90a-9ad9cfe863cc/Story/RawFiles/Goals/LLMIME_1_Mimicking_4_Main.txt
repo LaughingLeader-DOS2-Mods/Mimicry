@@ -507,15 +507,11 @@ DB_NOOP(1);
 
 PROC
 LLMIME_Mimicking_ActionQueued((CHARACTERGUID)_Mime, (CHARACTERGUID)_Caster, (STRING)_AttackID, "Attack")
-AND
-IsTagged(_Mime, "SUMMON", 0) // Summons can't equip items
 THEN
 LLMIME_Mimicking_TrackWeapons(_Mime, _Caster, _AttackID, "Attack");
 
 PROC
 LLMIME_Mimicking_ActionQueued((CHARACTERGUID)_Mime, (CHARACTERGUID)_Caster, (STRING)_Skill, "Skill")
-AND
-IsTagged(_Mime, "SUMMON", 0)
 AND
 DB_LLMIME_SkillData(_Skill, _SkillType, _SkillElement)
 AND
@@ -526,29 +522,32 @@ LLMIME_Mimicking_TrackWeapons(_Mime, _Caster, _Skill, "Skill");
 PROC
 LLMIME_Mimicking_TrackWeapons((CHARACTERGUID)_Mime, (CHARACTERGUID)_Caster, (STRING)_Action, (STRING)_ActionType)
 AND
-CharacterGetEquippedItem(_Mime, "Weapon", (ITEMGUID)_MainHand)
+CharacterGetEquippedItem(_Caster, "Weapon", (ITEMGUID)_MainHand)
 AND
 NOT DB_LLMIME_Mimicking_Temp_CasterWeapons(_Caster, _, _, _Action, _ActionType)
 THEN
+LeaderLog_Log("DEBUG", "[LLMIME:Mimicking:TrackWeapons] Recorded caster's main hand weapon for [",_ActionType,"][",_Action,"]");
 DB_LLMIME_Mimicking_Temp_CasterWeapons(_Caster, _MainHand, NULL_00000000-0000-0000-0000-000000000000, _Action, _ActionType);
 
 PROC
 LLMIME_Mimicking_TrackWeapons((CHARACTERGUID)_Mime, (CHARACTERGUID)_Caster, (STRING)_Action, (STRING)_ActionType)
 AND
-CharacterGetEquippedItem(_Mime, "Shield", (ITEMGUID)_Offhand)
+CharacterGetEquippedItem(_Caster, "Shield", (ITEMGUID)_Offhand)
 AND
 DB_LLMIME_Mimicking_Temp_CasterWeapons(_Caster, _MainHand, NULL_00000000-0000-0000-0000-000000000000, _Action, _ActionType)
 THEN
+LeaderLog_Log("DEBUG", "[LLMIME:Mimicking:TrackWeapons] Recorded caster's off hand weapon for [",_ActionType,"][",_Action,"]");
 NOT DB_LLMIME_Mimicking_Temp_CasterWeapons(_Caster, _MainHand, NULL_00000000-0000-0000-0000-000000000000, _Action, _ActionType);
 DB_LLMIME_Mimicking_Temp_CasterWeapons(_Caster, _MainHand, _Offhand, _Action, _ActionType);
 
 PROC
 LLMIME_Mimicking_TrackWeapons((CHARACTERGUID)_Mime, (CHARACTERGUID)_Caster, (STRING)_Action, (STRING)_ActionType)
 AND
-CharacterGetEquippedItem(_Mime, "Shield", (ITEMGUID)_Offhand)
+CharacterGetEquippedItem(_Caster, "Shield", (ITEMGUID)_Offhand)
 AND
 NOT DB_LLMIME_Mimicking_Temp_CasterWeapons(_Caster, _, _, _Action, _ActionType)
 THEN
+LeaderLog_Log("DEBUG", "[LLMIME:Mimicking:TrackWeapons] Recorded caster's off hand weapon for [",_ActionType,"][",_Action,"]");
 DB_LLMIME_Mimicking_Temp_CasterWeapons(_Caster, NULL_00000000-0000-0000-0000-000000000000, _Offhand, _Action, _ActionType);
 
 PROC

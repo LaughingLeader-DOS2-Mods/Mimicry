@@ -20,8 +20,6 @@ DB_LLMIME_Mimicking_Temp_TargetPriority(_Caster, _Target, _TargetPriority)
 AND
 DB_LLMIME_Mimicking_MimicNextAction(_Mime)
 AND
-IsTagged(_Mime, "SUMMON", 0)
-AND
 LLMIME_Mimicking_QRY_CanMimicCharacter(_Caster, _Mime)
 AND
 GetPosition(_Target, _TargetX, _TargetY, _TargetZ)
@@ -78,8 +76,6 @@ PROC
 LLMIME_Mimicking_OnAttackAtPosition((CHARACTERGUID)_Caster, (REAL)_TargetX, (REAL)_TargetY, (REAL)_TargetZ)
 AND
 DB_LLMIME_Mimicking_MimicNextAction(_Mime)
-AND
-IsTagged(_Mime, "SUMMON", 0)
 AND
 LLMIME_Mimicking_QRY_CanMimicCharacter(_Caster, _Mime)
 AND

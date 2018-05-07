@@ -65,6 +65,11 @@ CharacterRecruitCharacter(_Character, _Player);
 CharacterStopFollow(_Character);
 
 IF
+StoryEvent(CHARACTERGUID_LLMIME_Debug_PartyMember3_9c02760e-befa-4026-a214-ecbeaa7de64a, "LLMIME_Events_Debug_IterateCharacters")
+THEN
+SetStoryEvent(CHARACTERGUID_LLMIME_Debug_PartyMember3_9c02760e-befa-4026-a214-ecbeaa7de64a, "LLMIME_Events_InitMime");
+
+IF
 StoryEvent(NULL_00000000-0000-0000-0000-000000000000, "LLMIME_Events_Debug_IterateCharacters")
 THEN
 NOT DB_LLMIME_Debug_IteratingPlayers(1);
