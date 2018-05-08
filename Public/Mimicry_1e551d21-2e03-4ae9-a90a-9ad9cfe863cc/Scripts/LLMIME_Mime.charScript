@@ -7,7 +7,7 @@ EVENT Equip_Mask
 VARS
 	ITEM:_Mask
 ON
-	OnInit()
+	OnActivate()
 ACTIONS
 IF "c1"
 	ItemGetFromInventory(_Mask, __Me, "ARM_UNIQUE_LLMIME_MimeMask_A")

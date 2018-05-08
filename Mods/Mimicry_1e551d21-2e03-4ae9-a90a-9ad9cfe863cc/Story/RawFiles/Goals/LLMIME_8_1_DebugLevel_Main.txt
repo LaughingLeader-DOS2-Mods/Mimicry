@@ -27,6 +27,15 @@ CharacterLaunchIterator("LLMIME_Events_Debug_IterateCharacters");
 IF
 StoryEvent((CHARACTERGUID)_Player, "LLMIME_Events_Debug_IterateCharacters")
 AND
+DB_LLMIME_Templates("Mask_A", _Template)
+AND
+NOT GetItemForItemTemplateInInventory(_Player, _Template, _)
+THEN
+ItemTemplateAddTo(_Template, _Player, 1);
+
+IF
+StoryEvent((CHARACTERGUID)_Player, "LLMIME_Events_Debug_IterateCharacters")
+AND
 IsTagged(_Player, "COMPANION", 0)
 AND
 CharacterIsPlayer(_Player, 1)
@@ -37,16 +46,8 @@ CreateItemTemplateAtPosition("LOOT_BackPack_A_6c70c298-aa29-418f-a659-f8e0b5f5fa
 THEN
 SetTag(_Backpack, "LLMIME_DEBUG_DELETEALL");
 MoveAllItemsTo(_Player, _Backpack, 1, 1, 1);
-CharacterAddSkill(_Player, "Shout_LLMIME_Mime");
-CharacterLevelUpTo(_Player, 10);
-CharacterAddAttribute(_Player, "Finesse", 5);
-CharacterAddAttribute(_Player, "Strength", 5);
-CharacterAddAttribute(_Player, "Wits", 5);
-CharacterAddAttribute(_Player, "Intelligence", 5);
-CharacterAddAttribute(_Player, "Constitution", 5);
 //SetStoryEvent(_Player, "LLMIME_Events_InitMime");
 CharacterTransformAppearanceToWithEquipmentSet(_Player, _Player, "Class_Ranger_Act2", 0);
-ItemTemplateAddTo("EQ_Clothing_LLMIME_MimeMask_A_8e66ce79-8c8e-4c22-a8ea-5a99977f4ea8", _Player, 1);
 DB_LLMIME_Debug_HostPlayer(_Player);
 DB_LLMIME_Debug_DeleteBackpack(_Backpack);
 
@@ -63,11 +64,19 @@ IsTagged(_Player, "COMPANION", 0)
 THEN
 CharacterRecruitCharacter(_Character, _Player);
 CharacterStopFollow(_Character);
+CharacterLevelUpTo(_Character, 10);
+CharacterAddAttribute(_Character, "Finesse", 5);
+CharacterAddAttribute(_Character, "Strength", 5);
+CharacterAddAttribute(_Character, "Wits", 5);
+CharacterAddAttribute(_Character, "Intelligence", 5);
+CharacterAddAttribute(_Character, "Constitution", 5);
 
+/*
 IF
 StoryEvent(CHARACTERGUID_LLMIME_Debug_PartyMember3_9c02760e-befa-4026-a214-ecbeaa7de64a, "LLMIME_Events_Debug_IterateCharacters")
 THEN
 SetStoryEvent(CHARACTERGUID_LLMIME_Debug_PartyMember3_9c02760e-befa-4026-a214-ecbeaa7de64a, "LLMIME_Events_InitMime");
+*/
 
 IF
 StoryEvent(NULL_00000000-0000-0000-0000-000000000000, "LLMIME_Events_Debug_IterateCharacters")

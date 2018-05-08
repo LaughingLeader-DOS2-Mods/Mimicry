@@ -112,7 +112,6 @@ ObjectClearFlag(_Mime, "LLMIME_CANNOT_DOUBLE_ATTACK");
 //END_REGION
 
 //REGION BRAWLER_FIST
-//ITEMGUID_WPN_LLMIME_BrawlerFist_e1bda904-93c2-4f6f-8136-1a547279fd1f
 PROC
 LLMIME_Brawler_RegisterFist((CHARACTERGUID)_Mime, (ITEMGUID)_Fist)
 THEN
@@ -141,7 +140,9 @@ CharacterStatusApplied(_Mime, "LLMIME_BRAWLER_BONUS", _)
 AND
 NOT DB_LLMIME_Brawler_SpawnedFist(_Mime, _)
 AND
-GetItemForItemTemplateInInventory(_Mime, "WPN_LLMIME_BrawlerFist_e1bda904-93c2-4f6f-8136-1a547279fd1f", _Fist)
+DB_LLMIME_Templates("BrawlerFist", _Template)
+AND
+GetItemForItemTemplateInInventory(_Mime, _Template, _Fist)
 THEN
 LLMIME_Brawler_RegisterFist(_Mime, _Fist);
 
@@ -152,7 +153,9 @@ NOT DB_LLMIME_Brawler_SpawnedFist(_Mime, _)
 AND
 GetPosition(_Mime, _x, _y, _z)
 AND
-CreateItemTemplateAtPosition("WPN_LLMIME_BrawlerFist_e1bda904-93c2-4f6f-8136-1a547279fd1f", _x, _y, _z, _Fist)
+DB_LLMIME_Templates("BrawlerFist", _Template)
+AND
+CreateItemTemplateAtPosition(_Template, _x, _y, _z, _Fist)
 AND
 CharacterGetLevel(_Mime, _Level)
 THEN
@@ -217,6 +220,7 @@ NOT DB_LLMIME_Brawler_SpawnedFist(_, _Fist)
 THEN
 ItemDestroy(_Fist);
 
+/*
 IF
 CharacterUsedItem(_Mime, _Fist)
 AND
@@ -227,6 +231,7 @@ THEN
 ItemDestroy(_Fist);
 NOT DB_LLMIME_Brawler_SpawnedFist(_Mime, _Fist);
 CharacterStatusText(_Mime, "<font color='#32CD32'>You relax your hand.</font>");
+*/
 
 IF
 CharacterUsedItem(_Character, _Fist)

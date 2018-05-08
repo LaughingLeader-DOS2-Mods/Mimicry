@@ -4,6 +4,7 @@ INITSECTION
 LLMIME_System_InitSettings();
 //DB_LLMIME_SkillData(_Skill, _SkillType, _SkillElement)
 //DB_LLMIME_PassiveData(_Status, _BonusStatus, _InfoStatus, _DisableFlag)
+//DB_LLMIME_Templates(_Name, _Template)
 KBSECTION
 //REGION SETTINGS
 PROC
@@ -12,6 +13,10 @@ THEN
 DB_LLMIME_PassiveData("LLMIME_BRAWLER", "LLMIME_BRAWLER_BONUS", "LLMIME_BRAWLER_INFO", "LLMIME_HideMimePassives");
 DB_LLMIME_PassiveData("LLMIME_BEASTMASTER", "LLMIME_BEASTMASTER", "LLMIME_BEASTMASTER_INFO", "LLMIME_HideMimePassives");
 DB_LLMIME_PassiveData("LLMIME_CONCENTRATION", "LLMIME_CONCENTRATION_BONUS", "LLMIME_CONCENTRATION_INFO", "LLMIME_HideMimePassives");
+
+DB_LLMIME_Templates("Mask_A", "EQ_Armor_UNIQUE_LLMIME_MimeMask_A_8e66ce79-8c8e-4c22-a8ea-5a99977f4ea8");
+DB_LLMIME_Templates("BrawlerFist", "WPN_LLMIME_BrawlerFist_e1bda904-93c2-4f6f-8136-1a547279fd1f");
+DB_LLMIME_Templates("MimeManual", "WPN_LLMIME_BrawlerFist_e1bda904-93c2-4f6f-8136-1a547279fd1f");
 //END_REGION
 
 //REGION SKILL_DATA
