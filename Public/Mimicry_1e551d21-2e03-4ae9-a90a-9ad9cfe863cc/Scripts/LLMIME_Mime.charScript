@@ -1,0 +1,31 @@
+INIT
+	CHARACTER:__Me
+	INT:%FirstEquip = 0
+EVENTS
+
+EVENT Equip_Mask
+VARS
+	ITEM:_Mask
+ON
+	OnInit()
+ACTIONS
+IF "c1"
+	ItemGetFromInventory(_Mask, __Me, "ARM_UNIQUE_LLMIME_MimeMask_A")
+THEN
+	
+ENDIF
+
+BEHAVIOUR
+
+REACTION Equip_Mask_Auto, 99999
+USAGE PEACE
+VARS
+	ITEM:_Mask
+ACTIONS
+IF "c1&c2"
+	IsEqual(%FirstEquip, 0)
+	ItemGetFromInventory(_Mask, __Me, "ARM_UNIQUE_LLMIME_MimeMask_A", "LLMIME_ACTIVATE_MIME", 0)
+THEN
+	CharacterUseItem(_Mask)
+	StatusText(__Me, "Equipped Mask")
+ENDIF

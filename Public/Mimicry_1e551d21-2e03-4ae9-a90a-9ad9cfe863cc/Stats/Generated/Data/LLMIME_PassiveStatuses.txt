@@ -150,3 +150,13 @@ data "Description" "Character is highly focused, ensuring attacks will never mis
 data "DescriptionParams" "Stats:Stats_LLMIME_Concentration:AccuracyBoost"
 data "Icon" "statIcons_Hypercharged"
 data "FormatColor" "Polymorph"
+
+new entry "LLMIME_MASK_INFO"
+type "StatusData"
+data "StatusType" "CONSUME"
+data "ForGameMaster" "No"
+data "InitiateCombat" "No"
+data "DisplayName" "Mask of Mimicry"
+data "Description" "Character is wearing the Mask of Mimicry, transforming them into a mime.<br><font color='#FF0000'>Cannot use skills.</font><br><font color='#FF00FF'>Mimics the actions of allies in combat.</font>"
+data "Icon" "LLMIME_Icons_Status_MaskOfMimicry"
+data "FormatColor" "Decay"
