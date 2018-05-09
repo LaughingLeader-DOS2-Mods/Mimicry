@@ -144,55 +144,6 @@ SetOnStage(_Item, 0);
 NOT DB_LLMIME_Mimicking_Items_DestroyNext(_Mime, _Item, _Action, _Caster);
 //END_REGION
 
-//REGION DEBUG
-IF
-CanUseItem(_Mime, _Item, _RequestID)
-AND
-GetTemplate(_Item, _Template)
-AND
-CharacterGetDisplayName(_Mime, _, _Name)
-THEN
-LeaderLog_Log("DEBUG", "[LLMIME:Debug:CanUseItem] [",_Name,"] is attempting to use item [",_Template,"].");
-
-IF
-CharacterUsedItem(_Mime, _Item)
-AND
-GetTemplate(_Item, _Template)
-AND
-CharacterGetDisplayName(_Mime, _, _Name)
-THEN
-LeaderLog_Log("DEBUG", "[LLMIME:Debug:CharacterUsedItem] [",_Name,"] used item [",_Template,"].");
-
-IF
-CharacterUsedItemTemplate(_Mime, _Template, _Item)
-AND
-CharacterGetDisplayName(_Mime, _, _Name)
-THEN
-LeaderLog_Log("DEBUG", "[LLMIME:Debug:CharacterUsedItemTemplate] [",_Name,"] used item [",_Template,"].");
-
-IF
-ItemDestroying(_Item)
-AND
-GetTemplate(_Item, _Template)
-THEN
-LeaderLog_Log("DEBUG", "[LLMIME:Debug:ItemDestroying] Item [",_Template,"] is being destroyed.");
-
-IF
-ItemDestroyed(_Item)
-AND
-GetTemplate(_Item, _Template)
-THEN
-LeaderLog_Log("DEBUG", "[LLMIME:Debug:ItemDestroying] Item [",_Template,"] was destroyed.");
-
-IF
-CharacterItemEvent(_Mime, _Item, "LLMIME_Events_OnItemUse")
-AND
-GetTemplate(_Item, _Template)
-AND
-CharacterGetDisplayName(_Mime, _, _Name)
-THEN
-LeaderLog_Log("DEBUG", "[LLMIME:Debug:LLMIME_Events_OnItemUse] [",_Name,"] used item [",_Template,"].");
-//END_REGION
 EXITSECTION
 
 ENDEXITSECTION

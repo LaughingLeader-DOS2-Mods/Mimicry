@@ -15,12 +15,33 @@ VARS
 ON
 	OnCharacterEvent(_Mime, "LLMIME_Events_InitMime")
 ACTIONS
-	AddStatusInfluence(_Mime, %Passive_IsMime, 99, "", 0, 1)
-	AddStatusInfluence(_Mime, %Passive_Brawler, 99, "", 0, 1)
-	AddStatusInfluence(_Mime, %Passive_Beastmaster, 99, "", 0, 1)
-	AddStatusInfluence(_Mime, %Passive_Concentration, 99, "", 0, 1)
+IF "!c1"
+	IsTagged(_Mime, "LLMIME_MIME")
+THEN
 	SetTag(_Mime, "LLMIME_MIME")
 	ListAdd(%Mimes, _Mime)
+ENDIF
+IF "!c1"
+	CharacterHasStatus(_Mime, %Passive_IsMime)
+THEN
+	AddStatusInfluence(_Mime, %Passive_IsMime, 99, "", 0, 1)
+ENDIF
+IF "!c1"
+	CharacterHasStatus(_Mime, %Passive_Brawler)
+THEN
+	AddStatusInfluence(_Mime, %Passive_Brawler, 99, "", 0, 1)
+ENDIF
+IF "!c1"
+	CharacterHasStatus(_Mime, %Passive_Beastmaster)
+THEN
+	AddStatusInfluence(_Mime, %Passive_Beastmaster, 99, "", 0, 1)
+ENDIF
+IF "!c1"
+	CharacterHasStatus(_Mime, %Passive_Concentration)
+THEN
+	AddStatusInfluence(_Mime, %Passive_Concentration, 99, "", 0, 1)
+ENDIF
+
 EVENT Mime_Remove
 VARS
 	CHARACTER:_Mime
@@ -30,30 +51,48 @@ VARS
 ON
 	OnCharacterEvent(_Mime, "LLMIME_Events_RemoveMime")
 ACTIONS
-	RemoveStatusInfluence(_Mime, %Passive_IsMime, 9999999)
-	RemoveStatusInfluence(_Mime, %Passive_Brawler, 9999999)
-	RemoveStatusInfluence(_Mime, %Passive_Beastmaster, 9999999)
-	RemoveStatusInfluence(_Mime, %Passive_Concentration, 9999999)
+IF "c1"
+	CharacterHasStatus(_Mime, %Passive_IsMime)
+THEN
+	RemoveStatusInfluence(_Mime, %Passive_IsMime, 99, "", 0)
+ENDIF
+IF "c1"
+	CharacterHasStatus(_Mime, %Passive_Brawler)
+THEN
+	RemoveStatusInfluence(_Mime, %Passive_Brawler, 99, "", 0)
+ENDIF
+IF "c1"
+	CharacterHasStatus(_Mime, %Passive_Beastmaster)
+THEN
+	RemoveStatusInfluence(_Mime, %Passive_Beastmaster, 99, "", 0)
+ENDIF
+IF "c1"
+	CharacterHasStatus(_Mime, %Passive_Concentration)
+THEN
+	RemoveStatusInfluence(_Mime, %Passive_Concentration, 99, "", 0)
+ENDIF
+
+IF "c1&c2"
+	IsTagged(_Mime, "LLMIME_MIME")
+	ListGetSize(%Mimes,_Size)
+THEN
 	ClearTag(_Mime, "LLMIME_MIME")
-	IF "c1"
-		ListGetSize(%Mimes,_Size)
-	THEN
-		Set(_Index,1)
-		WHILE "!c1"
-			IsGreaterThen(_Index, _Size)
-		DO
-			IF "c1&c2"
-				ListGet(%Mimes, _Index, _GetMime)
-				IsEqual(_GetMime, _Mime)
-			THEN
-				ListRemove(%Mimes, _Index)
-				Goto("BreakWhile")
-			ELSE
-				Add(_Index, 1)
-			ENDIF
-		ENDWHILE
-		Label("BreakWhile")
-	ENDIF
+	Set(_Index,1)
+	WHILE "!c1"
+		IsGreaterThen(_Index, _Size)
+	DO
+		IF "c1&c2"
+			ListGet(%Mimes, _Index, _GetMime)
+			IsEqual(_GetMime, _Mime)
+		THEN
+			ListRemove(%Mimes, _Index)
+			Goto("BreakWhile")
+		ELSE
+			Add(_Index, 1)
+		ENDIF
+	ENDWHILE
+	Label("BreakWhile")
+ENDIF
 
 EVENT Func_RemoveSummonedMimes
 VARS

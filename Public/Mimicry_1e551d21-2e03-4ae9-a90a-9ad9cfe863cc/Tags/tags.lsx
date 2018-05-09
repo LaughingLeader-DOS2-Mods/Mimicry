@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <save>
-    <header version="2" time="1525423072" />
+    <header version="2" time="1525872063" />
     <version major="3" minor="1" revision="7" build="0" />
     <region id="Tags">
         <node id="root">
@@ -66,6 +66,19 @@
                 <node id="Tag">
                     <attribute id="Description" value="Items that make the character a Mime upon equipping." type="23" />
                     <attribute id="Name" value="LLMIME_ACTIVATE_MIME" type="23" />
+                    <children>
+                        <node id="Categories">
+                            <children>
+                                <node id="Category">
+                                    <attribute id="Name" value="Code" type="23" />
+                                </node>
+                            </children>
+                        </node>
+                    </children>
+                </node>
+                <node id="Tag">
+                    <attribute id="Description" value="Auto-levels the item to the owner character&apos;s level." type="23" />
+                    <attribute id="Name" value="LLMIME_AUTO_LEVEL" type="23" />
                     <children>
                         <node id="Categories">
                             <children>

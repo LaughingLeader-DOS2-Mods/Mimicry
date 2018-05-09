@@ -33,6 +33,19 @@ IntegertoString(_Percentage, _DamageStr)
 THEN
 LeaderLog_Log("DEBUG", "[LLMIME:Mime:CharacterReceivedDamage] Mime did [",_DamageStr,"]% damage. Whatever that means.");
 
+//REGION BRAWLER_STANCE
+IF
+ItemUnEquipped(_Item, _Mime)
+AND
+HasActiveStatus(_Mime, "LLMIME_BRAWLER_STANCE", 1)
+AND
+GetTemplate(_Item, _Template)
+AND
+DB_LLMIME_Templates("BrawlerFist", _Template)
+THEN
+RemoveStatus(_Mime, "LLMIME_BRAWLER_STANCE");
+//END_REGION
+
 //REGION DAMAGE_TYPE_MATCHING
 QRY
 LLMIME_Brawler_QRY_DamageTypeMatches((CHARACTERGUID)_Mime, (STRING)_DamageType)
@@ -109,140 +122,6 @@ NOT DB_LLMIME_Brawler_ExtraAttackTimer(_TimerName, _Mime, _Target);
 //CharacterUseSkill(_Mime, "Target_LLMIME_UnarmedAttack1", _Target, 1, 1, 1);
 CharacterAttack(_Mime, _Target);
 ObjectClearFlag(_Mime, "LLMIME_CANNOT_DOUBLE_ATTACK");
-//END_REGION
-
-//REGION BRAWLER_FIST
-PROC
-LLMIME_Brawler_RegisterFist((CHARACTERGUID)_Mime, (ITEMGUID)_Fist)
-THEN
-DB_LLMIME_Brawler_SpawnedFist(_Mime, _Fist);
-
-IF
-CharacterStatusApplied(_Mime, "LLMIME_BRAWLER_BONUS", _)
-AND
-DB_LLMIME_Brawler_SpawnedFist(_Mime, _Fist)
-AND
-ObjectExists(_Fist, 0)
-THEN
-NOT DB_LLMIME_Brawler_SpawnedFist(_Mime, _Fist);
-
-IF
-CharacterStatusApplied(_Mime, "LLMIME_BRAWLER_BONUS", _)
-AND
-DB_LLMIME_Brawler_SpawnedFist(_Mime, _Fist)
-AND
-NOT LLMIME_QRY_ItemIsInWeaponSlot(_Mime, _Fist)
-THEN
-ItemToInventory(_Fist, _Mime, 1, 0, 1);
-
-IF
-CharacterStatusApplied(_Mime, "LLMIME_BRAWLER_BONUS", _)
-AND
-NOT DB_LLMIME_Brawler_SpawnedFist(_Mime, _)
-AND
-DB_LLMIME_Templates("BrawlerFist", _Template)
-AND
-GetItemForItemTemplateInInventory(_Mime, _Template, _Fist)
-THEN
-LLMIME_Brawler_RegisterFist(_Mime, _Fist);
-
-IF
-CharacterStatusApplied(_Mime, "LLMIME_BRAWLER_BONUS", _)
-AND
-NOT DB_LLMIME_Brawler_SpawnedFist(_Mime, _)
-AND
-GetPosition(_Mime, _x, _y, _z)
-AND
-DB_LLMIME_Templates("BrawlerFist", _Template)
-AND
-CreateItemTemplateAtPosition(_Template, _x, _y, _z, _Fist)
-AND
-CharacterGetLevel(_Mime, _Level)
-THEN
-ItemLevelUpTo(_Fist, _Level);
-CharacterEquipItem(_Mime, _Fist);
-LLMIME_Brawler_RegisterFist(_Mime, _Fist);
-
-IF
-ItemDestroyed(_Fist)
-AND
-DB_LLMIME_Brawler_SpawnedFist(_Mime, _Fist)
-THEN
-NOT DB_LLMIME_Brawler_SpawnedFist(_Mime, _Fist);
-
-IF
-CharacterLeveledUp(_Mime)
-AND
-DB_LLMIME_Brawler_SpawnedFist(_Mime, _Fist)
-AND
-CharacterGetLevel(_Mime, _Level)
-THEN
-ItemLevelUpTo(_Fist, _Level);
-
-IF
-ItemEquipped(_Fist, _Character)
-AND
-IsTagged(_Fist, "LLMIME_BrawlerFist", 1)
-AND
-HasActiveStatus(_Character, "LLMIME_MIME", 0)
-THEN
-CharacterUnequipItem(_Character, _Fist);
-CharacterStatusText(_Character, "<font color='#FF0000'>You try to use the Mime's hand, but it is futile.");
-
-IF
-ItemDropped(_Fist)
-AND
-IsTagged(_Fist, "LLMIME_BrawlerFist", 1)
-AND
-DB_LLMIME_Brawler_SpawnedFist(_Mime, _Fist)
-THEN
-ItemToInventory(_Fist, _Mime, 0, 1);
-
-/*
-IF
-ItemMoved(_Fist)
-AND
-IsTagged(_Fist, "LLMIME_BrawlerFist", 1)
-AND
-DB_LLMIME_Brawler_SpawnedFist(_Mime, _Fist)
-AND
-ItemIsInCharacterInventory(_Fist, _Mime, 0)
-THEN
-ItemToInventory(_Fist, _Mime, 0, 1);
-*/
-
-IF
-ItemDropped(_Fist)
-AND
-IsTagged(_Fist, "LLMIME_BrawlerFist", 1)
-AND
-NOT DB_LLMIME_Brawler_SpawnedFist(_, _Fist)
-THEN
-ItemDestroy(_Fist);
-
-/*
-IF
-CharacterUsedItem(_Mime, _Fist)
-AND
-IsTagged(_Fist, "LLMIME_BrawlerFist", 1)
-AND
-DB_LLMIME_Brawler_SpawnedFist(_Mime, _Fist)
-THEN
-ItemDestroy(_Fist);
-NOT DB_LLMIME_Brawler_SpawnedFist(_Mime, _Fist);
-CharacterStatusText(_Mime, "<font color='#32CD32'>You relax your hand.</font>");
-*/
-
-IF
-CharacterUsedItem(_Character, _Fist)
-AND
-IsTagged(_Fist, "LLMIME_BrawlerFist", 1)
-AND
-NOT DB_LLMIME_Brawler_SpawnedFist(_Character, _Fist)
-AND
-DB_LLMIME_Brawler_SpawnedFist(_Mime, _Fist)
-THEN
-ItemToInventory(_Fist, _Mime, 0, 1);
 //END_REGION
 EXITSECTION
 

@@ -17,6 +17,8 @@ DB_LLMIME_PassiveData("LLMIME_CONCENTRATION", "LLMIME_CONCENTRATION_BONUS", "LLM
 DB_LLMIME_Templates("Mask_A", "EQ_Armor_UNIQUE_LLMIME_MimeMask_A_8e66ce79-8c8e-4c22-a8ea-5a99977f4ea8");
 DB_LLMIME_Templates("BrawlerFist", "WPN_LLMIME_BrawlerFist_e1bda904-93c2-4f6f-8136-1a547279fd1f");
 DB_LLMIME_Templates("MimeManual", "WPN_LLMIME_BrawlerFist_e1bda904-93c2-4f6f-8136-1a547279fd1f");
+
+LeaderLib_Register_StatusToggleSkill("Shout_LLMIME_BrawlerStance", "LLMIME_BRAWLER_STANCE", -1.0, 1);
 //END_REGION
 
 //REGION SKILL_DATA
@@ -226,7 +228,7 @@ THEN
 ObjectClearFlag(_Mime, "LLMIME_UNARMED");
 //END_REGION
 
-//REGION BRAWLER_BONUS
+//REGION UNARMED_BRAWLER_BONUS
 IF
 ObjectFlagSet("LLMIME_UNARMED", (CHARACTERGUID)_Mime, _)
 AND
@@ -370,6 +372,7 @@ DB_LLMIME_Mimicking_MimicFailTimer(_TimerName, _Mime, _Caster, _Action, _ActionT
 THEN
 DB_NOOP(1);
 //END_REGION
+
 EXITSECTION
 
 ENDEXITSECTION

@@ -1,11 +1,14 @@
 Version 1
 SubGoalCombiner SGC_AND
 INITSECTION
+DB_WaypointInfo((ITEMGUID)S_LLMIME_TestLevelWaypointShrine_9955a6a5-c7ca-40aa-8fa8-9c3699d65032,(TRIGGERGUID)S_LLMIME_Debug_Waypoint_e81af9c7-8f99-4050-8ab8-1101954a97af,"WAYP_LLMIME_TestLevel");
+
 Proc_LLMIME_IterateGameAlreadyStarted();
 KBSECTION
 IF
 GameStarted(_,_)
 THEN
+ProcDoWaypointUnlock(ITEMGUID_S_LLMIME_TestLevelWaypointShrine_9955a6a5-c7ca-40aa-8fa8-9c3699d65032,NULL_00000000-0000-0000-0000-000000000000);
 DB_LLMIME_Debug_GameStarted(1);
 TimerLaunch("LLMIME_Debug_Start", 100);
 TimerLaunch("LLMIME_Debug_Test", 5000);
@@ -23,15 +26,6 @@ NOT DB_LLMIME_Debug_IteratingPlayers(_)
 THEN
 DB_LLMIME_Debug_IteratingPlayers(1);
 CharacterLaunchIterator("LLMIME_Events_Debug_IterateCharacters");
-
-IF
-StoryEvent((CHARACTERGUID)_Player, "LLMIME_Events_Debug_IterateCharacters")
-AND
-DB_LLMIME_Templates("Mask_A", _Template)
-AND
-NOT GetItemForItemTemplateInInventory(_Player, _Template, _)
-THEN
-ItemTemplateAddTo(_Template, _Player, 1);
 
 IF
 StoryEvent((CHARACTERGUID)_Player, "LLMIME_Events_Debug_IterateCharacters")
@@ -64,12 +58,23 @@ IsTagged(_Player, "COMPANION", 0)
 THEN
 CharacterRecruitCharacter(_Character, _Player);
 CharacterStopFollow(_Character);
-CharacterLevelUpTo(_Character, 10);
+
+IF
+StoryEvent((CHARACTERGUID)_Character, "LLMIME_Events_Debug_IterateCharacters")
+AND
+DB_LLMIME_Templates("Mask_A", _Template)
+AND
+NOT GetItemForItemTemplateInInventory(_Character, _Template, _)
+THEN
+ItemTemplateAddTo(_Template, _Character, 1);
+CharacterEnableWaypointUsage(_Character, 1);
+SetHomesteadKeyState(1, _Character);
 CharacterAddAttribute(_Character, "Finesse", 5);
 CharacterAddAttribute(_Character, "Strength", 5);
 CharacterAddAttribute(_Character, "Wits", 5);
 CharacterAddAttribute(_Character, "Intelligence", 5);
 CharacterAddAttribute(_Character, "Constitution", 5);
+CharacterLevelUpTo(_Character, 10);
 
 /*
 IF
