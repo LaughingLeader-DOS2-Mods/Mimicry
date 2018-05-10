@@ -19,6 +19,57 @@ DB_LLMIME_Templates("BrawlerFist", "WPN_LLMIME_BrawlerFist_e1bda904-93c2-4f6f-81
 DB_LLMIME_Templates("MimeManual", "WPN_LLMIME_BrawlerFist_e1bda904-93c2-4f6f-8136-1a547279fd1f");
 
 LeaderLib_Register_StatusToggleSkill("Shout_LLMIME_BrawlerStance", "LLMIME_BRAWLER_STANCE", -1.0, 1);
+
+DB_LLMIME_Statuses("LLMIME_MIMICKING");
+DB_LLMIME_Statuses("LLMIME_MIMIC_WEAPON_REQUIREMENTS");
+DB_LLMIME_Statuses("LLMIME_MIMIC_ATTACK_ROOT");
+DB_LLMIME_Statuses("LLMIME_BRAWLER_STANCE");
+DB_LLMIME_Statuses("LLMIME_MIME");
+DB_LLMIME_Statuses("LLMIME_BRAWLER");
+DB_LLMIME_Statuses("LLMIME_BRAWLER_BONUS");
+DB_LLMIME_Statuses("LLMIME_UNARMED_BONUS_HIT");
+DB_LLMIME_Statuses("LLMIME_BEASTMASTER");
+DB_LLMIME_Statuses("LLMIME_BEASTMASTER_TYPECHECK");
+DB_LLMIME_Statuses("LLMIME_BEASTMASTER_MONSTERSKILL");
+DB_LLMIME_Statuses("LLMIME_CONCENTRATION");
+DB_LLMIME_Statuses("LLMIME_CONCENTRATION_BONUS");
+DB_LLMIME_Statuses("LLMIME_BRAWLER_INFO");
+DB_LLMIME_Statuses("LLMIME_BEASTMASTER_INFO");
+DB_LLMIME_Statuses("LLMIME_CONCENTRATION_INFO");
+DB_LLMIME_Statuses("LLMIME_MASK_INFO");
+//END_REGION
+
+//REGION CLEAR_HELPERS
+PROC
+LLMIME_RemoveAllModStatuses((CHARACTERGUID)_Character)
+AND
+DB_LLMIME_Statuses(_Status)
+AND
+HasActiveStatus(_Character, _Status, 1)
+THEN
+RemoveStatus(_Character, _Status);
+
+IF
+CharacterStatusApplied(_Mime, "LLMIME_MIME", _)
+THEN
+SetStoryEvent(_Mime, "LLMIME_Events_ApplyMimeBonuses");
+
+IF
+CharacterStatusRemoved(_Mime, "LLMIME_MIME", _)
+THEN
+SetStoryEvent(_Mime, "LLMIME_Events_ClearMimeBonuses");
+
+IF
+StoryEvent((CHARACTERGUID)_Mime, "LLMIME_Events_ClearMimeBonuses")
+AND
+ObjectGetFlag(_Mime, "LLMIME_UNARMED", 1)
+THEN
+ObjectClearFlag(_Mime, "LLMIME_UNARMED");
+
+IF
+StoryEvent((CHARACTERGUID)_Mime, "LLMIME_Events_ClearMimeBonuses")
+THEN
+LLMIME_RemoveAllModStatuses(_Mime);
 //END_REGION
 
 //REGION SKILL_DATA
@@ -203,27 +254,20 @@ ObjectSetFlag(_Mime, "LLMIME_UNARMED");
 
 IF
 CharacterStatusApplied(_Mime, "LLMIME_MIME", _)
-AND
-ObjectGetFlag(_Mime, "LLMIME_UNARMED", 0)
+THEN
+LLMIME_System_FlagForUnarmed(_Mime);
+
+PROC
+LLMIME_System_FlagForUnarmed((CHARACTERGUID)_Mime)
 AND
 LLMIME_QRY_NoWeaponsEquipped(_Mime)
 THEN
 ObjectSetFlag(_Mime, "LLMIME_UNARMED");
 
-IF
-CharacterStatusApplied(_Mime, "LLMIME_MIME", _)
-THEN
-SetStoryEvent(_Mime, "LLMIME_Events_ApplyMimeBonuses");
-
-IF
-CharacterStatusRemoved(_Mime, "LLMIME_MIME", _)
-THEN
-SetStoryEvent(_Mime, "LLMIME_Events_ClearMimeBonuses");
-
-IF
-StoryEvent((CHARACTERGUID)_Mime, "LLMIME_Events_ClearMimeBonuses")
+PROC
+LLMIME_System_FlagForUnarmed((CHARACTERGUID)_Mime)
 AND
-ObjectGetFlag(_Mime, "LLMIME_UNARMED", 1)
+NOT LLMIME_QRY_NoWeaponsEquipped(_Mime)
 THEN
 ObjectClearFlag(_Mime, "LLMIME_UNARMED");
 //END_REGION

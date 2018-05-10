@@ -3,3 +3,15 @@ add name "Mask of Mimicry","The mask of a warrior who abandoned his or her own i
 
 new namegroup "LLMIME_BrawlerFist"
 add name "Brawler's Fist","An iron-hard fist. Can only be equipped by a mime."
+
+new namegroup "LLMIME_Mime_Light_UpperBody"
+add name "Mime's Jacket","A spiffy jacket worn by a mime."
+
+new namegroup "LLMIME_Mime_Light_LowerBody"
+add name "Mime's Pants","Spotless pants worn by a mime. The flexible material enables quick movement."
+
+new namegroup "LLMIME_Mime_Light_Boots"
+add name "Mime's Boots","Sturdy boots worn by a mime. Steel-toed."
+
+new namegroup "LLMIME_Mime_Light_Gloves"
+add name "Mime's Gloves","Tough leather gloves worn by a mime. The fists behind these are sure to sting."

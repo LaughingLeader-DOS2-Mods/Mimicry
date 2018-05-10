@@ -1,9 +1,18 @@
 Version 1
 SubGoalCombiner SGC_AND
 INITSECTION
+LLMIME_Brawler_InitSettings();
 //DB_LLMIME_Brawler_BonusAttackTimer(_TimerName, _Mime, _Target)
 //DB_LLMIME_Brawler_SpawnedFist(_Mime, _Fist)
+//DB_LLMIME_Brawler_JustToggledStance(_Mime)
 KBSECTION
+PROC
+LLMIME_Brawler_InitSettings()
+THEN
+DB_LLMIME_Brawler_StanceStatuses("LLMIME_BRAWLER_STANCE_CON", "LLMIME_BrawlerStance_UseCon");
+DB_LLMIME_Brawler_StanceStatuses("LLMIME_BRAWLER_STANCE_STR", "LLMIME_BrawlerStance_UseStr");
+DB_LLMIME_Brawler_StanceStatuses("LLMIME_BRAWLER_STANCE_FIN", "LLMIME_BrawlerStance_UseFin");
+
 IF
 CharacterStartAttackObject(_Target, _Owner, _Attacker)
 AND
@@ -33,17 +42,107 @@ IntegertoString(_Percentage, _DamageStr)
 THEN
 LeaderLog_Log("DEBUG", "[LLMIME:Mime:CharacterReceivedDamage] Mime did [",_DamageStr,"]% damage. Whatever that means.");
 
-//REGION BRAWLER_STANCE
+//REGION BRAWLER_STANCE_PREFERENCE_SET
+PROC
+LLMIME_Brawler_SetStancePreference((CHARACTERGUID)_Mime, (STRING)_Flag)
+AND
+NOT ObjectGetFlag(_Mime, _Flag, 1)
+AND
+DB_LLMIME_Brawler_StanceStatuses(_Status, _SettingsFlag)
+THEN
+ObjectClearFlag(_Mime, _SettingsFlag);
+
+PROC
+LLMIME_Brawler_SetStancePreference((CHARACTERGUID)_Mime, (STRING)_Flag)
+AND
+NOT ObjectGetFlag(_Mime, _Flag, 1)
+THEN
+ObjectSetFlag(_Mime, _Flag);
+LLMIME_Brawler_RemoveStance(_Mime);
+LLMIME_Brawler_ApplyStance(_Mime);
+
+QRY
+LLMIME_Brawler_QRY_StancePreferenceSet((CHARACTERGUID)_Mime)
+AND
+DB_LLMIME_Brawler_StanceStatuses(_Status, _Flag)
+AND
+ObjectGetFlag(_Mime, _Flag, 1)
+THEN
+DB_NOOP(1);
+
+IF
+CharacterUsedSkill(_Mime, "Shout_LLMIME_BrawlerStance", _)
+AND
+NOT LLMIME_Brawler_QRY_StancePreferenceSet(_Mime)
+THEN
+ObjectSetFlag(_Mime, "LLMIME_BrawlerStance_UseCon"); // Default
+//END_REGION
+
+//REGION BRAWLER_STANCE_TOGGLE
+QRY
+LLMIME_Brawler_QRY_StanceIsActive((CHARACTERGUID)_Mime)
+AND
+DB_LLMIME_Brawler_StanceStatuses(_Status, _Flag)
+AND
+HasActiveStatus(_Mime, _Status, 1)
+THEN
+DB_NOOP(1);
+
+IF
+SkillCast(_Mime, "Shout_LLMIME_BrawlerStance", _)
+AND
+NOT DB_LLMIME_Brawler_JustToggledStance(_Mime)
+AND
+NOT LLMIME_Brawler_QRY_StanceIsActive(_Mime)
+THEN
+LLMIME_Brawler_ApplyStance(_Mime);
+DB_LLMIME_Brawler_JustToggledStance(_Mime);
+
+IF
+SkillCast(_Mime, "Shout_LLMIME_BrawlerStance", _)
+AND
+NOT DB_LLMIME_Brawler_JustToggledStance(_Mime)
+AND
+LLMIME_Brawler_QRY_StanceIsActive(_Mime)
+THEN
+LLMIME_Brawler_RemoveStance(_Mime);
+DB_LLMIME_Brawler_JustToggledStance(_Mime);
+
+IF
+SkillCast(_Mime, "Shout_LLMIME_BrawlerStance", _)
+AND
+DB_LLMIME_Brawler_JustToggledStance(_Mime)
+THEN
+NOT DB_LLMIME_Brawler_JustToggledStance(_Mime);
+
+PROC
+LLMIME_Brawler_ApplyStance((CHARACTERGUID)_Mime)
+AND
+DB_LLMIME_Brawler_StanceStatuses(_Status, _Flag)
+AND
+ObjectGetFlag(_Mime, _Flag, 1)
+AND
+HasActiveStatus(_Mime, _Status, 0)
+THEN
+ApplyStatus(_Mime, _Status, -1.0, 1);
+//END_REGION
+
+//REGION BRAWLER_STANCE_REMOVAL
 IF
 ItemUnEquipped(_Item, _Mime)
 AND
-HasActiveStatus(_Mime, "LLMIME_BRAWLER_STANCE", 1)
-AND
-GetTemplate(_Item, _Template)
-AND
-DB_LLMIME_Templates("BrawlerFist", _Template)
+IsTagged(_Item, "LLMIME_BrawlerFist", 1)
 THEN
-RemoveStatus(_Mime, "LLMIME_BRAWLER_STANCE");
+LLMIME_Brawler_RemoveStance(_Mime);
+
+PROC
+LLMIME_Brawler_RemoveStance((CHARACTERGUID)_Mime)
+AND
+DB_LLMIME_Brawler_StanceStatuses(_Status, _Flag)
+AND
+HasActiveStatus(_Mime, _Status, 1)
+THEN
+RemoveStatus(_Mime, _Status);
 //END_REGION
 
 //REGION DAMAGE_TYPE_MATCHING

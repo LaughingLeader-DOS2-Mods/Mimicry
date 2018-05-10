@@ -181,7 +181,7 @@ AND
 DB_LLMIME_Mimicking_Temp_ResetDummyAfterMimicAction(_Mime, _Target, _Skill, "Skill")
 THEN
 NOT DB_LLMIME_Mimicking_Temp_ResetDummyAfterMimicAction(_Mime, _Target, _Skill, "Skill");
-LLMIME_Dummy_ResetDummyAfterDelay((GUIDSTRING)_Target, 1000);
+LLMIME_Dummy_ResetDummyAfterDelay((GUIDSTRING)_Target, 2000);
 //END_REGION
 
 //REGION FAIL_TIMER_CANCELLING

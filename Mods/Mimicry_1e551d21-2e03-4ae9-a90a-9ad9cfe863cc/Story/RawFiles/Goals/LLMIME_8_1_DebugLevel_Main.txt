@@ -15,6 +15,13 @@ TimerLaunch("LLMIME_Debug_Test", 5000);
 
 IF
 RegionEnded(_)
+AND
+DB_IsPlayer(_Player)
+THEN
+LLMIME_RemoveAllModStatuses(_Player);
+
+IF
+RegionEnded(_)
 THEN
 NOT DB_LLMIME_Debug_GameStarted(1);
 NOT DB_LLMIME_Debug_IteratingPlayers(1);
@@ -41,10 +48,26 @@ THEN
 SetTag(_Backpack, "LLMIME_DEBUG_DELETEALL");
 MoveAllItemsTo(_Player, _Backpack, 1, 1, 1);
 //SetStoryEvent(_Player, "LLMIME_Events_InitMime");
-CharacterTransformAppearanceToWithEquipmentSet(_Player, _Player, "Class_Ranger_Act2", 0);
+CharacterTransformAppearanceToWithEquipmentSet(_Player, _Player, "LLMIME_Class_Mime_Start", 0);
 DB_LLMIME_Debug_HostPlayer(_Player);
 DB_LLMIME_Debug_DeleteBackpack(_Backpack);
 
+IF
+ObjectFlagSet("LLMIME_IsCompanion", (CHARACTERGUID)_Character, _Instance)
+THEN
+CharacterMakePlayer(_Character);
+CharacterStopFollow(_Character);
+CharacterDetachFromGroup(_Character);
+DB_IsPlayer(_Character);
+
+IF
+ObjectFlagCleared("LLMIME_IsCompanion", (CHARACTERGUID)_Character, _Instance)
+THEN
+CharacterDetachFromGroup(_Character);
+CharacterMakeNPC(_Character);
+NOT DB_IsPlayer(_Character);
+
+/*
 IF
 StoryEvent((CHARACTERGUID)_Character, "LLMIME_Events_Debug_IterateCharacters")
 AND
@@ -58,6 +81,25 @@ IsTagged(_Player, "COMPANION", 0)
 THEN
 CharacterRecruitCharacter(_Character, _Player);
 CharacterStopFollow(_Character);
+*/
+
+IF
+StoryEvent((CHARACTERGUID)_Character, "LLMIME_Events_Debug_IterateCharacters")
+AND
+CharacterGetHostCharacter(_Host)
+AND
+CharacterIsEnemy(_Character, _Host, 0)
+THEN
+CharacterEnableWaypointUsage(_Character, 1);
+SetHomesteadKeyState(1, _Character);
+CharacterAddAttribute(_Character, "Finesse", 5);
+CharacterAddAttribute(_Character, "Strength", 5);
+CharacterAddAttribute(_Character, "Wits", 5);
+CharacterAddAttribute(_Character, "Intelligence", 5);
+CharacterAddAttribute(_Character, "Constitution", 5);
+CharacterLevelUpTo(_Character, 10);
+CharacterOverrideMaxSourcePoints(_Character, 10);
+CharacterAddSourcePoints(_Character, 10);
 
 IF
 StoryEvent((CHARACTERGUID)_Character, "LLMIME_Events_Debug_IterateCharacters")
@@ -67,14 +109,6 @@ AND
 NOT GetItemForItemTemplateInInventory(_Character, _Template, _)
 THEN
 ItemTemplateAddTo(_Template, _Character, 1);
-CharacterEnableWaypointUsage(_Character, 1);
-SetHomesteadKeyState(1, _Character);
-CharacterAddAttribute(_Character, "Finesse", 5);
-CharacterAddAttribute(_Character, "Strength", 5);
-CharacterAddAttribute(_Character, "Wits", 5);
-CharacterAddAttribute(_Character, "Intelligence", 5);
-CharacterAddAttribute(_Character, "Constitution", 5);
-CharacterLevelUpTo(_Character, 10);
 
 /*
 IF
@@ -87,7 +121,8 @@ IF
 StoryEvent(NULL_00000000-0000-0000-0000-000000000000, "LLMIME_Events_Debug_IterateCharacters")
 THEN
 NOT DB_LLMIME_Debug_IteratingPlayers(1);
-TimerLaunch("LLMINE_Events_UnequipDummy", 300);
+//TimerLaunch("LLMINE_Events_UnequipDummy", 300);
+TimerLaunch("LLMINE_Events_Debug_DeleteBackpacks", 500);
 IterateParties("LLMIME_Events_Debug_AddPlayers");
 
 IF
@@ -140,8 +175,6 @@ AND
 NOT DB_IsPlayer(_Player)
 THEN
 DB_IsPlayer(_Player);
-CharacterOverrideMaxSourcePoints(_Player, 10);
-CharacterAddSourcePoints(_Player, 10);
 
 IF
 CharacterUsedSkill(_Character,_,_)
@@ -216,6 +249,30 @@ StringConcatenate(_Flag, " set.", _Message)
 THEN
 DebugBreak(_Message);
 GlobalSetFlag(_Flag);
+//END_REGION
+
+//REGION TRACING
+IF
+AttackedByObject(_Target, _Owner, _Attacker, _DamageType, _DamageSource)
+AND
+GetTemplate(_Attacker, _AttackerID)
+AND
+GetTemplate(_Owner, _OwnerID)
+AND
+GetTemplate(_Target, _TargetID)
+THEN
+LeaderLog_Log("DEBUG", "[LLMIME:Debug:AttackedByObject] [",_AttackerID,"](",_OwnerID,") attacked [",_TargetID,"]. DamageType[",_DamageType,"] DamageSource[",_DamageSource,"].");
+
+IF
+CharacterReceivedDamage(_Target, _Percentage, _Attacker)
+AND
+GetTemplate(_Attacker, _AttackerID)
+AND
+GetTemplate(_Target, _TargetID)
+AND
+IntegertoString(_Percentage, _DamageStr)
+THEN
+LeaderLog_Log("DEBUG", "[LLMIME:Mime:CharacterReceivedDamage] [",_AttackerID,"] did [",_DamageStr,"]% damage to [",_TargetID,"].");
 //END_REGION
 EXITSECTION
 

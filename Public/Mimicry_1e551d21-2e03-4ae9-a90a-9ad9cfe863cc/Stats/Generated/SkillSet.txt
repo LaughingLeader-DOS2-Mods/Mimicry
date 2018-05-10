@@ -1,0 +1,3 @@
+new skillset "Class_LLMIME_Mime"
+add skill "Shout_LLMIME_BrawlerStance"
+add skill "Shout_LLMIME_OpenMenu"

@@ -6,6 +6,7 @@ INIT
 	EXTERN STATUS:%Passive_Brawler = LLMIME_BRAWLER
 	EXTERN STATUS:%Passive_Beastmaster = LLMIME_BEASTMASTER
 	EXTERN STATUS:%Passive_Concentration = LLMIME_CONCENTRATION
+	FLOAT:%StatusStrength = 50
 	LIST<CHARACTER>:%Mimes
 EVENTS
 
@@ -22,24 +23,24 @@ THEN
 	ListAdd(%Mimes, _Mime)
 ENDIF
 IF "!c1"
-	CharacterHasStatus(_Mime, %Passive_IsMime)
+	HasStatusInfluence(_Mime, %Passive_IsMime)
 THEN
-	AddStatusInfluence(_Mime, %Passive_IsMime, 99, "", 0, 1)
+	AddStatusInfluence(_Mime, %Passive_IsMime, %StatusStrength, "", 0, 1)
 ENDIF
 IF "!c1"
-	CharacterHasStatus(_Mime, %Passive_Brawler)
+	HasStatusInfluence(_Mime, %Passive_Brawler)
 THEN
-	AddStatusInfluence(_Mime, %Passive_Brawler, 99, "", 0, 1)
+	AddStatusInfluence(_Mime, %Passive_Brawler, %StatusStrength, "", 0, 1)
 ENDIF
 IF "!c1"
-	CharacterHasStatus(_Mime, %Passive_Beastmaster)
+	HasStatusInfluence(_Mime, %Passive_Beastmaster)
 THEN
-	AddStatusInfluence(_Mime, %Passive_Beastmaster, 99, "", 0, 1)
+	AddStatusInfluence(_Mime, %Passive_Beastmaster, %StatusStrength, "", 0, 1)
 ENDIF
 IF "!c1"
-	CharacterHasStatus(_Mime, %Passive_Concentration)
+	HasStatusInfluence(_Mime, %Passive_Concentration)
 THEN
-	AddStatusInfluence(_Mime, %Passive_Concentration, 99, "", 0, 1)
+	AddStatusInfluence(_Mime, %Passive_Concentration, %StatusStrength, "", 0, 1)
 ENDIF
 
 EVENT Mime_Remove
@@ -52,24 +53,24 @@ ON
 	OnCharacterEvent(_Mime, "LLMIME_Events_RemoveMime")
 ACTIONS
 IF "c1"
-	CharacterHasStatus(_Mime, %Passive_IsMime)
+	HasStatusInfluence(_Mime, %Passive_IsMime)
 THEN
-	RemoveStatusInfluence(_Mime, %Passive_IsMime, 99, "", 0)
+	RemoveStatusInfluence(_Mime, %Passive_IsMime, %StatusStrength, "", 0)
 ENDIF
 IF "c1"
-	CharacterHasStatus(_Mime, %Passive_Brawler)
+	HasStatusInfluence(_Mime, %Passive_Brawler)
 THEN
-	RemoveStatusInfluence(_Mime, %Passive_Brawler, 99, "", 0)
+	RemoveStatusInfluence(_Mime, %Passive_Brawler, %StatusStrength, "", 0)
 ENDIF
 IF "c1"
-	CharacterHasStatus(_Mime, %Passive_Beastmaster)
+	HasStatusInfluence(_Mime, %Passive_Beastmaster)
 THEN
-	RemoveStatusInfluence(_Mime, %Passive_Beastmaster, 99, "", 0)
+	RemoveStatusInfluence(_Mime, %Passive_Beastmaster, %StatusStrength, "", 0)
 ENDIF
 IF "c1"
-	CharacterHasStatus(_Mime, %Passive_Concentration)
+	HasStatusInfluence(_Mime, %Passive_Concentration)
 THEN
-	RemoveStatusInfluence(_Mime, %Passive_Concentration, 99, "", 0)
+	RemoveStatusInfluence(_Mime, %Passive_Concentration, %StatusStrength, "", 0)
 ENDIF
 
 IF "c1&c2"

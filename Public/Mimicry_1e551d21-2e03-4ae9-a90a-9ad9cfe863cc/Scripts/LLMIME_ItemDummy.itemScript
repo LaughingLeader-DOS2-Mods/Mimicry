@@ -34,3 +34,18 @@ ON
 	OnTimer(%ResetTimerName)
 ACTIONS
 	ItemEvent(__Me, "LLMIME_Events_ResetDummyID")
+	
+EVENT OnDamage_Debug
+VARS
+	DAMAGE:_DamageType
+	FLOAT:_Val
+	CHARACTER:_Char
+	CHARACTERTEMPLATE:_CharID
+	ITEM:_Item
+	STRING:_Message
+ON
+	OnDamage(_DamageType, _Val, _Char, _Item)
+ACTIONS
+	Print(_Message, "[LLMIME:Dummy:OnDamage_Debug] Dummy was attacked: Type: [1] | Amount: [2] | Character: [3]", _DamageType, _Val, _Char)
+	SetVar(__Me, "LeaderLib_LogMessage", _Message)
+	ItemEvent(__Me, "LeaderLib_DebugLog")

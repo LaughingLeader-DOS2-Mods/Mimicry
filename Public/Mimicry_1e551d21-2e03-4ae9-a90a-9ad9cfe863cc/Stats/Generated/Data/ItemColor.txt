@@ -1,0 +1,1 @@
+new itemcolor "LLMIMEMimeLightArmor","5E5E5E","FF0000","FFD700"
