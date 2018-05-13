@@ -96,7 +96,7 @@ CanUseItem(_Character, _Item, _RequestID)
 AND
 IsTagged(_Item, "LLMIME_BrawlerFist", 1)
 AND
-HasActiveStatus(_Character, "LLMIME_MIME", 0)
+NOT LLMIME_QRY_CharacterIsAMime(_Character)
 THEN
 CharacterStatusText(_Character, "<font color='#FF0000'>You try to use fight like a brawler, but it is futile.</font>");
 RequestProcessed(_Character, _RequestID, 0);

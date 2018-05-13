@@ -297,8 +297,6 @@ RemoveStatus(_Mime, "LLMIME_MIMICKING");
 IF
 ObjectTurnStarted((CHARACTERGUID)_Mime)
 AND
-HasActiveStatus(_Mime, "LLMIME_MIME", 1)
-AND
 HasActiveStatus(_Mime, "LLMIME_MIMICKING", 1)
 THEN
 RemoveStatus(_Mime, "LLMIME_MIMICKING");
@@ -307,14 +305,14 @@ CharacterStatusText(_Mime, "<font color='#FF7F50'>Mimicking Ended</font>");
 IF
 ObjectTurnEnded((CHARACTERGUID)_Mime)
 AND
-HasActiveStatus(_Mime, "LLMIME_MIME", 1)
+LLMIME_QRY_CharacterIsAMime(_Mime)
 THEN
 ApplyStatus(_Mime, "LLMIME_MIMICKING", -1.0);
 
 IF
 ObjectLeftCombat(_Mime, _CombatID)
 AND
-HasActiveStatus(_Mime, "LLMIME_MIME", 1)
+HasActiveStatus(_Mime, "LLMIME_MIMICKING", 1)
 THEN
 RemoveStatus(_Mime, "LLMIME_MIMICKING");
 

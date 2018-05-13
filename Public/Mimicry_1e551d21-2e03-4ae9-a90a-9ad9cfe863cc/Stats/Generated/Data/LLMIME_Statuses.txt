@@ -60,7 +60,6 @@ data "Description" "Character is fighting in an unarmed stance."
 data "Icon" "LLMIME_Icons_Status_BrawlerStance"
 data "FormatColor" "Polymorph"
 data "StackId" "Stack_LLMIME_BrawlerStance"
-data "Items" "LLMIME_BrawlerFist_Con"
 
 new entry "LLMIME_BRAWLER_STANCE_CON"
 type "StatusData"

@@ -65,7 +65,8 @@ CharacterGetHostCharacter(_Host) // So the dummy doesn't spawn outside bounds
 AND
 GetPosition(_Host, _hx, _hy, _hz)
 AND
-TemporaryCharacterCreateAtPosition(_hx, _hy, _hz, "S_LLMIME_Scripting_Dummy_e2f3f6f7-c069-4928-830e-f1d46e2c898c", 0, _Dummy)
+//TemporaryCharacterCreateAtPosition(_hx, _hy, _hz, "S_LLMIME_Scripting_Dummy_e2f3f6f7-c069-4928-830e-f1d46e2c898c", 0, _Dummy)
+TemporaryCharacterCreateAtPositionOutOfSightTo(_hx, _hy, _hz, "S_LLMIME_Scripting_Dummy_e2f3f6f7-c069-4928-830e-f1d46e2c898c", 0, 0, "", _Dummy)
 AND
 GetUUID(_Dummy, _DummyID)
 THEN

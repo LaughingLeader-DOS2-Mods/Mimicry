@@ -2,6 +2,7 @@ INIT
 	CHARACTER:__Me
 	FIXEDSTRING:%ResetTimerName = ""
 	EXTERN FLOAT:%ResetTimerDelay = 5.0
+	INT:%DebugTimerActive = 0
 EVENTS
 
 EVENT DeleteRogueDummies
@@ -38,6 +39,7 @@ ACTIONS
 EVENT OnDamage_Debug
 VARS
 	DAMAGE:_DamageType
+	DAMAGE:_CheckDamageType
 	FLOAT:_Val
 	CHARACTER:_Char
 	CHARACTERTEMPLATE:_CharID
@@ -46,6 +48,40 @@ VARS
 ON
 	OnDamage(_DamageType, _Val, _Char, _Item)
 ACTIONS
-	Print(_Message, "[LLMIME:Dummy:OnDamage_Debug] Dummy was attacked: Type: [1] | Amount: [2] | Character: [3]", _DamageType, _Val, _Char)
+	Print(_Message, "[LLMIME:DummyBehavior:OnDamage_Debug] Dummy was attacked: Type: [1] | Amount: [2] | Character: [3]", _DamageType, _Val, _Char)
 	SetVar(__Me, "LeaderLib_LogMessage", _Message)
 	CharacterEvent(__Me, "LeaderLib_DebugLog")
+	StatusText(__Me, "I was hit!")
+	
+EVENT DamageType_Debug_Start
+ON
+	OnCharacterStatusApplied(__Me, _)
+	OnCharacterStatusAttempt(__Me, _)
+	OnDamage(_, _, _, _)
+ACTIONS
+IF "c1"
+	IsEqual(%DebugTimerActive, 0)
+THEN
+	StartTimer("LLMIME_Timers_DummyDebug", 0.25, 0)
+	Set(%DebugTimerActive, INT:1)
+	//StatusText(__Me, "Started damage type debug timer!")
+ENDIF
+EVENT DamageType_Debug
+VARS
+	DAMAGE:_DamageType
+	DAMAGE:_CheckDamageType
+	STRING:_Message
+ON
+	OnTimer("LLMIME_Timers_DummyDebug")
+ACTIONS
+	Set(%DebugTimerActive, INT:0)
+IF "c1"
+	CharacterHasBeenHitBy(__Me, _DamageType)
+THEN
+	Print(_Message, "[LLMIME:DummyBehavior:DamageType_Debug] Dummy was hit with damage type: [1]", _CheckDamageType)
+	SetVar(__Me, "LeaderLib_LogMessage", _Message)
+	CharacterEvent(__Me, "LeaderLib_DebugLog")
+ELSE
+	SetVar(__Me, "LeaderLib_LogMessage", STRING:"[LLMIME:DummyBehavior:DamageType_Debug] No damage type detected!")
+	CharacterEvent(__Me, "LeaderLib_DebugLog")
+ENDIF

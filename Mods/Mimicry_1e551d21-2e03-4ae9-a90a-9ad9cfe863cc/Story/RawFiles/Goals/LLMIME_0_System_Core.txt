@@ -18,12 +18,15 @@ DB_LLMIME_Templates("Mask_A", "EQ_Armor_UNIQUE_LLMIME_MimeMask_A_8e66ce79-8c8e-4
 DB_LLMIME_Templates("BrawlerFist", "WPN_LLMIME_BrawlerFist_e1bda904-93c2-4f6f-8136-1a547279fd1f");
 DB_LLMIME_Templates("MimeManual", "WPN_LLMIME_BrawlerFist_e1bda904-93c2-4f6f-8136-1a547279fd1f");
 
-LeaderLib_Register_StatusToggleSkill("Shout_LLMIME_BrawlerStance", "LLMIME_BRAWLER_STANCE", -1.0, 1);
+//LeaderLib_Register_StatusToggleSkill("Shout_LLMIME_BrawlerStance", "LLMIME_BRAWLER_STANCE", -1.0, 1);
 
 DB_LLMIME_Statuses("LLMIME_MIMICKING");
 DB_LLMIME_Statuses("LLMIME_MIMIC_WEAPON_REQUIREMENTS");
 DB_LLMIME_Statuses("LLMIME_MIMIC_ATTACK_ROOT");
-DB_LLMIME_Statuses("LLMIME_BRAWLER_STANCE");
+DB_LLMIME_Statuses("LLMIME_BRAWLER_STANCE_BASE");
+DB_LLMIME_Statuses("LLMIME_BRAWLER_STANCE_CON");
+DB_LLMIME_Statuses("LLMIME_BRAWLER_STANCE_STR");
+DB_LLMIME_Statuses("LLMIME_BRAWLER_STANCE_FIN");
 DB_LLMIME_Statuses("LLMIME_MIME");
 DB_LLMIME_Statuses("LLMIME_BRAWLER");
 DB_LLMIME_Statuses("LLMIME_BRAWLER_BONUS");
@@ -135,7 +138,7 @@ THEN
 DB_NOOP(1);
 //END_REGION
 
-//REGION UNARMED_FLAG
+//REGION UNARMED_FLAG_QUERIES
 QRY
 LLMIME_QRY_WeaponIsBrawlerFist((ITEMGUID)_Item)
 AND
@@ -231,7 +234,9 @@ AND
 CharacterGetEquippedItem(_Mime, "Shield", _Item)
 THEN
 DB_NOOP(1);
+//END_REGION
 
+//REGION UNARMED_FLAG_EVENTS
 IF
 ItemEquipped(_Item, _Mime)
 AND
@@ -239,7 +244,7 @@ LLMIME_QRY_CharacterIsAMime(_Mime)
 AND
 LLMIME_QRY_ItemIsWeapon(_Mime, _Item)
 THEN
-ObjectClearFlag(_Mime, "LLMIME_UNARMED");
+LLMIME_System_FlagForUnarmed(_Mime);
 
 IF
 ItemUnEquipped(_Item, _Mime)
@@ -250,26 +255,48 @@ ObjectGetFlag(_Mime, "LLMIME_UNARMED", 0)
 AND
 LLMIME_QRY_NoWeaponsEquipped(_Mime)
 THEN
-ObjectSetFlag(_Mime, "LLMIME_UNARMED");
+LLMIME_System_FlagForUnarmed(_Mime);
 
 IF
 CharacterStatusApplied(_Mime, "LLMIME_MIME", _)
 THEN
 LLMIME_System_FlagForUnarmed(_Mime);
 
-PROC
-LLMIME_System_FlagForUnarmed((CHARACTERGUID)_Mime)
-AND
-LLMIME_QRY_NoWeaponsEquipped(_Mime)
+IF
+CharacterStatusApplied(_Mime, "LLMIME_BRAWLER", _)
 THEN
-ObjectSetFlag(_Mime, "LLMIME_UNARMED");
+LLMIME_System_FlagForUnarmed(_Mime);
 
 PROC
 LLMIME_System_FlagForUnarmed((CHARACTERGUID)_Mime)
 AND
+NOT DB_LLMIME_Temp_JustSetUnarmedFlag(_Mime)
+AND
+ObjectGetFlag(_Mime, "LLMIME_UNARMED", 0)
+AND
+LLMIME_QRY_NoWeaponsEquipped(_Mime)
+THEN
+ObjectSetFlag(_Mime, "LLMIME_UNARMED");
+DB_LLMIME_Temp_JustSetUnarmedFlag(_Mime);
+
+PROC
+LLMIME_System_FlagForUnarmed((CHARACTERGUID)_Mime)
+AND
+NOT DB_LLMIME_Temp_JustSetUnarmedFlag(_Mime)
+AND
+ObjectGetFlag(_Mime, "LLMIME_UNARMED", 1)
+AND
 NOT LLMIME_QRY_NoWeaponsEquipped(_Mime)
 THEN
 ObjectClearFlag(_Mime, "LLMIME_UNARMED");
+DB_LLMIME_Temp_JustSetUnarmedFlag(_Mime);
+
+PROC
+LLMIME_System_FlagForUnarmed((CHARACTERGUID)_Mime)
+AND
+DB_LLMIME_Temp_JustSetUnarmedFlag(_Mime)
+THEN
+NOT DB_LLMIME_Temp_JustSetUnarmedFlag(_Mime);
 //END_REGION
 
 //REGION UNARMED_BRAWLER_BONUS
@@ -375,6 +402,17 @@ QRY
 LLMIME_QRY_CharacterIsAMime((CHARACTERGUID)_Character)
 AND
 IsTagged(_Character, "LLMIME_MIME", 1)
+AND
+IsTagged(_Character, "LLMIME_Dummy", 0)
+THEN
+DB_NOOP(1);
+
+QRY
+LLMIME_QRY_CharacterIsAMime((CHARACTERGUID)_Character)
+AND
+HasActiveStatus(_Character, "LLMIME_MIME", 1)
+AND
+IsTagged(_Character, "LLMIME_Dummy", 0)
 THEN
 DB_NOOP(1);
 
@@ -382,13 +420,15 @@ QRY
 LLMIME_QRY_CharacterIsAMime((CHARACTERGUID)_Character)
 AND
 DB_LLMIME_Mimicking_MimicNextAction(_Character)
+AND
+IsTagged(_Character, "LLMIME_Dummy", 0)
 THEN
 DB_NOOP(1);
 
 QRY
 LLMIME_QRY_MimeShouldBeMimicking((CHARACTERGUID)_Mime)
 AND
-HasActiveStatus(_Mime, "LLMIME_MIME", 1)
+LLMIME_QRY_CharacterIsAMime(_Mime)
 AND
 GlobalGetFlag("Mimicry_Mimic_CombatOnlyDisabled", 1)
 THEN
@@ -397,7 +437,7 @@ DB_NOOP(1);
 QRY
 LLMIME_QRY_MimeShouldBeMimicking((CHARACTERGUID)_Mime)
 AND
-HasActiveStatus(_Mime, "LLMIME_MIME", 1)
+LLMIME_QRY_CharacterIsAMime(_Mime)
 AND
 NOT GlobalGetFlag("Mimicry_Mimic_CombatOnlyDisabled", 1)
 AND
@@ -410,7 +450,7 @@ DB_NOOP(1);
 QRY
 LLMIME_QRY_MimeIsCurrentlyMimicking((CHARACTERGUID)_Mime)
 AND
-HasActiveStatus(_Mime, "LLMIME_MIME", 1)
+LLMIME_QRY_CharacterIsAMime(_Mime)
 AND
 DB_LLMIME_Mimicking_MimicFailTimer(_TimerName, _Mime, _Caster, _Action, _ActionType)
 THEN
