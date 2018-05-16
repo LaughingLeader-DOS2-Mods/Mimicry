@@ -8,13 +8,16 @@ LLMIME_Brawler_InitSettings();
 //DB_LLMIME_Brawler_DoubleAttackTimer(_TimerName, _Mime, _FXHandle)
 //DB_LLMIME_Brawler_JustToggledStance(_Mime)
 KBSECTION
+//REGION SETTINGS
 PROC
 LLMIME_Brawler_InitSettings()
 THEN
 DB_LLMIME_Brawler_StanceStatuses("LLMIME_BRAWLER_STANCE_CON", "LLMIME_BrawlerStance_UseCon");
 DB_LLMIME_Brawler_StanceStatuses("LLMIME_BRAWLER_STANCE_STR", "LLMIME_BrawlerStance_UseStr");
 DB_LLMIME_Brawler_StanceStatuses("LLMIME_BRAWLER_STANCE_FIN", "LLMIME_BrawlerStance_UseFin");
+//END_REGION
 
+//REGION DEBUG
 IF
 AttackedByObject(_Target, _Owner, (CHARACTERGUID)_Mime, _DamageType, _DamageSource)
 AND
@@ -34,6 +37,7 @@ AND
 IntegertoString(_Percentage, _DamageStr)
 THEN
 LeaderLog_Log("DEBUG", "[LLMIME:Mime:CharacterReceivedDamage] Mime did [",_DamageStr,"]% damage. Whatever that means.");
+//END_REGION
 
 //REGION BRAWLER_STANCE_PREFERENCE_SET
 PROC
@@ -182,9 +186,10 @@ GetUUID(_Mime, _MimeID)
 AND
 StringConcatenate("LLMIME_Timers_BrawlerBonusAttack_", _MimeID, _TimerName)
 THEN
-LLMIME_Brawler_ApplyBonusDamage(_Mime, _Target);
+//LLMIME_Brawler_ApplyBonusDamage(_Mime, _Target);
+ApplyStatus(_Target, "LLMIME_UNARMED_BONUS_HIT", 1.0, 1, _Mime);
 DB_LLMIME_Brawler_BonusAttackTimer(_TimerName, _Mime, _Target);
-TimerLaunch(_TimerName, 25); // Prevents multiple bonus damage calls in a single frame
+TimerLaunch(_TimerName, 250); // Prevents multiple bonus damage calls in a single attack
 
 IF
 TimerFinished(_TimerName)

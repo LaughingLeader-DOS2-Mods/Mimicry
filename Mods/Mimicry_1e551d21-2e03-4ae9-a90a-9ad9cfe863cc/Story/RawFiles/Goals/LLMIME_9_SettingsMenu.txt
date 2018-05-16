@@ -1,0 +1,55 @@
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+
+KBSECTION
+IF
+CharacterUsedSkill(_Mime, "Shout_LLMIME_OpenMenu", _)
+AND
+CharacterIsInCombat(_Mime, 0)
+AND
+GetItemForItemTemplateInInventory(_Mime, "EQ_Armor_UNIQUE_LLMIME_MimeMask_A_8e66ce79-8c8e-4c22-a8ea-5a99977f4ea8", _Mask)
+AND
+NOT DB_LLMIME_Settings_Temp_StartedDialog(_Mime)
+THEN
+Proc_StartDialog(0, "LLMIME_SettingsMenu", _Mask, _Mime);
+DB_LLMIME_Settings_Temp_StartedDialog(_Mime);
+
+IF
+CharacterUsedSkill(_Mime, "Shout_LLMIME_OpenMenu", _)
+AND
+CharacterIsInCombat(_Mime, 0)
+AND
+NOT DB_LLMIME_Settings_Temp_StartedDialog(_Mime) // Couldn't find mask
+THEN
+Proc_StartDialog(0, "LLMIME_SettingsMenu", _Mime, _Mime);
+DB_LLMIME_Settings_Temp_StartedDialog(_Mime);
+
+IF
+DialogStarted("LLMIME_SettingsMenu", _Instance)
+AND
+DialogGetInvolvedPlayer(_Instance, 1, (CHARACTERGUID)_Mime)
+AND
+DB_LLMIME_Settings_Temp_StartedDialog(_Mime)
+THEN
+CharacterSetAnimationOverride(_Mime, "Kneel_01_Loop");
+
+IF
+DialogEnded("LLMIME_SettingsMenu", _Instance)
+AND
+DialogGetInvolvedPlayer(_Instance, 1, (CHARACTERGUID)_Mime)
+THEN
+CharacterSetAnimationOverride(_Mime, "");
+
+IF
+DialogEnded("LLMIME_SettingsMenu", _Instance)
+AND
+DialogGetInvolvedPlayer(_Instance, 1, (CHARACTERGUID)_Mime)
+AND
+DB_LLMIME_Settings_Temp_StartedDialog(_Mime)
+THEN
+NOT DB_LLMIME_Settings_Temp_StartedDialog(_Mime);
+EXITSECTION
+
+ENDEXITSECTION
+ParentTargetEdge "LaughingLeader_Mimicry"
