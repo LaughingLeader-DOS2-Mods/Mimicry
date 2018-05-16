@@ -1,0 +1,226 @@
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+LLMIME_Follower_InitSettings();
+//DB_LLMIME_Follower_RandomAnimation(_Index, _Animation)
+//DB_LLMIME_Follower_ResetPositionTimer(_Mime, _TimerName, _Stage)
+KBSECTION
+//REGION SETTINGS
+PROC
+LLMIME_Follower_InitSettings()
+THEN
+LeaderLib_Follower_RegisterPosition((CHARACTERGUID)CHARACTERGUID_LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9, "TestLevel_LL_Mimicry", 4.92, 0.0, 6.42);
+
+LLMIME_Follower_AddRandomAnimation("use_inspect");
+LLMIME_Follower_AddRandomAnimation("Teleport_01");
+LLMIME_Follower_AddRandomAnimation("Think_01");
+LLMIME_Follower_AddRandomAnimation("Think_02");
+LLMIME_Follower_AddRandomAnimation("Cheer_01");
+LLMIME_Follower_AddRandomAnimation("Cheer_02");
+LLMIME_Follower_AddRandomAnimation("Cheer_03");
+LLMIME_Follower_AddRandomAnimation("Victory_01");
+LLMIME_Follower_AddRandomAnimation("Victory_02");
+LLMIME_Follower_AddRandomAnimation("Pray_01");
+LLMIME_Follower_AddRandomAnimation("Pickpocket_01");
+LLMIME_Follower_AddRandomAnimation("Listen_01");
+LLMIME_Follower_AddRandomAnimation("Cower_01");
+LLMIME_Follower_AddRandomAnimation("Cower_02");
+LLMIME_Follower_AddRandomAnimation("Crying_01");
+LLMIME_Follower_AddRandomAnimation("Check_Neck_01");
+LLMIME_Follower_AddRandomAnimation("Bored_03");
+LLMIME_Follower_AddRandomAnimation("Attention_01");
+LLMIME_Follower_AddRandomAnimation("Annoyed_01");
+LLMIME_Follower_AddRandomAnimation("BehindBars_01");
+LLMIME_Follower_AddRandomAnimation("Clean_Floor_01");
+LLMIME_Follower_AddRandomAnimation("Clean_Floor_02");
+LLMIME_Follower_AddRandomAnimation("Dust_Off_01");
+LLMIME_Follower_AddRandomAnimation("Pst_03");
+LLMIME_Follower_AddRandomAnimation("Stand_Read_01");
+LLMIME_Follower_AddRandomAnimation("Sigh_01");
+LLMIME_Follower_AddRandomAnimation("knockdown_loop");
+LLMIME_Follower_AddRandomAnimation("stillmental");
+LLMIME_Follower_AddRandomAnimation("stilldrunk");
+LLMIME_Follower_AddRandomAnimation("use_craft");
+LLMIME_Follower_AddRandomAnimation("Lie_Tied_Up_01_Loop");
+LLMIME_Follower_AddRandomAnimation("Worship_01");
+
+PROC
+LLMIME_Follower_AddRandomAnimation((STRING)_Animation)
+AND
+SysCount("DB_LLMIME_Follower_RandomAnimation", 2, _Index)
+THEN
+DB_LLMIME_Follower_RandomAnimation(_Index, _Animation);
+//END_REGION
+
+IF
+DialogStarted("LLMIME_ElfCompanion_Default", _Instance)
+AND
+DialogGetInvolvedNPC(_Instance, 1, (CHARACTERGUID)_Mime)
+AND
+ObjectGetFlag(_Mime, "LeaderLib_CharacterIsFollowing", 0) // Don't bother if following, since anims won't play
+AND
+SysCount("DB_LLMIME_Follower_RandomAnimation", 2, _Total)
+AND
+IntegerSubtract(_Total, 1, _LastIndex)
+AND
+Random(_LastIndex, _Index)
+AND
+DB_LLMIME_Follower_RandomAnimation(_Index, _Animation)
+THEN
+PlayAnimation(_Mime, _Animation);
+LeaderLog_Log("DEBUG", "[LLMIME:Follower] Played animation [",_Animation,"].");
+
+//REGION RECRUITMENT
+IF
+StoryEvent((CHARACTERGUID)_Mime, "LeaderLib_Events_FollowerRecruited")
+THEN
+CharacterEnableAllCrimes(_Mime);
+SetCanJoinCombat(_Mime, 1);
+SetFaction(_Mime,"Good NPC");
+
+IF
+StoryEvent((CHARACTERGUID)_Mime, "LeaderLib_Events_FollowerRecruited")
+AND
+DB_LLMIME_Follower_ResetPositionTimer(_Mime, _TimerName, _Stage)
+THEN
+NOT DB_LLMIME_Follower_ResetPositionTimer(_Mime, _TimerName, _Stage);
+TimerCancel(_TimerName);
+//END_REGION
+
+//REGION DISMISSAL
+IF
+StoryEvent((CHARACTERGUID)_Mime, "LeaderLib_Events_FollowerDismissed")
+AND
+IsTagged(_Mime, "LLMIME_MimeFollower", 1)
+AND
+GetUUID(_Mime, _MimeID)
+AND
+StringConcatenate("LLMIME_Timers_ResetPositionTimer_", _MimeID, _TimerName)
+THEN
+CharacterDisableAllCrimes(_Mime);
+SetCanJoinCombat(_Mime, 0);
+SetFaction(_Mime,"Neutral NPC");
+DB_LLMIME_Follower_ResetPositionTimer(_Mime, _TimerName, 1);
+TimerLaunch(_TimerName, 10000);
+LeaderLog_Log("DEBUG", "[LLMIME:Follower] Started position reset timer.");
+
+IF
+TimerFinished(_TimerName)
+AND
+DB_LLMIME_Follower_ResetPositionTimer(_Mime, _TimerName, 2)
+AND
+GetVarObject(_Mime, "LeaderLib_Follower_LastOwner", _Owner)
+THEN
+NOT DB_LLMIME_Follower_ResetPositionTimer(_Mime, _TimerName, 2);
+CharacterDisappearOutOfSightToObject(_Mime, _Owner, 1, "LLMIME_Events_MimeFollowerDisappeared", 1);
+
+IF
+StoryEvent((CHARACTERGUID)_Mime, "LLMIME_Events_MimeFollowerDisappeared")
+THEN
+LLLIB_Follower_ResetPosition(_Mime, "");
+SetOnStage(_Mime, 1);
+LeaderLog_Log("DEBUG", "[LLMIME:Follower] Reset follower's position to the recruit position.");
+
+IF
+TimerFinished(_TimerName)
+AND
+DB_LLMIME_Follower_ResetPositionTimer(_Mime, _TimerName, 2)
+THEN
+NOT DB_LLMIME_Follower_ResetPositionTimer(_Mime, _TimerName, 2);
+LLLIB_Follower_ResetPosition(_Mime, "RS3_FX_GP_ScriptedEvent_Teleport_GenericSmoke_01");
+LeaderLog_Log("DEBUG", "[LLMIME:Follower] Reset follower's position to the recruit position.");
+
+IF
+TimerFinished(_TimerName)
+AND
+DB_LLMIME_Follower_ResetPositionTimer(_Mime, _TimerName, 1)
+THEN
+NOT DB_LLMIME_Follower_ResetPositionTimer(_Mime, _TimerName, 1);
+//ApplyStatus(_Mime, "INVISIBLE", 3.0, 1);
+TimerLaunch(_TimerName, 1000);
+DB_LLMIME_Follower_ResetPositionTimer(_Mime, _TimerName, 2);
+//END_REGION
+
+//REGION NON_RECRUITED_COMBAT
+IF
+AttackedByObject((CHARACTERGUID)_Mime, (CHARACTERGUID)_Owner, _Attacker, _, _)
+AND
+IsTagged(_Mime, "LLMIME_MimeFollower", 1)
+AND
+CharacterIsPlayer(_Owner, 1)
+AND
+ObjectGetFlag(_Mime, "LeaderLib_IsFollower", 0)
+THEN
+CharacterEnableAllCrimes(_Mime);
+SetCanJoinCombat(_Mime, 1);
+
+IF
+AttackedByObject((CHARACTERGUID)_Mime, (CHARACTERGUID)_Owner, _Attacker, _, _)
+AND
+IsTagged(_Mime, "LLMIME_MimeFollower", 1)
+AND
+ObjectGetFlag(_Mime, "LeaderLib_IsFollower", 0)
+AND
+CharacterGetHitpointsPercentage(_Mime, _Percentage)
+AND
+IntegertoString(_Percentage, _HpStr)
+THEN
+LeaderLog_Log("DEBUG", "[LLMIME:Follower:Debug] Mime follower's health is: [",_HpStr,"%]");
+
+IF
+AttackedByObject((CHARACTERGUID)_Mime, (CHARACTERGUID)_Owner, _Attacker, _, _)
+AND
+IsTagged(_Mime, "LLMIME_MimeFollower", 1)
+AND
+CharacterIsPlayer(_Owner, 1)
+AND
+ObjectGetFlag(_Mime, "LeaderLib_IsFollower", 0)
+AND
+CharacterGetHitpointsPercentage(_Mime, _Percentage)
+AND
+_Percentage <= 75
+THEN
+CharacterAddAttitudeTowardsPlayer(_Mime, _Owner, -5);
+
+IF
+AttackedByObject((CHARACTERGUID)_Mime, (CHARACTERGUID)_Owner, _Attacker, _, _)
+AND
+IsTagged(_Mime, "LLMIME_MimeFollower", 1)
+AND
+CharacterIsPlayer(_Owner, 1)
+AND
+ObjectGetFlag(_Mime, "LeaderLib_IsFollower", 0)
+AND
+CharacterGetHitpointsPercentage(_Mime, _Percentage)
+AND
+_Percentage <= 40
+THEN
+EnterCombat(_Mime, _Owner);
+
+IF
+AttackedByObject((CHARACTERGUID)_Mime, (CHARACTERGUID)_Owner, _Attacker, _, _)
+AND
+IsTagged(_Mime, "LLMIME_MimeFollower", 1)
+AND
+CharacterIsInCombat(_Mime, 0)
+AND
+CharacterIsPlayer(_Owner, 0)
+AND
+ObjectGetFlag(_Mime, "LeaderLib_IsFollower", 0)
+THEN
+ApplyStatus(_Mime, "INVISIBLE", 90.0, 1);
+
+IF
+ObjectEnteredCombat((CHARACTERGUID)_Mime, _CombatID)
+AND
+IsTagged(_Mime, "LLMIME_MimeFollower", 1)
+AND
+ObjectGetFlag(_Mime, "LeaderLib_IsFollower", 0)
+THEN
+CharacterAddActionPoints(_Mime, 2);
+CharacterUseSkill(_Mime, "Shout_LLMIME_BrawlerStance", _Mime, 1, 1);
+//END_REGION
+EXITSECTION
+
+ENDEXITSECTION
+ParentTargetEdge "LaughingLeader_Mimicry"

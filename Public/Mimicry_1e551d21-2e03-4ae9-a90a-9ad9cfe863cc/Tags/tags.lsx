@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <save>
-    <header version="2" time="1525872063" />
+    <header version="2" time="1526431145" />
     <version major="3" minor="1" revision="7" build="0" />
     <region id="Tags">
         <node id="root">
@@ -84,6 +84,22 @@
                             <children>
                                 <node id="Category">
                                     <attribute id="Name" value="Code" type="23" />
+                                </node>
+                            </children>
+                        </node>
+                    </children>
+                </node>
+                <node id="Tag">
+                    <attribute id="Description" value="Character is a hired mime." type="23" />
+                    <attribute id="Name" value="LLMIME_MimeFollower" type="23" />
+                    <children>
+                        <node id="Categories">
+                            <children>
+                                <node id="Category">
+                                    <attribute id="Name" value="Code" type="23" />
+                                </node>
+                                <node id="Category">
+                                    <attribute id="Name" value="Profession" type="23" />
                                 </node>
                             </children>
                         </node>

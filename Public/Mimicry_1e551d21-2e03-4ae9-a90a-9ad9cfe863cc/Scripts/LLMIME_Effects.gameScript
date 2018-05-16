@@ -18,6 +18,13 @@ ON
 	OnCharacterEvent(_Char, "LLMIME_Events_BrawlerStanceActivated_Cast")
 ACTIONS
 
+EVENT BrawlerStance_Deactivated
+VARS
+	CHARACTER:_Char
+ON
+	OnCharacterEvent(_Char, "LLMIME_Events_BrawlerStanceDeactivated_Status")
+ACTIONS
+	CharacterPlayEffect(_Char, "LLMIME_FX_Skills_BrawlerStance_Deactivate_OverheadFX_01", "Dummy_OverheadFX")
 	
 EVENT BrawlerStance_Deactivated_SkillUsed
 VARS

@@ -431,6 +431,8 @@ AND
 LLMIME_QRY_CharacterIsAMime(_Mime)
 AND
 GlobalGetFlag("Mimicry_Mimic_CombatOnlyDisabled", 1)
+AND
+CharacterIsPartyMember(_Mime, 1)
 THEN
 DB_NOOP(1);
 
@@ -442,6 +444,8 @@ AND
 NOT GlobalGetFlag("Mimicry_Mimic_CombatOnlyDisabled", 1)
 AND
 CharacterIsInCombat(_Mime, 1)
+AND
+CharacterIsPartyMember(_Mime, 1)
 AND
 NOT DB_LeaderLib_Combat_ActiveObject(_, _Mime)
 THEN
@@ -457,6 +461,21 @@ THEN
 DB_NOOP(1);
 //END_REGION
 
+//REGION RESET_EVENTS
+IF
+ObjectLeftCombat((CHARACTERGUID)_Mime, _CombatID)
+AND
+LLMIME_QRY_CharacterIsAMime(_Mime)
+THEN
+SetStoryEvent(_Mime, "Mimicry_ResetMimeCombatData");
+
+IF
+CharacterDied(_Mime)
+AND
+LLMIME_QRY_CharacterIsAMime(_Mime)
+THEN
+SetStoryEvent(_Mime, "Mimicry_ResetMimeCombatData");
+//END_REGION
 EXITSECTION
 
 ENDEXITSECTION

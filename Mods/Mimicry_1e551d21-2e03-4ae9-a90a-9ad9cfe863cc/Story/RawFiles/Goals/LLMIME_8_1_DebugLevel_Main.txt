@@ -84,6 +84,11 @@ CharacterStopFollow(_Character);
 */
 
 IF
+StoryEvent(CHARACTERGUID_LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9, "LLMIME_Events_Debug_IterateCharacters")
+THEN
+SetTag(CHARACTERGUID_LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9, "LeaderLib_Follower_DisableAutoResetPosition");
+
+IF
 StoryEvent((CHARACTERGUID)_Character, "LLMIME_Events_Debug_IterateCharacters")
 AND
 CharacterGetHostCharacter(_Host)

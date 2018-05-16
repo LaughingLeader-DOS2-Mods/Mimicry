@@ -2,10 +2,11 @@ Version 1
 SubGoalCombiner SGC_AND
 INITSECTION
 LLMIME_Brawler_InitSettings();
-//DB_LLMIME_Brawler_DoubleAttackTimer(_TimerName, _Mime)
-//DB_LLMIME_Brawler_SpawnedFist(_Mime, _Fist)
-//DB_LLMIME_Brawler_JustToggledStance(_Mime)
+/*Settings*/
 //DB_LLMIME_Brawler_StanceStatuses(_Status, _Flag)
+/*Temp*/
+//DB_LLMIME_Brawler_DoubleAttackTimer(_TimerName, _Mime, _FXHandle)
+//DB_LLMIME_Brawler_JustToggledStance(_Mime)
 KBSECTION
 PROC
 LLMIME_Brawler_InitSettings()
@@ -155,6 +156,7 @@ AND
 HasActiveStatus(_Mime, _Status, 1)
 THEN
 RemoveStatus(_Mime, _Status);
+SetStoryEvent(_Mime, "LLMIME_Events_BrawlerStanceDeactivated_Status");
 //END_REGION
 
 //REGION DAMAGE_TYPE_MATCHING
@@ -169,8 +171,6 @@ IF
 AttackedByObject(_Target, _Owner, (CHARACTERGUID)_Mime, _DamageType, "Attack")
 AND
 LLMIME_QRY_CharacterIsAMime(_Mime)
-AND
-LLMIME_QRY_MimeIsCurrentlyMimicking(_Mime)
 AND
 HasActiveStatus(_Mime, "LLMIME_BRAWLER_BONUS", 1)
 AND
@@ -205,36 +205,33 @@ ApplyDamage(_Target, _Damage, "Physical", _Mime);
 
 //REGION DOUBLE_ATTACK
 IF
-CharacterCriticalHitBy(_Target, _Owner, _Mime)
-//AttackedByObject(_Target, _Owner, (CHARACTERGUID)_Mime, _DamageType, "Attack")
+CharacterStartAttackObject(_, _, _Mime)
+AND
+CharacterIsInCombat(_Mime, 1)
 AND
 LLMIME_QRY_CharacterIsAMime(_Mime)
 AND
-HasActiveStatus(_Mime, "LLMIME_BRAWLER_BONUS", 1)
+NOT DB_LLMIME_Brawler_Temp_MimeIsAttacking(_Mime)
+AND
+ObjectGetFlag(_Mime, "LLMIME_CANNOT_DOUBLE_ATTACK", 0)
 THEN
-LeaderLog_Log("DEBUG", "[LLMIME:Mime:CharacterCriticalHitBy] Mime got a critical hit on an enemy.");
+DB_LLMIME_Brawler_Temp_MimeIsAttacking(_Mime);
 
 IF
 CharacterCriticalHitBy(_Target, _Owner, _Mime)
-//AttackedByObject(_Target, _Owner, (CHARACTERGUID)_Mime, _DamageType, "Attack")
+AND
+CharacterIsDead(_Target, 0)
+AND
+CharacterIsInCombat(_Mime, 1)
 AND
 LLMIME_QRY_CharacterIsAMime(_Mime)
 AND
-HasActiveStatus(_Mime, "LLMIME_BRAWLER_BONUS", 0)
-THEN
-LeaderLog_Log("DEBUG", "[LLMIME:Mime:CharacterCriticalHitBy] Non-brawler Mime got a critical hit on an enemy.");
-
-IF
-CharacterCriticalHitBy(_Target, _Owner, _Mime)
-//AttackedByObject(_Target, _Owner, (CHARACTERGUID)_Mime, _DamageType, "Attack")
-AND
-LLMIME_QRY_CharacterIsAMime(_Mime)
+DB_LLMIME_Brawler_Temp_MimeIsAttacking(_Mime)
 AND
 HasActiveStatus(_Mime, "LLMIME_BRAWLER_BONUS", 1)
 AND
-NOT ObjectGetFlag(_Mime, "LLMIME_CANNOT_DOUBLE_ATTACK", 1)
+ObjectGetFlag(_Mime, "LLMIME_CANNOT_DOUBLE_ATTACK", 0)
 THEN
-//CharacterAddActionPoints(_Mime, 2);
 ObjectSetFlag(_Mime, "LLMIME_CANNOT_DOUBLE_ATTACK");
 LLMIME_Brawler_DoubleAttack(_Mime, _Target);
 
@@ -264,6 +261,7 @@ THEN
 TimerCancel(_TimerName);
 TimerLaunch(_TimerName, 2000);
 StopLoopEffect(_FXHandle);
+NOT DB_LLMIME_Brawler_Temp_MimeIsAttacking(_Mime);
 
 IF
 TimerFinished(_TimerName)
@@ -272,6 +270,19 @@ DB_LLMIME_Brawler_DoubleAttackTimer(_TimerName, _Mime, _FXHandle)
 THEN
 NOT DB_LLMIME_Brawler_DoubleAttackTimer(_TimerName, _Mime, _FXHandle);
 ObjectClearFlag(_Mime, "LLMIME_CANNOT_DOUBLE_ATTACK");
+//END_REGION
+
+//REGION RESET
+IF
+StoryEvent((CHARACTERGUID)_Mime, "Mimicry_ResetMimeCombatData")
+AND
+DB_LLMIME_Brawler_DoubleAttackTimer(_TimerName, _Mime, _FXHandle)
+THEN
+NOT DB_LLMIME_Brawler_DoubleAttackTimer(_TimerName, _Mime, _FXHandle);
+TimerCancel(_TimerName);
+StopLoopEffect(_FXHandle);
+ObjectClearFlag(_Mime, "LLMIME_CANNOT_DOUBLE_ATTACK");
+NOT DB_LLMIME_Brawler_Temp_MimeIsAttacking(_Mime);
 //END_REGION
 EXITSECTION
 
