@@ -3,6 +3,7 @@ SubGoalCombiner SGC_AND
 INITSECTION
 
 KBSECTION
+//REGION MENU_SKILL
 IF
 CharacterUsedSkill(_Mime, "Shout_LLMIME_OpenMenu", _)
 AND
@@ -24,7 +25,9 @@ NOT DB_LLMIME_Settings_Temp_StartedDialog(_Mime) // Couldn't find mask
 THEN
 Proc_StartDialog(0, "LLMIME_SettingsMenu", _Mime, _Mime);
 DB_LLMIME_Settings_Temp_StartedDialog(_Mime);
+//END_REGION
 
+//REGION DIALOG_EVENTS
 IF
 DialogStarted("LLMIME_SettingsMenu", _Instance)
 AND
@@ -49,6 +52,25 @@ AND
 DB_LLMIME_Settings_Temp_StartedDialog(_Mime)
 THEN
 NOT DB_LLMIME_Settings_Temp_StartedDialog(_Mime);
+//END_REGION
+
+//REGION DEBUG_FLAGS
+IF
+ObjectFlagSet("Mimicry_Debug_RemoveAllStatuses", (CHARACTERGUID)_Mime, _Instance)
+AND
+LLLIB_Helper_QRY_ClearObjectFlag(_Mime, "Mimicry_Debug_RemoveAllStatuses")
+THEN
+LLMIME_RemoveMask(_Mime);
+LLMIME_RemoveAllModStatuses(_Mime);
+
+IF
+ObjectFlagSet("Mimicry_Debug_RefreshMask", (CHARACTERGUID)_Mime, _Instance)
+AND
+LLLIB_Helper_QRY_ClearObjectFlag(_Mime, "Mimicry_Debug_RefreshMask")
+THEN
+LLMIME_RefreshMask(_Mime);
+LLMIME_RemoveAllModStatuses(_Mime);
+//END_REGION
 EXITSECTION
 
 ENDEXITSECTION

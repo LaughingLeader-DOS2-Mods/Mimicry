@@ -10,9 +10,9 @@ KBSECTION
 PROC
 LLMIME_System_InitSettings()
 THEN
-DB_LLMIME_PassiveData("LLMIME_BRAWLER", "LLMIME_BRAWLER_BONUS", "LLMIME_BRAWLER_INFO", "LLMIME_HideMimePassives");
-DB_LLMIME_PassiveData("LLMIME_BEASTMASTER", "LLMIME_BEASTMASTER", "LLMIME_BEASTMASTER_INFO", "LLMIME_HideMimePassives");
-DB_LLMIME_PassiveData("LLMIME_CONCENTRATION", "LLMIME_CONCENTRATION_BONUS", "LLMIME_CONCENTRATION_INFO", "LLMIME_HideMimePassives");
+DB_LLMIME_PassiveData("LLMIME_BRAWLER", "LLMIME_BRAWLER_BONUS", "LLMIME_BRAWLER_INFO", "Mimicry_HideMimePassives");
+DB_LLMIME_PassiveData("LLMIME_BEASTMASTER", "LLMIME_BEASTMASTER", "LLMIME_BEASTMASTER_INFO", "Mimicry_HideMimePassives");
+DB_LLMIME_PassiveData("LLMIME_CONCENTRATION", "LLMIME_CONCENTRATION_BONUS", "LLMIME_CONCENTRATION_INFO", "Mimicry_HideMimePassives");
 
 DB_LLMIME_Templates("Mask_A", "EQ_Armor_UNIQUE_LLMIME_MimeMask_A_8e66ce79-8c8e-4c22-a8ea-5a99977f4ea8");
 DB_LLMIME_Templates("BrawlerFist", "WPN_LLMIME_BrawlerFist_e1bda904-93c2-4f6f-8136-1a547279fd1f");
@@ -73,6 +73,43 @@ IF
 StoryEvent((CHARACTERGUID)_Mime, "LLMIME_Events_ClearMimeBonuses")
 THEN
 LLMIME_RemoveAllModStatuses(_Mime);
+//END_REGION
+
+//REGION HELPERS
+PROC
+LLMIME_RemoveMask((CHARACTERGUID)_Mime)
+AND
+CharacterFindTaggedItem(_Mime, "LLMIME_ACTIVATE_MIME", _Mask)
+THEN
+CharacterUnequipItem(_Mime, _Mask);
+
+PROC
+LLMIME_RefreshMask((CHARACTERGUID)_Mime)
+AND
+CharacterFindTaggedItem(_Mime, "LLMIME_ACTIVATE_MIME", _Mask)
+AND
+NOT DB_LLMIME_System_Temp_RefreshMask(_Mime, _Mask, _)
+AND
+GetUUID(_Mime, _MimeID)
+AND
+GetUUID(_Mask, _MaskID)
+AND
+LeaderLog_QRY_Log("COMBINE", "LLMIME_Timers_RefreshMask_", _MimeID, "_", _MaskID)
+AND
+DB_LeaderLog_Temp_CombinedString(_TimerName)
+THEN
+NOT DB_LeaderLog_Temp_CombinedString(_TimerName);
+CharacterUnequipItem(_Mime, _Mask);
+DB_LLMIME_System_Temp_RefreshMask(_Mime, _Mask, _TimerName);
+TimerLaunch(_TimerName, 1000);
+
+IF
+TimerFinished(_TimerName)
+AND
+DB_LLMIME_System_Temp_RefreshMask(_Mime, _Mask, _TimerName)
+THEN
+NOT DB_LLMIME_System_Temp_RefreshMask(_Mime, _Mask, _TimerName);
+CharacterEquipItem(_Mime, _Mask);
 //END_REGION
 
 //REGION SKILL_DATA
@@ -375,7 +412,7 @@ THEN
 RemoveStatus(_Mime, _InfoStatus);
 
 IF
-ObjectFlagSet(_DisableFlag, _Mime, _)
+ObjectFlagCleared(_DisableFlag, _Mime, _)
 AND
 DB_LLMIME_PassiveData(_Status, _BonusStatus, _InfoStatus, _DisableFlag)
 AND
@@ -388,7 +425,7 @@ THEN
 ApplyStatus(_Mime, _InfoStatus, -1.0, 1);
 
 IF
-ObjectFlagCleared(_DisableFlag, _Mime, _)
+ObjectFlagSet(_DisableFlag, _Mime, _)
 AND
 DB_LLMIME_PassiveData(_Status, _BonusStatus, _InfoStatus, _DisableFlag)
 AND

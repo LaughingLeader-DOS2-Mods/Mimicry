@@ -148,6 +148,8 @@ QRY
 LLMIME_Mimicking_QRY_PartyConditionsMet((CHARACTERGUID)_Character, (CHARACTERGUID)_Mime)
 AND
 GlobalGetFlag("Mimicry_Mimic_PartyOnlyDisabled", 1)
+AND
+CharacterIsAlly(_Character, _Mime, 1)
 THEN
 DB_NOOP(1);
 

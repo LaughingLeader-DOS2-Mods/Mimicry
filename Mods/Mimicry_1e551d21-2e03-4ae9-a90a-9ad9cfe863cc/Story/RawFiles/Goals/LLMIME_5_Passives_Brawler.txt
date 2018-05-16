@@ -12,9 +12,9 @@ KBSECTION
 PROC
 LLMIME_Brawler_InitSettings()
 THEN
-DB_LLMIME_Brawler_StanceStatuses("LLMIME_BRAWLER_STANCE_CON", "LLMIME_BrawlerStance_UseCon");
-DB_LLMIME_Brawler_StanceStatuses("LLMIME_BRAWLER_STANCE_STR", "LLMIME_BrawlerStance_UseStr");
-DB_LLMIME_Brawler_StanceStatuses("LLMIME_BRAWLER_STANCE_FIN", "LLMIME_BrawlerStance_UseFin");
+DB_LLMIME_Brawler_StanceStatuses("LLMIME_BRAWLER_STANCE_CON", "Mimicry_BrawlerStance_UseCon");
+DB_LLMIME_Brawler_StanceStatuses("LLMIME_BRAWLER_STANCE_STR", "Mimicry_BrawlerStance_UseStr");
+DB_LLMIME_Brawler_StanceStatuses("LLMIME_BRAWLER_STANCE_FIN", "Mimicry_BrawlerStance_UseFin");
 //END_REGION
 
 //REGION DEBUG
@@ -71,8 +71,10 @@ IF
 CharacterUsedSkill(_Mime, "Shout_LLMIME_BrawlerStance", _)
 AND
 NOT LLMIME_Brawler_QRY_StancePreferenceSet(_Mime)
+AND
+DB_LLMIME_Brawler_StanceStatuses("LLMIME_BRAWLER_STANCE_CON", _Flag)
 THEN
-ObjectSetFlag(_Mime, "LLMIME_BrawlerStance_UseCon"); // Default
+ObjectSetFlag(_Mime, _Flag); // Default
 //END_REGION
 
 //REGION BRAWLER_STANCE_TOGGLE
