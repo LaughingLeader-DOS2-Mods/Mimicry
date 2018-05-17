@@ -1,0 +1,104 @@
+INIT
+
+EVENTS
+
+EVENT Wish_ReduceHealth
+VARS
+	CHARACTER:_Target
+	CHARACTER:_Caster
+	FLOAT:_HealPercentage
+	FLOAT:_CasterStartingVit
+	FLOAT:_CasterVit
+ON
+	OnCharacterCharacterEvent(_Caster, _Target, "Mimicry_Events_OnWishCast")
+ACTIONS
+IF "c1&c2&c3"
+	GetVar(_HealPercentage, _Caster, "Mimicry_Wish_HealPercentage")
+	CharacterGetStat(_CasterStartingVit, _Caster, VitalityPoints)
+	CharacterGetStat(_CasterVit, _Caster, Vitality)
+THEN
+	SetVar(_Caster, "Mimicry_Wish_StartingHealth", _CasterStartingVit)
+	Divide(_CasterVit, 2)
+	SetHealth(_Caster, _CasterVit)
+	CharacterCharacterEvent(_Caster, _Target, "Mimicry_Events_WishDelay")
+ENDIF
+
+EVENT Wish_ApplyHealing
+VARS
+	CHARACTER:_Target
+	CHARACTER:_Caster
+	FLOAT:_HealPercentage
+	FLOAT:_CasterStartingVit
+	FLOAT:_CasterVit
+	FLOAT:_CasterVitMax
+	FLOAT:_HealAmount
+	FLOAT:_TargetVit
+	FLOAT:_TargetStartingVit
+	FLOAT:_TargetVitMax
+	FLOAT:_LostHealth
+	INT:_LostHealthInt
+	STRING:_Str
+	FIXEDSTRING:_DisplayMessage
+ON	
+	OnCharacterCharacterEvent(_Caster, _Target, "Mimicry_Events_HealWishTarget")
+ACTIONS
+IF "c1&c2&c3&c4&c5&c6&c7"
+	GetVar(_CasterStartingVit, _Caster, "Mimicry_Wish_StartingHealth")
+	CharacterGetStat(_LostHealth, _Caster, VitalityPoints)
+	CharacterGetStat(_CasterVit, _Caster, VitalityPoints)
+	CharacterGetStat(_TargetVit, _Target, Vitality)
+	CharacterGetStat(_TargetStartingVit, _Target, VitalityPoints)
+	CharacterGetStat(_CasterVitMax, _Caster, VitalityMax)
+	CharacterGetStat(_TargetVitMax, _Target, VitalityMax)
+THEN
+	Subtract(_LostHealth, _CasterStartingVit)
+	IF "c1"
+		IsLessThen(_LostHealth, 0)
+	THEN
+		Multiply(_LostHealth, -1)
+	ENDIF
+	//Print(_Str, "Lost [1] vitality. Health: [2]/[3]", _LostHealth, _CasterVit, _CasterVitMax)
+	Cast(_LostHealthInt, _LostHealth)
+	Print(_Str, "wished away <font color='#FF0000'>[1] vitality</font>", _LostHealthInt)
+	Cast(_DisplayMessage, _Str)
+	DisplayCombatInfoText(_Caster, _DisplayMessage, 0)
+	DisplayText(_Caster, "", 0)
+
+	Set(_HealAmount, _LostHealth)
+	Multiply(_HealAmount, 2)
+	//Add(_HealAmount, _TargetStartingVit)
+	
+	SetFlag(_Target, "Mimicry_Wish_CheckHealthResult")
+	
+	IF "c1|c2"
+		IsGreaterThen(_HealAmount, _TargetVitMax)
+		IsEqual(_HealAmount, _TargetVitMax)
+	THEN
+		SetHealth(_Target, 1)
+	ELSE
+		Divide(_HealAmount, _TargetVitMax)
+		IF "c1"
+			IsLessThen(_HealAmount, 0)
+		THEN
+			Multiply(_HealAmount, -1)
+		ELIF "c1"
+			IsGreaterThen(_HealAmount, 1)
+		THEN
+			Set(_HealAmount, 1)
+		ENDIF
+
+		IF "c1"
+			IsEqual(_HealAmount, 0)
+		THEN
+			Set(_HealAmount, 0.001)
+		ENDIF
+		CharacterHeal(_Target, _HealAmount)
+		/*Print(_Str, "Healed [1]% vitality.", _HealAmount)
+		Cast(_DisplayMessage, _Str)
+		DisplayCombatInfoText(_Caster, _DisplayMessage, 0)
+		DisplayText(_Caster, "", 0)*/
+	ENDIF
+	StatusText(_Target, "<font color='#fcd203' size='20'>Wish</font>")
+	//CharacterPlayEffect(_Target, "LLMIME_FX_Skills_Wish_Cast_Target_Root_01", "Dummy_Root")
+	
+ENDIF

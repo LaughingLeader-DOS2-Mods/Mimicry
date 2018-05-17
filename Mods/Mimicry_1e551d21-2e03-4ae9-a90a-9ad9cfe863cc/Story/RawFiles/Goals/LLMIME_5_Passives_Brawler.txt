@@ -78,15 +78,6 @@ ObjectSetFlag(_Mime, _Flag); // Default
 //END_REGION
 
 //REGION BRAWLER_STANCE_TOGGLE
-QRY
-LLMIME_Brawler_QRY_StanceIsActive((CHARACTERGUID)_Mime)
-AND
-DB_LLMIME_Brawler_StanceStatuses(_Status, _Flag)
-AND
-HasActiveStatus(_Mime, _Status, 1)
-THEN
-DB_NOOP(1);
-
 IF
 CharacterUsedSkill(_Mime, "Shout_LLMIME_BrawlerStance", _)
 AND
@@ -277,6 +268,36 @@ DB_LLMIME_Brawler_DoubleAttackTimer(_TimerName, _Mime, _FXHandle)
 THEN
 NOT DB_LLMIME_Brawler_DoubleAttackTimer(_TimerName, _Mime, _FXHandle);
 ObjectClearFlag(_Mime, "LLMIME_CANNOT_DOUBLE_ATTACK");
+//END_REGION
+
+//REGION WEAPON_MIMICKING_STANCE_SAVING
+PROC
+LLMIME_Mimicking_SaveEquippedWeapons((CHARACTERGUID)_Mime, (STRING)_ActionType)
+AND
+_ActionType != "Item"
+AND
+LLMIME_Brawler_QRY_StanceIsActive(_Mime)
+THEN
+ObjectSetFlag(_Mime, "Mimicry_BrawlerStanceWasActive");
+
+PROC
+LLMIME_Mimicking_EquipLastItems((CHARACTERGUID)_Mime, (STRING)_Action, (STRING)_ActionType)
+AND
+ObjectGetFlag(_Mime, "Mimicry_BrawlerStanceWasActive", 1)
+THEN
+ObjectClearFlag(_Mime, "Mimicry_BrawlerStanceWasActive");
+LLMIME_Brawler_ApplyStance(_Mime);
+//END_REGION
+
+//REGION QUERIES
+QRY
+LLMIME_Brawler_QRY_StanceIsActive((CHARACTERGUID)_Mime)
+AND
+DB_LLMIME_Brawler_StanceStatuses(_Status, _Flag)
+AND
+HasActiveStatus(_Mime, _Status, 1)
+THEN
+DB_NOOP(1);
 //END_REGION
 
 //REGION RESET

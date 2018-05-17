@@ -35,6 +35,13 @@ DB_LLMIME_Debug_IteratingPlayers(1);
 CharacterLaunchIterator("LLMIME_Events_Debug_IterateCharacters");
 
 IF
+StoryEvent((CHARACTERGUID)_Character, "LLMIME_Events_Debug_IterateCharacters")
+AND
+IsTagged(_Character, "COMPANION", 1)
+THEN
+CharacterSetHitpointsPercentage(_Character, 50);
+
+IF
 StoryEvent((CHARACTERGUID)_Player, "LLMIME_Events_Debug_IterateCharacters")
 AND
 IsTagged(_Player, "COMPANION", 0)
@@ -114,6 +121,7 @@ AND
 NOT GetItemForItemTemplateInInventory(_Character, _Template, _)
 THEN
 ItemTemplateAddTo(_Template, _Character, 1);
+CharacterAddSkill(_Character, "Target_LLMIME_Wish", 0);
 
 /*
 IF

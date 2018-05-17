@@ -406,6 +406,8 @@ AND
 _ActionType != "Item"
 AND
 CharacterGetEquippedItem(_Mime, "Weapon", (ITEMGUID)_Item)
+AND
+IsTagged(_Item, "LLMIME_BrawlerFist", 0)
 THEN
 DB_LLMIME_Mimicking_LastEquipped(_Mime, "Weapon", _Item);
 
@@ -415,6 +417,8 @@ AND
 _ActionType != "Item"
 AND
 CharacterGetEquippedItem(_Mime, "Shield", (ITEMGUID)_Item)
+AND
+IsTagged(_Item, "LLMIME_BrawlerFist", 0)
 THEN
 DB_LLMIME_Mimicking_LastEquipped(_Mime, "Shield", _Item);
 
