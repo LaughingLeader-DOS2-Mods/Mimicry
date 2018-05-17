@@ -1,6 +1,7 @@
 INIT
 	CHARACTER:__Me
 	INT:%FirstEquip = 0
+	INT:%Following = 0
 EVENTS
 
 EVENT Equip_Mask
@@ -15,17 +16,43 @@ THEN
 	
 ENDIF
 
+EVENT Reset_Follow_Priority
+ON
+	OnCharacterFlagSet("LeaderLib_CharacterIsFollowing", __Me)
+ACTIONS
+	Interrupt("Block_AutoFollow")
+	SetPriority("Block_AutoFollow", 0)
+	
+EVENT Activate_Follow_Priority
+ON
+	OnCharacterFlagCleared("LeaderLib_CharacterIsFollowing", __Me)
+ACTIONS
+	SetPriority("Block_AutoFollow", 99998)
+	//SetPriority("Block_AutoFollow", 0)
+
 BEHAVIOUR
 
 REACTION Equip_Mask_Auto, 99999
 USAGE PEACE
 VARS
 	ITEM:_Mask
-ACTIONS
-IF "c1&c2"
+CHECK "c1"
 	IsEqual(%FirstEquip, 0)
+ACTIONS
+IF "c1"
 	ItemGetFromInventory(_Mask, __Me, "ARM_UNIQUE_LLMIME_MimeMask_A", "LLMIME_ACTIVATE_MIME", 0)
 THEN
 	CharacterUseItem(_Mask)
-	StatusText(__Me, "Equipped Mask")
+	Set(%FirstEquip, 1)
+ELSE
+	Reset()
 ENDIF
+
+REACTION Block_AutoFollow, 99998
+USAGE PEACE
+VARS
+	CHARACTER:_Owner
+CHECK "!c1"
+	HasFlag(__Me, "LeaderLib_CharacterIsFollowing")
+ACTIONS
+	Sleep(1)

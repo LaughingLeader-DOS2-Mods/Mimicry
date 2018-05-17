@@ -1,7 +1,7 @@
 {
    "save" : {
       "header" : {
-         "time" : 1526430953,
+         "time" : 1526579572,
          "version" : "2.0.8.2"
       },
       "regions" : {
@@ -118,6 +118,11 @@
                                        {
                                           "name" : {"type" : 22, "value" : "LeaderLib_IsFollowingSpeaker"},
                                           "paramval" : {"type" : 4, "value" : 0},
+                                          "value" : {"type" : 19, "value" : 1}
+                                       },
+                                       {
+                                          "name" : {"type" : 22, "value" : "LeaderLib_SpeakerIsFollowerOwner"},
+                                          "paramval" : {"type" : 4, "value" : 1},
                                           "value" : {"type" : 19, "value" : 1}
                                        }
                                     ],"type" : {"type" : 22, "value" : "Character"}}
@@ -661,6 +666,11 @@
                                           "name" : {"type" : 22, "value" : "LeaderLib_IsFollowingSpeaker"},
                                           "paramval" : {"type" : 4, "value" : 0},
                                           "value" : {"type" : 19, "value" : 0}
+                                       },
+                                       {
+                                          "name" : {"type" : 22, "value" : "LeaderLib_SpeakerIsFollowerOwner"},
+                                          "paramval" : {"type" : 4, "value" : 1},
+                                          "value" : {"type" : 19, "value" : 1}
                                        }
                                     ],"type" : {"type" : 22, "value" : "Character"}}
                               ]

@@ -7,7 +7,6 @@ INIT
 	EXTERN STATUS:%Passive_Beastmaster = LLMIME_BEASTMASTER
 	EXTERN STATUS:%Passive_Concentration = LLMIME_CONCENTRATION
 	FLOAT:%StatusStrength = 50
-	LIST<CHARACTER>:%Mimes
 EVENTS
 
 EVENT Mime_Setup
@@ -16,12 +15,8 @@ VARS
 ON
 	OnCharacterEvent(_Mime, "LLMIME_Events_InitMime")
 ACTIONS
-IF "!c1"
-	IsTagged(_Mime, "LLMIME_MIME")
-THEN
 	SetTag(_Mime, "LLMIME_MIME")
-	ListAdd(%Mimes, _Mime)
-ENDIF
+	
 IF "!c1"
 	HasStatusInfluence(_Mime, %Passive_IsMime)
 THEN
@@ -46,12 +41,10 @@ ENDIF
 EVENT Mime_Remove
 VARS
 	CHARACTER:_Mime
-	CHARACTER:_GetMime
-	INT:_Size
-	INT:_Index
 ON
 	OnCharacterEvent(_Mime, "LLMIME_Events_RemoveMime")
 ACTIONS
+	ClearTag(_Mime, "LLMIME_MIME")
 IF "c1"
 	HasStatusInfluence(_Mime, %Passive_IsMime)
 THEN
@@ -73,67 +66,6 @@ THEN
 	RemoveStatusInfluence(_Mime, %Passive_Concentration, %StatusStrength, "", 0)
 ENDIF
 
-IF "c1&c2"
-	IsTagged(_Mime, "LLMIME_MIME")
-	ListGetSize(%Mimes,_Size)
-THEN
-	ClearTag(_Mime, "LLMIME_MIME")
-	Set(_Index,1)
-	WHILE "!c1"
-		IsGreaterThen(_Index, _Size)
-	DO
-		IF "c1&c2"
-			ListGet(%Mimes, _Index, _GetMime)
-			IsEqual(_GetMime, _Mime)
-		THEN
-			ListRemove(%Mimes, _Index)
-			Goto("BreakWhile")
-		ELSE
-			Add(_Index, 1)
-		ENDIF
-	ENDWHILE
-	Label("BreakWhile")
-ENDIF
-
-EVENT Func_RemoveSummonedMimes
-VARS
-	CHARACTER:_Mime
-	INT:_Size
-	INT:_Index
-ON
-	OnFunction("LLMIME_Func_CleanupMimeList")
-ACTIONS
-IF "c1"
-	ListGetSize(%Mimes,_Size)
-THEN
-	Set(_Index,1)
-	WHILE "!c1"
-		IsGreaterThen(_Index, _Size)
-	DO
-		IF "c1&c2&c3"
-			ListGet(%Mimes, _Index, _Mime)
-			CharacterIsSummon(_Mime)
-			CharacterIsDead(_Mime)
-		THEN
-			ListRemove(%Mimes, _Index)
-		ENDIF
-	Add(_Index, 1)
-	ENDWHILE
-ENDIF
-
-EVENT StartListCleanup
-VARS
-	CHARACTER:_Mime
-ON
-	OnDie(_Mime, _, _, _)
-ACTIONS
-IF "c1&c2"
-	CharacterIsSummon(_Mime)
-	IsTagged(_Mime, "LLMIME_MIME")
-THEN
-	CallFunction("LLMIME_Func_CleanupMimeList")
-ENDIF
-
 EVENT Apply_Mimicking_Start
 VARS
 	CHARACTER:_Mime
@@ -142,21 +74,7 @@ VARS
 ON
 	OnGlobalFlagSet("Mimicry_Mimic_CombatOnlyDisabled")
 ACTIONS
-IF "c1"
-	ListGetSize(%Mimes,_Size)
-THEN
-	Set(_Index,1)
-	WHILE "!c1"
-		IsGreaterThen(_Index, _Size)
-	DO
-		IF "c1"
-			ListGet(%Mimes, _Index, _Mime)
-		THEN
-			CharacterEvent(_Mime, "LLMIME_Events_RequestMimicking")
-		ENDIF
-	Add(_Index, 1)
-	ENDWHILE
-ENDIF
+	IterateCharacters("LLMIME_Events_RequestMimicking", null, null, "LLMIME_MIME")
 	
 EVENT Apply_Mimicking
 VARS
@@ -179,21 +97,7 @@ VARS
 ON
 	OnGlobalFlagCleared("Mimicry_Mimic_CombatOnlyDisabled")
 ACTIONS
-IF "c1"
-	ListGetSize(%Mimes,_Size)
-THEN
-	Set(_Index,1)
-	WHILE "!c1"
-		IsGreaterThen(_Index, _Size)
-	DO
-		IF "c1"
-			ListGet(%Mimes, _Index, _Mime)
-		THEN
-			CharacterEvent(_Mime, "LLMIME_Events_RemoveMimicking")
-		ENDIF
-	Add(_Index, 1)
-	ENDWHILE
-ENDIF
+	IterateCharacters("LLMIME_Events_RemoveMimicking", null, null, "LLMIME_MIME")
 
 EVENT Remove_Mimicking
 VARS
@@ -207,15 +111,6 @@ IF "c1&!c2"
 THEN
 	CharacterRemoveStatus(_Mime, LLMIME_MIMICKING)
 ENDIF
-
-EVENT Debug_Item
-VARS
-	CHARACTER:_Char
-	ITEM:_Item
-ON
-	OnUseItem(_Char, _Item)
-ACTIONS
-	CharacterItemEvent(_Char, _Item, "LLMIME_Events_OnItemUse")
 
 EVENT Dummy_Iterate_NearbyItems
 VARS

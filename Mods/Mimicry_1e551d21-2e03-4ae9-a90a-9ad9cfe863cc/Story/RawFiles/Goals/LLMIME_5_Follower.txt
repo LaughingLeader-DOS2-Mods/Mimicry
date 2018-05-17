@@ -9,7 +9,7 @@ KBSECTION
 PROC
 LLMIME_Follower_InitSettings()
 THEN
-LeaderLib_Follower_RegisterPosition((CHARACTERGUID)CHARACTERGUID_LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9, "TestLevel_LL_Mimicry", 4.92, 0.0, 6.42);
+LeaderLib_Follower_RegisterPosition((CHARACTERGUID)CHARACTERGUID_LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9, "TestLevel_LL_Mimicry", 4.92, 0.0, 6.42, "Mimicry_Events_MimeFollowerPositionReset");
 
 LLMIME_Follower_AddRandomAnimation("use_inspect");
 LLMIME_Follower_AddRandomAnimation("Teleport_01");
@@ -92,14 +92,22 @@ IF
 StoryEvent((CHARACTERGUID)_Mime, "LeaderLib_Events_FollowerDismissed")
 AND
 IsTagged(_Mime, "LLMIME_MimeFollower", 1)
+THEN
+CharacterDisableAllCrimes(_Mime);
+SetCanJoinCombat(_Mime, 0);
+SetFaction(_Mime,"Neutral NPC");
+
+IF
+StoryEvent((CHARACTERGUID)_Mime, "LeaderLib_Events_FollowerDismissed")
+AND
+IsTagged(_Mime, "LLMIME_MimeFollower", 1)
+AND
+NOT DB_LLMIME_Follower_ResetPositionTimer(_Mime, _, _)
 AND
 GetUUID(_Mime, _MimeID)
 AND
 StringConcatenate("LLMIME_Timers_ResetPositionTimer_", _MimeID, _TimerName)
 THEN
-CharacterDisableAllCrimes(_Mime);
-SetCanJoinCombat(_Mime, 0);
-SetFaction(_Mime,"Neutral NPC");
 DB_LLMIME_Follower_ResetPositionTimer(_Mime, _TimerName, 1);
 TimerLaunch(_TimerName, 10000);
 LeaderLog_Log("DEBUG", "[LLMIME:Follower] Started position reset timer.");
@@ -117,9 +125,14 @@ CharacterDisappearOutOfSightToObject(_Mime, _Owner, 1, "LLMIME_Events_MimeFollow
 IF
 StoryEvent((CHARACTERGUID)_Mime, "LLMIME_Events_MimeFollowerDisappeared")
 THEN
-LLLIB_Follower_ResetPosition(_Mime, "");
-SetOnStage(_Mime, 1);
+LLLIB_Follower_ResetPosition(_Mime);
 LeaderLog_Log("DEBUG", "[LLMIME:Follower] Reset follower's position to the recruit position.");
+
+IF
+StoryEvent((CHARACTERGUID)_Mime, "Mimicry_Events_MimeFollowerPositionReset")
+THEN
+SetOnStage(_Mime, 1);
+LeaderLog_Log("DEBUG", "[LLMIME:Follower] Set Mime follower on stage.");
 
 IF
 TimerFinished(_TimerName)
@@ -219,6 +232,30 @@ ObjectGetFlag(_Mime, "LeaderLib_IsFollower", 0)
 THEN
 CharacterAddActionPoints(_Mime, 2);
 CharacterUseSkill(_Mime, "Shout_LLMIME_BrawlerStance", _Mime, 1, 1);
+//END_REGION
+
+//REGION RETURN
+IF
+SkillCast(_Follower, "Shout_LLMIME_ReturnToOwner", _)
+THEN
+LeaderLib_StartTargetTimer(_Follower, 250, "LLMIME_Timers_ReturnDelay_", "LLMIME_Events_StartTeleport");
+
+IF
+StoryEvent((CHARACTERGUID)_Follower, "LLMIME_Events_StartTeleport")
+AND
+DB_LLLIB_PartyFollower(_Owner, _Follower)
+THEN
+TeleportTo(_Follower, _Owner, "Shout_LLMIME_ReturnToOwner", 1);
+
+IF
+StoryEvent((CHARACTERGUID)_Follower, "Shout_LLMIME_ReturnToOwner")
+THEN
+LeaderLib_StartTargetTimer(_Follower, 500, "LLMIME_Timers_ReturnEffectDelay_", "LLMIME_Events_PlayReturnEffect");
+
+IF
+StoryEvent((CHARACTERGUID)_Follower, "LLMIME_Events_PlayReturnEffect")
+THEN
+PlayEffect(_Follower, "RS3_FX_Skills_Void_Cast_VoidGlide_Root_01");
 //END_REGION
 EXITSECTION
 
