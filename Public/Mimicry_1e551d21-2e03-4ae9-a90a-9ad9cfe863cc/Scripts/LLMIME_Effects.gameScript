@@ -24,7 +24,11 @@ VARS
 ON
 	OnCharacterEvent(_Char, "LLMIME_Events_BrawlerStanceDeactivated_Status")
 ACTIONS
+IF "!c1"
+	HasFlag(_Char, "Mimicry_IsMimicking")
+THEN
 	CharacterPlayEffect(_Char, "LLMIME_FX_Skills_BrawlerStance_Deactivate_OverheadFX_01", "Dummy_OverheadFX")
+ENDIF
 	
 EVENT BrawlerStance_Deactivated_SkillUsed
 VARS
