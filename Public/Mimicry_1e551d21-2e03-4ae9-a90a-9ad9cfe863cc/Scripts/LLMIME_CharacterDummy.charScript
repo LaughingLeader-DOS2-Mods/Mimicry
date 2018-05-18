@@ -3,6 +3,7 @@ INIT
 	FIXEDSTRING:%ResetTimerName = ""
 	EXTERN FLOAT:%ResetTimerDelay = 5.0
 	INT:%DebugTimerActive = 0
+	INT:%DebugMode = 0
 EVENTS
 
 EVENT DeleteRogueDummies
@@ -48,10 +49,14 @@ VARS
 ON
 	OnDamage(_DamageType, _Val, _Char, _Item)
 ACTIONS
+IF "c1"
+	IsEqual(%DebugMode, 1)
+THEN
 	Print(_Message, "[LLMIME:DummyBehavior:OnDamage_Debug] Dummy was attacked: Type: [1] | Amount: [2] | Character: [3]", _DamageType, _Val, _Char)
 	SetVar(__Me, "LeaderLib_LogMessage", _Message)
 	CharacterEvent(__Me, "LeaderLib_DebugLog")
 	StatusText(__Me, "I was hit!")
+ENDIF
 	
 EVENT DamageType_Debug_Start
 ON
@@ -59,8 +64,9 @@ ON
 	OnCharacterStatusAttempt(__Me, _)
 	OnDamage(_, _, _, _)
 ACTIONS
-IF "c1"
+IF "c1&c2"
 	IsEqual(%DebugTimerActive, 0)
+	IsEqual(%DebugMode, 1)
 THEN
 	StartTimer("LLMIME_Timers_DummyDebug", 0.25, 0)
 	Set(%DebugTimerActive, INT:1)

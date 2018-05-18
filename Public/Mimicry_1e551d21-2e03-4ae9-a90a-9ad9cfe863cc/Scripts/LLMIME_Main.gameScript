@@ -13,10 +13,9 @@ EVENT Mime_Setup
 VARS
 	CHARACTER:_Mime
 ON
-	OnCharacterEvent(_Mime, "LLMIME_Events_InitMime")
+	OnCharacterEvent(_Mime, "Mimicry_InitMimeJob")
 ACTIONS
 	SetTag(_Mime, "LLMIME_MIME")
-	
 IF "!c1"
 	HasStatusInfluence(_Mime, %Passive_IsMime)
 THEN
@@ -42,7 +41,7 @@ EVENT Mime_Remove
 VARS
 	CHARACTER:_Mime
 ON
-	OnCharacterEvent(_Mime, "LLMIME_Events_RemoveMime")
+	OnCharacterEvent(_Mime, "Mimicry_RemoveMimeJob")
 ACTIONS
 	ClearTag(_Mime, "LLMIME_MIME")
 IF "c1"
@@ -67,20 +66,19 @@ THEN
 ENDIF
 
 EVENT Apply_Mimicking_Start
-VARS
-	CHARACTER:_Mime
-	INT:_Size
-	INT:_Index
 ON
 	OnGlobalFlagSet("Mimicry_Mimic_CombatOnlyDisabled")
 ACTIONS
 	IterateCharacters("LLMIME_Events_RequestMimicking", null, null, "LLMIME_MIME")
-	
+	//CharacterApplyStatus(LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9, LLMIME_MIMICKING, -1)
+
+
 EVENT Apply_Mimicking
 VARS
 	CHARACTER:_Mime
 ON
 	OnCharacterEvent(_Mime, "LLMIME_Events_RequestMimicking")
+	OnIterateCharacter(_Mime, "LLMIME_Events_RequestMimicking")
 ACTIONS
 IF "c1&!c2"
 	CharacterHasStatus(_Mime, LLMIME_MIME)
@@ -89,11 +87,21 @@ THEN
 	CharacterApplyStatus(_Mime, LLMIME_MIMICKING, -1)
 ENDIF
 
-EVENT Remove_Mimicking_Start
+EVENT Apply_Mimicking_CombatEnded
 VARS
 	CHARACTER:_Mime
-	INT:_Size
-	INT:_Index
+ON
+	OnLeftCombat(_Mime, _)
+ACTIONS
+IF "c1&c2&!c3"
+	HasGlobalFlag("Mimicry_Mimic_CombatOnlyDisabled")
+	CharacterHasStatus(_Mime, LLMIME_MIME)
+	CharacterHasStatus(_Mime, LLMIME_MIMICKING)
+THEN
+	CharacterApplyStatus(_Mime, LLMIME_MIMICKING, -1)
+ENDIF
+
+EVENT Remove_Mimicking_Start
 ON
 	OnGlobalFlagCleared("Mimicry_Mimic_CombatOnlyDisabled")
 ACTIONS
@@ -104,10 +112,11 @@ VARS
 	CHARACTER:_Mime
 ON
 	OnCharacterEvent(_Mime, "LLMIME_Events_RemoveMimicking")
+	OnIterateCharacter(_Mime, "LLMIME_Events_RemoveMimicking")
 ACTIONS
-IF "c1&!c2"
-	CharacterHasStatus(_Mime, LLMIME_MIMICKING)
+IF "!c1|c2"
 	IsInCombat(_Mime)
+	IsInActiveTurn(_Mime)
 THEN
 	CharacterRemoveStatus(_Mime, LLMIME_MIMICKING)
 ENDIF

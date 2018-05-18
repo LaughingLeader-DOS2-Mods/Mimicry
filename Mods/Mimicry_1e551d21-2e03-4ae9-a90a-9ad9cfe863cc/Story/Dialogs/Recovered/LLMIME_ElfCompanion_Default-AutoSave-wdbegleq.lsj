@@ -1,7 +1,7 @@
 {
    "save" : {
       "header" : {
-         "time" : 1526601482,
+         "time" : 1526597916,
          "version" : "2.0.8.2"
       },
       "regions" : {
@@ -174,7 +174,7 @@
                                     "flag" : [
                                        {
                                           "name" : {"type" : 22, "value" : "Mimicry_HideMimePassives"},
-                                          "paramval" : {"type" : 4, "value" : 0},
+                                          "paramval" : {"type" : 4, "value" : 1},
                                           "value" : {"type" : 19, "value" : 1}
                                        }
                                     ],"type" : {"type" : 22, "value" : "Character"}}
@@ -227,7 +227,7 @@
                                     "flag" : [
                                        {
                                           "name" : {"type" : 22, "value" : "Mimicry_HideMimePassives"},
-                                          "paramval" : {"type" : 4, "value" : 0},
+                                          "paramval" : {"type" : 4, "value" : 1},
                                           "value" : {"type" : 19, "value" : 0}
                                        }
                                     ],"type" : {"type" : 22, "value" : "Character"}}
@@ -830,20 +830,7 @@
                         "Tags" : [ {} ],
                         "UUID" : {"type" : 22, "value" : "69115f3d-7b9a-4117-b9f6-ae8d6dcc28c9"},
                         "addressedspeaker" : {"type" : 4, "value" : -1},
-                        "checkflags" : [
-                           {
-                              "flaggroup" : [
-                                 {
-                                    "flag" : [
-                                       {
-                                          "name" : {"type" : 22, "value" : "LeaderLib_SpeakerIsFollowerOwner"},
-                                          "paramval" : {"type" : 4, "value" : 1},
-                                          "value" : {"type" : 19, "value" : 1}
-                                       }
-                                    ],"type" : {"type" : 22, "value" : "Character"}}
-                              ]
-                           }
-                        ],
+                        "checkflags" : [ {} ],
                         "children" : [
                            {
                               "child" : [
@@ -2119,7 +2106,7 @@
                               "SoundEvent" : {"type" : 23, "value" : ""}
                            }
                         ],
-                        "ShowOnce" : {"type" : 19, "value" : 0},
+                        "ShowOnce" : {"type" : 19, "value" : 1},
                         "TaggedTexts" : [
                            {
                               "TaggedText" : [
@@ -2138,7 +2125,7 @@
                                                 "TagText" : {
                                                    "handle" : "ls::TranslatedStringRepository::s_HandleUnknown",
                                                    "type" : 28,
-                                                   "value" : "*Tell the mime to re-adjust their mask.* (Refresh Mime Status)"
+                                                   "value" : "*Tell the mime to re-adjust their mask.* (Refresh Mime Statuses)"
                                                 },
                                                 "stub" : {"type" : 19, "value" : 1}
                                              }
@@ -2207,7 +2194,7 @@
                            }
                         ],
                         "speaker" : {"type" : 4, "value" : 1},
-                        "stub" : {"type" : 19, "value" : 0},
+                        "stub" : {"type" : 19, "value" : 1},
                         "transitionmode" : {"type" : 1, "value" : 0},
                         "waittime" : {"type" : 6, "value" : -1.0}
                      }

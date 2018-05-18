@@ -54,7 +54,7 @@ CreateItemTemplateAtPosition("LOOT_BackPack_A_6c70c298-aa29-418f-a659-f8e0b5f5fa
 THEN
 SetTag(_Backpack, "LLMIME_DEBUG_DELETEALL");
 MoveAllItemsTo(_Player, _Backpack, 1, 1, 1);
-//SetStoryEvent(_Player, "LLMIME_Events_InitMime");
+//SetStoryEvent(_Player, "Mimicry_InitMimeJob");
 //CharacterTransformAppearanceToWithEquipmentSet(_Player, _Player, "LLMIME_Class_Mime_Start", 0);
 DB_LLMIME_Debug_HostPlayer(_Player);
 DB_LLMIME_Debug_DeleteBackpack(_Backpack);
@@ -127,7 +127,7 @@ CharacterAddSkill(_Character, "Target_LLMIME_Wish", 0);
 IF
 StoryEvent(CHARACTERGUID_LLMIME_Debug_PartyMember3_9c02760e-befa-4026-a214-ecbeaa7de64a, "LLMIME_Events_Debug_IterateCharacters")
 THEN
-SetStoryEvent(CHARACTERGUID_LLMIME_Debug_PartyMember3_9c02760e-befa-4026-a214-ecbeaa7de64a, "LLMIME_Events_InitMime");
+SetStoryEvent(CHARACTERGUID_LLMIME_Debug_PartyMember3_9c02760e-befa-4026-a214-ecbeaa7de64a, "Mimicry_InitMimeJob");
 */
 
 IF

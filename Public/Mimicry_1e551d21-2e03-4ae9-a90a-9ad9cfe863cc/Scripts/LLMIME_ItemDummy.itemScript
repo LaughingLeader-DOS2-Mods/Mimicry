@@ -2,6 +2,7 @@ INIT
 	ITEM:__Me
 	FIXEDSTRING:%ResetTimerName = ""
 	EXTERN FLOAT:%ResetTimerDelay = 5.0
+	INT:%DebugMode = 0
 EVENTS
 
 EVENT DeleteRogueDummies
@@ -46,6 +47,10 @@ VARS
 ON
 	OnDamage(_DamageType, _Val, _Char, _Item)
 ACTIONS
+IF "c1"
+	IsEqual(%DebugMode, 1)
+THEN
 	Print(_Message, "[LLMIME:Dummy:OnDamage_Debug] Dummy was attacked: Type: [1] | Amount: [2] | Character: [3]", _DamageType, _Val, _Char)
 	SetVar(__Me, "LeaderLib_LogMessage", _Message)
 	ItemEvent(__Me, "LeaderLib_DebugLog")
+ENDIF

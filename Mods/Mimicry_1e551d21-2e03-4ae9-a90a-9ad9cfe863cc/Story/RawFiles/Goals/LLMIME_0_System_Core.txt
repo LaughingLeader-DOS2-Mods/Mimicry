@@ -43,6 +43,11 @@ DB_LLMIME_Statuses("LLMIME_MASK_INFO");
 //END_REGION
 
 //REGION CLEAR_HELPERS
+IF
+StoryEvent((CHARACTERGUID)_Mime, "Mimicry_RemoveAllMimicryStatuses")
+THEN
+LLMIME_RemoveAllModStatuses(_Mime);
+
 PROC
 LLMIME_RemoveAllModStatuses((CHARACTERGUID)_Character)
 AND
@@ -396,7 +401,7 @@ CharacterStatusApplied(_Mime, _BonusStatus, _)
 AND
 DB_LLMIME_PassiveData(_Status, _BonusStatus, _InfoStatus, _DisableFlag)
 AND
-NOT UserGetFlag(_Mime, _DisableFlag, 1)
+NOT ObjectGetFlag(_Mime, _DisableFlag, 1)
 AND
 HasActiveStatus(_Mime, _InfoStatus, 0)
 THEN

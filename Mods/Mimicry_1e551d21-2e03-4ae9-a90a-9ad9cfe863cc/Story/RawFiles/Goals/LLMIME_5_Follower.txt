@@ -236,6 +236,15 @@ CharacterUseSkill(_Mime, "Shout_LLMIME_BrawlerStance", _Mime, 1, 1);
 
 //REGION RETURN
 IF
+FleeCombat(_Owner)
+AND
+DB_LLLIB_PartyFollower(_Owner, _Follower)
+AND
+IsTagged(_Follower, "LLMIME_MimeFollower", 1)
+THEN
+CharacterUseSkill(_Follower, "Shout_LLMIME_ReturnToOwner", _Follower, 1, 1);
+
+IF
 SkillCast(_Follower, "Shout_LLMIME_ReturnToOwner", _)
 THEN
 LeaderLib_StartTargetTimer(_Follower, 250, "LLMIME_Timers_ReturnDelay_", "LLMIME_Events_StartTeleport");

@@ -318,6 +318,8 @@ CharacterStatusText(_Mime, "<font color='#FF7F50'>Mimicking Ended</font>");
 IF
 ObjectLeftCombat(_Mime, _CombatID)
 AND
+NOT GlobalGetFlag("Mimicry_Mimic_CombatOnlyDisabled", 1)
+AND
 HasActiveStatus(_Mime, "LLMIME_MIMICKING", 1)
 THEN
 RemoveStatus(_Mime, "LLMIME_MIMICKING");

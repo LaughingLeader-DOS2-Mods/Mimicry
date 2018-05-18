@@ -2,18 +2,23 @@ INIT
 	CHARACTER:__Me
 	INT:%FirstEquip = 0
 	INT:%Following = 0
+	EXTERN FLOAT:%BrawlerStanceInfluenceStrength = 50.0
 EVENTS
 
-EVENT Equip_Mask
-VARS
-	ITEM:_Mask
+EVENT Follower_BrawlerStance_Activate
 ON
-	OnActivate()
+	OnFunction("Mimicry_MimeFollower_ActivateBrawlerStance")
 ACTIONS
-IF "c1"
-	ItemGetFromInventory(_Mask, __Me, "ARM_UNIQUE_LLMIME_MimeMask_A")
+	//SetFaction(__Me, "Neutral_NPC")
+	//CharacterSetHasDialog(__Me, 1)
+IF "!c1"
+	HasStatusInfluence(__Me, LLMIME_BRAWLER_STANCE_CON)
 THEN
-	
+	AddStatusInfluence(__Me, LLMIME_BRAWLER_STANCE_CON, %BrawlerStanceInfluenceStrength, "", 0, 1)
+ELSE
+	RemoveStatusInfluence(__Me, LLMIME_BRAWLER_STANCE_CON, %BrawlerStanceInfluenceStrength, "", 0)
+	CharacterRemoveStatus(__Me, LLMIME_BRAWLER_STANCE_CON, null, 0)
+	AddStatusInfluence(__Me, LLMIME_BRAWLER_STANCE_CON, %BrawlerStanceInfluenceStrength, "", 0, 1)
 ENDIF
 
 EVENT Reset_Follow_Priority
@@ -39,11 +44,24 @@ VARS
 CHECK "c1"
 	IsEqual(%FirstEquip, 0)
 ACTIONS
-IF "c1"
-	ItemGetFromInventory(_Mask, __Me, "ARM_UNIQUE_LLMIME_MimeMask_A", "LLMIME_ACTIVATE_MIME", 0)
+IF "!c1&c2"
+	CharacterHasStatus(__Me, LLMIME_MIME)
+	ItemGetFromInventory(_Mask, __Me, null, "LLMIME_ACTIVATE_MIME", 0)	
 THEN
+	//Fix reloading story/stats shenanigans
+	CharacterEvent(__Me, "Mimicry_RemoveAllMimicryStatuses")
+	CharacterEvent(__Me, "Mimicry_RemoveMimeJob")
+	//SetFlag(__Me, "Mimicry_HideMimePassives")
+	Sleep(1.0)
 	CharacterUseItem(_Mask)
+	CallFunction("Mimicry_MimeFollower_ActivateBrawlerStance")
 	Set(%FirstEquip, 1)
+	SetPriority("Equip_Mask_Auto", 0)
+ELIF "c1"
+	CharacterHasStatus(__Me, LLMIME_MIME)
+THEN
+	Set(%FirstEquip, 1)
+	SetPriority("Equip_Mask_Auto", 0)
 ELSE
 	Reset()
 ENDIF
