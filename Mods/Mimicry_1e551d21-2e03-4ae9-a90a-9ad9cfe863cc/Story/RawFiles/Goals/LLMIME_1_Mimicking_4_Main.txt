@@ -440,27 +440,26 @@ DB_NOOP(1);
 PROC
 LLMIME_Mimicking_Internal_StartWeaponMimicking((CHARACTERGUID)_Mime, (CHARACTERGUID)_Caster, (STRING)_ActionType)
 AND
+_ActionType != "Item"
+AND
 NOT LLMIME_Mimicking_QRY_CasterAndMimeUnarmed(_Mime, _Caster, _ActionType)
 THEN
 LLMIME_Mimicking_ApplyStatRequirementStatus(_Mime, _Caster, _ActionType);
 LLMIME_Mimicking_SaveEquippedWeapons(_Mime, _ActionType);
 LLMIME_Mimicking_UnequipWeapons(_Mime, _ActionType);
+SetStoryEvent(_Mime, "Mimicry_WeaponMimickingStarted");
 
 PROC
 LLMIME_Mimicking_ApplyStatRequirementStatus((CHARACTERGUID)_Mime, (CHARACTERGUID)_Caster, (STRING)_ActionType)
-AND
-_ActionType != "Item"
 AND
 DB_LLMIME_Mimicking_Temp_CasterWeapons(_Caster, _MainHand, _Offhand, _Action, _ActionType)
 AND
 HasActiveStatus(_Mime, "LLMIME_MIMIC_WEAPON_REQUIREMENTS", 0)
 THEN
-ApplyStatus(_Mime, "LLMIME_MIMIC_WEAPON_REQUIREMENTS", -1.0, 1);
+ApplyStatus(_Mime, "LLMIME_MIMIC_WEAPON_REQUIREMENTS", 30.0, 1);
 
 PROC
 LLMIME_Mimicking_SaveEquippedWeapons((CHARACTERGUID)_Mime, (STRING)_ActionType)
-AND
-_ActionType != "Item"
 AND
 CharacterGetEquippedItem(_Mime, "Weapon", (ITEMGUID)_Item)
 AND
@@ -471,8 +470,6 @@ DB_LLMIME_Mimicking_LastEquipped(_Mime, "Weapon", _Item);
 PROC
 LLMIME_Mimicking_SaveEquippedWeapons((CHARACTERGUID)_Mime, (STRING)_ActionType)
 AND
-_ActionType != "Item"
-AND
 CharacterGetEquippedItem(_Mime, "Shield", (ITEMGUID)_Item)
 AND
 IsTagged(_Item, "LLMIME_BrawlerFist", 0)
@@ -482,16 +479,12 @@ DB_LLMIME_Mimicking_LastEquipped(_Mime, "Shield", _Item);
 PROC
 LLMIME_Mimicking_UnequipWeapons((CHARACTERGUID)_Mime, (STRING)_ActionType)
 AND
-_ActionType != "Item"
-AND
 CharacterGetEquippedItem(_Mime, "Weapon", (ITEMGUID)_Item)
 THEN
 CharacterUnequipItem(_Mime, _Item);
 
 PROC
 LLMIME_Mimicking_UnequipWeapons((CHARACTERGUID)_Mime, (STRING)_ActionType)
-AND
-_ActionType != "Item"
 AND
 CharacterGetEquippedItem(_Mime, "Shield", (ITEMGUID)_Item)
 THEN
@@ -793,7 +786,7 @@ LLMIME_Mimicking_Internal_CreateUseWeaponsTimer(_Mime, _Action, "Skill", 4000);
 PROC
 LLMIME_Mimicking_StartDeleteOneTimeUseWeaponsTimer((CHARACTERGUID)_Mime, (STRING)_Action, "Attack")
 THEN
-LLMIME_Mimicking_Internal_CreateUseWeaponsTimer(_Mime, _Action, "Attack", 1250);
+LLMIME_Mimicking_Internal_CreateUseWeaponsTimer(_Mime, _Action, "Attack", 1500);
 
 PROC
 LLMIME_Mimicking_StartDeleteOneTimeUseWeaponsTimer((CHARACTERGUID)_Mime, (STRING)_Action, (STRING)_ActionType)
@@ -833,6 +826,14 @@ TimerCancel(_TimerName);
 TimerLaunch(_TimerName, 2000);
 
 IF
+CharacterStartAttackObject(_, _, _Mime)
+AND
+DB_LLMIME_Mimicking_DeleteOneTimeUseWeaponsTimer(_TimerName, _Mime, _Action, "Attack")
+THEN
+TimerCancel(_TimerName);
+TimerLaunch(_TimerName, 1000);
+
+IF
 TimerFinished(_TimerName)
 AND
 DB_LLMIME_Mimicking_DeleteOneTimeUseWeaponsTimer(_TimerName, _Mime, _Action, _ActionType)
@@ -840,6 +841,7 @@ THEN
 NOT DB_LLMIME_Mimicking_DeleteOneTimeUseWeaponsTimer(_TimerName, _Mime, _Action, _ActionType);
 LLMIME_Mimicking_DeleteOneTimeUseWeapons(_Mime, _Action, _ActionType);
 LLMIME_Mimicking_EquipLastItems(_Mime, _Action, _ActionType);
+SetStoryEvent(_Mime, "Mimicry_MimickedWeaponsRemoved");
 
 QRY
 LLMIME_Mimickery_QRY_HasMimickedItems((CHARACTERGUID)_Mime)
@@ -904,6 +906,16 @@ LLMIME_Mimicking_DeleteOneTimeUseWeapons(_Mime, _Action, _ActionType);
 
 PROC
 LLMIME_Mimicking_DeleteMimickedItems((CHARACTERGUID)_Mime)
+AND
+HasActiveStatus(_Mime, "LLMIME_MIMIC_WEAPON_REQUIREMENTS", 1)
+THEN
+RemoveStatus(_Mime, "LLMIME_MIMIC_WEAPON_REQUIREMENTS");
+
+//Fail safe
+IF
+ItemUnEquipped(_Item, _Mime)
+AND
+IsTagged(_Item, "LLMIME_MIMICKED_WEAPON", 1)
 AND
 HasActiveStatus(_Mime, "LLMIME_MIMIC_WEAPON_REQUIREMENTS", 1)
 THEN
