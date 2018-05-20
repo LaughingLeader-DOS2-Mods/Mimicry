@@ -23,7 +23,8 @@ Public/Mimicry_1e551d21-2e03-4ae9-a90a-9ad9cfe863cc/Assets/*
 StatsEditorConfig.xml
 EffectEditorConfig.xml
 DockPanel.config
-EditorBrowserMetadata.*
+EditorBrowserMetadata_*
+EditorBrowserMetadata.xml
 
 #Assets
 ######################

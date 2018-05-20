@@ -22,9 +22,13 @@ DB_LLMIME_Mimicking_MimicNextAction(_Mime)
 AND
 LLMIME_Mimicking_QRY_CanMimicCharacter(_Caster, _Mime)
 AND
-GetPosition(_Target, _TargetX, _, _TargetZ)
+GetPosition(_Target, _TargetX, _TargetY, _TargetZ)
 AND
-GetUUID(_Target, _Action)
+GetUUID(_Caster, _CasterID)
+AND
+GetUUID(_Target, _TargetID)
+AND
+StringConcatenate(_CasterID, _TargetID, _Action)
 THEN
 LeaderLog_Log("DEBUG", "[LLMIME:Mime:CharacterStartAttackObject] Queueing up mimic weapon attack on target.");
 //ObjectSetFlag(_Mime, "LLMIME_MIMIC_PREFER_ITEM_TARGET"); // Prefer the item dummy, since all weapons can attack items
@@ -59,9 +63,7 @@ TimerFinished(_TimerName)
 AND
 DB_LLMIME_Timers_AttackAtPositionTimer(_TimerName, _Caster, _TargetX, _TargetZ)
 AND
-NOT LLMIME_Mimicking_QRY_SelfActionIsQueued(_Caster, "Attack", "Attack")
-AND
-NOT LLMIME_Mimicking_QRY_TargetActionIsQueued(_Caster, "Attack", "Attack", _TargetX, _TargetZ, 1)
+NOT LLMIME_Mimicking_QRY_ActionTypeQueued(_Caster, "Attack")
 THEN
 LLMIME_Mimicking_OnAttackAtPosition(_Caster, _TargetX, _TargetZ);
 
@@ -79,26 +81,31 @@ DB_LLMIME_Mimicking_MimicNextAction(_Mime)
 AND
 LLMIME_Mimicking_QRY_CanMimicCharacter(_Caster, _Mime)
 AND
-GetUUID(_Caster, _Action)
+GetUUID(_Caster, _CasterID)
+AND
+LeaderLog_QRY_RealToString(_CasterID, _TargetX, _TargetZ)
+AND
+DB_LeaderLog_Temp_RealString(_CasterID, _xs, _zs)
+AND
+StringConcatenate(_xs, _zs, _Str)
+AND
+StringConcatenate(_CasterID, _Str, _Action)
 THEN
+NOT DB_LeaderLog_Temp_RealString(_CasterID, _xs, _zs);
 LeaderLog_Log("DEBUG", "[LLMIME:Mime:OnAttackAtPosition] Queuing up next mimic attack position.");
 LLMIME_Mimicking_QueueNextAction(_Mime, _Caster, _Action, "Attack", _TargetX, _TargetZ, 2);
+LLMIME_Mimicking_StartNextMimic(_Caster, _Action, "Attack", 1000);
 
 IF
 CharacterStartAttackObject(_Target, _Owner, _Caster)
 AND
 LLMIME_Mimicking_QRY_ActionTypeQueued(_Caster, "Attack")
 AND
-GetUUID(_Target, _Action)
-THEN
-LLMIME_Mimicking_StartNextMimic(_Caster, _Action, "Attack", 1000);
-
-PROC
-LLMIME_Mimicking_OnAttackAtPosition((CHARACTERGUID)_Caster, (REAL)_TargetX, (REAL)_TargetZ)
+GetUUID(_Caster, _CasterID)
 AND
-LLMIME_Mimicking_QRY_ActionTypeQueued(_Caster, "Attack")
+GetUUID(_Target, _TargetID)
 AND
-GetUUID(_Caster, _Action)
+StringConcatenate(_CasterID, _TargetID, _Action)
 THEN
 LLMIME_Mimicking_StartNextMimic(_Caster, _Action, "Attack", 1000);
 //END_REGION
