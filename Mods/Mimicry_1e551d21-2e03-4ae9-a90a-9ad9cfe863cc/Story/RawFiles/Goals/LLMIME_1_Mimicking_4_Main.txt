@@ -418,7 +418,7 @@ LLMIME_Mimic_CalculateTarget(_Mime, _Caster, _CastX, _CastRotation, _CastZ, _Tar
 QRY
 LLMIME_Mimicking_QRY_CasterAndMimeUnarmed((CHARACTERGUID)_Mime, (CHARACTERGUID)_Caster, (STRING)_ActionType)
 AND
-ObjectGetFlag(_Mime, "LLMIME_UNARMED", 1)
+ObjectGetFlag(_Mime, "Mimicry_MimeIsUnarmed", 1)
 AND
 NOT DB_LLMIME_Mimicking_Temp_CasterWeapons(_Caster, _, _, _, _ActionType)
 THEN
@@ -427,7 +427,7 @@ DB_NOOP(1);
 QRY
 LLMIME_Mimicking_QRY_CasterAndMimeUnarmed((CHARACTERGUID)_Mime, (CHARACTERGUID)_Caster, (STRING)_ActionType)
 AND
-ObjectGetFlag(_Mime, "LLMIME_UNARMED", 1)
+ObjectGetFlag(_Mime, "Mimicry_MimeIsUnarmed", 1)
 AND
 DB_LLMIME_Mimicking_Temp_CasterWeapons(_Caster, _MainHand, _Offhand, _Action, _ActionType)
 AND
@@ -948,7 +948,7 @@ NOT DB_LLMIME_Mimicking_FinalMimicQueue(_Mime, _Caster, _Action, _ActionType, _C
 
 //REGION CLEAR_MIMIC
 IF
-StoryEvent((CHARACTERGUID)_Mime, "LLMIME_Events_ClearMimeBonuses")
+StoryEvent((CHARACTERGUID)_Mime, "Mimicry_ClearMimeBonuses")
 THEN
 LLMIME_Mimicking_CleaAllDataForMime(_Mime);
 

@@ -1,4 +1,4 @@
-new equipment "LLMIME_Class_Mime"
+new equipment "LLMIME_Equipment_FollowerMime"
 add equipmentgroup 
 add equipment entry "ARM_UNIQUE_LLMIME_MimeMask_A"
 

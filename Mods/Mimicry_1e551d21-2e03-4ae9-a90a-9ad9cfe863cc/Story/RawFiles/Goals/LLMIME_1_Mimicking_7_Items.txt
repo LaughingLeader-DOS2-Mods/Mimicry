@@ -120,7 +120,7 @@ NOT DB_LLMIME_Mimicking_Items_DestroyNext(_Mime, _Item, _Action, _Caster);
 
 //REGION CLEAR_MIME
 IF
-StoryEvent((CHARACTERGUID)_Mime, "LLMIME_Events_ClearMimeBonuses")
+StoryEvent((CHARACTERGUID)_Mime, "Mimicry_ClearMimeBonuses")
 THEN
 LLMIME_Mimicking_Items_ClearAllDataForMime(_Mime);
 

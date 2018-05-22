@@ -2,68 +2,108 @@ INIT
 	FIXEDSTRING:%EmptyFixedStr = ""
 	FLOAT3:%EmptyPos = null
 	CHARACTER:%NullChar = null
-	EXTERN STATUS:%Passive_IsMime = LLMIME_MIME
-	EXTERN STATUS:%Passive_Brawler = LLMIME_BRAWLER
-	EXTERN STATUS:%Passive_Beastmaster = LLMIME_BEASTMASTER
-	EXTERN STATUS:%Passive_Concentration = LLMIME_CONCENTRATION
+	LIST<STATUS>:%MimeStatuses
 	FLOAT:%StatusStrength = 50
 EVENTS
+
+EVENT InitStatusList
+VARS
+	INT:_ListSize
+ON
+	OnActivate()
+	OnFunction("Mimicry_InitStatusList")
+ACTIONS
+IF "!c1|(c1&c2)"
+	ListGetSize(%MimeStatuses, _ListSize)
+	IsLessThen(_ListSize, 1)
+THEN
+	ListAdd(%MimeStatuses, LLMIME_MIME)
+	ListAdd(%MimeStatuses, LLMIME_BEASTMASTER)
+	ListAdd(%MimeStatuses, LLMIME_BRAWLER)
+	ListAdd(%MimeStatuses, LLMIME_CONCENTRATION)
+ENDIF
+
+EVENT LeaderLib_InitEvent
+ON
+	OnCharacterEvent(_, "LeaderLib_Initialized")
+ACTIONS
+	CallFunction("Mimicry_InitStatusList")
+	IterateCharacters("LLMIME_Iterator_InitMime", null, null, "LLMIME_MIME")
+
+EVENT Mime_InitIterate
+VARS
+	CHARACTER:_Mime
+ON
+	OnIterateCharacter(_Mime, "LLMIME_Iterator_InitMime")
+ACTIONS
+	CharacterEvent(_Mime, "Mimicry_MimeInitialized")
 
 EVENT Mime_Setup
 VARS
 	CHARACTER:_Mime
+	INT:_Size
+	INT:_Index
+	STATUS:_Status
+	STRING:_Message
 ON
 	OnCharacterEvent(_Mime, "Mimicry_InitMimeJob")
 ACTIONS
+	CallFunction("Mimicry_InitStatusList")
+IF "!c1"
+	IsTagged(_Mime, "LLMIME_MIME")
+THEN
+	SetVar(_Mime, "LeaderLib_LogMessage", STRING:"[LLMIME:LLMIME_Maim:Mime_Setup] Setting mime tag and statuses.")
+	CharacterEvent(_Mime, "LeaderLib_DebugLog")
 	SetTag(_Mime, "LLMIME_MIME")
-IF "!c1"
-	HasStatusInfluence(_Mime, %Passive_IsMime)
-THEN
-	AddStatusInfluence(_Mime, %Passive_IsMime, %StatusStrength, "", 0, 1)
 ENDIF
-IF "!c1"
-	HasStatusInfluence(_Mime, %Passive_Brawler)
+	Set(_Index, 1)
+IF "c1"
+	ListGetSize(%MimeStatuses, _Size)
 THEN
-	AddStatusInfluence(_Mime, %Passive_Brawler, %StatusStrength, "", 0, 1)
+	WHILE "!c1"
+		IsGreaterThen(_Index,_Size)
+	DO
+		IF "c1"
+			ListGet(%MimeStatuses,_Index,_Status)
+		THEN
+			/*
+			IF "!c1"
+				HasStatusInfluence(_Mime, _Status)
+			THEN
+				AddStatusInfluence(_Mime, _Status, %StatusStrength, "", 0, 1)
+			ENDIF
+			*/
+			IF "!c1"
+				CharacterHasStatus(_Mime, _Status)
+			THEN
+				CharacterApplyStatus(_Mime, _Status, -1, 1)
+			ENDIF
+		ENDIF
+	Add(_Index, 1)
+	ENDWHILE
 ENDIF
-IF "!c1"
-	HasStatusInfluence(_Mime, %Passive_Beastmaster)
-THEN
-	AddStatusInfluence(_Mime, %Passive_Beastmaster, %StatusStrength, "", 0, 1)
-ENDIF
-IF "!c1"
-	HasStatusInfluence(_Mime, %Passive_Concentration)
-THEN
-	AddStatusInfluence(_Mime, %Passive_Concentration, %StatusStrength, "", 0, 1)
-ENDIF
-
+	CharacterEvent(_Mime, "Mimicry_MimeInitialized")
+	
+	/*
+	Print(_Message, "[LLMIME:LLMIME_Maim:Mime_Setup] Status list: Size([1]).", _Size)
+	SetVar(_Mime, "LeaderLib_LogMessage", _Message)
+	CharacterEvent(_Mime, "LeaderLib_DebugLog")
+	*/
 EVENT Mime_Remove
 VARS
 	CHARACTER:_Mime
 ON
 	OnCharacterEvent(_Mime, "Mimicry_RemoveMimeJob")
 ACTIONS
+IF "c1"
+	IsTagged(_Mime, "LLMIME_MIME")
+THEN
+	SetVar(_Mime, "LeaderLib_LogMessage", STRING:"[LLMIME:LLMIME_Maim:Mime_Remove] Remove mime tag and clearing status influences.")
+	CharacterEvent(_Mime, "LeaderLib_DebugLog")
 	ClearTag(_Mime, "LLMIME_MIME")
-IF "c1"
-	HasStatusInfluence(_Mime, %Passive_IsMime)
-THEN
-	RemoveStatusInfluence(_Mime, %Passive_IsMime, %StatusStrength, "", 0)
 ENDIF
-IF "c1"
-	HasStatusInfluence(_Mime, %Passive_Brawler)
-THEN
-	RemoveStatusInfluence(_Mime, %Passive_Brawler, %StatusStrength, "", 0)
-ENDIF
-IF "c1"
-	HasStatusInfluence(_Mime, %Passive_Beastmaster)
-THEN
-	RemoveStatusInfluence(_Mime, %Passive_Beastmaster, %StatusStrength, "", 0)
-ENDIF
-IF "c1"
-	HasStatusInfluence(_Mime, %Passive_Concentration)
-THEN
-	RemoveStatusInfluence(_Mime, %Passive_Concentration, %StatusStrength, "", 0)
-ENDIF
+	CharacterEvent(_Mime, "Mimicry_ClearMimeBonuses")
+	CharacterEvent(_Mime, "Mimicry_MimeJobRemoved")
 
 EVENT Apply_Mimicking_Start
 ON

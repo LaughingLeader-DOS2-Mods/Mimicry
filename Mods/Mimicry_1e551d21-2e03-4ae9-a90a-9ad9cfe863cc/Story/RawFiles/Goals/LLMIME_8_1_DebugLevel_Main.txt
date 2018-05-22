@@ -6,25 +6,29 @@ DB_WaypointInfo((ITEMGUID)S_LLMIME_TestLevelWaypointShrine_9955a6a5-c7ca-40aa-8f
 Proc_LLMIME_IterateGameAlreadyStarted();
 KBSECTION
 IF
-GameStarted(_,_)
+GameStarted("TestLevel_LL_Mimicry",1)
 THEN
 ProcDoWaypointUnlock(ITEMGUID_S_LLMIME_TestLevelWaypointShrine_9955a6a5-c7ca-40aa-8fa8-9c3699d65032,NULL_00000000-0000-0000-0000-000000000000);
 DB_LLMIME_Debug_GameStarted(1);
 TimerLaunch("LLMIME_Debug_Start", 100);
 TimerLaunch("LLMIME_Debug_Test", 5000);
 
+/*
 IF
-RegionEnded(_)
+RegionEnded("TestLevel_LL_Mimicry")
 AND
 DB_IsPlayer(_Player)
 THEN
 LLMIME_RemoveAllModStatuses(_Player);
+*/
 
 IF
-RegionEnded(_)
+RegionEnded("TestLevel_LL_Mimicry")
 THEN
 NOT DB_LLMIME_Debug_GameStarted(1);
 NOT DB_LLMIME_Debug_IteratingPlayers(1);
+GoalCompleted;
+SysActivateGoal("LLMIME_8_0_DebugLevel");
 
 IF
 TimerFinished("LLMIME_Debug_Start")
@@ -104,15 +108,21 @@ CharacterIsEnemy(_Character, _Host, 0)
 THEN
 CharacterEnableWaypointUsage(_Character, 1);
 SetHomesteadKeyState(1, _Character);
-CharacterAddAttribute(_Character, "Finesse", 5);
-CharacterAddAttribute(_Character, "Strength", 5);
-CharacterAddAttribute(_Character, "Wits", 5);
-CharacterAddAttribute(_Character, "Intelligence", 5);
-CharacterAddAttribute(_Character, "Constitution", 5);
-CharacterLevelUpTo(_Character, 10);
+CharacterAddAttribute(_Character, "Finesse", 1);
+CharacterAddAttribute(_Character, "Strength", 1);
+CharacterAddAttribute(_Character, "Wits", 1);
+CharacterAddAttribute(_Character, "Intelligence", 1);
+CharacterAddAttribute(_Character, "Constitution", 1);
+//CharacterLevelUpTo(_Character, 10);
 CharacterOverrideMaxSourcePoints(_Character, 10);
 CharacterAddSourcePoints(_Character, 10);
 
+IF
+StoryEvent((CHARACTERGUID)_Character, "LLMIME_Events_Debug_IterateCharacters")
+THEN
+CharacterAddSkill(_Character, "Target_LLMIME_Wish", 0);
+
+/*
 IF
 StoryEvent((CHARACTERGUID)_Character, "LLMIME_Events_Debug_IterateCharacters")
 AND
@@ -122,6 +132,7 @@ NOT GetItemForItemTemplateInInventory(_Character, _Template, _)
 THEN
 ItemTemplateAddTo(_Template, _Character, 1);
 CharacterAddSkill(_Character, "Target_LLMIME_Wish", 0);
+*/
 
 /*
 IF

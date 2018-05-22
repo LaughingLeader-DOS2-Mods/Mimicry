@@ -5,6 +5,18 @@ INIT
 	EXTERN FLOAT:%BrawlerStanceInfluenceStrength = 50.0
 EVENTS
 
+EVENT Create_Mask
+VARS
+	ITEM:_Mask
+ON
+	OnActivate()
+ACTIONS
+IF "!c1"
+	ItemGetFromInventory(_Mask, __Me, null, "LLMIME_ACTIVATE_MIME", 0)
+THEN
+	CharacterAddToInventory(__Me, "ARM_UNIQUE_LLMIME_MimeMask_A", 1, 0)
+ENDIF
+
 EVENT Follower_BrawlerStance_Activate
 ON
 	OnFunction("Mimicry_MimeFollower_ActivateBrawlerStance")
@@ -34,6 +46,21 @@ ON
 ACTIONS
 	SetPriority("Block_AutoFollow", 99998)
 	//SetPriority("Block_AutoFollow", 0)
+	
+EVENT Mask_Equipped
+VARS
+	ITEM:_Mask
+ON
+	OnItemEquipped(__Me, _Mask)
+ACTIONS
+IF "c1&c2"
+	IsTagged(_Mask, "LLMIME_ACTIVATE_MIME")
+	IsEqual(%FirstEquip, 0)
+THEN
+	CallFunction("Mimicry_MimeFollower_ActivateBrawlerStance")
+	SetPriority("Equip_Mask_Auto", 0)
+	Set(%FirstEquip, 1)
+ENDIF
 
 BEHAVIOUR
 
@@ -44,19 +71,21 @@ VARS
 CHECK "c1"
 	IsEqual(%FirstEquip, 0)
 ACTIONS
-IF "!c1&c2"
+IF "!c1&c2&!c3"
 	CharacterHasStatus(__Me, LLMIME_MIME)
-	ItemGetFromInventory(_Mask, __Me, null, "LLMIME_ACTIVATE_MIME", 0)	
+	ItemGetFromInventory(_Mask, __Me, "ARM_UNIQUE_LLMIME_MimeMask_A", "LLMIME_ACTIVATE_MIME", 0)
+	ItemGetFromInventory(_Mask, __Me, "ARM_UNIQUE_LLMIME_MimeMask_A", "LLMIME_ACTIVATE_MIME", 1)
 THEN
 	//Fix reloading story/stats shenanigans
 	CharacterEvent(__Me, "Mimicry_RemoveAllMimicryStatuses")
 	CharacterEvent(__Me, "Mimicry_RemoveMimeJob")
+	//Sleep(1.0)
 	//SetFlag(__Me, "Mimicry_HideMimePassives")
-	Sleep(1.0)
-	CharacterUseItem(_Mask)
-	CallFunction("Mimicry_MimeFollower_ActivateBrawlerStance")
-	Set(%FirstEquip, 1)
-	SetPriority("Equip_Mask_Auto", 0)
+	//SetVar(__Me, "LeaderLib_ItemSlot", STRING:"Helmet")
+	//CharacterEvent(__Me, "LeaderLib_UnequipItemInSlot")
+	Sleep(0.50)
+	CharacterItemEvent(__Me, _Mask, "LeaderLib_EquipItem")
+	//CharacterUseItem(_Mask)
 ELIF "c1"
 	CharacterHasStatus(__Me, LLMIME_MIME)
 THEN

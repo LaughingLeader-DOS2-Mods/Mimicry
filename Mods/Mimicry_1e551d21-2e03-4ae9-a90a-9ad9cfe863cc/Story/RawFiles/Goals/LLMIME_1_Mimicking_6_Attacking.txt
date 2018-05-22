@@ -213,7 +213,7 @@ RemoveStatus(_Mime, "LLMIME_MIMIC_ATTACK_ROOT");
 
 //REGION CLEAR_MIME
 IF
-StoryEvent((CHARACTERGUID)_Mime, "LLMIME_Events_ClearMimeBonuses")
+StoryEvent((CHARACTERGUID)_Mime, "Mimicry_ClearMimeBonuses")
 AND
 DB_LLMIME_Timers_AttackAtPositionTimer(_TimerName, _Caster, _TargetX, _TargetZ)
 THEN

@@ -23,7 +23,7 @@ AttackedByObject(_Target, _Owner, (CHARACTERGUID)_Mime, _DamageType, _DamageSour
 AND
 LLMIME_QRY_CharacterIsAMime(_Mime)
 AND
-ObjectGetFlag(_Mime, "LLMIME_UNARMED", 1)
+ObjectGetFlag(_Mime, "Mimicry_MimeIsUnarmed", 1)
 THEN
 LeaderLog_Log("DEBUG", "[LLMIME:Mime:AttackedByObject] Mime attacked something. DamageType[",_DamageType,"] DamageSource[",_DamageSource,"].");
 
@@ -32,7 +32,7 @@ CharacterReceivedDamage(_Target, _Percentage, (CHARACTERGUID)_Mime)
 AND
 LLMIME_QRY_CharacterIsAMime(_Mime)
 AND
-ObjectGetFlag(_Mime, "LLMIME_UNARMED", 1)
+ObjectGetFlag(_Mime, "Mimicry_MimeIsUnarmed", 1)
 AND
 IntegertoString(_Percentage, _DamageStr)
 THEN
@@ -140,6 +140,14 @@ AND
 HasActiveStatus(_Mime, _Status, 0)
 THEN
 ApplyStatus(_Mime, _Status, -1.0, 1);
+ObjectSetFlag(_Mime, "Mimicry_BrawlerStatusActive");
+
+IF
+CharacterStatusApplied(_Mime, "LLMIME_BRAWLER_BONUS", _)
+AND
+ObjectGetFlag(_Mime, "Mimicry_BrawlerStatusActive", 1)
+THEN
+LLMIME_Brawler_ApplyStance(_Mime);
 //END_REGION
 
 //REGION BRAWLER_STANCE_REMOVAL
@@ -147,6 +155,11 @@ IF
 ItemUnEquipped(_Item, _Mime)
 AND
 IsTagged(_Item, "LLMIME_BrawlerFist", 1)
+THEN
+LLMIME_Brawler_RemoveStance(_Mime);
+
+IF
+CharacterStatusRemoved(_Mime, "LLMIME_BRAWLER", _)
 THEN
 LLMIME_Brawler_RemoveStance(_Mime);
 
@@ -159,6 +172,15 @@ HasActiveStatus(_Mime, _Status, 1)
 THEN
 RemoveStatus(_Mime, _Status);
 SetStoryEvent(_Mime, "LLMIME_Events_BrawlerStanceDeactivated_Status");
+
+PROC
+LLMIME_Brawler_RemoveStance((CHARACTERGUID)_Mime)
+AND
+CharacterIsDead(_Mime, 0)
+AND
+ObjectGetFlag(_Mime, "Mimicry_BrawlerStatusActive", 1)
+THEN
+ObjectClearFlag(_Mime, "Mimicry_BrawlerStatusActive");
 //END_REGION
 
 //REGION DAMAGE_TYPE_MATCHING

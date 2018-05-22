@@ -797,7 +797,7 @@ NOT DB_LLMIME_Mimic_Temp_TargetIterator(_Caster, _Mime, _Dummy, _TargetX, _Rotat
 
 //REGION CLEAR_MIMIC
 IF
-StoryEvent((CHARACTERGUID)_Mime, "LLMIME_Events_ClearMimeBonuses")
+StoryEvent((CHARACTERGUID)_Mime, "Mimicry_ClearMimeBonuses")
 THEN
 LLMIME_Mimicking_Targeting_ClearAllData(_Mime);
 //END_REGION
