@@ -1,24 +1,25 @@
-#SourceControlGenerator
-######################
+# SourceControlGenerator #
+##########################
 SourceControlGenerator.json
 
-#Levels
+# Levels
 ######################
 Mods/Mimicry_1e551d21-2e03-4ae9-a90a-9ad9cfe863cc/Levels/*
 Mods/Mimicry_1e551d21-2e03-4ae9-a90a-9ad9cfe863cc/Globals/*
 Editor/Mods/Mimicry_1e551d21-2e03-4ae9-a90a-9ad9cfe863cc/Levels/*
 
-#Compiled Story files
+# Story files        #
 ######################
 *.div
 *.raw
+story_orphanqueries_ignore.txt
 
-#Assets
-######################*
+# Asset Folders      #
+######################
 Public/Mimicry_1e551d21-2e03-4ae9-a90a-9ad9cfe863cc/Assets/*
 #Public/Mimicry_1e551d21-2e03-4ae9-a90a-9ad9cfe863cc/GUI/*
 
-#Editor files
+# Editor files       #
 ######################
 StatsEditorConfig.xml
 EffectEditorConfig.xml
@@ -26,7 +27,7 @@ DockPanel.config
 EditorBrowserMetadata_*
 EditorBrowserMetadata.xml
 
-#Assets
+# Assets             #
 ######################
 *.gr2
 *.dae
@@ -43,7 +44,7 @@ EditorBrowserMetadata.xml
 *.lsx
 *.lsmg
 
-# Logs #
+# Logs               #
 ######################
 *.log
 *.ailog
@@ -52,7 +53,7 @@ errors.txt
 dialoglog.txt
 personallog.txt
 
-#Binary Files
+# Binary Files       #
 ######################
 *.dat
 *.data
@@ -67,7 +68,7 @@ personallog.txt
 *.patch
 *.tmpl
 
-# Dump files
+# Dump files         #
 ######################
 *.stackdump
 *.dmp

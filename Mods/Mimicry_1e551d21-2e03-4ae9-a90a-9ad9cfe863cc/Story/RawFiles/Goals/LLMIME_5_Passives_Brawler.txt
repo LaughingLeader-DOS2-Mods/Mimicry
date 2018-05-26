@@ -207,7 +207,7 @@ AND
 StringConcatenate("LLMIME_Timers_BrawlerBonusAttack_", _MimeID, _TimerName)
 THEN
 //LLMIME_Brawler_ApplyBonusDamage(_Mime, _Target);
-ApplyStatus(_Target, "LLMIME_UNARMED_BONUS_HIT", 1.0, 1, _Mime);
+LLMIME_Brawler_IncrementHits(_Mime, _Target);
 DB_LLMIME_Brawler_BonusAttackTimer(_TimerName, _Mime, _Target);
 TimerLaunch(_TimerName, 250); // Prevents multiple bonus damage calls in a single attack
 
@@ -226,6 +226,31 @@ AND
 IntegerProduct(_Level, 5, _Damage)
 THEN
 ApplyDamage(_Target, _Damage, "Physical", _Mime);
+
+PROC
+LLMIME_Brawler_IncrementHits((CHARACTERGUID)_Mime, (GUIDSTRING)_Target)
+AND
+DB_LLMIME_Brawler_TotalHits(_Mime, _Target, _TotalHits)
+AND
+IntegerSum(_TotalHits, 1, _NextTotalHits)
+THEN
+NOT DB_LLMIME_Brawler_TotalHits(_Mime, _Target, _TotalHits);
+DB_LLMIME_Brawler_TotalHits(_Mime, _Target, _NextTotalHits);
+
+PROC
+LLMIME_Brawler_IncrementHits((CHARACTERGUID)_Mime, (GUIDSTRING)_Target)
+AND
+NOT DB_LLMIME_Brawler_TotalHits(_Mime, _Target, _)
+THEN
+DB_LLMIME_Brawler_TotalHits(_Mime, _Target, 1);
+
+PROC
+LLMIME_Brawler_IncrementHits((CHARACTERGUID)_Mime, (GUIDSTRING)_Target)
+AND
+DB_LLMIME_Brawler_TotalHits(_Mime, _Target, 3)
+THEN
+NOT DB_LLMIME_Brawler_TotalHits(_Mime, _Target, 3);
+ApplyStatus(_Target, "LLMIME_UNARMED_BONUS_HIT", 0.0, 1, _Mime);
 //END_REGION
 
 //REGION DOUBLE_ATTACK

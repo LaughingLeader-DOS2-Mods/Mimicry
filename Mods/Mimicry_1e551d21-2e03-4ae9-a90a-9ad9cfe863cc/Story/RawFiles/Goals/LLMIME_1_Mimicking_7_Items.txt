@@ -62,6 +62,16 @@ CharacterUseItem(_Mime, _Item, "");
 NOT DB_LLMIME_Mimicking_MimicQueue_Self(_Mime, _Caster, _Template, "Item");
 
 IF
+DB_CustomUseItemResponse(_Char, _Item, 0)
+AND
+DB_LLMIME_Mimicking_Items_DestroyNext(_Mime, _Item, _Template, _Caster)
+THEN
+ItemDestroy(_Item);
+SetOnStage(_Item, 0);
+LLMIME_Mimicking_OnMimicFailed(_Mime, _Caster, _Template, "Item");
+NOT DB_LLMIME_Mimicking_Items_DestroyNext(_Mime, _Item, _Template, _Caster);
+
+IF
 CharacterUsedItemFailed(_Mime, _Item)
 AND
 DB_LLMIME_Mimicking_Items_DestroyNext(_Mime, _Item, _Template, _Caster)

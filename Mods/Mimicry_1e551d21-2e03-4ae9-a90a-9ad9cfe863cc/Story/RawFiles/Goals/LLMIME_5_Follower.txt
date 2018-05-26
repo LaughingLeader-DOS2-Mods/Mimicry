@@ -9,7 +9,7 @@ KBSECTION
 PROC
 LLMIME_Follower_InitSettings()
 THEN
-LeaderLib_Follower_RegisterPosition((CHARACTERGUID)CHARACTERGUID_LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9, "TestLevel_LL_Mimicry", 4.92, 0.0, 6.42, "Mimicry_Events_MimeFollowerPositionReset");
+//LeaderLib_Follower_RegisterPosition((CHARACTERGUID)CHARACTERGUID_LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9, "TestLevel_LL_Mimicry", 4.92, 0.0, 6.42, "Mimicry_Events_MimeFollowerPositionReset");
 
 LLMIME_Follower_AddRandomAnimation("use_inspect");
 LLMIME_Follower_AddRandomAnimation("Teleport_01");
@@ -53,7 +53,7 @@ DB_LLMIME_Follower_RandomAnimation(_Index, _Animation);
 //END_REGION
 
 IF
-DialogStarted("LLMIME_ElfCompanion_Default", _Instance)
+DialogStarted("LLMIME_MimeCompanion_Default", _Instance)
 AND
 DialogGetInvolvedNPC(_Instance, 1, (CHARACTERGUID)_Mime)
 AND
@@ -70,10 +70,149 @@ THEN
 PlayAnimation(_Mime, _Animation);
 LeaderLog_Log("DEBUG", "[LLMIME:Follower] Played animation [",_Animation,"].");
 
-//REGION RECRUITMENT
+//REGION MUSICBOX_SUMMONING
+QRY
+LLMIME_Follower_QRY_CanSummon((CHARACTERGUID)_Char)
+AND
+CharacterIsInCombat(_Char, 0)
+AND
+CharacterIsDead(CHARACTERGUID_LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9, 0)
+AND
+ObjectGetFlag(CHARACTERGUID_LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9, "LeaderLib_IsFollower", 0)
+AND
+ObjectGetFlag(CHARACTERGUID_LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9, "Mimicry_FollowerIsLeaving", 0)
+THEN
+DB_NOOP(1);
+
+PROC
+LLMIME_Follower_ReturnIfNotInCombat((CHARACTERGUID)_Char)
+AND
+CharacterIsInCombat(_Char, 0)
+AND
+CharacterIsInCombat(CHARACTERGUID_LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9, 0)
+AND
+GetDistanceTo(_Char, CHARACTERGUID_LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9, _Dist)
+AND
+_Dist >= 30
+THEN
+CharacterUseSkill(CHARACTERGUID_LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9, "Shout_LLMIME_ReturnToOwner", _Char, 1, 1);
+
+IF
+CharacterUsedItem(_Char, _Item)
+AND
+IsTagged(_Item, "LLMIME_MimeSummonTool", 1)
+AND
+GetPosition(CHARACTERGUID_LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9, _x, _y, _z)
+THEN
+PlayEffectAtPosition("RS3_FX_Skills_Rogue_CloakDagger_Cast_01", _x, _y, _z);
+PlayEffect(CHARACTERGUID_LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9, "LLMIME_FX_Scripted_Follower_Summon_TeleportOverlay_01");
+LeaderLib_StartCharacterItemTimer(_Char, _Item, 100, "LLMIME_Timers_FollowerSummonTimer_", "LLMIME_StartSummoningFollower");
+
+IF
+CharacterItemEvent(_Char, _Item, "LLMIME_StartSummoningFollower")
+THEN
+LLMIME_Follower_SummonFollower(_Char, _Item);
+
+IF
+DB_CustomUseItemResponse(_Char, _Item, 0)
+AND
+GetTemplate(_Item, "UNIQUE_LLMIME_MusicBox_fd03b00c-5366-40e2-a8af-1d9f6a904ecb")
+AND
+CharacterIsInCombat(_Char, 1)
+THEN
+CharacterStatusText(_Char, "<font color='#FFFFFF'>*It seems unwise to play with a music box while in combat...*</font>");
+
+//Reset dismissal timer
+IF
+DB_CustomUseItemResponse(_Char, _Item, 0)
+AND
+GetTemplate(_Item, "UNIQUE_LLMIME_MusicBox_fd03b00c-5366-40e2-a8af-1d9f6a904ecb")
+AND
+ObjectGetFlag(CHARACTERGUID_LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9, "Mimicry_FollowerIsLeaving", 1)
+AND
+DB_LLMIME_Follower_ResetPositionTimer(CHARACTERGUID_LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9, _TimerName, _Stage)
+THEN
+TimerCancel(_TimerName);
+TimerLaunch(_TimerName, 10000);
+
+IF
+DB_CustomUseItemResponse(_Char, _Item, 0)
+AND
+GetTemplate(_Item, "UNIQUE_LLMIME_MusicBox_fd03b00c-5366-40e2-a8af-1d9f6a904ecb")
+AND
+ObjectGetFlag(CHARACTERGUID_LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9, "Mimicry_FollowerIsLeaving", 1)
+AND
+ObjectGetFlag(CHARACTERGUID_LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9, "Mimicry_FollowerIsRunningAway", 0)
+THEN
+ProcCharacterMoveToAndTalk(CHARACTERGUID_LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9, _Char, "LLMIME_MimeCompanion_Default", 0, "", 1, 5000.0, 0, 0);
+
+IF
+DialogStarted("LLMIME_MimeCompanion_Default", _Instance)
+AND
+DB_LLMIME_Follower_ResetPositionTimer(CHARACTERGUID_LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9, _TimerName, _Stage)
+THEN
+TimerPause(_TimerName);
+
+IF
+DialogEnded("LLMIME_MimeCompanion_Default", _Instance)
+AND
+DB_LLMIME_Follower_ResetPositionTimer(CHARACTERGUID_LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9, _TimerName, _Stage)
+THEN
+TimerUnpause(_TimerName);
+
+PROC
+LLMIME_Follower_SummonFollower((CHARACTERGUID)_Char, (ITEMGUID)_Item)
+AND
+ObjectGetFlag(CHARACTERGUID_LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9, "LeaderLib_IsFollower", 0)
+AND
+ItemIsInInventory(_Item, 0)
+AND
+GetPosition(_Item, _x, _y, _z)
+THEN
+PlayEffectAtPosition("RS3_FX_Skills_Void_Cast_VoidGlide_Root_01", _x, _y, _z);
+TeleportToPosition(CHARACTERGUID_LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9, _x, _y, _z, "Mimicry_Follower_MimeSummoned_Item", 0);
+SetOnStage(CHARACTERGUID_LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9, 1);
+CharacterCharacterSetEvent(_Char, CHARACTERGUID_LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9, "Mimicry_MimeSummoned");
+
+PROC
+LLMIME_Follower_SummonFollower((CHARACTERGUID)_Char, (ITEMGUID)_Item)
+AND
+ObjectGetFlag(CHARACTERGUID_LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9, "LeaderLib_IsFollower", 0)
+AND
+ItemIsInInventory(_Item, 1)
+THEN
+TeleportTo(CHARACTERGUID_LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9, _Char, "Mimicry_Follower_MimeSummoned_Char", 0);
+SetOnStage(CHARACTERGUID_LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9, 1);
+CharacterCharacterSetEvent(_Char, CHARACTERGUID_LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9, "Mimicry_MimeSummoned");
+
+IF
+StoryEvent((CHARACTERGUID)_Mime, "Mimicry_Follower_MimeSummoned_Char")
+AND
+GetPosition(_Mime, _x, _y, _z)
+THEN
+PlayEffectAtPosition("RS3_FX_Skills_Void_Cast_VoidGlide_Root_01", _x, _y, _z);
+
+IF
+CharacterCharacterEvent(_Summoner, _Mime, "Mimicry_MimeSummoned")
+THEN
+ObjectSetFlag(_Mime, "Mimicry_MimeFollowerJustSummoned");
+ProcCharacterMoveToAndTalk(_Mime, _Summoner, "LLMIME_MimeCompanion_Default", 0, "", 1, 5000.0, 0, 0);
+
+IF
+DialogEnded("LLMIME_MimeCompanion_Default", _Instance)
+AND
+DialogGetInvolvedNPC(_Instance, 1, (CHARACTERGUID)_Mime)
+AND
+ObjectGetFlag(_Mime, "Mimicry_MimeFollowerJustSummoned", 1)
+THEN
+ObjectClearFlag(_Mime, "Mimicry_MimeFollowerJustSummoned");
+//END_REGION
+
+//REGION RECRUITMENT_EVENTS
 IF
 StoryEvent((CHARACTERGUID)_Mime, "LeaderLib_Events_FollowerRecruited")
 THEN
+ObjectClearFlag(_Mime, "Mimicry_FollowerIsLeaving");
 CharacterEnableAllCrimes(_Mime);
 SetCanJoinCombat(_Mime, 1);
 SetFaction(_Mime,"Good NPC");
@@ -93,6 +232,7 @@ StoryEvent((CHARACTERGUID)_Mime, "LeaderLib_Events_FollowerDismissed")
 AND
 IsTagged(_Mime, "LLMIME_MimeFollower", 1)
 THEN
+ObjectSetFlag(_Mime, "Mimicry_FollowerIsLeaving");
 CharacterDisableAllCrimes(_Mime);
 SetCanJoinCombat(_Mime, 0);
 SetFaction(_Mime,"Neutral NPC");
@@ -115,43 +255,53 @@ LeaderLog_Log("DEBUG", "[LLMIME:Follower] Started position reset timer.");
 IF
 TimerFinished(_TimerName)
 AND
-DB_LLMIME_Follower_ResetPositionTimer(_Mime, _TimerName, 2)
-AND
-GetVarObject(_Mime, "LeaderLib_Follower_LastOwner", _Owner)
-THEN
-NOT DB_LLMIME_Follower_ResetPositionTimer(_Mime, _TimerName, 2);
-CharacterDisappearOutOfSightToObject(_Mime, _Owner, 1, "LLMIME_Events_MimeFollowerDisappeared", 1);
-
-IF
-StoryEvent((CHARACTERGUID)_Mime, "LLMIME_Events_MimeFollowerDisappeared")
-THEN
-LLLIB_Follower_ResetPosition(_Mime);
-LeaderLog_Log("DEBUG", "[LLMIME:Follower] Reset follower's position to the recruit position.");
-
-IF
-StoryEvent((CHARACTERGUID)_Mime, "Mimicry_Events_MimeFollowerPositionReset")
-THEN
-SetOnStage(_Mime, 1);
-LeaderLog_Log("DEBUG", "[LLMIME:Follower] Set Mime follower on stage.");
-
-IF
-TimerFinished(_TimerName)
-AND
-DB_LLMIME_Follower_ResetPositionTimer(_Mime, _TimerName, 2)
-THEN
-NOT DB_LLMIME_Follower_ResetPositionTimer(_Mime, _TimerName, 2);
-LLLIB_Follower_ResetPosition(_Mime, "RS3_FX_GP_ScriptedEvent_Teleport_GenericSmoke_01");
-LeaderLog_Log("DEBUG", "[LLMIME:Follower] Reset follower's position to the recruit position.");
-
-IF
-TimerFinished(_TimerName)
-AND
 DB_LLMIME_Follower_ResetPositionTimer(_Mime, _TimerName, 1)
 THEN
 NOT DB_LLMIME_Follower_ResetPositionTimer(_Mime, _TimerName, 1);
 //ApplyStatus(_Mime, "INVISIBLE", 3.0, 1);
 TimerLaunch(_TimerName, 1000);
 DB_LLMIME_Follower_ResetPositionTimer(_Mime, _TimerName, 2);
+
+IF
+TimerFinished(_TimerName)
+AND
+DB_LLMIME_Follower_ResetPositionTimer(_Mime, _TimerName, 2)
+AND
+GetVarObject(_Mime, "LeaderLib_Follower_LastOwner", _Owner)
+THEN
+NOT DB_LLMIME_Follower_ResetPositionTimer(_Mime, _TimerName, 2);
+ObjectSetFlag(_Mime, "Mimicry_FollowerIsRunningAway");
+CharacterDisappearOutOfSightToObject(_Mime, _Owner, 1, "LLMIME_Events_MimeFollowerDisappeared", 1);
+
+IF
+StoryEvent((CHARACTERGUID)_Mime, "LLMIME_Events_MimeFollowerDisappeared")
+THEN
+//LLLIB_Follower_ResetPosition(_Mime);
+//LeaderLog_Log("DEBUG", "[LLMIME:Follower] Reset follower's position to the recruit position.");
+Poof(_Mime);
+LeaderLog_Log("DEBUG", "[LLMIME:Follower] Poofed the Mime follower.");
+ObjectClearFlag(_Mime, "Mimicry_FollowerIsLeaving");
+ObjectClearFlag(_Mime, "Mimicry_FollowerIsRunningAway");
+
+/*
+IF
+StoryEvent((CHARACTERGUID)_Mime, "Mimicry_Events_MimeFollowerPositionReset")
+THEN
+SetOnStage(_Mime, 1);
+LeaderLog_Log("DEBUG", "[LLMIME:Follower] Set Mime follower on stage.");
+*/
+
+//No last owner found
+IF
+TimerFinished(_TimerName)
+AND
+DB_LLMIME_Follower_ResetPositionTimer(_Mime, _TimerName, 2)
+THEN
+NOT DB_LLMIME_Follower_ResetPositionTimer(_Mime, _TimerName, 2);
+//LLLIB_Follower_ResetPosition(_Mime, "RS3_FX_GP_ScriptedEvent_Teleport_GenericSmoke_01");
+//LeaderLog_Log("DEBUG", "[LLMIME:Follower] Reset follower's position to the recruit position.");
+Poof(_Mime);
+LeaderLog_Log("DEBUG", "[LLMIME:Follower] Poofed the Mime follower.");
 //END_REGION
 
 //REGION NON_RECRUITED_COMBAT
@@ -234,7 +384,7 @@ CharacterAddActionPoints(_Mime, 2);
 CharacterUseSkill(_Mime, "Shout_LLMIME_BrawlerStance", _Mime, 1, 1);
 //END_REGION
 
-//REGION RETURN
+//REGION RETURN_SKILL
 IF
 FleeCombat(_Owner)
 AND

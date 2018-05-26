@@ -3,109 +3,22 @@ SubGoalCombiner SGC_AND
 INITSECTION
 
 KBSECTION
-//REGION BRAWLER_FIST
-/*
-PROC
-LLMIME_Brawler_RegisterFist((CHARACTERGUID)_Mime, (ITEMGUID)_Fist)
-THEN
-DB_LLMIME_Brawler_SpawnedFist(_Mime, _Fist);
-
-IF
-CharacterStatusApplied(_Mime, "LLMIME_BRAWLER_BONUS", _)
-AND
-DB_LLMIME_Brawler_SpawnedFist(_Mime, _Fist)
-AND
-ObjectExists(_Fist, 0)
-THEN
-NOT DB_LLMIME_Brawler_SpawnedFist(_Mime, _Fist);
-
-IF
-CharacterStatusApplied(_Mime, "LLMIME_BRAWLER_BONUS", _)
-AND
-DB_LLMIME_Brawler_SpawnedFist(_Mime, _Fist)
-AND
-NOT LLMIME_QRY_ItemIsInWeaponSlot(_Mime, _Fist)
-THEN
-ItemToInventory(_Fist, _Mime, 1, 0, 1);
-
-IF
-CharacterStatusApplied(_Mime, "LLMIME_BRAWLER_BONUS", _)
-AND
-NOT DB_LLMIME_Brawler_SpawnedFist(_Mime, _)
-AND
-DB_LLMIME_Templates("BrawlerFist", _Template)
-AND
-GetItemForItemTemplateInInventory(_Mime, _Template, _Fist)
-THEN
-LLMIME_Brawler_RegisterFist(_Mime, _Fist);
-*/
-/*
-IF
-CharacterStatusApplied(_Mime, "LLMIME_BRAWLER_BONUS", _)
-AND
-NOT DB_LLMIME_Brawler_SpawnedFist(_Mime, _)
-AND
-LLMIME_QRY_NoWeaponsEquipped(_Mime)
-AND
-GetPosition(_Mime, _x, _y, _z)
-AND
-DB_LLMIME_Templates("BrawlerFist", _Template)
-AND
-CreateItemTemplateAtPosition(_Template, _x, _y, _z, _Fist)
-AND
-CharacterGetLevel(_Mime, _Level)
-THEN
-ItemLevelUpTo(_Fist, _Level);
-CharacterEquipItem(_Mime, _Fist);
-LLMIME_Brawler_RegisterFist(_Mime, _Fist);
-*/
-
-/*
-IF
-ItemDropped(_Fist)
-AND
-IsTagged(_Fist, "LLMIME_BrawlerFist", 1)
-AND
-DB_LLMIME_Brawler_SpawnedFist(_Mime, _Fist)
-THEN
-ItemToInventory(_Fist, _Mime, 0, 1);
-
-IF
-ItemDropped(_Fist)
-AND
-IsTagged(_Fist, "LLMIME_BrawlerFist", 1)
-AND
-GetTemplate(_Fist, _Template)
-AND
-DB_LLMIME_Templates("BrawlerFist", _Template)
-THEN
-ItemDestroy(_Fist);
-
-IF
-ItemDestroyed(_Fist)
-AND
-DB_LLMIME_Brawler_SpawnedFist(_Mime, _Fist)
-THEN
-NOT DB_LLMIME_Brawler_SpawnedFist(_Mime, _Fist);
-*/
-//END_REGION
-
 //REGION FIST_EQUIPPING
-IF
-CanUseItem(_Character, _Item, _RequestID)
+PROC
+ProcBlockUseOfItem(_Character, _Item)
 AND
 IsTagged(_Item, "LLMIME_BrawlerFist", 1)
 AND
 NOT LLMIME_QRY_CharacterIsAMime(_Character)
 THEN
 CharacterStatusText(_Character, "<font color='#FF0000'>You try to use fight like a brawler, but it is futile.</font>");
-RequestProcessed(_Character, _RequestID, 0);
-DB_LLMIME_Items_Temp_BlockedItem(_Character, _Item);
+DB_CustomUseItemResponse(_Character, _Item, 0);
+//DB_LLMIME_Items_Temp_BlockedItem(_Character, _Item);
 //END_REGION
 
 //REGION MASK_EQUIPPING
-IF
-CanUseItem(_Character, _Item, _RequestID)
+PROC
+ProcBlockUseOfItem(_Character, _Item)
 AND
 LLMIME_Mime_QRY_IsMimeItem(_Item)
 AND
@@ -118,18 +31,39 @@ AND
 CharacterIsInCombat(_Character, 1)
 THEN
 CharacterStatusText(_Character, "<font color='#FF0000'>You can't equip the Mask of Mimicry in combat!</font>");
-RequestProcessed(_Character, _RequestID, 0);
-DB_LLMIME_Items_Temp_BlockedItem(_Character, _Item);
+DB_CustomUseItemResponse(_Character, _Item, 0);
+//DB_LLMIME_Items_Temp_BlockedItem(_Character, _Item);
 //END_REGION
 
-//REGION EQUIP_BLOCKING
-IF
-ItemEquipped(_Item, _Character)
+//REGION MUSIC_BOX
+PROC
+ProcBlockUseOfItem(_Char, _Item)
 AND
-DB_LLMIME_Items_Temp_BlockedItem(_Character, _Item)
+GetTemplate(_Item, "UNIQUE_LLMIME_MusicBox_fd03b00c-5366-40e2-a8af-1d9f6a904ecb")
+AND
+NOT LLMIME_Follower_QRY_CanSummon(_Char)
 THEN
-NOT DB_LLMIME_Items_Temp_BlockedItem(_Character, _Item);
-CharacterUnequipItem(_Character, _Item);
+CharacterStatusText(_Char, "*The music box key refuses to twist.*");
+DB_CustomUseItemResponse(_Char, _Item, 0);
+
+IF
+DB_CustomUseItemResponse(_Char, _Item, 0)
+AND
+GetTemplate(_Item, "UNIQUE_LLMIME_MusicBox_fd03b00c-5366-40e2-a8af-1d9f6a904ecb")
+AND
+ObjectGetFlag(CHARACTERGUID_LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9, "LeaderLib_IsFollower", 1)
+THEN
+LLMIME_Follower_ReturnIfNotInCombat(_Char);
+
+PROC
+ProcBlockUseOfItem(_Char, _Item)
+AND
+GetTemplate(_Item, "UNIQUE_LLMIME_MusicBox_fd03b00c-5366-40e2-a8af-1d9f6a904ecb")
+AND
+LLMIME_Follower_QRY_CanSummon(_Char)
+THEN
+CharacterStatusText(_Char, "*As you turn the key, the music box echoes an off-beat jingle.*");
+DB_CustomUseItemResponse(_Char, _Item, 1);
 //END_REGION
 
 //REGION ITEM_LEVELING
@@ -150,6 +84,16 @@ AND
 CharacterGetLevel(_Character, _Level)
 THEN
 ItemLevelUpTo(_Item, _Level);
+//END_REGION
+
+//REGION EQUIP_BLOCKING
+IF
+ItemEquipped(_Item, _Character)
+AND
+DB_LLMIME_Items_Temp_BlockedItem(_Character, _Item)
+THEN
+NOT DB_LLMIME_Items_Temp_BlockedItem(_Character, _Item);
+CharacterUnequipItem(_Character, _Item);
 //END_REGION
 
 //REGION DEBUG
@@ -195,6 +139,15 @@ AND
 CharacterGetDisplayName(_Mime, _, _Name)
 THEN
 LeaderLog_Log("DEBUG", "[LLMIME:Debug:CharacterUsedItemTemplate] [",_Name,"] used item [",_Template,"].");
+
+IF
+CharacterUsedItemFailed(_Mime, _Item)
+AND
+GetTemplate(_Item, _Template)
+AND
+CharacterGetDisplayName(_Mime, _, _Name)
+THEN
+LeaderLog_Log("DEBUG", "[LLMIME:Debug:CharacterUsedItemFailed] [",_Name,"] failed to use item [",_Template,"].");
 
 IF
 ItemDestroying(_Item)
