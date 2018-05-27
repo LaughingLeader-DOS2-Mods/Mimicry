@@ -52,10 +52,15 @@ THEN
 DB_LLMIME_Follower_RandomAnimation(_Index, _Animation);
 //END_REGION
 
+//REGION PLAY_RANDOM_ANIM
 IF
 DialogStarted("LLMIME_MimeCompanion_Default", _Instance)
 AND
 DialogGetInvolvedNPC(_Instance, 1, (CHARACTERGUID)_Mime)
+AND
+DialogGetInvolvedPlayer(_Instance, 1, (CHARACTERGUID)_Player)
+AND
+IsTagged(_Player, "LLMIME_MIME", 0)
 AND
 ObjectGetFlag(_Mime, "LeaderLib_CharacterIsFollowing", 0) // Don't bother if following, since anims won't play
 AND
@@ -69,6 +74,7 @@ DB_LLMIME_Follower_RandomAnimation(_Index, _Animation)
 THEN
 PlayAnimation(_Mime, _Animation);
 LeaderLog_Log("DEBUG", "[LLMIME:Follower] Played animation [",_Animation,"].");
+//END_REGION
 
 //REGION MUSICBOX_SUMMONING
 QRY
