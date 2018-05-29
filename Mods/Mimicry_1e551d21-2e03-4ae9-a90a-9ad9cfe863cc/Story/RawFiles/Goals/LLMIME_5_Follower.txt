@@ -238,7 +238,6 @@ StoryEvent((CHARACTERGUID)_Mime, "LeaderLib_Events_FollowerDismissed")
 AND
 IsTagged(_Mime, "LLMIME_MimeFollower", 1)
 THEN
-ObjectSetFlag(_Mime, "Mimicry_FollowerIsLeaving");
 CharacterDisableAllCrimes(_Mime);
 SetCanJoinCombat(_Mime, 0);
 SetFaction(_Mime,"Neutral NPC");
@@ -247,6 +246,17 @@ IF
 StoryEvent((CHARACTERGUID)_Mime, "LeaderLib_Events_FollowerDismissed")
 AND
 IsTagged(_Mime, "LLMIME_MimeFollower", 1)
+AND
+CharacterIsDead(_Mime, 0)
+THEN
+ObjectSetFlag(_Mime, "Mimicry_FollowerIsLeaving");
+
+IF
+StoryEvent((CHARACTERGUID)_Mime, "LeaderLib_Events_FollowerDismissed")
+AND
+IsTagged(_Mime, "LLMIME_MimeFollower", 1)
+AND
+ObjectGetFlag(_Mime, "Mimicry_FollowerIsLeaving", 1)
 AND
 NOT DB_LLMIME_Follower_ResetPositionTimer(_Mime, _, _)
 AND
@@ -421,6 +431,98 @@ IF
 StoryEvent((CHARACTERGUID)_Follower, "LLMIME_Events_PlayReturnEffect")
 THEN
 PlayEffect(_Follower, "RS3_FX_Skills_Void_Cast_VoidGlide_Root_01");
+//END_REGION
+
+//REGION GHOST
+IF
+CharacterDied(CHARACTERGUID_LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9)
+AND
+DB_LLMIME_FollowerGhost(_MimeGhost)
+AND
+ObjectExists((CHARACTERGUID)_MimeGhost, 0)
+THEN
+NOT DB_LLMIME_FollowerGhost(_MimeGhost);
+
+IF
+CharacterDied(CHARACTERGUID_LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9)
+AND
+DB_LLMIME_FollowerGhost(_MimeGhost)
+AND
+ObjectExists((CHARACTERGUID)_MimeGhost, 1)
+THEN
+TeleportTo(_MimeGhost, CHARACTERGUID_LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9, "Mimicry_MimeGhostAppeared", 0);
+
+IF
+StoryEvent(_MimeGhost, "Mimicry_MimeGhostAppeared")
+THEN
+SetOnStage(_MimeGhost, 1);
+
+IF
+CharacterDied(CHARACTERGUID_LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9)
+AND
+NOT DB_LLMIME_FollowerGhost(_)
+AND
+GetPosition(CHARACTERGUID_LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9, _x, _y, _z)
+AND
+TemporaryCharacterCreateAtPosition(_x, _y, _z, "S_LLMIME_Ghost_Mime_d699d0e5-250d-4d4d-bacf-96e19e60235c", 1, _MimeGhost)
+THEN
+DB_LLMIME_FollowerGhost(_MimeGhost); 
+DB_Dialogs(_MimeGhost, "LLMIME_MimeCompanion_Ghost");
+CharacterLinkGhost(CHARACTERGUID_LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9, _MimeGhost);
+
+IF
+CharacterDied(CHARACTERGUID_LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9)
+AND
+DB_LLMIME_FollowerGhost(_MimeGhost)
+AND
+DB_LLLIB_PartyFollower(_Owner, CHARACTERGUID_LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9)
+THEN
+ObjectSetFlag(_MimeGhost,"GLO_Ghost_Visible");
+
+IF
+CharacterResurrected(CHARACTERGUID_LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9)
+AND
+DB_LLMIME_FollowerGhost(_MimeGhost)
+THEN
+SetOnStage(_MimeGhost, 0);
+
+IF
+RegionEnded(_)
+AND
+DB_LLMIME_FollowerGhost(_MimeGhost)
+THEN
+SetOnStage(_MimeGhost, 0);
+//DestroyGhost(_MimeGhost);
+NOT DB_LLMIME_FollowerGhost(_MimeGhost);
+//END_REGION
+
+//REGION GHOST_MASK
+IF
+ObjectFlagSet("Mimicry_MaskTakenFromFollower", (CHARACTERGUID)_Player, _Instance)
+AND
+DialogGetInvolvedNPC(_Instance, 1, (CHARACTERGUID)_Ghost)
+//AND
+//DB_LLMIME_FollowerGhost(_Ghost)
+THEN
+CharacterUnlinkGhost(CHARACTERGUID_LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9, _Ghost);
+//DestroyGhost(_Ghost);
+CharacterDie(_Ghost, 0, "", _Player);
+LeaderLib_Follower_DismissCharacter(CHARACTERGUID_LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9, "", 0);
+SetTag(CHARACTERGUID_LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9, "BLOCK_RESURRECTION");
+
+IF
+ObjectFlagSet("Mimicry_MaskTakenFromFollower", (CHARACTERGUID)_Player, _Instance)
+AND
+DB_LLMIME_Templates("Mask_A", _Template)
+AND
+GetItemForItemTemplateInInventory(CHARACTERGUID_LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9, _Template, _Mask)
+THEN
+CharacterUnequipItem(CHARACTERGUID_LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9, _Mask);
+ItemToInventory(_Mask, _Player, 1, 1, 1);
+//END_REGION
+
+//REGION REVIVAL
+
 //END_REGION
 EXITSECTION
 
