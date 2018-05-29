@@ -17,6 +17,7 @@ DB_LLMIME_PassiveData("LLMIME_CONCENTRATION", "LLMIME_CONCENTRATION_BONUS", "LLM
 DB_LLMIME_Templates("Mask_A", "EQ_Armor_UNIQUE_LLMIME_MimeMask_A_8e66ce79-8c8e-4c22-a8ea-5a99977f4ea8");
 DB_LLMIME_Templates("BrawlerFist", "WPN_LLMIME_BrawlerFist_e1bda904-93c2-4f6f-8136-1a547279fd1f");
 DB_LLMIME_Templates("MimeManual", "WPN_LLMIME_BrawlerFist_e1bda904-93c2-4f6f-8136-1a547279fd1f");
+DB_LLMIME_Templates("MusicBox", "UNIQUE_LLMIME_MusicBox_fd03b00c-5366-40e2-a8af-1d9f6a904ecb");
 
 //LeaderLib_Register_StatusToggleSkill("Shout_LLMIME_BrawlerStance", "LLMIME_BRAWLER_STANCE", -1.0, 1);
 

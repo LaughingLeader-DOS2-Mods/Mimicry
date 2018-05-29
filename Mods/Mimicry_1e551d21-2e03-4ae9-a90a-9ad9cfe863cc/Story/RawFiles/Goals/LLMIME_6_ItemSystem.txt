@@ -39,9 +39,41 @@ DB_CustomUseItemResponse(_Character, _Item, 0);
 PROC
 ProcBlockUseOfItem(_Char, _Item)
 AND
-GetTemplate(_Item, "UNIQUE_LLMIME_MusicBox_fd03b00c-5366-40e2-a8af-1d9f6a904ecb")
+GetTemplate(_Item, _Template)
+AND
+DB_LLMIME_Templates("MusicBox", _Template)
+THEN
+LLMIME_Items_OnMusicBoxUsed(_Char, _Item);
+
+//Resurrection dialog (mask required)
+PROC
+LLMIME_Items_OnMusicBoxUsed((CHARACTERGUID)_Char, (ITEMGUID)_Item)
+AND
+NOT DB_CustomUseItemResponse(_Char, _Item, _)
+AND
+CharacterIsInCombat(_Char, 0)
 AND
 NOT LLMIME_Follower_QRY_CanSummon(_Char)
+AND
+LLMIME_Follower_QRY_CanResurrectMime(_Char)
+THEN
+DB_CustomUseItemResponse(_Char, _Item, 0);
+Proc_StartDialog(0, "LLMIME_MusicBox_Resurrection", _Item, _Char);
+
+PROC
+LLMIME_Items_OnMusicBoxUsed((CHARACTERGUID)_Char, (ITEMGUID)_Item)
+AND
+NOT DB_CustomUseItemResponse(_Char, _Item, _)
+AND
+LLMIME_Follower_QRY_CanSummon(_Char)
+THEN
+CharacterStatusText(_Char, "*As you turn the key, the music box echoes an off-beat jingle.*");
+DB_CustomUseItemResponse(_Char, _Item, 1);
+
+PROC
+LLMIME_Items_OnMusicBoxUsed((CHARACTERGUID)_Char, (ITEMGUID)_Item)
+AND
+NOT DB_CustomUseItemResponse(_Char, _Item, _)
 THEN
 CharacterStatusText(_Char, "*The music box key refuses to twist.*");
 DB_CustomUseItemResponse(_Char, _Item, 0);
@@ -49,21 +81,15 @@ DB_CustomUseItemResponse(_Char, _Item, 0);
 IF
 DB_CustomUseItemResponse(_Char, _Item, 0)
 AND
-GetTemplate(_Item, "UNIQUE_LLMIME_MusicBox_fd03b00c-5366-40e2-a8af-1d9f6a904ecb")
+GetTemplate(_Item, _Template)
+AND
+DB_LLMIME_Templates("MusicBox", _Template)
+AND
+CharacterIsDead(CHARACTERGUID_LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9, 0)
 AND
 ObjectGetFlag(CHARACTERGUID_LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9, "LeaderLib_IsFollower", 1)
 THEN
 LLMIME_Follower_ReturnIfNotInCombat(_Char);
-
-PROC
-ProcBlockUseOfItem(_Char, _Item)
-AND
-GetTemplate(_Item, "UNIQUE_LLMIME_MusicBox_fd03b00c-5366-40e2-a8af-1d9f6a904ecb")
-AND
-LLMIME_Follower_QRY_CanSummon(_Char)
-THEN
-CharacterStatusText(_Char, "*As you turn the key, the music box echoes an off-beat jingle.*");
-DB_CustomUseItemResponse(_Char, _Item, 1);
 //END_REGION
 
 //REGION ITEM_LEVELING
