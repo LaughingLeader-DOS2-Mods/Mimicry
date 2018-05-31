@@ -45,6 +45,32 @@ DB_LLMIME_Mimicking_Whitelist_WeaponCopy_SkillTypes("Rain");
 DB_LLMIME_Mimicking_Blacklist_WeaponCopy_IgnoreSkillsWith("_Grenade_");
 //END_REGION
 
+//REGION COPY_ATTRIBUTES
+PROC
+LLMIME_Mimicking_CopyAttributes((CHARACTERGUID)_Mime, (CHARACTERGUID)_Caster)
+AND
+DB_LLLIB_Attributes(_Attribute)
+AND
+CharacterGetAttribute(_Caster, _Attribute, _Val)
+AND
+CharacterGetAttribute(_Mime, _Attribute, _CurrentVal)
+AND
+IntegerSubtract(_Val, _CurrentVal, _AddVal)
+AND
+_AddVal > 0
+THEN
+CharacterAddAttribute(_Mime, _Attribute, _AddVal);
+DB_LLMIME_Mimicking_MimickedAttribute(_Mime, _Attribute, _AddVal);
+
+PROC
+LLMIME_Mimicking_ClearCopiedAttributes((CHARACTERGUID)_Mime)
+AND
+DB_LLMIME_Mimicking_MimickedAttribute(_Mime, _Attribute, _AddVal)
+THEN
+CharacterRemoveAttribute(_Mime, _Attribute, _AddVal);
+NOT DB_LLMIME_Mimicking_MimickedAttribute(_Mime, _Attribute, _AddVal);
+//END_REGION
+
 //REGION BLACKLIST_CHECK_ITEMS
 QRY
 LLMIME_Mimicking_QRY_ItemIsAllowed((ITEMGUID)_Item)

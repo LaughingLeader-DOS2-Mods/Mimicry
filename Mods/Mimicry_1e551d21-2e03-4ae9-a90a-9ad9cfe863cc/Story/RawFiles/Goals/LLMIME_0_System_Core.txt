@@ -189,6 +189,20 @@ THEN
 DB_NOOP(1);
 
 QRY
+LLMIME_QRY_WeaponIsUnarmed((ITEMGUID)_Item)
+AND
+LLMIME_QRY_WeaponIsBrawlerFist(_Item)
+THEN
+DB_NOOP(1);
+
+QRY
+LLMIME_QRY_WeaponIsUnarmed((ITEMGUID)_Item)
+AND
+_Item == NULL_00000000-0000-0000-0000-000000000000
+THEN
+DB_NOOP(1);
+
+QRY
 LLMIME_QRY_WeaponEquippedInMainHand((CHARACTERGUID)_Mime)
 AND
 CharacterGetEquippedItem(_Mime, "Weapon", (ITEMGUID)_Item)

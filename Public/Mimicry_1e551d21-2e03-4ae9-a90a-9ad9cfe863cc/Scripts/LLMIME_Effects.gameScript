@@ -9,7 +9,7 @@ ON
 	OnCharacterEvent(_Char, "LLMIME_Events_BrawlerStanceActivated_Start")
 ACTIONS
 	CharacterPlayEffect(_Char, "LLMIME_FX_Skills_BrawlerStance_Activate_Root_01", "Dummy_Root")
-	CharacterPlayEffect(_Char, "LLMIME_FX_Skills_BrawlerStance_Activate_Overlay_01", "Dummy_Root")
+	//CharacterPlayEffect(_Char, "LLMIME_FX_Skills_BrawlerStance_Activate_Overlay_01", "Dummy_Root")
 	
 EVENT BrawlerStance_Activated_SkillCast
 VARS
@@ -37,7 +37,7 @@ ON
 	OnCharacterEvent(_Char, "LLMIME_Events_BrawlerStanceDeactivated_Start")
 ACTIONS
 	CharacterPlayEffect(_Char, "LLMIME_FX_Skills_BrawlerStance_Deactivate_Root_01", "Dummy_Root")
-	CharacterPlayEffect(_Char, "LLMIME_FX_Skills_BrawlerStance_Deactivate_Overlay_01")
+	//CharacterPlayEffect(_Char, "LLMIME_FX_Skills_BrawlerStance_Deactivate_Overlay_01")
 	
 EVENT BrawlerStance_Deactivated_SkillCast
 VARS

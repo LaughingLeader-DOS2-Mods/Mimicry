@@ -37,12 +37,161 @@ GetPosition(_Mime, _MimeX, _, _MimeZ)
 AND
 GetRotation(_Mime, _, _MimeRotation, _)
 AND
-RealSum(_MimeX, _xdiff, _MimeTargetX)
+RealSubtract(_Rotation, _MimeRotation, _RotDiff)
 AND
-RealSum(_MimeZ, _zdiff, _MimeTargetZ)
+LLMIME_Targeting_QRY_DetermineRotationDifference(_Rotation, _MimeRotation)
+AND
+DB_LLMIME_Targeting_Temp_RotationDiff(_XMult, _ZMult)
+AND
+RealProduct(_xdiff, _XMult, _MimeTargetXFactor)
+AND
+RealProduct(_zdiff, _ZMult, _MimeTargetZFactor)
+AND
+RealSum(_MimeX, _MimeTargetXFactor, _MimeTargetX)
+AND
+RealSum(_MimeZ, _MimeTargetZFactor, _MimeTargetZ)
 THEN
+NOT DB_LLMIME_Targeting_Temp_RotationDiff(_XMult, _ZMult);
 LLMIME_Mimic_GetTargetNearPosition(_Caster, _Mime, _MimeTargetX, _Rotation, _MimeTargetZ, _TargetPriority, _Action, _ActionType);
 //LLMINE_Debug_TracePositions(_StartX, _StartY, _StartZ, _TargetX, _Rotation, _TargetZ, _MimeX, _MimeY, _MimeZ, _MimeTargetX, _MimeTargetY, _MimeTargetZ);
+//END_REGION
+
+//REGION ROTATION_DIRECTIONS
+QRY
+LLMIME_Targeting_QRY_DetermineRotationDifference((REAL)_Rotation, (REAL)_MimeRotation)
+AND
+_Rotation == _MimeRotation
+THEN
+DB_LLMIME_Targeting_Temp_RotationDiff(1.0, 1.0);
+
+QRY
+LLMIME_Targeting_QRY_DetermineRotationDifference((REAL)_Rotation, (REAL)_MimeRotation)
+AND
+_Rotation != _MimeRotation
+AND
+LLMIME_Targeting_QRY_SetRotationDirection(_Rotation)
+AND
+LLMIME_Targeting_QRY_SetRotationDirection(_MimeRotation)
+AND
+DB_LLMIME_Temp_RotationDirection(_Rotation, _CasterDirection)
+AND
+DB_LLMIME_Temp_RotationDirection(_Rotation, _MimeDirection)
+THEN
+LLMIME_Targeting_DetermineRotationDifference(_CasterDirection, _MimeDirection);
+
+PROC
+LLMIME_Targeting_DetermineRotationDifference((STRING)_CasterDirection, (STRING)_MimeDirection)
+AND
+_CasterDirection == _MimeDirection
+THEN
+DB_LLMIME_Targeting_Temp_RotationDiff(1.0, 1.0);
+
+//NS/SN
+PROC
+LLMIME_Targeting_DetermineRotationDifference("north", "south")
+THEN
+DB_LLMIME_Targeting_Temp_RotationDiff(1.0, -1.0);
+
+PROC
+LLMIME_Targeting_DetermineRotationDifference("south", "north")
+THEN
+DB_LLMIME_Targeting_Temp_RotationDiff(1.0, -1.0);
+
+//EW/WE
+PROC
+LLMIME_Targeting_DetermineRotationDifference("east", "west")
+THEN
+DB_LLMIME_Targeting_Temp_RotationDiff(-1.0, 1.0);
+
+PROC
+LLMIME_Targeting_DetermineRotationDifference("west", "east")
+THEN
+DB_LLMIME_Targeting_Temp_RotationDiff(1.0, -1.0);
+
+//NE/EN
+PROC
+LLMIME_Targeting_DetermineRotationDifference("east", "north")
+THEN
+DB_LLMIME_Targeting_Temp_RotationDiff(-1.0, 1.0);
+
+PROC
+LLMIME_Targeting_DetermineRotationDifference("north", "east")
+THEN
+DB_LLMIME_Targeting_Temp_RotationDiff(1.0, -1.0);
+
+//NW/WN
+PROC
+LLMIME_Targeting_DetermineRotationDifference("north", "west")
+THEN
+DB_LLMIME_Targeting_Temp_RotationDiff(-1.0, -1.0);
+
+PROC
+LLMIME_Targeting_DetermineRotationDifference("west", "north")
+THEN
+DB_LLMIME_Targeting_Temp_RotationDiff(1.0, 1.0);
+
+//SE/ES
+PROC
+LLMIME_Targeting_DetermineRotationDifference("south", "east")
+THEN
+DB_LLMIME_Targeting_Temp_RotationDiff(1.0, 1.0);
+
+PROC
+LLMIME_Targeting_DetermineRotationDifference("east", "south")
+THEN
+DB_LLMIME_Targeting_Temp_RotationDiff(-1.0, -1.0);
+
+//SW/WS
+PROC
+LLMIME_Targeting_DetermineRotationDifference("south", "west")
+THEN
+DB_LLMIME_Targeting_Temp_RotationDiff(-1.0, 1.0);
+
+PROC
+LLMIME_Targeting_DetermineRotationDifference("west", "south")
+THEN
+DB_LLMIME_Targeting_Temp_RotationDiff(1.0, -1.0);
+
+QRY
+LLMIME_Targeting_QRY_SetRotationDirection((REAL)_Rotation)
+AND
+_Rotation >= -45.0
+AND
+_Rotation <= 45.0
+THEN
+DB_LLMIME_Temp_RotationDirection(_Rotation, "south");
+
+QRY
+LLMIME_Targeting_QRY_SetRotationDirection((REAL)_Rotation)
+AND
+_Rotation >= 46.0
+AND
+_Rotation <= 136.0
+THEN
+DB_LLMIME_Temp_RotationDirection(_Rotation, "west");
+
+QRY
+LLMIME_Targeting_QRY_SetRotationDirection((REAL)_Rotation)
+AND
+_Rotation >= 137.0
+AND
+_Rotation <= 227.0
+THEN
+DB_LLMIME_Temp_RotationDirection(_Rotation, "north");
+
+QRY
+LLMIME_Targeting_QRY_SetRotationDirection((REAL)_Rotation)
+AND
+_Rotation >= 228.0
+THEN
+DB_LLMIME_Temp_RotationDirection(_Rotation, "east");
+
+QRY
+LLMIME_Targeting_QRY_SetRotationDirection((REAL)_Rotation)
+AND
+_Rotation <= -44.0
+THEN
+DB_LLMIME_Temp_RotationDirection(_Rotation, "east");
 //END_REGION
 
 //REGION ITERATOR_START
@@ -139,7 +288,7 @@ StringConcatenate("LLMIME_Events_FindMimicTarget_", _UniqueID, _EventName)
 THEN
 //LeaderLog_Log("TRACE", "[LLMIME:Mime:Targeting] Starting dummy character iterator for [",_Action, _ActionType,"].");
 DB_LLMIME_Mimic_Temp_TargetIterator(_Caster, _Mime, _Dummy, _TargetX, _Rotation, _TargetZ, _EventName, _TargetPriority, _Action, _ActionType);
-CharacterLaunchIteratorAroundCharacter(_Dummy, 1.75, _EventName);
+CharacterLaunchIteratorAroundCharacter(_Dummy, 1.2, _EventName);
 LLMIME_Mimicking_ResetFailTimer(_Mime, _Caster, _Action, _ActionType, 3000);
 
 IF
@@ -339,7 +488,7 @@ LLMIME_Mimicking_ResetFailTimer(_Mime, _Caster, _Action, _ActionType, 1500);
 LeaderLog_Log("DEBUG", "[LLMIME:Mime:Targeting:OnIteratorFinished] No characters found. Searching for nearby items with event [",_NextEventName,"].");
 DB_LLMIME_Mimic_Temp_TargetItemIterator(_Caster, _Mime, _Dummy, _TargetX, _Rotation, _TargetZ, _NextEventName, _TargetPriority, _Action, _ActionType, _TimerName);
 SetVarFixedString(_Dummy, "LLMIME_Dummy_IterationEvent", _NextEventName);
-SetVarFloat(_Dummy, "LLMIME_Dummy_IterationRange", 2.0);
+SetVarFloat(_Dummy, "LLMIME_Dummy_IterationRange", 1.2);
 SetStoryEvent(_Dummy, "LLMIME_Events_StartDummyItemIterator");
 TimerLaunch(_TimerName, 100);
 

@@ -1,7 +1,7 @@
 {
    "save" : {
       "header" : {
-         "time" : 1527698378,
+         "time" : 1527792993,
          "version" : "2.0.8.2"
       },
       "regions" : {
@@ -478,7 +478,20 @@
                         "endnode" : {"type" : 19, "value" : 0},
                         "exclusive" : {"type" : 19, "value" : 0},
                         "optional" : {"type" : 19, "value" : 0},
-                        "setflags" : [ {} ],
+                        "setflags" : [
+                           {
+                              "flaggroup" : [
+                                 {
+                                    "flag" : [
+                                       {
+                                          "name" : {"type" : 22, "value" : "Mimicry_PunchedMime"},
+                                          "paramval" : {"type" : 4, "value" : 1},
+                                          "value" : {"type" : 19, "value" : 1}
+                                       }
+                                    ],"type" : {"type" : 22, "value" : "Character"}}
+                              ]
+                           }
+                        ],
                         "speaker" : {"type" : 4, "value" : 1},
                         "stub" : {"type" : 19, "value" : 1},
                         "transitionmode" : {"type" : 1, "value" : 0},
@@ -672,7 +685,7 @@
                                  {
                                     "flag" : [
                                        {
-                                          "name" : {"type" : 22, "value" : "LeaderLib_ApplyKnockdown_9"},
+                                          "name" : {"type" : 22, "value" : "LeaderLib_ApplyStatus_Knockdown_9"},
                                           "paramval" : {"type" : 4, "value" : 0},
                                           "value" : {"type" : 19, "value" : 1}
                                        },
@@ -1008,6 +1021,11 @@
                                        {
                                           "name" : {"type" : 22, "value" : "LeaderLib_IsFollower"},
                                           "paramval" : {"type" : 4, "value" : 0},
+                                          "value" : {"type" : 19, "value" : 0}
+                                       },
+                                       {
+                                          "name" : {"type" : 22, "value" : "Mimicry_PunchedMime"},
+                                          "paramval" : {"type" : 4, "value" : 1},
                                           "value" : {"type" : 19, "value" : 0}
                                        }
                                     ],"type" : {"type" : 22, "value" : "Character"}},
@@ -2258,7 +2276,20 @@
                         "endnode" : {"type" : 19, "value" : 0},
                         "exclusive" : {"type" : 19, "value" : 0},
                         "optional" : {"type" : 19, "value" : 0},
-                        "setflags" : [ {} ],
+                        "setflags" : [
+                           {
+                              "flaggroup" : [
+                                 {
+                                    "flag" : [
+                                       {
+                                          "name" : {"type" : 22, "value" : "LeaderLib_PlayAnimation_Knockdown_Loop"},
+                                          "paramval" : {"type" : 4, "value" : 1},
+                                          "value" : {"type" : 19, "value" : 0}
+                                       }
+                                    ],"type" : {"type" : 22, "value" : "Character"}}
+                              ]
+                           }
+                        ],
                         "speaker" : {"type" : 4, "value" : 0},
                         "stub" : {"type" : 19, "value" : 1},
                         "transitionmode" : {"type" : 1, "value" : 0},
@@ -2434,7 +2465,7 @@
                                                 "TagText" : {
                                                    "handle" : "ls::TranslatedStringRepository::s_HandleUnknown",
                                                    "type" : 28,
-                                                   "value" : "*Ask the mime to join your party.*"
+                                                   "value" : "*Ask the mime to join you.*"
                                                 },
                                                 "stub" : {"type" : 19, "value" : 1}
                                              }
@@ -3267,12 +3298,6 @@
                         "GameData" : [
                            {
                               "AiPersonalities" : [ {} ],
-                              "Animations" : [
-                                 {
-                                    "Animation" : {"type" : 23, "value" : "knockdown_fall"},
-                                    "Speaker" : {"type" : 3, "value" : 1}
-                                 }
-                              ],
                               "CameraTarget" : {"type" : 4, "value" : -1},
                               "CustomMovie" : {"type" : 23, "value" : ""},
                               "Emotion" : {"type" : 23, "value" : "Default"},
@@ -3361,10 +3386,23 @@
                         "endnode" : {"type" : 19, "value" : 0},
                         "exclusive" : {"type" : 19, "value" : 0},
                         "optional" : {"type" : 19, "value" : 0},
-                        "setflags" : [ {} ],
+                        "setflags" : [
+                           {
+                              "flaggroup" : [
+                                 {
+                                    "flag" : [
+                                       {
+                                          "name" : {"type" : 22, "value" : "LeaderLib_PlayAnimation_Knockdown_Loop"},
+                                          "paramval" : {"type" : 4, "value" : 1},
+                                          "value" : {"type" : 19, "value" : 1}
+                                       }
+                                    ],"type" : {"type" : 22, "value" : "Character"}}
+                              ]
+                           }
+                        ],
                         "speaker" : {"type" : 4, "value" : 0},
                         "stub" : {"type" : 19, "value" : 1},
-                        "transitionmode" : {"type" : 1, "value" : 1},
+                        "transitionmode" : {"type" : 1, "value" : 0},
                         "waittime" : {"type" : 6, "value" : 0.50}
                      },
                      {

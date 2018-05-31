@@ -97,7 +97,7 @@ THEN
 SetStoryEvent(_Mime, "LLMIME_Events_BrawlerStanceDeactivated_Start");
 
 IF
-SkillCast(_Mime, "Shout_LLMIME_BrawlerStance", _)
+CharacterUsedSkill(_Mime, "Shout_LLMIME_BrawlerStance", _)
 AND
 NOT DB_LLMIME_Brawler_JustToggledStance(_Mime)
 AND
@@ -108,7 +108,7 @@ LLMIME_Brawler_ApplyStance(_Mime);
 DB_LLMIME_Brawler_JustToggledStance(_Mime);
 
 IF
-SkillCast(_Mime, "Shout_LLMIME_BrawlerStance", _)
+CharacterUsedSkill(_Mime, "Shout_LLMIME_BrawlerStance", _)
 AND
 NOT DB_LLMIME_Brawler_JustToggledStance(_Mime)
 AND
@@ -119,7 +119,7 @@ LLMIME_Brawler_RemoveStance(_Mime);
 DB_LLMIME_Brawler_JustToggledStance(_Mime);
 
 IF
-SkillCast(_Mime, "Shout_LLMIME_BrawlerStance", _)
+CharacterUsedSkill(_Mime, "Shout_LLMIME_BrawlerStance", _)
 AND
 DB_LLMIME_Brawler_JustToggledStance(_Mime)
 THEN
