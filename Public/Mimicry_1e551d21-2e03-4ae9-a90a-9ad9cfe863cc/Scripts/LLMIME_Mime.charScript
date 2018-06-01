@@ -113,12 +113,13 @@ REACTION Block_AutoFollow, 500
 USAGE PEACE
 VARS
 	CHARACTER:_Owner
-CHECK "!c1"
+CHECK "!c1&!c2"
 	HasFlag(__Me, "LeaderLib_CharacterIsFollowing")
+	CharacterHasStatus(__Me, LLMIME_MIMIC_WEAPON_REQUIREMENTS)
 ACTIONS
 	Sleep(1)
 	
-REACTION Mimic_Attack_Character, 999
+REACTION Mimic_Attack_Character, 9999
 USAGE ALL
 VARS
 	CHARACTER:_Target
@@ -126,11 +127,17 @@ CHECK "c1&!c2"
 	GetVar(_Target, __Me, "Mimicry_MimicCharacterTarget")
 	IsEqual(_Target, null)
 ACTIONS
-	CharacterAttackWithoutMove(_Target, 1)
+IF "c1"
+	CharacterCanSee(__Me, _Target)
+THEN
+	CharacterAttack(_Target)
+ELSE
+	CharacterAttackWithoutMove(_Target)
+ENDIF
 	SetVar(__Me, "Mimicry_MimicCharacterTarget", CHARACTER:null)
 	StatusText(__Me, "Attacked character")
 	
-REACTION Mimic_Attack_Item, 998
+REACTION Mimic_Attack_Item, 9999
 USAGE ALL
 VARS
 	ITEM:_Target
@@ -138,6 +145,12 @@ CHECK "c1&!c2"
 	GetVar(_Target, __Me, "Mimicry_MimicItemTarget")
 	IsEqual(_Target, null)
 ACTIONS
-	CharacterAttackWithoutMove(_Target, 1)
+IF "c1"
+	CharacterCanSee(__Me, _Target)
+THEN
+	CharacterAttack(_Target)
+ELSE
+	CharacterAttackWithoutMove(_Target)
+ENDIF
 	SetVar(__Me, "Mimicry_MimicItemTarget", ITEM:null)
 	StatusText(__Me, "Attacked item")

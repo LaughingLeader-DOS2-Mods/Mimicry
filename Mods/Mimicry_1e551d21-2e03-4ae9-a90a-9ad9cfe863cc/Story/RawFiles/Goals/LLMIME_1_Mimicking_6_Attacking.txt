@@ -293,21 +293,16 @@ LeaderLog_QRY_RealToString("MimicryAttackDebugRotation", _rx, _ry, _rz)
 AND
 DB_LeaderLog_Temp_RealString("MimicryAttackDebugRotation", _rxstr, _rystr, _rzstr)
 AND
-LeaderLib_Math_QRY_Sine(_ry)
-AND
-DB_LeaderLib_Math_Sine(_ry, _sinResult)
-AND
-LeaderLog_QRY_RealToString("MimicryAttackDebugRotationSin", _sinResult)
-AND
-DB_LeaderLog_Temp_RealString("MimicryAttackDebugRotationSin", _sinResultStr)
+CharacterGetDisplayName(_Caster, _, _Name)
 THEN
 NOT DB_LeaderLog_Temp_RealString("MimicryAttackDebugTargetPosition", _txstr, _tystr, _tzstr);
 NOT DB_LeaderLog_Temp_RealString("MimicryAttackDebugRotation", _rxstr, _rystr, _rzstr);
 NOT DB_LeaderLog_Temp_RealString("MimicryAttackDebugAttackerPosition", _pxstr, _pystr, _pzstr);
-NOT DB_LeaderLog_Temp_RealString("MimicryAttackDebugRotationSin", _sinResultStr);
-NOT DB_LeaderLib_Math_Sine(_ry, _sinResult);
+LeaderLog_Log("DEBUG", "[LLMIME:AttackDebug:CharacterStartAttackPosition] **************************************");
+LeaderLog_Log("DEBUG", "[LLMIME:AttackDebug:CharacterStartAttackPosition] Character [",_Name,"] made an attack:");
 LeaderLog_Log("DEBUG", "[LLMIME:AttackDebug:CharacterStartAttackPosition] Position[",_pxstr,",",_pystr,",",_pzstr,"] | Target: [",_txstr,",",_tystr,",",_tzstr,"]");
-LeaderLog_Log("DEBUG", "[LLMIME:AttackDebug:CharacterStartAttackPosition] Attacker's rotation: [",_rxstr,",",_rystr,",",_rzstr,"] Sine[",_sinResultStr,"]");
+LeaderLog_Log("DEBUG", "[LLMIME:AttackDebug:CharacterStartAttackPosition] Rotation: [",_rxstr,",",_rystr,",",_rzstr,"]");
+LeaderLog_Log("DEBUG", "[LLMIME:AttackDebug:CharacterStartAttackPosition] **************************************");
 
 IF
 CharacterStartAttackObject(_Defender, _Owner, _Caster)
@@ -329,12 +324,17 @@ AND
 LeaderLog_QRY_RealToString("MimicryAttackDebugRotation", _rx, _ry, _rz)
 AND
 DB_LeaderLog_Temp_RealString("MimicryAttackDebugRotation", _rxstr, _rystr, _rzstr)
+AND
+CharacterGetDisplayName(_Caster, _, _Name)
 THEN
 NOT DB_LeaderLog_Temp_RealString("MimicryAttackDebugTargetPosition", _txstr, _tystr, _tzstr);
 NOT DB_LeaderLog_Temp_RealString("MimicryAttackDebugRotation", _rxstr, _rystr, _rzstr);
 NOT DB_LeaderLog_Temp_RealString("MimicryAttackDebugAttackerPosition", _pxstr, _pystr, _pzstr);
+LeaderLog_Log("DEBUG", "[LLMIME:AttackDebug:CharacterStartAttackObject] **************************************");
+LeaderLog_Log("DEBUG", "[LLMIME:AttackDebug:CharacterStartAttackObject] Character [",_Name,"] made an attack:");
 LeaderLog_Log("DEBUG", "[LLMIME:AttackDebug:CharacterStartAttackObject] Position[",_pxstr,",",_pystr,",",_pzstr,"] | Target: [",_txstr,",",_tystr,",",_tzstr,"]");
-LeaderLog_Log("DEBUG", "[LLMIME:AttackDebug:CharacterStartAttackObject] Attacker's rotation: [",_rxstr,",",_rystr,",",_rzstr,"]");
+LeaderLog_Log("DEBUG", "[LLMIME:AttackDebug:CharacterStartAttackObject] Rotation: [",_rxstr,",",_rystr,",",_rzstr,"]");
+LeaderLog_Log("DEBUG", "[LLMIME:AttackDebug:CharacterStartAttackObject] **************************************");
 //END_REGION
 EXITSECTION
 

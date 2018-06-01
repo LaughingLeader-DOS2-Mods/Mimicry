@@ -37,6 +37,71 @@ GetPosition(_Mime, _MimeX, _, _MimeZ)
 AND
 GetRotation(_Mime, _, _MimeRotation, _)
 AND
+LLMIME_Targeting_QRY_FixRotation(_MimeRotation)
+AND
+DB_LLMIME_Targeting_Temp_AdjustedRotation(_AdjustedRot)
+AND
+Integer(_AdjustedRot, _RotInt)
+AND
+Real(_RotInt, _Rot)
+AND
+LeaderLib_Math_QRY_Sine(_Rot)
+AND
+DB_LeaderLib_Math_Sine(_Rot, _SineResult)
+AND
+LeaderLib_Math_QRY_Cosine(_Rot)
+AND
+DB_LeaderLib_Math_Cosine(_Rot, _CosineResult)
+AND
+RealProduct(_xdiff, _CosineResult, _MimeTargetXFactor)
+AND
+RealProduct(_zdiff, _SineResult, _MimeTargetZFactor)
+AND
+RealSum(_MimeX, _MimeTargetXFactor, _MimeTargetX)
+AND
+RealSum(_MimeZ, _MimeTargetZFactor, _MimeTargetZ)
+THEN
+NOT DB_LLMIME_Targeting_Temp_AdjustedRotation(_AdjustedRot);
+LLMIME_Mimic_GetTargetNearPosition(_Caster, _Mime, _MimeTargetX, _Rotation, _MimeTargetZ, _TargetPriority, _Action, _ActionType);
+//LLMINE_Debug_TracePositions(_StartX, _StartY, _StartZ, _TargetX, _Rotation, _TargetZ, _MimeX, _MimeY, _MimeZ, _MimeTargetX, _MimeTargetY, _MimeTargetZ);
+
+QRY
+LLMIME_Targeting_QRY_FixRotation((REAL)_Rotation)
+THEN
+LLMIME_Targeting_Internal_FixRotation(_Rotation);
+
+PROC
+LLMIME_Targeting_Internal_FixRotation((REAL)_Rotation)
+AND
+_Rotation < 0
+AND
+RealProduct(_Rotation, -1.0, _x1)
+AND
+RealSum(_x1, 270.0, _FinalRot)
+THEN
+DB_LLMIME_Targeting_Temp_AdjustedRotation(_FinalRot);
+
+PROC
+LLMIME_Targeting_Internal_FixRotation((REAL)_Rotation)
+AND
+NOT DB_LLMIME_Targeting_Temp_AdjustedRotation(_)
+AND
+_Rotation > 0
+THEN
+DB_LLMIME_Targeting_Temp_AdjustedRotation(_Rotation);
+
+/*
+PROC
+LLMIME_Mimic_CalculateTarget((CHARACTERGUID)_Mime, (CHARACTERGUID)_Caster, (REAL)_StartX, (REAL)_Rotation, (REAL)_StartZ, (REAL)_TargetX, (REAL)_TargetZ, (INTEGER)_TargetPriority, (STRING)_Action, (STRING)_ActionType)
+AND
+RealSubtract(_TargetX, _StartX, _xdiff)
+AND
+RealSubtract(_TargetZ, _StartZ, _zdiff)
+AND
+GetPosition(_Mime, _MimeX, _, _MimeZ)
+AND
+GetRotation(_Mime, _, _MimeRotation, _)
+AND
 RealSubtract(_Rotation, _MimeRotation, _RotDiff)
 AND
 LLMIME_Targeting_QRY_DetermineRotationDifference(_Rotation, _MimeRotation)
@@ -54,6 +119,7 @@ THEN
 NOT DB_LLMIME_Targeting_Temp_RotationDiff(_XMult, _ZMult);
 LLMIME_Mimic_GetTargetNearPosition(_Caster, _Mime, _MimeTargetX, _Rotation, _MimeTargetZ, _TargetPriority, _Action, _ActionType);
 //LLMINE_Debug_TracePositions(_StartX, _StartY, _StartZ, _TargetX, _Rotation, _TargetZ, _MimeX, _MimeY, _MimeZ, _MimeTargetX, _MimeTargetY, _MimeTargetZ);
+*/
 //END_REGION
 
 //REGION ROTATION_DIRECTIONS
