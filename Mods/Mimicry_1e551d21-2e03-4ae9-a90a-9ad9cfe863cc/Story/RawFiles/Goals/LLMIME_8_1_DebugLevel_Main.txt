@@ -13,6 +13,40 @@ DB_LLMIME_Debug_GameStarted(1);
 TimerLaunch("LLMIME_Debug_Start", 100);
 TimerLaunch("LLMIME_Debug_Test", 5000);
 
+IF
+TimerFinished("LLMIME_Debug_Start")
+THEN
+LeaderLib_Math_Sine(131.0);
+LeaderLib_Math_Cosine(131.0);
+
+IF
+DB_LeaderLib_Math_Sine(131.0, _Result)
+AND
+CharacterGetHostCharacter(_Char)
+THEN
+LeaderLog_RealToString(_Char, _Result, "LLMIME_Debug_SineResultConverted");
+
+IF
+StoryEvent(_Char, "LLMIME_Debug_SineResultConverted")
+AND
+GetVarString(_Char, "LeaderLog_RealString", _RealStr)
+THEN
+LeaderLog_Log("DEBUG", "[LLMIME:Debug:Math] Sine | Angle [131] = [",_RealStr,"]");
+
+IF
+StoryEvent((CHARACTERGUID)_Char, "LLMIME_Debug_SineResultConverted")
+AND
+DB_LeaderLib_Math_Cosine(131.0, _Result)
+THEN
+LeaderLog_RealToString(_Char, _Result, "LLMIME_Debug_CosineResultConverted");
+
+IF
+StoryEvent(_Char, "LLMIME_Debug_CosineResultConverted")
+AND
+GetVarString(_Char, "LeaderLog_RealString", _RealStr)
+THEN
+LeaderLog_Log("DEBUG", "[LLMIME:Debug:Math] Cosine | Angle [131] = [",_RealStr,"]");
+
 /*
 IF
 RegionEnded("TestLevel_LL_Mimicry")

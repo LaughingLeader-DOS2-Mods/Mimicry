@@ -83,7 +83,7 @@ LLMIME_Mimicking_QRY_CanMimicCharacter(_Caster, _Mime)
 AND
 GetUUID(_Caster, _CasterID)
 AND
-LeaderLog_QRY_RealToString(_CasterID, _TargetX, _TargetZ)
+LeaderLog_QRY_RealToIntToString(_CasterID, _TargetX, _TargetZ)
 AND
 DB_LeaderLog_Temp_RealString(_CasterID, _xs, _zs)
 AND
@@ -277,19 +277,19 @@ TimerCancel(_TimerName);
 IF
 CharacterStartAttackPosition(_txf, _tyf, _tzf, _Owner, _Caster)
 AND
-LeaderLog_QRY_RealToString("MimicryAttackDebugTargetPosition", _txf, _tyf, _tzf)
+LeaderLog_QRY_RealToIntToString("MimicryAttackDebugTargetPosition", _txf, _tyf, _tzf)
 AND
 DB_LeaderLog_Temp_RealString("MimicryAttackDebugTargetPosition", _txstr, _tystr, _tzstr)
 AND
 GetPosition(_Caster, _px, _py, _pz)
 AND
-LeaderLog_QRY_RealToString("MimicryAttackDebugAttackerPosition", _px, _py, _pz)
+LeaderLog_QRY_RealToIntToString("MimicryAttackDebugAttackerPosition", _px, _py, _pz)
 AND
 DB_LeaderLog_Temp_RealString("MimicryAttackDebugAttackerPosition", _pxstr, _pystr, _pzstr)
 AND
 GetRotation(_Caster, _rx, _ry, _rz)
 AND
-LeaderLog_QRY_RealToString("MimicryAttackDebugRotation", _rx, _ry, _rz)
+LeaderLog_QRY_RealToIntToString("MimicryAttackDebugRotation", _rx, _ry, _rz)
 AND
 DB_LeaderLog_Temp_RealString("MimicryAttackDebugRotation", _rxstr, _rystr, _rzstr)
 AND
@@ -309,19 +309,19 @@ CharacterStartAttackObject(_Defender, _Owner, _Caster)
 AND
 GetPosition(_Defender, _txf, _tyf, _tzf)
 AND
-LeaderLog_QRY_RealToString("MimicryAttackDebugTargetPosition", _txf, _tyf, _tzf)
+LeaderLog_QRY_RealToIntToString("MimicryAttackDebugTargetPosition", _txf, _tyf, _tzf)
 AND
 DB_LeaderLog_Temp_RealString("MimicryAttackDebugTargetPosition", _txstr, _tystr, _tzstr)
 AND
 GetPosition(_Caster, _px, _py, _pz)
 AND
-LeaderLog_QRY_RealToString("MimicryAttackDebugAttackerPosition", _px, _py, _pz)
+LeaderLog_QRY_RealToIntToString("MimicryAttackDebugAttackerPosition", _px, _py, _pz)
 AND
 DB_LeaderLog_Temp_RealString("MimicryAttackDebugAttackerPosition", _pxstr, _pystr, _pzstr)
 AND
 GetRotation(_Caster, _rx, _ry, _rz)
 AND
-LeaderLog_QRY_RealToString("MimicryAttackDebugRotation", _rx, _ry, _rz)
+LeaderLog_QRY_RealToIntToString("MimicryAttackDebugRotation", _rx, _ry, _rz)
 AND
 DB_LeaderLog_Temp_RealString("MimicryAttackDebugRotation", _rxstr, _rystr, _rzstr)
 AND
