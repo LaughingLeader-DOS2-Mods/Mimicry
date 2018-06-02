@@ -14,11 +14,7 @@ DB_LLMIME_PassiveData("LLMIME_BRAWLER", "LLMIME_BRAWLER_BONUS", "LLMIME_BRAWLER_
 DB_LLMIME_PassiveData("LLMIME_BEASTMASTER", "LLMIME_BEASTMASTER", "LLMIME_BEASTMASTER_INFO", "Mimicry_HideMimePassives");
 DB_LLMIME_PassiveData("LLMIME_CONCENTRATION", "LLMIME_CONCENTRATION_BONUS", "LLMIME_CONCENTRATION_INFO", "Mimicry_HideMimePassives");
 
-DB_LLMIME_Templates("Mask_A", "EQ_Armor_UNIQUE_LLMIME_MimeMask_A_8e66ce79-8c8e-4c22-a8ea-5a99977f4ea8");
-DB_LLMIME_Templates("BrawlerFist", "WPN_LLMIME_BrawlerFist_e1bda904-93c2-4f6f-8136-1a547279fd1f");
-DB_LLMIME_Templates("MimeManual", "WPN_LLMIME_BrawlerFist_e1bda904-93c2-4f6f-8136-1a547279fd1f");
-DB_LLMIME_Templates("MusicBox", "UNIQUE_LLMIME_MusicBox_fd03b00c-5366-40e2-a8af-1d9f6a904ecb");
-DB_LLMIME_Templates("MusicBox", "UNIQUE_LLMIME_MusicBox_Cracked_467b732e-c599-49b1-beb8-06e55f1dd140");
+LLMIME_System_InitTemplates();
 
 //LeaderLib_Register_StatusToggleSkill("Shout_LLMIME_BrawlerStance", "LLMIME_BRAWLER_STANCE", -1.0, 1);
 
@@ -42,6 +38,25 @@ DB_LLMIME_Statuses("LLMIME_BRAWLER_INFO");
 DB_LLMIME_Statuses("LLMIME_BEASTMASTER_INFO");
 DB_LLMIME_Statuses("LLMIME_CONCENTRATION_INFO");
 DB_LLMIME_Statuses("LLMIME_MASK_INFO");
+
+PROC
+LLMIME_System_InitTemplates()
+THEN
+LLLIB_Helper_ClearExistingDatabase("DB_LLMIME_Templates", 2);
+DB_LLMIME_Templates("Mask_A", "EQ_Armor_UNIQUE_LLMIME_MimeMask_A_8e66ce79-8c8e-4c22-a8ea-5a99977f4ea8");
+DB_LLMIME_Templates("BrawlerFist", "WPN_LLMIME_BrawlerFist_e1bda904-93c2-4f6f-8136-1a547279fd1f");
+DB_LLMIME_Templates("MimeManual", "WPN_LLMIME_BrawlerFist_e1bda904-93c2-4f6f-8136-1a547279fd1f");
+DB_LLMIME_Templates("MusicBox", "UNIQUE_LLMIME_MusicBox_fd03b00c-5366-40e2-a8af-1d9f6a904ecb");
+DB_LLMIME_Templates("MusicBox", "UNIQUE_LLMIME_MusicBox_Cracked_467b732e-c599-49b1-beb8-06e55f1dd140");
+DB_LLMIME_Templates("MimeAmulet", "LOOT_MagicAmulet_LLMIME_SourceBlastImmunity_fcc27ec5-b83e-42e3-976e-90c269a52aed");
+//END_REGION
+
+//REGION UPDATE
+PROC
+LLMIME_System_UpdateDatabases()
+THEN
+LLMIME_System_InitTemplates();
+LeaderLog_Log("DEBUG", "[LLMIME:System:Core:UpdateDatabases] Settings updated.");
 //END_REGION
 
 //REGION CLEAR_HELPERS

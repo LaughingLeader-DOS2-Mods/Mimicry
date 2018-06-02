@@ -368,7 +368,7 @@ StringConcatenate("LLMIME_Events_FindMimicTarget_", _UniqueID, _EventName)
 THEN
 //LeaderLog_Log("TRACE", "[LLMIME:Mime:Targeting] Starting dummy character iterator for [",_Action, _ActionType,"].");
 DB_LLMIME_Mimic_Temp_TargetIterator(_Caster, _Mime, _Dummy, _TargetX, _Rotation, _TargetZ, _EventName, _TargetPriority, _Action, _ActionType);
-CharacterLaunchIteratorAroundCharacter(_Dummy, 1.2, _EventName);
+CharacterLaunchIteratorAroundCharacter(_Dummy, 1.5, _EventName);
 LLMIME_Mimicking_ResetFailTimer(_Mime, _Caster, _Action, _ActionType, 3000);
 
 IF
@@ -518,7 +518,7 @@ LeaderLog_Log("DEBUG", "[LLMIME:Mime:Targeting] Set mimic target to ally charact
 LLMIME_Mimic_Targeting_SetTarget(_Mime, _Caster, (GUIDSTRING)_CheckChar);
 //END_REGION
 
-//REGION ITERATOR_END
+//REGION CHARACTER_ITERATOR_END_ITEM_ITERATOR_START
 IF
 StoryEvent(NULL_00000000-0000-0000-0000-000000000000, _EventName)
 AND
@@ -568,7 +568,7 @@ LLMIME_Mimicking_ResetFailTimer(_Mime, _Caster, _Action, _ActionType, 1500);
 LeaderLog_Log("DEBUG", "[LLMIME:Mime:Targeting:OnIteratorFinished] No characters found. Searching for nearby items with event [",_NextEventName,"].");
 DB_LLMIME_Mimic_Temp_TargetItemIterator(_Caster, _Mime, _Dummy, _TargetX, _Rotation, _TargetZ, _NextEventName, _TargetPriority, _Action, _ActionType, _TimerName);
 SetVarFixedString(_Dummy, "LLMIME_Dummy_IterationEvent", _NextEventName);
-SetVarFloat(_Dummy, "LLMIME_Dummy_IterationRange", 1.2);
+SetVarFloat(_Dummy, "LLMIME_Dummy_IterationRange", 1.0);
 SetStoryEvent(_Dummy, "LLMIME_Events_StartDummyItemIterator");
 TimerLaunch(_TimerName, 100);
 
