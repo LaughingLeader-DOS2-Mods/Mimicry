@@ -27,6 +27,7 @@ DockPanel.config
 EditorBrowserMetadata_*
 EditorBrowserMetadata.xml
 Autosave/
+Recovered/
 
 # Assets             #
 ######################

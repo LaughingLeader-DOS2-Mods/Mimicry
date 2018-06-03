@@ -8,6 +8,7 @@ EVENTS
 EVENT Init_Register
 ON
 	OnActivate()
+	//OnItemEvent(_, "LeaderLib_Initialized")
 ACTIONS
 IF "c1"
 	IsEqual(%LLMIME_Initialized, 0)
@@ -18,8 +19,8 @@ THEN
 	THEN
 		SetTag(__Me, "LeaderLib_ReceiveExtraEvents")
 	ENDIF
-	SetVar(__Me, "LeaderLib_LogMessage", STRING:"[LLMIME:LLMIME_Mime.charScript:Init_Register] Activated.")
-	CharacterEvent(__Me, "LeaderLib_DebugLog")
+	//SetVar(__Me, "LeaderLib_LogMessage", STRING:"[LLMIME:LLMIME_Mime.charScript:Init_Register] Activated.")
+	//CharacterEvent(__Me, "LeaderLib_DebugLog")
 	Set(%LLMIME_Initialized, 1)
 ENDIF
 

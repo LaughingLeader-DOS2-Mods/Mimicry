@@ -60,6 +60,19 @@ LLMIME_System_InitTemplates();
 LeaderLog_Log("DEBUG", "[LLMIME:System:Core:UpdateDatabases] Settings updated.");
 //END_REGION
 
+//REGION MASK_TAG
+/* For easy iteration */
+IF
+CharacterStatusApplied(_Mime, "LLMIME_MASK_INFO", _)
+THEN
+SetTag(_Mime, "Mimicry_WearingMask");
+
+IF
+CharacterStatusRemoved(_Mime, "LLMIME_MASK_INFO", _)
+THEN
+ClearTag(_Mime, "Mimicry_WearingMask");
+//END_REGION
+
 //REGION CLEAR_HELPERS
 IF
 StoryEvent((CHARACTERGUID)_Mime, "Mimicry_RemoveAllMimicryStatuses")
@@ -318,6 +331,7 @@ LLMIME_System_FlagForUnarmed(_Mime);
 IF
 StoryEvent((CHARACTERGUID)_Mime, "Mimicry_MimeInitialized")
 THEN
+LLMIME_System_FlagForUnarmed(_Mime);
 LeaderLib_StartTargetTimer(_Mime, 50, "LLMIME_Timers_CheckUnarmed_", "Mimicry_CheckUnarmed");
 
 IF

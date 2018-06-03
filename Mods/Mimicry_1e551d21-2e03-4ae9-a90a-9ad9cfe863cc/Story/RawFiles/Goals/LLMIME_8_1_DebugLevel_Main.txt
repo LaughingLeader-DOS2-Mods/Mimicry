@@ -111,6 +111,7 @@ AND
 IsTagged(_Character, "COMPANION", 1)
 THEN
 CharacterSetHitpointsPercentage(_Character, 50);
+DB_Dialogs(_Character, "LLMIME_Debug_RecruitCharacter");
 
 IF
 StoryEvent((CHARACTERGUID)_Player, "LLMIME_Events_Debug_IterateCharacters")
@@ -123,6 +124,7 @@ GetPosition(_Player, _x, _y, _z)
 AND
 CreateItemTemplateAtPosition("LOOT_BackPack_A_6c70c298-aa29-418f-a659-f8e0b5f5fa60", _x, _y, _z, _Backpack)
 THEN
+SetTag(_Player, "AVATAR");
 SetTag(_Backpack, "LLMIME_DEBUG_DELETEALL");
 MoveAllItemsTo(_Player, _Backpack, 1, 1, 1);
 //SetStoryEvent(_Player, "Mimicry_InitMimeJob");

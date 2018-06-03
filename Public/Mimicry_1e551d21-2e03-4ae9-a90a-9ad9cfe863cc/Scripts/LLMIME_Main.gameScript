@@ -25,18 +25,32 @@ ENDIF
 
 EVENT LeaderLib_InitEvent
 ON
-	OnCharacterEvent(_, "LeaderLib_Initialized")
+	OnItemEvent(_, "LeaderLib_Initialized")
 ACTIONS
 	CallFunction("Mimicry_InitStatusList")
-	IterateCharacters("LLMIME_Iterator_InitMime", null, null, "LLMIME_MIME")
+	IterateCharacters("LLMIME_Iterator_CheckUnarmed", null, null, "LLMIME_MIME")
 
 EVENT Mime_InitIterate
 VARS
 	CHARACTER:_Mime
 ON
-	OnIterateCharacter(_Mime, "LLMIME_Iterator_InitMime")
+	OnIterateCharacter(_Mime, "LLMIME_Iterator_CheckUnarmed")
 ACTIONS
 	CharacterEvent(_Mime, "Mimicry_MimeInitialized")
+	
+EVENT CheckMaskWearers
+ON
+	OnItemEvent(_, "LeaderLib_Events_OnDefaultEventFlowComplete")
+ACTIONS
+	IterateCharacters("LLMIME_Iterator_InitMime", null, null, "Mimicry_WearingMask")
+
+EVENT Mime_MaskWearers_InitMimeJob
+VARS
+	CHARACTER:_Mime
+ON
+	OnIterateCharacter(_Mime, "LLMIME_Iterator_InitMime")
+ACTIONS
+	CharacterEvent(_Mime, "Mimicry_InitMimeJob")
 
 EVENT Mime_Setup
 VARS
@@ -188,14 +202,3 @@ ON
 ACTIONS
 	Cast(_EventNameStr, _EventName)
 	ItemEvent(_Item, _EventNameStr)
-	
-	
-EVENT Debug_EventTest
-VARS
-	CHARACTER:_EventParser
-ON
-	OnCharacterEvent(_EventParser, "LeaderLib_Events_OnDefaultEventFlowComplete")
-	OnCharacterEvent(_EventParser, "LeaderLib_Initialized")
-ACTIONS
-	SetVar(_EventParser, "LeaderLib_LogMessage", STRING:"[LLMIME:LLMIME_Main.gameScript:Debug_EventTest] Test.")
-	CharacterEvent(_EventParser, "LeaderLib_DebugLog")
