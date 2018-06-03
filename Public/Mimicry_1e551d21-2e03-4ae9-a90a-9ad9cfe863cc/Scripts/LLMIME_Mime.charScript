@@ -1,20 +1,26 @@
 INIT
 	CHARACTER:__Me
-	INT:%FirstEquip = 0
 	INT:%Following = 0
+	INT:%LLMIME_Initialized = 0
 	EXTERN FLOAT:%BrawlerStanceInfluenceStrength = 50.0
 EVENTS
 
-EVENT Create_Mask
-VARS
-	ITEM:_Mask
+EVENT Init_Register
 ON
 	OnActivate()
 ACTIONS
-IF "!c1"
-	ItemGetFromInventory(_Mask, __Me, null, "LLMIME_ACTIVATE_MIME", 0)
+IF "c1"
+	IsEqual(%LLMIME_Initialized, 0)
 THEN
-	CharacterAddToInventory(__Me, "ARM_UNIQUE_LLMIME_MimeMask_A", 1, 0)
+	CharacterEvent(__Me, "Mimicry_RegisterMimeFollower")
+	IF "!c1"
+		IsTagged(__Me, "LeaderLib_ReceiveExtraEvents")
+	THEN
+		SetTag(__Me, "LeaderLib_ReceiveExtraEvents")
+	ENDIF
+	SetVar(__Me, "LeaderLib_LogMessage", STRING:"[LLMIME:LLMIME_Mime.charScript:Init_Register] Activated.")
+	CharacterEvent(__Me, "LeaderLib_DebugLog")
+	Set(%LLMIME_Initialized, 1)
 ENDIF
 
 EVENT Follower_BrawlerStance_Activate
@@ -53,13 +59,10 @@ VARS
 ON
 	OnItemEquipped(__Me, _Mask)
 ACTIONS
-IF "c1&c2"
+IF "c1"
 	IsTagged(_Mask, "LLMIME_ACTIVATE_MIME")
-	IsEqual(%FirstEquip, 0)
 THEN
 	CallFunction("Mimicry_MimeFollower_ActivateBrawlerStance")
-	SetPriority("Equip_Mask_Auto", 0)
-	Set(%FirstEquip, 1)
 ENDIF
 
 EVENT Mimicking_Applied
@@ -78,38 +81,7 @@ ACTIONS
 
 BEHAVIOUR
 
-REACTION Equip_Mask_Auto, 99999
-USAGE PEACE
-VARS
-	ITEM:_Mask
-CHECK "c1"
-	IsEqual(%FirstEquip, 0)
-ACTIONS
-IF "!c1&c2&!c3"
-	CharacterHasStatus(__Me, LLMIME_MIME)
-	ItemGetFromInventory(_Mask, __Me, "ARM_UNIQUE_LLMIME_MimeMask_A", "LLMIME_ACTIVATE_MIME", 0)
-	ItemGetFromInventory(_Mask, __Me, "ARM_UNIQUE_LLMIME_MimeMask_A", "LLMIME_ACTIVATE_MIME", 1)
-THEN
-	//Fix reloading story/stats shenanigans
-	CharacterEvent(__Me, "Mimicry_RemoveAllMimicryStatuses")
-	CharacterEvent(__Me, "Mimicry_RemoveMimeJob")
-	//Sleep(1.0)
-	//SetFlag(__Me, "Mimicry_HideMimePassives")
-	//SetVar(__Me, "LeaderLib_ItemSlot", STRING:"Helmet")
-	//CharacterEvent(__Me, "LeaderLib_UnequipItemInSlot")
-	Sleep(0.50)
-	CharacterItemEvent(__Me, _Mask, "LeaderLib_EquipItem")
-	//CharacterUseItem(_Mask)
-ELIF "c1"
-	CharacterHasStatus(__Me, LLMIME_MIME)
-THEN
-	Set(%FirstEquip, 1)
-	SetPriority("Equip_Mask_Auto", 0)
-ELSE
-	Reset()
-ENDIF
-
-REACTION Block_AutoFollow, 500
+REACTION Block_AutoFollow, 0
 USAGE PEACE
 VARS
 	CHARACTER:_Owner
@@ -123,7 +95,8 @@ REACTION Mimic_Attack_Character, 9999
 USAGE ALL
 VARS
 	CHARACTER:_Target
-CHECK "c1&!c2"
+CHECK "c1&c2&!c3"
+	CharacterHasStatus(__Me, LLMIME_MIMICKING)
 	GetVar(_Target, __Me, "Mimicry_MimicCharacterTarget")
 	IsEqual(_Target, null)
 ACTIONS
@@ -141,7 +114,8 @@ REACTION Mimic_Attack_Item, 9999
 USAGE ALL
 VARS
 	ITEM:_Target
-CHECK "c1&!c2"
+CHECK "c1&c2&!c3"
+	CharacterHasStatus(__Me, LLMIME_MIMICKING)
 	GetVar(_Target, __Me, "Mimicry_MimicItemTarget")
 	IsEqual(_Target, null)
 ACTIONS

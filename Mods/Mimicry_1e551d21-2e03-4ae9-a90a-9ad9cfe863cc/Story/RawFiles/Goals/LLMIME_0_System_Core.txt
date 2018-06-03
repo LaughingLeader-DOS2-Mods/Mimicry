@@ -44,6 +44,7 @@ LLMIME_System_InitTemplates()
 THEN
 LLLIB_Helper_ClearExistingDatabase("DB_LLMIME_Templates", 2);
 DB_LLMIME_Templates("Mask_A", "EQ_Armor_UNIQUE_LLMIME_MimeMask_A_8e66ce79-8c8e-4c22-a8ea-5a99977f4ea8");
+DB_LLMIME_Templates("Mask_NoVisual", "EQ_Armor_LLMIME_MimeMask_NoVisual_38d7f6c3-ab60-43e5-b20c-f5faf06801dd");
 DB_LLMIME_Templates("BrawlerFist", "WPN_LLMIME_BrawlerFist_e1bda904-93c2-4f6f-8136-1a547279fd1f");
 DB_LLMIME_Templates("MimeManual", "WPN_LLMIME_BrawlerFist_e1bda904-93c2-4f6f-8136-1a547279fd1f");
 DB_LLMIME_Templates("MusicBox", "UNIQUE_LLMIME_MusicBox_fd03b00c-5366-40e2-a8af-1d9f6a904ecb");
@@ -547,7 +548,10 @@ LLMIME_QRY_CharacterIsAMime(_Mime)
 AND
 GlobalGetFlag("Mimicry_Mimic_CombatOnlyDisabled", 1)
 AND
-CharacterIsPartyMember(_Mime, 1)
+//CharacterIsPartyMember(_Mime, 1)
+GetVarInteger(_Mime, "LeaderLib_PartyCount", _Count)
+AND
+_Count > 1
 THEN
 DB_NOOP(1);
 
@@ -560,7 +564,10 @@ NOT GlobalGetFlag("Mimicry_Mimic_CombatOnlyDisabled", 1)
 AND
 CharacterIsInCombat(_Mime, 1)
 AND
-CharacterIsPartyMember(_Mime, 1)
+//CharacterIsPartyMember(_Mime, 1)
+GetVarInteger(_Mime, "LeaderLib_PartyCount", _Count)
+AND
+_Count > 1
 AND
 NOT DB_LeaderLib_Combat_ActiveObject(_, _Mime)
 THEN

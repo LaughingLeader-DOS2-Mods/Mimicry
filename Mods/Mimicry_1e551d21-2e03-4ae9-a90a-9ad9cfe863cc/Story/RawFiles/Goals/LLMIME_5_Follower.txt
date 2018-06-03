@@ -53,15 +53,65 @@ DB_LLMIME_Follower_RandomAnimation(_Index, _Animation);
 //END_REGION
 
 //REGION CHARACTER_SETUP
-PROC
-LLMIME_Follower_Internal_SetMime((CHARACTERGUID)_Mime)
+IF
+StoryEvent(_, "LeaderLib_Events_OnDefaultEventFlowComplete")
 THEN
-DB_LLMIME_Follower_Mime(_Mime);
+LLMIME_Follower_RegisterMime();
+
+IF
+StoryEvent((CHARACTERGUID)_Mime, "Mimicry_RegisterMimeFollower")
+THEN
+LLMIME_Follower_Internal_SetMime(_Mime);
 
 IF
 StoryEvent(_, "LeaderLib_Initialized")
 THEN
-LLMIME_Follower_RegisterMime();
+LLMIME_Follower_Internal_SetupMask();
+
+IF
+StoryEvent(_, "LLMIME_StartSummoningFollower")
+THEN
+LLMIME_Follower_Internal_SetupMask();
+
+PROC
+LLMIME_Follower_Internal_SetupMask()
+AND
+DB_LLMIME_Follower_Mime(_Mime)
+AND
+CharacterIsDead(_Mime, 0)
+AND
+DB_LLMIME_Templates("Mask_NoVisual", _Template)
+AND
+GetItemForItemTemplateInInventory(_Mime, _Template, _Mask)
+AND
+NOT CharacterGetEquippedItem(_Mime, "Helmet", _Mask)
+THEN
+CharacterEquipItem(_Mime, _Mask);
+
+PROC
+LLMIME_Follower_Internal_SetupMask()
+AND
+DB_LLMIME_Follower_Mime(_Mime)
+AND
+CharacterIsDead(_Mime, 0)
+AND
+DB_LLMIME_Templates("Mask_NoVisual", _Template)
+AND
+NOT GetItemForItemTemplateInInventory(_Mime, _Template, _)
+AND
+GetPosition(_Mime, _x, _y, _z)
+AND
+CreateItemTemplateAtPosition(_Template, _x, _y, _z, _Mask)
+THEN
+CharacterEquipItem(_Mime, _Mask);
+
+PROC
+LLMIME_Follower_Internal_SetMime((CHARACTERGUID)_Mime)
+AND
+NOT DB_LLMIME_Follower_Mime(_Mime)
+THEN
+SysClear("DB_LLMIME_Follower_Mime", 1);
+DB_LLMIME_Follower_Mime(_Mime);
 
 PROC
 LLMIME_Follower_RegisterMime()
@@ -638,6 +688,8 @@ THEN
 DB_LLMIME_FollowerGhost(_MimeGhost); 
 DB_Dialogs(_MimeGhost, "LLMIME_MimeCompanion_Ghost");
 CharacterLinkGhost(_Mime, _MimeGhost);
+CharacterSetImmortal(_MimeGhost,1);
+ProcSetInvulnerable(_MimeGhost,1);
 
 IF
 CharacterDied(_Mime)
@@ -689,8 +741,11 @@ DB_LLMIME_Follower_Mime(_Mime)
 //AND
 //DB_LLMIME_FollowerGhost(_Ghost)
 THEN
+CharacterTransform(_Mime, "LLMIME_Elves_Male_Mime_NoMask_8b69a5c0-1d6a-403c-ae38-e4a8d4297ceb", 0, 0, 0, 0, 0, 0, 0);
 CharacterUnlinkGhost(_Mime, _Ghost);
 //DestroyGhost(_Ghost);
+CharacterSetImmortal(_Ghost,0);
+ProcSetInvulnerable(_Ghost,0);
 CharacterDie(_Ghost, 0, "", _Player);
 LeaderLib_Follower_DismissCharacter(_Mime, "", 0);
 SetTag(_Mime, "BLOCK_RESURRECTION");
@@ -699,7 +754,7 @@ SetTag(_Mime, "BLOCK_RESURRECTION");
 IF
 ObjectFlagSet("Mimicry_MaskTakenFromFollower", (CHARACTERGUID)_Player, _Instance)
 AND
-DialogGetInvolvedNPC(_Instance, 1, (CHARACTERGUID)_Mime)
+DB_LLMIME_Follower_Mime(_Mime)
 AND
 CharacterIsDead(_Mime, 0)
 THEN
@@ -708,7 +763,7 @@ CharacterDie(_Mime, 0, "None", _Player);
 IF
 ObjectFlagSet("Mimicry_MaskTakenFromFollower", (CHARACTERGUID)_Player, _Instance)
 AND
-DialogGetInvolvedNPC(_Instance, 1, (CHARACTERGUID)_Mime)
+DB_LLMIME_Follower_Mime(_Mime)
 AND
 DB_LLMIME_Templates("Mask_A", _Template)
 AND
@@ -719,14 +774,22 @@ ItemTemplateAddTo(_Template, _Player, 1);
 IF
 ObjectFlagSet("Mimicry_MaskTakenFromFollower", (CHARACTERGUID)_Player, _Instance)
 AND
-DialogGetInvolvedNPC(_Instance, 1, (CHARACTERGUID)_Mime)
+DB_LLMIME_Follower_Mime(_Mime)
 AND
 DB_LLMIME_Templates("Mask_A", _Template)
 AND
 GetItemForItemTemplateInInventory(_Mime, _Template, _Mask)
 THEN
-CharacterUnequipItem(_Mime, _Mask);
+//CharacterUnequipItem(_Mime, _Mask);
 ItemToInventory(_Mask, _Player, 1, 1, 1);
+
+IF
+CharacterDied(_MimeGhost)
+AND
+DB_LLMIME_FollowerGhost(_MimeGhost)
+THEN
+SetOnStage(_MimeGhost, 0);
+NOT DB_LLMIME_FollowerGhost(_MimeGhost);
 //END_REGION
 
 //REGION RESURRECTION_EVENT
@@ -785,8 +848,9 @@ _Count > 0
 AND
 GetItemForItemTemplateInInventory(_Player, _Template, _Mask)
 THEN
-//ItemToInventory(_Mask, _Mime);
-CharacterEquipItem(_Mime, _Mask);
+CharacterTransform(_Mime, "LLMIME_Elves_Male_Mime_d8b7efbb-6e60-4700-af8a-4295b0c1ed41", 0, 0, 0, 0, 0, 0, 0);
+ItemToInventory(_Mask, _Mime);
+//CharacterEquipItem(_Mime, _Mask);
 ChangeAttitude(_Mime, _Player, 0);
 
 IF
@@ -811,6 +875,7 @@ AND
 DialogGetInvolvedNPC(_Instance, 1, (CHARACTERGUID)_Mime)
 THEN
 Proc_StartDialog(0, "LLMIME_MimeCompanion_Default", _Mime, _Player);
+ObjectClearFlag(_Player, "Mimicry_MaskTakenFromFollower");
 //END_REGION
 
 //REGION TUTORIAL_IMMUNITY

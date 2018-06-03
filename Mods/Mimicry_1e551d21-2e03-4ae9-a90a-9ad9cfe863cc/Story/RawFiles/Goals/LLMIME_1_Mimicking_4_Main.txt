@@ -402,10 +402,37 @@ LLMIME_Mimicking_MimicAction(_Caster, _Action, _ActionType);
 //END_REGION
 
 //REGION MIMIC_ACTION_START
+QRY
+LLMIME_Mimicking_QRY_CanStartMimic((CHARACTERGUID)_Mime)
+AND
+LeaderLib_Combat_QRY_HasAliveEnemies(_Mime)
+THEN
+DB_NOOP(1);
+
+QRY
+LLMIME_Mimicking_QRY_CanStartMimic((CHARACTERGUID)_Mime)
+AND
+NOT LeaderLib_Combat_QRY_HasAliveEnemies(_Mime)
+AND
+GlobalGetFlag("Mimicry_Mimic_CombatOnlyDisabled", 1)
+THEN
+DB_NOOP(1);
+
 PROC
 LLMIME_Mimicking_MimicAction((CHARACTERGUID)_Caster, (STRING)_Action, (STRING)_ActionType)
 AND
 DB_LLMIME_Mimicking_MimicQueue(_Mime, _Caster, _Action, _ActionType, _CastX, _CastRotation, _CastZ, _TargetX, _TargetZ, _TargetPriority, _IsTarget)
+AND
+NOT LLMIME_Mimicking_QRY_CanStartMimic(_Mime)
+THEN
+LLMIME_Mimicking_ClearMimicDataForMime(_Mime);
+
+PROC
+LLMIME_Mimicking_MimicAction((CHARACTERGUID)_Caster, (STRING)_Action, (STRING)_ActionType)
+AND
+DB_LLMIME_Mimicking_MimicQueue(_Mime, _Caster, _Action, _ActionType, _CastX, _CastRotation, _CastZ, _TargetX, _TargetZ, _TargetPriority, _IsTarget)
+AND
+LLMIME_Mimicking_QRY_CanStartMimic(_Mime)
 THEN
 LeaderLog_Log("DEBUG", "[LLMIME:Mime:MimicAction] Starting target calculation for [",_ActionType,"][",_Action,"].");
 NOT DB_LLMIME_Mimicking_MimicQueue(_Mime, _Caster, _Action, _ActionType, _CastX, _CastRotation, _CastZ, _TargetX, _TargetZ, _TargetPriority, _IsTarget);
@@ -961,11 +988,11 @@ NOT DB_LLMIME_Mimicking_FinalMimicQueue(_Mime, _Caster, _Action, _ActionType, _C
 IF
 StoryEvent((CHARACTERGUID)_Mime, "Mimicry_ClearMimeBonuses")
 THEN
-LLMIME_Mimicking_CleaAllDataForMime(_Mime);
+LLMIME_Mimicking_ClearMimicDataForMime(_Mime);
 
 /*
 PROC
-LLMIME_Mimicking_CleaAllDataForMime((CHARACTERGUID)_Mime)
+LLMIME_Mimicking_ClearMimicDataForMime((CHARACTERGUID)_Mime)
 AND
 DB_LLMIME_Mimicking_MimicNextAction(_Mime)
 THEN
@@ -973,28 +1000,28 @@ NOT DB_LLMIME_Mimicking_MimicNextAction(_Mime);
 */
 
 PROC
-LLMIME_Mimicking_CleaAllDataForMime((CHARACTERGUID)_Mime)
+LLMIME_Mimicking_ClearMimicDataForMime((CHARACTERGUID)_Mime)
 AND
 DB_LLMIME_Mimicking_MimicQueue_Self(_Mime, _Caster, _Action, _ActionType)
 THEN
 NOT DB_LLMIME_Mimicking_MimicQueue_Self(_Mime, _Caster, _Action, _ActionType);
 
 PROC
-LLMIME_Mimicking_CleaAllDataForMime((CHARACTERGUID)_Mime)
+LLMIME_Mimicking_ClearMimicDataForMime((CHARACTERGUID)_Mime)
 AND
 DB_LLMIME_Mimicking_MimicQueue(_Mime, _Caster, _Action, _ActionType, _CastX, _CastRotation, _CastZ, _TargetX, _TargetZ, _TargetPriority, _IsTarget)
 THEN
 NOT DB_LLMIME_Mimicking_MimicQueue(_Mime, _Caster, _Action, _ActionType, _CastX, _CastRotation, _CastZ, _TargetX, _TargetZ, _TargetPriority, _IsTarget);
 
 PROC
-LLMIME_Mimicking_CleaAllDataForMime((CHARACTERGUID)_Mime)
+LLMIME_Mimicking_ClearMimicDataForMime((CHARACTERGUID)_Mime)
 AND
 DB_LLMIME_Mimicking_FinalMimicQueue(_Mime, _Caster, _Action, _ActionType, _CastX, _CastRotation, _CastZ, _TargetX, _TargetZ, _TargetPriority, _IsTarget)
 THEN
 NOT DB_LLMIME_Mimicking_FinalMimicQueue(_Mime, _Caster, _Action, _ActionType, _CastX, _CastRotation, _CastZ, _TargetX, _TargetZ, _TargetPriority, _IsTarget);
 
 PROC
-LLMIME_Mimicking_CleaAllDataForMime((CHARACTERGUID)_Mime)
+LLMIME_Mimicking_ClearMimicDataForMime((CHARACTERGUID)_Mime)
 AND
 DB_LLMIME_Mimicking_MimicFailTimer(_TimerName, _Mime, _Caster, _Action, _ActionType)
 THEN
@@ -1002,7 +1029,7 @@ NOT DB_LLMIME_Mimicking_MimicFailTimer(_TimerName, _Mime, _Caster, _Action, _Act
 TimerCancel(_TimerName);
 
 PROC
-LLMIME_Mimicking_CleaAllDataForMime((CHARACTERGUID)_Mime)
+LLMIME_Mimicking_ClearMimicDataForMime((CHARACTERGUID)_Mime)
 AND
 DB_LLMIME_Mimicking_DeleteOneTimeUseWeaponsTimer(_TimerName, _Mime, _Action, _ActionType)
 THEN
@@ -1010,7 +1037,7 @@ NOT DB_LLMIME_Mimicking_DeleteOneTimeUseWeaponsTimer(_TimerName, _Mime, _Action,
 TimerCancel(_TimerName);
 
 PROC
-LLMIME_Mimicking_CleaAllDataForMime((CHARACTERGUID)_Mime)
+LLMIME_Mimicking_ClearMimicDataForMime((CHARACTERGUID)_Mime)
 AND
 DB_LLMIME_Mimicking_MimicCleanupTimer(_TimerName, _Mime)
 THEN
@@ -1018,28 +1045,28 @@ NOT DB_LLMIME_Mimicking_MimicCleanupTimer(_TimerName, _Mime);
 TimerCancel(_TimerName);
 
 PROC
-LLMIME_Mimicking_CleaAllDataForMime((CHARACTERGUID)_Mime)
+LLMIME_Mimicking_ClearMimicDataForMime((CHARACTERGUID)_Mime)
 AND
 DB_LLMIME_Mimicking_Temp_ResetDummyAfterMimicAction(_Mime, _Target, _Action, _ActionType)
 THEN
 NOT DB_LLMIME_Mimicking_Temp_ResetDummyAfterMimicAction(_Mime, _Target, _Action, _ActionType);
 
 PROC
-LLMIME_Mimicking_CleaAllDataForMime((CHARACTERGUID)_Mime)
+LLMIME_Mimicking_ClearMimicDataForMime((CHARACTERGUID)_Mime)
 AND
 DB_LLMIME_Mimicking_LastEquipped(_Mime, _Slot, _Item)
 THEN
 NOT DB_LLMIME_Mimicking_LastEquipped(_Mime, _Slot, _Item);
 
 PROC
-LLMIME_Mimicking_CleaAllDataForMime((CHARACTERGUID)_Mime)
+LLMIME_Mimicking_ClearMimicDataForMime((CHARACTERGUID)_Mime)
 AND
 LLMIME_Mimickery_QRY_HasMimickedItems(_Mime)
 THEN
 LLMIME_Mimicking_DeleteMimickedItems(_Mime);
 
 PROC
-LLMIME_Mimicking_CleaAllDataForMime((CHARACTERGUID)_Mime)
+LLMIME_Mimicking_ClearMimicDataForMime((CHARACTERGUID)_Mime)
 THEN
 LLMIME_Mimicking_CleanupMime(_Mime);
 //END_REGION

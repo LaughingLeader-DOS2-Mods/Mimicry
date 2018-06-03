@@ -20,6 +20,39 @@ LeaderLib_Math_Sine(131.0);
 LeaderLib_Math_Cosine(131.0);
 
 IF
+TimerFinished("LLMIME_Debug_Test")
+AND
+DB_IsPlayer(_Player)
+THEN
+LLMIME_Debug_TracePartyCount(_Player);
+
+IF
+CharacterJoinedParty(_)
+AND
+DB_IsPlayer(_Player)
+THEN
+LLMIME_Debug_TracePartyCount(_Player);
+
+IF
+CharacterLeftParty(_)
+AND
+DB_IsPlayer(_Player)
+THEN
+LLMIME_Debug_TracePartyCount(_Player);
+
+PROC
+LLMIME_Debug_TracePartyCount((CHARACTERGUID)_Player)
+AND
+GetVarInteger(_Player, "LeaderLib_PartyCount", _Count)
+AND
+IntegertoString(_Count, _CountStr)
+AND
+CharacterGetDisplayName(_Player, _, _Name)
+THEN
+LeaderLog_Log("DEBUG", "[LLMIME:Debug:PartyCount] [",_Name,"] party count is [",_CountStr,"].");
+
+
+IF
 DB_LeaderLib_Math_Sine(131.0, _Result)
 AND
 CharacterGetHostCharacter(_Char)

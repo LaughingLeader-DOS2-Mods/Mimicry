@@ -26,6 +26,7 @@ EffectEditorConfig.xml
 DockPanel.config
 EditorBrowserMetadata_*
 EditorBrowserMetadata.xml
+Autosave/
 
 # Assets             #
 ######################

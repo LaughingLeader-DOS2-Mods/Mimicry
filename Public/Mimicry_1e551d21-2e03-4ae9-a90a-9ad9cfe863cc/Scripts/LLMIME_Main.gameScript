@@ -188,3 +188,14 @@ ON
 ACTIONS
 	Cast(_EventNameStr, _EventName)
 	ItemEvent(_Item, _EventNameStr)
+	
+	
+EVENT Debug_EventTest
+VARS
+	CHARACTER:_EventParser
+ON
+	OnCharacterEvent(_EventParser, "LeaderLib_Events_OnDefaultEventFlowComplete")
+	OnCharacterEvent(_EventParser, "LeaderLib_Initialized")
+ACTIONS
+	SetVar(_EventParser, "LeaderLib_LogMessage", STRING:"[LLMIME:LLMIME_Main.gameScript:Debug_EventTest] Test.")
+	CharacterEvent(_EventParser, "LeaderLib_DebugLog")
