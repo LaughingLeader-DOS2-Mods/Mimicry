@@ -20,6 +20,9 @@ DB_LLMIME_Mimicking_Blacklist_Skills("Target_LLMIME_MimicAttack");
 DB_LLMIME_Mimicking_Blacklist_Skills("Shout_LLMIME_ReturnToOwner");
 DB_LLMIME_Mimicking_Blacklist_Skills("Shout_LLMIME_BrawlerStance");
 DB_LLMIME_Mimicking_Blacklist_SkillPrefixes("_CA_");
+//Special skills
+DB_LLMIME_Mimicking_Whitelist_Skills("Shout_RecoverArmour");
+DB_LLMIME_Mimicking_Whitelist_Skills("Shout_EnemyOverthrow");
 
 DB_LLMIME_Mimicking_Whitelist_ItemTags("Potion");
 DB_LLMIME_Mimicking_Whitelist_ItemTags("POTIONS");
@@ -41,6 +44,8 @@ DB_LLMIME_Mimicking_Whitelist_WeaponCopy_SkillTypes("Zone");
 DB_LLMIME_Mimicking_Whitelist_WeaponCopy_SkillTypes("MultiStrike");
 DB_LLMIME_Mimicking_Whitelist_WeaponCopy_SkillTypes("Rush");
 DB_LLMIME_Mimicking_Whitelist_WeaponCopy_SkillTypes("Rain");
+
+DB_LLMIME_Mimicking_Whitelist_WeaponCopy_Skills("Shout_RecoverArmour");
 
 DB_LLMIME_Mimicking_Blacklist_WeaponCopy_IgnoreSkillsWith("_Grenade_");
 //END_REGION
@@ -87,6 +92,13 @@ DB_NOOP(1);
 //END_REGION
 
 //REGION BLACKLIST_CHECK_SKILLS
+QRY
+LLMIME_Mimicking_QRY_SkillIsAllowed((STRING)_Skill)
+AND
+DB_LLMIME_Mimicking_Whitelist_Skills(_Skill)
+THEN
+DB_NOOP(1);
+
 QRY
 LLMIME_Mimicking_QRY_SkillIsAllowed((STRING)_Skill)
 AND

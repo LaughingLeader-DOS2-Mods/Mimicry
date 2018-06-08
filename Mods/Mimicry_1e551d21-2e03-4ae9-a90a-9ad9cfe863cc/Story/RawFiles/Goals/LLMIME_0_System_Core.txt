@@ -595,6 +595,17 @@ AND
 DB_LLMIME_Mimicking_MimicFailTimer(_TimerName, _Mime, _Caster, _Action, _ActionType)
 THEN
 DB_NOOP(1);
+
+QRY
+LLMIME_QRY_MimeIsCurrentlyMimicking((CHARACTERGUID)_Mime)
+AND
+LLMIME_QRY_CharacterIsAMime(_Mime)
+AND
+NOT DB_LLMIME_Mimicking_MimicFailTimer(_, _Mime, _, _, _)
+AND
+ObjectGetFlag(_Mime, "Mimicry_IsMimicking", 1)
+THEN
+DB_NOOP(1);
 //END_REGION
 
 //REGION RESET_EVENTS

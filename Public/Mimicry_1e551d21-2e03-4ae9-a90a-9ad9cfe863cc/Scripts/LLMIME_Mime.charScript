@@ -3,13 +3,41 @@ INIT
 	INT:%Following = 0
 	INT:%LLMIME_Initialized = 0
 	EXTERN FLOAT:%BrawlerStanceInfluenceStrength = 50.0
+	INT:%LLMIME_InitialRefresh = 0
+	FIXEDSTRING:%RefreshTimerName = ""
 EVENTS
 
-EVENT Init_Register
+/*
+EVENT Init_Vars
 ON
-	OnActivate()
-	//OnItemEvent(_, "LeaderLib_Initialized")
+	OnItemEvent(_, "LeaderLib_Initialized")
 ACTIONS
+	Set(%LLMIME_InitialRefresh, 0)
+*/
+
+
+EVENT Init_Event
+VARS
+	INT:_Ran
+	FLOAT:_RanFloat
+	STRING:_TimerName
+ON
+	//OnCharacterEvent(__Me, "Mimicry_MimeInitialized")
+	//OnActivate()
+	OnItemEvent(_, "LeaderLib_Initialized")
+ACTIONS
+	
+IF "c1"
+	IsEqual(%LLMIME_InitialRefresh, 0)
+THEN
+	CallFunction("Mimicry_MimeFollower_ActivateBrawlerStance")
+	/*GetRandomBetween(_Ran, 15, 20)
+	Cast(_RanFloat, _Ran)
+	Print(_TimerName, "LLMIME_Timers_RefreshEquipment_[1]", _Ran)
+	Cast(%RefreshTimerName, _TimerName)
+	StartTimer(%RefreshTimerName, _RanFloat, 0)*/
+	Set(%LLMIME_InitialRefresh, 1)
+ENDIF
 IF "c1"
 	IsEqual(%LLMIME_Initialized, 0)
 THEN
@@ -24,12 +52,17 @@ THEN
 	Set(%LLMIME_Initialized, 1)
 ENDIF
 
+
 EVENT Follower_BrawlerStance_Activate
 ON
 	OnFunction("Mimicry_MimeFollower_ActivateBrawlerStance")
 ACTIONS
-	//SetFaction(__Me, "Neutral_NPC")
-	//CharacterSetHasDialog(__Me, 1)
+IF "!c1"
+	CharacterHasStatus(__Me, LLMIME_BRAWLER_STANCE_CON)
+THEN
+	CharacterApplyStatus(__Me, LLMIME_BRAWLER_STANCE_CON, -1, 1)
+ENDIF
+/*
 IF "!c1"
 	HasStatusInfluence(__Me, LLMIME_BRAWLER_STANCE_CON)
 THEN
@@ -39,6 +72,14 @@ ELSE
 	CharacterRemoveStatus(__Me, LLMIME_BRAWLER_STANCE_CON, null, 0)
 	AddStatusInfluence(__Me, LLMIME_BRAWLER_STANCE_CON, %BrawlerStanceInfluenceStrength, "", 0, 1)
 ENDIF
+*/
+
+EVENT Apply_BrawlerStance
+ON
+	OnCharacterEvent(__Me, "Mimicry_MimickedWeaponsRemoved")
+	OnCharacterEvent(__Me, "LLMIME_MimeFollowerRevived")
+ACTIONS
+	CallFunction("Mimicry_MimeFollower_ActivateBrawlerStance")
 
 EVENT Reset_Follow_Priority
 ON
@@ -53,7 +94,8 @@ ON
 ACTIONS
 	SetPriority("Block_AutoFollow", 99998)
 	//SetPriority("Block_AutoFollow", 0)
-	
+
+/*
 EVENT Mask_Equipped
 VARS
 	ITEM:_Mask
@@ -65,6 +107,13 @@ IF "c1"
 THEN
 	CallFunction("Mimicry_MimeFollower_ActivateBrawlerStance")
 ENDIF
+*/
+
+EVENT Refresh_Timer
+ON
+	OnTimer(%RefreshTimerName)
+ACTIONS
+	CharacterEvent(__Me, "LeaderLib_Commands_RefreshEquipment_Delayed")
 
 EVENT Mimicking_Applied
 ON
@@ -86,46 +135,7 @@ REACTION Block_AutoFollow, 0
 USAGE PEACE
 VARS
 	CHARACTER:_Owner
-CHECK "!c1&!c2"
+CHECK "!c1"
 	HasFlag(__Me, "LeaderLib_CharacterIsFollowing")
-	CharacterHasStatus(__Me, LLMIME_MIMIC_WEAPON_REQUIREMENTS)
 ACTIONS
 	Sleep(1)
-	
-REACTION Mimic_Attack_Character, 9999
-USAGE ALL
-VARS
-	CHARACTER:_Target
-CHECK "c1&c2&!c3"
-	CharacterHasStatus(__Me, LLMIME_MIMICKING)
-	GetVar(_Target, __Me, "Mimicry_MimicCharacterTarget")
-	IsEqual(_Target, null)
-ACTIONS
-IF "c1"
-	CharacterCanSee(__Me, _Target)
-THEN
-	CharacterAttack(_Target)
-ELSE
-	CharacterAttackWithoutMove(_Target)
-ENDIF
-	SetVar(__Me, "Mimicry_MimicCharacterTarget", CHARACTER:null)
-	StatusText(__Me, "Attacked character")
-	
-REACTION Mimic_Attack_Item, 9999
-USAGE ALL
-VARS
-	ITEM:_Target
-CHECK "c1&c2&!c3"
-	CharacterHasStatus(__Me, LLMIME_MIMICKING)
-	GetVar(_Target, __Me, "Mimicry_MimicItemTarget")
-	IsEqual(_Target, null)
-ACTIONS
-IF "c1"
-	CharacterCanSee(__Me, _Target)
-THEN
-	CharacterAttack(_Target)
-ELSE
-	CharacterAttackWithoutMove(_Target)
-ENDIF
-	SetVar(__Me, "Mimicry_MimicItemTarget", ITEM:null)
-	StatusText(__Me, "Attacked item")

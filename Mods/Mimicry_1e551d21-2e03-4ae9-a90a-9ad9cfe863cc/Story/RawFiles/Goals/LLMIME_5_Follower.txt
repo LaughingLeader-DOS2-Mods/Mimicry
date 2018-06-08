@@ -837,6 +837,13 @@ IF
 CharacterResurrected(_Mime)
 AND
 DB_LLMIME_Follower_Mime(_Mime)
+THEN
+SetStoryEvent(_Mime, "LLMIME_MimeFollowerRevived");
+
+IF
+CharacterResurrected(_Mime)
+AND
+DB_LLMIME_Follower_Mime(_Mime)
 AND
 DB_LLMIME_Follower_RevivedBy(_Player)
 AND
