@@ -316,32 +316,35 @@ RemoveStatus(_Mime, "LLMIME_MIMICKING");
 
 IF
 CharacterStatusApplied(_Mime, "LLMIME_MIME", _)
-AND
-HasActiveStatus(_Mime, "LLMIME_MIMICKING", 0)
-AND
-LLMIME_QRY_MimeShouldBeMimicking(_Mime)
 THEN
-ApplyStatus(_Mime, "LLMIME_MIMICKING", -1.0);
-
-//GlobalFlagSet("Mimicry_Mimic_CombatOnlyDisabled")
+LLMIME_Mimicking_ApplyMimicking(_Mime);
 
 IF
 ObjectTurnEnded((CHARACTERGUID)_Mime)
-AND
-HasActiveStatus(_Mime, "LLMIME_MIMICKING", 0)
-AND
-LLMIME_QRY_MimeShouldBeMimicking(_Mime)
 THEN
-ApplyStatus(_Mime, "LLMIME_MIMICKING", -1.0);
+LLMIME_Mimicking_ApplyMimicking(_Mime);
 
 IF
 ObjectEnteredCombat((CHARACTERGUID)_Mime, _CombatID)
+THEN
+LLMIME_Mimicking_ApplyMimicking(_Mime);
+
+IF
+CharacterJoinedParty(_Character)
+THEN
+IterateParty(_Character, "Mimicry_ApplyMimickingIterator");
+
+IF
+StoryEvent((CHARACTERGUID)_Mime, "Mimicry_ApplyMimickingIterator")
+THEN
+LLMIME_Mimicking_ApplyMimicking(_Mime);
+
+PROC
+LLMIME_Mimicking_ApplyMimicking((CHARACTERGUID)_Mime)
 AND
 HasActiveStatus(_Mime, "LLMIME_MIMICKING", 0)
 AND
 LLMIME_QRY_MimeShouldBeMimicking(_Mime)
-AND
-NOT DB_LeaderLib_Combat_ActiveObject(_CombatID, _Mime)
 THEN
 ApplyStatus(_Mime, "LLMIME_MIMICKING", -1.0);
 
@@ -357,6 +360,13 @@ IF
 ObjectLeftCombat(_Mime, _CombatID)
 AND
 NOT GlobalGetFlag("Mimicry_Mimic_CombatOnlyDisabled", 1)
+AND
+HasActiveStatus(_Mime, "LLMIME_MIMICKING", 1)
+THEN
+RemoveStatus(_Mime, "LLMIME_MIMICKING");
+
+IF
+CharacterStatusApplied(_Mime, "LLMIME_MIMICKING_DISABLED", _)
 AND
 HasActiveStatus(_Mime, "LLMIME_MIMICKING", 1)
 THEN
@@ -416,6 +426,7 @@ LLMIME_Mimicking_MimicAction(_Caster, _Action, _ActionType);
 //END_REGION
 
 //REGION MIMIC_ACTION_START
+/*
 QRY
 LLMIME_Mimicking_QRY_CanStartMimic((CHARACTERGUID)_Mime)
 AND
@@ -439,14 +450,16 @@ DB_LLMIME_Mimicking_MimicQueue(_Mime, _Caster, _Action, _ActionType, _CastX, _Ca
 AND
 NOT LLMIME_Mimicking_QRY_CanStartMimic(_Mime)
 THEN
+LeaderLog_Log("DEBUG", "[LLMIME:Mimicking:MimicAction] No alive enemies in combat. Skipping action.");
 LLMIME_Mimicking_ClearMimicDataForMime(_Mime);
+*/
 
 PROC
 LLMIME_Mimicking_MimicAction((CHARACTERGUID)_Caster, (STRING)_Action, (STRING)_ActionType)
 AND
 DB_LLMIME_Mimicking_MimicQueue(_Mime, _Caster, _Action, _ActionType, _CastX, _CastRotation, _CastZ, _TargetX, _TargetZ, _TargetPriority, _IsTarget)
-AND
-LLMIME_Mimicking_QRY_CanStartMimic(_Mime)
+//AND
+//LLMIME_Mimicking_QRY_CanStartMimic(_Mime)
 THEN
 LeaderLog_Log("DEBUG", "[LLMIME:Mime:MimicAction] Starting target calculation for [",_ActionType,"][",_Action,"].");
 NOT DB_LLMIME_Mimicking_MimicQueue(_Mime, _Caster, _Action, _ActionType, _CastX, _CastRotation, _CastZ, _TargetX, _TargetZ, _TargetPriority, _IsTarget);

@@ -78,6 +78,7 @@ EVENT Apply_BrawlerStance
 ON
 	OnCharacterEvent(__Me, "Mimicry_MimickedWeaponsRemoved")
 	OnCharacterEvent(__Me, "LLMIME_MimeFollowerRevived")
+	OnCharacterStatusApplied(__Me, "LLMIME_MIME")
 ACTIONS
 	CallFunction("Mimicry_MimeFollower_ActivateBrawlerStance")
 

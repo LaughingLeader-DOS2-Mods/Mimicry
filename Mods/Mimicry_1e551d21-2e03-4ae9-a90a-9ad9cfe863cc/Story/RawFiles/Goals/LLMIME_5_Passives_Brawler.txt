@@ -183,20 +183,13 @@ THEN
 ObjectClearFlag(_Mime, "Mimicry_BrawlerStatusActive");
 //END_REGION
 
-//REGION DAMAGE_TYPE_MATCHING
-QRY
-LLMIME_Brawler_QRY_DamageTypeMatches((CHARACTERGUID)_Mime, (STRING)_DamageType)
-THEN
-DB_NOOP(1);
-//END_REGION
-
 //REGION BONUS_DAMAGE
 IF
 AttackedByObject(_Target, _Owner, (CHARACTERGUID)_Mime, _DamageType, "Attack")
 AND
 LLMIME_QRY_CharacterIsAMime(_Mime)
 AND
-HasActiveStatus(_Mime, "LLMIME_BRAWLER_BONUS", 1)
+LLMIME_Brawler_QRY_BrawlerActive(_Mime)
 AND
 LLMIME_Brawler_QRY_DamageTypeMatches(_Mime, _DamageType)
 AND
@@ -278,7 +271,7 @@ LLMIME_QRY_CharacterIsAMime(_Mime)
 AND
 DB_LLMIME_Brawler_Temp_MimeIsAttacking(_Mime)
 AND
-HasActiveStatus(_Mime, "LLMIME_BRAWLER_BONUS", 1)
+LLMIME_Brawler_QRY_BrawlerActive(_Mime)
 AND
 ObjectGetFlag(_Mime, "LLMIME_CANNOT_DOUBLE_ATTACK", 0)
 THEN
@@ -386,6 +379,20 @@ AND
 DB_LLMIME_Brawler_StanceStatuses(_Status, _SettingsFlag, _InfoStatus, _DisableInfoFlag)
 AND
 HasActiveStatus(_Mime, _Status, 1)
+THEN
+DB_NOOP(1);
+
+QRY
+LLMIME_Brawler_QRY_DamageTypeMatches((CHARACTERGUID)_Mime, (STRING)_DamageType)
+THEN
+DB_NOOP(1);
+
+QRY
+LLMIME_Brawler_QRY_BrawlerActive((CHARACTERGUID)_Mime)
+AND
+HasActiveStatus(_Mime, "LLMIME_BRAWLER_BONUS", 1)
+AND
+ObjectGetFlag(_Mime, "Mimicry_MimeIsUnarmed", 1)
 THEN
 DB_NOOP(1);
 //END_REGION

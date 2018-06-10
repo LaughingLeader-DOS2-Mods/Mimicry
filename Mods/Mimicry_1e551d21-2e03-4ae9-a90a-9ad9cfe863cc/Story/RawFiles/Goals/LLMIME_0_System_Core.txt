@@ -16,7 +16,7 @@ DB_LLMIME_PassiveData("LLMIME_CONCENTRATION", "LLMIME_CONCENTRATION_BONUS", "LLM
 
 LLMIME_System_InitTemplates();
 
-//LeaderLib_Register_StatusToggleSkill("Shout_LLMIME_BrawlerStance", "LLMIME_BRAWLER_STANCE", -1.0, 1);
+LeaderLib_Register_StatusToggleSkill("Shout_LLMIME_DisableMimicking", "LLMIME_MIMICKING_DISABLED", -1.0, 1);
 
 DB_LLMIME_Statuses("LLMIME_MIMICKING");
 DB_LLMIME_Statuses("LLMIME_MIMIC_WEAPON_REQUIREMENTS");
@@ -556,16 +556,38 @@ THEN
 DB_NOOP(1);
 
 QRY
-LLMIME_QRY_MimeShouldBeMimicking((CHARACTERGUID)_Mime)
+LLMIME_QRY_NotSolo((CHARACTERGUID)_Mime)
 AND
-LLMIME_QRY_CharacterIsAMime(_Mime)
-AND
-GlobalGetFlag("Mimicry_Mimic_CombatOnlyDisabled", 1)
-AND
-//CharacterIsPartyMember(_Mime, 1)
 GetVarInteger(_Mime, "LeaderLib_PartyCount", _Count)
 AND
 _Count > 1
+THEN
+DB_NOOP(1);
+
+QRY
+LLMIME_QRY_NotSolo((CHARACTERGUID)_Mime)
+AND
+LLMIME_QRY_Internal_PartyCountNotSet(_Mime)
+AND
+LeaderLib_Party_QRY_CountParties()
+AND
+GetVarInteger(_Mime, "LeaderLib_PartyCount", _Count)
+AND
+_Count > 1
+THEN
+DB_NOOP(1);
+
+QRY
+LLMIME_QRY_Internal_PartyCountNotSet((CHARACTERGUID)_Character)
+AND
+NOT GetVarInteger(_Character, "LeaderLib_PartyCount", _)
+THEN
+DB_NOOP(1);
+
+QRY
+LLMIME_QRY_Internal_PartyCountNotSet((CHARACTERGUID)_Character)
+AND
+GetVarInteger(_Character, "LeaderLib_PartyCount", 0)
 THEN
 DB_NOOP(1);
 
@@ -574,14 +596,26 @@ LLMIME_QRY_MimeShouldBeMimicking((CHARACTERGUID)_Mime)
 AND
 LLMIME_QRY_CharacterIsAMime(_Mime)
 AND
-NOT GlobalGetFlag("Mimicry_Mimic_CombatOnlyDisabled", 1)
+HasActiveStatus(_Mime, "LLMIME_MIMICKING_DISABLED", 0)
+AND
+CharacterIsInCombat(_Mime, 0)
+AND
+GlobalGetFlag("Mimicry_Mimic_CombatOnlyDisabled", 1)
+AND
+LLMIME_QRY_NotSolo(_Mime)
+THEN
+DB_NOOP(1);
+
+QRY
+LLMIME_QRY_MimeShouldBeMimicking((CHARACTERGUID)_Mime)
+AND
+LLMIME_QRY_CharacterIsAMime(_Mime)
+AND
+HasActiveStatus(_Mime, "LLMIME_MIMICKING_DISABLED", 0)
 AND
 CharacterIsInCombat(_Mime, 1)
 AND
-//CharacterIsPartyMember(_Mime, 1)
-GetVarInteger(_Mime, "LeaderLib_PartyCount", _Count)
-AND
-_Count > 1
+LLMIME_QRY_NotSolo(_Mime)
 AND
 NOT DB_LeaderLib_Combat_ActiveObject(_, _Mime)
 THEN

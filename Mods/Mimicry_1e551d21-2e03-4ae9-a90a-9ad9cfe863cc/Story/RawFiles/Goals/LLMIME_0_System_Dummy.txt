@@ -225,6 +225,13 @@ SetOnStage(_Dummy, 0);
 LeaderLog_Log("DEBUG", "[LLMIME:Mimic:Dummy:ResetDummy] Set dummy off stage.");
 
 PROC
+LLMIME_Dummy_ResetDummy((GUIDSTRING)_Dummy)
+AND
+NOT IsTagged(_Dummy, "LLMIME_DUMMY", 1)
+THEN
+LeaderLog_Log("DEBUG", "[LLMIME:Mimic:Dummy:ResetDummy] [ERROR] Object is not tagged as a dummy!");
+
+PROC
 LLMIME_Dummy_ResetDummyAfterDelay((GUIDSTRING)_Dummy, (INTEGER)_Delay)
 AND
 DB_LLMIME_ResetDummyTimer(_TimerName, _Dummy)
@@ -245,8 +252,10 @@ AND
 GetUUID(_Dummy, _ID)
 AND
 StringConcatenate("LLMIME_Timers_ResetDummyAfterDelay_", _ID, _TimerName)
+AND
+IntegertoString(_Delay, _DelayStr)
 THEN
-LeaderLog_Log("DEBUG", "[LLMIME:Mimic:Dummy:ResetDummyAfterDelay] Resetting dummy [",_ID,"] after delay.");
+LeaderLog_Log("DEBUG", "[LLMIME:Mimic:Dummy:ResetDummyAfterDelay] Resetting dummy [",_ID,"] after timer delay [",_TimerName,"|",_DelayStr,"ms].");
 DB_LLMIME_ResetDummyTimer(_TimerName, _Dummy);
 TimerLaunch(_TimerName, _Delay);
 
@@ -256,6 +265,7 @@ AND
 DB_LLMIME_ResetDummyTimer(_TimerName, _Dummy)
 THEN
 NOT DB_LLMIME_ResetDummyTimer(_TimerName, _Dummy);
+LeaderLog_Log("DEBUG", "[LLMIME:Mimic:Dummy:ResetDummyTimer] Timer finished. Resetting dummy.");
 LLMIME_Dummy_ResetDummy(_Dummy);
 //END_REGION
 

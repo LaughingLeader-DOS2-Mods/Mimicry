@@ -9,6 +9,7 @@ THEN
 DB_LLMIME_Mime_MimeActivatingEquipmentTags("LLMIME_ACTIVATE_MIME");
 DB_LLMIME_Mime_Skills("Shout_LLMIME_BrawlerStance");
 DB_LLMIME_Mime_Skills("Shout_LLMIME_OpenMenu");
+DB_LLMIME_Mime_Skills("Shout_LLMIME_DisableMimicking");
 
 QRY
 LLMIME_Mime_QRY_IsMimeItem((ITEMGUID)_Item)
