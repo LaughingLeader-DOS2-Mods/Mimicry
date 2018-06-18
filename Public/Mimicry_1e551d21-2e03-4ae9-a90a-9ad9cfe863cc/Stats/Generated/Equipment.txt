@@ -4,8 +4,6 @@ add equipment entry "ARM_UNIQUE_LLMIME_MimeMask_A"
 
 new equipment "LLMIME_Class_Mime_Preview"
 add equipmentgroup 
-add equipment entry "ARM_UNIQUE_LLMIME_MimeMask_A"
-add equipmentgroup 
 add equipment entry "ARM_LLMIME_Mime_Light_UpperBody"
 add equipmentgroup 
 add equipment entry "ARM_LLMIME_Mime_Light_LowerBody"
