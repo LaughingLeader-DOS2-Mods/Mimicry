@@ -133,6 +133,7 @@ CharacterEquipItem(_Mime, _Mask);
 //END_REGION
 
 //REGION SKILL_DATA
+/*
 IF
 CharacterUsedSkillAtPosition(_,_,_,_, _Skill, _SkillType)
 THEN
@@ -176,6 +177,10 @@ AND
 DB_LLMIME_SkillData(_Skill, _SkillType, _PastSkillElement)
 AND
 _PastSkillElement != _SkillElement
+AND
+_PastSkillElement == ""
+AND
+_SkillElement != ""
 THEN
 NOT DB_LLMIME_SkillData(_Skill, _SkillType, _PastSkillElement);
 DB_LLMIME_SkillData(_Skill, _SkillType, _SkillElement);
@@ -193,6 +198,7 @@ AND
 DB_LLMIME_SkillData(_Skill, _CheckType, _SkillElement)
 THEN
 DB_NOOP(1);
+*/
 //END_REGION
 
 //REGION UNARMED_FLAG_QUERIES
@@ -332,7 +338,7 @@ IF
 StoryEvent((CHARACTERGUID)_Mime, "Mimicry_MimeInitialized")
 THEN
 LLMIME_System_FlagForUnarmed(_Mime);
-LeaderLib_StartTargetTimer(_Mime, 50, "LLMIME_Timers_CheckUnarmed_", "Mimicry_CheckUnarmed");
+LeaderLib_StartObjectTimer(_Mime, 50, "LLMIME_Timers_CheckUnarmed_", "Mimicry_CheckUnarmed");
 
 IF
 StoryEvent((CHARACTERGUID)_Mime, "Mimicry_CheckUnarmed")
@@ -617,7 +623,7 @@ CharacterIsInCombat(_Mime, 1)
 AND
 LLMIME_QRY_NotSolo(_Mime)
 AND
-NOT DB_LeaderLib_Combat_ActiveObject(_, _Mime)
+NOT LeaderLib_Combat_QRY_IsActiveTurn(_Mime)
 THEN
 DB_NOOP(1);
 

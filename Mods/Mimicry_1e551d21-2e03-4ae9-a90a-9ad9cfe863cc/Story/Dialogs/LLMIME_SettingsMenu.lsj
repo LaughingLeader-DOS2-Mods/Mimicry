@@ -1,7 +1,7 @@
 {
    "save" : {
       "header" : {
-         "time" : 1527363833,
+         "time" : 1529190623,
          "version" : "2.0.8.2"
       },
       "regions" : {
@@ -1366,6 +1366,11 @@
                                  {
                                     "flag" : [
                                        {
+                                          "name" : {"type" : 22, "value" : "LeaderLib_IsFollower"},
+                                          "paramval" : {"type" : 4, "value" : 1},
+                                          "value" : {"type" : 19, "value" : 0}
+                                       },
+                                       {
                                           "name" : {"type" : 22, "value" : "Mimicry_BrawlerStance_UseCon"},
                                           "paramval" : {"type" : 4, "value" : 1},
                                           "value" : {"type" : 19, "value" : 0}
@@ -1499,6 +1504,11 @@
                               "flaggroup" : [
                                  {
                                     "flag" : [
+                                       {
+                                          "name" : {"type" : 22, "value" : "LeaderLib_IsFollower"},
+                                          "paramval" : {"type" : 4, "value" : 1},
+                                          "value" : {"type" : 19, "value" : 0}
+                                       },
                                        {
                                           "name" : {"type" : 22, "value" : "Mimicry_BrawlerStance_UseStr"},
                                           "paramval" : {"type" : 4, "value" : 1},
@@ -2116,6 +2126,11 @@
                               "flaggroup" : [
                                  {
                                     "flag" : [
+                                       {
+                                          "name" : {"type" : 22, "value" : "LeaderLib_IsFollower"},
+                                          "paramval" : {"type" : 4, "value" : 1},
+                                          "value" : {"type" : 19, "value" : 0}
+                                       },
                                        {
                                           "name" : {"type" : 22, "value" : "Mimicry_BrawlerStance_UseFin"},
                                           "paramval" : {"type" : 4, "value" : 1},

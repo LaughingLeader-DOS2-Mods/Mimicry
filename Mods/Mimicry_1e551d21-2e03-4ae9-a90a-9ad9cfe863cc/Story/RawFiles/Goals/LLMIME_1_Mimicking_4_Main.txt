@@ -27,11 +27,11 @@ KBSECTION
 //This is used to calculate the correct target position. Important to catch this before the player is moved by an animation.
 //REGION ACTION_POSITION
 IF
-CharacterUsedSkill(_Caster, _Skill, _)
+CharacterUsedSkill(_Caster, _Skill, _SkillElement)
 AND
 CharacterIsPlayer(_Caster, 1)
 AND
-LLMIME_Mimicking_QRY_CanMimicSkill(_Skill)
+LLMIME_Mimicking_QRY_MimesAvailable()
 AND
 NOT DB_LLMIME_Mimicking_ActionPosition(_Caster, _Skill, "Skill", _,_,_)
 AND
@@ -46,7 +46,7 @@ CharacterUsedSkillAtPosition(_Caster, _,_,_, _Skill, _SkillType)
 AND
 CharacterIsPlayer(_Caster, 1)
 AND
-LLMIME_Mimicking_QRY_CanMimicSkill(_Skill)
+LLMIME_Mimicking_QRY_MimesAvailable()
 AND
 NOT DB_LLMIME_Mimicking_ActionPosition(_Caster, _Skill, "Skill", _,_,_)
 AND
@@ -61,7 +61,7 @@ CharacterUsedSkillOnTarget(_Caster, _, _Skill, _SkillType)
 AND
 CharacterIsPlayer(_Caster, 1)
 AND
-LLMIME_Mimicking_QRY_CanMimicSkill(_Skill)
+LLMIME_Mimicking_QRY_MimesAvailable()
 AND
 NOT DB_LLMIME_Mimicking_ActionPosition(_Caster, _Skill, "Skill", _,_,_)
 AND
@@ -73,6 +73,8 @@ DB_LLMIME_Mimicking_ActionPosition(_Caster, _Skill, "Skill", _x,_CastRotation,_z
 
 IF
 DB_LLMIME_Mimicking_ActionPosition(_Caster, _Action, _ActionType, _CastX, _CastRotation, _CastZ)
+AND
+NOT DB_LLMIME_Mimicking_ResetActionPositionTimer(_, _Caster, _Action, _ActionType, _CastX, _CastRotation, _CastZ)
 AND
 GetUUID(_Caster, _ID)
 AND
@@ -87,7 +89,7 @@ AND
 StringConcatenate("LLMIME_Timers_ResetActionPosition_", _TimerID, _TimerName)
 THEN
 DB_LLMIME_Mimicking_ResetActionPositionTimer(_TimerName, _Caster, _Action, _ActionType, _CastX, _CastRotation, _CastZ);
-TimerLaunch(_TimerName, 1000);
+TimerLaunch(_TimerName, 5000);
 
 IF
 TimerFinished(_TimerName)
@@ -104,6 +106,14 @@ AND
 DB_LLMIME_Mimicking_ResetActionPositionTimer(_TimerName, _Caster, _Action, _ActionType, _CastX, _CastRotation, _CastZ)
 THEN
 NOT DB_LLMIME_Mimicking_ResetActionPositionTimer(_TimerName, _Caster, _Action, _ActionType, _CastX, _CastRotation, _CastZ);
+
+PROC
+LLMIME_Mimicking_MimicDone((STRING)_Action, (STRING)_ActionType)
+AND
+DB_LLMIME_Mimicking_ResetActionPositionTimer(_TimerName, _Caster, _Action, _ActionType, _CastX, _CastRotation, _CastZ)
+THEN
+TimerCancel(_TimerName);
+TimerLaunch(_TimerName, 500);
 //END_REGION
 
 //REGION TARGET_PRIORITY
@@ -227,6 +237,20 @@ QRY
 LLMIME_Mimicking_QRY_ActionTypeQueued((CHARACTERGUID)_Caster, (STRING)_ActionType)
 AND
 DB_LLMIME_Mimicking_MimicQueue(_Mime, _Caster, _Action, _ActionType, _CastX, _CastRotation, _CastZ, _TargetX, _TargetZ, _TargetPriority, _IsTarget)
+THEN
+DB_NOOP(1);
+
+QRY
+LLMIME_Mimicking_QRY_MimeInQueue((CHARACTERGUID)_Mime)
+AND
+DB_LLMIME_Mimicking_MimicQueue(_Mime, _Caster, _Action, _ActionType, _CastX, _CastRotation, _CastZ, _TargetX, _TargetZ, _TargetPriority, _IsTarget)
+THEN
+DB_NOOP(1);
+
+QRY
+LLMIME_Mimicking_QRY_MimeInQueue((CHARACTERGUID)_Mime)
+AND
+DB_LLMIME_Mimicking_MimicQueue_Self(_Mime, _Caster, _Action, _ActionType)
 THEN
 DB_NOOP(1);
 //END_REGION
@@ -426,7 +450,6 @@ LLMIME_Mimicking_MimicAction(_Caster, _Action, _ActionType);
 //END_REGION
 
 //REGION MIMIC_ACTION_START
-/*
 QRY
 LLMIME_Mimicking_QRY_CanStartMimic((CHARACTERGUID)_Mime)
 AND
@@ -447,25 +470,26 @@ PROC
 LLMIME_Mimicking_MimicAction((CHARACTERGUID)_Caster, (STRING)_Action, (STRING)_ActionType)
 AND
 DB_LLMIME_Mimicking_MimicQueue(_Mime, _Caster, _Action, _ActionType, _CastX, _CastRotation, _CastZ, _TargetX, _TargetZ, _TargetPriority, _IsTarget)
+THEN
+LLMIME_Mimicking_Internal_ProcessMimicQueue(_Mime, _Caster, _Action, _ActionType, _CastX, _CastRotation, _CastZ, _TargetX, _TargetZ, _TargetPriority, _IsTarget);
+NOT DB_LLMIME_Mimicking_MimicQueue(_Mime, _Caster, _Action, _ActionType, _CastX, _CastRotation, _CastZ, _TargetX, _TargetZ, _TargetPriority, _IsTarget);
+
+PROC
+LLMIME_Mimicking_Internal_ProcessMimicQueue((CHARACTERGUID)_Mime, (CHARACTERGUID)_Caster, (STRING)_Action, (STRING)_ActionType, (REAL)_CastX, (REAL)_CastRotation, (REAL)_CastZ, (REAL)_TargetX, (REAL)_TargetZ, (INTEGER)_TargetPriority, (INTEGER)_IsTarget)
 AND
 NOT LLMIME_Mimicking_QRY_CanStartMimic(_Mime)
 THEN
-LeaderLog_Log("DEBUG", "[LLMIME:Mimicking:MimicAction] No alive enemies in combat. Skipping action.");
+LeaderLog_Log("DEBUG", "[LLMIME:Mimicking:ProcessMimicQueue] No alive enemies in combat. Skipping action.");
 LLMIME_Mimicking_ClearMimicDataForMime(_Mime);
-*/
 
 PROC
-LLMIME_Mimicking_MimicAction((CHARACTERGUID)_Caster, (STRING)_Action, (STRING)_ActionType)
+LLMIME_Mimicking_Internal_ProcessMimicQueue((CHARACTERGUID)_Mime, (CHARACTERGUID)_Caster, (STRING)_Action, (STRING)_ActionType, (REAL)_CastX, (REAL)_CastRotation, (REAL)_CastZ, (REAL)_TargetX, (REAL)_TargetZ, (INTEGER)_TargetPriority, (INTEGER)_IsTarget)
 AND
-DB_LLMIME_Mimicking_MimicQueue(_Mime, _Caster, _Action, _ActionType, _CastX, _CastRotation, _CastZ, _TargetX, _TargetZ, _TargetPriority, _IsTarget)
-//AND
-//LLMIME_Mimicking_QRY_CanStartMimic(_Mime)
+LLMIME_Mimicking_QRY_CanStartMimic(_Mime)
 THEN
-LeaderLog_Log("DEBUG", "[LLMIME:Mime:MimicAction] Starting target calculation for [",_ActionType,"][",_Action,"].");
-NOT DB_LLMIME_Mimicking_MimicQueue(_Mime, _Caster, _Action, _ActionType, _CastX, _CastRotation, _CastZ, _TargetX, _TargetZ, _TargetPriority, _IsTarget);
+LeaderLog_Log("DEBUG", "[LLMIME:Mimicking:ProcessMimicQueue] Starting target calculation for [",_ActionType,"][",_Action,"].");
 ObjectSetFlag(_Mime, "Mimicry_IsMimicking");
 LLMIME_Mimicking_Internal_StartWeaponMimicking(_Mime, _Caster, _ActionType);
-
 DB_LLMIME_Mimicking_FinalMimicQueue(_Mime, _Caster, _Action, _ActionType, _CastX, _CastRotation, _CastZ, _TargetX, _TargetZ, _TargetPriority, _IsTarget);
 LLMIME_Mimic_CalculateTarget(_Mime, _Caster, _CastX, _CastRotation, _CastZ, _TargetX, _TargetZ, _TargetPriority, _Action, _ActionType);
 
@@ -668,6 +692,7 @@ DB_LLMIME_Mimicking_MimicCleanupTimer(_TimerName, _Mime)
 THEN
 NOT DB_LLMIME_Mimicking_MimicCleanupTimer(_TimerName, _Mime);
 LLMIME_Mimicking_CleanupMime(_Mime);
+SetStoryEvent(_Mime, "Mimicry_MimeFinishedMimicking");
 
 PROC
 LLMIME_Mimicking_CleanupMime((CHARACTERGUID)_Mime)
@@ -675,35 +700,43 @@ AND
 HasActiveStatus(_Mime, "LLMIME_MIMIC_WEAPON_REQUIREMENTS", 1)
 THEN
 RemoveStatus(_Mime, "LLMIME_MIMIC_WEAPON_REQUIREMENTS");
+
+//END_REGION
+
+//REGION NEXT_QUEUE
+IF
+StoryEvent((CHARACTERGUID)_Mime, "Mimicry_MimeFinishedMimicking")
+AND
+LLMIME_Mimicking_QRY_MimeInQueue(_Mime)
+AND
+NOT DB_LLMIME_Mimicking_Temp_NextQueueStarted(_Mime)
+AND
+DB_LLMIME_Mimicking_MimicQueue(_Mime, _Caster, _Action, _ActionType, _CastX, _CastRotation, _CastZ, _TargetX, _TargetZ, _TargetPriority, _IsTarget)
+THEN
+DB_LLMIME_Mimicking_Temp_NextQueueStarted(_Mime);
+LLMIME_Mimicking_StartNextMimic(_Caster, _Action, _ActionType);
+
+IF
+StoryEvent((CHARACTERGUID)_Mime, "Mimicry_MimeFinishedMimicking")
+AND
+LLMIME_Mimicking_QRY_MimeInQueue(_Mime)
+AND
+NOT DB_LLMIME_Mimicking_Temp_NextQueueStarted(_Mime)
+AND
+DB_LLMIME_Mimicking_MimicQueue_Self(_Mime, _Caster, _Action, _ActionType)
+THEN
+DB_LLMIME_Mimicking_Temp_NextQueueStarted(_Mime);
+LLMIME_Mimicking_StartNextMimic(_Caster, _Action, _ActionType);
+
+IF
+ObjectFlagSet("Mimicry_IsMimicking", (CHARACTERGUID)_Mime, _)
+AND
+DB_LLMIME_Mimicking_Temp_NextQueueStarted(_Mime)
+THEN
+NOT DB_LLMIME_Mimicking_Temp_NextQueueStarted(_Mime);
 //END_REGION
 
 //REGION WEAPON_TRACKING
-//Only bother with skill types that allow weapon requirements
-QRY
-LLMIME_Mimicking_Skills_QRY_WeaponSkillTypeMatch((STRING)_Skill, (STRING)_SkillType)
-AND
-DB_LLMIME_Mimicking_Whitelist_WeaponCopy_SkillTypes(_SkillType)
-AND
-NOT LLMIME_Mimicking_Skills_QRY_IgnoredSkillStringMatch(_Skill)
-THEN
-DB_NOOP(1);
-
-QRY
-LLMIME_Mimicking_Skills_QRY_IgnoredSkillStringMatch((STRING)_Skill)
-AND
-DB_LLMIME_Mimicking_Blacklist_WeaponCopy_IgnoreSkillsWith(_Str)
-AND
-StringContains(_Skill, _Str, 1)
-THEN
-DB_NOOP(1);
-
-QRY
-LLMIME_Mimicking_Skills_QRY_WeaponSkillTypeMatch(_Skill, (STRING)_SkillType)
-AND
-DB_LLMIME_Mimicking_Whitelist_WeaponCopy_Skills(_Skill)
-THEN
-DB_NOOP(1);
-
 PROC
 LLMIME_Mimicking_ActionQueued((CHARACTERGUID)_Mime, (CHARACTERGUID)_Caster, (STRING)_AttackID, "Attack")
 THEN
@@ -712,9 +745,7 @@ LLMIME_Mimicking_TrackWeapons(_Mime, _Caster, _AttackID, "Attack");
 PROC
 LLMIME_Mimicking_ActionQueued((CHARACTERGUID)_Mime, (CHARACTERGUID)_Caster, (STRING)_Skill, "Skill")
 AND
-DB_LLMIME_SkillData(_Skill, _SkillType, _SkillElement)
-AND
-LLMIME_Mimicking_Skills_QRY_WeaponSkillTypeMatch(_Skill, _SkillType)
+LLMIME_Mimicking_Skills_QRY_WeaponSkillTypeMatch(_Skill)
 THEN
 LLMIME_Mimicking_TrackWeapons(_Mime, _Caster, _Skill, "Skill");
 

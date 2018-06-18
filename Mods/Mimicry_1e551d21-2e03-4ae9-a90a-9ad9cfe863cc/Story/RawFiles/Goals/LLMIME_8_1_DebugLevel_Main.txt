@@ -344,6 +344,27 @@ DebugBreak(_Message);
 GlobalSetFlag(_Flag);
 //END_REGION
 
+IF
+DB_LLMIME_Debug_HostPlayer(_Player)
+THEN
+LeaveCombat(_Player);
+
+IF
+CharacterTeleportToFleeWaypoint(_Player, _)
+AND
+DB_LeaderLib_Combat_Objects(_CombatID, _Player)
+AND
+DB_LeaderLib_Combat_Objects(_CombatID, _Object)
+AND
+CharacterIsEnemy((CHARACTERGUID)_Object, _Player, 1)
+THEN
+LeaveCombat(_Object);
+
+IF
+CharacterTeleportToFleeWaypoint(_Player, _)
+THEN
+LeaveCombat(_Player);
+
 //REGION TRACING
 IF
 AttackedByObject(_Target, _Owner, _Attacker, _DamageType, _DamageSource)
@@ -366,6 +387,31 @@ AND
 IntegertoString(_Percentage, _DamageStr)
 THEN
 LeaderLog_Log("DEBUG", "[LLMIME:Mime:CharacterReceivedDamage] [",_AttackerID,"] did [",_DamageStr,"]% damage to [",_TargetID,"].");
+
+IF
+CharacterTeleported(_Player, _, _, _, _, _, _, _, _Skill)
+AND
+GetTemplate(_Player, _PlayerID)
+THEN
+LeaderLog_Log("DEBUG", "[LLMIME:Debug:CharacterTeleported] [",_PlayerID,"] teleported with skill [",_Skill,"].");
+
+IF
+CharacterTeleportToWaypoint(_Player, _Trigger)
+AND
+GetTemplate(_Player, _PlayerID)
+AND
+GetTemplate(_Trigger, _TriggerID)
+THEN
+LeaderLog_Log("DEBUG", "[LLMIME:Debug:CharacterTeleportToWaypoint] [",_PlayerID,"] teleported to waypoint [",_TriggerID,"].");
+
+IF
+CharacterTeleportToFleeWaypoint(_Player, _Trigger)
+AND
+GetTemplate(_Player, _PlayerID)
+AND
+GetTemplate(_Trigger, _TriggerID)
+THEN
+LeaderLog_Log("DEBUG", "[LLMIME:Debug:CharacterTeleportToFleeWaypoint] [",_PlayerID,"] fled to waypoint [",_TriggerID,"].");
 //END_REGION
 EXITSECTION
 

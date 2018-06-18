@@ -1,0 +1,39 @@
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+
+KBSECTION
+/*For disappearing when the player escapes on the boat, and re-appearing on the beach.*/
+//REGION TUT_FTJ_ESCAPE
+IF
+ReadyCheckPassed("TUT_PlayerFlee")
+AND
+DB_LLMIME_Follower_Mime(_Mime)
+AND
+GetPosition(_Mime, _x, _y, _z)
+THEN
+ApplyStatus(_Mime, "INVISIBLE", 12.0, 1);
+PlayEffectAtPosition("RS3_FX_Skills_Rogue_CloakDagger_Cast_01", _x, _y, _z);
+PlayEffect(_Mime, "RS3_FX_Skills_Void_Cast_VoidGlide_Overlay_01");
+
+IF
+DB_OnlyOnce("FTJ_PlayersWokenUp")
+AND
+DB_LLMIME_Follower_Mime(_Mime)
+THEN
+SetVisible(_Mime, 0);
+LeaderLib_StartObjectTimer(_Mime, 1000, "LLMIME_Timers_FTJ_MimeAppearTimer_", "Mimicry_Origins_FTJ_MimeAppearOnBeach");
+
+IF
+StoryEvent((CHARACTERGUID)_Mime, "Mimicry_Origins_FTJ_MimeAppearOnBeach")
+AND
+GetPosition(_Mime, _x, _y, _z)
+THEN
+PlayEffectAtPosition("RS3_FX_Skills_Rogue_CloakDagger_Cast_01", _x, _y, _z);
+PlayEffect(_Mime, "RS3_FX_Skills_Void_Cast_VoidGlide_Overlay_01");
+SetVisible(_Mime, 1);
+//END_REGION
+EXITSECTION
+
+ENDEXITSECTION
+ParentTargetEdge "LaughingLeader_Mimicry"

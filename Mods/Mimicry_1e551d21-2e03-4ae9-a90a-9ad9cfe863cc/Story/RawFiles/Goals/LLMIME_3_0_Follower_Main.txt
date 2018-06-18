@@ -5,6 +5,7 @@ LLMIME_Follower_InitSettings();
 //DB_LLMIME_Follower_RandomAnimation(_Index, _Animation)
 //DB_LLMIME_Follower_ResetPositionTimer(_Mime, _TimerName, _Stage)
 //DB_LLMIME_Follower_Mime(_Mime)
+//DB_LLMIME_Follower_Temp_FollowOwner(_Follower, _Owner)
 KBSECTION
 //REGION SETTINGS
 PROC
@@ -607,18 +608,21 @@ CharacterUseSkill(_Mime, "Shout_LLMIME_BrawlerStance", _Mime, 1, 1);
 
 //REGION RETURN_SKILL
 IF
-FleeCombat(_Owner)
+CharacterTeleportToFleeWaypoint(_Owner, _)
 AND
 DB_LLLIB_PartyFollower(_Owner, _Follower)
 AND
 IsTagged(_Follower, "LLMIME_MimeFollower", 1)
 THEN
+RemoveStatus(_Follower, "LLMIME_MIMICKING");
+ApplyStatus(_Follower, "INVISIBLE", 9.0, 1);
+LeaveCombat(_Follower);
 CharacterUseSkill(_Follower, "Shout_LLMIME_ReturnToOwner", _Follower, 1, 1);
 
 IF
 SkillCast(_Follower, "Shout_LLMIME_ReturnToOwner", _)
 THEN
-LeaderLib_StartTargetTimer(_Follower, 250, "LLMIME_Timers_ReturnDelay_", "LLMIME_Events_StartTeleport");
+LeaderLib_StartObjectTimer(_Follower, 250, "LLMIME_Timers_ReturnDelay_", "LLMIME_Events_StartTeleport");
 
 IF
 StoryEvent((CHARACTERGUID)_Follower, "LLMIME_Events_StartTeleport")
@@ -630,7 +634,7 @@ TeleportTo(_Follower, _Owner, "Shout_LLMIME_ReturnToOwner", 1);
 IF
 StoryEvent((CHARACTERGUID)_Follower, "Shout_LLMIME_ReturnToOwner")
 THEN
-LeaderLib_StartTargetTimer(_Follower, 500, "LLMIME_Timers_ReturnEffectDelay_", "LLMIME_Events_PlayReturnEffect");
+LeaderLib_StartObjectTimer(_Follower, 500, "LLMIME_Timers_ReturnEffectDelay_", "LLMIME_Events_PlayReturnEffect");
 
 IF
 StoryEvent((CHARACTERGUID)_Follower, "LLMIME_Events_PlayReturnEffect")

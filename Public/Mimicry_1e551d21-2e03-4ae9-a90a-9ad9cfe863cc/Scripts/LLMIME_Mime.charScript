@@ -129,6 +129,20 @@ ON
 ACTIONS
 	SetPriority("Mimic_Attack_Character", -1)
 	SetPriority("Mimic_Attack_Item", -1)
+	
+EVENT Enter_Combat
+VARS
+	CHARACTER:_Character
+	CHARACTER:_Owner
+ON
+	OnEnteredCombat(_Character, _)
+ACTIONS
+IF "c1&c2"
+	GetVar(_Owner, __Me, "LeaderLib_Follower_Owner")
+	IsEqual(_Character, _Owner)	
+THEN
+	EnterCombat(__Me, _Owner)
+ENDIF
 
 BEHAVIOUR
 
