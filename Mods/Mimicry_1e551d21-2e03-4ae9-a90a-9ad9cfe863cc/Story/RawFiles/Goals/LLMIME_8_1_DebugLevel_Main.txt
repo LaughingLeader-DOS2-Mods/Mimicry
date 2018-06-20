@@ -309,6 +309,13 @@ THEN
 //CharacterTransformAppearanceTo(_Character, CHARACTERGUID_LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9, 1, 1);
 CharacterTransformAppearanceToWithEquipmentSet(_Character, CHARACTERGUID_LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9, "LLMIME_Class_Mime_Preview", 1);
 
+IF
+CharacterUsedItem(_Character, ITEMGUID_LLMIME_Debug_Lever_LevelUpMimeFollower_69094caf-1984-4812-aca0-f7e0c1071380)
+AND
+CharacterGetLevel(_Character, _Level)
+THEN
+CharacterLevelUpTo(CHARACTERGUID_LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9, _Level);
+
 //REGION TEXT_EVENTS
 /*
 IF

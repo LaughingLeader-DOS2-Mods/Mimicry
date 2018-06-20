@@ -422,7 +422,9 @@ ObjectClearFlag(_Mime, "Mimicry_MimeFollowerJustSummoned");
 
 //REGION RECRUITMENT_EVENTS
 IF
-StoryEvent((CHARACTERGUID)_Mime, "LeaderLib_Events_FollowerRecruited")
+CharacterCharacterEvent((CHARACTERGUID)_Owner, (CHARACTERGUID)_Mime, "LeaderLib_Events_FollowerRecruited")
+AND
+IsTagged(_Mime, "LLMIME_MimeFollower", 1)
 THEN
 ObjectClearFlag(_Mime, "Mimicry_FollowerIsLeaving");
 CharacterEnableAllCrimes(_Mime);
@@ -430,7 +432,9 @@ SetCanJoinCombat(_Mime, 1);
 SetFaction(_Mime,"Good NPC");
 
 IF
-StoryEvent((CHARACTERGUID)_Mime, "LeaderLib_Events_FollowerRecruited")
+CharacterCharacterEvent((CHARACTERGUID)_Owner, (CHARACTERGUID)_Mime, "LeaderLib_Events_FollowerRecruited")
+AND
+IsTagged(_Mime, "LLMIME_MimeFollower", 1)
 AND
 DB_LLMIME_Follower_ResetPositionTimer(_Mime, _TimerName, _Stage)
 THEN
@@ -440,7 +444,7 @@ TimerCancel(_TimerName);
 
 //REGION DISMISSAL
 IF
-StoryEvent((CHARACTERGUID)_Mime, "LeaderLib_Events_FollowerDismissed")
+CharacterCharacterEvent((CHARACTERGUID)_Owner, (CHARACTERGUID)_Mime, "LeaderLib_Events_FollowerDismissed")
 AND
 IsTagged(_Mime, "LLMIME_MimeFollower", 1)
 THEN
@@ -449,7 +453,7 @@ SetCanJoinCombat(_Mime, 0);
 SetFaction(_Mime,"Neutral NPC");
 
 IF
-StoryEvent((CHARACTERGUID)_Mime, "LeaderLib_Events_FollowerDismissed")
+CharacterCharacterEvent((CHARACTERGUID)_Owner, (CHARACTERGUID)_Mime, "LeaderLib_Events_FollowerDismissed")
 AND
 IsTagged(_Mime, "LLMIME_MimeFollower", 1)
 AND
@@ -458,7 +462,7 @@ THEN
 ObjectSetFlag(_Mime, "Mimicry_FollowerIsLeaving");
 
 IF
-StoryEvent((CHARACTERGUID)_Mime, "LeaderLib_Events_FollowerDismissed")
+CharacterCharacterEvent((CHARACTERGUID)_Owner, (CHARACTERGUID)_Mime, "LeaderLib_Events_FollowerDismissed")
 AND
 IsTagged(_Mime, "LLMIME_MimeFollower", 1)
 AND
@@ -642,11 +646,96 @@ THEN
 PlayEffect(_Follower, "RS3_FX_Skills_Void_Cast_VoidGlide_Root_01");
 //END_REGION
 
+//REGION LEVEL_UP
+IF
+CharacterCharacterEvent((CHARACTERGUID)_Owner, (CHARACTERGUID)_Mime, "LeaderLib_Events_FollowerRecruited")
+AND
+IsTagged(_Mime, "LLMIME_MimeFollower", 1)
+AND
+CharacterGetLevel(_Owner, _Level)
+AND
+CharacterGetLevel(_Mime, _MimeLevel)
+AND
+IntegertoString(_Level, _LevelStr)
+AND
+IntegertoString(_MimeLevel, _MimeLevelStr)
+THEN
+LeaderLog_Log("DEBUG", "[LLMIME:Follower:FollowerRecruited_Debug] Level: Mime[",_MimeLevelStr,"] Owner[",_LevelStr,"]");
+
+IF
+CharacterCharacterEvent((CHARACTERGUID)_Owner, (CHARACTERGUID)_Mime, "LeaderLib_PlayerIsRecruitingCharacter")
+AND
+IsTagged(_Mime, "LLMIME_MimeFollower", 1)
+AND
+CharacterGetLevel(_Owner, _Level)
+AND
+CharacterGetLevel(_Mime, _MimeLevel)
+AND
+_MimeLevel < _Level
+THEN
+CharacterLevelUpTo(_Mime, _Level);
+LeaderLog_Log("DEBUG", "[LLMIME:Follower:FollowerRecruited] Mime joined party and is a lower level than the recruiting character. Leveling up.");
+
+IF
+CharacterLeveledUp(_Owner)
+AND
+DB_LLLIB_PartyFollower(_Owner, _Mime)
+AND
+IsTagged(_Mime, "LLMIME_MimeFollower", 1)
+AND
+CharacterGetLevel(_Owner, _Level)
+AND
+CharacterGetLevel(_Mime, _MimeLevel)
+AND
+_MimeLevel < _Level
+THEN
+CharacterRemoveFromPlayerCharacter(_Mime, _Owner);
+LeaderLib_StartCharacterCharacterTimer(_Owner, _Mime, 100, "Mimicry_Timers_Follower_LevelUpDelay_", "Mimicry_Follower_LevelUpAndAttachFollower");
+
+IF
+CharacterCharacterEvent((CHARACTERGUID)_Owner, (CHARACTERGUID)_Mime, "Mimicry_Follower_LevelUpAndAttachFollower")
+AND
+CharacterGetLevel(_Owner, _Level)
+THEN
+CharacterLevelUpTo(_Mime, _Level);
+CharacterAddToPlayerCharacter(_Mime, _Owner);
+//END_REGION
+
 //REGION GHOST
+QRY
+LLMIME_Follower_QRY_GhostExists()
+AND
+DB_LLMIME_FollowerGhost(_MimeGhost)
+AND
+ObjectExists(_MimeGhost, 1)
+THEN
+DB_NOOP(1);
+
+IF
+GameStarted(_,_)
+AND
+DB_LLMIME_Follower_Mime(_Mime)
+AND
+CharacterIsDead(_Mime, 1)
+AND
+NOT LLMIME_Follower_QRY_GhostExists()
+THEN
+LeaderLib_StartObjectTimer(_Mime, 500, "Mimicry_Timers_Follower_SpawnGhost_", "Mimicry_Follower_SpawnGhost");
+
+IF
+StoryEvent((CHARACTERGUID)_Mime, "Mimicry_Follower_SpawnGhost")
+THEN
+LLMIME_Follower_SpawnGhost(_Mime);
+
 IF
 CharacterDied(_Mime)
 AND
 DB_LLMIME_Follower_Mime(_Mime)
+THEN
+LLMIME_Follower_SpawnGhost(_Mime);
+
+PROC
+LLMIME_Follower_SpawnGhost((CHARACTERGUID)_Mime)
 AND
 DB_LLMIME_FollowerGhost(_MimeGhost)
 AND
@@ -654,10 +743,8 @@ ObjectExists((CHARACTERGUID)_MimeGhost, 0)
 THEN
 NOT DB_LLMIME_FollowerGhost(_MimeGhost);
 
-IF
-CharacterDied(_Mime)
-AND
-DB_LLMIME_Follower_Mime(_Mime)
+PROC
+LLMIME_Follower_SpawnGhost((CHARACTERGUID)_Mime)
 AND
 DB_LLMIME_FollowerGhost(_MimeGhost)
 AND
@@ -672,10 +759,8 @@ StoryEvent(_MimeGhost, "Mimicry_MimeGhostAppeared")
 THEN
 SetOnStage(_MimeGhost, 1);
 
-IF
-CharacterDied(_Mime)
-AND
-DB_LLMIME_Follower_Mime(_Mime)
+PROC
+LLMIME_Follower_SpawnGhost((CHARACTERGUID)_Mime)
 AND
 NOT DB_LLMIME_FollowerGhost(_)
 AND
@@ -695,10 +780,8 @@ CharacterLinkGhost(_Mime, _MimeGhost);
 CharacterSetImmortal(_MimeGhost,1);
 ProcSetInvulnerable(_MimeGhost,1);
 
-IF
-CharacterDied(_Mime)
-AND
-DB_LLMIME_Follower_Mime(_Mime)
+PROC
+LLMIME_Follower_SpawnGhost((CHARACTERGUID)_Mime)
 AND
 DB_LLMIME_FollowerGhost(_MimeGhost)
 AND
