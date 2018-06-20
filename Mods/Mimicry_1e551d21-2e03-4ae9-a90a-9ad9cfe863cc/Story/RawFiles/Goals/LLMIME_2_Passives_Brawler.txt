@@ -3,7 +3,8 @@ SubGoalCombiner SGC_AND
 INITSECTION
 LLMIME_Brawler_InitSettings();
 /*Settings*/
-//DB_LLMIME_Brawler_StanceStatuses(_Status, _SettingsFlag, _InfoStatus, _DisableInfoFlag)
+//DB_LLMIME_Brawler_StanceStatuses(_Status, _SettingsFlag, _InfoStatus, _DisableInfoFlag, _DialogVar)
+//DB_LLMIME_Brawler_SettingsString(_SettingsFlag, _Str)
 /*Temp*/
 //DB_LLMIME_Brawler_DoubleAttackTimer(_TimerName, _Mime, _FXHandle)
 //DB_LLMIME_Brawler_JustToggledStance(_Mime)
@@ -12,9 +13,58 @@ KBSECTION
 PROC
 LLMIME_Brawler_InitSettings()
 THEN
-DB_LLMIME_Brawler_StanceStatuses("LLMIME_BRAWLER_STANCE_CON", "Mimicry_BrawlerStance_UseCon", "LLMIME_BRAWLER_STANCE_CON_INFO", "Mimicry_HideMimePassives");
-DB_LLMIME_Brawler_StanceStatuses("LLMIME_BRAWLER_STANCE_STR", "Mimicry_BrawlerStance_UseStr", "LLMIME_BRAWLER_STANCE_STR_INFO", "Mimicry_HideMimePassives");
-DB_LLMIME_Brawler_StanceStatuses("LLMIME_BRAWLER_STANCE_FIN", "Mimicry_BrawlerStance_UseFin", "LLMIME_BRAWLER_STANCE_FIN_INFO", "Mimicry_HideMimePassives");
+DB_LLMIME_Brawler_StanceStatuses("LLMIME_BRAWLER_STANCE_CON", "Mimicry_BrawlerStance_UseCon", "LLMIME_BRAWLER_STANCE_CON_INFO", "Mimicry_HideMimePassives", "LLMIME_Settings_BrawlerStance_Con_1f4bd5ba-4cf3-4262-af49-455e2530c986");
+DB_LLMIME_Brawler_StanceStatuses("LLMIME_BRAWLER_STANCE_STR", "Mimicry_BrawlerStance_UseStr", "LLMIME_BRAWLER_STANCE_STR_INFO", "Mimicry_HideMimePassives", "LLMIME_Settings_BrawlerStance_Str_694fa103-1089-492b-a7db-aef0e5cf0efd");
+DB_LLMIME_Brawler_StanceStatuses("LLMIME_BRAWLER_STANCE_FIN", "Mimicry_BrawlerStance_UseFin", "LLMIME_BRAWLER_STANCE_FIN_INFO", "Mimicry_HideMimePassives", "LLMIME_Settings_BrawlerStance_Fin_c2f6f50c-8e29-4fdc-8391-f8a4e823f658");
+
+DB_LLMIME_Brawler_SettingsString("Mimicry_BrawlerStance_UseCon", "*Prefer a body-based Brawler Stance (Scales with Constitution).* (Default)");
+DB_LLMIME_Brawler_SettingsString("Mimicry_BrawlerStance_UseStr", "*Prefer a strength-based Brawler Stance (Scales with Strength).*");
+DB_LLMIME_Brawler_SettingsString("Mimicry_BrawlerStance_UseFin", "*Prefer a finesse-based Brawler Stance (Scales with Finesse).*");
+//END_REGION
+
+//REGION SETTINGS_DIALOG_VARS
+IF
+ObjectFlagSet(_SettingsFlag, (CHARACTERGUID)_Mime, _Instance)
+AND
+DB_LLMIME_Brawler_SettingsString(_SettingsFlag, _Str)
+THEN
+LLMIME_Settings_SetDialogVariables(_Mime, _Instance);
+
+IF
+ObjectFlagSet(_SettingsFlag, (CHARACTERGUID)_Mime, _Instance)
+AND
+DB_LLMIME_Brawler_SettingsString(_SettingsFlag, _Str)
+AND
+LLMIME_Brawler_QRY_StanceIsActive(_Mime)
+THEN
+LLMIME_Brawler_ApplyStance(_Mime);
+
+PROC
+LLMIME_Settings_SetDialogVariables((CHARACTERGUID)_Mime, (INTEGER)_Instance)
+AND
+DB_LLMIME_Brawler_StanceStatuses(_Status, _SettingsFlag, _InfoStatus, _DisableInfoFlag, _DialogVar)
+AND
+DB_LLMIME_Brawler_SettingsString(_SettingsFlag, _Str)
+AND
+ObjectGetFlag(_Mime, _SettingsFlag, _FlagVal)
+THEN
+LLMIME_Brawler_Internal_SetStanceString(_Instance, _DialogVar, _Str, _FlagVal);
+
+PROC
+LLMIME_Brawler_Internal_SetStanceString((INTEGER)_Instance, (STRING)_DialogVar, (STRING)_Str, (INTEGER)_FlagVal)
+AND
+_FlagVal == 0
+THEN
+DialogSetVariableStringForInstance(_Instance, _DialogVar, _Str);
+
+PROC
+LLMIME_Brawler_Internal_SetStanceString((INTEGER)_Instance, (STRING)_DialogVar, (STRING)_Str, (INTEGER)_FlagVal)
+AND
+_FlagVal == 1
+AND
+StringConcatenate(_Str, " *Active*", _FinalStr)
+THEN
+DialogSetVariableStringForInstance(_Instance, _DialogVar, _FinalStr);
 //END_REGION
 
 //REGION DEBUG
@@ -45,7 +95,7 @@ LLMIME_Brawler_SetStancePreference((CHARACTERGUID)_Mime, (STRING)_Flag)
 AND
 NOT ObjectGetFlag(_Mime, _Flag, 1)
 AND
-DB_LLMIME_Brawler_StanceStatuses(_Status, _SettingsFlag, _InfoStatus, _DisableInfoFlag)
+DB_LLMIME_Brawler_StanceStatuses(_Status, _SettingsFlag, _InfoStatus, _DisableInfoFlag, _DialogVar)
 THEN
 ObjectClearFlag(_Mime, _SettingsFlag);
 
@@ -61,7 +111,7 @@ LLMIME_Brawler_ApplyStance(_Mime);
 QRY
 LLMIME_Brawler_QRY_StancePreferenceSet((CHARACTERGUID)_Mime)
 AND
-DB_LLMIME_Brawler_StanceStatuses(_Status, _SettingsFlag, _InfoStatus, _DisableInfoFlag)
+DB_LLMIME_Brawler_StanceStatuses(_Status, _SettingsFlag, _InfoStatus, _DisableInfoFlag, _DialogVar)
 AND
 ObjectGetFlag(_Mime, _SettingsFlag, 1)
 THEN
@@ -72,7 +122,16 @@ CharacterUsedSkill(_Mime, "Shout_LLMIME_BrawlerStance", _)
 AND
 NOT LLMIME_Brawler_QRY_StancePreferenceSet(_Mime)
 AND
-DB_LLMIME_Brawler_StanceStatuses("LLMIME_BRAWLER_STANCE_CON", _SettingsFlag, _InfoStatus, _DisableInfoFlag)
+DB_LLMIME_Brawler_StanceStatuses("LLMIME_BRAWLER_STANCE_CON", _SettingsFlag, _InfoStatus, _DisableInfoFlag, _DialogVar)
+THEN
+ObjectSetFlag(_Mime, _SettingsFlag); // Default
+
+IF
+CharacterStatusApplied(_Mime, "LLMIME_BRAWLER", _)
+AND
+NOT LLMIME_Brawler_QRY_StancePreferenceSet(_Mime)
+AND
+DB_LLMIME_Brawler_StanceStatuses("LLMIME_BRAWLER_STANCE_CON", _SettingsFlag, _InfoStatus, _DisableInfoFlag, _DialogVar)
 THEN
 ObjectSetFlag(_Mime, _SettingsFlag); // Default
 //END_REGION
@@ -133,7 +192,7 @@ LLMIME_Brawler_ApplyStance(_Mime);
 PROC
 LLMIME_Brawler_ApplyStance((CHARACTERGUID)_Mime)
 AND
-DB_LLMIME_Brawler_StanceStatuses(_Status, _SettingsFlag, _InfoStatus, _DisableInfoFlag)
+DB_LLMIME_Brawler_StanceStatuses(_Status, _SettingsFlag, _InfoStatus, _DisableInfoFlag, _DialogVar)
 AND
 ObjectGetFlag(_Mime, _SettingsFlag, 1)
 AND
@@ -166,7 +225,7 @@ LLMIME_Brawler_RemoveStance(_Mime);
 PROC
 LLMIME_Brawler_RemoveStance((CHARACTERGUID)_Mime)
 AND
-DB_LLMIME_Brawler_StanceStatuses(_Status, _SettingsFlag, _InfoStatus, _DisableInfoFlag)
+DB_LLMIME_Brawler_StanceStatuses(_Status, _SettingsFlag, _InfoStatus, _DisableInfoFlag, _DialogVar)
 AND
 HasActiveStatus(_Mime, _Status, 1)
 THEN
@@ -243,7 +302,7 @@ AND
 DB_LLMIME_Brawler_TotalHits(_Mime, _Target, 3)
 THEN
 NOT DB_LLMIME_Brawler_TotalHits(_Mime, _Target, 3);
-ApplyStatus(_Target, "LLMIME_UNARMED_BONUS_HIT", 0.0, 1, _Mime);
+ApplyStatus(_Target, "LLMIME_UNARMED_BONUS_DAMAGE", 0.0, 1, _Mime);
 //END_REGION
 
 //REGION DOUBLE_ATTACK
@@ -336,7 +395,7 @@ LLMIME_Brawler_ApplyStance(_Mime);
 IF
 CharacterStatusRemoved(_Mime, _Status, _)
 AND
-DB_LLMIME_Brawler_StanceStatuses(_Status, _SettingsFlag, _InfoStatus, _DisableInfoFlag)
+DB_LLMIME_Brawler_StanceStatuses(_Status, _SettingsFlag, _InfoStatus, _DisableInfoFlag, _DialogVar)
 AND
 ObjectGetFlag(_Mime, "Mimicry_IsMimicking", 0)
 THEN
@@ -345,7 +404,7 @@ RemoveStatus(_Mime, _InfoStatus);
 IF
 CharacterStatusApplied(_Mime, _Status, _)
 AND
-DB_LLMIME_Brawler_StanceStatuses(_Status, _SettingsFlag, _InfoStatus, _DisableInfoFlag)
+DB_LLMIME_Brawler_StanceStatuses(_Status, _SettingsFlag, _InfoStatus, _DisableInfoFlag, _DialogVar)
 AND
 NOT ObjectGetFlag(_Mime, _DisableInfoFlag, 1)
 AND
@@ -356,14 +415,14 @@ ApplyStatus(_Mime, _InfoStatus, -1.0, 1);
 IF
 ObjectFlagSet(_DisableInfoFlag, (CHARACTERGUID)_Mime, _Instance)
 AND
-DB_LLMIME_Brawler_StanceStatuses(_Status, _SettingsFlag, _InfoStatus, _DisableInfoFlag)
+DB_LLMIME_Brawler_StanceStatuses(_Status, _SettingsFlag, _InfoStatus, _DisableInfoFlag, _DialogVar)
 THEN
 RemoveStatus(_Mime, _InfoStatus);
 
 IF
 ObjectFlagCleared(_DisableInfoFlag, (CHARACTERGUID)_Mime, _Instance)
 AND
-DB_LLMIME_Brawler_StanceStatuses(_Status, _SettingsFlag, _InfoStatus, _DisableInfoFlag)
+DB_LLMIME_Brawler_StanceStatuses(_Status, _SettingsFlag, _InfoStatus, _DisableInfoFlag, _DialogVar)
 AND
 HasActiveStatus(_Mime, _Status, 1)
 AND
@@ -376,7 +435,7 @@ ApplyStatus(_Mime, _InfoStatus, -1.0, 1);
 QRY
 LLMIME_Brawler_QRY_StanceIsActive((CHARACTERGUID)_Mime)
 AND
-DB_LLMIME_Brawler_StanceStatuses(_Status, _SettingsFlag, _InfoStatus, _DisableInfoFlag)
+DB_LLMIME_Brawler_StanceStatuses(_Status, _SettingsFlag, _InfoStatus, _DisableInfoFlag, _DialogVar)
 AND
 HasActiveStatus(_Mime, _Status, 1)
 THEN

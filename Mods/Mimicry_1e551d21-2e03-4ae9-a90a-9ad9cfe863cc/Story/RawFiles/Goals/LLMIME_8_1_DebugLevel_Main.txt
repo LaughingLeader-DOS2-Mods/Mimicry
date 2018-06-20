@@ -303,6 +303,12 @@ DB_LLMIME_Debug_LeverToggle(ITEMGUID_LLMIME_TestLevel_Lever_ToggleGlobalFlags_32
 THEN
 NOT DB_LLMIME_Debug_LeverToggle(ITEMGUID_LLMIME_TestLevel_Lever_ToggleGlobalFlags_32ee1fc8-3a1f-4293-85eb-45c59dc25d83);
 
+IF
+CharacterUsedItem(_Character, ITEMGUID_LLMIME_Debug_TransformIntoMime_1667be7d-cb2e-497e-8d71-b5a2eac0d641)
+THEN
+//CharacterTransformAppearanceTo(_Character, CHARACTERGUID_LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9, 1, 1);
+CharacterTransformAppearanceToWithEquipmentSet(_Character, CHARACTERGUID_LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9, "LLMIME_Class_Mime_Preview", 1);
+
 //REGION TEXT_EVENTS
 /*
 IF

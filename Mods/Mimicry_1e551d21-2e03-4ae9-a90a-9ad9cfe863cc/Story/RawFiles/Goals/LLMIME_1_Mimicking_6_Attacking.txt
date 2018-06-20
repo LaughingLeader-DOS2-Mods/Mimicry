@@ -282,13 +282,6 @@ DB_LLMIME_Timers_AttackSuccessTimer(_TimerName, _Mime, _Target, _Action)
 THEN
 NOT DB_LLMIME_Timers_AttackSuccessTimer(_TimerName, _Mime, _Target, _Action);
 LLMIME_Mimicking_OnMimicSuccess(_Mime, _Action, "Attack");
-
-IF
-StoryEvent((CHARACTERGUID)_Mime, "LLMIME_Events_MimickingDone")
-AND
-HasActiveStatus(_Mime, "LLMIME_MIMIC_ATTACK_ROOT", 1)
-THEN
-RemoveStatus(_Mime, "LLMIME_MIMIC_ATTACK_ROOT");
 //END_REGION
 
 //REGION CLEAR_MIME

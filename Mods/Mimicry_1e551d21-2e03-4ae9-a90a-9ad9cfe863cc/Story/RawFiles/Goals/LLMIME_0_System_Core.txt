@@ -5,6 +5,8 @@ LLMIME_System_InitSettings();
 //DB_LLMIME_SkillData(_Skill, _SkillType, _SkillElement)
 //DB_LLMIME_PassiveData(_Status, _BonusStatus, _InfoStatus, _DisableFlag)
 //DB_LLMIME_Templates(_Name, _Template)
+//DB_LLMIME_Statuses(_Status)
+//DB_LLMIME_MimeStatuses(_Status)
 KBSECTION
 //REGION SETTINGS
 PROC
@@ -18,26 +20,32 @@ LLMIME_System_InitTemplates();
 
 LeaderLib_Register_StatusToggleSkill("Shout_LLMIME_DisableMimicking", "LLMIME_MIMICKING_DISABLED", -1.0, 1);
 
-DB_LLMIME_Statuses("LLMIME_MIMICKING");
-DB_LLMIME_Statuses("LLMIME_MIMIC_WEAPON_REQUIREMENTS");
-DB_LLMIME_Statuses("LLMIME_MIMIC_ATTACK_ROOT");
-DB_LLMIME_Statuses("LLMIME_BRAWLER_STANCE_BASE");
-DB_LLMIME_Statuses("LLMIME_BRAWLER_STANCE_CON");
-DB_LLMIME_Statuses("LLMIME_BRAWLER_STANCE_STR");
-DB_LLMIME_Statuses("LLMIME_BRAWLER_STANCE_FIN");
-DB_LLMIME_Statuses("LLMIME_MIME");
-DB_LLMIME_Statuses("LLMIME_BRAWLER");
-DB_LLMIME_Statuses("LLMIME_BRAWLER_BONUS");
-DB_LLMIME_Statuses("LLMIME_UNARMED_BONUS_HIT");
-DB_LLMIME_Statuses("LLMIME_BEASTMASTER");
-DB_LLMIME_Statuses("LLMIME_BEASTMASTER_TYPECHECK");
-DB_LLMIME_Statuses("LLMIME_BEASTMASTER_MONSTERSKILL");
-DB_LLMIME_Statuses("LLMIME_CONCENTRATION");
-DB_LLMIME_Statuses("LLMIME_CONCENTRATION_BONUS");
-DB_LLMIME_Statuses("LLMIME_BRAWLER_INFO");
-DB_LLMIME_Statuses("LLMIME_BEASTMASTER_INFO");
-DB_LLMIME_Statuses("LLMIME_CONCENTRATION_INFO");
-DB_LLMIME_Statuses("LLMIME_MASK_INFO");
+DB_LLMIME_Statuses("LLMIME_UNARMED_BONUS_DAMAGE");
+DB_LLMIME_Statuses("LLMIME_TOTEMRAGE");
+DB_LLMIME_Statuses("LLMIME_BAD_BREATH");
+DB_LLMIME_Statuses("LLMIME_TOAD");
+DB_LLMIME_MimeStatuses("LLMIME_MIMICKING");
+DB_LLMIME_MimeStatuses("LLMIME_MIMICKING_DISABLED");
+DB_LLMIME_MimeStatuses("LLMIME_MIMIC_WEAPON_REQUIREMENTS");
+DB_LLMIME_MimeStatuses("LLMIME_BRAWLER_STANCE_CON");
+DB_LLMIME_MimeStatuses("LLMIME_BRAWLER_STANCE_CON_INFO");
+DB_LLMIME_MimeStatuses("LLMIME_BRAWLER_STANCE_STR");
+DB_LLMIME_MimeStatuses("LLMIME_BRAWLER_STANCE_STR_INFO");
+DB_LLMIME_MimeStatuses("LLMIME_BRAWLER_STANCE_FIN");
+DB_LLMIME_MimeStatuses("LLMIME_BRAWLER_STANCE_FIN_INFO");
+//Passives
+DB_LLMIME_MimeStatuses("LLMIME_MIME");
+DB_LLMIME_MimeStatuses("LLMIME_MASK_INFO");
+DB_LLMIME_MimeStatuses("LLMIME_BRAWLER");
+DB_LLMIME_MimeStatuses("LLMIME_BRAWLER_BONUS");
+DB_LLMIME_MimeStatuses("LLMIME_BRAWLER_INFO");
+DB_LLMIME_MimeStatuses("LLMIME_BEASTMASTER");
+DB_LLMIME_MimeStatuses("LLMIME_BEASTMASTER_INFO");
+DB_LLMIME_MimeStatuses("LLMIME_BEASTMASTER_TYPECHECK");
+DB_LLMIME_MimeStatuses("LLMIME_BEASTMASTER_MONSTERSKILL");
+DB_LLMIME_MimeStatuses("LLMIME_CONCENTRATION");
+DB_LLMIME_MimeStatuses("LLMIME_CONCENTRATION_BONUS");
+DB_LLMIME_MimeStatuses("LLMIME_CONCENTRATION_INFO");
 
 PROC
 LLMIME_System_InitTemplates()
@@ -88,11 +96,29 @@ HasActiveStatus(_Character, _Status, 1)
 THEN
 RemoveStatus(_Character, _Status);
 
+PROC
+LLMIME_RemoveAllModStatuses((CHARACTERGUID)_Character)
+AND
+DB_LLMIME_MimeStatuses(_Status)
+AND
+HasActiveStatus(_Character, _Status, 1)
+THEN
+RemoveStatus(_Character, _Status);
+
 IF
 StoryEvent((CHARACTERGUID)_Mime, "Mimicry_ClearMimeBonuses")
 THEN
-LLMIME_RemoveAllModStatuses(_Mime);
+LLMIME_RemoveAllMimeStatuses(_Mime);
 ObjectClearFlag(_Mime, "Mimicry_MimeIsUnarmed");
+
+PROC
+LLMIME_RemoveAllMimeStatuses((CHARACTERGUID)_Character)
+AND
+DB_LLMIME_MimeStatuses(_Status)
+AND
+HasActiveStatus(_Character, _Status, 1)
+THEN
+RemoveStatus(_Character, _Status);
 //END_REGION
 
 //REGION HELPERS

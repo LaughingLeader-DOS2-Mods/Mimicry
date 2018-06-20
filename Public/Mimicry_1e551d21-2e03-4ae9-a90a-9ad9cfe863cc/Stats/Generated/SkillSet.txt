@@ -1,6 +1,6 @@
 new skillset "Class_LLMIME_Mime"
-add skill "Shout_LLMIME_DisableMimicking"
 add skill "Shout_LLMIME_BrawlerStance"
+add skill "Shout_LLMIME_DisableMimicking"
 add skill "Shout_LLMIME_OpenMenu"
 new skillset "Class_LLMIME_FollowerMime"
 add skill "Shout_LLMIME_ReturnToOwner"

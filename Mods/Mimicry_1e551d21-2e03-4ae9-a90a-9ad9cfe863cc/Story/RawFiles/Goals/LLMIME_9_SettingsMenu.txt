@@ -36,6 +36,7 @@ AND
 DB_LLMIME_Settings_Temp_StartedDialog(_Mime)
 THEN
 CharacterSetAnimationOverride(_Mime, "Kneel_01_Loop");
+LLMIME_Settings_SetDialogVariables(_Mime, _Instance);
 
 IF
 DialogEnded("LLMIME_SettingsMenu", _Instance)
@@ -52,6 +53,13 @@ AND
 DB_LLMIME_Settings_Temp_StartedDialog(_Mime)
 THEN
 NOT DB_LLMIME_Settings_Temp_StartedDialog(_Mime);
+//END_REGION
+
+//REGION DIALOG_VARS
+PROC
+LLMIME_Settings_SetDialogVariables((CHARACTERGUID)_Mime, (INTEGER)_Instance)
+THEN
+DB_NOOP(1);
 //END_REGION
 
 //REGION DEBUG_FLAGS
