@@ -1,7 +1,7 @@
 {
    "save" : {
       "header" : {
-         "time" : 1529345315,
+         "time" : 1529576269,
          "version" : "2.0.8.2"
       },
       "regions" : {
@@ -1698,7 +1698,7 @@
                                                 "TagText" : {
                                                    "handle" : "ls::TranslatedStringRepository::s_HandleUnknown",
                                                    "type" : 28,
-                                                   "value" : "*Motion for the mime to stop following you.*"
+                                                   "value" : "*Tell the mime to wait here.*"
                                                 },
                                                 "stub" : {"type" : 19, "value" : 1}
                                              }

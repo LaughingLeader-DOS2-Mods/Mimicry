@@ -31,11 +31,7 @@ IF "c1"
 	IsEqual(%LLMIME_InitialRefresh, 0)
 THEN
 	CallFunction("Mimicry_MimeFollower_ActivateBrawlerStance")
-	/*GetRandomBetween(_Ran, 15, 20)
-	Cast(_RanFloat, _Ran)
-	Print(_TimerName, "LLMIME_Timers_RefreshEquipment_[1]", _Ran)
-	Cast(%RefreshTimerName, _TimerName)
-	StartTimer(%RefreshTimerName, _RanFloat, 0)*/
+	CharacterEvent(__Me, "Mimicry_InitMimeJob")
 	Set(%LLMIME_InitialRefresh, 1)
 ENDIF
 IF "c1"

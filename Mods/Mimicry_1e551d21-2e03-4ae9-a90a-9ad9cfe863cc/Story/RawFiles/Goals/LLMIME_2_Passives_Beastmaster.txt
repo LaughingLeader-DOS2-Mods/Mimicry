@@ -41,7 +41,6 @@ DB_LLMIME_MonsterSkill_BadBreathStatus("MUTED", 20, 9.0);
 DB_LLMIME_MonsterSkill_BadBreathStatus("LLMIME_TOAD", 10, 12.0);
 
 DB_LLMIME_MonsterSkill_SummonRename("Template", "Summons_Plant_e63a712f-fc87-4469-8848-fd8941043afd", "Malboro", "#00FF00", "24", "Full");
-//DB_LLMIME_MonsterSkill_SummonRename("Tag", "TOTEM", "Angry ", "#00FF00", "30", "Prefix");
 DB_LLMIME_MonsterSkill_SummonRename("Tag", "TOTEM", "Rage Totem", "#DC143C", "24", "Full");
 //END_REGION
 
@@ -348,17 +347,17 @@ CharacterUsedSkillOnTarget(_Caster, (CHARACTERGUID)_Target, "Target_LLMIME_Wish"
 AND
 CharacterGetHitpointsPercentage(_Caster, _CasterHealth)
 AND
+_CasterHealth > 2
+AND
 IntegerDivide(_CasterHealth, 2, _NextHealth)
 AND
-_NextHealth > 0
+_NextHealth > 1
 THEN
 PlayEffect(_Caster, "LLMIME_FX_Skills_Wish_Cast_Root_01");
 DB_LLMIME_Beastmaster_Temp_NextWish(_Caster, _Target);
 
 IF
 CharacterUsedSkillOnTarget(_Caster, (CHARACTERGUID)_Target, "Target_LLMIME_Wish", _)
-AND
-CharacterGetHitpointsPercentage(_Caster, _Health)
 AND
 NOT DB_LLMIME_Beastmaster_Temp_NextWish(_Caster, _Target)
 THEN
@@ -380,7 +379,7 @@ AND
 DB_LLMIME_Beastmaster_Temp_FailedWish(_Caster)
 THEN
 NOT DB_LLMIME_Beastmaster_Temp_FailedWish(_Caster);
-CharacterStatusText(_Caster, "<font color='#FF0000'>Wish Failed - Health too low!</font>");
+CharacterStatusText(_Caster, "LLMIME_StatusText_WishFailed");
 
 IF
 CharacterCharacterEvent(_Caster, _Target, "Mimicry_Events_WishDelay")

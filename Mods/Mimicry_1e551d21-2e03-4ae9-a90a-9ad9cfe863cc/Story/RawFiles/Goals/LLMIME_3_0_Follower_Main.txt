@@ -239,7 +239,7 @@ GetTemplate(_Item, "UNIQUE_LLMIME_MusicBox_fd03b00c-5366-40e2-a8af-1d9f6a904ecb"
 AND
 CharacterIsInCombat(_Char, 1)
 THEN
-CharacterStatusText(_Char, "<font color='#FFFFFF'>*It seems unwise to play with a music box while in combat...*</font>");
+CharacterStatusText(_Char, "LLMIME_StatusText_MusicBoxBlockedInCombat");
 
 //Reset dismissal timer
 IF
@@ -910,7 +910,7 @@ AND
 GetTemplate(_MusicBox, "UNIQUE_LLMIME_MusicBox_Cracked_467b732e-c599-49b1-beb8-06e55f1dd140")
 THEN
 ItemDestroy(_MusicBox);
-CharacterStatusText(_Player, "<font color='#FF0000'The music box shatters to pieces!</font>");
+CharacterStatusText(_Player, "LLMIME_StatusText_MusicBoxShatters");
 
 PROC
 LLMIME_Follower_BeginResurrection((CHARACTERGUID)_Player, (ITEMGUID)_MusicBox)
@@ -1089,7 +1089,7 @@ RemoveStatus(_Mime,"KNOCKED_DOWN");
 SetCanFight(_Mime,1);
 SetCanJoinCombat(_Mime,1);
 CharacterSetAnimationOverride(_Mime,"");
-CharacterStatusText(_Mime, "*The mime's amulet shatters!*");
+CharacterStatusText(_Mime, "LLMIME_StatusText_MimeAmuletShatters");
 CharacterSetHitpointsPercentage(_Mime, 100);
 GlobalClearFlag("Mimicry_LevelIsOriginsTutorial");
 

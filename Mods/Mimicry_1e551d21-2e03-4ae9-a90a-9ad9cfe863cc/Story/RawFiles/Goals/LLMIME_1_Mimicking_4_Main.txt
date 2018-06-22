@@ -378,7 +378,7 @@ AND
 HasActiveStatus(_Mime, "LLMIME_MIMICKING", 1)
 THEN
 RemoveStatus(_Mime, "LLMIME_MIMICKING");
-CharacterStatusText(_Mime, "<font color='#FF7F50'>Mimicking Ended</font>");
+CharacterStatusText(_Mime, "LLMIME_StatusText_MimickingEnded");
 
 IF
 ObjectLeftCombat(_Mime, _CombatID)
@@ -624,7 +624,7 @@ LLMIME_Mimicking_ClearQueue(_Mime, _Caster, _Action, _ActionType);
 PROC
 LLMIME_Mimicking_OnMimicFailed((CHARACTERGUID)_Mime, (CHARACTERGUID)_Caster, (STRING)_Action, (STRING)_ActionType)
 THEN
-CharacterStatusText(_Mime, "<font color='#DC143C'>Mimic Failed!</font>");
+CharacterStatusText(_Mime, "LLMIME_StatusText_MimickingFailed");
 PlayAnimation(_Mime, "emotion_angry");
 
 PROC

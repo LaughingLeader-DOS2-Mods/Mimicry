@@ -59,6 +59,7 @@ VARS
 	INT:_Index
 	STATUS:_Status
 	STRING:_Message
+	INT:_Turns
 ON
 	OnCharacterEvent(_Mime, "Mimicry_InitMimeJob")
 ACTIONS
@@ -87,8 +88,10 @@ THEN
 				AddStatusInfluence(_Mime, _Status, %StatusStrength, "", 0, 1)
 			ENDIF
 			*/
-			IF "!c1"
+			IF "!c1|(c2&!c3)"
 				CharacterHasStatus(_Mime, _Status)
+				GetStatusTurns(_Mime, _Status, _Turns)
+				IsEqual(_Turns, -1)
 			THEN
 				CharacterApplyStatus(_Mime, _Status, -1, 1)
 			ENDIF

@@ -11,7 +11,7 @@ IsTagged(_Item, "LLMIME_BrawlerFist", 1)
 AND
 NOT LLMIME_QRY_CharacterIsAMime(_Character)
 THEN
-CharacterStatusText(_Character, "<font color='#FF0000'>You try to use fight like a brawler, but it is futile.</font>");
+CharacterStatusText(_Character, "LLMIME_StatusText_BrawlerFistBlocked");
 DB_CustomUseItemResponse(_Character, _Item, 0);
 //DB_LLMIME_Items_Temp_BlockedItem(_Character, _Item);
 //END_REGION
@@ -30,7 +30,7 @@ NOT CharacterGetEquippedItem(_Character, "Helmet", _Item) // Mask not equipped
 AND
 CharacterIsInCombat(_Character, 1)
 THEN
-CharacterStatusText(_Character, "<font color='#FF0000'>You can't equip the Mask of Mimicry in combat!</font>");
+CharacterStatusText(_Character, "LLMIME_StatusText_MimeMaskBlocked");
 DB_CustomUseItemResponse(_Character, _Item, 0);
 //DB_LLMIME_Items_Temp_BlockedItem(_Character, _Item);
 //END_REGION
@@ -67,7 +67,7 @@ NOT DB_CustomUseItemResponse(_Char, _Item, _)
 AND
 LLMIME_Follower_QRY_CanSummon(_Char)
 THEN
-CharacterStatusText(_Char, "*As you turn the key, the music box echoes an off-beat jingle.*");
+CharacterStatusText(_Char, "LLMIME_StatusText_MusicBoxUsed");
 DB_CustomUseItemResponse(_Char, _Item, 1);
 
 PROC
@@ -75,7 +75,7 @@ LLMIME_Items_OnMusicBoxUsed((CHARACTERGUID)_Char, (ITEMGUID)_Item)
 AND
 NOT DB_CustomUseItemResponse(_Char, _Item, _)
 THEN
-CharacterStatusText(_Char, "*The music box key refuses to twist.*");
+CharacterStatusText(_Char, "LLMIME_StatusText_MusicBoxBlocked");
 DB_CustomUseItemResponse(_Char, _Item, 0);
 
 IF

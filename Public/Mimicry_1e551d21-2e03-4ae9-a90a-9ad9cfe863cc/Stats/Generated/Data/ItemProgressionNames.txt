@@ -2,7 +2,7 @@ new namegroup "ARM_UNIQUE_LLMIME_MimeMask_A"
 add name "Mask of Mimicry","The mask of a warrior who abandoned their own identity. Bestows the power to mimic the actions of allies in battle, at a cost of the wearer's identity."
 
 new namegroup "LLMIME_BrawlerFist"
-add name "Brawler's Fist","An iron-hard fist. Can only be equipped by a mime."
+add name "Brawler's Fist","The iron-hard fist of a Brawler. Strikes true."
 
 new namegroup "LLMIME_Mime_Light_UpperBody"
 add name "Mime's Jacket","A spiffy jacket worn by a mime."

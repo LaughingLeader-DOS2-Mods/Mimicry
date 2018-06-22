@@ -89,6 +89,57 @@ THEN
 LeaderLog_Log("DEBUG", "[LLMIME:Mime:CharacterReceivedDamage] Mime did [",_DamageStr,"]% damage. Whatever that means.");
 //END_REGION
 
+//REGION SUCKER_PUNCH
+IF
+SkillAdded(_Mime, "Target_SingleHandedAttack", _)
+AND
+LLMIME_QRY_CharacterIsAMime(_Mime)
+THEN
+LeaderLib_StartObjectTimer(_Mime, 200, "Mimicry_Timers_Brawler_SwapSuckerPunch_", "Mimicry_Events_SwapSuckerPunch");
+
+IF
+StoryEvent((CHARACTERGUID)_Mime, "Mimicry_Events_SwapSuckerPunch")
+AND
+ObjectGetFlag(_Mime, "Mimicry_MimeIsUnarmed", 1)
+AND
+CharacterHasSkill(_Mime, "Target_SingleHandedAttack", 1)
+THEN
+CharacterRemoveSkill(_Mime, "Target_SingleHandedAttack");
+CharacterAddSkill(_Mime, "Target_LLMIME_SuckerPunch");
+LeaderLog_Log("DEBUG", "[LLMIME:Brawler:Mimicry_Events_SwapSuckerPunch] Removing [Target_SingleHandedAttack] and adding [Target_LLMIME_SuckerPunch] to Mime.");
+
+IF
+ItemUnEquipped(_Item, _Mime)
+AND
+LLMIME_QRY_WeaponIsBrawlerFist(_Item)
+THEN
+LLMIME_Brawler_RemoveSuckerPunch(_Mime);
+
+IF
+ObjectFlagCleared("Mimicry_MimeIsUnarmed", (CHARACTERGUID)_Mime, _)
+AND
+LLMIME_QRY_CharacterIsAMime(_Mime)
+THEN
+LLMIME_Brawler_RemoveSuckerPunch(_Mime);
+
+IF
+CharacterStatusRemoved(_Mime, _Status, _)
+AND
+DB_LLMIME_Brawler_StanceStatuses(_Status, _SettingsFlag, _InfoStatus, _DisableInfoFlag, _DialogVar)
+AND
+LLMIME_QRY_CharacterIsAMime(_Mime)
+THEN
+LLMIME_Brawler_RemoveSuckerPunch(_Mime);
+
+PROC
+LLMIME_Brawler_RemoveSuckerPunch((CHARACTERGUID)_Mime)
+AND
+CharacterHasSkill(_Mime, "Target_LLMIME_SuckerPunch", 1)
+THEN
+CharacterRemoveSkill(_Mime, "Target_LLMIME_SuckerPunch");
+LeaderLog_Log("DEBUG", "[LLMIME:Brawler:Mimicry_MimeIsUnarmed(Cleared)] Removing [Target_LLMIME_SuckerPunch] from Mime.");
+//END_REGION
+
 //REGION BRAWLER_STANCE_PREFERENCE_SET
 PROC
 LLMIME_Brawler_SetStancePreference((CHARACTERGUID)_Mime, (STRING)_Flag)
@@ -350,7 +401,7 @@ PlayLoopEffect(_Mime, "LLMIME_FX_DoubleAttack_Overlay_01", "", _FXHandle)
 THEN
 CharacterAddActionPoints(_Mime, 2);
 //PlayAnimation(_Mime, "attack1");
-CharacterStatusText(_Mime, "<font color='#8A2BE2' size='24'>Double Strike!</font>");
+CharacterStatusText(_Mime, "LLMIME_StatusText_DoubleStrike");
 CharacterAttack(_Mime, _Target);
 DB_LLMIME_Brawler_DoubleAttackTimer(_TimerName, _Mime, _FXHandle);
 TimerLaunch(_TimerName, 3000);
