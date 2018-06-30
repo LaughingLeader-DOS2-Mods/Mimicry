@@ -25,6 +25,7 @@ ON
 	//OnCharacterEvent(__Me, "Mimicry_MimeInitialized")
 	//OnActivate()
 	OnItemEvent(_, "LeaderLib_Initialized")
+	OnCharacterEvent(__Me, "Mimicry_Follower_ReInitialize")
 ACTIONS
 	
 IF "c1"

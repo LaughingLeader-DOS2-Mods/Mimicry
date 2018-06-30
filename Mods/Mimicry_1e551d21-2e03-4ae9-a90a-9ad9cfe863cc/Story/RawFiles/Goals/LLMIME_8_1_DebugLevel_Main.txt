@@ -10,21 +10,30 @@ GameStarted("TestLevel_LL_Mimicry",1)
 THEN
 ProcDoWaypointUnlock(ITEMGUID_S_LLMIME_TestLevelWaypointShrine_9955a6a5-c7ca-40aa-8fa8-9c3699d65032,NULL_00000000-0000-0000-0000-000000000000);
 DB_LLMIME_Debug_GameStarted(1);
-TimerLaunch("LLMIME_Debug_Start", 100);
-TimerLaunch("LLMIME_Debug_Test", 5000);
+TimerLaunch("LLMIME_Debug_Start", 500);
+TimerLaunch("LLMIME_Debug_Test", 100);
+
+IF
+GameStarted("LeaderLib_GreenScreen",1)
+THEN
+DB_LLMIME_Debug_GameStarted(1);
+TimerLaunch("LLMIME_Debug_Start", 500);
 
 IF
 TimerFinished("LLMIME_Debug_Start")
+AND
+DB_IsPlayer(_Player)
+AND
+NOT GetItemForItemTemplateInInventory(_Player, "UNIQUE_LLMIME_MusicBox_fd03b00c-5366-40e2-a8af-1d9f6a904ecb", _)
 THEN
-LeaderLib_Math_Sine(131.0);
-LeaderLib_Math_Cosine(131.0);
+ItemTemplateAddTo("UNIQUE_LLMIME_MusicBox_fd03b00c-5366-40e2-a8af-1d9f6a904ecb", _Player, 1);
+LLMIME_Debug_TracePartyCount(_Player);
 
 IF
 TimerFinished("LLMIME_Debug_Test")
-AND
-DB_IsPlayer(_Player)
 THEN
-LLMIME_Debug_TracePartyCount(_Player);
+LeaderLib_Math_Sine(131.0);
+LeaderLib_Math_Cosine(131.0);
 
 IF
 CharacterJoinedParty(_)
@@ -308,7 +317,9 @@ CharacterUsedItem(_Character, ITEMGUID_LLMIME_Debug_TransformIntoMime_1667be7d-c
 THEN
 //CharacterTransformAppearanceTo(_Character, CHARACTERGUID_LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9, 1, 1);
 //CharacterTransformAppearanceToWithEquipmentSet(_Character, CHARACTERGUID_LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9, "LLMIME_Class_Mime_Preview", 1);
-MoviePlay(_Character, "Mimicry_TestTransparency");
+MoviePlay(_Character, "CS_BackToRC");
+//MoviePlay(_Character, "Mimicry_TestTransparency");
+//ApplyStatus(_Character, "HASTED", 30.0, 1);
 
 IF
 CharacterUsedItem(_Character, ITEMGUID_LLMIME_Debug_Lever_LevelUpMimeFollower_69094caf-1984-4812-aca0-f7e0c1071380)

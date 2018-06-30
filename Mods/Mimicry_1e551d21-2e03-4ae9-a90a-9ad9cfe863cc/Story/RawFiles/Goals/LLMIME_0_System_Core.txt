@@ -131,6 +131,11 @@ CharacterUnequipItem(_Mime, _Mask);
 
 PROC
 LLMIME_RefreshMask((CHARACTERGUID)_Mime)
+THEN
+LLMIME_RefreshMask(_Mime, 1000);
+
+PROC
+LLMIME_RefreshMask((CHARACTERGUID)_Mime, (INTEGER)_Delay)
 AND
 CharacterFindTaggedItem(_Mime, "LLMIME_ACTIVATE_MIME", _Mask)
 AND
@@ -147,7 +152,7 @@ THEN
 NOT DB_LeaderLog_Temp_CombinedString(_TimerName);
 CharacterUnequipItem(_Mime, _Mask);
 DB_LLMIME_System_Temp_RefreshMask(_Mime, _Mask, _TimerName);
-TimerLaunch(_TimerName, 1000);
+TimerLaunch(_TimerName, _Delay);
 
 IF
 TimerFinished(_TimerName)
@@ -156,6 +161,7 @@ DB_LLMIME_System_Temp_RefreshMask(_Mime, _Mask, _TimerName)
 THEN
 NOT DB_LLMIME_System_Temp_RefreshMask(_Mime, _Mask, _TimerName);
 CharacterEquipItem(_Mime, _Mask);
+CharacterItemSetEvent(_Mime, _Mask, "Mimicry_MaskRefreshed");
 //END_REGION
 
 //REGION SKILL_DATA
