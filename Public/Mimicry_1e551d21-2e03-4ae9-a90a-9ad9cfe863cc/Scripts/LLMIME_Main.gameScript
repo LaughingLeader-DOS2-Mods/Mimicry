@@ -4,6 +4,8 @@ INIT
 	CHARACTER:%NullChar = null
 	LIST<STATUS>:%MimeStatuses
 	FLOAT:%StatusStrength = 50
+	EXTERN FLOAT:%SourceRegenMinimumLevel = 10
+	EXTERN INT:%SourceRegenDuration = 10
 EVENTS
 
 EVENT InitStatusList
@@ -51,6 +53,25 @@ ON
 	OnIterateCharacter(_Mime, "LLMIME_Iterator_InitMime")
 ACTIONS
 	CharacterEvent(_Mime, "Mimicry_InitMimeJob")
+	
+EVENT Mime_ApplySourceRegen
+VARS
+	CHARACTER:_Mime
+	FLOAT:_Level
+ON
+	OnCharacterStatusRemoved(_Mime, LLMIME_SOURCE_REGENERATION_HIDDEN)
+	OnCharacterEvent(_Mime, "Mimicry_MimeLeveledUp")
+	OnCharacterEvent(_Mime, "Mimicry_ApplySourceRegen")
+ACTIONS
+IF "c1&!c2&c3&(c4|c5)"
+	IsTagged(_Mime, "LLMIME_MIME")
+	CharacterHasStatus(_Mime, LLMIME_SOURCE_REGENERATION_HIDDEN)
+	CharacterGetStat(_Level, _Mime, Level)
+	IsGreaterThen(_Level, %SourceRegenMinimumLevel)
+	IsEqual(_Level, %SourceRegenMinimumLevel)
+THEN
+	CharacterApplyStatus(_Mime, LLMIME_SOURCE_REGENERATION_HIDDEN, %SourceRegenDuration, 0)
+ENDIF
 
 EVENT Mime_Setup
 VARS
@@ -71,6 +92,7 @@ THEN
 	CharacterEvent(_Mime, "LeaderLib_DebugLog")
 	SetTag(_Mime, "LLMIME_MIME")
 ENDIF
+	CharacterEvent(_Mime, "Mimicry_ApplySourceRegen")
 	Set(_Index, 1)
 IF "c1"
 	ListGetSize(%MimeStatuses, _Size)
@@ -121,7 +143,8 @@ THEN
 ENDIF
 	CharacterEvent(_Mime, "Mimicry_ClearMimeBonuses")
 	CharacterEvent(_Mime, "Mimicry_MimeJobRemoved")
-
+	CharacterRemoveStatus(_Mime, LLMIME_SOURCE_REGENERATION_HIDDEN, null, 0)
+	
 EVENT Apply_Mimicking_Start
 ON
 	OnGlobalFlagSet("Mimicry_Mimic_CombatOnlyDisabled")

@@ -12,6 +12,20 @@ IF
 GameStarted("TestLevel_LL_Mimicry", _)
 THEN
 GoalCompleted;
+
+IF
+GameStarted("LeaderLib_GreenScreen",1)
+THEN
+TimerLaunch("LLMIME_Debug_Start", 500);
+
+IF
+TimerFinished("LLMIME_Debug_Start")
+AND
+CharacterGetHostCharacter(_Player)
+AND
+NOT GetItemForItemTemplateInInventory(_Player, "UNIQUE_LLMIME_MusicBox_fd03b00c-5366-40e2-a8af-1d9f6a904ecb", _)
+THEN
+ItemTemplateAddTo("UNIQUE_LLMIME_MusicBox_fd03b00c-5366-40e2-a8af-1d9f6a904ecb", _Player, 1);
 EXITSECTION
 
 ENDEXITSECTION

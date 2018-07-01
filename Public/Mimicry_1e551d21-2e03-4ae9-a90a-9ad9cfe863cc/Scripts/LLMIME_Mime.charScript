@@ -15,6 +15,13 @@ ACTIONS
 	Set(%LLMIME_InitialRefresh, 0)
 */
 
+/*
+EVENT Region_ReInit
+ON
+	OnRegionEntered(__Me, _, _)
+ACTIONS
+	CharacterEvent(__Me, "Mimicry_Follower_ReInitialize")
+*/
 
 EVENT Init_Event
 VARS
@@ -27,7 +34,6 @@ ON
 	OnItemEvent(_, "LeaderLib_Initialized")
 	OnCharacterEvent(__Me, "Mimicry_Follower_ReInitialize")
 ACTIONS
-	
 IF "c1"
 	IsEqual(%LLMIME_InitialRefresh, 0)
 THEN
@@ -48,7 +54,6 @@ THEN
 	//CharacterEvent(__Me, "LeaderLib_DebugLog")
 	Set(%LLMIME_Initialized, 1)
 ENDIF
-
 
 EVENT Follower_BrawlerStance_Activate
 ON

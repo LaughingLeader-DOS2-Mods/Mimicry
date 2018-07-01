@@ -9,6 +9,25 @@ LLMIME_Mimicking_InitSettings();
 //DB_LLMIME_Mimicking_Blacklist_SkillPrefixes(_Prefix)
 KBSECTION
 //REGION SETTINGS
+IF
+StoryEvent(_, "LeaderUpdater_ModVersionsChanged")
+AND
+DB_LeaderUpdater_Temp_PastRegistered("Mimicry", "LaughingLeader", "0.9.0.0")
+AND
+NOT DB_LLMIME_Mimicking_UpdatingVersion(_)
+THEN
+LeaderLog_Log("DEBUG", "[LLMIME:Mimicking:System] Updating settings from version [0.9.0.0]");
+DB_LLMIME_Mimicking_UpdatingVersion(1);
+LLMIME_Mimicking_ClearSettings();
+LLMIME_Mimicking_InitSettings();
+
+IF
+StoryEvent(_, "LeaderUpdater_ModVersionsChanged")
+AND
+DB_LLMIME_Mimicking_UpdatingVersion(_Val)
+THEN
+NOT DB_LLMIME_Mimicking_UpdatingVersion(_Val);
+
 PROC
 LLMIME_Mimicking_ClearSettings()
 THEN
@@ -33,6 +52,21 @@ DB_LLMIME_Mimicking_Blacklist_Skills("Shout_FavourableWind");
 DB_LLMIME_Mimicking_Blacklist_Skills("Target_LLMIME_MimicAttack");
 DB_LLMIME_Mimicking_Blacklist_Skills("Shout_LLMIME_ReturnToOwner");
 DB_LLMIME_Mimicking_Blacklist_Skills("Shout_LLMIME_BrawlerStance");
+//Source skills
+DB_LLMIME_Mimicking_Blacklist_Skills("Target_Challenge");
+//Summon Infusions
+DB_LLMIME_Mimicking_Blacklist_Skills("Target_ElectricInfusion");
+DB_LLMIME_Mimicking_Blacklist_Skills("Target_IceInfusion");
+DB_LLMIME_Mimicking_Blacklist_Skills("Target_FireInfusion");
+DB_LLMIME_Mimicking_Blacklist_Skills("Target_WarpInfusion");
+DB_LLMIME_Mimicking_Blacklist_Skills("Target_ShadowInfusion");
+DB_LLMIME_Mimicking_Blacklist_Skills("Target_PowerInfusion");
+DB_LLMIME_Mimicking_Blacklist_Skills("Target_RangedInfusion");
+DB_LLMIME_Mimicking_Blacklist_Skills("Target_PoisonInfusion");
+DB_LLMIME_Mimicking_Blacklist_Skills("Target_NecrofireInfusion");
+DB_LLMIME_Mimicking_Blacklist_Skills("Target_WaterInfusion");
+DB_LLMIME_Mimicking_Blacklist_Skills("Target_AcidInfusion");
+DB_LLMIME_Mimicking_Blacklist_Skills("Target_CursedElectricInfusion");
 //Prefixes (i.e. mod skills)
 DB_LLMIME_Mimicking_Blacklist_SkillPrefixes("_CA_");
 //Special skills
@@ -133,14 +167,14 @@ THEN
 DB_NOOP(1);
 
 QRY
-LLMIME_Mimicking_QRY_CanMimicSourceSkill((STRING)_Skill)
+LLMIME_Mimicking_QRY_CanMimicSourceSkill((STRING)_Skill, (CHARACTERGUID)_Mime)
 AND
 IsSourceSkill(_Skill, 0)
 THEN
 DB_NOOP(1);
 
 QRY
-LLMIME_Mimicking_QRY_CanMimicSourceSkill((STRING)_Skill)
+LLMIME_Mimicking_QRY_CanMimicSourceSkill((STRING)_Skill, (CHARACTERGUID)_Mime)
 AND
 IsSourceSkill(_Skill, 1)
 AND
@@ -149,9 +183,20 @@ THEN
 DB_NOOP(1);
 
 QRY
-LLMIME_Mimicking_QRY_CanMimicSkill((STRING)_Skill, (STRING)_SkillType, (STRING)_SkillElement)
+LLMIME_Mimicking_QRY_CanMimicSourceSkill((STRING)_Skill, (CHARACTERGUID)_Mime)
 AND
-LLMIME_Mimicking_QRY_CanMimicSourceSkill(_Skill)
+IsSourceSkill(_Skill, 1)
+AND
+NOT GlobalGetFlag("Mimicry_Mimic_CopySourceSkills_Enabled", 1)
+AND
+HasActiveStatus(_Mime, "LLMIME_MIMICKING_SOURCE", 1)
+THEN
+DB_NOOP(1);
+
+QRY
+LLMIME_Mimicking_QRY_CanMimicSkill((STRING)_Skill, (STRING)_SkillType, (STRING)_SkillElement)
+//AND
+//LLMIME_Mimicking_QRY_CanMimicSourceSkill(_Skill)
 AND
 LLMIME_Mimicking_QRY_SkillIsAllowed(_Skill, _SkillType, _SkillElement)
 THEN

@@ -147,6 +147,11 @@ IF
 CharacterLeveledUp(_Mime)
 AND
 LLMIME_QRY_CharacterIsAMime(_Mime)
+THEN
+SetStoryEvent(_Mime, "Mimicry_MimeLeveledUp");
+
+IF
+StoryEvent((CHARACTERGUID)_Mime, "Mimicry_MimeLeveledUp")
 AND
 CharacterGetLevel(_Mime, _Level)
 AND

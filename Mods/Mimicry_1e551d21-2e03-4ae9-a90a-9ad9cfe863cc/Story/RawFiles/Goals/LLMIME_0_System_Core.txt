@@ -678,6 +678,17 @@ AND
 ObjectGetFlag(_Mime, "Mimicry_IsMimicking", 1)
 THEN
 DB_NOOP(1);
+
+QRY
+LLMIME_QRY_HasMaskEquipped((CHARACTERGUID)_Mime)
+AND
+CharacterGetEquippedItem(_Mime, "Helmet", _Mask)
+AND
+DB_LLMIME_Templates("Mask_A", _Template)
+AND
+GetTemplate(_Mask, _Template)
+THEN
+DB_NOOP(1);
 //END_REGION
 
 //REGION RESET_EVENTS

@@ -189,6 +189,7 @@ NOT DB_LLMIME_Mimicking_Temp_JustAttacked(_Mime)
 AND
 LLMIME_Mimicking_QRY_HasEquippedWeaponType(_Mime, "Crossbow")
 THEN
+ObjectSetFlag(_Mime, "Mimicry_IsMimicking");
 CharacterUseSkill(_Mime, "Projectile_LLMIME_MimicCrossbowAttack", _Target, 1, 1, 1);
 LLMIME_Mimicking_Attack_StartSuccessTimer(_Mime, _Target, _Action);
 DB_LLMIME_Mimicking_Temp_JustAttacked(_Mime);
@@ -200,6 +201,7 @@ NOT DB_LLMIME_Mimicking_Temp_JustAttacked(_Mime)
 AND
 LLMIME_Mimicking_QRY_HasEquippedWeaponType(_Mime, "Bow")
 THEN
+ObjectSetFlag(_Mime, "Mimicry_IsMimicking");
 CharacterUseSkill(_Mime, "Projectile_LLMIME_MimicBowAttack", _Target, 1, 1, 1);
 LLMIME_Mimicking_Attack_StartSuccessTimer(_Mime, _Target, _Action);
 DB_LLMIME_Mimicking_Temp_JustAttacked(_Mime);
@@ -209,6 +211,7 @@ LLMIME_Mimicking_MimicActionOnTarget((CHARACTERGUID)_Mime, (CHARACTERGUID)_Caste
 AND
 NOT DB_LLMIME_Mimicking_Temp_JustAttacked(_Mime)
 THEN
+ObjectSetFlag(_Mime, "Mimicry_IsMimicking");
 CharacterUseSkill(_Mime, "Target_LLMIME_MimicAttack", _Target, 1, 1, 1);
 LLMIME_Mimicking_Attack_StartSuccessTimer(_Mime, _Target, _Action);
 DB_LLMIME_Mimicking_Temp_JustAttacked(_Mime);
@@ -220,6 +223,7 @@ NOT DB_LLMIME_Mimicking_Temp_JustAttacked(_Mime)
 AND
 CharacterCanSee(_Mime, _Target, 1)
 THEN
+ObjectSetFlag(_Mime, "Mimicry_IsMimicking");
 CharacterAttack(_Mime, _Target);
 //SetVarObject(_Mime, "AttackOfOpportunity", _Target); // Call CharacterAttackWithoutMove in behavior with Base.charScript
 LLMIME_Mimicking_Attack_StartSuccessTimer(_Mime, _Target, _Action);

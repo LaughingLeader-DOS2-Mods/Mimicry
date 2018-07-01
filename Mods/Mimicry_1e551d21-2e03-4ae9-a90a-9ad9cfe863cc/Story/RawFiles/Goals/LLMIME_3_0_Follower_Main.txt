@@ -186,6 +186,23 @@ LLMIME_Follower_Internal_SetMime(_Mime);
 SetOnStage(_Mime, 0);
 //END_REGION
 
+//REGION MASK_FIX
+IF
+GameStarted(_,_)
+AND
+DB_LLMIME_Follower_Mime(_Mime)
+AND
+CharacterIsDead(_Mime, 0)
+AND
+NOT LLMIME_QRY_HasMaskEquipped(_Mime)
+AND
+DB_LLMIME_Templates("Mask_A", _Template)
+AND
+GetItemForItemTemplateInInventory(_Mime, _Template, _Mask)
+THEN
+CharacterEquipItem(_Mime, _Mask);
+//END_REGION
+
 //REGION PLAY_RANDOM_ANIM
 IF
 DialogStarted("LLMIME_MimeCompanion_Default", _Instance)
@@ -928,6 +945,33 @@ CharacterGetLevel(_Owner, _Level)
 THEN
 CharacterLevelUpTo(_Mime, _Level);
 CharacterAddToPlayerCharacter(_Mime, _Owner);
+//END_REGION
+
+//REGION SOURCE_MIMICKING_UNLOCK
+IF
+StoryEvent((CHARACTERGUID)_Mime, "Mimicry_MimeInitialized")
+AND
+IsTagged(_Mime, "LLMIME_MimeFollower", 1)
+THEN
+LLMIME_Follower_Internal_AddSourceMimicking(_Mime);
+
+IF
+CharacterLeveledUp(_Mime)
+AND
+IsTagged(_Mime, "LLMIME_MimeFollower", 1)
+THEN
+LLMIME_Follower_Internal_AddSourceMimicking(_Mime);
+
+PROC
+LLMIME_Follower_Internal_AddSourceMimicking((CHARACTERGUID)_Mime)
+AND
+CharacterGetLevel(_Mime, _Level)
+AND
+_Level >= 10
+AND
+CharacterHasSkill(_Mime, "Shout_LLMIME_SourceMimicking", 0)
+THEN
+CharacterAddSkill(_Mime, "Shout_LLMIME_SourceMimicking");
 //END_REGION
 
 //REGION GHOST

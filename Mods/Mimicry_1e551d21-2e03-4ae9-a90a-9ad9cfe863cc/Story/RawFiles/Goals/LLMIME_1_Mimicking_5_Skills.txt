@@ -46,6 +46,8 @@ DB_LLMIME_Mimicking_Temp_TargetPriority(_Caster, _Target, _TargetPriority)
 AND
 DB_LLMIME_Mimicking_MimicNextAction(_Mime)
 AND
+LLMIME_Mimicking_QRY_CanMimicSourceSkill(_Skill, _Mime)
+AND
 LLMIME_Mimicking_QRY_CanMimicCharacter(_Caster, _Mime)
 AND
 GetPosition(_Target, _TargetX, _, _TargetZ)
@@ -63,6 +65,8 @@ AND
 LLMIME_Mimicking_QRY_CanMimicSkill(_Skill, _SkillType, _SkillElement)
 AND
 DB_LLMIME_Mimicking_MimicNextAction(_Mime)
+AND
+LLMIME_Mimicking_QRY_CanMimicSourceSkill(_Skill, _Mime)
 AND
 LLMIME_Mimicking_QRY_CanMimicCharacter(_Caster, _Mime)
 THEN
@@ -99,6 +103,8 @@ AND
 NOT DB_LLMIME_Timers_SkillCastAtPosition(_, _Caster, _TargetX, _TargetZ, _Skill, _SkillType)
 AND
 LLMIME_Mimicking_QRY_CanMimicCharacter(_Caster, _Mime)
+AND
+LLMIME_Mimicking_QRY_CanMimicSourceSkill(_Skill, _Mime)
 AND
 GetUUID(_Caster, _CasterID)
 AND
@@ -241,6 +247,7 @@ DB_LLMIME_Mimicking_MimicQueue_Self(_Mime, _Caster, _Skill, "Skill")
 AND
 LLMIME_Mimicking_Skills_QRY_SkipWeaponMimicking(_Mime, _Caster, _Skill)
 THEN
+ObjectSetFlag(_Mime, "Mimicry_IsMimicking");
 LLMIME_Mimicking_ResetFailTimer(_Mime, _Caster, _Skill, "Skill", 2500);
 CharacterUseSkill(_Mime, _Skill, _Mime, 1, 1, 1);
 NOT DB_LLMIME_Mimicking_MimicQueue_Self(_Mime, _Caster, _Skill, "Skill");
@@ -248,6 +255,7 @@ NOT DB_LLMIME_Mimicking_MimicQueue_Self(_Mime, _Caster, _Skill, "Skill");
 PROC
 LLMIME_Mimicking_MimicActionOnTarget((CHARACTERGUID)_Mime, (CHARACTERGUID)_Caster, (GUIDSTRING)_Target, (STRING)_Skill, "Skill")
 THEN
+ObjectSetFlag(_Mime, "Mimicry_IsMimicking");
 LLMIME_Mimicking_ResetFailTimer(_Mime, _Caster, _Skill, "Skill", 2500);
 CharacterUseSkill(_Mime, _Skill, _Target, 1, 1, 1);
 
@@ -258,6 +266,17 @@ DB_LLMIME_Mimicking_Temp_ResetDummyAfterMimicAction(_Mime, _Target, _Skill, "Ski
 THEN
 NOT DB_LLMIME_Mimicking_Temp_ResetDummyAfterMimicAction(_Mime, _Target, _Skill, "Skill");
 LLMIME_Dummy_ResetDummyAfterDelay((GUIDSTRING)_Target, 2000);
+
+IF
+CharacterUsedSkill(_Mime, _Skill, _)
+AND
+ObjectGetFlag(_Mime, "Mimicry_IsMimicking", 1)
+AND
+IsSourceSkill(_Skill, 1)
+AND
+HasActiveStatus(_Mime, "LLMIME_MIMICKING_SOURCE", 1)
+THEN
+RemoveStatus(_Mime, "LLMIME_MIMICKING_SOURCE");
 //END_REGION
 
 //REGION SUCCESS

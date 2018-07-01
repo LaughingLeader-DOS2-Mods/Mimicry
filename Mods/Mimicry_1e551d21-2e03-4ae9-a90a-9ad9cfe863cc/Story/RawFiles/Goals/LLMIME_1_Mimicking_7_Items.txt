@@ -54,6 +54,7 @@ GetPosition(_Mime, _x, _y, _z)
 AND
 CreateItemTemplateAtPosition(_Template, _x, _y, _z, _Item)
 THEN
+ObjectSetFlag(_Mime, "Mimicry_IsMimicking");
 DB_LLMIME_Mimicking_Items_DestroyNext(_Mime, _Item, _Template, _Caster);
 ItemToInventory(_Item, _Mime, 1, 0, 1);
 CharacterUseItem(_Mime, _Item, "");
