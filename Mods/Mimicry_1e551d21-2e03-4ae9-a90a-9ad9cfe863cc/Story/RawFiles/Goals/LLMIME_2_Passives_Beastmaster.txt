@@ -22,7 +22,8 @@ LLMIME_MonsterSkill_RegisterToTemplate("Summons_Condor_0441f88d-4a0a-40ec-ac69-3
 LLMIME_MonsterSkill_RegisterToTemplate("Summons_FireOoze_67a658f4-8312-4993-966a-cd2871da7ee0",			"Projectile_EnemyFireball", 			"Skill");
 LLMIME_MonsterSkill_RegisterToTemplate("Summons_FireSlug_163befcc-d8f6-4c3a-ba1d-536d1f7568bc",			"Projectile_EnemyFireball", 			"Skill");
 LLMIME_MonsterSkill_RegisterToTemplate("Summons_GiantIncarnate_13f9314d-e744-4dc5-acf2-c6bf77a04892",	"Shout_EnemyOverthrow", 				"Skill");
-LLMIME_MonsterSkill_RegisterToTemplate("Summons_Incarnate_118d7359-b7d5-41ea-8c55-86ce27afceba",		"Target_SingleHandedAttack", 			"Skill");
+//LLMIME_MonsterSkill_RegisterToTemplate("Summons_Incarnate_118d7359-b7d5-41ea-8c55-86ce27afceba",		"Target_SingleHandedAttack", 			"Skill");
+LLMIME_MonsterSkill_RegisterToTemplate("Summons_Incarnate_118d7359-b7d5-41ea-8c55-86ce27afceba",		"Shout_LLMIME_ForcedEvolution", 		"Skill");
 LLMIME_MonsterSkill_RegisterToTemplate("Summons_OilBlob_e61da3a2-6dfd-4f2e-8f62-6bfbddb5a7f9",			"Target_TargetedOilSurface", 			"Skill");
 LLMIME_MonsterSkill_RegisterToTemplate("Summons_Plant_e63a712f-fc87-4469-8848-fd8941043afd",			"Cone_LLMIME_BadBreath", 				"Skill");
 LLMIME_MonsterSkill_RegisterToTemplate("Summons_PoisonOoze_7ecb0aa4-376f-4e9a-99d6-6eff900c3c77",		"Projectile_EnemyPoisonDart", 			"Skill");
@@ -412,6 +413,46 @@ AND
 _Percentage > 100
 THEN
 CharacterSetHitpointsPercentage(_Target, 100);
+//END_REGION
+
+//REGION FORCED_EVOLUTION
+IF
+SkillCast(_Summon, "Shout_LLMIME_ForcedEvolution", _)
+AND
+IsTagged(_Summon, "INCARNATE_S", 1)
+AND
+GetPosition(_Summon, _x, _y, _z)
+AND
+CharacterGetOwner(_Summon, _Owner)
+THEN
+CharacterDieImmediate(_Summon, 0, "None");
+SetOnStage(_Summon, 0);
+CharacterUseSkillAtPosition(_Owner, "Summon_LLMIME_EvolvedIncarnate", _x, _y, _z, 1, 1);
+PlayEffectAtPosition("RS3_FX_GP_Impacts_Air_LightningBolt_Vertical_01", 0.5, _x, _y, _z);
+//ClearTag(_Summon, "INCARNATE_S");
+//CharacterTransform(_Summon, "Summons_GiantIncarnate_13f9314d-e744-4dc5-acf2-c6bf77a04892", 0, 1, 1, 1, 0, 1, 0);
+//SetTag(_Summon, "INCARNATE_G");
+//PlayEffect(_Summon, "RS3_FX_Skills_Totem_Impact_Summon_Overlay_01", "");
+
+IF
+CharacterStatusApplied(_Summon, "LLMIME_FORCED_EVOLUTION", _Summoner)
+AND
+IsTagged(_Summon, "INCARNATE_G", 1)
+THEN
+PlayScaledEffectAtPosition("RS3_FX_Elven_Pillar_Explosion", 0.5, _x, _y, _z);
+SetStoryEvent(_Summon, "Mimicry_SummonEvolved");
+
+/*
+//Re-apply monster skills
+IF
+StoryEvent((CHARACTERGUID)_Summon, "Mimicry_SummonEvolved")
+AND
+//HasActiveStatus(_Summon, "LLMIME_FORCED_EVOLUTION", 1)
+HasActiveStatus(_Summon, "LLMIME_BEASTMASTER_MONSTERSKILL", 1)
+THEN
+RemoveStatus(_Summon, "LLMIME_BEASTMASTER_MONSTERSKILL");
+ApplyStatus(_Summon, "LLMIME_BEASTMASTER_MONSTERSKILL", -1.0, 1);
+*/
 //END_REGION
 EXITSECTION
 
