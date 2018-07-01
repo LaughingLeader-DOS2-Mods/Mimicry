@@ -346,6 +346,11 @@ THEN
 LLMIME_Mimicking_ApplyMimicking(_Mime);
 
 IF
+CharacterStatusRemoved(_Mime, "LLMIME_MIMICKING_DISABLED", _)
+THEN
+LLMIME_Mimicking_ApplyMimicking(_Mime);
+
+IF
 ObjectTurnEnded((CHARACTERGUID)_Mime)
 THEN
 LLMIME_Mimicking_ApplyMimicking(_Mime);
@@ -369,7 +374,7 @@ HasActiveStatus(_Mime, "LLMIME_MIMICKING", 0)
 AND
 LLMIME_QRY_MimeShouldBeMimicking(_Mime)
 THEN
-ApplyStatus(_Mime, "LLMIME_MIMICKING", -1.0);
+ApplyStatus(_Mime, "LLMIME_MIMICKING", -1.0, 1);
 
 PROC
 LLMIME_Mimicking_ApplyMimicking((CHARACTERGUID)_Mime)
@@ -380,7 +385,7 @@ HasActiveStatus(_Mime, "LLMIME_MIMICKING_FOLLOWER", 0)
 AND
 LLMIME_QRY_MimeShouldBeMimicking(_Mime)
 THEN
-ApplyStatus(_Mime, "LLMIME_MIMICKING_FOLLOWER", -1.0);
+ApplyStatus(_Mime, "LLMIME_MIMICKING_FOLLOWER", -1.0, 1);
 
 IF
 CharacterStatusApplied(_Mime, _Status, _)

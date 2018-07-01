@@ -136,6 +136,8 @@ LLMIME_Mimicking_OnSkillCastAtPosition((CHARACTERGUID)_Caster, (REAL)_TargetX, (
 AND
 DB_LLMIME_Mimicking_MimicNextAction(_Mime)
 AND
+LLMIME_Mimicking_QRY_CanMimicSourceSkill(_Skill, _Mime)
+AND
 LLMIME_Mimicking_QRY_CanMimicCharacter(_Caster, _Mime)
 THEN
 LeaderLog_Log("DEBUG", "[LLMIME:Mime:OnSkillCastAtPosition] Queuing up next mimic shout skill [",_Skill,"].");
@@ -147,6 +149,8 @@ AND
 _SkillType != "shout"
 AND
 DB_LLMIME_Mimicking_MimicNextAction(_Mime)
+AND
+LLMIME_Mimicking_QRY_CanMimicSourceSkill(_Skill, _Mime)
 AND
 LLMIME_Mimicking_QRY_CanMimicCharacter(_Caster, _Mime)
 THEN

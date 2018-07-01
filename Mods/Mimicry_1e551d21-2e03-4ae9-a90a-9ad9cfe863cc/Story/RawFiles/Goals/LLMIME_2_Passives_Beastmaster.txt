@@ -36,7 +36,7 @@ LLMIME_MonsterSkill_RegisterToTemplate("Summons_SoulWolf_53f49a2d-36a1-4c47-8cef
 LLMIME_MonsterSkill_RegisterToTemplate("Summons_WaterOoze_b4fc88e6-1e7f-425e-b901-0be379f19168",		"ProjectileStrike_EnemyHailStrike", 	"Skill");
 LLMIME_MonsterSkill_RegisterToTag("TOTEM", "LLMIME_TOTEMRAGE", "Status");
 //Giant Incarnate
-LLMIME_MonsterSkill_RegisterToStatus("INF_FIRE_G", 		"Shout_EnemySupernova", "Skill");
+LLMIME_MonsterSkill_RegisterToStatus("INF_FIRE_G", 		"Shout_LLMIME_Explosion", "Skill");
 LLMIME_MonsterSkill_RegisterToStatus("INF_WATER_G", 	"Cone_Enemy_WaterSpit", "Skill");
 LLMIME_MonsterSkill_RegisterToStatus("INF_BLOOD_G", 	"Target_EnemyInfect", "Skill");
 LLMIME_MonsterSkill_RegisterToStatus("INF_ELECTRIC_G", 	"Projectile_EnemyFrog_Air", "Skill");
@@ -603,22 +603,27 @@ AND
 IsTagged(_Summon, "INCARNATE_S", 1)
 AND
 CharacterGetOwner(_Summon, _Owner)
-THEN
-CharacterDie(_Summon, 0, "None");
-LeaderLib_StartCharacterCharacterTimer(_Summon, _Owner, 900, "LLMIME_Timers_EvolveIncarnate_", "Mimicry_StartIncarnateEvolution");
-
-IF
-CharacterCharacterEvent(_Summon, _Owner, "Mimicry_StartIncarnateEvolution")
 AND
 GetPosition(_Summon, _x, _y, _z)
 THEN
-//SetOnStage(_Summon, 0);
-CharacterUseSkillAtPosition(_Owner, "Summon_LLMIME_EvolvedIncarnate", _x, _y, _z, 1, 1);
+CharacterDie(_Summon, 0, "None");
+DB_LLMIME_Beastmaster_ForcedEvolutionPosition(_Owner, _x, _y, _z);
+LeaderLib_StartObjectTimer(_Owner, 900, "LLMIME_Timers_EvolveIncarnate_", "Mimicry_StartIncarnateEvolution");
+
+IF
+StoryEvent((CHARACTERGUID)_Owner, "Mimicry_StartIncarnateEvolution")
+AND
+DB_LLMIME_Beastmaster_ForcedEvolutionPosition(_Owner, _x, _y, _z)
+AND
+LLMIME_Dummy_QRY_CreateItemDummy("LLMIME_Dummy_EvolutionTarget", _x, _y, _z)
+AND
+DB_LLMIME_Dummy_NextItemDummy("LLMIME_Dummy_EvolutionTarget", _Dummy)
+THEN
+CharacterUseSkill(_Owner, "Summon_LLMIME_EvolvedIncarnate", _Dummy, 1, 1, 1);
 PlayEffectAtPosition("RS3_FX_GP_Impacts_Air_LightningBolt_Vertical_01", _x, _y, _z);
-//ClearTag(_Summon, "INCARNATE_S");
-//CharacterTransform(_Summon, "Summons_GiantIncarnate_13f9314d-e744-4dc5-acf2-c6bf77a04892", 0, 1, 1, 1, 0, 1, 0);
-//SetTag(_Summon, "INCARNATE_G");
-//PlayEffect(_Summon, "RS3_FX_Skills_Totem_Impact_Summon_Overlay_01", "");
+NOT DB_LLMIME_Dummy_NextItemDummy("LLMIME_Dummy_EvolutionTarget", _Dummy);
+NOT DB_LLMIME_Beastmaster_ForcedEvolutionPosition(_Owner, _x, _y, _z);
+LLMIME_Dummy_ResetDummy(_Dummy);
 
 IF
 CharacterStatusApplied(_Summon, "LLMIME_FORCED_EVOLUTION", _Summoner)
