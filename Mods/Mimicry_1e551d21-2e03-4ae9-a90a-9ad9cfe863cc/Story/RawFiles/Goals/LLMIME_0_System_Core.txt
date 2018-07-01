@@ -24,7 +24,10 @@ DB_LLMIME_Statuses("LLMIME_UNARMED_BONUS_DAMAGE");
 DB_LLMIME_Statuses("LLMIME_TOTEMRAGE");
 DB_LLMIME_Statuses("LLMIME_BAD_BREATH");
 DB_LLMIME_Statuses("LLMIME_TOAD");
-DB_LLMIME_MimeStatuses("LLMIME_MIMICKING");
+DB_LLMIME_Statuses("LLMIME_FORCED_EVOLUTION");
+DB_LLMIME_MimickingStatuses("LLMIME_MIMICKING");
+DB_LLMIME_MimickingStatuses("LLMIME_MIMICKING_FOLLOWER");
+DB_LLMIME_MimickingStatuses("LLMIME_MIMICKING_SOURCE");
 DB_LLMIME_MimeStatuses("LLMIME_MIMICKING_DISABLED");
 DB_LLMIME_MimeStatuses("LLMIME_MIMIC_WEAPON_REQUIREMENTS");
 DB_LLMIME_MimeStatuses("LLMIME_BRAWLER_STANCE_CON");
@@ -46,6 +49,7 @@ DB_LLMIME_MimeStatuses("LLMIME_BEASTMASTER_MONSTERSKILL");
 DB_LLMIME_MimeStatuses("LLMIME_CONCENTRATION");
 DB_LLMIME_MimeStatuses("LLMIME_CONCENTRATION_BONUS");
 DB_LLMIME_MimeStatuses("LLMIME_CONCENTRATION_INFO");
+DB_LLMIME_MimeStatuses("LLMIME_SOURCE_REGENERATION_HIDDEN");
 
 PROC
 LLMIME_System_InitTemplates()
@@ -115,6 +119,15 @@ PROC
 LLMIME_RemoveAllMimeStatuses((CHARACTERGUID)_Character)
 AND
 DB_LLMIME_MimeStatuses(_Status)
+AND
+HasActiveStatus(_Character, _Status, 1)
+THEN
+RemoveStatus(_Character, _Status);
+
+PROC
+LLMIME_RemoveAllMimeStatuses((CHARACTERGUID)_Character)
+AND
+DB_LLMIME_MimickingStatuses(_Status)
 AND
 HasActiveStatus(_Character, _Status, 1)
 THEN
@@ -510,7 +523,7 @@ GameStarted(_,_)
 AND
 DB_IsPlayer(_Mime)
 AND
-IsTagged(_Mime, "LLMIME_MIME", 1)
+LLMIME_QRY_CharacterIsAMime(_Mime)
 AND
 DB_LLMIME_PassiveData(_Status, _BonusStatus, _InfoStatus, _DisableFlag)
 AND
@@ -569,7 +582,7 @@ RemoveStatus(_Mime, _InfoStatus);
 QRY
 LLMIME_QRY_CharacterIsAMime((CHARACTERGUID)_Character)
 AND
-IsTagged(_Character, "LLMIME_MIME", 1)
+IsTagged(_Character, "Mimicry_Mime", 1)
 AND
 IsTagged(_Character, "LLMIME_Dummy", 0)
 THEN
@@ -684,9 +697,23 @@ LLMIME_QRY_HasMaskEquipped((CHARACTERGUID)_Mime)
 AND
 CharacterGetEquippedItem(_Mime, "Helmet", _Mask)
 AND
-DB_LLMIME_Templates("Mask_A", _Template)
-AND
 GetTemplate(_Mask, _Template)
+AND
+LLMIME_QRY_IsMaskTemplate(_Template)
+THEN
+DB_NOOP(1);
+
+QRY
+LLMIME_QRY_IsMaskTemplate((STRING)_Template)
+AND
+DB_LLMIME_Templates("Mask_A", _Template)
+THEN
+DB_NOOP(1);
+
+QRY
+LLMIME_QRY_IsMaskTemplate((STRING)_Template)
+AND
+DB_LLMIME_Templates("Mask_NoVisual", _Template)
 THEN
 DB_NOOP(1);
 //END_REGION

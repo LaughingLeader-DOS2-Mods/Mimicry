@@ -123,7 +123,7 @@ CanUseItem(_Mime, _Mask, _RequestID)
 AND
 GetTemplate(_Mask, _Template)
 AND
-DB_LLMIME_Templates("Mask_A", _Template)
+LLMIME_QRY_IsMaskTemplate(_Template)
 AND
 NOT CharacterGetEquippedItem(_Mime, "Helmet", _Mask)
 THEN
@@ -136,7 +136,7 @@ ItemUnEquipped(_Mask, _Mime)
 AND
 GetTemplate(_Mask, _Template)
 AND
-DB_LLMIME_Templates("Mask_A", _Template)
+LLMIME_QRY_IsMaskTemplate(_Template)
 THEN
 PlayEffect(_Mime, "LLMIME_FX_MimeMask_Transform_Root_02");
 PlayEffect(_Mime, "LLMIME_FX_MimeMask_Transform_Overlay_Unequipped_01");
@@ -149,28 +149,6 @@ AND
 LLMIME_QRY_CharacterIsAMime(_Mime)
 THEN
 SetStoryEvent(_Mime, "Mimicry_MimeLeveledUp");
-
-IF
-StoryEvent((CHARACTERGUID)_Mime, "Mimicry_MimeLeveledUp")
-AND
-CharacterGetLevel(_Mime, _Level)
-AND
-DB_LLMIME_Templates("Mask_A", _Template)
-AND
-GetItemForItemTemplateInInventory(_Mime, _Template, _Mask)
-THEN
-ItemLevelUpTo(_Mask, _Level);
-
-IF
-ItemEquipped(_Mask, _Mime)
-AND
-GetTemplate(_Mask, _Template)
-AND
-DB_LLMIME_Templates("Mask_A", _Template)
-AND
-CharacterGetLevel(_Mime, _Level)
-THEN
-ItemLevelUpTo(_Mask, _Level);
 //END_REGION
 EXITSECTION
 

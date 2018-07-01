@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <save>
-    <header version="2" time="1527383984" />
+    <header version="2" time="1530476966" />
     <version major="3" minor="1" revision="8" build="0" />
     <region id="Tags">
         <node id="root">
             <children>
                 <node id="Tag">
                     <attribute id="Description" value="A warrior who has abandoned their own identity, instead mimicking the actions of allies in battle." type="23" />
-                    <attribute id="Name" value="LLMIME_MIME" type="23" />
+                    <attribute id="Name" value="Mimicry_Mime" type="23" />
                     <children>
                         <node id="Categories">
                             <children>
@@ -111,6 +111,19 @@
                 <node id="Tag">
                     <attribute id="Description" value="Used to summon the Mime follower." type="23" />
                     <attribute id="Name" value="LLMIME_MimeSummonTool" type="23" />
+                    <children>
+                        <node id="Categories">
+                            <children>
+                                <node id="Category">
+                                    <attribute id="Name" value="Code" type="23" />
+                                </node>
+                            </children>
+                        </node>
+                    </children>
+                </node>
+                <node id="Tag">
+                    <attribute id="Description" value="Item is the mask of a Mime." type="23" />
+                    <attribute id="Name" value="LLMIME_MimeMask" type="23" />
                     <children>
                         <node id="Categories">
                             <children>

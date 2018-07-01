@@ -30,7 +30,7 @@ ON
 	OnItemEvent(_, "LeaderLib_Initialized")
 ACTIONS
 	CallFunction("Mimicry_InitStatusList")
-	IterateCharacters("LLMIME_Iterator_CheckUnarmed", null, null, "LLMIME_MIME")
+	IterateCharacters("LLMIME_Iterator_CheckUnarmed", null, null, "Mimicry_Mime")
 
 EVENT Mime_InitIterate
 VARS
@@ -53,25 +53,6 @@ ON
 	OnIterateCharacter(_Mime, "LLMIME_Iterator_InitMime")
 ACTIONS
 	CharacterEvent(_Mime, "Mimicry_InitMimeJob")
-	
-EVENT Mime_ApplySourceRegen
-VARS
-	CHARACTER:_Mime
-	FLOAT:_Level
-ON
-	OnCharacterStatusRemoved(_Mime, LLMIME_SOURCE_REGENERATION_HIDDEN)
-	OnCharacterEvent(_Mime, "Mimicry_MimeLeveledUp")
-	OnCharacterEvent(_Mime, "Mimicry_ApplySourceRegen")
-ACTIONS
-IF "c1&!c2&c3&(c4|c5)"
-	IsTagged(_Mime, "LLMIME_MIME")
-	CharacterHasStatus(_Mime, LLMIME_SOURCE_REGENERATION_HIDDEN)
-	CharacterGetStat(_Level, _Mime, Level)
-	IsGreaterThen(_Level, %SourceRegenMinimumLevel)
-	IsEqual(_Level, %SourceRegenMinimumLevel)
-THEN
-	CharacterApplyStatus(_Mime, LLMIME_SOURCE_REGENERATION_HIDDEN, %SourceRegenDuration, 0)
-ENDIF
 
 EVENT Mime_Setup
 VARS
@@ -86,11 +67,11 @@ ON
 ACTIONS
 	CallFunction("Mimicry_InitStatusList")
 IF "!c1"
-	IsTagged(_Mime, "LLMIME_MIME")
+	IsTagged(_Mime, "Mimicry_Mime")
 THEN
 	SetVar(_Mime, "LeaderLib_LogMessage", STRING:"[LLMIME:LLMIME_Maim:Mime_Setup] Setting mime tag and statuses.")
 	CharacterEvent(_Mime, "LeaderLib_DebugLog")
-	SetTag(_Mime, "LLMIME_MIME")
+	SetTag(_Mime, "Mimicry_Mime")
 ENDIF
 	CharacterEvent(_Mime, "Mimicry_ApplySourceRegen")
 	Set(_Index, 1)
@@ -135,11 +116,11 @@ ON
 	OnCharacterEvent(_Mime, "Mimicry_RemoveMimeJob")
 ACTIONS
 IF "c1"
-	IsTagged(_Mime, "LLMIME_MIME")
+	IsTagged(_Mime, "Mimicry_Mime")
 THEN
 	SetVar(_Mime, "LeaderLib_LogMessage", STRING:"[LLMIME:LLMIME_Maim:Mime_Remove] Remove mime tag and clearing status influences.")
 	CharacterEvent(_Mime, "LeaderLib_DebugLog")
-	ClearTag(_Mime, "LLMIME_MIME")
+	ClearTag(_Mime, "Mimicry_Mime")
 ENDIF
 	CharacterEvent(_Mime, "Mimicry_ClearMimeBonuses")
 	CharacterEvent(_Mime, "Mimicry_MimeJobRemoved")
@@ -149,7 +130,7 @@ EVENT Apply_Mimicking_Start
 ON
 	OnGlobalFlagSet("Mimicry_Mimic_CombatOnlyDisabled")
 ACTIONS
-	IterateCharacters("LLMIME_Events_RequestMimicking", null, null, "LLMIME_MIME")
+	IterateCharacters("LLMIME_Iterator_RequestMimicking", null, null, "Mimicry_Mime")
 	//CharacterApplyStatus(LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9, LLMIME_MIMICKING, -1)
 
 
@@ -157,51 +138,40 @@ EVENT Apply_Mimicking
 VARS
 	CHARACTER:_Mime
 ON
-	OnCharacterEvent(_Mime, "LLMIME_Events_RequestMimicking")
-	OnIterateCharacter(_Mime, "LLMIME_Events_RequestMimicking")
+	OnIterateCharacter(_Mime, "LLMIME_Iterator_RequestMimicking")
 ACTIONS
-IF "c1&!c2&!c3"
-	CharacterHasStatus(_Mime, LLMIME_MIME)
-	CharacterHasStatus(_Mime, LLMIME_MIMICKING)
-	CharacterHasStatus(_Mime, LLMIME_MIMICKING_DISABLED)
-THEN
-	CharacterApplyStatus(_Mime, LLMIME_MIMICKING, -1)
-ENDIF
-
+	CharacterEvent(_Mime, "LLMIME_Events_RequestMimicking")
+	
 EVENT Apply_Mimicking_CombatEnded
 VARS
 	CHARACTER:_Mime
 ON
 	OnLeftCombat(_Mime, _)
 ACTIONS
-IF "c1&c2&!c3&!c4"
+IF "c1"
 	HasGlobalFlag("Mimicry_Mimic_CombatOnlyDisabled")
-	CharacterHasStatus(_Mime, LLMIME_MIME)
-	CharacterHasStatus(_Mime, LLMIME_MIMICKING)
-	CharacterHasStatus(_Mime, LLMIME_MIMICKING_DISABLED)
 THEN
-	CharacterApplyStatus(_Mime, LLMIME_MIMICKING, -1)
+	CharacterEvent(_Mime, "LLMIME_Events_RequestMimicking")
 ENDIF
 
 EVENT Remove_Mimicking_Start
 ON
 	OnGlobalFlagCleared("Mimicry_Mimic_CombatOnlyDisabled")
 ACTIONS
-	IterateCharacters("LLMIME_Events_RemoveMimicking", null, null, "LLMIME_MIME")
+	IterateCharacters("LLMIME_Iterator_RemoveMimicking", null, null, "Mimicry_Mime")
 
 EVENT Remove_Mimicking
 VARS
 	CHARACTER:_Mime
 ON
-	OnCharacterEvent(_Mime, "LLMIME_Events_RemoveMimicking")
-	OnIterateCharacter(_Mime, "LLMIME_Events_RemoveMimicking")
+	OnIterateCharacter(_Mime, "LLMIME_Iterator_RemoveMimicking")
 ACTIONS
 IF "!c1|c2|c3"
 	IsInCombat(_Mime)
 	IsInActiveTurn(_Mime)
 	CharacterHasStatus(_Mime, LLMIME_MIMICKING_DISABLED)
 THEN
-	CharacterRemoveStatus(_Mime, LLMIME_MIMICKING)
+	CharacterEvent(_Mime, "LLMIME_Events_RemoveMimicking")
 ENDIF
 
 EVENT Dummy_Iterate_NearbyItems
@@ -231,3 +201,22 @@ ON
 ACTIONS
 	Cast(_EventNameStr, _EventName)
 	ItemEvent(_Item, _EventNameStr)
+	
+EVENT Mime_ApplySourceRegen
+VARS
+	CHARACTER:_Mime
+	FLOAT:_Level
+ON
+	OnCharacterStatusRemoved(_Mime, LLMIME_SOURCE_REGENERATION_HIDDEN)
+	OnCharacterEvent(_Mime, "Mimicry_MimeLeveledUp")
+	OnCharacterEvent(_Mime, "Mimicry_ApplySourceRegen")
+ACTIONS
+IF "c1&!c2&c3&(c4|c5)"
+	IsTagged(_Mime, "Mimicry_Mime")
+	CharacterHasStatus(_Mime, LLMIME_SOURCE_REGENERATION_HIDDEN)
+	CharacterGetStat(_Level, _Mime, Level)
+	IsGreaterThen(_Level, %SourceRegenMinimumLevel)
+	IsEqual(_Level, %SourceRegenMinimumLevel)
+THEN
+	CharacterApplyStatus(_Mime, LLMIME_SOURCE_REGENERATION_HIDDEN, %SourceRegenDuration, 0)
+ENDIF

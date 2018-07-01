@@ -105,7 +105,7 @@ AND
 CharacterHasSkill(_Mime, "Target_SingleHandedAttack", 1)
 THEN
 CharacterRemoveSkill(_Mime, "Target_SingleHandedAttack");
-CharacterAddSkill(_Mime, "Target_LLMIME_SuckerPunch");
+CharacterAddSkill(_Mime, "Target_LLMIME_SuckerPunch", 0);
 LeaderLog_Log("DEBUG", "[LLMIME:Brawler:Mimicry_Events_SwapSuckerPunch] Removing [Target_SingleHandedAttack] and adding [Target_LLMIME_SuckerPunch] to Mime.");
 
 IF
@@ -367,12 +367,15 @@ ApplyStatus(_Target, "LLMIME_UNARMED_BONUS_DAMAGE", 0.0, 1, _Mime);
 //END_REGION
 
 //REGION DOUBLE_ATTACK
+//Prevents double attacks from happening while mimicking
 IF
 CharacterStartAttackObject(_, _, _Mime)
 AND
 CharacterIsInCombat(_Mime, 1)
 AND
 LLMIME_QRY_CharacterIsAMime(_Mime)
+AND
+NOT LLMIME_Mimicking_QRY_IsMimicking(_Mime)
 AND
 NOT DB_LLMIME_Brawler_Temp_MimeIsAttacking(_Mime)
 AND
@@ -388,6 +391,8 @@ AND
 CharacterIsInCombat(_Mime, 1)
 AND
 LLMIME_QRY_CharacterIsAMime(_Mime)
+AND
+NOT LLMIME_Mimicking_QRY_IsMimicking(_Mime)
 AND
 DB_LLMIME_Brawler_Temp_MimeIsAttacking(_Mime)
 AND

@@ -102,48 +102,6 @@ StoryEvent((CHARACTERGUID)_Mime, "Mimicry_RegisterMimeFollower")
 THEN
 LLMIME_Follower_Internal_SetMime(_Mime);
 
-IF
-StoryEvent(_, "LeaderLib_Initialized")
-THEN
-LLMIME_Follower_Internal_SetupMask();
-
-IF
-StoryEvent(_, "LLMIME_StartSummoningFollower")
-THEN
-LLMIME_Follower_Internal_SetupMask();
-
-PROC
-LLMIME_Follower_Internal_SetupMask()
-AND
-DB_LLMIME_Follower_Mime(_Mime)
-AND
-CharacterIsDead(_Mime, 0)
-AND
-DB_LLMIME_Templates("Mask_NoVisual", _Template)
-AND
-GetItemForItemTemplateInInventory(_Mime, _Template, _Mask)
-AND
-NOT CharacterGetEquippedItem(_Mime, "Helmet", _Mask)
-THEN
-CharacterEquipItem(_Mime, _Mask);
-
-PROC
-LLMIME_Follower_Internal_SetupMask()
-AND
-DB_LLMIME_Follower_Mime(_Mime)
-AND
-CharacterIsDead(_Mime, 0)
-AND
-DB_LLMIME_Templates("Mask_NoVisual", _Template)
-AND
-NOT GetItemForItemTemplateInInventory(_Mime, _Template, _)
-AND
-GetPosition(_Mime, _x, _y, _z)
-AND
-CreateItemTemplateAtPosition(_Template, _x, _y, _z, _Mask)
-THEN
-CharacterEquipItem(_Mime, _Mask);
-
 PROC
 LLMIME_Follower_Internal_SetMime((CHARACTERGUID)_Mime)
 AND
@@ -189,6 +147,49 @@ SetOnStage(_Mime, 0);
 //REGION MASK_FIX
 IF
 GameStarted(_,_)
+THEN
+LLMIME_Follower_Internal_SetupMask();
+
+IF
+StoryEvent(_, "LLMIME_StartSummoningFollower")
+THEN
+LLMIME_Follower_Internal_SetupMask();
+
+PROC
+LLMIME_Follower_Internal_SetupMask()
+AND
+DB_LLMIME_Follower_Mime(_Mime)
+AND
+CharacterIsDead(_Mime, 0)
+AND
+DB_LLMIME_Templates("Mask_NoVisual", _Template)
+AND
+GetItemForItemTemplateInInventory(_Mime, _Template, _Mask)
+AND
+NOT CharacterGetEquippedItem(_Mime, "Helmet", _Mask)
+THEN
+CharacterEquipItem(_Mime, _Mask);
+
+PROC
+LLMIME_Follower_Internal_SetupMask()
+AND
+DB_LLMIME_Follower_Mime(_Mime)
+AND
+CharacterIsDead(_Mime, 0)
+AND
+DB_LLMIME_Templates("Mask_NoVisual", _Template)
+AND
+NOT GetItemForItemTemplateInInventory(_Mime, _Template, _)
+AND
+GetPosition(_Mime, _x, _y, _z)
+AND
+CreateItemTemplateAtPosition(_Template, _x, _y, _z, _Mask)
+THEN
+CharacterEquipItem(_Mime, _Mask);
+
+/*
+IF
+GameStarted(_,_)
 AND
 DB_LLMIME_Follower_Mime(_Mime)
 AND
@@ -196,11 +197,12 @@ CharacterIsDead(_Mime, 0)
 AND
 NOT LLMIME_QRY_HasMaskEquipped(_Mime)
 AND
-DB_LLMIME_Templates("Mask_A", _Template)
+DB_LLMIME_Templates("Mask_NoVisual", _Template)
 AND
 GetItemForItemTemplateInInventory(_Mime, _Template, _Mask)
 THEN
 CharacterEquipItem(_Mime, _Mask);
+*/
 //END_REGION
 
 //REGION PLAY_RANDOM_ANIM
@@ -211,7 +213,7 @@ DialogGetInvolvedNPC(_Instance, 1, (CHARACTERGUID)_Mime)
 AND
 DialogGetInvolvedPlayer(_Instance, 1, (CHARACTERGUID)_Player)
 AND
-IsTagged(_Player, "LLMIME_MIME", 0)
+NOT LLMIME_QRY_CharacterIsAMime(_Player)
 AND
 ObjectGetFlag(_Mime, "LeaderLib_CharacterIsFollowing", 0) // Don't bother if following, since anims won't play
 AND
@@ -395,7 +397,7 @@ LLMIME_Follower_QRY_WithinTalkingDistance((CHARACTERGUID)_Char, (CHARACTERGUID)_
 AND
 ObjectIsOnStage(_Mime, 1)
 AND
-IsTagged(_Mime, "LLMIME_MIME", 1) // Initialized
+LLMIME_QRY_CharacterIsAMime(_Mime) // Initialized
 AND
 GetDistanceTo(_Char, _Mime, _Dist)
 AND
@@ -458,7 +460,7 @@ LLMIME_Follower_QRY_IsInitialized((CHARACTERGUID)_Mime)
 AND
 ObjectIsOnStage(_Mime, 1)
 AND
-IsTagged(_Mime, "LLMIME_MIME", 1)
+LLMIME_QRY_CharacterIsAMime(_Mime)
 AND
 GetVarInteger(_Mime, "LLMIME_Initialized", 1)
 THEN
@@ -498,7 +500,7 @@ LLMIME_Follower_Internal_RefreshIfNeeded((CHARACTERGUID)_Mime)
 AND
 GetVarInteger(_Mime, "LLMIME_InitialRefresh", 1)
 AND
-NOT IsTagged(_Mime, "LLMIME_MIME", 1)
+NOT LLMIME_QRY_CharacterIsAMime(_Mime)
 THEN
 LeaderLog_Log("DEBUG", "[LLMIME:Follower:Internal:RefreshIfNeeded] Mime follower does not have the [LLMIME_MIME] tag. Refreshing mask.");
 LLMIME_RefreshMask(_Mime, 50);
@@ -864,7 +866,7 @@ DB_LLLIB_PartyFollower(_Owner, _Follower)
 AND
 IsTagged(_Follower, "LLMIME_MimeFollower", 1)
 THEN
-RemoveStatus(_Follower, "LLMIME_MIMICKING");
+LLMIME_Mimicking_RemoveMimicking(_Follower);
 ApplyStatus(_Follower, "INVISIBLE", 9.0, 1);
 LeaveCombat(_Follower);
 CharacterUseSkill(_Follower, "Shout_LLMIME_ReturnToOwner", _Follower, 1, 1);

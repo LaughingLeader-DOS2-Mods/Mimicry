@@ -17,11 +17,13 @@ Mimicry, inspired by [the Mime from Final Fantasy Tactics](http://finalfantasy.w
 
 The mime job is unlocked on a character by wearing The Mask of Mimicry. Simply wearing it unlocks all the mime passives and skills.
 
-_Note: Mimes cannot cast spells! This is to add some balance to their power innate abilities._
+_Restrictions: Mimes are muted, and therefore cannot cast spells! The power of mimicking comes at a cost..._
 
 #### Mime Follower
 
 As an alternative to dedicating a party member to the life of a mime, a mime follower can be recruited, and acts as a permanent summon.
+
+_Restrictions: The mime follower can only mimic the actions of the character who recruited them._
 
 #### Class Preset
 
@@ -107,7 +109,8 @@ Friendly summons within 10m to the mime gain new abilities.
 | Fire Slug | Fireball |
 | Giant Incarnate | Overthrow |
 | Ifan's Soul Wolf | Bull Rush |
-| Incarnate | Sucker Punch |
+| Incarnate (Small) | Forced Evolution (New skill added by Mimicry) |
+| Incarnate (Giant) | Varies depending on surface. |
 | Oil Blob | Midnight Oil |
 | Plant Monster | Bad Breath (New skill added by Mimicry) |
 | Poison Ooze | Poison Dart |

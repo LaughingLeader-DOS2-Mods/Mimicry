@@ -274,7 +274,9 @@ NOT LLMIME_QRY_MimeIsCurrentlyMimicking(_Mime)
 AND
 _Character != _Mime
 AND
-NOT LLMIME_QRY_CharacterIsAMime(_Character) // Endless loops are bad!
+LLMIME_Mimicking_QRY_CanMimicMime(_Character, _Mime)
+AND
+LLMIME_Mimicking_QRY_FollowerOwnerMatch(_Character, _Mime)
 AND
 QRY_CharacterIsNotDisabled(_Mime)
 AND
@@ -283,6 +285,39 @@ AND
 LLMIME_Mimicking_QRY_PartyConditionsMet(_Character, _Mime)
 AND
 LLMIME_Mimicking_QRY_CanMimicSummon(_Character)
+THEN
+DB_NOOP(1);
+
+//Mime followers can only mimic their owners
+QRY
+LLMIME_Mimicking_QRY_FollowerOwnerMatch((CHARACTERGUID)_Character, (CHARACTERGUID)_Mime)
+AND
+IsTagged(_Mime, "LLMIME_MimeFollower", 1)
+AND
+DB_LLLIB_PartyFollower(_Character, _Mime)
+THEN
+DB_NOOP(1);
+
+QRY
+LLMIME_Mimicking_QRY_FollowerOwnerMatch((CHARACTERGUID)_Character, (CHARACTERGUID)_Mime)
+AND
+IsTagged(_Mime, "LLMIME_MimeFollower", 0)
+THEN
+DB_NOOP(1);
+
+QRY
+LLMIME_Mimicking_QRY_CanMimicMime((CHARACTERGUID)_Character, (CHARACTERGUID)_Mime)
+AND
+NOT LLMIME_QRY_CharacterIsAMime(_Character)
+THEN
+DB_NOOP(1);
+
+QRY
+LLMIME_Mimicking_QRY_CanMimicMime((CHARACTERGUID)_Character, (CHARACTERGUID)_Mime)
+AND
+LLMIME_QRY_CharacterIsAMime(_Character)
+AND
+NOT LLMIME_Mimicking_QRY_IsMimicking(_Character)
 THEN
 DB_NOOP(1);
 
@@ -380,6 +415,27 @@ QRY
 LLMIME_Mimicking_QRY_CasterAndTargetMatch((CHARACTERGUID)_Character, (GUIDSTRING)_Target, (STRING)_SkillType)
 AND
 (GUIDSTRING)_Character == _Target
+THEN
+DB_NOOP(1);
+
+QRY
+LLMIME_Mimicking_QRY_IsMimicking((CHARACTERGUID)_Mime)
+AND
+ObjectGetFlag(_Mime, "Mimicry_IsMimicking", 1)
+THEN
+DB_NOOP(1);
+
+QRY
+LLMIME_Mimicking_QRY_IsMimicking((CHARACTERGUID)_Mime)
+AND
+HasActiveStatus(_Mime, "LLMIME_MIMICKING", 1)
+THEN
+DB_NOOP(1);
+
+QRY
+LLMIME_Mimicking_QRY_IsMimicking((CHARACTERGUID)_Mime)
+AND
+HasActiveStatus(_Mime, "LLMIME_MIMICKING_FOLLOWER", 1)
 THEN
 DB_NOOP(1);
 //END_REGION
