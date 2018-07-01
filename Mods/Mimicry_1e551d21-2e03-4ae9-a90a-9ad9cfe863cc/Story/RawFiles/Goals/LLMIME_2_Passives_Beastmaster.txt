@@ -421,14 +421,19 @@ SkillCast(_Summon, "Shout_LLMIME_ForcedEvolution", _)
 AND
 IsTagged(_Summon, "INCARNATE_S", 1)
 AND
-GetPosition(_Summon, _x, _y, _z)
-AND
 CharacterGetOwner(_Summon, _Owner)
 THEN
-CharacterDieImmediate(_Summon, 0, "None");
-SetOnStage(_Summon, 0);
+CharacterDie(_Summon, 0, "None");
+LeaderLib_StartCharacterCharacterTimer(_Summon, _Owner, 900, "LLMIME_Timers_EvolveIncarnate_", "Mimicry_StartIncarnateEvolution");
+
+IF
+CharacterCharacterEvent(_Summon, _Owner, "Mimicry_StartIncarnateEvolution")
+AND
+GetPosition(_Summon, _x, _y, _z)
+THEN
+//SetOnStage(_Summon, 0);
 CharacterUseSkillAtPosition(_Owner, "Summon_LLMIME_EvolvedIncarnate", _x, _y, _z, 1, 1);
-PlayEffectAtPosition("RS3_FX_GP_Impacts_Air_LightningBolt_Vertical_01", 0.5, _x, _y, _z);
+PlayEffectAtPosition("RS3_FX_GP_Impacts_Air_LightningBolt_Vertical_01", _x, _y, _z);
 //ClearTag(_Summon, "INCARNATE_S");
 //CharacterTransform(_Summon, "Summons_GiantIncarnate_13f9314d-e744-4dc5-acf2-c6bf77a04892", 0, 1, 1, 1, 0, 1, 0);
 //SetTag(_Summon, "INCARNATE_G");
@@ -438,6 +443,8 @@ IF
 CharacterStatusApplied(_Summon, "LLMIME_FORCED_EVOLUTION", _Summoner)
 AND
 IsTagged(_Summon, "INCARNATE_G", 1)
+AND
+GetPosition(_Summon, _x, _y, _z)
 THEN
 PlayScaledEffectAtPosition("RS3_FX_Elven_Pillar_Explosion", 0.5, _x, _y, _z);
 SetStoryEvent(_Summon, "Mimicry_SummonEvolved");
