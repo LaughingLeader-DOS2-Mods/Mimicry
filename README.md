@@ -71,6 +71,12 @@ The following item types are mimicked:
 
 Item mimicking can be disabled in the host settings menu.
 
+#### Source Mimicking & Source Regeneration
+
+Mimes can unlock an ability at level 10 or higher that allows them to mimic one source ability per combat.
+
+Additionally, at level 10 or higher, mimes will regenerate 1 source point every 60 seconds outside of combat, or every 10 turns within combat.
+
 ### Passives
 
 #### Brawler
@@ -81,7 +87,7 @@ Mimes are innately gifted with unarmed combat.
 * Every 3rd hit, unarmed attacks will deal random bonus damage. 
 
 *Double Strike*
-* Critical unarmed strikes will cause a Double Strike (one free hit per turn).
+* Critical unarmed strikes will cause a Double Strike (one free hit per turn). Double Strike won't occur during a mimicked attack.
 
 *Innate 5% Damage*
 * Brawlers gain a small 5% bonus to all damage.
@@ -95,7 +101,7 @@ While unarmed, mimes gain a 100% bonus to accuracy, ensuring attacks will never 
 
 #### Beastmaster
 
-Friendly summons within 10m to the mime gain new abilities.
+Friendly summons within 15m to a mime gain new abilities.
 
 ##### Monster Skills:
 
@@ -110,7 +116,7 @@ Friendly summons within 10m to the mime gain new abilities.
 | Giant Incarnate | Overthrow |
 | Ifan's Soul Wolf | Bull Rush |
 | Incarnate (Small) | Forced Evolution (New skill added by Mimicry) |
-| Incarnate (Giant) | Varies depending on surface. |
+| Incarnate (Giant) | Varies depending on the incarnate elemental type. |
 | Oil Blob | Midnight Oil |
 | Plant Monster | Bad Breath (New skill added by Mimicry) |
 | Poison Ooze | Poison Dart |

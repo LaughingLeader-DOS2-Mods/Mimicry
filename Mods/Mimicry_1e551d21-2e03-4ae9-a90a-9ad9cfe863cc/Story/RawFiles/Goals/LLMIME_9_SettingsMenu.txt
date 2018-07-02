@@ -4,6 +4,7 @@ INITSECTION
 
 KBSECTION
 //REGION MENU_SKILL
+/*
 IF
 CharacterUsedSkill(_Mime, "Shout_LLMIME_OpenMenu", _)
 AND
@@ -15,16 +16,14 @@ NOT DB_LLMIME_Settings_Temp_StartedDialog(_Mime)
 THEN
 Proc_StartDialog(0, "LLMIME_SettingsMenu", _Mask, _Mime);
 DB_LLMIME_Settings_Temp_StartedDialog(_Mime);
+*/
 
 IF
 CharacterUsedSkill(_Mime, "Shout_LLMIME_OpenMenu", _)
 AND
 CharacterIsInCombat(_Mime, 0)
-AND
-NOT DB_LLMIME_Settings_Temp_StartedDialog(_Mime) // Couldn't find mask
 THEN
 Proc_StartDialog(0, "LLMIME_SettingsMenu", _Mime, _Mime);
-DB_LLMIME_Settings_Temp_StartedDialog(_Mime);
 //END_REGION
 
 //REGION DIALOG_EVENTS
@@ -32,8 +31,6 @@ IF
 DialogStarted("LLMIME_SettingsMenu", _Instance)
 AND
 DialogGetInvolvedPlayer(_Instance, 1, (CHARACTERGUID)_Mime)
-AND
-DB_LLMIME_Settings_Temp_StartedDialog(_Mime)
 THEN
 CharacterSetAnimationOverride(_Mime, "Kneel_01_Loop");
 LLMIME_Settings_SetDialogVariables(_Mime, _Instance);
@@ -44,15 +41,6 @@ AND
 DialogGetInvolvedPlayer(_Instance, 1, (CHARACTERGUID)_Mime)
 THEN
 CharacterSetAnimationOverride(_Mime, "");
-
-IF
-DialogEnded("LLMIME_SettingsMenu", _Instance)
-AND
-DialogGetInvolvedPlayer(_Instance, 1, (CHARACTERGUID)_Mime)
-AND
-DB_LLMIME_Settings_Temp_StartedDialog(_Mime)
-THEN
-NOT DB_LLMIME_Settings_Temp_StartedDialog(_Mime);
 //END_REGION
 
 //REGION DIALOG_VARS

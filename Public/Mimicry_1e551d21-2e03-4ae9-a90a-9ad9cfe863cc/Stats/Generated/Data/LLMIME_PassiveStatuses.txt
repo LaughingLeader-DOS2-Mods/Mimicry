@@ -37,7 +37,7 @@ type "StatusData"
 data "StatusType" "CONSUME"
 data "ForGameMaster" "No"
 data "InitiateCombat" "No"
-data "AuraRadius" "10"
+data "AuraRadius" "15"
 data "AuraAllies" "LLMIME_BEASTMASTER_TYPECHECK"
 data "StackId" "Stack_LLMIME_Beastmaster"
 
