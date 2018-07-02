@@ -372,12 +372,14 @@ THEN
 LeaderLog_Log("DEBUG", "[LLMIME:Follower] Playing movie 'Mimicry_MusicBoxIntro'.");
 DB_LLMIME_Follower_Temp_MusicBoxUser(_Char, _Item);
 ProcStartMovie("Mimicry_MusicBoxIntro");
+TimerLaunch("Mimicry_Timers_MusicBoxVideoFailsafe", 2000);
 
 IF
 MovieFinished("Mimicry_MusicBoxIntro")
 AND
 DB_LLMIME_Follower_Temp_MusicBoxUser(_Char, _Item)
 THEN
+TimerCancel("Mimicry_Timers_MusicBoxVideoFailsafe");
 LeaderLog_Log("DEBUG", "[LLMIME:Follower:MovieFinished] Movie 'Mimicry_MusicBoxIntro' finished. Starting summoning.");
 PartySetFlag(_Char, "Mimicry_PlayedMusicBoxIntro");
 NOT DB_LLMIME_Follower_Temp_MusicBoxUser(_Char, _Item);

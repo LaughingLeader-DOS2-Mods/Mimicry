@@ -413,9 +413,17 @@ PROC
 LLMIME_Mimicking_RemoveMimicking((CHARACTERGUID)_Mime)
 AND
 ObjectGetFlag(_Mime, "Mimicry_MimickingWasRemoved", 1)
+AND
+DB_LeaderLib_Combat_ActiveObject(_, _Mime)
+THEN
+CharacterStatusText(_Mime, "LLMIME_StatusText_MimickingEnded");
+
+PROC
+LLMIME_Mimicking_RemoveMimicking((CHARACTERGUID)_Mime)
+AND
+ObjectGetFlag(_Mime, "Mimicry_MimickingWasRemoved", 1)
 THEN
 ObjectClearFlag(_Mime, "Mimicry_MimickingWasRemoved");
-CharacterStatusText(_Mime, "LLMIME_StatusText_MimickingEnded");
 
 IF
 ObjectTurnStarted((CHARACTERGUID)_Mime)

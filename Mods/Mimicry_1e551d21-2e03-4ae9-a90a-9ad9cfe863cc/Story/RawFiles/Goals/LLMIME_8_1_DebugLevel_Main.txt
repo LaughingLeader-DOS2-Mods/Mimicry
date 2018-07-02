@@ -312,7 +312,7 @@ THEN
 //CharacterTransformAppearanceTo(_Character, CHARACTERGUID_LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9, 1, 1);
 //CharacterTransformAppearanceToWithEquipmentSet(_Character, CHARACTERGUID_LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9, "LLMIME_Class_Mime_Preview", 1);
 //MoviePlay(_Character, "CS_BackToRC");
-MoviePlay(_Character, "Mimicry_MusicBoxIntro");
+MoviePlay(_Character, "Test");
 //ApplyStatus(_Character, "HASTED", 30.0, 1);
 //ApplyStatus(_Character, "LLMIME_SOURCE_REGENERATION_HIDDEN", 24.0, 0);
 

@@ -12,6 +12,7 @@ KBSECTION
 PROC
 LLMIME_System_InitSettings()
 THEN
+LLLIB_Helper_ClearExistingDatabase("DB_LLMIME_PassiveData", 4);
 DB_LLMIME_PassiveData("LLMIME_BRAWLER", "LLMIME_BRAWLER_BONUS", "LLMIME_BRAWLER_INFO", "Mimicry_HideMimePassives");
 DB_LLMIME_PassiveData("LLMIME_BEASTMASTER", "LLMIME_BEASTMASTER", "LLMIME_BEASTMASTER_INFO", "Mimicry_HideMimePassives");
 DB_LLMIME_PassiveData("LLMIME_CONCENTRATION", "LLMIME_CONCENTRATION_BONUS", "LLMIME_CONCENTRATION_INFO", "Mimicry_HideMimePassives");
@@ -20,14 +21,17 @@ LLMIME_System_InitTemplates();
 
 LeaderLib_Register_StatusToggleSkill("Shout_LLMIME_DisableMimicking", "LLMIME_MIMICKING_DISABLED", -1.0, 1);
 
+LLLIB_Helper_ClearExistingDatabase("DB_LLMIME_Statuses", 1);
 DB_LLMIME_Statuses("LLMIME_UNARMED_BONUS_DAMAGE");
 DB_LLMIME_Statuses("LLMIME_TOTEMRAGE");
 DB_LLMIME_Statuses("LLMIME_BAD_BREATH");
 DB_LLMIME_Statuses("LLMIME_TOAD");
 DB_LLMIME_Statuses("LLMIME_FORCED_EVOLUTION");
+LLLIB_Helper_ClearExistingDatabase("DB_LLMIME_MimickingStatuses", 1);
 DB_LLMIME_MimickingStatuses("LLMIME_MIMICKING");
 DB_LLMIME_MimickingStatuses("LLMIME_MIMICKING_FOLLOWER");
 DB_LLMIME_MimickingStatuses("LLMIME_MIMICKING_SOURCE");
+LLLIB_Helper_ClearExistingDatabase("DB_LLMIME_MimeStatuses", 1);
 DB_LLMIME_MimeStatuses("LLMIME_MIMICKING_DISABLED");
 DB_LLMIME_MimeStatuses("LLMIME_MIMIC_WEAPON_REQUIREMENTS");
 DB_LLMIME_MimeStatuses("LLMIME_BRAWLER_STANCE_CON");
@@ -68,7 +72,7 @@ DB_LLMIME_Templates("MimeAmulet", "LOOT_MagicAmulet_LLMIME_SourceBlastImmunity_f
 PROC
 LLMIME_System_UpdateDatabases()
 THEN
-LLMIME_System_InitTemplates();
+LLMIME_System_InitSettings();
 LeaderLog_Log("DEBUG", "[LLMIME:System:Core:UpdateDatabases] Settings updated.");
 //END_REGION
 

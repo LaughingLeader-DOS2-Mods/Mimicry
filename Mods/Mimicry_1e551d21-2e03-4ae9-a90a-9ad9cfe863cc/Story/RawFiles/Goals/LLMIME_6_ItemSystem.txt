@@ -35,6 +35,18 @@ DB_CustomUseItemResponse(_Character, _Item, 0);
 //DB_LLMIME_Items_Temp_BlockedItem(_Character, _Item);
 //END_REGION
 
+//REGION MIME_SKILLBOOK
+PROC
+ProcBlockUseOfItem(_Character, _Item)
+AND
+IsTagged(_Item, "LLMIME_MimeSkillbook", 1)
+AND
+NOT LLMIME_QRY_CharacterIsAMime(_Character)
+THEN
+CharacterStatusText(_Character, "LLMIME_StatusText_MimeSkillbookBlocked");
+DB_CustomUseItemResponse(_Character, _Item, 0);
+//END_REGION
+
 //REGION MUSIC_BOX
 PROC
 ProcBlockUseOfItem(_Char, _Item)
