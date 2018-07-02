@@ -104,26 +104,6 @@ THEN
 LLMIME_Follower_ReturnIfNotInCombat(_Char);
 //END_REGION
 
-//REGION ITEM_LEVELING
-IF
-ItemEquipped(_Item, _Character)
-AND
-IsTagged(_Item, "LLMIME_AUTO_LEVEL", 1)
-AND
-CharacterGetLevel(_Character, _Level)
-THEN
-ItemLevelUpTo(_Item, _Level);
-
-IF
-CharacterLeveledUp(_Character)
-AND
-CharacterFindTaggedItem(_Character, "LLMIME_AUTO_LEVEL", _Item)
-AND
-CharacterGetLevel(_Character, _Level)
-THEN
-ItemLevelUpTo(_Item, _Level);
-//END_REGION
-
 //REGION EQUIP_BLOCKING
 IF
 ItemEquipped(_Item, _Character)
