@@ -456,6 +456,20 @@ AND
 IntegertoString(_Result, _ResultStr)
 THEN
 LeaderLog_Log("DEBUG", "[LLMIME:Debug:ProcProcessUseOfItem] [",_Name,"] item [",_ItemID,"] process response is [",_ResultStr,"].");
+
+IF
+ObjectFlagSet("Mimicry_MimeIsUnarmed", (CHARACTERGUID)_Char, _)
+AND
+CharacterGetDisplayName(_Char, _, _Name)
+THEN
+LeaderLog_Log("DEBUG", "[LLMIME:Debug:Mimicry_MimeIsUnarmed] [",_Name,"] is unarmed.");
+
+IF
+ObjectFlagCleared("Mimicry_MimeIsUnarmed", (CHARACTERGUID)_Char, _)
+AND
+CharacterGetDisplayName(_Char, _, _Name)
+THEN
+LeaderLog_Log("DEBUG", "[LLMIME:Debug:Mimicry_MimeIsUnarmed] [",_Name,"] is not unarmed.");
 //END_REGION
 EXITSECTION
 

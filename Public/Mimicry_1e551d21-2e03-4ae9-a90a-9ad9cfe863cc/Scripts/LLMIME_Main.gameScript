@@ -220,3 +220,52 @@ IF "c1&!c2&c3&(c4|c5)"
 THEN
 	CharacterApplyStatus(_Mime, LLMIME_SOURCE_REGENERATION_HIDDEN, %SourceRegenDuration, 0)
 ENDIF
+
+EVENT Mime_Combat_Muted_Apply
+VARS
+	CHARACTER:_Mime
+ON
+	OnEnteredCombat(_Mime, _)
+ACTIONS
+IF "c1"
+	IsTagged(_Mime, "Mimicry_Mime")
+THEN
+	CharacterApplyStatus(_Mime, LLMIME_COMBAT_MUTED, -1, 1)
+ENDIF
+	
+EVENT Mime_Combat_Muted_Remove
+VARS
+	CHARACTER:_Mime
+ON
+	OnLeftCombat(_Mime, _)
+ACTIONS
+IF "c1"
+	IsTagged(_Mime, "Mimicry_Mime")
+THEN
+	//Make it "cool down" instead of removing it immediately, for fleeing situations
+	CharacterApplyStatus(_Mime, LLMIME_COMBAT_MUTED, 1, 1)
+ENDIF
+
+EVENT Mime_BasicAttack_Event
+VARS
+	CHARACTER:_Mime
+	CHARACTER:_DefenderChar
+	ITEM:_DefenderItem
+ON
+	OnCharacterStartAttackObject(_DefenderChar, _DefenderItem, _, _Mime)
+ACTIONS
+IF "c1&c2"
+	IsTagged(_Mime, "Mimicry_Mime")
+	HasFlag(_Mime, "Mimicry_MimeIsUnarmed")
+THEN
+	IF "!c1"
+		IsEqual(_DefenderChar, null)
+	THEN
+		CharacterCharacterEvent(_Mime, _DefenderChar, "Mimicry_Events_OnMimeUnarmedBasicAttack")
+	ENDIF
+	IF "!c1"
+		IsEqual(_DefenderItem, null)
+	THEN
+		CharacterItemEvent(_Mime, _DefenderItem, "Mimicry_Events_OnMimeUnarmedBasicAttack")
+	ENDIF
+ENDIF

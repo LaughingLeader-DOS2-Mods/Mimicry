@@ -202,6 +202,8 @@ CharacterLearnedSkill(_Mime, _Skill)
 AND
 DB_LLMIME_Mime_LearnableSkills(_Skill)
 AND
+NOT DB_InCharacterCreation(1)
+AND
 NOT DB_LLMIME_Mime_MimeSkillMemory(_Mime, _Skill)
 THEN
 DB_LLMIME_Mime_MimeSkillMemory(_Mime, _Skill);

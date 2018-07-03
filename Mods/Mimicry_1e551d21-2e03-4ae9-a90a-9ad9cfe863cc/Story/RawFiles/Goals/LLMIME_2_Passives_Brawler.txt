@@ -338,13 +338,22 @@ ObjectClearFlag(_Mime, "Mimicry_BrawlerStatusActive");
 
 //REGION BONUS_DAMAGE
 IF
-AttackedByObject(_Target, _Owner, (CHARACTERGUID)_Mime, _DamageType, "Attack")
-AND
-LLMIME_QRY_CharacterIsAMime(_Mime)
+//AttackedByObject(_Target, _Owner, (CHARACTERGUID)_Mime, _DamageType, "Attack")
+CharacterCharacterEvent(_Mime, _Target, "Mimicry_Events_OnMimeUnarmedBasicAttack")
+THEN
+LLMIME_Brawler_OnUnarmedAttack(_Mime, _Target);
+
+/*
+IF
+CharacterItemEvent(_Mime, _Target, "Mimicry_Events_OnMimeUnarmedBasicAttack")
+THEN
+LLMIME_Brawler_OnUnarmedAttack(_Mime, _Target);
+*/
+
+PROC
+LLMIME_Brawler_OnUnarmedAttack((CHARACTERGUID)_Mime, (CHARACTERGUID)_Target)
 AND
 LLMIME_Brawler_QRY_BrawlerActive(_Mime)
-AND
-LLMIME_Brawler_QRY_DamageTypeMatches(_Mime, _DamageType)
 AND
 NOT DB_LLMIME_Brawler_BonusAttackTimer(_, _Mime, _Target)
 AND
@@ -352,7 +361,6 @@ GetUUID(_Mime, _MimeID)
 AND
 StringConcatenate("LLMIME_Timers_BrawlerBonusAttack_", _MimeID, _TimerName)
 THEN
-//LLMIME_Brawler_ApplyBonusDamage(_Mime, _Target);
 LLMIME_Brawler_IncrementHits(_Mime, _Target);
 DB_LLMIME_Brawler_BonusAttackTimer(_TimerName, _Mime, _Target);
 TimerLaunch(_TimerName, 250); // Prevents multiple bonus damage calls in a single attack
@@ -365,16 +373,7 @@ THEN
 NOT DB_LLMIME_Brawler_BonusAttackTimer(_TimerName, _Mime, _Target);
 
 PROC
-LLMIME_Brawler_ApplyBonusDamage((CHARACTERGUID)_Mime, (GUIDSTRING)_Target)
-AND
-CharacterGetLevel(_Mime, _Level)
-AND
-IntegerProduct(_Level, 5, _Damage)
-THEN
-ApplyDamage(_Target, _Damage, "Physical", _Mime);
-
-PROC
-LLMIME_Brawler_IncrementHits((CHARACTERGUID)_Mime, (GUIDSTRING)_Target)
+LLMIME_Brawler_IncrementHits((CHARACTERGUID)_Mime, (CHARACTERGUID)_Target)
 AND
 DB_LLMIME_Brawler_TotalHits(_Mime, _Target, _TotalHits)
 AND
@@ -384,19 +383,68 @@ NOT DB_LLMIME_Brawler_TotalHits(_Mime, _Target, _TotalHits);
 DB_LLMIME_Brawler_TotalHits(_Mime, _Target, _NextTotalHits);
 
 PROC
-LLMIME_Brawler_IncrementHits((CHARACTERGUID)_Mime, (GUIDSTRING)_Target)
+LLMIME_Brawler_IncrementHits((CHARACTERGUID)_Mime, (CHARACTERGUID)_Target)
 AND
 NOT DB_LLMIME_Brawler_TotalHits(_Mime, _Target, _)
 THEN
 DB_LLMIME_Brawler_TotalHits(_Mime, _Target, 1);
 
 PROC
-LLMIME_Brawler_IncrementHits((CHARACTERGUID)_Mime, (GUIDSTRING)_Target)
+LLMIME_Brawler_IncrementHits((CHARACTERGUID)_Mime, (CHARACTERGUID)_Target)
 AND
 DB_LLMIME_Brawler_TotalHits(_Mime, _Target, 3)
 THEN
 NOT DB_LLMIME_Brawler_TotalHits(_Mime, _Target, 3);
-ApplyStatus(_Target, "LLMIME_UNARMED_BONUS_DAMAGE", 0.0, 1, _Mime);
+//ApplyStatus(_Target, "LLMIME_UNARMED_BONUS_DAMAGE", 0.0, 1, _Mime);
+LeaderLib_StartCharacterCharacterTimer(_Mime, _Target, 1000, "LLMIME_Timers_Brawler_CastUnarmedBonusDamage_", "Mimicry_Events_CastUnarmedBonusDamage");
+
+IF
+CharacterCharacterEvent(_Mime, _Target, "Mimicry_Events_CastUnarmedBonusDamage")
+THEN
+CharacterUseSkill(_Mime, "Target_LLMIME_ApplyUnarmedBonusDamage", _Target, 1, 1, 1);
+//END_REGION
+
+//REGION UNARMED_BONUS_DAMAGE_DEBUFFS
+IF
+CharacterStatusApplied(_Target, "LLMIME_UNARMED_BONUS_DAMAGE", (CHARACTERGUID)_Mime)
+AND
+Random(99999, _Seed)
+THEN
+PlayEffect(_Target, "RS3_FX_Skills_Voodoo_Impact_Attack_Precision_01", "Dummy_BodyFX");
+LLMIME_Brawler_ApplyBonusDamageDebuffs(_Target, _Seed, _Mime);
+
+PROC
+LLMIME_Brawler_ApplyBonusDamageDebuffs((CHARACTERGUID)_Target, (INTEGER)_Seed, (CHARACTERGUID)_Mime)
+AND
+Random(_Seed, _Ran)
+AND
+IntegerModulo(_Ran, 99, _Roll)
+AND
+_Roll <= 15
+THEN
+ApplyStatus(_Target, "BLINDED", 1.0, 0, _Mime);
+
+PROC
+LLMIME_Brawler_ApplyBonusDamageDebuffs((CHARACTERGUID)_Target, (INTEGER)_Seed, (CHARACTERGUID)_Mime)
+AND
+Random(_Seed, _Ran)
+AND
+IntegerModulo(_Ran, 99, _Roll)
+AND
+_Roll <= 10
+THEN
+ApplyStatus(_Target, "SLOWED", 1.0, 0, _Mime);
+
+PROC
+LLMIME_Brawler_ApplyBonusDamageDebuffs((CHARACTERGUID)_Target, (INTEGER)_Seed, (CHARACTERGUID)_Mime)
+AND
+Random(_Seed, _Ran)
+AND
+IntegerModulo(_Ran, 99, _Roll)
+AND
+_Roll <= 5
+THEN
+ApplyStatus(_Target, "WEAK", 1.0, 0, _Mime);
 //END_REGION
 
 //REGION DOUBLE_ATTACK

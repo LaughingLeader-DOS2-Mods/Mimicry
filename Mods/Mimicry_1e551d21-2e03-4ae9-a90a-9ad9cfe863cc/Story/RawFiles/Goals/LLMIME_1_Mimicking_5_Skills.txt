@@ -287,21 +287,21 @@ RemoveStatus(_Mime, "LLMIME_MIMICKING_SOURCE");
 IF
 CharacterUsedSkill(_Mime, _Skill, _)
 AND
-LLMIME_QRY_MimeIsCurrentlyMimicking(_Mime)
+LLMIME_Mimicking_QRY_MimeIsCurrentlyMimicking(_Mime)
 THEN
 LLMIME_Mimicking_OnMimicSuccess(_Mime, _Skill, "Skill");
 
 IF
 CharacterUsedSkillOnZoneWithTarget(_Mime, _Target, _Skill, _SkillType)
 AND
-LLMIME_QRY_MimeIsCurrentlyMimicking(_Mime)
+LLMIME_Mimicking_QRY_MimeIsCurrentlyMimicking(_Mime)
 THEN
 LLMIME_Mimicking_OnMimicSuccess(_Mime, _Skill, "Skill");
 
 IF
 CharacterUsedSkillOnTarget(_Mime, _Target, _Skill, _SkillType)
 AND
-LLMIME_QRY_MimeIsCurrentlyMimicking(_Mime)
+LLMIME_Mimicking_QRY_MimeIsCurrentlyMimicking(_Mime)
 THEN
 LLMIME_Mimicking_OnMimicSuccess(_Mime, _Skill, "Skill");
 //END_REGION

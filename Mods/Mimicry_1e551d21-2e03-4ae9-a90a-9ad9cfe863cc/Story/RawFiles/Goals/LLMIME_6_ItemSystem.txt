@@ -35,7 +35,7 @@ DB_CustomUseItemResponse(_Character, _Item, 0);
 //DB_LLMIME_Items_Temp_BlockedItem(_Character, _Item);
 //END_REGION
 
-//REGION MIME_SKILLBOOK
+//REGION MIME_SKILLBOOKS
 PROC
 ProcBlockUseOfItem(_Character, _Item)
 AND
@@ -45,7 +45,9 @@ NOT LLMIME_QRY_CharacterIsAMime(_Character)
 THEN
 CharacterStatusText(_Character, "LLMIME_StatusText_MimeSkillbookBlocked");
 DB_CustomUseItemResponse(_Character, _Item, 0);
+//END_REGION
 
+//REGION MIME_FOLLOWER
 PROC
 ProcBlockUseOfItem(_Character, _Item)
 AND
@@ -63,6 +65,8 @@ AND
 IsTagged(_Character, "LLMIME_MimeFollower", 1)
 AND
 NOT DB_CustomUseItemResponse(_Character, _Item, _)
+AND
+ItemIsInInventory(_Item, 1)
 AND
 NOT LLMIME_Mimicking_QRY_IsMimicking(_Character)
 AND

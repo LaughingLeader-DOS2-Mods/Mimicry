@@ -35,6 +35,7 @@ DB_LLMIME_MimickingStatuses("LLMIME_MIMICKING_SOURCE");
 
 SysClear("DB_LLMIME_MimeStatuses", 1);
 DB_LLMIME_MimeStatuses("LLMIME_MIMICKING_DISABLED");
+DB_LLMIME_MimeStatuses("LLMIME_COMBAT_MUTED");
 DB_LLMIME_MimeStatuses("LLMIME_MIMIC_WEAPON_REQUIREMENTS");
 DB_LLMIME_MimeStatuses("LLMIME_BRAWLER_STANCE_CON");
 DB_LLMIME_MimeStatuses("LLMIME_BRAWLER_STANCE_CON_INFO");
@@ -314,7 +315,7 @@ LLMIME_QRY_WeaponEquippedInMainHand((CHARACTERGUID)_Mime)
 AND
 CharacterGetEquippedItem(_Mime, "Weapon", (ITEMGUID)_Item)
 AND
-NOT LLMIME_QRY_WeaponIsBrawlerFist(_Item)
+NOT LLMIME_QRY_WeaponIsUnarmed(_Item)
 AND
 NOT IsTagged(_Item, "LLMIME_MIMICKED_WEAPON", 1)
 THEN
@@ -412,6 +413,7 @@ THEN
 LLMIME_System_FlagForUnarmed(_Mime);
 LeaderLib_StartObjectTimer(_Mime, 50, "LLMIME_Timers_CheckUnarmed_", "Mimicry_CheckUnarmed");
 
+/*
 IF
 StoryEvent((CHARACTERGUID)_Mime, "Mimicry_CheckUnarmed")
 AND
@@ -419,6 +421,7 @@ ObjectGetFlag(_Mime, "Mimicry_MimeIsUnarmed", 1)
 THEN
 LLMIME_System_ToggleBrawlerBonus(_Mime);
 LLMIME_System_ToggleConcentrationBonus(_Mime);
+*/
 
 IF
 StoryEvent((CHARACTERGUID)_Mime, "Mimicry_CheckUnarmed")
@@ -462,16 +465,6 @@ NOT DB_LLMIME_Temp_JustSetUnarmedFlag(_Mime);
 //REGION UNARMED_BRAWLER_BONUS
 IF
 ObjectFlagSet("Mimicry_MimeIsUnarmed", (CHARACTERGUID)_Mime, _)
-THEN
-LLMIME_System_ToggleBrawlerBonus(_Mime);
-
-IF
-ObjectFlagCleared("Mimicry_MimeIsUnarmed", (CHARACTERGUID)_Mime, _)
-THEN
-LLMIME_System_ToggleBrawlerBonus(_Mime);
-
-PROC
-LLMIME_System_ToggleBrawlerBonus((CHARACTERGUID)_Mime)
 AND
 HasActiveStatus(_Mime, "LLMIME_BRAWLER", 1)
 AND
@@ -479,10 +472,15 @@ HasActiveStatus(_Mime, "LLMIME_BRAWLER_BONUS", 0)
 THEN
 ApplyStatus(_Mime, "LLMIME_BRAWLER_BONUS", -1.0, 1);
 
-PROC
-LLMIME_System_ToggleBrawlerBonus((CHARACTERGUID)_Mime)
+IF
+ObjectFlagCleared("Mimicry_MimeIsUnarmed", (CHARACTERGUID)_Mime, _)
 AND
-HasActiveStatus(_Mime, "LLMIME_BRAWLER", 0)
+HasActiveStatus(_Mime, "LLMIME_BRAWLER_BONUS", 1)
+THEN
+RemoveStatus(_Mime, "LLMIME_BRAWLER_BONUS");
+
+IF
+CharacterStatusRemoved(_Mime, "LLMIME_BRAWLER", _)
 AND
 HasActiveStatus(_Mime, "LLMIME_BRAWLER_BONUS", 1)
 THEN
@@ -492,16 +490,6 @@ RemoveStatus(_Mime, "LLMIME_BRAWLER_BONUS");
 //REGION CONCENTRATION_BONUS
 IF
 ObjectFlagSet("Mimicry_MimeIsUnarmed", (CHARACTERGUID)_Mime, _)
-THEN
-LLMIME_System_ToggleConcentrationBonus(_Mime);
-
-IF
-ObjectFlagCleared("Mimicry_MimeIsUnarmed", (CHARACTERGUID)_Mime, _)
-THEN
-LLMIME_System_ToggleConcentrationBonus(_Mime);
-
-PROC
-LLMIME_System_ToggleConcentrationBonus((CHARACTERGUID)_Mime)
 AND
 HasActiveStatus(_Mime, "LLMIME_CONCENTRATION", 1)
 AND
@@ -509,10 +497,15 @@ HasActiveStatus(_Mime, "LLMIME_CONCENTRATION_BONUS", 0)
 THEN
 ApplyStatus(_Mime, "LLMIME_CONCENTRATION_BONUS", -1.0, 1);
 
-PROC
-LLMIME_System_ToggleConcentrationBonus((CHARACTERGUID)_Mime)
+IF
+ObjectFlagCleared("Mimicry_MimeIsUnarmed", (CHARACTERGUID)_Mime, _)
 AND
-HasActiveStatus(_Mime, "LLMIME_CONCENTRATION", 0)
+HasActiveStatus(_Mime, "LLMIME_CONCENTRATION_BONUS", 1)
+THEN
+RemoveStatus(_Mime, "LLMIME_CONCENTRATION_BONUS");
+
+IF
+CharacterStatusRemoved(_Mime, "LLMIME_CONCENTRATION", _)
 AND
 HasActiveStatus(_Mime, "LLMIME_CONCENTRATION_BONUS", 1)
 THEN
@@ -666,56 +659,6 @@ QRY
 LLMIME_QRY_Internal_PartyCountNotSet((CHARACTERGUID)_Character)
 AND
 GetVarInteger(_Character, "LeaderLib_PartyCount", 0)
-THEN
-DB_NOOP(1);
-
-QRY
-LLMIME_QRY_MimeShouldBeMimicking((CHARACTERGUID)_Mime)
-AND
-LLMIME_QRY_CharacterIsAMime(_Mime)
-AND
-HasActiveStatus(_Mime, "LLMIME_MIMICKING_DISABLED", 0)
-AND
-CharacterIsInCombat(_Mime, 0)
-AND
-GlobalGetFlag("Mimicry_Mimic_CombatOnlyDisabled", 1)
-AND
-LLMIME_QRY_NotSolo(_Mime)
-THEN
-DB_NOOP(1);
-
-QRY
-LLMIME_QRY_MimeShouldBeMimicking((CHARACTERGUID)_Mime)
-AND
-LLMIME_QRY_CharacterIsAMime(_Mime)
-AND
-HasActiveStatus(_Mime, "LLMIME_MIMICKING_DISABLED", 0)
-AND
-CharacterIsInCombat(_Mime, 1)
-AND
-LLMIME_QRY_NotSolo(_Mime)
-AND
-NOT LeaderLib_Combat_QRY_IsActiveTurn(_Mime)
-THEN
-DB_NOOP(1);
-
-QRY
-LLMIME_QRY_MimeIsCurrentlyMimicking((CHARACTERGUID)_Mime)
-AND
-LLMIME_QRY_CharacterIsAMime(_Mime)
-AND
-DB_LLMIME_Mimicking_MimicFailTimer(_TimerName, _Mime, _Caster, _Action, _ActionType)
-THEN
-DB_NOOP(1);
-
-QRY
-LLMIME_QRY_MimeIsCurrentlyMimicking((CHARACTERGUID)_Mime)
-AND
-LLMIME_QRY_CharacterIsAMime(_Mime)
-AND
-NOT DB_LLMIME_Mimicking_MimicFailTimer(_, _Mime, _, _, _)
-AND
-ObjectGetFlag(_Mime, "Mimicry_IsMimicking", 1)
 THEN
 DB_NOOP(1);
 

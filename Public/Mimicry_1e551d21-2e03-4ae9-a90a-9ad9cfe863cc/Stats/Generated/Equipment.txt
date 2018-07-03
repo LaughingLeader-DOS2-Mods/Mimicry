@@ -1,7 +1,6 @@
 new equipment "LLMIME_Equipment_FollowerMime"
 add equipmentgroup 
 add equipment entry "ARM_UNIQUE_LLMIME_MimeMask_A"
-
 new equipment "LLMIME_Class_Mime_Preview"
 add equipmentgroup 
 add equipment entry "ARM_LLMIME_Mime_Light_UpperBody"
@@ -11,7 +10,6 @@ add equipmentgroup
 add equipment entry "ARM_LLMIME_Mime_Light_Boots"
 add equipmentgroup 
 add equipment entry "ARM_LLMIME_Mime_Light_Gloves"
-
 new equipment "LLMIME_Class_Mime_Start"
 add equipmentgroup 
 add equipment entry "ARM_UNIQUE_LLMIME_MimeMask_A"
