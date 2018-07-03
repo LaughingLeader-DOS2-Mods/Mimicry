@@ -57,16 +57,26 @@ data "DescriptionRef" "Surpass your limits, mimicking the next source skill used
 data "FXScale" "50"
 data "PrepareAnimationInit" "skill_prepare_touch_01_start"
 data "PrepareAnimationLoop" "skill_prepare_touch_01_loop"
-data "PrepareEffect" "RS3_FX_Soul_Prepare_Soul_LastRites_Hand_Loop_01:Dummy_R_HandFX,Dummy_L_HandFX"
+data "PrepareEffect" "LLMIME_FX_Skills_SourceMimicking_Prepare_Hand_Loop_01:Dummy_R_HandFX,Dummy_L_HandFX;LLMIME_FX_Skills_SourceMimicking_Prepare_Sigil_Loop_01"
 data "CastAnimation" "skill_cast_self_touch_01_cast"
 data "CastSelfAnimation" "skill_cast_self_touch_01_cast"
 data "CastTextEvent" "cast"
-data "CastEffect" "RS3_FX_Skills_Soul_Cast_Target_Cast_LastRites_Hand_01:Dummy_R_HandFX;RS3_FX_Skills_Soul_Cast_Target_Cast_LastRites_Hand_02:Dummy_L_HandFX;RS3_FX_Skills_Soul_Cast_Target_Cast_LastRites_Hand_Cast_01:Dummy_L_HandFX,Dummy_R_HandFX:cast;RS3_FX_Skills_Divine_Farsight_Cast_Root_01:root:cast"
+data "CastEffect" "RS3_FX_Skills_Soul_Cast_Target_Cast_LastRites_Hand_01:Dummy_R_HandFX;RS3_FX_Skills_Soul_Cast_Target_Cast_LastRites_Hand_02:Dummy_L_HandFX;RS3_FX_Skills_Soul_Cast_Target_Cast_LastRites_Hand_Cast_01:Dummy_L_HandFX,Dummy_R_HandFX:cast;LLMIME_FX_Skills_SourceMimicking_Cast_Overlay_01:root:cast"
 data "CanTargetCharacters" "Yes"
 
 new entry "Shout_LLMIME_SourceMimicking-1"
 type "SkillData"
 using "Shout_LLMIME_SourceMimicking"
+data "Level" "-1"
+
+new entry "Shout_LLMIME_SourceMimicking_Follower"
+type "SkillData"
+using "Shout_LLMIME_SourceMimicking"
+data "Memory Cost" "0"
+
+new entry "Shout_LLMIME_SourceMimicking_Follower-1"
+type "SkillData"
+using "Shout_LLMIME_SourceMimicking_Follower"
 data "Level" "-1"
 
 new entry "Shout_LLMIME_BrawlerStance"

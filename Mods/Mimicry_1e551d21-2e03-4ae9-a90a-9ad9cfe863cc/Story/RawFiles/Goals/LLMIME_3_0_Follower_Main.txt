@@ -973,9 +973,9 @@ CharacterGetLevel(_Mime, _Level)
 AND
 _Level >= 10
 AND
-CharacterHasSkill(_Mime, "Shout_LLMIME_SourceMimicking", 0)
+CharacterHasSkill(_Mime, "Shout_LLMIME_SourceMimicking_Follower", 0)
 THEN
-CharacterAddSkill(_Mime, "Shout_LLMIME_SourceMimicking");
+CharacterAddSkill(_Mime, "Shout_LLMIME_SourceMimicking_Follower");
 //END_REGION
 
 //REGION GHOST

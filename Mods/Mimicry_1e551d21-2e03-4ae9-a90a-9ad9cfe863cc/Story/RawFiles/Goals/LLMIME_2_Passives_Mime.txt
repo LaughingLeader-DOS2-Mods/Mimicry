@@ -207,6 +207,17 @@ CharacterHasSkill(_Mime, _Skill, 1)
 THEN
 CharacterRemoveSkill(_Mime, _Skill);
 //END_REGION
+
+//REGION MIME_STATUS_ATTEMPTS
+IF
+CharacterStatusAttempt(_Character, _Status, _)
+AND
+DB_LLMIME_MimickingStatuses(_Status)
+AND
+NOT LLMIME_QRY_CharacterIsAMime(_Character)
+THEN
+RemoveStatus(_Character, _Status);
+//END_REGION
 EXITSECTION
 
 ENDEXITSECTION

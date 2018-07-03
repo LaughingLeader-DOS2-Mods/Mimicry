@@ -1,4 +1,4 @@
-new skillset "Class_LLMIME_Mime"
+new skillset "Class_LLMIME_MimePreset"
 add skill "Shout_LLMIME_BrawlerStance"
 add skill "Shout_LLMIME_DisableMimicking"
 add skill "Shout_LLMIME_OpenMenu"

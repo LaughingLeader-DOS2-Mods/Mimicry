@@ -45,6 +45,30 @@ NOT LLMIME_QRY_CharacterIsAMime(_Character)
 THEN
 CharacterStatusText(_Character, "LLMIME_StatusText_MimeSkillbookBlocked");
 DB_CustomUseItemResponse(_Character, _Item, 0);
+
+PROC
+ProcBlockUseOfItem(_Character, _Item)
+AND
+IsTagged(_Item, "BOOK", 1)
+AND
+IsTagged(_Character, "LLMIME_MimeFollower", 1)
+THEN
+CharacterStatusText(_Character, "LLMIME_StatusText_SkillbookBlockedForFollower");
+DB_CustomUseItemResponse(_Character, _Item, 0);
+
+//Prevent general item use with the Mime follower
+PROC
+ProcBlockUseOfItem(_Character, _Item)
+AND
+IsTagged(_Character, "LLMIME_MimeFollower", 1)
+AND
+NOT DB_CustomUseItemResponse(_Character, _Item, _)
+AND
+NOT LLMIME_Mimicking_QRY_IsMimicking(_Character)
+AND
+NOT GetInventoryOwner(_Item, _Character)
+THEN
+DB_CustomUseItemResponse(_Character, _Item, 0);
 //END_REGION
 
 //REGION MUSIC_BOX
@@ -139,8 +163,10 @@ AND
 GetTemplate(_Item, _Template)
 AND
 CharacterGetDisplayName(_Mime, _, _Name)
+AND
+IntegertoString(_RequestID, _RequestIDStr)
 THEN
-LeaderLog_Log("DEBUG", "[LLMIME:Debug:CanUseItem] [",_Name,"] is attempting to use item [",_Template,"].");
+LeaderLog_Log("DEBUG", "[LLMIME:Debug:CanUseItem] [",_Name,"] is attempting to use item [",_Template,"] with RequestID [",_RequestIDStr,"].");
 
 IF
 CharacterUsedItem(_Mime, _Item)

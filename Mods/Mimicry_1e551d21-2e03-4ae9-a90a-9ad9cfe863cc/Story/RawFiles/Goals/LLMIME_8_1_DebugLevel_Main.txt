@@ -4,6 +4,8 @@ INITSECTION
 DB_WaypointInfo((ITEMGUID)S_LLMIME_TestLevelWaypointShrine_9955a6a5-c7ca-40aa-8fa8-9c3699d65032,(TRIGGERGUID)S_LLMIME_Debug_Waypoint_e81af9c7-8f99-4050-8ab8-1101954a97af,"WAYP_LLMIME_TestLevel");
 
 Proc_LLMIME_IterateGameAlreadyStarted();
+
+GlobalSetFlag("LeaderLog_Trace_Enabled");
 KBSECTION
 IF
 GameStarted("TestLevel_LL_Mimicry",1)
@@ -432,6 +434,28 @@ AND
 GetTemplate(_Trigger, _TriggerID)
 THEN
 LeaderLog_Log("DEBUG", "[LLMIME:Debug:CharacterTeleportToFleeWaypoint] [",_PlayerID,"] fled to waypoint [",_TriggerID,"].");
+
+IF
+DB_CustomUseItemResponse(_Char, _Item, _Result)
+AND
+CharacterGetDisplayName(_Char, _, _Name)
+AND
+GetTemplate(_Item, _ItemID)
+AND
+IntegertoString(_Result, _ResultStr)
+THEN
+LeaderLog_Log("DEBUG", "[LLMIME:Debug:DB_CustomUseItemResponse] [",_Name,"] custom item response for [",_ItemID,"] is [",_ResultStr,"].");
+
+PROC
+ProcProcessUseOfItem((CHARACTERGUID)_Char, (ITEMGUID)_Item, (INTEGER)_Result)
+AND
+CharacterGetDisplayName(_Char, _, _Name)
+AND
+GetTemplate(_Item, _ItemID)
+AND
+IntegertoString(_Result, _ResultStr)
+THEN
+LeaderLog_Log("DEBUG", "[LLMIME:Debug:ProcProcessUseOfItem] [",_Name,"] item [",_ItemID,"] process response is [",_ResultStr,"].");
 //END_REGION
 EXITSECTION
 
