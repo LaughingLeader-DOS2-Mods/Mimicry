@@ -25,12 +25,33 @@ SysClear("DB_LLMIME_Mime_LearnableSkills", 1);
 DB_LLMIME_Mime_LearnableSkills("Shout_LLMIME_DisableMimicking");
 //END_REGION
 
-//REGION UPDATE
-PROC
-LLMIME_System_UpdateDatabases()
+//REGION UPDATING
+QRY
+LLMIME_Mime_Internal_QRY_VersionNeedsUpdating((STRING)_Version)
+AND
+_Version == "0.9.0.0"
 THEN
+DB_NOOP(1);
+
+IF
+StoryEvent(_, "LeaderUpdater_ModVersionsChanged")
+AND
+DB_LeaderUpdater_Temp_PastRegistered("Mimicry", "LaughingLeader", _Version)
+AND
+LLMIME_Mime_Internal_QRY_VersionNeedsUpdating(_Version)
+AND
+NOT DB_LLMIME_Mime_UpdatingVersion(_)
+THEN
+LeaderLog_Log("DEBUG", "[LLMIME:Mime] Updating settings from version [",_Version,"]");
+DB_LLMIME_Mime_UpdatingVersion(1);
 LLMIME_Mime_InitSettings();
-LeaderLog_Log("DEBUG", "[LLMIME:Passives:Mime:UpdateDatabases] Settings updated.");
+
+IF
+StoryEvent(_, "LeaderUpdater_ModVersionsChanged")
+AND
+DB_LLMIME_Mime_UpdatingVersion(_Val)
+THEN
+NOT DB_LLMIME_Mime_UpdatingVersion(_Val);
 //END_REGION
 
 //REGION QUERIES
@@ -63,7 +84,7 @@ NOT LLMIME_QRY_CharacterIsAMime(_Mime)
 AND
 NOT DB_LLMIME_Mime_Temp_BlockedItem(_Mime, _Item)
 THEN
-//LLMIME_RemoveAllModStatuses(_Mime);
+//LLMIME_RemoveAllMimicryStatuses(_Mime);
 SetStoryEvent(_Mime, "Mimicry_InitMimeJob");
 
 IF

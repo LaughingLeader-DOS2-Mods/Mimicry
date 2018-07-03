@@ -12,7 +12,7 @@ KBSECTION
 PROC
 LLMIME_System_InitSettings()
 THEN
-LLLIB_Helper_ClearExistingDatabase("DB_LLMIME_PassiveData", 4);
+SysClear("DB_LLMIME_PassiveData", 4);
 DB_LLMIME_PassiveData("LLMIME_BRAWLER", "LLMIME_BRAWLER_BONUS", "LLMIME_BRAWLER_INFO", "Mimicry_HideMimePassives");
 DB_LLMIME_PassiveData("LLMIME_BEASTMASTER", "LLMIME_BEASTMASTER", "LLMIME_BEASTMASTER_INFO", "Mimicry_HideMimePassives");
 DB_LLMIME_PassiveData("LLMIME_CONCENTRATION", "LLMIME_CONCENTRATION_BONUS", "LLMIME_CONCENTRATION_INFO", "Mimicry_HideMimePassives");
@@ -21,17 +21,19 @@ LLMIME_System_InitTemplates();
 
 LeaderLib_Register_StatusToggleSkill("Shout_LLMIME_DisableMimicking", "LLMIME_MIMICKING_DISABLED", -1.0, 1);
 
-LLLIB_Helper_ClearExistingDatabase("DB_LLMIME_Statuses", 1);
+SysClear("DB_LLMIME_Statuses", 1);
 DB_LLMIME_Statuses("LLMIME_UNARMED_BONUS_DAMAGE");
 DB_LLMIME_Statuses("LLMIME_TOTEMRAGE");
 DB_LLMIME_Statuses("LLMIME_BAD_BREATH");
 DB_LLMIME_Statuses("LLMIME_TOAD");
 DB_LLMIME_Statuses("LLMIME_FORCED_EVOLUTION");
-LLLIB_Helper_ClearExistingDatabase("DB_LLMIME_MimickingStatuses", 1);
+
+SysClear("DB_LLMIME_MimickingStatuses", 1);
 DB_LLMIME_MimickingStatuses("LLMIME_MIMICKING");
 DB_LLMIME_MimickingStatuses("LLMIME_MIMICKING_FOLLOWER");
 DB_LLMIME_MimickingStatuses("LLMIME_MIMICKING_SOURCE");
-LLLIB_Helper_ClearExistingDatabase("DB_LLMIME_MimeStatuses", 1);
+
+SysClear("DB_LLMIME_MimeStatuses", 1);
 DB_LLMIME_MimeStatuses("LLMIME_MIMICKING_DISABLED");
 DB_LLMIME_MimeStatuses("LLMIME_MIMIC_WEAPON_REQUIREMENTS");
 DB_LLMIME_MimeStatuses("LLMIME_BRAWLER_STANCE_CON");
@@ -58,7 +60,7 @@ DB_LLMIME_MimeStatuses("LLMIME_SOURCE_REGENERATION_HIDDEN");
 PROC
 LLMIME_System_InitTemplates()
 THEN
-LLLIB_Helper_ClearExistingDatabase("DB_LLMIME_Templates", 2);
+SysClear("DB_LLMIME_Templates", 2);
 DB_LLMIME_Templates("Mask_A", "EQ_Armor_UNIQUE_LLMIME_MimeMask_A_8e66ce79-8c8e-4c22-a8ea-5a99977f4ea8");
 DB_LLMIME_Templates("Mask_NoVisual", "EQ_Armor_LLMIME_MimeMask_NoVisual_38d7f6c3-ab60-43e5-b20c-f5faf06801dd");
 DB_LLMIME_Templates("BrawlerFist", "WPN_LLMIME_BrawlerFist_e1bda904-93c2-4f6f-8136-1a547279fd1f");
@@ -68,12 +70,33 @@ DB_LLMIME_Templates("MusicBox", "UNIQUE_LLMIME_MusicBox_Cracked_467b732e-c599-49
 DB_LLMIME_Templates("MimeAmulet", "LOOT_MagicAmulet_LLMIME_SourceBlastImmunity_fcc27ec5-b83e-42e3-976e-90c269a52aed");
 //END_REGION
 
-//REGION UPDATE
-PROC
-LLMIME_System_UpdateDatabases()
+//REGION UPDATING
+QRY
+LLMIME_System_Internal_QRY_VersionNeedsUpdating((STRING)_Version)
+AND
+_Version == "-1"
 THEN
+DB_NOOP(1);
+
+IF
+StoryEvent(_, "LeaderUpdater_ModVersionsChanged")
+AND
+DB_LeaderUpdater_Temp_PastRegistered("Mimicry", "LaughingLeader", _Version)
+AND
+LLMIME_System_Internal_QRY_VersionNeedsUpdating(_Version)
+AND
+NOT DB_LLMIME_System_UpdatingVersion(_)
+THEN
+LeaderLog_Log("DEBUG", "[LLMIME:System] Updating settings from version [",_Version,"]");
+DB_LLMIME_System_UpdatingVersion(1);
 LLMIME_System_InitSettings();
-LeaderLog_Log("DEBUG", "[LLMIME:System:Core:UpdateDatabases] Settings updated.");
+
+IF
+StoryEvent(_, "LeaderUpdater_ModVersionsChanged")
+AND
+DB_LLMIME_System_UpdatingVersion(_Val)
+THEN
+NOT DB_LLMIME_System_UpdatingVersion(_Val);
 //END_REGION
 
 //REGION MASK_TAG
@@ -93,10 +116,10 @@ ClearTag(_Mime, "Mimicry_WearingMask");
 IF
 StoryEvent((CHARACTERGUID)_Mime, "Mimicry_RemoveAllMimicryStatuses")
 THEN
-LLMIME_RemoveAllModStatuses(_Mime);
+LLMIME_RemoveAllMimicryStatuses(_Mime);
 
 PROC
-LLMIME_RemoveAllModStatuses((CHARACTERGUID)_Character)
+LLMIME_RemoveAllMimicryStatuses((CHARACTERGUID)_Character)
 AND
 DB_LLMIME_Statuses(_Status)
 AND
@@ -105,7 +128,7 @@ THEN
 RemoveStatus(_Character, _Status);
 
 PROC
-LLMIME_RemoveAllModStatuses((CHARACTERGUID)_Character)
+LLMIME_RemoveAllMimicryStatuses((CHARACTERGUID)_Character)
 AND
 DB_LLMIME_MimeStatuses(_Status)
 AND

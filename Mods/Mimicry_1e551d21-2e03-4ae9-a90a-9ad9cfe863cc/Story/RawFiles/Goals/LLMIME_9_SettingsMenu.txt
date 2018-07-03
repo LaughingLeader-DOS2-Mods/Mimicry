@@ -57,7 +57,7 @@ AND
 LLLIB_Helper_QRY_ClearObjectFlag(_Mime, "Mimicry_Debug_RemoveAllStatuses")
 THEN
 LLMIME_RemoveMask(_Mime);
-LLMIME_RemoveAllModStatuses(_Mime);
+LLMIME_RemoveAllMimicryStatuses(_Mime);
 
 IF
 ObjectFlagSet("Mimicry_Debug_RefreshMask", (CHARACTERGUID)_Mime, _Instance)
@@ -65,7 +65,7 @@ AND
 LLLIB_Helper_QRY_ClearObjectFlag(_Mime, "Mimicry_Debug_RefreshMask")
 THEN
 LLMIME_RefreshMask(_Mime);
-LLMIME_RemoveAllModStatuses(_Mime);
+LLMIME_RemoveAllMimicryStatuses(_Mime);
 //END_REGION
 EXITSECTION
 

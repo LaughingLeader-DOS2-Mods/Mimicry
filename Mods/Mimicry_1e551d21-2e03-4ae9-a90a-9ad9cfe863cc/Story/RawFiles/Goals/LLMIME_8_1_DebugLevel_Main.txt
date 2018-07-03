@@ -91,7 +91,7 @@ RegionEnded("TestLevel_LL_Mimicry")
 AND
 DB_IsPlayer(_Player)
 THEN
-LLMIME_RemoveAllModStatuses(_Player);
+LLMIME_RemoveAllMimicryStatuses(_Player);
 */
 
 IF

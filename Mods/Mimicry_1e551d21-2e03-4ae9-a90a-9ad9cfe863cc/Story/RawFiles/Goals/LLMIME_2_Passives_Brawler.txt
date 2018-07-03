@@ -13,13 +13,46 @@ KBSECTION
 PROC
 LLMIME_Brawler_InitSettings()
 THEN
+SysClear("DB_LLMIME_Brawler_StanceStatuses", 5);
 DB_LLMIME_Brawler_StanceStatuses("LLMIME_BRAWLER_STANCE_CON", "Mimicry_BrawlerStance_UseCon", "LLMIME_BRAWLER_STANCE_CON_INFO", "Mimicry_HideMimePassives", "LLMIME_Settings_BrawlerStance_Con_1f4bd5ba-4cf3-4262-af49-455e2530c986");
 DB_LLMIME_Brawler_StanceStatuses("LLMIME_BRAWLER_STANCE_STR", "Mimicry_BrawlerStance_UseStr", "LLMIME_BRAWLER_STANCE_STR_INFO", "Mimicry_HideMimePassives", "LLMIME_Settings_BrawlerStance_Str_694fa103-1089-492b-a7db-aef0e5cf0efd");
 DB_LLMIME_Brawler_StanceStatuses("LLMIME_BRAWLER_STANCE_FIN", "Mimicry_BrawlerStance_UseFin", "LLMIME_BRAWLER_STANCE_FIN_INFO", "Mimicry_HideMimePassives", "LLMIME_Settings_BrawlerStance_Fin_c2f6f50c-8e29-4fdc-8391-f8a4e823f658");
 
+SysClear("DB_LLMIME_Brawler_StanceStatuses", 3);
+//These need to be hard-coded strings rather than translates strings, since the engine doesn't seem to translate a string passed from a variable
 DB_LLMIME_Brawler_SettingsString("Mimicry_BrawlerStance_UseCon", "*Prefer a body-based Brawler Stance (Scales with Constitution).* (Default)");
 DB_LLMIME_Brawler_SettingsString("Mimicry_BrawlerStance_UseStr", "*Prefer a strength-based Brawler Stance (Scales with Strength).*");
 DB_LLMIME_Brawler_SettingsString("Mimicry_BrawlerStance_UseFin", "*Prefer a finesse-based Brawler Stance (Scales with Finesse).*");
+//END_REGION
+
+//REGION UPDATING
+//Disabled for now
+QRY
+LLMIME_Brawler_Internal_QRY_VersionNeedsUpdating((STRING)_Version)
+AND
+_Version == "-1"
+THEN
+DB_NOOP(1);
+
+IF
+StoryEvent(_, "LeaderUpdater_ModVersionsChanged")
+AND
+DB_LeaderUpdater_Temp_PastRegistered("Mimicry", "LaughingLeader", _Version)
+AND
+LLMIME_Brawler_Internal_QRY_VersionNeedsUpdating(_Version)
+AND
+NOT DB_LLMIME_Brawler_UpdatingVersion(_)
+THEN
+LeaderLog_Log("DEBUG", "[LLMIME:Brawler] Updating settings from version [",_Version,"]");
+DB_LLMIME_Brawler_UpdatingVersion(1);
+LLMIME_Brawler_InitSettings();
+
+IF
+StoryEvent(_, "LeaderUpdater_ModVersionsChanged")
+AND
+DB_LLMIME_Brawler_UpdatingVersion(_Val)
+THEN
+NOT DB_LLMIME_Brawler_UpdatingVersion(_Val);
 //END_REGION
 
 //REGION SETTINGS_DIALOG_VARS

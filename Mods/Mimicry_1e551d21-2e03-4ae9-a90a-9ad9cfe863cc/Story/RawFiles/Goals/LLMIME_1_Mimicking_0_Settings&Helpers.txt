@@ -9,25 +9,6 @@ LLMIME_Mimicking_InitSettings();
 //DB_LLMIME_Mimicking_Blacklist_SkillPrefixes(_Prefix)
 KBSECTION
 //REGION SETTINGS
-IF
-StoryEvent(_, "LeaderUpdater_ModVersionsChanged")
-AND
-DB_LeaderUpdater_Temp_PastRegistered("Mimicry", "LaughingLeader", "0.9.0.0")
-AND
-NOT DB_LLMIME_Mimicking_UpdatingVersion(_)
-THEN
-LeaderLog_Log("DEBUG", "[LLMIME:Mimicking:System] Updating settings from version [0.9.0.0]");
-DB_LLMIME_Mimicking_UpdatingVersion(1);
-LLMIME_Mimicking_ClearSettings();
-LLMIME_Mimicking_InitSettings();
-
-IF
-StoryEvent(_, "LeaderUpdater_ModVersionsChanged")
-AND
-DB_LLMIME_Mimicking_UpdatingVersion(_Val)
-THEN
-NOT DB_LLMIME_Mimicking_UpdatingVersion(_Val);
-
 PROC
 LLMIME_Mimicking_ClearSettings()
 THEN
@@ -97,6 +78,36 @@ DB_LLMIME_Mimicking_Whitelist_WeaponCopy_SkillTypes("Rain_");
 DB_LLMIME_Mimicking_Whitelist_WeaponCopy_Skills("Shout_RecoverArmour");
 
 DB_LLMIME_Mimicking_Blacklist_WeaponCopy_IgnoreSkillsWith("_Grenade_");
+//END_REGION
+
+//REGION UPDATING
+QRY
+LLMIME_Mimicking_Internal_QRY_VersionNeedsUpdating((STRING)_Version)
+AND
+_Version == "0.9.0.0"
+THEN
+DB_NOOP(1);
+
+IF
+StoryEvent(_, "LeaderUpdater_ModVersionsChanged")
+AND
+DB_LeaderUpdater_Temp_PastRegistered("Mimicry", "LaughingLeader", _Version)
+AND
+LLMIME_Mimicking_Internal_QRY_VersionNeedsUpdating(_Version)
+AND
+NOT DB_LLMIME_Mimicking_UpdatingVersion(_)
+THEN
+LeaderLog_Log("DEBUG", "[LLMIME:Mimicking:System] Updating settings from version [",_Version,"]");
+DB_LLMIME_Mimicking_UpdatingVersion(1);
+LLMIME_Mimicking_ClearSettings();
+LLMIME_Mimicking_InitSettings();
+
+IF
+StoryEvent(_, "LeaderUpdater_ModVersionsChanged")
+AND
+DB_LLMIME_Mimicking_UpdatingVersion(_Val)
+THEN
+NOT DB_LLMIME_Mimicking_UpdatingVersion(_Val);
 //END_REGION
 
 //REGION COPY_ATTRIBUTES
