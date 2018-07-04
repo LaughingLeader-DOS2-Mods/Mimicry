@@ -2,3 +2,13 @@ treasure itemtypes "Common","Uncommon","Rare","Epic","Legendary","Divine","Uniqu
 new treasuretable "ST_LLMIME_SkillbookMime"
 new subtable "1,1"
 object category "I_SKILLBOOK_LLMIME_SourceMimicking",1,0,0,0,0,0,0,0
+new treasuretable "LLMIME_MimeFollower_Treasure"
+StartLevel "9"
+new subtable "-1"
+object category "LLMIME_LightMimeUpperBody",1,0,0,1,0,0,0,0
+new subtable "-1"
+object category "LLMIME_LightMimeLowerBody",1,0,0,1,0,0,0,0
+new subtable "-1"
+object category "LLMIME_LightMimeBoots",1,0,0,1,0,0,0,0
+new subtable "-1"
+object category "LLMIME_LightMimeGloves",1,0,0,1,0,0,0,0

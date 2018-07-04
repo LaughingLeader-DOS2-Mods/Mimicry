@@ -1,0 +1,20 @@
+new deltamod "Boost_LLMIME_BrawlerFist_Ability_OneHanded"
+param "BoostType" "ItemCombo"
+param "Frequency" "1"
+param "ModifierType" "Weapon"
+param "WeaponType" "None"
+new boost "_Boost_Weapon_Ability_OneHanded",1
+
+new deltamod "Boost_LLMIME_BrawlerFist_Damage_Bonus"
+param "BoostType" "ItemCombo"
+param "Frequency" "1"
+param "ModifierType" "Weapon"
+param "WeaponType" "None"
+new boost "_Boost_Weapon_Damage_Bonus",1
+
+new deltamod "Boost_LLMIME_BrawlerFist_Damage_ArmourPiercing_Large"
+param "BoostType" "ItemCombo"
+param "Frequency" "1"
+param "ModifierType" "Weapon"
+param "WeaponType" "None"
+new boost "_Boost_Weapon_Damage_ArmourPiercing_Large",1

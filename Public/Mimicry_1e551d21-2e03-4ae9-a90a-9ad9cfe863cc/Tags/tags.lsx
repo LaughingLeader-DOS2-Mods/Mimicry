@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <save>
-    <header version="2" time="1530593077" />
+    <header version="2" time="1530654826" />
     <version major="3" minor="1" revision="8" build="0" />
     <region id="Tags">
         <node id="root">
             <children>
                 <node id="Tag">
-                    <attribute id="Description" value="A warrior who has abandoned their own identity, instead mimicking the actions of allies in battle." type="23" />
+                    <attribute id="Description" value="A warrior who mimics the actions of allies in battle. Mimes are also proficient with unarmed combat, and provide additional skills and bonuses to nearby summoned creatures." type="23" />
                     <attribute id="Name" value="Mimicry_Mime" type="23" />
                     <children>
                         <node id="Categories">

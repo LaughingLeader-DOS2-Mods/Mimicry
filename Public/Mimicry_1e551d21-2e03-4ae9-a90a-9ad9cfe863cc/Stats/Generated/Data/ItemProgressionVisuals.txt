@@ -1,8 +1,20 @@
-new itemgroup "ARM_UNIQUE_LLMIME_MimeMask_A"
+new itemgroup "ARM_UNIQUE_LLMIME_Mime_Mask_A"
 
 add levelgroup 0,0,"All"
 add rootgroup "8e66ce79-8c8e-4c22-a8ea-5a99977f4ea8",""
-add namegroup "ARM_UNIQUE_LLMIME_MimeMask_A","",""
+add namegroup "ARM_UNIQUE_LLMIME_Mime_Mask_A","",""
+
+new itemgroup "ARM_LLMIME_Mime_Mask_NoVisual"
+
+add levelgroup 0,0,"All"
+add rootgroup "38d7f6c3-ab60-43e5-b20c-f5faf06801dd",""
+add namegroup "ARM_UNIQUE_LLMIME_Mime_Mask_A","",""
+
+new itemgroup "ARM_LLMIME_Mime_Mask_Preview"
+
+add levelgroup 0,0,"All"
+add rootgroup "36348beb-6126-42f5-ba26-05acf6b65bae",""
+add namegroup "ARM_UNIQUE_LLMIME_Mime_Mask_A","",""
 
 new itemgroup "LLMIME_BrawlerFist"
 
@@ -12,24 +24,57 @@ add namegroup "LLMIME_BrawlerFist","",""
 
 new itemgroup "ARM_LLMIME_Mime_Light_UpperBody"
 
-add levelgroup 0,0,"All"
-add rootgroup "fa1fab93-fad8-4c76-89e2-bb52753e7b88","LLMIMEMimeLightArmor"
+add levelgroup 1,8,"Common"
+add rootgroup "002d96a6-02c1-4e82-9890-67b86ea01531","LLMIMEMimeLightArmor"
+add namegroup "LLMIME_Mime_Light_UpperBody","",""
+
+add levelgroup 9,14,"Rare"
+add rootgroup "002d96a6-02c1-4e82-9890-67b86ea01531","LLMIMEMimeLightArmor"
+add namegroup "LLMIME_Mime_Light_UpperBody","",""
+
+add levelgroup 15,20,"Epic"
+add rootgroup "002d96a6-02c1-4e82-9890-67b86ea01531","LLMIMEMimeLightArmor"
 add namegroup "LLMIME_Mime_Light_UpperBody","",""
 
 new itemgroup "ARM_LLMIME_Mime_Light_LowerBody"
 
-add levelgroup 0,0,"All"
-add rootgroup "255b3e98-9ed5-4710-924c-84425b11648e","LLMIMEMimeLightArmor"
+add levelgroup 1,8,"Common"
+add rootgroup "134cbd6d-c5f5-4e7c-a7ff-a0f17644baab","LLMIMEMimeLightArmor"
+add namegroup "LLMIME_Mime_Light_LowerBody","",""
+
+add levelgroup 9,14,"Rare"
+add rootgroup "134cbd6d-c5f5-4e7c-a7ff-a0f17644baab","LLMIMEMimeLightArmor"
+add namegroup "LLMIME_Mime_Light_LowerBody","",""
+
+add levelgroup 15,20,"Epic"
+add rootgroup "134cbd6d-c5f5-4e7c-a7ff-a0f17644baab","LLMIMEMimeLightArmor"
 add namegroup "LLMIME_Mime_Light_LowerBody","",""
 
 new itemgroup "ARM_LLMIME_Mime_Light_Boots"
 
-add levelgroup 0,0,"All"
-add rootgroup "1f64742e-476b-4511-86cd-347655c35ad9","LLMIMEMimeLightArmor"
+add levelgroup 1,8,"Common"
+add rootgroup "5b2a8469-a1a2-41cf-a861-8b997330f522","LLMIMEMimeLightArmor"
+add namegroup "LLMIME_Mime_Light_Boots","",""
+
+add levelgroup 9,14,"Rare"
+add rootgroup "5b2a8469-a1a2-41cf-a861-8b997330f522","LLMIMEMimeLightArmor"
+add namegroup "LLMIME_Mime_Light_Boots","",""
+
+add levelgroup 15,20,"Epic"
+add rootgroup "5b2a8469-a1a2-41cf-a861-8b997330f522","LLMIMEMimeLightArmor"
 add namegroup "LLMIME_Mime_Light_Boots","",""
 
 new itemgroup "ARM_LLMIME_Mime_Light_Gloves"
 
-add levelgroup 0,0,"All"
-add rootgroup "9d919a7d-f09b-469e-8783-574f77204dc9","LLMIMEMimeLightArmor"
+add levelgroup 1,8,"Common"
+add rootgroup "719c05ec-03d1-4910-b709-1ced217cd136","LLMIMEMimeLightArmor"
 add namegroup "LLMIME_Mime_Light_Gloves","",""
+
+add levelgroup 9,14,"Rare"
+add rootgroup "719c05ec-03d1-4910-b709-1ced217cd136","LLMIMEMimeLightArmor"
+add namegroup "LLMIME_Mime_Light_Gloves","",""
+
+add levelgroup 15,20,"Epic"
+add rootgroup "719c05ec-03d1-4910-b709-1ced217cd136","LLMIMEMimeLightArmor"
+add namegroup "LLMIME_Mime_Light_Gloves","",""
+

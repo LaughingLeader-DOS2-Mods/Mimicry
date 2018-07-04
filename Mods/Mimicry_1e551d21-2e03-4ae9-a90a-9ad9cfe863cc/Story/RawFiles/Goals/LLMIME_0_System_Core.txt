@@ -62,8 +62,8 @@ PROC
 LLMIME_System_InitTemplates()
 THEN
 SysClear("DB_LLMIME_Templates", 2);
-DB_LLMIME_Templates("Mask_A", "EQ_Armor_UNIQUE_LLMIME_MimeMask_A_8e66ce79-8c8e-4c22-a8ea-5a99977f4ea8");
-DB_LLMIME_Templates("Mask_NoVisual", "EQ_Armor_LLMIME_MimeMask_NoVisual_38d7f6c3-ab60-43e5-b20c-f5faf06801dd");
+DB_LLMIME_Templates("Mask_A", "EQ_Armor_UNIQUE_LLMIME_Mime_Mask_A_8e66ce79-8c8e-4c22-a8ea-5a99977f4ea8");
+DB_LLMIME_Templates("Mask_NoVisual", "EQ_Armor_LLMIME_Mime_Mask_NoVisual_38d7f6c3-ab60-43e5-b20c-f5faf06801dd");
 DB_LLMIME_Templates("BrawlerFist", "WPN_LLMIME_BrawlerFist_e1bda904-93c2-4f6f-8136-1a547279fd1f");
 DB_LLMIME_Templates("MimeManual", "WPN_LLMIME_BrawlerFist_e1bda904-93c2-4f6f-8136-1a547279fd1f");
 DB_LLMIME_Templates("MusicBox", "UNIQUE_LLMIME_MusicBox_fd03b00c-5366-40e2-a8af-1d9f6a904ecb");
@@ -75,7 +75,7 @@ DB_LLMIME_Templates("MimeAmulet", "LOOT_MagicAmulet_LLMIME_SourceBlastImmunity_f
 QRY
 LLMIME_System_Internal_QRY_VersionNeedsUpdating((STRING)_Version)
 AND
-_Version == "-1"
+_Version == "0.9.0.0"
 THEN
 DB_NOOP(1);
 
@@ -411,22 +411,10 @@ IF
 StoryEvent((CHARACTERGUID)_Mime, "Mimicry_MimeInitialized")
 THEN
 LLMIME_System_FlagForUnarmed(_Mime);
-LeaderLib_StartObjectTimer(_Mime, 50, "LLMIME_Timers_CheckUnarmed_", "Mimicry_CheckUnarmed");
-
-/*
-IF
-StoryEvent((CHARACTERGUID)_Mime, "Mimicry_CheckUnarmed")
-AND
-ObjectGetFlag(_Mime, "Mimicry_MimeIsUnarmed", 1)
-THEN
-LLMIME_System_ToggleBrawlerBonus(_Mime);
-LLMIME_System_ToggleConcentrationBonus(_Mime);
-*/
+LeaderLib_StartObjectTimer(_Mime, 200, "LLMIME_Timers_CheckUnarmed_", "Mimicry_CheckUnarmed");
 
 IF
 StoryEvent((CHARACTERGUID)_Mime, "Mimicry_CheckUnarmed")
-AND
-ObjectGetFlag(_Mime, "Mimicry_MimeIsUnarmed", 0)
 THEN
 LLMIME_System_FlagForUnarmed(_Mime);
 
@@ -466,7 +454,7 @@ NOT DB_LLMIME_Temp_JustSetUnarmedFlag(_Mime);
 IF
 ObjectFlagSet("Mimicry_MimeIsUnarmed", (CHARACTERGUID)_Mime, _)
 AND
-HasActiveStatus(_Mime, "LLMIME_BRAWLER", 1)
+LLLIB_Helper_QRY_HasStatus(_Mime, "LLMIME_BRAWLER")
 AND
 HasActiveStatus(_Mime, "LLMIME_BRAWLER_BONUS", 0)
 THEN
@@ -475,14 +463,14 @@ ApplyStatus(_Mime, "LLMIME_BRAWLER_BONUS", -1.0, 1);
 IF
 ObjectFlagCleared("Mimicry_MimeIsUnarmed", (CHARACTERGUID)_Mime, _)
 AND
-HasActiveStatus(_Mime, "LLMIME_BRAWLER_BONUS", 1)
+LLLIB_Helper_QRY_HasStatus(_Mime, "LLMIME_BRAWLER_BONUS")
 THEN
 RemoveStatus(_Mime, "LLMIME_BRAWLER_BONUS");
 
 IF
 CharacterStatusRemoved(_Mime, "LLMIME_BRAWLER", _)
 AND
-HasActiveStatus(_Mime, "LLMIME_BRAWLER_BONUS", 1)
+LLLIB_Helper_QRY_HasStatus(_Mime, "LLMIME_BRAWLER_BONUS")
 THEN
 RemoveStatus(_Mime, "LLMIME_BRAWLER_BONUS");
 //END_REGION
@@ -491,7 +479,7 @@ RemoveStatus(_Mime, "LLMIME_BRAWLER_BONUS");
 IF
 ObjectFlagSet("Mimicry_MimeIsUnarmed", (CHARACTERGUID)_Mime, _)
 AND
-HasActiveStatus(_Mime, "LLMIME_CONCENTRATION", 1)
+LLLIB_Helper_QRY_HasStatus(_Mime, "LLMIME_CONCENTRATION")
 AND
 HasActiveStatus(_Mime, "LLMIME_CONCENTRATION_BONUS", 0)
 THEN
@@ -500,14 +488,14 @@ ApplyStatus(_Mime, "LLMIME_CONCENTRATION_BONUS", -1.0, 1);
 IF
 ObjectFlagCleared("Mimicry_MimeIsUnarmed", (CHARACTERGUID)_Mime, _)
 AND
-HasActiveStatus(_Mime, "LLMIME_CONCENTRATION_BONUS", 1)
+LLLIB_Helper_QRY_HasStatus(_Mime, "LLMIME_CONCENTRATION_BONUS")
 THEN
 RemoveStatus(_Mime, "LLMIME_CONCENTRATION_BONUS");
 
 IF
 CharacterStatusRemoved(_Mime, "LLMIME_CONCENTRATION", _)
 AND
-HasActiveStatus(_Mime, "LLMIME_CONCENTRATION_BONUS", 1)
+LLLIB_Helper_QRY_HasStatus(_Mime, "LLMIME_CONCENTRATION_BONUS")
 THEN
 RemoveStatus(_Mime, "LLMIME_CONCENTRATION_BONUS");
 //END_REGION

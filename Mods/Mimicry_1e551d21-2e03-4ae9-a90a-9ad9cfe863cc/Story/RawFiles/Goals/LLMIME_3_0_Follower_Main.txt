@@ -1135,7 +1135,17 @@ AND
 DB_LLMIME_Follower_Mime(_Mime)
 //AND
 //DB_LLMIME_FollowerGhost(_Ghost)
+AND
+GetPosition(_Mime, _x, _y, _z)
+AND
+CreateItemTemplateAtPosition("LOOT_BackPack_A_6c70c298-aa29-418f-a659-f8e0b5f5fa60", _x, _y, _z, _Backpack)
+AND
+CharacterGetLevel(_Player, _Level)
 THEN
+GenerateTreasure(_Backpack, "LLMIME_MimeFollower_Treasure", -1, _Player);
+MoveAllItemsTo(_Backpack, _Mime);
+ItemRemove(_Backpack);
+
 CharacterTransform(_Mime, "LLMIME_Elves_Male_Mime_NoMask_8b69a5c0-1d6a-403c-ae38-e4a8d4297ceb", 0, 0, 0, 0, 0, 0, 0);
 CharacterUnlinkGhost(_Mime, _Ghost);
 //DestroyGhost(_Ghost);
@@ -1160,11 +1170,22 @@ ObjectFlagSet("Mimicry_MaskTakenFromFollower", (CHARACTERGUID)_Player, _Instance
 AND
 DB_LLMIME_Follower_Mime(_Mime)
 AND
+DB_LLMIME_Templates("Mask_NoVisual", _Template)
+AND
+GetItemForItemTemplateInInventory(_Mime, _Template, _Mask)
+THEN
+ItemRemove(_Mask);
+
+IF
+ObjectFlagSet("Mimicry_MaskTakenFromFollower", (CHARACTERGUID)_Player, _Instance)
+AND
+DB_LLMIME_Follower_Mime(_Mime)
+AND
 DB_LLMIME_Templates("Mask_A", _Template)
 AND
 NOT GetItemForItemTemplateInInventory(_Mime, _Template, _)
 THEN
-ItemTemplateAddTo(_Template, _Player, 1);
+ItemTemplateAddTo(_Template, _Player, 1, 1);
 
 IF
 ObjectFlagSet("Mimicry_MaskTakenFromFollower", (CHARACTERGUID)_Player, _Instance)

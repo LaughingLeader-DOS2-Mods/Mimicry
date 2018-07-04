@@ -10,7 +10,9 @@ CharacterUsedSkill(_Mime, "Shout_LLMIME_OpenMenu", _)
 AND
 CharacterIsInCombat(_Mime, 0)
 AND
-GetItemForItemTemplateInInventory(_Mime, "EQ_Armor_UNIQUE_LLMIME_MimeMask_A_8e66ce79-8c8e-4c22-a8ea-5a99977f4ea8", _Mask)
+DB_LLMIME_Templates("Mask_A", _Template)
+AND
+GetItemForItemTemplateInInventory(_Mime, _Template, _Mask)
 AND
 NOT DB_LLMIME_Settings_Temp_StartedDialog(_Mime)
 THEN

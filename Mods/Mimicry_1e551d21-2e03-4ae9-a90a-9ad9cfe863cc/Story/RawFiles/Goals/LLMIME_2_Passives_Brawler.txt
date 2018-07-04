@@ -5,6 +5,7 @@ LLMIME_Brawler_InitSettings();
 /*Settings*/
 //DB_LLMIME_Brawler_StanceStatuses(_Status, _SettingsFlag, _InfoStatus, _DisableInfoFlag, _DialogVar)
 //DB_LLMIME_Brawler_SettingsString(_SettingsFlag, _Str)
+//DB_LLMIME_Brawler_FistDeltaMods(_MinLevel, _DeltaMod)
 /*Temp*/
 //DB_LLMIME_Brawler_DoubleAttackTimer(_TimerName, _Mime, _FXHandle)
 //DB_LLMIME_Brawler_JustToggledStance(_Mime)
@@ -23,6 +24,11 @@ SysClear("DB_LLMIME_Brawler_StanceStatuses", 3);
 DB_LLMIME_Brawler_SettingsString("Mimicry_BrawlerStance_UseCon", "*Prefer a body-based Brawler Stance (Scales with Constitution).* (Default)");
 DB_LLMIME_Brawler_SettingsString("Mimicry_BrawlerStance_UseStr", "*Prefer a strength-based Brawler Stance (Scales with Strength).*");
 DB_LLMIME_Brawler_SettingsString("Mimicry_BrawlerStance_UseFin", "*Prefer a finesse-based Brawler Stance (Scales with Finesse).*");
+
+SysClear("DB_LLMIME_Brawler_FistDeltaMods", 2);
+DB_LLMIME_Brawler_FistDeltaMods(10, "Boost_Weapon_Secondary_CriticalChance");
+DB_LLMIME_Brawler_FistDeltaMods(14, "Boost_LLMIME_Fist_Ability_OneHanded");
+DB_LLMIME_Brawler_FistDeltaMods(18, "Boost_LLMIME_Weapon_Damage_ArmourPiercing_Small_Fist");
 //END_REGION
 
 //REGION UPDATING
@@ -123,6 +129,7 @@ LeaderLog_Log("DEBUG", "[LLMIME:Mime:CharacterReceivedDamage] Mime did [",_Damag
 //END_REGION
 
 //REGION SUCKER_PUNCH
+/*
 IF
 SkillAdded(_Mime, "Target_SingleHandedAttack", _)
 AND
@@ -171,6 +178,7 @@ CharacterHasSkill(_Mime, "Target_LLMIME_SuckerPunch", 1)
 THEN
 CharacterRemoveSkill(_Mime, "Target_LLMIME_SuckerPunch");
 LeaderLog_Log("DEBUG", "[LLMIME:Brawler:Mimicry_MimeIsUnarmed(Cleared)] Removing [Target_LLMIME_SuckerPunch] from Mime.");
+*/
 //END_REGION
 
 //REGION BRAWLER_STANCE_PREFERENCE_SET
@@ -302,14 +310,12 @@ THEN
 ItemRemove(_Item);
 LLMIME_Brawler_RemoveStance(_Mime);
 
-/*
 IF
 ItemDropped(_Item)
 AND
 IsTagged(_Item, "LLMIME_BrawlerFist", 1)
 THEN
 ItemRemove(_Item);
-*/
 
 IF
 CharacterStatusRemoved(_Mime, "LLMIME_BRAWLER", _)
@@ -334,6 +340,24 @@ AND
 ObjectGetFlag(_Mime, "Mimicry_BrawlerStatusActive", 1)
 THEN
 ObjectClearFlag(_Mime, "Mimicry_BrawlerStatusActive");
+//END_REGION
+
+//REGION BRAWLER_FIST_DELTAMODS
+//_Boost_Shield_Skill_Taunt
+IF
+CharacterItemEvent(_Character, _Item, "LeaderLib_Events_ItemLeveledUp")
+AND
+IsTagged(_Item, "LLMIME_BrawlerFist", 1)
+AND
+GetVarInteger(_Item, "LeaderLib_ItemLevel", _ItemLevel)
+AND
+DB_LLMIME_Brawler_FistDeltaMods(_MinLevel, _DeltaMod)
+AND
+_ItemLevel > _MinLevel
+AND
+NOT ItemHasDeltaModifier(_Item, _DeltaMod, _)
+THEN
+ItemAddDeltaModifier(_Item, _DeltaMod);
 //END_REGION
 
 //REGION BONUS_DAMAGE
