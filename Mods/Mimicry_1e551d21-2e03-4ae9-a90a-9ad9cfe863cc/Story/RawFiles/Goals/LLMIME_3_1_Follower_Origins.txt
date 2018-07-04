@@ -33,6 +33,32 @@ PlayEffectAtPosition("RS3_FX_Skills_Rogue_CloakDagger_Cast_01", _x, _y, _z);
 PlayEffect(_Mime, "RS3_FX_Skills_Void_Cast_VoidGlide_Overlay_01");
 SetVisible(_Mime, 1);
 //END_REGION
+
+//REGION MUSICBOX_RESURRECTION_DIALOG_ATT_CHECK
+PROC
+LLMIME_Follower_Internal_SetupMusicBoxAttributeCheck((CHARACTERGUID)_Player)
+AND
+CharacterGetLevel(_Player, _Level)
+AND
+_Level > 2
+AND
+IntegerSubtract(_Level, 1, _CheckLevel)
+AND
+NOT DB_GLO_Attribute_Check_AgainstLevel("LLMIME_MusicBox_Resurrection", _, _, _, _, _CheckLevel)
+THEN
+//This DB is automatically cleared when adding a new entry
+DB_GLO_Attribute_Check_AgainstLevel("LLMIME_MusicBox_Resurrection", 1, "Intelligence", "Medium", 1, _CheckLevel);
+
+PROC
+LLMIME_Follower_Internal_SetupMusicBoxAttributeCheck((CHARACTERGUID)_Player)
+AND
+CharacterGetLevel(_Player, _Level)
+AND
+_Level <= 2
+THEN
+//This DB is automatically cleared when adding a new entry
+DB_GLO_Attribute_Check_AgainstLevel("LLMIME_MusicBox_Resurrection", 1, "Intelligence", "Medium", 1, 1);
+//END_REGION
 EXITSECTION
 
 ENDEXITSECTION

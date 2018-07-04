@@ -18,3 +18,10 @@ param "Frequency" "1"
 param "ModifierType" "Weapon"
 param "WeaponType" "None"
 new boost "_Boost_Weapon_Damage_ArmourPiercing_Large",1
+
+new deltamod "Boost_LLMIME_BrawlerFist_LifeSteal_Large"
+param "BoostType" "ItemCombo"
+param "Frequency" "1"
+param "ModifierType" "Weapon"
+param "WeaponType" "None"
+new boost "_Boost_Weapon_LifeSteal_TwoHanded",1

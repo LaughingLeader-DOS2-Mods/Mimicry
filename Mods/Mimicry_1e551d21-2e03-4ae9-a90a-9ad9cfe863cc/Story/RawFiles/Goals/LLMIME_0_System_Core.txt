@@ -67,8 +67,10 @@ DB_LLMIME_Templates("Mask_NoVisual", "EQ_Armor_LLMIME_Mime_Mask_NoVisual_38d7f6c
 DB_LLMIME_Templates("BrawlerFist", "WPN_LLMIME_BrawlerFist_e1bda904-93c2-4f6f-8136-1a547279fd1f");
 DB_LLMIME_Templates("MimeManual", "WPN_LLMIME_BrawlerFist_e1bda904-93c2-4f6f-8136-1a547279fd1f");
 DB_LLMIME_Templates("MusicBox", "UNIQUE_LLMIME_MusicBox_fd03b00c-5366-40e2-a8af-1d9f6a904ecb");
-DB_LLMIME_Templates("MusicBox", "UNIQUE_LLMIME_MusicBox_Cracked_467b732e-c599-49b1-beb8-06e55f1dd140");
+DB_LLMIME_Templates("MusicBox_Cracked", "UNIQUE_LLMIME_MusicBox_Cracked_467b732e-c599-49b1-beb8-06e55f1dd140");
 DB_LLMIME_Templates("MimeAmulet", "LOOT_MagicAmulet_LLMIME_SourceBlastImmunity_fcc27ec5-b83e-42e3-976e-90c269a52aed");
+DB_LLMIME_Templates("MimeFollower", "LLMIME_Elves_Male_Mime_d8b7efbb-6e60-4700-af8a-4295b0c1ed41");
+DB_LLMIME_Templates("MimeFollower_NoMask", "LLMIME_Elves_Male_Mime_NoMask_8b69a5c0-1d6a-403c-ae38-e4a8d4297ceb");
 //END_REGION
 
 //REGION UPDATING
@@ -390,6 +392,8 @@ DB_NOOP(1);
 IF
 ItemEquipped(_Item, _Mime)
 AND
+IsTagged(_Mime, "LLMIME_MimeFollower", 0)
+AND
 LLMIME_QRY_CharacterIsAMime(_Mime)
 AND
 LLMIME_QRY_ItemIsWeapon(_Mime, _Item)
@@ -398,6 +402,8 @@ LLMIME_System_FlagForUnarmed(_Mime);
 
 IF
 ItemUnEquipped(_Item, _Mime)
+AND
+IsTagged(_Mime, "LLMIME_MimeFollower", 0)
 AND
 LLMIME_QRY_CharacterIsAMime(_Mime)
 AND
@@ -409,9 +415,11 @@ LLMIME_System_FlagForUnarmed(_Mime);
 
 IF
 StoryEvent((CHARACTERGUID)_Mime, "Mimicry_MimeInitialized")
+AND
+IsTagged(_Mime, "LLMIME_MimeFollower", 0)
 THEN
 LLMIME_System_FlagForUnarmed(_Mime);
-LeaderLib_StartObjectTimer(_Mime, 200, "LLMIME_Timers_CheckUnarmed_", "Mimicry_CheckUnarmed");
+//LeaderLib_StartObjectTimer(_Mime, 200, "LLMIME_Timers_CheckUnarmed_", "Mimicry_CheckUnarmed");
 
 IF
 StoryEvent((CHARACTERGUID)_Mime, "Mimicry_CheckUnarmed")
@@ -445,23 +453,49 @@ DB_LLMIME_Temp_JustSetUnarmedFlag(_Mime);
 PROC
 LLMIME_System_FlagForUnarmed((CHARACTERGUID)_Mime)
 AND
+NOT DB_LLMIME_Temp_JustSetUnarmedFlag(_Mime)
+THEN
+LLMIME_System_CheckUnarmedBonuses(_Mime);
+
+PROC
+LLMIME_System_FlagForUnarmed((CHARACTERGUID)_Mime)
+AND
 DB_LLMIME_Temp_JustSetUnarmedFlag(_Mime)
 THEN
 NOT DB_LLMIME_Temp_JustSetUnarmedFlag(_Mime);
-//END_REGION
 
-//REGION UNARMED_BRAWLER_BONUS
 IF
 ObjectFlagSet("Mimicry_MimeIsUnarmed", (CHARACTERGUID)_Mime, _)
-AND
-LLLIB_Helper_QRY_HasStatus(_Mime, "LLMIME_BRAWLER")
-AND
-HasActiveStatus(_Mime, "LLMIME_BRAWLER_BONUS", 0)
 THEN
-ApplyStatus(_Mime, "LLMIME_BRAWLER_BONUS", -1.0, 1);
+LLMIME_System_CheckUnarmedBonuses(_Mime);
 
 IF
 ObjectFlagCleared("Mimicry_MimeIsUnarmed", (CHARACTERGUID)_Mime, _)
+THEN
+LLMIME_System_CheckUnarmedBonuses(_Mime);
+
+IF
+StoryEvent((CHARACTERGUID)_Mime, "Mimicry_MimeInitialized")
+THEN
+LLMIME_System_CheckUnarmedBonuses(_Mime);
+//END_REGION
+
+//REGION UNARMED_BRAWLER_BONUS
+PROC
+LLMIME_System_CheckUnarmedBonuses((CHARACTERGUID)_Mime)
+AND
+ObjectGetFlag(_Mime, "Mimicry_MimeIsUnarmed", 1)
+AND
+LLLIB_Helper_QRY_HasStatus(_Mime, "LLMIME_BRAWLER")
+AND
+NOT LLLIB_Helper_QRY_HasStatus(_Mime, "LLMIME_BRAWLER_BONUS")
+THEN
+ApplyStatus(_Mime, "LLMIME_BRAWLER_BONUS", -1.0, 1);
+
+PROC
+LLMIME_System_CheckUnarmedBonuses((CHARACTERGUID)_Mime)
+AND
+ObjectGetFlag(_Mime, "Mimicry_MimeIsUnarmed", 0)
 AND
 LLLIB_Helper_QRY_HasStatus(_Mime, "LLMIME_BRAWLER_BONUS")
 THEN
@@ -476,17 +510,21 @@ RemoveStatus(_Mime, "LLMIME_BRAWLER_BONUS");
 //END_REGION
 
 //REGION CONCENTRATION_BONUS
-IF
-ObjectFlagSet("Mimicry_MimeIsUnarmed", (CHARACTERGUID)_Mime, _)
+PROC
+LLMIME_System_CheckUnarmedBonuses((CHARACTERGUID)_Mime)
+AND
+ObjectGetFlag(_Mime, "Mimicry_MimeIsUnarmed", 1)
 AND
 LLLIB_Helper_QRY_HasStatus(_Mime, "LLMIME_CONCENTRATION")
 AND
-HasActiveStatus(_Mime, "LLMIME_CONCENTRATION_BONUS", 0)
+NOT LLLIB_Helper_QRY_HasStatus(_Mime, "LLMIME_CONCENTRATION_BONUS")
 THEN
 ApplyStatus(_Mime, "LLMIME_CONCENTRATION_BONUS", -1.0, 1);
 
-IF
-ObjectFlagCleared("Mimicry_MimeIsUnarmed", (CHARACTERGUID)_Mime, _)
+PROC
+LLMIME_System_CheckUnarmedBonuses((CHARACTERGUID)_Mime)
+AND
+ObjectGetFlag(_Mime, "Mimicry_MimeIsUnarmed", 0)
 AND
 LLLIB_Helper_QRY_HasStatus(_Mime, "LLMIME_CONCENTRATION_BONUS")
 THEN

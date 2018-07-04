@@ -98,6 +98,7 @@ AND
 LLMIME_Follower_QRY_CanResurrectMime(_Char)
 THEN
 DB_CustomUseItemResponse(_Char, _Item, 0);
+LLMIME_Follower_Internal_SetupMusicBoxAttributeCheck(_Char);
 Proc_StartDialog(0, "LLMIME_MusicBox_Resurrection", _Item, _Char);
 
 PROC

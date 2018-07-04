@@ -27,8 +27,10 @@ DB_LLMIME_Brawler_SettingsString("Mimicry_BrawlerStance_UseFin", "*Prefer a fine
 
 SysClear("DB_LLMIME_Brawler_FistDeltaMods", 2);
 DB_LLMIME_Brawler_FistDeltaMods(10, "Boost_Weapon_Secondary_CriticalChance");
-DB_LLMIME_Brawler_FistDeltaMods(14, "Boost_LLMIME_Fist_Ability_OneHanded");
-DB_LLMIME_Brawler_FistDeltaMods(18, "Boost_LLMIME_Weapon_Damage_ArmourPiercing_Small_Fist");
+DB_LLMIME_Brawler_FistDeltaMods(12, "Boost_LLMIME_BrawlerFist_Ability_OneHanded");
+DB_LLMIME_Brawler_FistDeltaMods(14, "Boost_LLMIME_BrawlerFist_LifeSteal_Large");
+DB_LLMIME_Brawler_FistDeltaMods(16, "Boost_LLMIME_BrawlerFist_Damage_Bonus");
+DB_LLMIME_Brawler_FistDeltaMods(18, "Boost_LLMIME_BrawlerFist_Damage_ArmourPiercing_Large");
 //END_REGION
 
 //REGION UPDATING

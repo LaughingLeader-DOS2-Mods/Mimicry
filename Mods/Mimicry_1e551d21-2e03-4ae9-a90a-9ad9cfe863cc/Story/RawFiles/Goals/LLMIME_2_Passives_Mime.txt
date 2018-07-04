@@ -73,30 +73,28 @@ DB_NOOP(1);
 //END_REGION
 
 //REGION MIME_INIT
+/*
 IF
 ItemEquipped(_Item, _Mime)
 AND
 LLMIME_Mime_QRY_IsMimeItem(_Item)
+*/
+IF
+CharacterStatusApplied(_Mime, "LLMIME_MASK_INFO", _)
 AND
 GlobalGetFlag("LeaderLib_Initialized", 1)
 AND
 NOT LLMIME_QRY_CharacterIsAMime(_Mime)
-AND
-NOT DB_LLMIME_Mime_Temp_BlockedItem(_Mime, _Item)
 THEN
 //LLMIME_RemoveAllMimicryStatuses(_Mime);
 SetStoryEvent(_Mime, "Mimicry_InitMimeJob");
 
 IF
-ItemEquipped(_Item, _Mime)
-AND
-LLMIME_Mime_QRY_IsMimeItem(_Item)
+CharacterStatusApplied(_Mime, "LLMIME_MASK_INFO", _)
 AND
 NOT GlobalGetFlag("LeaderLib_Initialized", 1)
 AND
 NOT LLMIME_QRY_CharacterIsAMime(_Mime)
-AND
-NOT DB_LLMIME_Mime_Temp_BlockedItem(_Mime, _Item)
 THEN
 DB_LLMIME_Temp_ActivateMime(_Mime);
 
@@ -129,9 +127,7 @@ SetStoryEvent(_Mime, "Mimicry_InitMimeJob");
 
 //REGION REMOVAL
 IF
-ItemUnEquipped(_Item, _Mime)
-AND
-LLMIME_Mime_QRY_IsMimeItem(_Item)
+CharacterStatusRemoved(_Mime, "LLMIME_MASK_INFO", _)
 AND
 LLMIME_QRY_CharacterIsAMime(_Mime)
 THEN

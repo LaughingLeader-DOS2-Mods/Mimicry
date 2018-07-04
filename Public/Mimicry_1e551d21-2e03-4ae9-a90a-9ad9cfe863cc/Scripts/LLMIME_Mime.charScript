@@ -33,7 +33,13 @@ ON
 	//OnActivate()
 	OnItemEvent(_, "LeaderLib_Initialized")
 	OnCharacterEvent(__Me, "Mimicry_Follower_ReInitialize")
+	OnCharacterEvent(__Me, "Mimicry_MimeInitialized")
 ACTIONS
+IF "!c1"
+	HasFlag(__Me, "Mimicry_MimeIsUnarmed")
+THEN
+	SetFlag(__Me, "Mimicry_MimeIsUnarmed")
+ENDIF
 IF "c1"
 	IsEqual(%LLMIME_InitialRefresh, 0)
 THEN
@@ -64,17 +70,6 @@ IF "!c1"
 THEN
 	CharacterApplyStatus(__Me, LLMIME_BRAWLER_STANCE_CON, -1, 1)
 ENDIF
-/*
-IF "!c1"
-	HasStatusInfluence(__Me, LLMIME_BRAWLER_STANCE_CON)
-THEN
-	AddStatusInfluence(__Me, LLMIME_BRAWLER_STANCE_CON, %BrawlerStanceInfluenceStrength, "", 0, 1)
-ELSE
-	RemoveStatusInfluence(__Me, LLMIME_BRAWLER_STANCE_CON, %BrawlerStanceInfluenceStrength, "", 0)
-	CharacterRemoveStatus(__Me, LLMIME_BRAWLER_STANCE_CON, null, 0)
-	AddStatusInfluence(__Me, LLMIME_BRAWLER_STANCE_CON, %BrawlerStanceInfluenceStrength, "", 0, 1)
-ENDIF
-*/
 
 EVENT Apply_BrawlerStance
 ON
@@ -83,34 +78,6 @@ ON
 	OnCharacterStatusApplied(__Me, "LLMIME_MIME")
 ACTIONS
 	CallFunction("Mimicry_MimeFollower_ActivateBrawlerStance")
-
-EVENT Reset_Follow_Priority
-ON
-	OnCharacterFlagSet("LeaderLib_CharacterIsFollowing", __Me)
-ACTIONS
-	Interrupt("Block_AutoFollow")
-	SetPriority("Block_AutoFollow", 0)
-	
-EVENT Activate_Follow_Priority
-ON
-	OnCharacterFlagCleared("LeaderLib_CharacterIsFollowing", __Me)
-ACTIONS
-	SetPriority("Block_AutoFollow", 99998)
-	//SetPriority("Block_AutoFollow", 0)
-
-/*
-EVENT Mask_Equipped
-VARS
-	ITEM:_Mask
-ON
-	OnItemEquipped(__Me, _Mask)
-ACTIONS
-IF "c1"
-	IsTagged(_Mask, "LLMIME_ACTIVATE_MIME")
-THEN
-	CallFunction("Mimicry_MimeFollower_ActivateBrawlerStance")
-ENDIF
-*/
 
 EVENT Refresh_Timer
 ON
@@ -132,7 +99,7 @@ ACTIONS
 	SetPriority("Mimic_Attack_Character", -1)
 	SetPriority("Mimic_Attack_Item", -1)
 	
-EVENT Enter_Combat
+EVENT Owner_Enter_Combat
 VARS
 	CHARACTER:_Character
 	CHARACTER:_Owner
@@ -146,6 +113,57 @@ THEN
 	EnterCombat(__Me, _Owner)
 ENDIF
 
+EVENT Follower_Enter_Combat
+VARS
+	CHARACTER:_Owner
+ON
+	OnEnteredCombat(__Me, _)
+ACTIONS
+IF "c1&!c2"
+	GetVar(_Owner, __Me, "LeaderLib_Follower_Owner")
+	IsEqual(_Owner, null)	
+THEN
+	EnterCombat(_Owner, __Me)
+ENDIF
+
+EVENT MimeFollower_RemoveGeneratedTreasure_Start
+ON
+	OnCharacterEvent(__Me, "LLMIME_MimeFollowerRevived")
+ACTIONS
+	IterateParty("LLMIME_Iterator_IterateInventoryForMimeFollowerTreasure")
+	IterateItems("LLMIME_Iterator_RemoveGeneratedMimeTreasure", "LLMIME_MimeFollowerTreasure")
+	IterateItemsInInventory(__Me, "LLMIME_Iterator_RemoveGeneratedMimeTreasure", "LLMIME_MimeFollowerTreasure")
+	
+EVENT MimeFollower_RemoveGeneratedTreasure_Character
+VARS
+	CHARACTER:_Character
+ON
+	OnIterateCharacter(_Character, "LLMIME_Iterator_IterateInventoryForMimeFollowerTreasure")
+ACTIONS
+	IterateItemsInInventory(_Character, "LLMIME_Iterator_RemoveGeneratedMimeTreasure", "LLMIME_MimeFollowerTreasure")
+	
+EVENT MimeFollower_RemoveGeneratedTreasure_OnIterateItem
+VARS
+	ITEM:_Item
+ON
+	OnIterateItem(_Item, "LLMIME_Iterator_RemoveGeneratedMimeTreasure")
+ACTIONS
+	ItemEvent(_Item, "LLMIME_Events_OnMimeFollowerTreasureRemoved")
+	ItemEvent(_Item, "LeaderLib_Commands_RemoveItem")
+
+EVENT Reset_Follow_Priority
+ON
+	OnCharacterFlagSet("LeaderLib_CharacterIsFollowing", __Me)
+ACTIONS
+	Interrupt("Block_AutoFollow")
+	SetPriority("Block_AutoFollow", 0)
+	
+EVENT Activate_Follow_Priority
+ON
+	OnCharacterFlagCleared("LeaderLib_CharacterIsFollowing", __Me)
+ACTIONS
+	SetPriority("Block_AutoFollow", 99998)
+	
 BEHAVIOUR
 
 REACTION Block_AutoFollow, 0

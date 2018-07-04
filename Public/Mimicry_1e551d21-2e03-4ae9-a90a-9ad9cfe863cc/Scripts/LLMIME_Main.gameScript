@@ -19,6 +19,7 @@ IF "!c1|(c1&c2)"
 	ListGetSize(%MimeStatuses, _ListSize)
 	IsLessThen(_ListSize, 1)
 THEN
+	ListClear(%MimeStatuses)
 	ListAdd(%MimeStatuses, LLMIME_MIME)
 	ListAdd(%MimeStatuses, LLMIME_BEASTMASTER)
 	ListAdd(%MimeStatuses, LLMIME_BRAWLER)
