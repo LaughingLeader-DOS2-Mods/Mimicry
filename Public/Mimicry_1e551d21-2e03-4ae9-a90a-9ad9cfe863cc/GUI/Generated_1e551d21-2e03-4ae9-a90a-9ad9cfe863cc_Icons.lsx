@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<save>
+    <header version="2" time="1529004884" />
+    <version major="3" minor="1" revision="8" build="0" />
+    <region id="IconUVList">
+        <node id="root">
+            <children>
+                <node id="IconUV">
+                    <attribute id="MapKey" value="0d576141-3f06-413d-a488-7c41897b68c3_9223372036854775808-_(LLMIME_Icon_Elf_Male)" type="22" />
+                    <attribute id="U1" value="0.00195313" type="6" />
+                    <attribute id="U2" value="0.310547" type="6" />
+                    <attribute id="V1" value="0.00390625" type="6" />
+                    <attribute id="V2" value="0.777344" type="6" />
+                </node>
+                <node id="IconUV">
+                    <attribute id="MapKey" value="f611968c-9f19-41d4-be40-93aaeb86f228_10685071591418765824-LLMIME_Equipment_FollowerMime_(LLMIME_Icon_Elf_Male)" type="22" />
+                    <attribute id="U1" value="0.314453" type="6" />
+                    <attribute id="U2" value="0.623047" type="6" />
+                    <attribute id="V1" value="0.00390625" type="6" />
+                    <attribute id="V2" value="0.777344" type="6" />
+                </node>
+                <node id="IconUV">
+                    <attribute id="MapKey" value="f611968c-9f19-41d4-be40-93aaeb86f228_10685071599471829504-_(LLMIME_Icon_Elf_Male)" type="22" />
+                    <attribute id="U1" value="0.626953" type="6" />
+                    <attribute id="U2" value="0.935547" type="6" />
+                    <attribute id="V1" value="0.00390625" type="6" />
+                    <attribute id="V2" value="0.777344" type="6" />
+                </node>
+            </children>
+        </node>
+    </region>
+    <region id="TextureAtlasInfo">
+        <node id="root">
+            <children>
+                <node id="TextureAtlasIconSize">
+                    <attribute id="Height" value="100" type="4" />
+                    <attribute id="Width" value="80" type="4" />
+                </node>
+                <node id="TextureAtlasPath">
+                    <attribute id="Path" value="Public/Mimicry_1e551d21-2e03-4ae9-a90a-9ad9cfe863cc/Assets/Textures/Icons/Generated_1e551d21-2e03-4ae9-a90a-9ad9cfe863cc_Icons.dds" type="29" />
+                    <attribute id="UUID" value="75a83ea7-07d9-47c2-9056-df07fc894a0d" type="22" />
+                </node>
+                <node id="TextureAtlasTextureSize">
+                    <attribute id="Height" value="128" type="4" />
+                    <attribute id="Width" value="256" type="4" />
+                </node>
+            </children>
+        </node>
+    </region>
+</save>
