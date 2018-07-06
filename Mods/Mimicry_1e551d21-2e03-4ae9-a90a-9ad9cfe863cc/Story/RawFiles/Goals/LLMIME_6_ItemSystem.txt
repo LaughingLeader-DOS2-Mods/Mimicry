@@ -75,15 +75,26 @@ THEN
 DB_CustomUseItemResponse(_Character, _Item, 0);
 //END_REGION
 
-//REGION MUSIC_BOX
+//REGION MUSIC_BOX_USAGE
 PROC
 ProcBlockUseOfItem(_Char, _Item)
 AND
-GetTemplate(_Item, _Template)
+IsTagged(_Item, "LLMIME_MimeSummonTool", 1)
 AND
-DB_LLMIME_Templates("MusicBox", _Template)
+NOT GlobalGetFlag("Mimicry_MusicBoxShattered", 1)
 THEN
 LLMIME_Items_OnMusicBoxUsed(_Char, _Item);
+
+//Why do they still have this?
+PROC
+ProcBlockUseOfItem(_Char, _Item)
+AND
+IsTagged(_Item, "LLMIME_MimeSummonTool", 1)
+AND
+GlobalGetFlag("Mimicry_MusicBoxShattered", 1)
+THEN
+CharacterStatusText(_Char, "LLMIME_StatusText_MusicBoxBlocked");
+DB_CustomUseItemResponse(_Char, _Item, 0);
 
 //Resurrection dialog (mask required)
 PROC
@@ -106,6 +117,20 @@ LLMIME_Items_OnMusicBoxUsed((CHARACTERGUID)_Char, (ITEMGUID)_Item)
 AND
 NOT DB_CustomUseItemResponse(_Char, _Item, _)
 AND
+CharacterIsInCombat(_Char, 0)
+AND
+NOT LLMIME_Follower_QRY_CanSummon(_Char)
+AND
+NOT LLMIME_Follower_QRY_CanResurrectMime(_Char)
+THEN
+CharacterStatusText(_Char, "LLMIME_StatusText_MusicBoxBlocked");
+DB_CustomUseItemResponse(_Char, _Item, 0);
+
+PROC
+LLMIME_Items_OnMusicBoxUsed((CHARACTERGUID)_Char, (ITEMGUID)_Item)
+AND
+NOT DB_CustomUseItemResponse(_Char, _Item, _)
+AND
 LLMIME_Follower_QRY_CanSummon(_Char)
 THEN
 CharacterStatusText(_Char, "LLMIME_StatusText_MusicBoxUsed");
@@ -122,15 +147,83 @@ DB_CustomUseItemResponse(_Char, _Item, 0);
 IF
 DB_CustomUseItemResponse(_Char, _Item, 0)
 AND
-GetTemplate(_Item, _Template)
+IsTagged(_Item, "LLMIME_MimeSummonTool", 1)
+AND
+DB_LLMIME_Follower_Mime(_Mime)
+AND
+CharacterIsDead(_Mime, 0)
+AND
+ObjectGetFlag(_Mime, "LeaderLib_IsFollower", 1)
+THEN
+LLMIME_Follower_ReturnIfNotInCombat(_Char);
+
+PROC
+ProcBlockUseOfItem((CHARACTERGUID)_Char, (ITEMGUID)_Item)
+AND
+IsTagged(_Item, "LLMIME_MusicBoxShard", 1)
+AND
+DB_LLMIME_Follower_Mime(_Mime)
+AND
+NOT ObjectGetFlag(_Mime, "LeaderLib_IsFollower", 1)
+THEN
+DB_CustomUseItemResponse(_Char, _Item, 0);
+CharacterStatusText(_Char, "LLMIME_StatusText_MusicBoxShardBlocked");
+
+IF
+CharacterUsedItemTemplate(_Char, _Template, _Item)
+AND
+DB_LLMIME_Templates("MusicBox_Shard", _Template)
+AND
+DB_LLMIME_Follower_Mime(_Mime)
+AND
+CharacterIsDead(_Mime, 0)
+AND
+ObjectGetFlag(_Mime, "LeaderLib_IsFollower", 1)
+THEN
+LLMIME_Follower_ReturnIfNotInCombat(_Char);
+//END_REGION
+
+//REGION MUSIC_BOX_TRANSFORM
+PROC
+LLMIME_Items_TransformMusicBox((CHARACTERGUID)_Player, (ITEMGUID)_MusicBox)
+AND
+NOT DB_LLMIME_Items_Temp_MusicBoxTransformed(_Player, _MusicBox)
 AND
 DB_LLMIME_Templates("MusicBox", _Template)
 AND
-CharacterIsDead(CHARACTERGUID_LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9, 0)
+GetTemplate(_MusicBox, _Template)
 AND
-ObjectGetFlag(CHARACTERGUID_LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9, "LeaderLib_IsFollower", 1)
+DB_LLMIME_Templates("MusicBox_Cracked", _TransformTemplate)
 THEN
-LLMIME_Follower_ReturnIfNotInCombat(_Char);
+Transform(_MusicBox, _TransformTemplate, 1, 0, 1);
+SetTag(_MusicBox, "Mimicry_CrackedMusicBox");
+DB_LLMIME_Items_Temp_MusicBoxTransformed(_Player, _MusicBox);
+
+PROC
+LLMIME_Items_TransformMusicBox((CHARACTERGUID)_Player, (ITEMGUID)_MusicBox)
+AND
+NOT DB_LLMIME_Items_Temp_MusicBoxTransformed(_Player, _MusicBox)
+AND
+DB_LLMIME_Templates("MusicBox_Cracked", _Template)
+AND
+GetTemplate(_MusicBox, _Template)
+AND
+DB_LLMIME_Templates("MusicBox_Shard", _TransformTemplate)
+THEN
+ClearTag(_MusicBox, "Mimicry_CrackedMusicBox");
+Transform(_MusicBox, _TransformTemplate, 1, 1, 1);
+CharacterStatusText(_Player, "LLMIME_StatusText_MusicBoxShatters");
+LeaderLog_SetOneshotTarget(_Player);
+LeaderLog_Log("COMBAT", "LLMIME_StatusText_MusicBoxShatters");
+GlobalSetFlag("Mimicry_MusicBoxShattered");
+DB_LLMIME_Items_Temp_MusicBoxTransformed(_Player, _MusicBox);
+
+PROC
+LLMIME_Items_TransformMusicBox((CHARACTERGUID)_Player, (ITEMGUID)_MusicBox)
+AND
+DB_LLMIME_Items_Temp_MusicBoxTransformed(_Player, _MusicBox)
+THEN
+NOT DB_LLMIME_Items_Temp_MusicBoxTransformed(_Player, _MusicBox);
 //END_REGION
 
 //REGION EQUIP_BLOCKING

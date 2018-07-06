@@ -18,6 +18,7 @@ DB_LLMIME_PassiveData("LLMIME_BEASTMASTER", "LLMIME_BEASTMASTER", "LLMIME_BEASTM
 DB_LLMIME_PassiveData("LLMIME_CONCENTRATION", "LLMIME_CONCENTRATION_BONUS", "LLMIME_CONCENTRATION_INFO", "Mimicry_HideMimePassives");
 
 LLMIME_System_InitTemplates();
+LLMIME_System_InitEffectFlags();
 
 LeaderLib_Register_StatusToggleSkill("Shout_LLMIME_DisableMimicking", "LLMIME_MIMICKING_DISABLED", -1.0, 1);
 
@@ -59,6 +60,13 @@ DB_LLMIME_MimeStatuses("LLMIME_CONCENTRATION_INFO");
 DB_LLMIME_MimeStatuses("LLMIME_SOURCE_REGENERATION_HIDDEN");
 
 PROC
+LLMIME_System_InitEffectFlags()
+AND
+NOT DB_LLLIB_EffectFlags_Effects("Mimicry_EffectFlags", _, _, _, _)
+THEN
+DB_LLLIB_EffectFlags_Effects("Mimicry_EffectFlags", "Mimicry_Effects_MaskTaken1", "RS3_FX_Skills_Soul_Cast_Soul_Impact_Root_01", 0, "");
+
+PROC
 LLMIME_System_InitTemplates()
 THEN
 SysClear("DB_LLMIME_Templates", 2);
@@ -68,9 +76,11 @@ DB_LLMIME_Templates("BrawlerFist", "WPN_LLMIME_BrawlerFist_e1bda904-93c2-4f6f-81
 DB_LLMIME_Templates("MimeManual", "WPN_LLMIME_BrawlerFist_e1bda904-93c2-4f6f-8136-1a547279fd1f");
 DB_LLMIME_Templates("MusicBox", "UNIQUE_LLMIME_MusicBox_fd03b00c-5366-40e2-a8af-1d9f6a904ecb");
 DB_LLMIME_Templates("MusicBox_Cracked", "UNIQUE_LLMIME_MusicBox_Cracked_467b732e-c599-49b1-beb8-06e55f1dd140");
+DB_LLMIME_Templates("MusicBox_Shard", "UNIQUE_LLMIME_MusicBox_Shard_cad615df-323d-49e4-934b-7d4b940b7dac");
 DB_LLMIME_Templates("MimeAmulet", "LOOT_MagicAmulet_LLMIME_SourceBlastImmunity_fcc27ec5-b83e-42e3-976e-90c269a52aed");
 DB_LLMIME_Templates("MimeFollower", "LLMIME_Elves_Male_Mime_d8b7efbb-6e60-4700-af8a-4295b0c1ed41");
 DB_LLMIME_Templates("MimeFollower_NoMask", "LLMIME_Elves_Male_Mime_NoMask_8b69a5c0-1d6a-403c-ae38-e4a8d4297ceb");
+DB_LLMIME_Templates("MimeFollower_Ghost", "S_LLMIME_Ghost_Mime_d699d0e5-250d-4d4d-bacf-96e19e60235c");
 //END_REGION
 
 //REGION UPDATING

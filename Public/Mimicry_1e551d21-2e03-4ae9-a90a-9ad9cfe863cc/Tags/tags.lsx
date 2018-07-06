@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <save>
-    <header version="2" time="1530654826" />
+    <header version="2" time="1530821957" />
     <version major="3" minor="1" revision="8" build="0" />
     <region id="Tags">
         <node id="root">
@@ -134,6 +134,19 @@
                 <node id="Tag">
                     <attribute id="Description" value="A mime-only skillbook." type="23" />
                     <attribute id="Name" value="LLMIME_MimeSkillbook" type="23" />
+                    <children>
+                        <node id="Categories">
+                            <children>
+                                <node id="Category">
+                                    <attribute id="Name" value="Code" type="23" />
+                                </node>
+                            </children>
+                        </node>
+                    </children>
+                </node>
+                <node id="Tag">
+                    <attribute id="Description" value="The shard of a broken music box." type="23" />
+                    <attribute id="Name" value="LLMIME_MusicBoxShard" type="23" />
                     <children>
                         <node id="Categories">
                             <children>

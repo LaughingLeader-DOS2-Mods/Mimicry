@@ -3,6 +3,142 @@ SubGoalCombiner SGC_AND
 INITSECTION
 
 KBSECTION
+//REGION TUTORIAL_IMMUNITY
+IF
+CharacterCharacterEvent(_Summoner, _Mime, "Mimicry_MimeSummoned")
+AND
+DB_CurrentLevel("TUT_Tutorial_A")
+AND
+ObjectGetFlag(_Mime, "Mimicry_MimeFollower_SourceBlastImmunityDisabled", 0)
+THEN
+GlobalSetFlag("Mimicry_LevelIsOriginsTutorial");
+DB_TUT_LowerDeck_WindegoSpareCharacters(_Mime); // To avoid dying from the source blast
+
+IF
+ObjectFlagSet("Mimicry_MimeFollower_SourceBlastImmunityDisabled", (CHARACTERGUID)_Mime, _Instance)
+AND
+DialogGetInvolvedPlayer(_Instance, 1, (CHARACTERGUID)_Player)
+AND
+DB_LLMIME_Templates("MimeAmulet", _Template)
+AND
+NOT GetItemForItemTemplateInInventory(_Mime, _Template, _)
+THEN
+ItemTemplateAddTo(_Template, _Player, 1);
+
+IF
+ObjectFlagSet("Mimicry_MimeFollower_SourceBlastImmunityDisabled", (CHARACTERGUID)_Mime, _Instance)
+THEN
+NOT DB_TUT_LowerDeck_WindegoSpareCharacters(_Mime);
+
+IF
+ObjectFlagSet("Mimicry_MimeFollower_SourceBlastImmunityDisabled", (CHARACTERGUID)_Mime, _Instance)
+AND
+DialogGetInvolvedPlayer(_Instance, 1, (CHARACTERGUID)_Player)
+AND
+DB_LLMIME_Templates("MimeAmulet", _Template)
+AND
+GetItemForItemTemplateInInventory(_Mime, _Template, _Amulet)
+THEN
+ItemToInventory(_Amulet, _Player, 1, 1);
+
+IF
+DialogStarted("LLMIME_MimeCompanion_Default", _Instance)
+AND
+DB_CurrentLevel("TUT_Tutorial_A")
+AND
+DialogGetInvolvedPlayer(_Instance, 1, (CHARACTERGUID)_Player)
+AND
+DialogGetInvolvedNPC(_Instance, 1, (CHARACTERGUID)_Mime)
+AND
+ObjectGetFlag(_Mime, "Mimicry_MimeFollower_SourceBlastImmunityDisabled", 1)
+AND
+DB_LLMIME_Templates("MimeAmulet", _Template)
+AND
+GetItemForItemTemplateInPartyInventory(_Player, _Template, _Amulet)
+THEN
+ObjectSetFlag(_Player, "Mimicry_HasMimeAmulet");
+
+IF
+DialogEnded("LLMIME_MimeCompanion_Default", _Instance)
+AND
+DB_CurrentLevel("TUT_Tutorial_A")
+AND
+DialogGetInvolvedPlayer(_Instance, 1, (CHARACTERGUID)_Player)
+AND
+ObjectGetFlag(_Player, "Mimicry_HasMimeAmulet", 1)
+THEN
+ObjectClearFlag(_Player, "Mimicry_HasMimeAmulet");
+
+IF
+DialogStarted("LLMIME_MimeCompanion_Default", _Instance)
+AND
+DB_CurrentLevel("TUT_Tutorial_A")
+AND
+DialogGetInvolvedPlayer(_Instance, 1, (CHARACTERGUID)_Player)
+AND
+ObjectGetFlag(_Player, "Mimicry_HasMimeAmulet", 1)
+AND
+DialogGetInvolvedNPC(_Instance, 1, (CHARACTERGUID)_Mime)
+AND
+ObjectGetFlag(_Mime, "Mimicry_MimeFollower_SourceBlastImmunityDisabled", 1)
+AND
+DB_LLMIME_Templates("MimeAmulet", _Template)
+AND
+NOT GetItemForItemTemplateInPartyInventory(_Player, _Template, _)
+THEN
+ObjectClearFlag(_Player, "Mimicry_HasMimeAmulet");
+
+IF
+ObjectFlagCleared("Mimicry_MimeFollower_SourceBlastImmunityDisabled", (CHARACTERGUID)_Mime, _Instance)
+THEN
+DB_TUT_LowerDeck_WindegoSpareCharacters(_Mime);
+
+IF
+ObjectFlagCleared("Mimicry_MimeFollower_SourceBlastImmunityDisabled", (CHARACTERGUID)_Mime, _Instance)
+AND
+DialogGetInvolvedPlayer(_Instance, 1, (CHARACTERGUID)_Player)
+AND
+DB_LLMIME_Templates("MimeAmulet", _Template)
+AND
+GetItemForItemTemplateInPartyInventory(_Player, _Template, _Amulet)
+THEN
+ItemToInventory(_Amulet, _Mime, 1, 1);
+PartyClearFlag(_Player, "Mimicry_HasMimeAmulet", 0);
+
+IF
+FadeInDone(_,"TUT_LowerDeck_WakeUpAfterWindego")
+AND
+DB_LLMIME_Follower_Mime(_Mime)
+AND
+CharacterIsDead(_Mime, 0)
+AND
+DB_TUT_LowerDeck_WindegoKnockedDown(_Mime)
+THEN
+NOT DB_TUT_LowerDeck_WindegoKnockedDown(_Mime);
+//CharacterSetCanTrade(_Mime, 1);
+RemoveStatus(_Mime,"KNOCKED_DOWN");
+SetCanFight(_Mime,1);
+SetCanJoinCombat(_Mime,1);
+CharacterSetAnimationOverride(_Mime,"");
+CharacterStatusText(_Mime, "LLMIME_StatusText_MimeAmuletShatters");
+CharacterSetHitpointsPercentage(_Mime, 100);
+GlobalClearFlag("Mimicry_LevelIsOriginsTutorial");
+
+IF
+FadeInDone(_,"TUT_LowerDeck_WakeUpAfterWindego")
+AND
+DB_LLMIME_Follower_Mime(_Mime)
+AND
+CharacterIsDead(_Mime, 0)
+AND
+DB_LLMIME_Templates("MimeAmulet", _Template)
+AND
+GetItemForItemTemplateInInventory(_Mime, _Template, _Amulet)
+THEN
+ItemDestroy(_Amulet);
+ObjectClearFlag(_Mime, "Mimicry_MimeFollower_SourceBlastImmunityDisabled");
+//END_REGION
+
 /*For disappearing when the player escapes on the boat, and re-appearing on the beach.*/
 //REGION TUT_FTJ_ESCAPE
 IF
@@ -47,7 +183,7 @@ AND
 NOT DB_GLO_Attribute_Check_AgainstLevel("LLMIME_MusicBox_Resurrection", _, _, _, _, _CheckLevel)
 THEN
 //This DB is automatically cleared when adding a new entry
-DB_GLO_Attribute_Check_AgainstLevel("LLMIME_MusicBox_Resurrection", 1, "Intelligence", "Medium", 1, _CheckLevel);
+DB_GLO_Attribute_Check_AgainstLevel("LLMIME_MusicBox_Resurrection", 1, "Intelligence", "Hard", 1, _CheckLevel);
 
 PROC
 LLMIME_Follower_Internal_SetupMusicBoxAttributeCheck((CHARACTERGUID)_Player)
@@ -57,7 +193,7 @@ AND
 _Level <= 2
 THEN
 //This DB is automatically cleared when adding a new entry
-DB_GLO_Attribute_Check_AgainstLevel("LLMIME_MusicBox_Resurrection", 1, "Intelligence", "Medium", 1, 1);
+DB_GLO_Attribute_Check_AgainstLevel("LLMIME_MusicBox_Resurrection", 1, "Intelligence", "Hard", 1, 1);
 //END_REGION
 EXITSECTION
 
