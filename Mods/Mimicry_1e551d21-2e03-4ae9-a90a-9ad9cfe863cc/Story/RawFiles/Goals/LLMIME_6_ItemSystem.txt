@@ -109,7 +109,7 @@ AND
 LLMIME_Follower_QRY_CanResurrectMime(_Char)
 THEN
 DB_CustomUseItemResponse(_Char, _Item, 0);
-LLMIME_Follower_Internal_SetupMusicBoxAttributeCheck(_Char);
+//LLMIME_Follower_Internal_SetupMusicBoxAttributeCheck(_Char);
 Proc_StartDialog(0, "LLMIME_MusicBox_Resurrection", _Item, _Char);
 
 PROC
@@ -224,6 +224,45 @@ AND
 DB_LLMIME_Items_Temp_MusicBoxTransformed(_Player, _MusicBox)
 THEN
 NOT DB_LLMIME_Items_Temp_MusicBoxTransformed(_Player, _MusicBox);
+//END_REGION
+
+//REGION MUSICBOX_RESURRECTION_DIALOG_ATT_CHECK
+IF
+DialogStarted("LLMIME_MusicBox_Resurrection", _Instance)
+AND
+DialogGetInvolvedPlayer(_Instance, 1, (CHARACTERGUID)_Player)
+AND
+CharacterGetAttribute(_Player, "Intelligence", _Amount)
+AND
+_Amount >= 15
+THEN
+LeaderLog_Log("DEBUG", "[LLMIME:ItemSystem:SetupMusicBoxAttributeCheck] Player's intelligence passes the requirement.");
+ObjectSetDialogFlag(_Player, "Mimicry_CanReadMusicBoxGlyphs", _Instance);
+
+/*
+PROC
+LLMIME_Follower_Internal_SetupMusicBoxAttributeCheck((CHARACTERGUID)_Player)
+AND
+CharacterGetLevel(_Player, _Level)
+AND
+_Level > 2
+AND
+IntegerSubtract(_Level, 1, _CheckLevel)
+THEN
+//This DB is automatically cleared when adding a new entry
+LeaderLog_Log("DEBUG", "[LLMIME:ItemSystem:SetupMusicBoxAttributeCheck] Player's level is greater than 2.");
+DB_GLO_Attribute_Check_AgainstLevel("LLMIME_MusicBox_Resurrection", 1, "Intelligence", "Normal", 1, _CheckLevel);
+
+PROC
+LLMIME_Follower_Internal_SetupMusicBoxAttributeCheck((CHARACTERGUID)_Player)
+AND
+CharacterGetLevel(_Player, _Level)
+AND
+_Level <= 2
+THEN
+LeaderLog_Log("DEBUG", "[LLMIME:ItemSystem:SetupMusicBoxAttributeCheck] Player's level is less than or equal to 2.");
+DB_GLO_Attribute_Check_AgainstLevel("LLMIME_MusicBox_Resurrection", 1, "Intelligence", "Easy", 1, 1);
+*/
 //END_REGION
 
 //REGION EQUIP_BLOCKING
