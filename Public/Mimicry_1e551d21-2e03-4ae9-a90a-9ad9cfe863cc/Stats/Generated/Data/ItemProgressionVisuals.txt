@@ -18,47 +18,31 @@ add namegroup "ARM_UNIQUE_LLMIME_Mime_Mask_A","",""
 
 new itemgroup "LLMIME_BrawlerFist"
 
-add levelgroup 0,8,"Common"
-add rootgroup "e1bda904-93c2-4f6f-8136-1a547279fd1f","LLMIMEMimeLightArmor"
-add namegroup "LLMIME_BrawlerFist","",""
-
-add levelgroup 9,11,"Uncommon"
-add rootgroup "e1bda904-93c2-4f6f-8136-1a547279fd1f","LLMIMEMimeLightArmor"
-add namegroup "LLMIME_BrawlerFist","",""
-
-add levelgroup 12,14,"Rare"
-add rootgroup "e1bda904-93c2-4f6f-8136-1a547279fd1f","LLMIMEMimeLightArmor"
-add namegroup "LLMIME_BrawlerFist","",""
-
-add levelgroup 15,20,"Epic"
-add rootgroup "e1bda904-93c2-4f6f-8136-1a547279fd1f","LLMIMEMimeLightArmor"
-add namegroup "LLMIME_BrawlerFist","",""
-
-add levelgroup 21,30,"Legendary"
+add levelgroup 0,0,"All"
 add rootgroup "e1bda904-93c2-4f6f-8136-1a547279fd1f","LLMIMEMimeLightArmor"
 add namegroup "LLMIME_BrawlerFist","",""
 
 new itemgroup "ARM_LLMIME_Mime_Light_UpperBody"
 
-add levelgroup 0,0,"Epic"
+add levelgroup 0,0,"All"
 add rootgroup "002d96a6-02c1-4e82-9890-67b86ea01531","LLMIMEMimeLightArmor"
 add namegroup "LLMIME_Mime_Light_UpperBody","",""
 
 new itemgroup "ARM_LLMIME_Mime_Light_LowerBody"
 
-add levelgroup 0,0,"Epic"
+add levelgroup 0,0,"All"
 add rootgroup "134cbd6d-c5f5-4e7c-a7ff-a0f17644baab","LLMIMEMimeLightArmor"
 add namegroup "LLMIME_Mime_Light_LowerBody","",""
 
 new itemgroup "ARM_LLMIME_Mime_Light_Boots"
 
-add levelgroup 0,0,"Epic"
+add levelgroup 0,0,"All"
 add rootgroup "5b2a8469-a1a2-41cf-a861-8b997330f522","LLMIMEMimeLightArmor"
 add namegroup "LLMIME_Mime_Light_Boots","",""
 
 new itemgroup "ARM_LLMIME_Mime_Light_Gloves"
 
-add levelgroup 0,0,"Epic"
+add levelgroup 0,0,"All"
 add rootgroup "719c05ec-03d1-4910-b709-1ced217cd136","LLMIMEMimeLightArmor"
 add namegroup "LLMIME_Mime_Light_Gloves","",""
 

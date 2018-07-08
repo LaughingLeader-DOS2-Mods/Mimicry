@@ -24,13 +24,6 @@ SysClear("DB_LLMIME_Brawler_StanceStatuses", 3);
 DB_LLMIME_Brawler_SettingsString("Mimicry_BrawlerStance_UseCon", "*Prefer a body-based Brawler Stance (Scales with Constitution).* (Default)");
 DB_LLMIME_Brawler_SettingsString("Mimicry_BrawlerStance_UseStr", "*Prefer a strength-based Brawler Stance (Scales with Strength).*");
 DB_LLMIME_Brawler_SettingsString("Mimicry_BrawlerStance_UseFin", "*Prefer a finesse-based Brawler Stance (Scales with Finesse).*");
-
-SysClear("DB_LLMIME_Brawler_FistDeltaMods", 2);
-DB_LLMIME_Brawler_FistDeltaMods(10, "Boost_Weapon_Secondary_CriticalChance");
-DB_LLMIME_Brawler_FistDeltaMods(12, "Boost_LLMIME_BrawlerFist_Ability_OneHanded");
-DB_LLMIME_Brawler_FistDeltaMods(14, "Boost_LLMIME_BrawlerFist_LifeSteal_Large");
-DB_LLMIME_Brawler_FistDeltaMods(16, "Boost_LLMIME_BrawlerFist_Damage_Bonus");
-DB_LLMIME_Brawler_FistDeltaMods(18, "Boost_LLMIME_BrawlerFist_Damage_ArmourPiercing_Large");
 //END_REGION
 
 //REGION UPDATING
@@ -128,59 +121,6 @@ AND
 IntegertoString(_Percentage, _DamageStr)
 THEN
 LeaderLog_Log("DEBUG", "[LLMIME:Mime:CharacterReceivedDamage] Mime did [",_DamageStr,"]% damage. Whatever that means.");
-//END_REGION
-
-//REGION SUCKER_PUNCH
-/*
-IF
-SkillAdded(_Mime, "Target_SingleHandedAttack", _)
-AND
-LLMIME_QRY_CharacterIsAMime(_Mime)
-THEN
-LeaderLib_StartObjectTimer(_Mime, 200, "Mimicry_Timers_Brawler_SwapSuckerPunch_", "Mimicry_Events_SwapSuckerPunch");
-
-IF
-StoryEvent((CHARACTERGUID)_Mime, "Mimicry_Events_SwapSuckerPunch")
-AND
-ObjectGetFlag(_Mime, "Mimicry_MimeIsUnarmed", 1)
-AND
-CharacterHasSkill(_Mime, "Target_SingleHandedAttack", 1)
-THEN
-CharacterRemoveSkill(_Mime, "Target_SingleHandedAttack");
-CharacterAddSkill(_Mime, "Target_LLMIME_SuckerPunch", 0);
-LeaderLog_Log("DEBUG", "[LLMIME:Brawler:Mimicry_Events_SwapSuckerPunch] Removing [Target_SingleHandedAttack] and adding [Target_LLMIME_SuckerPunch] to Mime.");
-
-IF
-ItemUnEquipped(_Item, _Mime)
-AND
-LLMIME_QRY_WeaponIsBrawlerFist(_Item)
-THEN
-LLMIME_Brawler_RemoveSuckerPunch(_Mime);
-
-IF
-ObjectFlagCleared("Mimicry_MimeIsUnarmed", (CHARACTERGUID)_Mime, _)
-AND
-LLMIME_QRY_CharacterIsAMime(_Mime)
-THEN
-LLMIME_Brawler_RemoveSuckerPunch(_Mime);
-
-IF
-CharacterStatusRemoved(_Mime, _Status, _)
-AND
-DB_LLMIME_Brawler_StanceStatuses(_Status, _SettingsFlag, _InfoStatus, _DisableInfoFlag, _DialogVar)
-AND
-LLMIME_QRY_CharacterIsAMime(_Mime)
-THEN
-LLMIME_Brawler_RemoveSuckerPunch(_Mime);
-
-PROC
-LLMIME_Brawler_RemoveSuckerPunch((CHARACTERGUID)_Mime)
-AND
-CharacterHasSkill(_Mime, "Target_LLMIME_SuckerPunch", 1)
-THEN
-CharacterRemoveSkill(_Mime, "Target_LLMIME_SuckerPunch");
-LeaderLog_Log("DEBUG", "[LLMIME:Brawler:Mimicry_MimeIsUnarmed(Cleared)] Removing [Target_LLMIME_SuckerPunch] from Mime.");
-*/
 //END_REGION
 
 //REGION BRAWLER_STANCE_PREFERENCE_SET
@@ -344,24 +284,6 @@ THEN
 ObjectClearFlag(_Mime, "Mimicry_BrawlerStatusActive");
 //END_REGION
 
-//REGION BRAWLER_FIST_DELTAMODS
-//_Boost_Shield_Skill_Taunt
-IF
-CharacterItemEvent(_Character, _Item, "LeaderLib_Events_ItemLeveledUp")
-AND
-IsTagged(_Item, "LLMIME_BrawlerFist", 1)
-AND
-GetVarInteger(_Item, "LeaderLib_ItemLevel", _ItemLevel)
-AND
-DB_LLMIME_Brawler_FistDeltaMods(_MinLevel, _DeltaMod)
-AND
-_ItemLevel > _MinLevel
-AND
-NOT ItemHasDeltaModifier(_Item, _DeltaMod, _)
-THEN
-ItemAddDeltaModifier(_Item, _DeltaMod);
-//END_REGION
-
 //REGION BONUS_DAMAGE
 IF
 //AttackedByObject(_Target, _Owner, (CHARACTERGUID)_Mime, _DamageType, "Attack")
@@ -448,7 +370,7 @@ IntegerModulo(_Ran, 99, _Roll)
 AND
 _Roll <= 15
 THEN
-ApplyStatus(_Target, "BLINDED", 1.0, 0, _Mime);
+ApplyStatus(_Target, "LLMIME_BLIND_ARMOR_BYPASS", 1.0, 0, _Mime);
 
 PROC
 LLMIME_Brawler_ApplyBonusDamageDebuffs((CHARACTERGUID)_Target, (INTEGER)_Seed, (CHARACTERGUID)_Mime)
@@ -459,7 +381,7 @@ IntegerModulo(_Ran, 99, _Roll)
 AND
 _Roll <= 10
 THEN
-ApplyStatus(_Target, "SLOWED", 1.0, 0, _Mime);
+ApplyStatus(_Target, "LLMIME_SLOWED_ARMOR_BYPASS", 1.0, 0, _Mime);
 
 PROC
 LLMIME_Brawler_ApplyBonusDamageDebuffs((CHARACTERGUID)_Target, (INTEGER)_Seed, (CHARACTERGUID)_Mime)
@@ -470,17 +392,13 @@ IntegerModulo(_Ran, 99, _Roll)
 AND
 _Roll <= 5
 THEN
-ApplyStatus(_Target, "WEAK", 1.0, 0, _Mime);
+ApplyStatus(_Target, "LLMIME_WEAK_ARMOR_BYPASS", 1.0, 0, _Mime);
 //END_REGION
 
 //REGION DOUBLE_ATTACK
 //Prevents double attacks from happening while mimicking
 IF
-CharacterStartAttackObject(_, _, _Mime)
-AND
-CharacterIsInCombat(_Mime, 1)
-AND
-LLMIME_QRY_CharacterIsAMime(_Mime)
+CharacterCharacterEvent(_Mime, _Target, "Mimicry_Events_OnMimeUnarmedBasicAttack")
 AND
 NOT LLMIME_Mimicking_QRY_IsMimicking(_Mime)
 AND

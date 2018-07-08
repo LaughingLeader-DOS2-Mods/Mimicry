@@ -1,8 +1,54 @@
 Version 1
 SubGoalCombiner SGC_AND
 INITSECTION
-
+LLMIME_ItemSystem_InitSettings();
 KBSECTION
+//REGION SETTINGS
+PROC
+LLMIME_ItemSystem_InitSettings()
+THEN
+SysClear("DB_LLMIME_ItemSystem_DeltaMods", 4);
+DB_LLMIME_ItemSystem_DeltaMods(10, "Boost_LLMIME_BrawlerFist_Boost1", "Tag", "LLMIME_BrawlerFist");
+DB_LLMIME_ItemSystem_DeltaMods(12, "Boost_LLMIME_BrawlerFist_Boost2", "Tag", "LLMIME_BrawlerFist");
+DB_LLMIME_ItemSystem_DeltaMods(14, "Boost_LLMIME_BrawlerFist_Boost3", "Tag", "LLMIME_BrawlerFist");
+DB_LLMIME_ItemSystem_DeltaMods(16, "Boost_LLMIME_BrawlerFist_Boost4", "Tag", "LLMIME_BrawlerFist");
+DB_LLMIME_ItemSystem_DeltaMods(18, "Boost_LLMIME_BrawlerFist_Boost5", "Tag", "LLMIME_BrawlerFist");
+
+DB_LLMIME_ItemSystem_DeltaMods(12, "Boost_Armor_Upperbody_Secondary_MovementSpeed_Medium", "Template", "EQ_Armor_LLMIME_Mime_UpperBody_B_002d96a6-02c1-4e82-9890-67b86ea01531");
+DB_LLMIME_ItemSystem_DeltaMods(14, "Boost_Armor_Upperbody_Primary_Constitution", "Template", "EQ_Armor_LLMIME_Mime_UpperBody_B_002d96a6-02c1-4e82-9890-67b86ea01531");
+DB_LLMIME_ItemSystem_DeltaMods(16, "Boost_Armor_Upperbody_Armour_Physical", "Template", "EQ_Armor_LLMIME_Mime_UpperBody_B_002d96a6-02c1-4e82-9890-67b86ea01531");
+DB_LLMIME_ItemSystem_DeltaMods(18, "Boost_Armor_Upperbody_Armour_Magical_Large_MailUpperbody", "Template", "EQ_Armor_LLMIME_Mime_UpperBody_B_002d96a6-02c1-4e82-9890-67b86ea01531");
+//END_REGION
+
+//REGION UPDATING
+QRY
+LLMIME_ItemSystem_Internal_QRY_VersionNeedsUpdating((STRING)_Version)
+AND
+_Version == "-1"
+THEN
+DB_NOOP(1);
+
+IF
+StoryEvent(_, "LeaderUpdater_ModVersionsChanged")
+AND
+DB_LeaderUpdater_Temp_PastRegistered("Mimicry", "LaughingLeader", _Version)
+AND
+LLMIME_ItemSystem_Internal_QRY_VersionNeedsUpdating(_Version)
+AND
+NOT DB_LLMIME_ItemSystem_UpdatingVersion(_)
+THEN
+LeaderLog_Log("DEBUG", "[LLMIME:ItemSystem] Updating settings from version [",_Version,"]");
+DB_LLMIME_ItemSystem_UpdatingVersion(1);
+LLMIME_ItemSystem_InitSettings();
+
+IF
+StoryEvent(_, "LeaderUpdater_ModVersionsChanged")
+AND
+DB_LLMIME_ItemSystem_UpdatingVersion(_Val)
+THEN
+NOT DB_LLMIME_ItemSystem_UpdatingVersion(_Val);
+//END_REGION
+
 //REGION FIST_EQUIPPING
 PROC
 ProcBlockUseOfItem(_Character, _Item)
@@ -153,7 +199,7 @@ DB_LLMIME_Follower_Mime(_Mime)
 AND
 CharacterIsDead(_Mime, 0)
 AND
-ObjectGetFlag(_Mime, "LeaderLib_IsFollower", 1)
+IsTagged(_Mime, "LeaderLib_IsFollower", 1)
 THEN
 LLMIME_Follower_ReturnIfNotInCombat(_Char);
 
@@ -164,7 +210,7 @@ IsTagged(_Item, "LLMIME_MusicBoxShard", 1)
 AND
 DB_LLMIME_Follower_Mime(_Mime)
 AND
-NOT ObjectGetFlag(_Mime, "LeaderLib_IsFollower", 1)
+NOT IsTagged(_Mime, "LeaderLib_IsFollower", 1)
 THEN
 DB_CustomUseItemResponse(_Char, _Item, 0);
 CharacterStatusText(_Char, "LLMIME_StatusText_MusicBoxShardBlocked");
@@ -178,7 +224,7 @@ DB_LLMIME_Follower_Mime(_Mime)
 AND
 CharacterIsDead(_Mime, 0)
 AND
-ObjectGetFlag(_Mime, "LeaderLib_IsFollower", 1)
+IsTagged(_Mime, "LeaderLib_IsFollower", 1)
 THEN
 LLMIME_Follower_ReturnIfNotInCombat(_Char);
 //END_REGION
@@ -273,6 +319,55 @@ DB_LLMIME_Items_Temp_BlockedItem(_Character, _Item)
 THEN
 NOT DB_LLMIME_Items_Temp_BlockedItem(_Character, _Item);
 CharacterUnequipItem(_Character, _Item);
+//END_REGION
+
+//REGION DELTAMODS
+/*
+IF
+CharacterItemEvent(_Character, _Item, "LeaderLib_Events_ItemLeveledUp")
+AND
+DB_LLMIME_ItemSystem_DeltaMods(_Level, _Boost, "Tag", _Tag)
+AND
+IsTagged(_Item, _Tag, 1)
+AND
+ItemHasDeltaModifier(_Item, _DeltaMod, _Count)
+AND
+IntegertoString(_Count, _CountStr)
+THEN
+LeaderLog_Log("DEBUG", "[LLMIME:Brawler:ApplyDeltaMods] Deltamod [",_DeltaMod,"] count on item is [",_CountStr,"]");
+*/
+
+IF
+CharacterItemEvent(_Character, _Item, "LeaderLib_Events_ItemLeveledUp")
+AND
+GetVarInteger(_Item, "LeaderLib_ItemLevel", _ItemLevel)
+AND
+DB_LLMIME_ItemSystem_DeltaMods(_MinLevel, _DeltaMod, "Tag", _Tag)
+AND
+IsTagged(_Item, _Tag, 1)
+AND
+_ItemLevel >= _MinLevel
+AND
+NOT LLLIB_Helper_QRY_ItemHasDeltaModifier(_Item, _DeltaMod)
+THEN
+LeaderLog_Log("DEBUG", "[LLMIME:Brawler:ApplyDeltaMods] Added deltamod [",_DeltaMod,"] to item.");
+ItemAddDeltaModifier(_Item, _DeltaMod);
+
+IF
+CharacterItemEvent(_Character, _Item, "LeaderLib_Events_ItemLeveledUp")
+AND
+GetVarInteger(_Item, "LeaderLib_ItemLevel", _ItemLevel)
+AND
+GetTemplate(_Item, _Template)
+AND
+DB_LLMIME_ItemSystem_DeltaMods(_MinLevel, _DeltaMod, "Template", _Template)
+AND
+_ItemLevel >= _MinLevel
+AND
+NOT LLLIB_Helper_QRY_ItemHasDeltaModifier(_Item, _DeltaMod)
+THEN
+LeaderLog_Log("DEBUG", "[LLMIME:Brawler:ApplyDeltaMods] Added deltamod [",_DeltaMod,"] to item.");
+ItemAddDeltaModifier(_Item, _DeltaMod);
 //END_REGION
 
 //REGION DEBUG

@@ -272,7 +272,7 @@ DB_LLMIME_Follower_Mime(_Mime)
 AND
 CharacterIsDead(_Mime, 0)
 AND
-ObjectGetFlag(_Mime, "LeaderLib_IsFollower", 0)
+IsTagged(_Mime, "LeaderLib_IsFollower", 0)
 AND
 ObjectGetFlag(_Mime, "Mimicry_FollowerIsRunningAway", 0)
 THEN
@@ -291,7 +291,7 @@ DB_LLMIME_Follower_Mime(_Mime)
 AND
 CharacterIsDead(_Mime, 0)
 AND
-ObjectGetFlag(_Mime, "LeaderLib_IsFollower", 0)
+IsTagged(_Mime, "LeaderLib_IsFollower", 0)
 AND
 ObjectGetFlag(_Mime, "Mimicry_FollowerIsRunningAway", 0)
 THEN
@@ -324,7 +324,7 @@ DB_LLMIME_Follower_Mime(_Mime)
 AND
 CharacterIsDead(_Mime, 1)
 AND
-ObjectGetFlag(_Mime, "LeaderLib_IsFollower", 0)
+IsTagged(_Mime, "LeaderLib_IsFollower", 0)
 AND
 DB_LLMIME_Templates("Mask_A", _Template)
 AND
@@ -569,7 +569,7 @@ LLMIME_Follower_SummonFollower((CHARACTERGUID)_Char, (ITEMGUID)_Item)
 AND
 DB_LLMIME_Follower_Mime(_Mime)
 AND
-ObjectGetFlag(_Mime, "LeaderLib_IsFollower", 0)
+IsTagged(_Mime, "LeaderLib_IsFollower", 0)
 AND
 ItemIsInInventory(_Item, 0)
 AND
@@ -586,7 +586,7 @@ LLMIME_Follower_SummonFollower((CHARACTERGUID)_Char, (ITEMGUID)_Item)
 AND
 DB_LLMIME_Follower_Mime(_Mime)
 AND
-ObjectGetFlag(_Mime, "LeaderLib_IsFollower", 0)
+IsTagged(_Mime, "LeaderLib_IsFollower", 0)
 AND
 ItemIsInInventory(_Item, 1)
 THEN
@@ -599,7 +599,7 @@ LLMIME_Follower_SummonFollower((CHARACTERGUID)_Char, (ITEMGUID)_Item)
 AND
 DB_LLMIME_Follower_Mime(_Mime)
 AND
-ObjectGetFlag(_Mime, "LeaderLib_IsFollower", 1)
+IsTagged(_Mime, "LeaderLib_IsFollower", 1)
 THEN
 LeaderLog_Log("DEBUG", "[LLMIME:Follower:SummonFollower] Mime follower is already recruited [LeaderLib_IsFollower].");
 
@@ -692,7 +692,7 @@ DialogEnded("LLMIME_MimeCompanion_Default", _Instance)
 AND
 DialogGetInvolvedNPC(_Instance, 1, (CHARACTERGUID)_Mime)
 AND
-ObjectGetFlag(_Mime, "LeaderLib_IsFollower", 0)
+IsTagged(_Mime, "LeaderLib_IsFollower", 0)
 AND
 ObjectGetFlag(_Mime, "Mimicry_FollowerIsLeaving", 0)
 THEN
@@ -828,7 +828,7 @@ IsTagged(_Mime, "LLMIME_MimeFollower", 1)
 AND
 CharacterIsPlayer(_Owner, 1)
 AND
-ObjectGetFlag(_Mime, "LeaderLib_IsFollower", 0)
+IsTagged(_Mime, "LeaderLib_IsFollower", 0)
 THEN
 CharacterEnableAllCrimes(_Mime);
 SetCanJoinCombat(_Mime, 1);
@@ -838,7 +838,7 @@ AttackedByObject((CHARACTERGUID)_Mime, (CHARACTERGUID)_Owner, _Attacker, _, _)
 AND
 IsTagged(_Mime, "LLMIME_MimeFollower", 1)
 AND
-ObjectGetFlag(_Mime, "LeaderLib_IsFollower", 0)
+IsTagged(_Mime, "LeaderLib_IsFollower", 0)
 AND
 CharacterGetHitpointsPercentage(_Mime, _Percentage)
 AND
@@ -853,7 +853,7 @@ IsTagged(_Mime, "LLMIME_MimeFollower", 1)
 AND
 CharacterIsPlayer(_Owner, 1)
 AND
-ObjectGetFlag(_Mime, "LeaderLib_IsFollower", 0)
+IsTagged(_Mime, "LeaderLib_IsFollower", 0)
 AND
 CharacterGetHitpointsPercentage(_Mime, _Percentage)
 AND
@@ -868,7 +868,7 @@ IsTagged(_Mime, "LLMIME_MimeFollower", 1)
 AND
 CharacterIsPlayer(_Owner, 1)
 AND
-ObjectGetFlag(_Mime, "LeaderLib_IsFollower", 0)
+IsTagged(_Mime, "LeaderLib_IsFollower", 0)
 AND
 CharacterGetHitpointsPercentage(_Mime, _Percentage)
 AND
@@ -885,7 +885,7 @@ CharacterIsInCombat(_Mime, 0)
 AND
 CharacterIsPlayer(_Owner, 0)
 AND
-ObjectGetFlag(_Mime, "LeaderLib_IsFollower", 0)
+IsTagged(_Mime, "LeaderLib_IsFollower", 0)
 THEN
 ApplyStatus(_Mime, "INVISIBLE", 90.0, 1);
 
@@ -894,7 +894,7 @@ ObjectEnteredCombat((CHARACTERGUID)_Mime, _CombatID)
 AND
 IsTagged(_Mime, "LLMIME_MimeFollower", 1)
 AND
-ObjectGetFlag(_Mime, "LeaderLib_IsFollower", 0)
+IsTagged(_Mime, "LeaderLib_IsFollower", 0)
 THEN
 CharacterAddActionPoints(_Mime, 2);
 CharacterUseSkill(_Mime, "Shout_LLMIME_BrawlerStance", _Mime, 1, 1);
@@ -1097,6 +1097,31 @@ THEN
 LLMIME_Follower_Internal_StartSpawningGhost(_Mime);
 
 IF
+CharacterDied(_Mime)
+AND
+DB_LLMIME_Follower_Mime(_Mime)
+AND
+IsTagged(_Mime, "LeaderLib_IsFollower", 1)
+THEN
+CharacterSetCorpseLootable(_Mime, 0);
+
+IF
+CharacterDied(_Mime)
+AND
+DB_LLMIME_Follower_Mime(_Mime)
+AND
+IsTagged(_Mime, "LeaderLib_IsFollower", 0)
+THEN
+CharacterSetCorpseLootable(_Mime, 1);
+
+IF
+ObjectLostTag((CHARACTERGUID)_Mime, "LeaderLib_IsFollower")
+AND
+DB_LLMIME_Follower_Mime(_Mime)
+THEN
+CharacterSetCorpseLootable(_Mime, 1);
+
+IF
 CombatEnded(_CombatID)
 AND
 DB_LLMIME_Follower_Temp_SpawnedGhostAfterCombat(_CombatID, _Mime)
@@ -1130,7 +1155,7 @@ NOT DB_LLMIME_Follower_Temp_SpawnedGhost(_Mime)
 AND
 NOT GlobalGetFlag("Mimicry_MusicBoxShattered", 1)
 AND
-NOT ObjectGetFlag(_Mime, "LeaderLib_IsFollower", 1)
+NOT IsTagged(_Mime, "LeaderLib_IsFollower", 1)
 THEN
 LLMIME_Follower_SpawnGhost(_Mime);
 DB_LLMIME_Follower_Temp_SpawnedGhost(_Mime);
@@ -1142,7 +1167,7 @@ NOT DB_LLMIME_Follower_Temp_SpawnedGhost(_Mime)
 AND
 NOT GlobalGetFlag("Mimicry_MusicBoxShattered", 1)
 AND
-ObjectGetFlag(_Mime, "LeaderLib_IsFollower", 1)
+IsTagged(_Mime, "LeaderLib_IsFollower", 1)
 AND
 DB_LLLIB_PartyFollower(_Owner, _Mime)
 AND
@@ -1158,7 +1183,7 @@ NOT DB_LLMIME_Follower_Temp_SpawnedGhost(_Mime)
 AND
 NOT GlobalGetFlag("Mimicry_MusicBoxShattered", 1)
 AND
-ObjectGetFlag(_Mime, "LeaderLib_IsFollower", 1)
+IsTagged(_Mime, "LeaderLib_IsFollower", 1)
 AND
 DB_LLLIB_PartyFollower(_Owner, _Mime)
 AND

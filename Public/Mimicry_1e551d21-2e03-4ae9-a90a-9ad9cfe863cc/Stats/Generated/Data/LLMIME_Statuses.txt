@@ -316,3 +316,18 @@ data "StackId" "Stack_Polymorphing"
 data "LoseControl" "Yes"
 data "PolymorphResult" "8bbd8af9-4a40-46ca-844b-dbb513a6e9e8"
 data "DisableInteractions" "Yes"
+
+new entry "LLMIME_BLIND_ARMOR_BYPASS"
+type "StatusData"
+using "BLIND"
+data "SavingThrow" "None"
+
+new entry "LLMIME_SLOWED_ARMOR_BYPASS"
+type "StatusData"
+using "SLOWED"
+data "SavingThrow" "None"
+
+new entry "LLMIME_WEAK_ARMOR_BYPASS"
+type "StatusData"
+using "WEAK"
+data "SavingThrow" "None"

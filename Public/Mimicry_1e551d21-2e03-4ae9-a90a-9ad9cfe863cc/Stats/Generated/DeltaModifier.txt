@@ -1,27 +1,29 @@
-new deltamod "Boost_LLMIME_BrawlerFist_Ability_OneHanded"
+new deltamod "Boost_LLMIME_BrawlerFist_Boost1"
 param "BoostType" "ItemCombo"
 param "Frequency" "1"
 param "ModifierType" "Weapon"
-param "WeaponType" "None"
 new boost "_Boost_Weapon_Ability_OneHanded",1
 
-new deltamod "Boost_LLMIME_BrawlerFist_Damage_Bonus"
+new deltamod "Boost_LLMIME_BrawlerFist_Boost2"
 param "BoostType" "ItemCombo"
 param "Frequency" "1"
 param "ModifierType" "Weapon"
-param "WeaponType" "None"
-new boost "_Boost_Weapon_Damage_Bonus",1
+new boost "_Boost_Weapon_Secondary_CriticalChance_Medium",1
 
-new deltamod "Boost_LLMIME_BrawlerFist_Damage_ArmourPiercing_Large"
+new deltamod "Boost_LLMIME_BrawlerFist_Boost3"
 param "BoostType" "ItemCombo"
 param "Frequency" "1"
 param "ModifierType" "Weapon"
-param "WeaponType" "None"
-new boost "_Boost_Weapon_Damage_ArmourPiercing_Large",1
+new boost "_Boost_LLMIME_BrawlerFist_DamageEnhancement",1
 
-new deltamod "Boost_LLMIME_BrawlerFist_LifeSteal_Large"
+new deltamod "Boost_LLMIME_BrawlerFist_Boost4"
 param "BoostType" "ItemCombo"
 param "Frequency" "1"
 param "ModifierType" "Weapon"
-param "WeaponType" "None"
-new boost "_Boost_Weapon_LifeSteal_TwoHanded",1
+new boost "_Boost_Weapon_Secondary_CriticalModifier_Small",1
+
+new deltamod "Boost_LLMIME_BrawlerFist_Boost5"
+param "BoostType" "ItemCombo"
+param "Frequency" "1"
+param "ModifierType" "Weapon"
+new boost "_Boost_Weapon_Damage_Bonus_Medium",1

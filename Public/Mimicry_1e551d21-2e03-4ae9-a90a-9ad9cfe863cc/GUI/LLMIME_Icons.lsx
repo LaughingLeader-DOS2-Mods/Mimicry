@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <save>
-    <header version="2" time="1530826091" />
+    <header version="2" time="1531088040" />
     <version major="3" minor="1" revision="8" build="0" />
     <region id="IconUVList">
         <node id="root">
@@ -69,7 +69,7 @@
                     <attribute id="V2" value="0.0620117" type="6" />
                 </node>
                 <node id="IconUV">
-                    <attribute id="MapKey" value="LLMIME_Icons_Item_MimeMask_A" type="22" />
+                    <attribute id="MapKey" value="LLMIME_Icons_Item_Mime_Mask_A" type="22" />
                     <attribute id="U1" value="0.562988" type="6" />
                     <attribute id="U2" value="0.624512" type="6" />
                     <attribute id="V1" value="0.000488281" type="6" />
