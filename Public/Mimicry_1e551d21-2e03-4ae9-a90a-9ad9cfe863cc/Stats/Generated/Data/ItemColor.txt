@@ -1,1 +1,1 @@
-new itemcolor "LLMIMEMimeLightArmor","252525","7F6FC7","C0C0C0"
+new itemcolor "LLMIMEMimeLightArmor","252525","7F6FC7","C0C0E0"

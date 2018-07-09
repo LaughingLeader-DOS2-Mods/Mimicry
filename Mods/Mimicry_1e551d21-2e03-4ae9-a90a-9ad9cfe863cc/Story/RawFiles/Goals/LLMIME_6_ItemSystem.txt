@@ -15,11 +15,11 @@ DB_LLMIME_ItemSystem_DeltaMods(16, "Boost_LLMIME_BrawlerFist_Boost4", "Tag", "LL
 DB_LLMIME_ItemSystem_DeltaMods(18, "Boost_LLMIME_BrawlerFist_Boost5", "Tag", "LLMIME_BrawlerFist");
 
 //Torso
-DB_LLMIME_ItemSystem_DeltaMods(7, "Boost_Armor_Upperbody_Ability_Warfare", "Template", "EQ_Armor_LLMIME_Mime_UpperBody_B_002d96a6-02c1-4e82-9890-67b86ea01531");
-DB_LLMIME_ItemSystem_DeltaMods(11, "Boost_Armor_Upperbody_Primary_Constitution", "Template", "EQ_Armor_LLMIME_Mime_UpperBody_B_002d96a6-02c1-4e82-9890-67b86ea01531");
-DB_LLMIME_ItemSystem_DeltaMods(13, "Boost_Armor_Upperbody_Armour_Physical_Large", "Template", "EQ_Armor_LLMIME_Mime_UpperBody_B_002d96a6-02c1-4e82-9890-67b86ea01531");
-DB_LLMIME_ItemSystem_DeltaMods(16, "Boost_Armor_Upperbody_Primary_Constitution_Large", "Template", "EQ_Armor_LLMIME_Mime_UpperBody_B_002d96a6-02c1-4e82-9890-67b86ea01531");
-DB_LLMIME_ItemSystem_DeltaMods(18, "Boost_Armor_UpperBody_EmptyRuneSlot", "Template", "EQ_Armor_LLMIME_Mime_UpperBody_B_002d96a6-02c1-4e82-9890-67b86ea01531");
+DB_LLMIME_ItemSystem_DeltaMods(7, "Boost_Armor_Upperbody_Ability_Warfare", "Template", "EQ_Armor_LLMIME_Mime_UpperBody_A_002d96a6-02c1-4e82-9890-67b86ea01531");
+DB_LLMIME_ItemSystem_DeltaMods(11, "Boost_Armor_Upperbody_Primary_Constitution", "Template", "EQ_Armor_LLMIME_Mime_UpperBody_A_002d96a6-02c1-4e82-9890-67b86ea01531");
+DB_LLMIME_ItemSystem_DeltaMods(13, "Boost_Armor_Upperbody_Armour_Physical_Large", "Template", "EQ_Armor_LLMIME_Mime_UpperBody_A_002d96a6-02c1-4e82-9890-67b86ea01531");
+DB_LLMIME_ItemSystem_DeltaMods(16, "Boost_Armor_Upperbody_Primary_Constitution_Large", "Template", "EQ_Armor_LLMIME_Mime_UpperBody_A_002d96a6-02c1-4e82-9890-67b86ea01531");
+DB_LLMIME_ItemSystem_DeltaMods(18, "Boost_Armor_UpperBody_EmptyRuneSlot", "Template", "EQ_Armor_LLMIME_Mime_UpperBody_A_002d96a6-02c1-4e82-9890-67b86ea01531");
 //Pants
 DB_LLMIME_ItemSystem_DeltaMods(8, "Boost_Armor_Pants_Secondary_MovementSpeed", "Template", "EQ_Armor_LLMIME_Mime_LowerBody_A_134cbd6d-c5f5-4e7c-a7ff-a0f17644baab");
 DB_LLMIME_ItemSystem_DeltaMods(10, "Boost_Armor_Pants_Primary_Constitution_PrimaryAsLarge", "Template", "EQ_Armor_LLMIME_Mime_LowerBody_A_134cbd6d-c5f5-4e7c-a7ff-a0f17644baab");
