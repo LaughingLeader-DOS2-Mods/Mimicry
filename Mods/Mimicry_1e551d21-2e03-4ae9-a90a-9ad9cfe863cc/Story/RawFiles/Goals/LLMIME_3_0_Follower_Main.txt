@@ -1231,7 +1231,7 @@ GetPosition(_MimeGhost, _x, _y, _z)
 THEN
 ObjectSetFlag(_MimeGhost, "GLO_Ghost_Visible");
 PlayEffectAtPosition("RS3_FX_Char_Ghosts_Teleport_in_01", _x, _y, _z);
-PlayAnimation(_MimeGhost, "deathfigure_start", "LLMIME_Events_Follower_PlayGhostLoop");
+PlayAnimation(_MimeGhost, "deathfigure_start", "LLMIME_Events_Follower_StartGhostLoop");
 SetOnStage(_MimeGhost, 1);
 
 PROC
@@ -1247,14 +1247,16 @@ NOT DB_LLMIME_FollowerGhost(_) // Safety
 AND
 TemporaryCharacterCreateAtPosition(_x, _y, _z, _Template, 0, _MimeGhost)
 THEN
-PlayAnimation(_MimeGhost, "deathfigure_start", "LLMIME_Events_Follower_PlayGhostLoop");
+PlayAnimation(_MimeGhost, "deathfigure_start", "");
 ObjectSetFlag(_MimeGhost, "GLO_Ghost_Visible");
 PlayEffectAtPosition("RS3_FX_Char_Ghosts_Teleport_in_01", _x, _y, _z);
+LLMIME_Follower_Internal_StartGhostLoopEffects(_MimeGhost);
 DB_LLMIME_FollowerGhost(_MimeGhost); 
 DB_Dialogs(_MimeGhost, "LLMIME_MimeCompanion_Ghost");
 //CharacterLinkGhost(_Mime, _MimeGhost);
 CharacterSetImmortal(_MimeGhost,1);
 ProcSetInvulnerable(_MimeGhost,1);
+LeaderLib_StartObjectTimer(_MimeGhost, 1600, "LLMIME_Timers_PlayGhostLoop_", "LLMIME_Events_Follower_PlayGhostLoop");
 
 IF
 CharacterResurrected(_Mime)
@@ -1274,19 +1276,23 @@ SetOnStage(_MimeGhost, 0);
 //DestroyGhost(_MimeGhost);
 NOT DB_LLMIME_FollowerGhost(_MimeGhost);
 
-IF
-StoryEvent((CHARACTERGUID)_Ghost, "LLMIME_Events_Follower_PlayGhostLoop")
+PROC
+LLMIME_Follower_Internal_StartGhostLoopEffects((CHARACTERGUID)_Ghost)
 AND
-PlayLoopEffect(_Ghost, "RS3_FX_GP_Combat_Death_DeathFigure_Root_01", "Dummy_Root", _Handle1)
+PlayLoopEffect(_Ghost, "LLMIME_FX_Scripted_Ghost_Root_01", "Dummy_Root", _Handle1)
 AND
-PlayLoopEffect(_Ghost, "RS3_FX_GP_Combat_Death_DeathFigure_LR_HandFX_01", "Hand_L_Bone", _Handle2)
+PlayLoopEffect(_Ghost, "LLMIME_FX_Scripted_Ghost_Hands_Root_01", "Hand_L_Bone", _Handle2)
 AND
-PlayLoopEffect(_Ghost, "RS3_FX_GP_Combat_Death_DeathFigure_LR_HandFX_01", "Hand_R_Bone", _Handle3)
+PlayLoopEffect(_Ghost, "LLMIME_FX_Scripted_Ghost_Hands_Root_01", "Hand_R_Bone", _Handle3)
 THEN
-CharacterSetAnimationOverride(_Ghost, "deathfigure_loop");
 DB_LLMIME_Follower_Temp_GhostEffect(_Ghost, _Handle1);
 DB_LLMIME_Follower_Temp_GhostEffect(_Ghost, _Handle2);
 DB_LLMIME_Follower_Temp_GhostEffect(_Ghost, _Handle3);
+
+IF
+StoryEvent((CHARACTERGUID)_Ghost, "LLMIME_Events_Follower_PlayGhostLoop")
+THEN
+CharacterSetAnimationOverride(_Ghost, "deathfigure_loop");
 //END_REGION
 
 //REGION GHOST_FOLLOWER_DEATH
@@ -1368,11 +1374,8 @@ GetPosition(_Ghost, _x, _y, _z)
 THEN
 NOT DB_LLMIME_FollowerGhost(_Ghost);
 PlayEffectAtPosition("RS3_FX_GP_ScriptedEvent_GhostDissipate_01", _x, _y, _z);
-SetOnStage(_Ghost, 0);
-CharacterSetImmortal(_Ghost,0);
-ProcSetInvulnerable(_Ghost,0);
 CharacterSetAnimationOverride(_Ghost, "");
-PlayAnimation(_Ghost, "deathfigure_end", "LLMIME_Events_Follower_PlayGhostLoop");
+PlayAnimation(_Ghost, "deathfigure_end", "LLMIME_Events_Follower_KillGhost");
 
 IF
 StoryEvent((CHARACTERGUID)_Ghost, "LLMIME_Events_Follower_KillGhost")
@@ -1385,6 +1388,9 @@ NOT DB_LLMIME_Follower_Temp_GhostEffect(_Ghost, _Handle);
 IF
 StoryEvent((CHARACTERGUID)_Ghost, "LLMIME_Events_Follower_KillGhost")
 THEN
+CharacterSetImmortal(_Ghost,0);
+ProcSetInvulnerable(_Ghost,0);
+SetOnStage(_Ghost, 0);
 CharacterDie(_Ghost, 0, "None");
 //END_REGION
 

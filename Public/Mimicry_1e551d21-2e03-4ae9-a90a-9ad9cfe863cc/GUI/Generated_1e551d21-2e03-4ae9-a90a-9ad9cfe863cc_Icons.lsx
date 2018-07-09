@@ -1,26 +1,26 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <save>
-    <header version="2" time="1531111299" />
+    <header version="2" time="1531164604" />
     <version major="3" minor="1" revision="8" build="0" />
     <region id="IconUVList">
         <node id="root">
             <children>
                 <node id="IconUV">
-                    <attribute id="MapKey" value="0d576141-3f06-413d-a488-7c41897b68c3_9223372036854775808-_(LLMIME_Icon_Elf_Male)" type="22" />
+                    <attribute id="MapKey" value="0d576141-3f06-413d-a488-7c41897b68c3_9223372036854775808-_(LLMIME_Icon_Elf_Male_Ghost)" type="22" />
                     <attribute id="U1" value="0.00195313" type="6" />
                     <attribute id="U2" value="0.310547" type="6" />
                     <attribute id="V1" value="0.00390625" type="6" />
                     <attribute id="V2" value="0.777344" type="6" />
                 </node>
                 <node id="IconUV">
-                    <attribute id="MapKey" value="f611968c-9f19-41d4-be40-93aaeb86f228_10829151595124770816-LLMIME_Equipment_FollowerMime_(LLMIME_Icon_Elf_Male)" type="22" />
+                    <attribute id="MapKey" value="f611968c-9f19-41d4-be40-93aaeb86f228_10829151595124770816-LLMIME_Equipment_FollowerMime_(LLMIME_Icon_Mime_Elf_Male)" type="22" />
                     <attribute id="U1" value="0.314453" type="6" />
                     <attribute id="U2" value="0.623047" type="6" />
                     <attribute id="V1" value="0.00390625" type="6" />
                     <attribute id="V2" value="0.777344" type="6" />
                 </node>
                 <node id="IconUV">
-                    <attribute id="MapKey" value="f611968c-9f19-41d4-be40-93aaeb86f228_10829151603177834496-LLMIME_Equipment_FollowerMime_(LLMIME_Icon_Elf_Male)" type="22" />
+                    <attribute id="MapKey" value="f611968c-9f19-41d4-be40-93aaeb86f228_10829151603177834496-LLMIME_Equipment_FollowerMime_(LLMIME_Icon_Mime_Elf_Male)" type="22" />
                     <attribute id="U1" value="0.626953" type="6" />
                     <attribute id="U2" value="0.935547" type="6" />
                     <attribute id="V1" value="0.00390625" type="6" />
