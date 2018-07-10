@@ -625,7 +625,7 @@ CharacterVitalityChanged(_Target, _Percentage)
 AND
 ObjectGetFlag(_Target, "Mimicry_Wish_CheckHealthResult", 1)
 AND
-LLLIB_Helper_QRY_ClearObjectFlag(_Target, "Mimicry_Wish_CheckHealthResult")
+LeaderLib_Helper_QRY_ClearObjectFlag(_Target, "Mimicry_Wish_CheckHealthResult")
 AND
 _Percentage > 100
 THEN

@@ -1,6 +1,5 @@
 INIT
 	CHARACTER:__Me
-	INT:%Following = 0
 	INT:%LLMIME_Initialized = 0
 	EXTERN FLOAT:%BrawlerStanceInfluenceStrength = 50.0
 	INT:%LLMIME_InitialRefresh = 0
@@ -23,7 +22,7 @@ ACTIONS
 	CharacterEvent(__Me, "Mimicry_Follower_ReInitialize")
 */
 
-EVENT Init_Event
+EVENT LLMIME_MimeFollower_Init_Event
 VARS
 	INT:_Ran
 	FLOAT:_RanFloat
@@ -61,7 +60,7 @@ THEN
 	Set(%LLMIME_Initialized, 1)
 ENDIF
 
-EVENT Follower_BrawlerStance_Activate
+EVENT LLMIME_MimeFollower_BrawlerStance_Activate
 ON
 	OnFunction("Mimicry_MimeFollower_ActivateBrawlerStance")
 ACTIONS
@@ -71,7 +70,7 @@ THEN
 	CharacterApplyStatus(__Me, LLMIME_BRAWLER_STANCE_CON, -1, 1)
 ENDIF
 
-EVENT Apply_BrawlerStance
+EVENT LLMIME_MimeFollower_Apply_BrawlerStance
 ON
 	OnCharacterEvent(__Me, "Mimicry_MimickedWeaponsRemoved")
 	OnCharacterEvent(__Me, "LLMIME_MimeFollowerRevived")
@@ -79,54 +78,60 @@ ON
 ACTIONS
 	CallFunction("Mimicry_MimeFollower_ActivateBrawlerStance")
 
-EVENT Refresh_Timer
+EVENT LLMIME_MimeFollower_Refresh_Timer
 ON
 	OnTimer(%RefreshTimerName)
 ACTIONS
 	CharacterEvent(__Me, "LeaderLib_Commands_RefreshEquipment_Delayed")
 
-EVENT Mimicking_Applied
+EVENT LLMIME_MimeFollower_Mimicking_Applied
 ON
 	OnCharacterStatusApplied(__Me, LLMIME_MIMICKING)
 ACTIONS
 	SetPriority("Mimic_Attack_Character", 999)
 	SetPriority("Mimic_Attack_Item", 999)
 
-EVENT Mimicking_Removed
+EVENT LLMIME_MimeFollower_Mimicking_Removed
 ON
 	OnCharacterStatusRemoved(__Me, LLMIME_MIMICKING)
 ACTIONS
 	SetPriority("Mimic_Attack_Character", -1)
 	SetPriority("Mimic_Attack_Item", -1)
 	
-EVENT Owner_Enter_Combat
+EVENT LLMIME_MimeFollower_Owner_Entered_Combat
 VARS
 	CHARACTER:_Character
 	CHARACTER:_Owner
+	FLOAT:_Dist
 ON
 	OnEnteredCombat(_Character, _)
 ACTIONS
-IF "c1&c2"
+IF "c1&c2&c3&c4"
 	GetVar(_Owner, __Me, "LeaderLib_Follower_Owner")
-	IsEqual(_Character, _Owner)	
+	IsEqual(_Character, _Owner)
+	GetDistance(_Dist, _Character, __Me)
+	IsLessThen(_Dist, 50)
 THEN
 	EnterCombat(__Me, _Owner)
 ENDIF
 
-EVENT Follower_Enter_Combat
+EVENT LLMIME_MimeFollower_Entered_Combat
 VARS
 	CHARACTER:_Owner
+	FLOAT:_Dist
 ON
 	OnEnteredCombat(__Me, _)
 ACTIONS
-IF "c1&!c2"
+IF "c1&!c2&c3&c4"
 	GetVar(_Owner, __Me, "LeaderLib_Follower_Owner")
-	IsEqual(_Owner, null)	
+	IsEqual(_Owner, null)
+	GetDistance(_Dist, _Owner, __Me)
+	IsLessThen(_Dist, 50)
 THEN
 	EnterCombat(_Owner, __Me)
 ENDIF
 
-EVENT MimeFollower_RemoveGeneratedTreasure_Start
+EVENT LLMIME_MimeFollower_RemoveGeneratedTreasure_Start
 ON
 	OnCharacterEvent(__Me, "LLMIME_MimeFollowerRevived")
 ACTIONS
@@ -134,7 +139,7 @@ ACTIONS
 	IterateItems("LLMIME_Iterator_RemoveGeneratedMimeTreasure", "LLMIME_MimeFollowerTreasure")
 	IterateItemsInInventory(__Me, "LLMIME_Iterator_RemoveGeneratedMimeTreasure", "LLMIME_MimeFollowerTreasure")
 	
-EVENT MimeFollower_RemoveGeneratedTreasure_Character
+EVENT LLMIME_MimeFollower_RemoveGeneratedTreasure_Character
 VARS
 	CHARACTER:_Character
 ON
@@ -142,7 +147,7 @@ ON
 ACTIONS
 	IterateItemsInInventory(_Character, "LLMIME_Iterator_RemoveGeneratedMimeTreasure", "LLMIME_MimeFollowerTreasure")
 	
-EVENT MimeFollower_RemoveGeneratedTreasure_OnIterateItem
+EVENT LLMIME_MimeFollower_RemoveGeneratedTreasure_OnIterateItem
 VARS
 	ITEM:_Item
 ON
@@ -150,27 +155,3 @@ ON
 ACTIONS
 	ItemEvent(_Item, "LLMIME_Events_OnMimeFollowerTreasureRemoved")
 	ItemEvent(_Item, "LeaderLib_Commands_RemoveItem")
-
-EVENT Reset_Follow_Priority
-ON
-	OnCharacterFlagSet("LeaderLib_CharacterIsFollowing", __Me)
-ACTIONS
-	Interrupt("Block_AutoFollow")
-	SetPriority("Block_AutoFollow", 0)
-	
-EVENT Activate_Follow_Priority
-ON
-	OnCharacterFlagCleared("LeaderLib_CharacterIsFollowing", __Me)
-ACTIONS
-	SetPriority("Block_AutoFollow", 99998)
-	
-BEHAVIOUR
-
-REACTION Block_AutoFollow, 0
-USAGE PEACE
-VARS
-	CHARACTER:_Owner
-CHECK "!c1"
-	HasFlag(__Me, "LeaderLib_CharacterIsFollowing")
-ACTIONS
-	Sleep(1)

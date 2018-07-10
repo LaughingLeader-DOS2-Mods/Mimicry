@@ -504,9 +504,9 @@ LLMIME_System_CheckUnarmedBonuses((CHARACTERGUID)_Mime)
 AND
 ObjectGetFlag(_Mime, "Mimicry_MimeIsUnarmed", 1)
 AND
-LLLIB_Helper_QRY_HasStatus(_Mime, "LLMIME_BRAWLER")
+LeaderLib_Helper_QRY_HasStatus(_Mime, "LLMIME_BRAWLER")
 AND
-NOT LLLIB_Helper_QRY_HasStatus(_Mime, "LLMIME_BRAWLER_BONUS")
+NOT LeaderLib_Helper_QRY_HasStatus(_Mime, "LLMIME_BRAWLER_BONUS")
 THEN
 ApplyStatus(_Mime, "LLMIME_BRAWLER_BONUS", -1.0, 1);
 
@@ -515,14 +515,14 @@ LLMIME_System_CheckUnarmedBonuses((CHARACTERGUID)_Mime)
 AND
 ObjectGetFlag(_Mime, "Mimicry_MimeIsUnarmed", 0)
 AND
-LLLIB_Helper_QRY_HasStatus(_Mime, "LLMIME_BRAWLER_BONUS")
+LeaderLib_Helper_QRY_HasStatus(_Mime, "LLMIME_BRAWLER_BONUS")
 THEN
 RemoveStatus(_Mime, "LLMIME_BRAWLER_BONUS");
 
 IF
 CharacterStatusRemoved(_Mime, "LLMIME_BRAWLER", _)
 AND
-LLLIB_Helper_QRY_HasStatus(_Mime, "LLMIME_BRAWLER_BONUS")
+LeaderLib_Helper_QRY_HasStatus(_Mime, "LLMIME_BRAWLER_BONUS")
 THEN
 RemoveStatus(_Mime, "LLMIME_BRAWLER_BONUS");
 //END_REGION
@@ -533,9 +533,9 @@ LLMIME_System_CheckUnarmedBonuses((CHARACTERGUID)_Mime)
 AND
 ObjectGetFlag(_Mime, "Mimicry_MimeIsUnarmed", 1)
 AND
-LLLIB_Helper_QRY_HasStatus(_Mime, "LLMIME_CONCENTRATION")
+LeaderLib_Helper_QRY_HasStatus(_Mime, "LLMIME_CONCENTRATION")
 AND
-NOT LLLIB_Helper_QRY_HasStatus(_Mime, "LLMIME_CONCENTRATION_BONUS")
+NOT LeaderLib_Helper_QRY_HasStatus(_Mime, "LLMIME_CONCENTRATION_BONUS")
 THEN
 ApplyStatus(_Mime, "LLMIME_CONCENTRATION_BONUS", -1.0, 1);
 
@@ -544,14 +544,14 @@ LLMIME_System_CheckUnarmedBonuses((CHARACTERGUID)_Mime)
 AND
 ObjectGetFlag(_Mime, "Mimicry_MimeIsUnarmed", 0)
 AND
-LLLIB_Helper_QRY_HasStatus(_Mime, "LLMIME_CONCENTRATION_BONUS")
+LeaderLib_Helper_QRY_HasStatus(_Mime, "LLMIME_CONCENTRATION_BONUS")
 THEN
 RemoveStatus(_Mime, "LLMIME_CONCENTRATION_BONUS");
 
 IF
 CharacterStatusRemoved(_Mime, "LLMIME_CONCENTRATION", _)
 AND
-LLLIB_Helper_QRY_HasStatus(_Mime, "LLMIME_CONCENTRATION_BONUS")
+LeaderLib_Helper_QRY_HasStatus(_Mime, "LLMIME_CONCENTRATION_BONUS")
 THEN
 RemoveStatus(_Mime, "LLMIME_CONCENTRATION_BONUS");
 //END_REGION

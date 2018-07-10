@@ -1471,7 +1471,7 @@
                                           "paramval" : {"type" : 4, "value" : 1},
                                           "value" : {"type" : 19, "value" : 0}
                                        }
-                                    ],"type" : {"type" : 22, "value" : "Character"}}
+                                    ],"type" : {"type" : 22, "value" : "Tag"}}
                               ]
                            }
                         ],
@@ -1610,7 +1610,7 @@
                                           "paramval" : {"type" : 4, "value" : 1},
                                           "value" : {"type" : 19, "value" : 0}
                                        }
-                                    ],"type" : {"type" : 22, "value" : "Character"}}
+                                    ],"type" : {"type" : 22, "value" : "Tag"}}
                               ]
                            }
                         ],
@@ -2232,7 +2232,7 @@
                                           "paramval" : {"type" : 4, "value" : 1},
                                           "value" : {"type" : 19, "value" : 0}
                                        }
-                                    ],"type" : {"type" : 22, "value" : "Character"}}
+                                    ],"type" : {"type" : 22, "value" : "Tag"}}
                               ]
                            }
                         ],
@@ -3138,7 +3138,7 @@
                                           "paramval" : {"type" : 4, "value" : 1},
                                           "value" : {"type" : 19, "value" : 0}
                                        }
-                                    ],"type" : {"type" : 22, "value" : "Character"}}
+                                    ],"type" : {"type" : 22, "value" : "Tag"}}
                               ]
                            }
                         ],

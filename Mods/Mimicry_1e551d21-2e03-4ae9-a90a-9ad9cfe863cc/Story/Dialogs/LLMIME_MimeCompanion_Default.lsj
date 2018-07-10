@@ -1,7 +1,7 @@
 {
    "save" : {
       "header" : {
-         "time" : 1529576269,
+         "time" : 1531186069,
          "version" : "2.0.8.2"
       },
       "regions" : {
@@ -1496,11 +1496,6 @@
                                  {
                                     "flag" : [
                                        {
-                                          "name" : {"type" : 22, "value" : "LeaderLib_IsFollower"},
-                                          "paramval" : {"type" : 4, "value" : 0},
-                                          "value" : {"type" : 19, "value" : 0}
-                                       },
-                                       {
                                           "name" : {"type" : 22, "value" : "Mimicry_PunchedMime"},
                                           "paramval" : {"type" : 4, "value" : 1},
                                           "value" : {"type" : 19, "value" : 0}
@@ -1508,6 +1503,11 @@
                                     ],"type" : {"type" : 22, "value" : "Character"}},
                                  {
                                     "flag" : [
+                                       {
+                                          "name" : {"type" : 22, "value" : "LeaderLib_IsFollower"},
+                                          "paramval" : {"type" : 4, "value" : 0},
+                                          "value" : {"type" : 19, "value" : 0}
+                                       },
                                        {
                                           "name" : {"type" : 22, "value" : "Mimicry_Mime"},
                                           "paramval" : {"type" : 4, "value" : 1},
@@ -1718,11 +1718,6 @@
                                  {
                                     "flag" : [
                                        {
-                                          "name" : {"type" : 22, "value" : "LeaderLib_IsFollower"},
-                                          "paramval" : {"type" : 4, "value" : 0},
-                                          "value" : {"type" : 19, "value" : 1}
-                                       },
-                                       {
                                           "name" : {"type" : 22, "value" : "LeaderLib_IsFollowingSpeaker"},
                                           "paramval" : {"type" : 4, "value" : 0},
                                           "value" : {"type" : 19, "value" : 1}
@@ -1732,7 +1727,15 @@
                                           "paramval" : {"type" : 4, "value" : 1},
                                           "value" : {"type" : 19, "value" : 1}
                                        }
-                                    ],"type" : {"type" : 22, "value" : "Character"}}
+                                    ],"type" : {"type" : 22, "value" : "Character"}},
+                                 {
+                                    "flag" : [
+                                       {
+                                          "name" : {"type" : 22, "value" : "LeaderLib_IsFollower"},
+                                          "paramval" : {"type" : 4, "value" : 0},
+                                          "value" : {"type" : 19, "value" : 1}
+                                       }
+                                    ],"type" : {"type" : 22, "value" : "Tag"}}
                               ]
                            }
                         ],
@@ -3145,11 +3148,6 @@
                                  {
                                     "flag" : [
                                        {
-                                          "name" : {"type" : 22, "value" : "LeaderLib_IsFollower"},
-                                          "paramval" : {"type" : 4, "value" : 0},
-                                          "value" : {"type" : 19, "value" : 1}
-                                       },
-                                       {
                                           "name" : {"type" : 22, "value" : "LeaderLib_IsFollowingSpeaker"},
                                           "paramval" : {"type" : 4, "value" : 0},
                                           "value" : {"type" : 19, "value" : 0}
@@ -3159,7 +3157,15 @@
                                           "paramval" : {"type" : 4, "value" : 1},
                                           "value" : {"type" : 19, "value" : 1}
                                        }
-                                    ],"type" : {"type" : 22, "value" : "Character"}}
+                                    ],"type" : {"type" : 22, "value" : "Character"}},
+                                 {
+                                    "flag" : [
+                                       {
+                                          "name" : {"type" : 22, "value" : "LeaderLib_IsFollower"},
+                                          "paramval" : {"type" : 4, "value" : 0},
+                                          "value" : {"type" : 19, "value" : 1}
+                                       }
+                                    ],"type" : {"type" : 22, "value" : "Tag"}}
                               ]
                            }
                         ],
@@ -3316,10 +3322,7 @@
                                           "name" : {"type" : 22, "value" : "LeaderLib_IsFollower"},
                                           "paramval" : {"type" : 4, "value" : 0},
                                           "value" : {"type" : 19, "value" : 0}
-                                       }
-                                    ],"type" : {"type" : 22, "value" : "Character"}},
-                                 {
-                                    "flag" : [
+                                       },
                                        {
                                           "name" : {"type" : 22, "value" : "Mimicry_Mime"},
                                           "paramval" : {"type" : 4, "value" : 1},
@@ -3522,11 +3525,6 @@
                                  {
                                     "flag" : [
                                        {
-                                          "name" : {"type" : 22, "value" : "LeaderLib_IsFollower"},
-                                          "paramval" : {"type" : 4, "value" : 0},
-                                          "value" : {"type" : 19, "value" : 1}
-                                       },
-                                       {
                                           "name" : {"type" : 22, "value" : "LeaderLib_SpeakerIsFollowerOwner"},
                                           "paramval" : {"type" : 4, "value" : 1},
                                           "value" : {"type" : 19, "value" : 1}
@@ -3541,7 +3539,15 @@
                                     "flag" : [
                                        {
                                           "name" : {"type" : 22, "value" : "Mimicry_LevelIsOriginsTutorial"},"value" : {"type" : 19, "value" : 1}}
-                                    ],"type" : {"type" : 22, "value" : "Global"}}
+                                    ],"type" : {"type" : 22, "value" : "Global"}},
+                                 {
+                                    "flag" : [
+                                       {
+                                          "name" : {"type" : 22, "value" : "LeaderLib_IsFollower"},
+                                          "paramval" : {"type" : 4, "value" : 0},
+                                          "value" : {"type" : 19, "value" : 1}
+                                       }
+                                    ],"type" : {"type" : 22, "value" : "Tag"}}
                               ]
                            }
                         ],
@@ -4356,16 +4362,19 @@
                                  {
                                     "flag" : [
                                        {
-                                          "name" : {"type" : 22, "value" : "LeaderLib_IsFollower"},
-                                          "paramval" : {"type" : 4, "value" : 0},
-                                          "value" : {"type" : 19, "value" : 1}
-                                       },
-                                       {
                                           "name" : {"type" : 22, "value" : "LeaderLib_SpeakerIsFollowerOwner"},
                                           "paramval" : {"type" : 4, "value" : 1},
                                           "value" : {"type" : 19, "value" : 1}
                                        }
-                                    ],"type" : {"type" : 22, "value" : "Character"}}
+                                    ],"type" : {"type" : 22, "value" : "Character"}},
+                                 {
+                                    "flag" : [
+                                       {
+                                          "name" : {"type" : 22, "value" : "LeaderLib_IsFollower"},
+                                          "paramval" : {"type" : 4, "value" : 0},
+                                          "value" : {"type" : 19, "value" : 1}
+                                       }
+                                    ],"type" : {"type" : 22, "value" : "Tag"}}
                               ]
                            }
                         ],
