@@ -141,8 +141,10 @@ ObjectClearFlag(_Mime, "Mimicry_MimeFollower_SourceBlastImmunityDisabled");
 
 /*For disappearing when the player escapes on the boat, and re-appearing on the beach.*/
 //REGION TUT_FTJ_ESCAPE
-IF
-ReadyCheckPassed("TUT_PlayerFlee")
+//IF
+//ReadyCheckPassed("TUT_PlayerFlee")
+PROC
+PROC_TUT_EndTutorial()
 AND
 DB_LLMIME_Follower_Mime(_Mime)
 AND
@@ -172,4 +174,4 @@ SetVisible(_Mime, 1);
 EXITSECTION
 
 ENDEXITSECTION
-ParentTargetEdge "LaughingLeader_Mimicry"
+ParentTargetEdge "LLMIME_3_1_Follower_Origins__Start"
