@@ -2,7 +2,7 @@ INIT
 
 EVENTS
 
-EVENT Wish_ReduceHealth
+EVENT LLMIME_Wish_ReduceHealth
 VARS
 	CHARACTER:_Target
 	CHARACTER:_Caster
@@ -23,7 +23,7 @@ THEN
 	CharacterCharacterEvent(_Caster, _Target, "Mimicry_Events_WishDelay")
 ENDIF
 
-EVENT Wish_ApplyHealing
+EVENT LLMIME_Wish_ApplyHealing
 VARS
 	CHARACTER:_Target
 	CHARACTER:_Caster
@@ -101,4 +101,33 @@ THEN
 	StatusText(_Target, "<font color='#73f6ff' size='20'>Wish</font>")
 	//CharacterPlayEffect(_Target, "LLMIME_FX_Skills_Wish_Cast_Target_Root_01", "Dummy_Root")
 	
+ENDIF
+
+/*Undead spill poison when hit, so clear it after a delay*/
+EVENT LLMIME_SealEvil_StartClearTimer
+VARS
+	CHARACTER:_Mime
+	CHARACTER:_Target
+ON
+	OnCharacterStatusApplied(_Target, LLMIME_SEAL_EVIL)
+ACTIONS
+	SetVar(_Target, "LeaderLib_Timer_Delay", INT:750)
+	SetVar(_Target, "LeaderLib_Timer_CompleteEvent", STRING:"Mimicry_Events_ClearPoisonSurface")
+	CharacterEvent(_Target, "LeaderLib_Commands_StartObjectTimer")
+
+EVENT LLMIME_SealEvil_ClearPoison
+VARS
+	CHARACTER:_Mime
+	CHARACTER:_Target
+ON
+	OnCharacterEvent(_Target, "Mimicry_Events_ClearPoisonSurface")
+ACTIONS
+IF "c1|c2|c3"
+	ContainsSurface(_Target, 5.0, SurfacePoison)
+	ContainsSurface(_Target, 5.0, SurfacePoisonCloud)
+	ContainsSurface(_Target, 5.0, SurfacePoisonCursed)
+THEN
+	CreateSurfaceAt(_Target, SurfaceNone, 3.0, 0)
+ELSE
+	//StatusText(_Target, "No poison found?")
 ENDIF

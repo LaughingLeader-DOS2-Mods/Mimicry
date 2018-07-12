@@ -351,6 +351,12 @@ data "DisplayNameRef" "Sealed"
 data "Description" "LLMIME_SEAL_EVIL_Desc"
 data "DescriptionRef" "Character has been sealed, turning them to stone."
 
+new entry "Stats_LLMIME_SurfaceClear"
+type "Potion"
+data "Act" "1"
+data "Act part" "0"
+data "ExtraProperties" "TargetCreateSurface,1,-1,None,100"
+
 new entry "LLMIME_SELF_SACRIFICE"
 type "StatusData"
 data "StatusType" "CONSUME"
