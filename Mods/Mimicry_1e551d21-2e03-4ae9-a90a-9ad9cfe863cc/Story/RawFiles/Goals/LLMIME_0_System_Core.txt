@@ -39,6 +39,7 @@ SysClear("DB_LLMIME_MimickingStatuses", 1);
 DB_LLMIME_MimickingStatuses("LLMIME_MIMICKING");
 DB_LLMIME_MimickingStatuses("LLMIME_MIMICKING_FOLLOWER");
 DB_LLMIME_MimickingStatuses("LLMIME_MIMICKING_SOURCE");
+DB_LLMIME_MimickingStatuses("LLMIME_MIMICKING_ENEMY");
 
 SysClear("DB_LLMIME_MimeStatuses", 1);
 DB_LLMIME_MimeStatuses("LLMIME_MIMICKING_DISABLED");
@@ -658,6 +659,13 @@ AND
 HasActiveStatus(_Character, "LLMIME_MIME", 1)
 AND
 IsTagged(_Character, "LLMIME_Dummy", 0)
+THEN
+DB_NOOP(1);
+
+QRY
+LLMIME_QRY_CharacterIsAMime((CHARACTERGUID)_Character)
+AND
+IsTagged(_Character, "Mimicry_EnemyMime", 1)
 THEN
 DB_NOOP(1);
 

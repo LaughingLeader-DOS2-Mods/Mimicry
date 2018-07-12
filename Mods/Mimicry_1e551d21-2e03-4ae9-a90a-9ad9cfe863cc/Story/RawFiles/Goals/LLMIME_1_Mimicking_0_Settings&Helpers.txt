@@ -281,6 +281,15 @@ DB_NOOP(1);
 QRY
 LLMIME_Mimicking_QRY_CanMimicCharacter((CHARACTERGUID)_Character, (CHARACTERGUID)_Mime)
 AND
+LLMIME_Mimicking_QRY_CanMimicCharacter(_Character, _Mime, "", "")
+THEN
+DB_NOOP(1);
+
+QRY
+LLMIME_Mimicking_QRY_CanMimicCharacter((CHARACTERGUID)_Character, (CHARACTERGUID)_Mime, (STRING)_Action, (STRING)_ActionType)
+AND
+IsTagged(_Mime, "Mimicry_EnemyMime", 0)
+AND
 NOT LLMIME_Mimicking_QRY_MimeIsCurrentlyMimicking(_Mime)
 AND
 _Character != _Mime
@@ -296,6 +305,56 @@ AND
 LLMIME_Mimicking_QRY_PartyConditionsMet(_Character, _Mime)
 AND
 LLMIME_Mimicking_QRY_CanMimicSummon(_Character)
+THEN
+DB_NOOP(1);
+
+//Enemy Mime skill mimicking
+QRY
+LLMIME_Mimicking_QRY_CanMimicCharacter((CHARACTERGUID)_Character, (CHARACTERGUID)_Mime, (STRING)_Skill, (STRING)_SkillType)
+AND
+_SkillType == "shout"
+AND
+IsTagged(_Mime, "Mimicry_EnemyMime", 1)
+AND
+NOT LLMIME_Mimicking_QRY_MimeIsCurrentlyMimicking(_Mime)
+AND
+_Character != _Mime
+AND
+QRY_CharacterIsNotDisabled(_Mime)
+AND
+CharacterIsSummon(_Character, 0)
+AND
+LLMIME_Mimicking_QRY_CanMimicMime(_Character, _Mime)
+AND
+CharacterIsEnemy(_Character, _Mime, 1)
+THEN
+DB_NOOP(1);
+
+QRY
+LLMIME_Mimicking_QRY_CanMimicCharacterWithItem((CHARACTERGUID)_Character, (CHARACTERGUID)_Mime, (ITEMGUID)_Item)
+AND
+IsTagged(_Mime, "Mimicry_EnemyMime", 0)
+AND
+LLMIME_Mimicking_QRY_CanMimicCharacter(_Character, _Mime, "", "")
+THEN
+DB_NOOP(1);
+
+QRY
+LLMIME_Mimicking_QRY_CanMimicCharacterWithItem((CHARACTERGUID)_Character, (CHARACTERGUID)_Mime, (ITEMGUID)_Item)
+AND
+IsTagged(_Mime, "Mimicry_EnemyMime", 1)
+AND
+NOT LLMIME_Mimicking_QRY_MimeIsCurrentlyMimicking(_Mime)
+AND
+_Character != _Mime
+AND
+QRY_CharacterIsNotDisabled(_Mime)
+AND
+CharacterIsSummon(_Character, 0)
+AND
+LLMIME_Mimicking_QRY_CanMimicMime(_Character, _Mime)
+AND
+CharacterIsEnemy(_Character, _Mime, 1)
 THEN
 DB_NOOP(1);
 
@@ -365,6 +424,13 @@ AND
 NOT GlobalGetFlag("Mimicry_Mimic_PartyOnlyDisabled", 1)
 AND
 CharacterIsInPartyWith(_Character, _Mime, 1)
+THEN
+DB_NOOP(1);
+
+QRY
+LLMIME_Mimicking_QRY_PartyConditionsMet((CHARACTERGUID)_Character, (CHARACTERGUID)_Mime)
+AND
+IsTagged(_Mime, "Mimicry_EnemyMime", 1)
 THEN
 DB_NOOP(1);
 
@@ -447,6 +513,13 @@ QRY
 LLMIME_Mimicking_QRY_IsMimicking((CHARACTERGUID)_Mime)
 AND
 HasActiveStatus(_Mime, "LLMIME_MIMICKING_FOLLOWER", 1)
+THEN
+DB_NOOP(1);
+
+QRY
+LLMIME_Mimicking_QRY_IsMimicking((CHARACTERGUID)_Mime)
+AND
+HasActiveStatus(_Mime, "LLMIME_MIMICKING_ENEMY", 1)
 THEN
 DB_NOOP(1);
 //END_REGION

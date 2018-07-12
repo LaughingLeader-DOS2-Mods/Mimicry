@@ -20,7 +20,7 @@ DB_LLMIME_Mimicking_Temp_TargetPriority(_Caster, _Target, _TargetPriority)
 AND
 DB_LLMIME_Mimicking_MimicNextAction(_Mime)
 AND
-LLMIME_Mimicking_QRY_CanMimicCharacter(_Caster, _Mime)
+LLMIME_Mimicking_QRY_CanMimicCharacter(_Caster, _Mime, "", "")
 AND
 GetPosition(_Target, _TargetX, _TargetY, _TargetZ)
 AND

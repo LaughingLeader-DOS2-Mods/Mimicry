@@ -48,7 +48,7 @@ DB_LLMIME_Mimicking_MimicNextAction(_Mime)
 AND
 LLMIME_Mimicking_QRY_CanMimicSourceSkill(_Skill, _Mime)
 AND
-LLMIME_Mimicking_QRY_CanMimicCharacter(_Caster, _Mime)
+LLMIME_Mimicking_QRY_CanMimicCharacter(_Caster, _Mime, _Skill, _SkillType)
 AND
 GetPosition(_Target, _TargetX, _, _TargetZ)
 THEN
@@ -68,7 +68,7 @@ DB_LLMIME_Mimicking_MimicNextAction(_Mime)
 AND
 LLMIME_Mimicking_QRY_CanMimicSourceSkill(_Skill, _Mime)
 AND
-LLMIME_Mimicking_QRY_CanMimicCharacter(_Caster, _Mime)
+LLMIME_Mimicking_QRY_CanMimicCharacter(_Caster, _Mime, _Skill, _SkillType)
 THEN
 LeaderLog_Log("DEBUG", "[LLMIME:Mime:CharacterUsedSkillOnTarget] Queueing up next mimic self-target skill [",_Skill,"].");
 LLMIME_Mimicking_QueueNextSelfAction(_Mime, _Caster, _Skill, "Skill");
@@ -102,7 +102,7 @@ DB_LLMIME_Mimicking_MimicNextAction(_Mime)
 AND
 NOT DB_LLMIME_Timers_SkillCastAtPosition(_, _Caster, _TargetX, _TargetZ, _Skill, _SkillType)
 AND
-LLMIME_Mimicking_QRY_CanMimicCharacter(_Caster, _Mime)
+LLMIME_Mimicking_QRY_CanMimicCharacter(_Caster, _Mime, _Skill, _SkillType)
 AND
 LLMIME_Mimicking_QRY_CanMimicSourceSkill(_Skill, _Mime)
 AND
@@ -138,7 +138,7 @@ DB_LLMIME_Mimicking_MimicNextAction(_Mime)
 AND
 LLMIME_Mimicking_QRY_CanMimicSourceSkill(_Skill, _Mime)
 AND
-LLMIME_Mimicking_QRY_CanMimicCharacter(_Caster, _Mime)
+LLMIME_Mimicking_QRY_CanMimicCharacter(_Caster, _Mime, _Skill, "shout")
 THEN
 LeaderLog_Log("DEBUG", "[LLMIME:Mime:OnSkillCastAtPosition] Queuing up next mimic shout skill [",_Skill,"].");
 LLMIME_Mimicking_QueueNextSelfAction(_Mime, _Caster, _Skill, "Skill");
@@ -152,7 +152,7 @@ DB_LLMIME_Mimicking_MimicNextAction(_Mime)
 AND
 LLMIME_Mimicking_QRY_CanMimicSourceSkill(_Skill, _Mime)
 AND
-LLMIME_Mimicking_QRY_CanMimicCharacter(_Caster, _Mime)
+LLMIME_Mimicking_QRY_CanMimicCharacter(_Caster, _Mime, _Skill, _SkillType)
 THEN
 LeaderLog_Log("DEBUG", "[LLMIME:Mime:CharacterUsedSkillAtPosition] Queuing up next mimic positional skill [",_Skill,"].");
 LLMIME_Mimicking_QueueNextAction(_Mime, _Caster, _Skill, "Skill", _TargetX, _TargetZ, -1);

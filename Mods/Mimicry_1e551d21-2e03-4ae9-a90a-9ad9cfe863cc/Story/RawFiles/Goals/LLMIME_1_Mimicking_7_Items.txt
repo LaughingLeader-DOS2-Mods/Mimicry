@@ -14,7 +14,7 @@ GetTemplate(_Item, _Template)
 AND
 DB_LLMIME_Mimicking_MimicNextAction(_Mime)
 AND
-LLMIME_Mimicking_QRY_CanMimicCharacter(_Caster, _Mime)
+LLMIME_Mimicking_QRY_CanMimicCharacterWithItem(_Caster, _Mime, _Item)
 THEN
 LeaderLog_Log("DEBUG", "[LLMIME:Mime:CharacterUsedItem] Queueing up next item mimic [",_Template,"] on mime.");
 LLMIME_Mimicking_QueueNextSelfAction(_Mime, _Caster, _Template, "Item");

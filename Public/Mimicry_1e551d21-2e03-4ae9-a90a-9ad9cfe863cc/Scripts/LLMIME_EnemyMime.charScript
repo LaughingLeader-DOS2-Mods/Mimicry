@@ -1,0 +1,22 @@
+INIT
+	CHARACTER:__Me
+EVENTS
+
+EVENT LLMIME_Enemy_SetStatusOnInit
+ON
+	OnInit()
+ACTIONS
+	CharacterApplyStatus(__Me, LLMIME_BRAWLER_STANCE_CON,-1, 1)
+
+EVENT LLMIME_Enemy_OnStatusRemoved
+ON
+	OnCharacterStatusRemoved(__Me, LLMIME_BRAWLER_STANCE_CON)
+ACTIONS
+	//StartTimer("LLMIME_Timers_Enemy_StatusReapplyDelay",0.5,0)
+	
+EVENT LLMIME_Enemy_FrameDelayForReapply
+ON
+	OnTimer("LLMIME_Timers_Enemy_StatusReapplyDelay")
+ACTIONS
+	CharacterApplyStatus(__Me, LLMIME_BRAWLER_STANCE_CON,-1)
+	StopTimer("LLMIME_Timers_Enemy_StatusReapplyDelay")

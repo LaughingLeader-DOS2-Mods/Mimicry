@@ -14,6 +14,21 @@ KBSECTION
 //REGION SETTINGS
 PROC
 LLMIME_Follower_InitSettings()
+THEN
+LeaderLib_Growth_Characters_Register_Skill("Mimicry.MimeFollower", 2, "Target_EnemyCripplingBlow", "Tag", "LLMIME_MimeFollower");
+LeaderLib_Growth_Characters_Register_Skill("Mimicry.MimeFollower", 4, "MultiStrike_LLMIME_MimeVault", "Tag", "LLMIME_MimeFollower");
+LeaderLib_Growth_Characters_Register_Skill("Mimicry.MimeFollower", 6, "Target_LLMIME_DisarmingBlow", "Tag", "LLMIME_MimeFollower");
+LeaderLib_Growth_Characters_Register_Skill("Mimicry.MimeFollower", 8, "Target_LLMIME_SealEvil", "Tag", "LLMIME_MimeFollower");
+LeaderLib_Growth_Characters_Register_Skill("Mimicry.MimeFollower", 11, "Target_LLMIME_KneeBreaker", "Tag", "LLMIME_MimeFollower");
+LeaderLib_Growth_Characters_Register_Skill("Mimicry.MimeFollower", 13, "Target_LLMIME_SilencingStare", "Tag", "LLMIME_MimeFollower");
+LeaderLib_Growth_Characters_Register_Skill("Mimicry.MimeFollower", 15, "Shout_EnemyOverthrow", "Tag", "LLMIME_MimeFollower");
+LeaderLib_Growth_Characters_Register_Skill("Mimicry.MimeFollower", 17, "Projectile_LLMIME_FinalWish", "Tag", "LLMIME_MimeFollower");
+LeaderLib_Growth_Characters_Register_Skill("Mimicry.MimeFollower", 18, "Target_LLMIME_Fatality", "Tag", "LLMIME_MimeFollower");
+//END_REGION
+
+//REGION SETTINGS_ANIMATIONS
+PROC
+LLMIME_Follower_InitSettings()
 AND
 NOT DB_LLMIME_Follower_RandomAnimation(_,_)
 THEN
@@ -59,9 +74,7 @@ DB_LLMIME_Follower_RandomAnimation(_Index, _Animation);
 
 //REGION UPDATING
 QRY
-LLMIME_Follower_Internal_QRY_VersionNeedsUpdating((STRING)_Version)
-AND
-_Version == "0.9.0.0"
+LLMIME_Follower_Internal_QRY_VersionNeedsUpdating("0.9.0.0")
 THEN
 DB_NOOP(1);
 
@@ -1061,6 +1074,35 @@ AND
 CharacterHasSkill(_Mime, "Shout_LLMIME_SourceMimicking_Follower", 0)
 THEN
 CharacterAddSkill(_Mime, "Shout_LLMIME_SourceMimicking_Follower");
+
+IF
+ObjectFlagSet("GLO_Has2MaxMP", (CHARACTERGUID)_Owner, _)
+AND
+DB_LLLIB_PartyFollower(_Owner, _Mime)
+AND
+IsTagged(_Mime, "LLMIME_MimeFollower", 1)
+THEN
+CharacterOverrideMaxSourcePoints(_Mime, 2);
+
+IF
+ObjectFlagSet("GLO_Has3MaxMP", (CHARACTERGUID)_Owner, _)
+AND
+DB_LLLIB_PartyFollower(_Owner, _Mime)
+AND
+IsTagged(_Mime, "LLMIME_MimeFollower", 1)
+THEN
+CharacterOverrideMaxSourcePoints(_Mime, 3);
+
+IF
+CharacterJoinedParty(_Mime)
+AND
+IsTagged(_Mime, "LLMIME_MimeFollower", 1)
+AND
+DB_LLLIB_PartyFollower(_Owner, _Mime)
+AND
+CharacterGetMaxSourcePoints(_Owner, _Amount)
+THEN
+CharacterOverrideMaxSourcePoints(_Mime, _Amount);
 //END_REGION
 
 //REGION GHOST_SPAWNING_START
@@ -1107,6 +1149,7 @@ IsTagged(_Mime, "LeaderLib_IsFollower", 1)
 THEN
 CharacterSetCorpseLootable(_Mime, 0);
 
+/*
 IF
 CharacterDied(_Mime)
 AND
@@ -1115,13 +1158,16 @@ AND
 IsTagged(_Mime, "LeaderLib_IsFollower", 0)
 THEN
 CharacterSetCorpseLootable(_Mime, 1);
+*/
 
+/*
 IF
 ObjectLostTag((CHARACTERGUID)_Mime, "LeaderLib_IsFollower")
 AND
 DB_LLMIME_Follower_Mime(_Mime)
 THEN
 CharacterSetCorpseLootable(_Mime, 1);
+*/
 
 IF
 CombatEnded(_CombatID)
@@ -1313,6 +1359,7 @@ DB_LLMIME_Follower_Mime(_Mime)
 AND
 GetPosition(_Mime, _x, _y, _z)
 THEN
+CharacterCharacterSetEvent(_Mime, _Player, "Mimicry_Events_MaskTakenFromFollower");
 //PlayEffectAtPosition("RS3_FX_GP_Impacts_Wand_Void_01", _x, _y, _z);
 PlayEffectAtPosition("RS3_FX_GP_Impacts_Void_Shield_01", _x, _y, _z);
 LeaderLib_Follower_DismissCharacter(_Mime, "", 0);
@@ -1327,12 +1374,18 @@ GetPosition(_Mime, _x, _y, _z)
 AND
 CreateItemTemplateAtPosition("CONT_Humans_Backpack_Merchant_A_360e3e11-c7f8-4281-848a-596e37df884b", _x, _y, _z, _Backpack)
 THEN
+LeaderLib_StartCharacterCharacterTimer(_Mime, _Player, 750, "LLMIME_Timers_TreasureEffectsTimer", "Mimicry_Events_MimeFollowerLootSpawned");
 SetTag(_Mime, "LLMIME_MimeFollower_TagTreasure");
 GenerateTreasure(_Backpack, "LLMIME_MimeFollower_Treasure", -1, _Player);
 MoveAllItemsTo(_Backpack, _Mime, 1, 1, 1);
 ItemRemove(_Backpack);
 LeaderLib_StartObjectTimer(_Mime, 500, "LLMIME_Timers_StopTaggingMimeFollowerTreasure_", "LLMIME_Events_StopTaggingMimeFollowerTreasure");
 LeaderLog_Log("DEBUG", "[LLMIME:Follower:Mimicry_MaskTakenFromFollower] Generated mime follower treasure and moved to corpse.");
+
+IF
+CharacterCharacterEvent(_Mime, _Player, "Mimicry_Events_MimeFollowerLootSpawned")
+THEN
+CharacterSetCorpseLootable(_Mime, 1);
 
 IF
 ItemAddedToCharacter(_Item, _Mime)

@@ -446,6 +446,8 @@ LLMIME_Mimicking_ApplyMimicking((CHARACTERGUID)_Mime)
 AND
 IsTagged(_Mime, "LLMIME_MimeFollower", 0)
 AND
+IsTagged(_Mime, "Mimicry_EnemyMime", 0)
+AND
 HasActiveStatus(_Mime, "LLMIME_MIMICKING", 0)
 AND
 LLMIME_Mimicking_QRY_MimeShouldBeMimicking(_Mime)
@@ -462,6 +464,17 @@ AND
 LLMIME_Mimicking_QRY_FollowerShouldBeMimicking(_Mime)
 THEN
 ApplyStatus(_Mime, "LLMIME_MIMICKING_FOLLOWER", -1.0, 1);
+
+PROC
+LLMIME_Mimicking_ApplyMimicking((CHARACTERGUID)_Mime)
+AND
+IsTagged(_Mime, "Mimicry_EnemyMime", 1)
+AND
+HasActiveStatus(_Mime, "LLMIME_MIMICKING_ENEMY", 0)
+AND
+LLMIME_Mimicking_QRY_MimeShouldBeMimicking(_Mime)
+THEN
+ApplyStatus(_Mime, "LLMIME_MIMICKING_ENEMY", -1.0, 1);
 
 IF
 CharacterStatusApplied(_Mime, _Status, _)

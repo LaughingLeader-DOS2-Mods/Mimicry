@@ -2,7 +2,7 @@ INIT
 
 EVENTS
 
-EVENT BrawlerStance_Activated_SkillUsed
+EVENT LLMIME_BrawlerStance_Activated_SkillUsed
 VARS
 	CHARACTER:_Char
 ON
@@ -11,14 +11,14 @@ ACTIONS
 	CharacterPlayEffect(_Char, "LLMIME_FX_Skills_BrawlerStance_Activate_Root_01", "Dummy_R_Hand")
 	//CharacterPlayEffect(_Char, "LLMIME_FX_Skills_BrawlerStance_Activate_Overlay_01", "Dummy_Root")
 	
-EVENT BrawlerStance_Activated_SkillCast
+EVENT LLMIME_BrawlerStance_Activated_SkillCast
 VARS
 	CHARACTER:_Char
 ON
 	OnCharacterEvent(_Char, "LLMIME_Events_BrawlerStanceActivated_Cast")
 ACTIONS
 
-EVENT BrawlerStance_Deactivated_Status
+EVENT LLMIME_BrawlerStance_Deactivated_Status
 VARS
 	CHARACTER:_Char
 ON
@@ -30,7 +30,7 @@ THEN
 	CharacterPlayEffect(_Char, "LLMIME_FX_Skills_BrawlerStance_Deactivate_OverheadFX_01", "Dummy_OverheadFX")
 ENDIF
 	
-EVENT BrawlerStance_Deactivated_SkillUsed
+EVENT LLMIME_BrawlerStance_Deactivated_SkillUsed
 VARS
 	CHARACTER:_Char
 ON
@@ -39,9 +39,25 @@ ACTIONS
 	CharacterPlayEffect(_Char, "LLMIME_FX_Skills_BrawlerStance_Deactivate_Root_01", "Dummy_R_Hand")
 	//CharacterPlayEffect(_Char, "LLMIME_FX_Skills_BrawlerStance_Deactivate_Overlay_01")
 	
-EVENT BrawlerStance_Deactivated_SkillCast
+EVENT LLMIME_BrawlerStance_Deactivated_SkillCast
 VARS
 	CHARACTER:_Char
 ON
 	OnCharacterEvent(_Char, "LLMIME_Events_BrawlerStanceDeactivated_Cast")
 ACTIONS
+	
+EVENT LLMIME_MimeFollower_TreasureSpawned_Effects
+VARS
+	CHARACTER:_Mime
+	CHARACTER:_Player
+	FLOAT3:_Pos
+ON
+	OnCharacterCharacterEvent(_Mime, _Player, "Mimicry_Events_MimeFollowerLootSpawned")
+ACTIONS
+IF "c1"
+	GetPosition(_Mime, _Pos)
+THEN
+	PlayEffectAt(_Pos, "RS3_FX_GP_ScriptedEvent_Sparkles_01")
+	PlayEffectAt(_Pos, "RS3_FX_GP_ScriptedEvent_Lucky_01")
+	CharacterApplyStatus(_Mime, EXPLODE, 1, 1, _Player)
+ENDIF
