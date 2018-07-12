@@ -1076,27 +1076,11 @@ THEN
 CharacterAddSkill(_Mime, "Shout_LLMIME_SourceMimicking_Follower");
 
 IF
-ObjectFlagSet("GLO_Has2MaxMP", (CHARACTERGUID)_Owner, _)
-AND
-DB_LLLIB_PartyFollower(_Owner, _Mime)
-AND
-IsTagged(_Mime, "LLMIME_MimeFollower", 1)
-THEN
-CharacterOverrideMaxSourcePoints(_Mime, 2);
-
-IF
-ObjectFlagSet("GLO_Has3MaxMP", (CHARACTERGUID)_Owner, _)
-AND
-DB_LLLIB_PartyFollower(_Owner, _Mime)
-AND
-IsTagged(_Mime, "LLMIME_MimeFollower", 1)
-THEN
-CharacterOverrideMaxSourcePoints(_Mime, 3);
-
-IF
 CharacterJoinedParty(_Mime)
 AND
 IsTagged(_Mime, "LLMIME_MimeFollower", 1)
+AND
+NOT DB_CurrentGameMode("Campaign")
 AND
 DB_LLLIB_PartyFollower(_Owner, _Mime)
 AND
@@ -1190,9 +1174,9 @@ NOT DB_LLMIME_Follower_Temp_SpawnedGhostAfterCombat(_CombatID, _Mime);
 QRY
 LLMIME_Follower_QRY_GhostExists()
 AND
-DB_LLMIME_FollowerGhost(_MimeGhost)
+DB_LLMIME_FollowerGhost(_Ghost)
 AND
-ObjectExists(_MimeGhost, 1)
+ObjectExists(_Ghost, 1)
 THEN
 DB_NOOP(1);
 
@@ -1251,34 +1235,26 @@ NOT DB_LLMIME_Follower_Temp_SpawnedGhost(_Mime);
 PROC
 LLMIME_Follower_SpawnGhost((CHARACTERGUID)_Mime)
 AND
-DB_LLMIME_FollowerGhost(_MimeGhost)
+DB_LLMIME_FollowerGhost(_Ghost)
 AND
-ObjectExists((CHARACTERGUID)_MimeGhost, 0)
+ObjectExists((CHARACTERGUID)_Ghost, 0)
 THEN
-NOT DB_LLMIME_FollowerGhost(_MimeGhost);
+NOT DB_LLMIME_FollowerGhost(_Ghost);
 
 PROC
 LLMIME_Follower_SpawnGhost((CHARACTERGUID)_Mime)
 AND
-DB_LLMIME_FollowerGhost(_MimeGhost)
+DB_LLMIME_FollowerGhost(_Ghost)
 AND
-ObjectExists((CHARACTERGUID)_MimeGhost, 1)
+ObjectExists((CHARACTERGUID)_Ghost, 1)
 AND
-CharacterIsDead(_MimeGhost, 0)
+CharacterIsDead(_Ghost, 0)
 AND
 GetPosition(_Mime, _x, _y, _z)
 THEN
-TeleportToPosition(_MimeGhost, _x, _y, _z, "Mimicry_MimeGhostAppeared", 0);
-
-IF
-StoryEvent(_MimeGhost, "Mimicry_MimeGhostAppeared")
-AND
-GetPosition(_MimeGhost, _x, _y, _z)
-THEN
-ObjectSetFlag(_MimeGhost, "GLO_Ghost_Visible");
-PlayEffectAtPosition("RS3_FX_Char_Ghosts_Teleport_in_01", _x, _y, _z);
-PlayAnimation(_MimeGhost, "deathfigure_start", "LLMIME_Events_Follower_StartGhostLoop");
-SetOnStage(_MimeGhost, 1);
+SetStoryEvent(_Ghost, "Mimicry_Events_MimeFollower_InitGhost");
+TeleportToPosition(_Ghost, _x, _y, _z, "", 0);
+LLMIME_Follower_Internal_OnGhostAppeared(_Ghost);
 
 PROC
 LLMIME_Follower_SpawnGhost((CHARACTERGUID)_Mime)
@@ -1291,54 +1267,43 @@ DB_LLMIME_Templates("MimeFollower_Ghost", _Template)
 AND
 NOT DB_LLMIME_FollowerGhost(_) // Safety
 AND
-TemporaryCharacterCreateAtPosition(_x, _y, _z, _Template, 0, _MimeGhost)
+TemporaryCharacterCreateAtPosition(_x, _y, _z, _Template, 0, _Ghost)
 THEN
-PlayAnimation(_MimeGhost, "deathfigure_start", "");
-ObjectSetFlag(_MimeGhost, "GLO_Ghost_Visible");
-PlayEffectAtPosition("RS3_FX_Char_Ghosts_Teleport_in_01", _x, _y, _z);
-LLMIME_Follower_Internal_StartGhostLoopEffects(_MimeGhost);
-DB_LLMIME_FollowerGhost(_MimeGhost); 
-DB_Dialogs(_MimeGhost, "LLMIME_MimeCompanion_Ghost");
-//CharacterLinkGhost(_Mime, _MimeGhost);
-CharacterSetImmortal(_MimeGhost,1);
-ProcSetInvulnerable(_MimeGhost,1);
-LeaderLib_StartObjectTimer(_MimeGhost, 1600, "LLMIME_Timers_PlayGhostLoop_", "LLMIME_Events_Follower_PlayGhostLoop");
+DB_LLMIME_FollowerGhost(_Ghost);
+LLMIME_Follower_Internal_OnGhostAppeared(_Ghost);
+
+PROC
+LLMIME_Follower_Internal_OnGhostAppeared((CHARACTERGUID)_Ghost)
+THEN
+DB_Dialogs(_Ghost, "LLMIME_MimeCompanion_Ghost");
+//SetInvulnerable_UseProcSetInvulnerable(_Ghost,1);
+ObjectSetFlag(_Ghost, "GLO_Ghost_Visible");
+SetStoryEvent(_Ghost, "Mimicry_Events_MimeFollower_GhostAppeared");
 
 IF
 CharacterResurrected(_Mime)
 AND
 DB_LLMIME_Follower_Mime(_Mime)
 AND
-DB_LLMIME_FollowerGhost(_MimeGhost)
+DB_LLMIME_FollowerGhost(_Ghost)
 THEN
-SetOnStage(_MimeGhost, 0);
+SetStoryEvent(_Ghost, "Mimicry_Events_MimeFollower_Resurrected");
 
 IF
 RegionEnded(_)
 AND
-DB_LLMIME_FollowerGhost(_MimeGhost)
+DB_LLMIME_FollowerGhost(_Ghost)
 THEN
-SetOnStage(_MimeGhost, 0);
-//DestroyGhost(_MimeGhost);
-NOT DB_LLMIME_FollowerGhost(_MimeGhost);
-
-PROC
-LLMIME_Follower_Internal_StartGhostLoopEffects((CHARACTERGUID)_Ghost)
-AND
-PlayLoopEffect(_Ghost, "LLMIME_FX_Scripted_Ghost_Root_01", "Dummy_Root", _Handle1)
-AND
-PlayLoopEffect(_Ghost, "LLMIME_FX_Scripted_Ghost_Hands_Root_01", "Hand_L_Bone", _Handle2)
-AND
-PlayLoopEffect(_Ghost, "LLMIME_FX_Scripted_Ghost_Hands_Root_01", "Hand_R_Bone", _Handle3)
-THEN
-DB_LLMIME_Follower_Temp_GhostEffect(_Ghost, _Handle1);
-DB_LLMIME_Follower_Temp_GhostEffect(_Ghost, _Handle2);
-DB_LLMIME_Follower_Temp_GhostEffect(_Ghost, _Handle3);
+SetOnStage(_Ghost, 0);
+NOT DB_LLMIME_FollowerGhost(_Ghost);
 
 IF
-StoryEvent((CHARACTERGUID)_Ghost, "LLMIME_Events_Follower_PlayGhostLoop")
+CharacterDied(_Ghost)
+AND
+DB_LLMIME_FollowerGhost(_Ghost)
 THEN
-CharacterSetAnimationOverride(_Ghost, "deathfigure_loop");
+NOT DB_LLMIME_FollowerGhost(_Ghost);
+LeaderLog_Log("DEBUG", "[LLMIME:Follower] Mime ghost died.");
 //END_REGION
 
 //REGION GHOST_FOLLOWER_DEATH
@@ -1442,7 +1407,7 @@ IF
 StoryEvent((CHARACTERGUID)_Ghost, "LLMIME_Events_Follower_KillGhost")
 THEN
 CharacterSetImmortal(_Ghost,0);
-ProcSetInvulnerable(_Ghost,0);
+SetInvulnerable_UseProcSetInvulnerable(_Ghost,0);
 SetOnStage(_Ghost, 0);
 CharacterDie(_Ghost, 0, "None");
 //END_REGION

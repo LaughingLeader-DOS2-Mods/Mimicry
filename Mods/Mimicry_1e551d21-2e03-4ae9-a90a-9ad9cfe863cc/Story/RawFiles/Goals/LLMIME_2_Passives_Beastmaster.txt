@@ -668,6 +668,7 @@ IsTagged(_Summon, "INCARNATE_G", 1)
 AND
 GetPosition(_Summon, _x, _y, _z)
 THEN
+JumpToTurn(_Summon);
 PlayScaledEffectAtPosition("RS3_FX_Elven_Pillar_Explosion", 0.5, _x, _y, _z);
 SetStoryEvent(_Summon, "Mimicry_SummonEvolved");
 

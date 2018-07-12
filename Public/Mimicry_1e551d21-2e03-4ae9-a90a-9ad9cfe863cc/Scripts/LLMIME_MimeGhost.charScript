@@ -1,0 +1,91 @@
+INIT
+	CHARACTER:__Me
+	INT64:%LoopEffectHandle = null
+	INT:%LLMIME_Ghost_State = -1
+
+EVENTS
+
+EVENT LLMIME_Ghost_OnInit
+ON
+	OnInit()
+	OnCharacterEvent(__Me, "Mimicry_Events_MimeFollower_InitGhost")
+ACTIONS
+	SetVisible(__Me, 0)
+	CharacterSetImmortal(__Me, 1)
+	SetInvulnerable(__Me, 1)
+	CharacterEvent(__Me, "Mimicry_Events_MimeFollower_ResetGhost")
+	
+EVENT LLMIME_Ghost_StartEffects
+ON
+	OnCharacterEvent(__Me, "Mimicry_Events_MimeFollower_GhostAppeared")
+ACTIONS
+	CharacterSetOnStage()
+	CharacterPlayLoopEffect(%LoopEffectHandle, __Me, "LLMIME_FX_Scripted_Ghost_Root_01")
+	//CharacterPlayEffect(__Me, "LLMIME_FX_Scripted_Follower_Summon_TeleportOverlay_01")
+	StartTimer("Mimicry_Timers_MimeFollower_PlayGhostAnimationStart", 1.706620, 0)
+	StartTimer("Mimicry_Timers_MimeFollower_PlayGhostAnimationLoop", 3.55, 0)
+	
+EVENT LLMIME_Ghost_PlayStartAnim
+ON
+	OnTimer("Mimicry_Timers_MimeFollower_PlayGhostAnimationStart")
+ACTIONS
+	Set(%LLMIME_Ghost_State, 1)
+	SetVisible(__Me, 1)
+
+EVENT LLMIME_Ghost_PlayLoopAnim
+ON
+	OnTimer("Mimicry_Timers_MimeFollower_PlayGhostAnimationLoop")
+ACTIONS
+	CharacterSetAnimationOverride(__Me, "deathfigure_loop")
+	Set(%LLMIME_Ghost_State, -1)
+	
+EVENT LLMIME_Ghost_Resurrected
+ON
+	OnCharacterEvent(__Me, "Mimicry_Events_MimeFollower_Resurrected")
+ACTIONS
+	SetVisible(__Me, 0)
+	CharacterEvent(__Me, "Mimicry_Events_MimeFollower_ResetGhost")
+	StartTimer("Mimicry_Timers_MimeFollower_KillGhost", 0.9, 0)
+IF "!c1"
+	IsEqual(%LoopEffectHandle, null)
+THEN
+	StopLoopEffect(%LoopEffectHandle)
+	Set(%LoopEffectHandle, null)
+ENDIF
+
+EVENT LLMIME_Ghost_Remove
+ON
+	OnTimer("Mimicry_Timers_MimeFollower_KillGhost")
+ACTIONS
+	CharacterSetImmortal(__Me, 0)
+	SetInvulnerable(__Me, 0)
+	CharacterSetOffStage()
+	CharacterDie(__Me, None)
+
+BEHAVIOUR
+
+REACTION LLMIME_Ghost_PlayStartAnim, 2550
+USAGE ALL
+CHECK "c1"
+	IsEqual(%LLMIME_Ghost_State, 1)
+ACTIONS
+IF "c1"
+	CharacterHasAnimationOverride(__Me)
+THEN
+	CharacterSetAnimationOverride(__Me, "")
+ENDIF
+	CharacterPlayAnimation("deathfigure_start", 0, 1, 1)
+	Set(%LLMIME_Ghost_State, -1)
+	
+REACTION LLMIME_Ghost_PlayEndAnim, 2555
+USAGE ALL
+CHECK "c1"
+	IsEqual(%LLMIME_Ghost_State, 2)
+ACTIONS
+IF "c1"
+	CharacterHasAnimationOverride(__Me)
+THEN
+	CharacterSetAnimationOverride(__Me, "")
+ENDIF
+	CharacterPlayAnimation("deathfigure_end", 0, 1, 1)
+	Set(%LLMIME_Ghost_State, -1)

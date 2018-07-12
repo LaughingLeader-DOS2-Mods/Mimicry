@@ -20,6 +20,12 @@ using "UNIQUE_LLMIME_MusicBox"
 data "RootTemplate" "467b732e-c599-49b1-beb8-06e55f1dd140"
 data "Value" "0"
 
+new entry "UNIQUE_LLMIME_MusicBox_Shard"
+type "Object"
+using "UNIQUE_LLMIME_MusicBox"
+data "RootTemplate" "cad615df-323d-49e4-934b-7d4b940b7dac"
+data "Value" "0"
+
 new entry "SKILLBOOK_LLMIME_SourceMimicking"
 type "Object"
 using "_Skillbooks"

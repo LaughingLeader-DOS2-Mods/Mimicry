@@ -126,16 +126,18 @@ AND
 CharacterIsPlayer(_Player, 1)
 AND
 GetPosition(_Player, _x, _y, _z)
-AND
-CreateItemTemplateAtPosition("LOOT_BackPack_A_6c70c298-aa29-418f-a659-f8e0b5f5fa60", _x, _y, _z, _Backpack)
+//AND
+//CreateItemTemplateAtPosition("LOOT_BackPack_A_6c70c298-aa29-418f-a659-f8e0b5f5fa60", _x, _y, _z, _Backpack)
 THEN
 SetTag(_Player, "AVATAR");
-SetTag(_Backpack, "LLMIME_DEBUG_DELETEALL");
-MoveAllItemsTo(_Player, _Backpack, 1, 1, 1);
+//SetTag(_Backpack, "LLMIME_DEBUG_DELETEALL");
+//MoveAllItemsTo(_Player, _Backpack, 1, 1, 1);
 //SetStoryEvent(_Player, "Mimicry_InitMimeJob");
 //CharacterTransformAppearanceToWithEquipmentSet(_Player, _Player, "LLMIME_Class_Mime_Start", 0);
 DB_LLMIME_Debug_HostPlayer(_Player);
-DB_LLMIME_Debug_DeleteBackpack(_Backpack);
+//DB_LLMIME_Debug_DeleteBackpack(_Backpack);
+CharacterAddSkill(_Player, "Target_Debug_KillCommand");
+CharacterAddSkill(_Player, "Target_EnemyResurrect");
 
 IF
 ObjectFlagSet("LLMIME_IsCompanion", (CHARACTERGUID)_Character, _Instance)
@@ -236,7 +238,7 @@ LLMIME_Debug_UnequipInSlot((CHARACTERGUID)_Player, (STRING)_Slot)
 AND
 CharacterGetEquippedItem(_Player, _Slot, (ITEMGUID)_Item)
 AND
-DB_LLMIME_Debug_DeleteBackpack(_Backpack)
+DB_LLMIME_Debug_DeleteBackpack((ITEMGUID)_Backpack)
 THEN
 CharacterUnequipItem(_Player, _Item);
 ItemToInventory(_Item, _Backpack);

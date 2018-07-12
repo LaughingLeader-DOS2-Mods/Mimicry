@@ -140,7 +140,7 @@ ObjectClearFlag(_Mime, "Mimicry_MimeFollower_SourceBlastImmunityDisabled");
 //END_REGION
 
 /*For disappearing when the player escapes on the boat, and re-appearing on the beach.*/
-//REGION TUT_FTJ_ESCAPE
+//REGION TUT_ESCAPE_FTJ_BEACH
 IF
 GlobalFlagSet("TUT_LowerBoatReadyToLower")
 THEN
@@ -190,7 +190,7 @@ GetPosition(_Mime, _x, _y, _z)
 THEN
 ObjectClearFlag(_Mime, "LLMIME_FTJ_MimeIsInvisible");
 PlayEffectAtPosition("RS3_FX_Skills_Rogue_CloakDagger_Cast_01", _x, _y, _z);
-PlayEffect(_Mime, "RS3_FX_Skills_Void_Cast_VoidGlide_Overlay_01");
+PlayEffect(_Mime, "LLMIME_FX_Scripted_Follower_Summon_TeleportOverlay_01");
 LeaderLib_StartObjectTimer(_Mime, 500, "LLMIME_Timers_FTJ_MimeAppearTimer_", "Mimicry_Origins_FTJ_MimeFollowerAppearedOnBeach");
 CharacterLookAt(_Mime, _Player);
 
@@ -199,6 +199,54 @@ StoryEvent(_Mime, "Mimicry_Origins_FTJ_MimeFollowerAppearedOnBeach")
 THEN
 PlayAnimation(_Mime, "Teleport_01_In", "");
 SetVisible(_Mime, 1);
+//END_REGION
+
+//REGION SOURCE
+IF
+ObjectFlagSet("GLO_Has2MaxMP", (CHARACTERGUID)_Owner, _)
+AND
+DB_LLLIB_PartyFollower(_Owner, _Mime)
+AND
+IsTagged(_Mime, "LLMIME_MimeFollower", 1)
+AND
+CharacterGetMaxSourcePoints(_Owner, _Amount)
+THEN
+CharacterOverrideMaxSourcePoints(_Mime, _Amount);
+
+IF
+ObjectFlagSet("GLO_Has3MaxMP", (CHARACTERGUID)_Owner, _)
+AND
+DB_LLLIB_PartyFollower(_Owner, _Mime)
+AND
+IsTagged(_Mime, "LLMIME_MimeFollower", 1)
+AND
+CharacterGetMaxSourcePoints(_Owner, _Amount)
+THEN
+CharacterOverrideMaxSourcePoints(_Mime, _Amount);
+
+IF
+CharacterJoinedParty(_Mime)
+AND
+IsTagged(_Mime, "LLMIME_MimeFollower", 1)
+AND
+DB_LLLIB_PartyFollower(_Owner, _Mime)
+AND
+LeaderLib_Helper_QRY_HasStatus(_Owner, "SOURCE_MUTED")
+THEN
+CharacterOverrideMaxSourcePoints(_Mime, 0);
+
+IF
+CharacterJoinedParty(_Mime)
+AND
+IsTagged(_Mime, "LLMIME_MimeFollower", 1)
+AND
+DB_LLLIB_PartyFollower(_Owner, _Mime)
+AND
+NOT LeaderLib_Helper_QRY_HasStatus(_Owner, "SOURCE_MUTED")
+AND
+CharacterGetMaxSourcePoints(_Owner, _Amount)
+THEN
+CharacterOverrideMaxSourcePoints(_Mime, _Amount);
 //END_REGION
 EXITSECTION
 
