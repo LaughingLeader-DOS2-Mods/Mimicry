@@ -132,13 +132,18 @@ ELSE
 	//StatusText(_Target, "No poison found?")
 ENDIF
 
-EVENT LLMIME_FinalWish_Animation
+EVENT LLMIME_FinalWish_Used
 VARS
 	CHARACTER:_Caster
 ON
-	//OnCharacterEvent(_Caster, "Mimicry_Events_FinalWishUsed")
-	OnCharacterEvent(_Caster, "Mimicry_Events_FinalWishCast")
-	//OnSkillCast(_Caster, Projectile_LLMIME_FinalWish)
+	OnCharacterEvent(_Caster, "Mimicry_Events_FinalWish_SkillUsed")
 ACTIONS
-	StatusText(_Caster, "Debug: Running")
-	//CharacterSetAnimationOverride(_Caster, "skill_prepare_flight_01_loop")
+	CharacterPlayEffect(_Caster, "LLMIME_FX_Skills_FinalWish_Cast_OverheadFX_01", "Dummy_OverheadFX")
+
+EVENT LLMIME_FinalWish_DeathEffect
+VARS
+	CHARACTER:_Caster
+ON
+	OnCharacterEvent(_Caster, "Mimicry_Events_FinalWish_PlayDeathEffect")
+ACTIONS
+	PlayEffectAt(_Caster, "RS3_FX_Skills_Soul_Cast_Shout_Root_01")
