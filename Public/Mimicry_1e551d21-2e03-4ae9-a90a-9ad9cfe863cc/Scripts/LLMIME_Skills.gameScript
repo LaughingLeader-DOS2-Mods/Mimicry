@@ -109,7 +109,7 @@ VARS
 	CHARACTER:_Mime
 	CHARACTER:_Target
 ON
-	OnCharacterStatusApplied(_Target, LLMIME_SEAL_EVIL)
+	OnCharacterStatusApplied(_Target, LLMIME_SEALED)
 ACTIONS
 	SetVar(_Target, "LeaderLib_Timer_Delay", INT:750)
 	SetVar(_Target, "LeaderLib_Timer_CompleteEvent", STRING:"Mimicry_Events_ClearPoisonSurface")
@@ -131,19 +131,3 @@ THEN
 ELSE
 	//StatusText(_Target, "No poison found?")
 ENDIF
-
-EVENT LLMIME_FinalWish_Used
-VARS
-	CHARACTER:_Caster
-ON
-	OnCharacterEvent(_Caster, "Mimicry_Events_FinalWish_SkillUsed")
-ACTIONS
-	CharacterPlayEffect(_Caster, "LLMIME_FX_Skills_FinalWish_Cast_OverheadFX_01", "Dummy_OverheadFX")
-
-EVENT LLMIME_FinalWish_DeathEffect
-VARS
-	CHARACTER:_Caster
-ON
-	OnCharacterEvent(_Caster, "Mimicry_Events_FinalWish_PlayDeathEffect")
-ACTIONS
-	PlayEffectAt(_Caster, "RS3_FX_Skills_Soul_Cast_Shout_Root_01")

@@ -61,3 +61,19 @@ THEN
 	PlayEffectAt(_Pos, "RS3_FX_GP_ScriptedEvent_Lucky_01")
 	CharacterApplyStatus(_Mime, EXPLODE, 1, 1, _Player)
 ENDIF
+
+EVENT LLMIME_FinalWish_Used
+VARS
+	CHARACTER:_Caster
+ON
+	OnCharacterEvent(_Caster, "Mimicry_Events_FinalWish_SkillUsed")
+ACTIONS
+	CharacterPlayEffect(_Caster, "LLMIME_FX_Skills_FinalWish_Cast_OverheadFX_01", "Dummy_OverheadFX")
+
+EVENT LLMIME_FinalWish_DeathEffect
+VARS
+	CHARACTER:_Caster
+ON
+	OnCharacterEvent(_Caster, "Mimicry_Events_FinalWish_PlayDeathEffect")
+ACTIONS
+	PlayEffectAt(_Caster, "RS3_FX_Skills_Soul_Cast_Shout_Root_01")

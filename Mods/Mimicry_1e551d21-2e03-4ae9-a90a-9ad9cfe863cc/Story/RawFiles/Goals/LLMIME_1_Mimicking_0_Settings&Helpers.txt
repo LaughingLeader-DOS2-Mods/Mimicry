@@ -35,6 +35,7 @@ DB_LLMIME_Mimicking_Blacklist_Skills("Shout_LLMIME_ReturnToOwner");
 DB_LLMIME_Mimicking_Blacklist_Skills("Shout_LLMIME_BrawlerStance");
 //Source skills
 DB_LLMIME_Mimicking_Blacklist_Skills("Target_Challenge");
+DB_LLMIME_Mimicking_Blacklist_Skills("Projectile_LLMIME_FinalWish");
 //Summon Infusions
 DB_LLMIME_Mimicking_Blacklist_Skills("Target_ElectricInfusion");
 DB_LLMIME_Mimicking_Blacklist_Skills("Target_IceInfusion");

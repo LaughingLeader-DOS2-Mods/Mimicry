@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <save>
-    <header version="2" time="1531088040" />
+    <header version="2" time="1531513799" />
     <version major="3" minor="1" revision="8" build="0" />
     <region id="IconUVList">
         <node id="root">
@@ -25,6 +25,13 @@
                     <attribute id="U2" value="0.187012" type="6" />
                     <attribute id="V1" value="0.000488281" type="6" />
                     <attribute id="V2" value="0.0620117" type="6" />
+                </node>
+                <node id="IconUV">
+                    <attribute id="MapKey" value="LLMIME_Icons_Ability_FinalWish" type="22" />
+                    <attribute id="U1" value="0.500488" type="6" />
+                    <attribute id="U2" value="0.562012" type="6" />
+                    <attribute id="V1" value="0.0629883" type="6" />
+                    <attribute id="V2" value="0.124512" type="6" />
                 </node>
                 <node id="IconUV">
                     <attribute id="MapKey" value="LLMIME_Icons_Ability_ForcedEvolution" type="22" />
