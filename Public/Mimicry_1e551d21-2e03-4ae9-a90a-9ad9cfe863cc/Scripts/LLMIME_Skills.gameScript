@@ -131,3 +131,14 @@ THEN
 ELSE
 	//StatusText(_Target, "No poison found?")
 ENDIF
+
+EVENT LLMIME_FinalWish_Animation
+VARS
+	CHARACTER:_Caster
+ON
+	//OnCharacterEvent(_Caster, "Mimicry_Events_FinalWishUsed")
+	OnCharacterEvent(_Caster, "Mimicry_Events_FinalWishCast")
+	//OnSkillCast(_Caster, Projectile_LLMIME_FinalWish)
+ACTIONS
+	StatusText(_Caster, "Debug: Running")
+	//CharacterSetAnimationOverride(_Caster, "skill_prepare_flight_01_loop")

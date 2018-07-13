@@ -758,6 +758,88 @@ LLMIME_QRY_CharacterIsAMime(_Mime)
 THEN
 SetStoryEvent(_Mime, "Mimicry_ResetMimeCombatData");
 //END_REGION
+
+//REGION FINAL_WISH
+PROC
+LLMIME_System_SpawnSkillPlatform((CHARACTERGUID)_Character)
+AND
+GetPosition(_Character, _x, _y, _z)
+AND
+CreateItemTemplateAtPosition("S_LLMIME_SkillPlatform_fa651784-9d7a-442c-b833-8cf4f44e793c", _x, _y, _z, _Platform)
+THEN
+//SetStoryEvent(_Character, "Mimicry_Events_FinalWishUsed");
+DB_LLMIME_Temp_SkillPlatforms(_Character, _Platform);
+ApplyStatus(_Platform, "LEADERLIB_NO_VISUAL", 30.0, 1);
+
+
+/*
+IF
+SkillCast(_Character, "Projectile_LLMIME_FinalWish", _)
+AND
+GetPosition(_Character, _x, _y, _z)
+AND
+RealSum(_y, 20.0, _newY)
+THEN
+TeleportToPosition(_Character, _x, _newY, _z, "", 0);
+*/
+
+/*Delay actually dying so the animation can play out*/
+IF
+//CharacterStatusApplied(_Character, "LLMIME_SELF_SACRIFICE", _)
+//SkillCast(_Character, "Projectile_LLMIME_FinalWish", _)
+CharacterUsedSkill(_Character, "Projectile_LLMIME_FinalWish", _)
+THEN
+///LeaderLib_StartObjectTimer(_Character, 1000, "Mimicry_Timers_SelfSacrifice_", "Mimicry_Events_OnCharacterSacrificed");
+LeaderLib_StartObjectTimer(_Character, 700, "Mimicry_Timers_FinalWish_SpawnPlatform_", "Mimicry_Events_FinalWish_SpawnPlatform");
+LeaderLib_StartObjectTimer(_Character, 2000, "Mimicry_Timers_SelfSacrifice_", "Mimicry_Events_FinalWish_RemovePlatform");
+
+IF
+StoryEvent((CHARACTERGUID)_Character, "Mimicry_Events_FinalWish_SpawnPlatform")
+THEN
+PlayEffect(_Character, "RS3_FX_Skills_Divine_Cast_Aoe_Divine_Root_02");
+LLMIME_System_SpawnSkillPlatform(_Character);
+SetVisible(_Character, 0);
+
+IF
+StoryEvent((CHARACTERGUID)_Character, "Mimicry_Events_FinalWish_RemovePlatform")
+AND
+DB_LLMIME_Temp_SkillPlatforms(_Character, (ITEMGUID)_Platform)
+AND
+GetPosition(_Platform, _x, _y, _z)
+THEN
+ItemRemove(_Platform);
+NOT DB_LLMIME_Temp_SkillPlatforms(_Character, _Platform);
+PlayEffectAtPosition("RS3_FX_Skills_Divine_MassBless_Impact_01", _x, _y, _z);
+
+IF
+StoryEvent((CHARACTERGUID)_Character, "Mimicry_Events_FinalWish_RemovePlatform")
+THEN
+LeaderLib_StartObjectTimer(_Character, 800, "Mimicry_Timers_SelfSacrifice_", "Mimicry_Events_FinalWish_Die");
+
+IF
+StoryEvent((CHARACTERGUID)_Character, "Mimicry_Events_FinalWish_Die")
+AND
+CharacterIsDead(_Character, 0)
+THEN
+//CharacterStatusText(_Character, "<font color='#FF0000'>Teleport Failed</font>");
+CharacterDieImmediate(_Character, 1, "DoT");
+LeaderLib_StartObjectTimer(_Character, 1000, "Mimicry_Timers_FinalWish_CorpseVisibility_", "Mimicry_Events_FinalWish_MakeVisible");
+
+/*
+IF
+CharacterDied(_Character)
+AND
+DB_LLMIME_Temp_SkillPlatforms(_Character, (ITEMGUID)_Platform)
+THEN
+ItemRemove(_Platform);
+NOT DB_LLMIME_Temp_SkillPlatforms(_Character, _Platform);
+*/
+
+IF
+StoryEvent((CHARACTERGUID)_Character, "Mimicry_Events_FinalWish_MakeVisible")
+THEN
+SetVisible(_Character, 1);
+//END_REGION
 EXITSECTION
 
 ENDEXITSECTION

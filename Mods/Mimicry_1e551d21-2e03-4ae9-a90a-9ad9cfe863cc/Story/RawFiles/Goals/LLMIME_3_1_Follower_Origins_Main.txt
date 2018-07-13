@@ -197,7 +197,7 @@ CharacterLookAt(_Mime, _Player);
 IF
 StoryEvent(_Mime, "Mimicry_Origins_FTJ_MimeFollowerAppearedOnBeach")
 THEN
-PlayAnimation(_Mime, "Teleport_01_In", "");
+PlayAnimation(_Mime, "Teleport_In_01", "");
 SetVisible(_Mime, 1);
 //END_REGION
 
