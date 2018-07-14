@@ -14,6 +14,21 @@ ProcDoWaypointUnlock(ITEMGUID_S_LLMIME_TestLevelWaypointShrine_9955a6a5-c7ca-40a
 DB_LLMIME_Debug_GameStarted(1);
 TimerLaunch("LLMIME_Debug_Start", 500);
 TimerLaunch("LLMIME_Debug_Test", 1000);
+LeaderLib_Treasure_Register_TreasureToTrader("LLMIME.LeaderTrader.DebugTest", "LLLIB_LeaderTrader");
+LeaderLib_Treasure_Register_TreasureTable("LLMIME.LeaderTrader.DebugTest", "CheatAllWeapons", "", 1);
+LeaderLib_Treasure_Register_TreasureToTrader("LLMIME.LeaderTrader.DebugTest2", "LLLIB_LeaderTrader");
+LeaderLib_Treasure_Register_TreasureToObject("LLMIME.LeaderTrader.DebugTest2", ITEMGUID_LLMIME_Debug_TestScriptingChest_fbe7bf08-9826-4e1c-a4dd-732d54499176);
+LeaderLib_Treasure_Register_TreasureTable("LLMIME.LeaderTrader.DebugTest2", "Cheat2HMaces", "", 1);
+LeaderLib_Treasure_Configure_AddDeltaMod("LLMIME.LeaderTrader.DebugTest2", "WPN_Mace_2H", "Boost_Weapon_Status_Set_Crippled_Mace", -1);
+LeaderLib_Treasure_Configure_AddDeltaMod("LLMIME.LeaderTrader.DebugTest2", "WPN_Mace_2H", "Boost_Weapon_EmptyRuneSlot", -1);
+LeaderLib_Treasure_Configure_AddDeltaMod("LLMIME.LeaderTrader.DebugTest2", "WPN_Mace_2H", "Boost_Weapon_EmptyRuneSlot", -1);
+LeaderLib_Treasure_Configure_AddDeltaMod("LLMIME.LeaderTrader.DebugTest2", "WPN_Mace_2H", "Boost_Weapon_EmptyRuneSlot", 75);
+DB_LLLIB_Treasure_DeltaModLimit("LLMIME.LeaderTrader.DebugTest2", "WPN_Mace_2H", "Boost_Weapon_EmptyRuneSlot", 99);
+LeaderLib_Treasure_Configure_AddRune("LLMIME.LeaderTrader.DebugTest2", "WPN_Mace_2H", "LOOT_Rune_Flame_Large_9ac874d8-a7e5-48b1-954a-b11b46f6f390", -1);
+LeaderLib_Treasure_Configure_AddRune("LLMIME.LeaderTrader.DebugTest2", "WPN_Mace_2H", "LOOT_Rune_Frost_Small_42a657df-428c-48d0-a640-c1fbc65268ca", -1);
+LeaderLib_Treasure_Configure_AddRune("LLMIME.LeaderTrader.DebugTest2", "WPN_Mace_2H", "LOOT_Rune_Masterwork_Giant_fca17b46-c1dc-4cc2-bd61-5df21d55d15e", -1);
+ItemAddDeltaModifier(ITEMGUID_WPN_Wand_A_Water_000_08d2402f-06bb-488b-b23c-c09e27d0fd27, "Boost_Weapon_EmptyRuneSlot");
+ItemAddDeltaModifier(ITEMGUID_WPN_Wand_A_Water_000_08d2402f-06bb-488b-b23c-c09e27d0fd27, "Boost_Weapon_EmptyRuneSlot");
 
 IF
 TimerFinished("LLMIME_Debug_Test")
@@ -25,11 +40,13 @@ THEN
 ItemTemplateAddTo("UNIQUE_LLMIME_MusicBox_fd03b00c-5366-40e2-a8af-1d9f6a904ecb", _Player, 1);
 LLMIME_Debug_TracePartyCount(_Player);
 
+/*
 IF
 TimerFinished("LLMIME_Debug_Test")
 THEN
-LeaderLib_Math_Sine(131.0);
-LeaderLib_Math_Cosine(131.0);
+//LeaderLib_Math_Sine(131.0);
+//LeaderLib_Math_Cosine(131.0);
+*/
 
 IF
 CharacterJoinedParty(_)
