@@ -24,9 +24,9 @@ LeaderLib_Treasure_Configure_AddDeltaMod("LLMIME.LeaderTrader.DebugTest2", "WPN_
 LeaderLib_Treasure_Configure_AddDeltaMod("LLMIME.LeaderTrader.DebugTest2", "WPN_Mace_2H", "Boost_Weapon_EmptyRuneSlot", -1);
 LeaderLib_Treasure_Configure_AddDeltaMod("LLMIME.LeaderTrader.DebugTest2", "WPN_Mace_2H", "Boost_Weapon_EmptyRuneSlot", 75);
 DB_LLLIB_Treasure_DeltaModLimit("LLMIME.LeaderTrader.DebugTest2", "WPN_Mace_2H", "Boost_Weapon_EmptyRuneSlot", 99);
-LeaderLib_Treasure_Configure_AddRune("LLMIME.LeaderTrader.DebugTest2", "WPN_Mace_2H", "LOOT_Rune_Flame_Large_9ac874d8-a7e5-48b1-954a-b11b46f6f390", -1);
-LeaderLib_Treasure_Configure_AddRune("LLMIME.LeaderTrader.DebugTest2", "WPN_Mace_2H", "LOOT_Rune_Frost_Small_42a657df-428c-48d0-a640-c1fbc65268ca", -1);
-LeaderLib_Treasure_Configure_AddRune("LLMIME.LeaderTrader.DebugTest2", "WPN_Mace_2H", "LOOT_Rune_Masterwork_Giant_fca17b46-c1dc-4cc2-bd61-5df21d55d15e", -1);
+//LeaderLib_Treasure_Configure_AddRune("LLMIME.LeaderTrader.DebugTest2", "WPN_Mace_2H", "LOOT_Rune_Flame_Large_9ac874d8-a7e5-48b1-954a-b11b46f6f390", -1);
+//LeaderLib_Treasure_Configure_AddRune("LLMIME.LeaderTrader.DebugTest2", "WPN_Mace_2H", "LOOT_Rune_Frost_Small_42a657df-428c-48d0-a640-c1fbc65268ca", -1);
+//LeaderLib_Treasure_Configure_AddRune("LLMIME.LeaderTrader.DebugTest2", "WPN_Mace_2H", "LOOT_Rune_Masterwork_Giant_fca17b46-c1dc-4cc2-bd61-5df21d55d15e", -1);
 ItemAddDeltaModifier(ITEMGUID_WPN_Wand_A_Water_000_08d2402f-06bb-488b-b23c-c09e27d0fd27, "Boost_Weapon_EmptyRuneSlot");
 ItemAddDeltaModifier(ITEMGUID_WPN_Wand_A_Water_000_08d2402f-06bb-488b-b23c-c09e27d0fd27, "Boost_Weapon_EmptyRuneSlot");
 

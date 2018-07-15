@@ -639,7 +639,7 @@ StoryEvent((CHARACTERGUID)_Mime, _EventName)
 AND
 DB_LLMIME_Mimicking_Temp_FinalMimicTarget(_Mime, _Caster, _Target, _Action, _ActionType, _EventName)
 AND
-IsTagged(_Target, "LLMIME_DUMMY", 1)
+IsTagged(_Target, "LLMIME_Dummy", 1)
 AND
 DB_LLMIME_Mimicking_FinalMimicQueue(_Mime, _Caster, _Action, _ActionType, _CastX, _CastRotation, _CastZ, _TargetX, _TargetZ, _TargetPriority, _IsTarget)
 THEN

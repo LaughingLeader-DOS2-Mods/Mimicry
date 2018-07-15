@@ -23,6 +23,7 @@ DB_LLMIME_Mime_Skills("Shout_LLMIME_DisableMimicking");
 
 SysClear("DB_LLMIME_Mime_LearnableSkills", 1);
 DB_LLMIME_Mime_LearnableSkills("Shout_LLMIME_DisableMimicking");
+DB_LLMIME_Mime_LearnableSkills("Projectile_LLMIME_DecoyPloy");
 //END_REGION
 
 //REGION UPDATING
@@ -84,6 +85,8 @@ CharacterStatusApplied(_Mime, "LLMIME_MASK_INFO", _)
 AND
 GlobalGetFlag("LeaderLib_Initialized", 1)
 AND
+NOT LLMIME_QRY_CharacterIsADummy(_Mime)
+AND
 NOT LLMIME_QRY_CharacterIsAMime(_Mime)
 THEN
 //LLMIME_RemoveAllMimicryStatuses(_Mime);
@@ -93,6 +96,8 @@ IF
 CharacterStatusApplied(_Mime, "LLMIME_MASK_INFO", _)
 AND
 NOT GlobalGetFlag("LeaderLib_Initialized", 1)
+AND
+NOT LLMIME_QRY_CharacterIsADummy(_Mime)
 AND
 NOT LLMIME_QRY_CharacterIsAMime(_Mime)
 THEN

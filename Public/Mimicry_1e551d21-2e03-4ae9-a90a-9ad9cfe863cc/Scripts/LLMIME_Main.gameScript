@@ -70,7 +70,7 @@ ACTIONS
 IF "!c1"
 	IsTagged(_Mime, "Mimicry_Mime")
 THEN
-	SetVar(_Mime, "LeaderLib_LogMessage", STRING:"[LLMIME:LLMIME_Maim:Mime_Setup] Setting mime tag and statuses.")
+	SetVar(_Mime, "LeaderLib_LogMessage", STRING:"[LLMIME:LLMIME_Main:Mime_Setup] Setting mime tag and statuses.")
 	CharacterEvent(_Mime, "LeaderLib_DebugLog")
 	SetTag(_Mime, "Mimicry_Mime")
 ENDIF
@@ -106,7 +106,7 @@ ENDIF
 	CharacterEvent(_Mime, "Mimicry_MimeInitialized")
 	
 	/*
-	Print(_Message, "[LLMIME:LLMIME_Maim:Mime_Setup] Status list: Size([1]).", _Size)
+	Print(_Message, "[LLMIME:LLMIME_Main:Mime_Setup] Status list: Size([1]).", _Size)
 	SetVar(_Mime, "LeaderLib_LogMessage", _Message)
 	CharacterEvent(_Mime, "LeaderLib_DebugLog")
 	*/
@@ -119,7 +119,7 @@ ACTIONS
 IF "c1"
 	IsTagged(_Mime, "Mimicry_Mime")
 THEN
-	SetVar(_Mime, "LeaderLib_LogMessage", STRING:"[LLMIME:LLMIME_Maim:Mime_Remove] Remove mime tag and clearing status influences.")
+	SetVar(_Mime, "LeaderLib_LogMessage", STRING:"[LLMIME:LLMIME_Main:Mime_Remove] Remove mime tag and clearing status influences.")
 	CharacterEvent(_Mime, "LeaderLib_DebugLog")
 	ClearTag(_Mime, "Mimicry_Mime")
 ENDIF

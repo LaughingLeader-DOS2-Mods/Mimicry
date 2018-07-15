@@ -71,7 +71,7 @@ GetUUID(_Dummy, _DummyID)
 THEN
 SetVarString(_Dummy, "LLMIME_UUID", _DummyID);
 LeaderLog_Log("DEBUG", "[LLMIME:Mimic:Dummy:SpawnDummy(Item)] Spawned dummy and set ID to [",_ID,"].");
-SetTag(_Dummy, "LLMIME_DUMMY");
+SetTag(_Dummy, "LLMIME_Dummy");
 LLMIME_Dummy_SetDummyID(_Dummy, _ID);
 SetVisible(_Dummy, 0);
 SetInvulnerable_UseProcSetInvulnerable(_Dummy, 1);
@@ -100,7 +100,7 @@ GetUUID(_Dummy, _DummyID)
 THEN
 SetVarString(_Dummy, "LLMIME_UUID", _DummyID);
 LeaderLog_Log("DEBUG", "[LLMIME:Mimic:Dummy:SpawnDummy(Character)] Spawned dummy and set ID to [",_ID,"].");
-SetTag(_Dummy, "LLMIME_DUMMY");
+SetTag(_Dummy, "LLMIME_Dummy");
 LLMIME_Dummy_SetDummyID(_Dummy, _ID);
 CharacterSetImmortal(_Dummy, 1);
 SetVisible(_Dummy, 0);
@@ -121,7 +121,7 @@ LLMIME_Dummy_MarkForDeletion(_Dummy, 500);
 PROC
 LLMIME_Dummy_MarkForDeletion((GUIDSTRING)_Dummy, (INTEGER)_Delay)
 AND
-IsTagged(_Dummy, "LLMIME_DUMMY", 1)
+IsTagged(_Dummy, "LLMIME_Dummy", 1)
 AND
 GetUUID(_Dummy, _ID)
 AND
@@ -202,14 +202,14 @@ NOT DB_LLMIME_Dummy_ItemDummies(_Dummy);
 IF
 StoryEvent(_Dummy, "LLMIME_Events_ResetDummyID")
 AND
-IsTagged(_Dummy, "LLMIME_DUMMY", 1)
+IsTagged(_Dummy, "LLMIME_Dummy", 1)
 THEN
 LLMIME_Dummy_ResetDummy(_Dummy);
 
 PROC
 LLMIME_Dummy_ResetDummy((GUIDSTRING)_Dummy)
 AND
-IsTagged(_Dummy, "LLMIME_DUMMY", 1)
+IsTagged(_Dummy, "LLMIME_Dummy", 1)
 AND
 NOT GetVarString(_Dummy, "LLMIME_DummyID", _)
 THEN
@@ -219,7 +219,7 @@ LeaderLog_Log("DEBUG", "[LLMIME:Mimic:Dummy:ResetDummy] Dummy has no ID.");
 PROC
 LLMIME_Dummy_ResetDummy((GUIDSTRING)_Dummy)
 AND
-IsTagged(_Dummy, "LLMIME_DUMMY", 1)
+IsTagged(_Dummy, "LLMIME_Dummy", 1)
 AND
 GetVarString(_Dummy, "LLMIME_DummyID", _CurrentID)
 AND
@@ -245,7 +245,7 @@ NOT DB_LLMIME_Dummy_NextItemDummy(_ID, _Dummy);
 PROC
 LLMIME_Dummy_ResetDummy((GUIDSTRING)_Dummy)
 AND
-IsTagged(_Dummy, "LLMIME_DUMMY", 1)
+IsTagged(_Dummy, "LLMIME_Dummy", 1)
 AND
 ObjectIsOnStage(_Dummy, 1)
 THEN
@@ -255,7 +255,7 @@ LeaderLog_Log("DEBUG", "[LLMIME:Mimic:Dummy:ResetDummy] Set dummy off stage.");
 PROC
 LLMIME_Dummy_ResetDummy((GUIDSTRING)_Dummy)
 AND
-NOT IsTagged(_Dummy, "LLMIME_DUMMY", 1)
+NOT IsTagged(_Dummy, "LLMIME_Dummy", 1)
 THEN
 LeaderLog_Log("DEBUG", "[LLMIME:Mimic:Dummy:ResetDummy] [ERROR] Object is not tagged as a dummy!");
 
@@ -273,7 +273,7 @@ TimerLaunch(_TimerName, _Delay);
 PROC
 LLMIME_Dummy_ResetDummyAfterDelay((GUIDSTRING)_Dummy, (INTEGER)_Delay)
 AND
-IsTagged(_Dummy, "LLMIME_DUMMY", 1)
+IsTagged(_Dummy, "LLMIME_Dummy", 1)
 AND
 NOT DB_LLMIME_ResetDummyTimer(_, _Dummy)
 AND
@@ -323,7 +323,7 @@ StoryEvent(_Dummy, "LLMIME_Events_DummyInitialized")
 AND
 NOT GlobalGetFlag("LLMIME_CreatingDummy", 1)
 AND
-IsTagged(_Dummy, "LLMIME_DUMMY", 1)
+IsTagged(_Dummy, "LLMIME_Dummy", 1)
 THEN
 LLMIME_Dummy_Internal_RegisterDummy(_Dummy);
 

@@ -210,7 +210,7 @@ DB_LLMIME_Follower_Mime(_Mime)
 AND
 CharacterIsDead(_Mime, 0)
 AND
-DB_LLMIME_Templates("Mask_NoVisual", _Template)
+DB_LLMIME_Templates("Mask_A_NoVisual", _Template)
 AND
 GetItemForItemTemplateInInventory(_Mime, _Template, _Mask)
 AND
@@ -225,7 +225,7 @@ DB_LLMIME_Follower_Mime(_Mime)
 AND
 CharacterIsDead(_Mime, 0)
 AND
-DB_LLMIME_Templates("Mask_NoVisual", _Template)
+DB_LLMIME_Templates("Mask_A_NoVisual", _Template)
 AND
 NOT GetItemForItemTemplateInInventory(_Mime, _Template, _)
 AND
@@ -245,7 +245,7 @@ CharacterIsDead(_Mime, 0)
 AND
 NOT LLMIME_QRY_HasMaskEquipped(_Mime)
 AND
-DB_LLMIME_Templates("Mask_NoVisual", _Template)
+DB_LLMIME_Templates("Mask_A_NoVisual", _Template)
 AND
 GetItemForItemTemplateInInventory(_Mime, _Template, _Mask)
 THEN

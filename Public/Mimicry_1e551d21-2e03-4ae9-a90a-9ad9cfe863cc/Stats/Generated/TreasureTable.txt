@@ -1,7 +1,11 @@
 treasure itemtypes "Common","Uncommon","Rare","Epic","Legendary","Divine","Unique"
 new treasuretable "ST_LLMIME_SkillbookMime"
+MinLevel "-30"
+MaxLevel "0"
 new subtable "1,1"
 object category "I_SKILLBOOK_LLMIME_SourceMimicking",1,0,0,0,0,0,0,0
+new subtable "1,1"
+object category "I_SKILLBOOK_LLMIME_DecoyPloy",1,0,0,0,0,0,0,0
 new treasuretable "LLMIME_Mime_Equipment"
 IgnoreLevelDiff 1
 new subtable "-1"

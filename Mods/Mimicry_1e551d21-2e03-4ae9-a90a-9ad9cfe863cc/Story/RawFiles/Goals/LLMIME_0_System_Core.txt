@@ -83,7 +83,8 @@ LLMIME_System_InitTemplates()
 THEN
 SysClear("DB_LLMIME_Templates", 2);
 DB_LLMIME_Templates("Mask_A", "EQ_Armor_UNIQUE_LLMIME_Mime_Mask_A_8e66ce79-8c8e-4c22-a8ea-5a99977f4ea8");
-DB_LLMIME_Templates("Mask_NoVisual", "EQ_Armor_LLMIME_Mime_Mask_NoVisual_38d7f6c3-ab60-43e5-b20c-f5faf06801dd");
+DB_LLMIME_Templates("Mask_A_Preview", "EQ_Armor_LLMIME_Mime_Mask_Preview_36348beb-6126-42f5-ba26-05acf6b65bae");
+DB_LLMIME_Templates("Mask_A_NoVisual", "EQ_Armor_LLMIME_Mime_Mask_NoVisual_38d7f6c3-ab60-43e5-b20c-f5faf06801dd");
 DB_LLMIME_Templates("BrawlerFist", "WPN_LLMIME_BrawlerFist_e1bda904-93c2-4f6f-8136-1a547279fd1f");
 DB_LLMIME_Templates("MimeManual", "WPN_LLMIME_BrawlerFist_e1bda904-93c2-4f6f-8136-1a547279fd1f");
 DB_LLMIME_Templates("MusicBox", "UNIQUE_LLMIME_MusicBox_fd03b00c-5366-40e2-a8af-1d9f6a904ecb");
@@ -93,6 +94,7 @@ DB_LLMIME_Templates("MimeAmulet", "LOOT_MagicAmulet_LLMIME_SourceBlastImmunity_f
 DB_LLMIME_Templates("MimeFollower", "LLMIME_Elves_Male_Mime_d8b7efbb-6e60-4700-af8a-4295b0c1ed41");
 DB_LLMIME_Templates("MimeFollower_NoMask", "LLMIME_Elves_Male_Mime_NoMask_8b69a5c0-1d6a-403c-ae38-e4a8d4297ceb");
 DB_LLMIME_Templates("MimeFollower_Ghost", "S_LLMIME_Ghost_Mime_d699d0e5-250d-4d4d-bacf-96e19e60235c");
+DB_LLMIME_Templates("Decoy", "S_LLMIME_Skill_Decoy_30a42871-15cc-4c97-bad6-4a813d797964");
 //END_REGION
 
 //REGION UPDATING
@@ -648,11 +650,39 @@ RemoveStatus(_Mime, _InfoStatus);
 
 //REGION CONDITION_QUERIES
 QRY
+LLMIME_QRY_CharacterIsADummy((CHARACTERGUID)_Character)
+AND
+IsTagged(_Character, "LLMIME_Dummy", 1)
+THEN
+DB_NOOP(1);
+
+QRY
+LLMIME_QRY_CharacterIsADummy((CHARACTERGUID)_Character)
+AND
+ObjectGetFlag(_Character, "LLMIME_Decoy", 1)
+THEN
+DB_NOOP(1);
+
+QRY
+LLMIME_QRY_CharacterIsADummy((CHARACTERGUID)_Character)
+AND
+IsTagged(_Character, "LLMIME_Decoy", 1)
+THEN
+DB_NOOP(1);
+
+QRY
+LLMIME_QRY_CharacterIsADummy((CHARACTERGUID)_Character)
+AND
+LeaderLib_Helper_QRY_HasStatus(_Character, "LLMIME_DECOY_LIFETIME")
+THEN
+DB_NOOP(1);
+
+QRY
 LLMIME_QRY_CharacterIsAMime((CHARACTERGUID)_Character)
 AND
 IsTagged(_Character, "Mimicry_Mime", 1)
 AND
-IsTagged(_Character, "LLMIME_Dummy", 0)
+NOT LLMIME_QRY_CharacterIsADummy(_Character)
 THEN
 DB_NOOP(1);
 
@@ -661,7 +691,7 @@ LLMIME_QRY_CharacterIsAMime((CHARACTERGUID)_Character)
 AND
 HasActiveStatus(_Character, "LLMIME_MIME", 1)
 AND
-IsTagged(_Character, "LLMIME_Dummy", 0)
+NOT LLMIME_QRY_CharacterIsADummy(_Character)
 THEN
 DB_NOOP(1);
 
@@ -669,6 +699,8 @@ QRY
 LLMIME_QRY_CharacterIsAMime((CHARACTERGUID)_Character)
 AND
 IsTagged(_Character, "Mimicry_EnemyMime", 1)
+AND
+NOT LLMIME_QRY_CharacterIsADummy(_Character)
 THEN
 DB_NOOP(1);
 
@@ -677,7 +709,7 @@ LLMIME_QRY_CharacterIsAMime((CHARACTERGUID)_Character)
 AND
 DB_LLMIME_Mimicking_MimicNextAction(_Character)
 AND
-IsTagged(_Character, "LLMIME_Dummy", 0)
+NOT LLMIME_QRY_CharacterIsADummy(_Character)
 THEN
 DB_NOOP(1);
 
@@ -738,7 +770,7 @@ DB_NOOP(1);
 QRY
 LLMIME_QRY_IsMaskTemplate((STRING)_Template)
 AND
-DB_LLMIME_Templates("Mask_NoVisual", _Template)
+DB_LLMIME_Templates("Mask_A_NoVisual", _Template)
 THEN
 DB_NOOP(1);
 //END_REGION
@@ -758,30 +790,6 @@ LLMIME_QRY_CharacterIsAMime(_Mime)
 THEN
 SetStoryEvent(_Mime, "Mimicry_ResetMimeCombatData");
 //END_REGION
-
-//REGION FINAL_WISH
-/*Delay actually dying so the animation can play out*/
-IF
-CharacterUsedSkill(_Character, "Projectile_LLMIME_FinalWish", _)
-THEN
-LeaderLib_StartObjectTimer(_Character, 3000, "Mimicry_Timers_FinalWish_DieEvent", "Mimicry_Events_FinalWish_Die");
-LeaderLib_StartObjectTimer(_Character, 1000, "Mimicry_Timers_FinalWish_UsedEvent_", "Mimicry_Events_FinalWish_SkillUsed");
-LeaderLib_StartObjectTimer(_Character, 2600, "Mimicry_Timers_FinalWish_DeathEffect", "Mimicry_Events_FinalWish_PlayDeathEffect");
-
-IF
-SkillCast(_Character, "Projectile_LLMIME_FinalWish", _)
-THEN
-LeaderLib_CancelObjectTimerByEvent(_Character, "Mimicry_Events_FinalWish_Die");
-LeaderLib_StartObjectTimer(_Character, 1000, "Mimicry_Timers_FinalWish_", "Mimicry_Events_FinalWish_Die");
-
-IF
-StoryEvent((CHARACTERGUID)_Character, "Mimicry_Events_FinalWish_Die")
-AND
-CharacterIsDead(_Character, 0)
-THEN
-CharacterDie(_Character, 1, "DoT");
-//END_REGION
-
 EXITSECTION
 
 ENDEXITSECTION

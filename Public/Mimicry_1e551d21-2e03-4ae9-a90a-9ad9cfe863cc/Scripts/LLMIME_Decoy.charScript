@@ -1,0 +1,26 @@
+INIT
+	CHARACTER:__Me
+	CHARACTER:%LLMIME_Decoy_Caster = null
+	INT:%LLMIME_Decoy_LookAt = 0
+	
+EVENTS
+
+EVENT LLMIME_Decoy_OnActivate
+ON
+	OnInit()
+	OnActivate()
+ACTIONS
+	SetVisible(__Me, 0)
+	//CharacterPlayEffect(__Me, "LLMIME_FX_Skills_Decoy_Overlay_FadeIn_01")
+
+BEHAVIOUR
+
+REACTION LLMIME_Decoy_LookAt, 10000
+USAGE ALL
+CHECK "c1"
+	IsEqual(%LLMIME_Decoy_LookAt, 1)
+ACTIONS
+	CharacterLookFrom(%LLMIME_Decoy_Caster, 1)
+	Set(%LLMIME_Decoy_LookAt, 0)
+	CharacterApplyStatus(__Me, LLMIME_DECOY_LIFETIME, 3, 1, %LLMIME_Decoy_Caster)
+	//StatusText(__Me, "Looking at caster?")
