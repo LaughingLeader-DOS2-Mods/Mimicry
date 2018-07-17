@@ -25,25 +25,13 @@ _Version == "-1"
 THEN
 DB_NOOP(1);
 
-IF
-StoryEvent(_, "LeaderUpdater_ModVersionsChanged")
-AND
-DB_LeaderUpdater_Temp_PastRegistered("Mimicry", "LaughingLeader", _Version)
+PROC
+LeaderUpdater_ModUpdated("Mimicry", "LaughingLeader", _Version)
 AND
 LLMIME_Dummy_Internal_QRY_VersionNeedsUpdating(_Version)
-AND
-NOT DB_LLMIME_Dummy_UpdatingVersion(_)
 THEN
 LeaderLog_Log("DEBUG", "[LLMIME:Dummy] Updating settings from version [",_Version,"]");
-DB_LLMIME_Dummy_UpdatingVersion(1);
 LLMIME_Dummy_InitSettings();
-
-IF
-StoryEvent(_, "LeaderUpdater_ModVersionsChanged")
-AND
-DB_LLMIME_Dummy_UpdatingVersion(_Val)
-THEN
-NOT DB_LLMIME_Dummy_UpdatingVersion(_Val);
 //END_REGION
 
 //REGION SPAWNING

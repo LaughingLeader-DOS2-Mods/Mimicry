@@ -1,26 +1,58 @@
 INIT
 	CHARACTER:__Me
 	CHARACTER:%LLMIME_Decoy_Caster = null
-	INT:%LLMIME_Decoy_LookAt = 0
-	
+	EXTERN FIXEDSTRING:%LLMIME_Decoy_LoopedAnimation = "Portret_Still_01"
+	INT:%LLMIME_Decoy_SetAnim = 0
 EVENTS
 
 EVENT LLMIME_Decoy_OnActivate
+VARS
+	CHARACTER:_Caster
 ON
 	OnInit()
-	OnActivate()
 ACTIONS
 	SetVisible(__Me, 0)
+	CharacterSetAnimationOverride(__Me, "die_hang")
+IF "c1&c2"
+	GetVar(_Caster, __Me, "LLMIME_Decoy_Caster")
+	IsEqual(_Caster, null)
+THEN
+	CharacterSetOffStage()
+ENDIF
 	//CharacterPlayEffect(__Me, "LLMIME_FX_Skills_Decoy_Overlay_FadeIn_01")
 
-BEHAVIOUR
-
-REACTION LLMIME_Decoy_LookAt, 10000
-USAGE ALL
-CHECK "c1"
-	IsEqual(%LLMIME_Decoy_LookAt, 1)
+EVENT LLMIME_Decoy_HideBlood
+ON
+	OnCharacterEvent(__Me, "LLMIME_Events_OnDecoyAttacked")
 ACTIONS
+IF "c1"
+	IsInSurface(__Me, SurfaceBlood, 6.0)
+THEN
+	CreateSurfaceAt(__Me, SurfaceNone, 6.0, 0)
+ENDIF
+
+EVENT LLMIME_Decoy_OverrideAnims
+ON
+	//OnCharacterEvent(__Me, "Mimicry_Events_Skills_Internal_SetupDecoy")
+	OnCharacterStatusApplied(__Me, LLMIME_DECOY_LIFETIME)
+ACTIONS
+	SetScriptFrame(__Me, "LLMIME_Decoy_SetAnimationOverride")
+	
+STORY
+
+SCRIPTFRAME LLMIME_Decoy_CopyRotation
+ACTIONS
+IF "!c1"
+	IsEqual(%LLMIME_Decoy_Caster, null)
+THEN
+	//StatusText(__Me, "Looped anim on apply?")
 	CharacterLookFrom(%LLMIME_Decoy_Caster, 1)
-	Set(%LLMIME_Decoy_LookAt, 0)
-	CharacterApplyStatus(__Me, LLMIME_DECOY_LIFETIME, 3, 1, %LLMIME_Decoy_Caster)
-	//StatusText(__Me, "Looking at caster?")
+	CharacterApplyStatus(__Me, LLMIME_DECOY_LIFETIME, 3, 1)
+ENDIF
+
+SCRIPTFRAME LLMIME_Decoy_SetAnimationOverride
+ACTIONS
+	CharacterStopAnimation()
+	CharacterSetAnimationOverride(__Me, %LLMIME_Decoy_LoopedAnimation)
+	//DisplayCombatInfoText(__Me, "Looped anim?", 10.0)
+	CharacterApplyStatus(__Me, LLMIME_DECOY_DISABLED, 3, 1)

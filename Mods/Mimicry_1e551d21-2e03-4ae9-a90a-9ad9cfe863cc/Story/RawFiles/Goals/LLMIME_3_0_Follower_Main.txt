@@ -78,25 +78,13 @@ LLMIME_Follower_Internal_QRY_VersionNeedsUpdating("0.9.0.0")
 THEN
 DB_NOOP(1);
 
-IF
-StoryEvent(_, "LeaderUpdater_ModVersionsChanged")
-AND
-DB_LeaderUpdater_Temp_PastRegistered("Mimicry", "LaughingLeader", _Version)
-AND
-NOT DB_LLMIME_Follower_UpdatingVersion(_)
+PROC
+LeaderUpdater_ModUpdated("Mimicry", "LaughingLeader", _Version)
 AND
 LLMIME_Follower_Internal_QRY_VersionNeedsUpdating(_Version)
 THEN
 LeaderLog_Log("DEBUG", "[LLMIME:Follower] Updating settings from version [",_Version,"]");
-DB_LLMIME_Follower_UpdatingVersion(1);
 LLMIME_Follower_InitSettings();
-
-IF
-StoryEvent(_, "LeaderUpdater_ModVersionsChanged")
-AND
-DB_LLMIME_Follower_UpdatingVersion(_Val)
-THEN
-NOT DB_LLMIME_Follower_UpdatingVersion(_Val);
 //END_REGION
 
 //REGION CHARACTER_SETUP

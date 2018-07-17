@@ -270,3 +270,41 @@ THEN
 		CharacterItemEvent(_Mime, _DefenderItem, "Mimicry_Events_OnMimeUnarmedBasicAttack")
 	ENDIF
 ENDIF
+
+EVENT LLMIME_TestSurfaceFinder
+VARS
+    CHARACTER:_Character
+    FLOAT3:_Pos
+    INT:_Size
+    INT:_SurfaceCount
+    FLOAT:_Radius
+    FLOAT:_Sizef
+	STRING:_Str
+	FIXEDSTRING:_Msg
+ON
+    OnSkillCast(_Character, Target_EnemyFortify)
+ACTIONS
+	//CreateSurfaceAt(_Character, SurfaceWater, 5.0, 0)
+	Set(_SurfaceCount, INT:0)
+	Set(_Radius, FLOAT:3.0)
+WHILE "c1"
+	IsLessThen(_SurfaceCount, INT:2)
+DO
+	IF "c1&c2"
+		FindSurface(_Pos, _Character, 0.0, _Radius, SurfaceWater)
+		GetSurfaceSize(_Pos, 0, _Size)
+	THEN
+		Print(_Str, "Cell Size = [1]", _Size)
+		Cast(_Msg, _Str)
+		DisplayCombatInfoText(_Character, _Msg, 1.0)
+		Divide(_Radius, _Size)
+		Cast(_Sizef, _Size)
+		Multiply(_Sizef, _Radius)
+		CreateSurfaceAt(_Pos, SurfaceNone, _Sizef, 0)
+		CreateSurfaceAt(_Pos, SurfaceFirePurified, _Sizef, 3)
+		Print(_Str, "Surface Size? = [1]", _Sizef)
+		Cast(_Msg, _Str)
+		DisplayCombatInfoText(_Character, _Msg, 5.0)
+	ENDIF
+	Add(_SurfaceCount, 1)
+ENDWHILE

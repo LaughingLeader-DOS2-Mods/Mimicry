@@ -103,7 +103,8 @@ THEN
 	
 ENDIF
 
-/*Undead spill poison when hit, so clear it after a delay*/
+/*
+//Undead spill poison when hit, so clear it after a delay//
 EVENT LLMIME_SealEvil_StartClearTimer
 VARS
 	CHARACTER:_Mime
@@ -130,4 +131,49 @@ THEN
 	CreateSurfaceAt(_Target, SurfaceNone, 3.0, 0)
 ELSE
 	//StatusText(_Target, "No poison found?")
+ENDIF
+*/
+
+EVENT LLMIME_Decoy_MimickingDisable
+VARS
+	CHARACTER:_Mime
+ON
+	OnCharacterStatusApplied(_Mime, LLMIME_DECOY_ACTIVE)
+ACTIONS
+IF "c1&!c2"
+	IsTagged(_Mime, "Mimicry_Mime")
+	CharacterHasStatus(_Mime, LLMIME_MIMICKING_DISABLED)
+THEN
+	CharacterApplyStatus(_Mime, LLMIME_MIMICKING_DISABLED, -1)
+	SetFlag(_Mime, "Mimicry_Internal_MimickingDisabledByDecoy")
+ENDIF
+
+EVENT LLMIME_Decoy_MimickingEnable
+VARS
+	CHARACTER:_Mime
+ON
+	OnCharacterStatusRemoved(_Mime, LLMIME_DECOY_ACTIVE)
+ACTIONS
+IF "c1&c2&c3"
+	IsTagged(_Mime, "Mimicry_Mime")
+	CharacterHasStatus(_Mime, LLMIME_MIMICKING_DISABLED)
+	HasFlag(_Mime, "Mimicry_Internal_MimickingDisabledByDecoy")
+THEN
+	CharacterRemoveStatus(_Mime, LLMIME_MIMICKING_DISABLED)
+	ClearFlag(_Mime, "Mimicry_Internal_MimickingDisabledByDecoy")
+ENDIF
+
+EVENT LLMIME_Decoy_Removal
+VARS
+	CHARACTER:_Mime
+ON
+	OnSkillCast(_Mime, _)
+	OnCharacterStartAttackObject(_, _, _, _Mime)
+	OnCharacterStatusApplied(_Mime, WET)
+	OnCharacterEvent(_Mime, "Mimicry_Events_Decoy_RemoveInvisibility")
+ACTIONS
+IF "c1"
+	CharacterHasStatus(_Mime, LLMIME_DECOY_ACTIVE)
+THEN
+	CharacterRemoveStatus(_Mime, LLMIME_DECOY_ACTIVE)
 ENDIF
