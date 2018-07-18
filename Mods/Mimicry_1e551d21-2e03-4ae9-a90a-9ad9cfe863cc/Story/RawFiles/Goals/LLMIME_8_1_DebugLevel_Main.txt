@@ -489,6 +489,33 @@ AND
 CharacterGetDisplayName(_Char, _, _Name)
 THEN
 LeaderLog_Log("DEBUG", "[LLMIME:Debug:Mimicry_MimeIsUnarmed] [",_Name,"] is not unarmed.");
+
+IF
+CharacterStatusAttempt(_Character, _Status, _Causee)
+AND
+String(_Causee, _Cause)
+AND
+CharacterGetDisplayName(_Character, _, _Name)
+THEN
+LeaderLog_Log("DEBUG", "[LLMIME:Debug:CharacterStatusAttempt] Status [",_Status,"] attempt on [",_Name,"] via [",_Cause,"].");
+
+IF
+CharacterStatusApplied(_Character, _Status, _Causee)
+AND
+String(_Causee, _Cause)
+AND
+CharacterGetDisplayName(_Character, _, _Name)
+THEN
+LeaderLog_Log("DEBUG", "[LLMIME:Debug:CharacterStatusApplied] Status [",_Status,"] applied on [",_Name,"] via [",_Cause,"].");
+
+IF
+CharacterStatusRemoved(_Character, _Status, _Causee)
+AND
+String(_Causee, _Cause)
+AND
+CharacterGetDisplayName(_Character, _, _Name)
+THEN
+LeaderLog_Log("DEBUG", "[LLMIME:Debug:CharacterStatusRemoved] Status [",_Status,"] removed from [",_Name,"] via [",_Cause,"].");
 //END_REGION
 EXITSECTION
 

@@ -70,8 +70,8 @@ ACTIONS
 IF "!c1"
 	IsTagged(_Mime, "Mimicry_Mime")
 THEN
-	SetVar(_Mime, "LeaderLib_LogMessage", STRING:"[LLMIME:LLMIME_Main:Mime_Setup] Setting mime tag and statuses.")
-	CharacterEvent(_Mime, "LeaderLib_DebugLog")
+	SetVar(_Mime, "LeaderLog_Message", STRING:"[LLMIME:LLMIME_Main:Mime_Setup] Setting mime tag and statuses.")
+	CharacterEvent(_Mime, "LeaderLog_Commands_Log")
 	SetTag(_Mime, "Mimicry_Mime")
 ENDIF
 	CharacterEvent(_Mime, "Mimicry_ApplySourceRegen")

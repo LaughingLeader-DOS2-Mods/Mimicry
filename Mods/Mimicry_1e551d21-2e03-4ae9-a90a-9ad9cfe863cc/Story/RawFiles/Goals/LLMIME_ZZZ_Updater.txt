@@ -16,12 +16,6 @@ AND
 LeaderUpdater_QRY_ModUpdateNeeded("Mimicry", "LaughingLeader", "0.9.1.0")
 THEN
 LeaderUpdater_Register_Mod("Mimicry", "LaughingLeader", "0.9.1.0");
-LLMIME_System_UpdateDatabases();
-
-PROC
-LLMIME_System_UpdateDatabases()
-THEN
-LeaderLog_Log("DEBUG", "[LLMIME:Updater] Databases updated.");
 EXITSECTION
 
 ENDEXITSECTION

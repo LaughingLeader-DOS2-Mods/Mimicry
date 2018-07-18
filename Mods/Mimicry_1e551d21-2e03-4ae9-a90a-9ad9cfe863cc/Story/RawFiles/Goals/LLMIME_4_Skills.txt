@@ -54,6 +54,22 @@ AND
 CharacterIsDead(_Character, 0)
 THEN
 CharacterDie(_Character, 1, "DoT");
+
+IF
+CharacterStatusAttempt(_Target, "LLMIME_FINAL_WISH_TARGET", (CHARACTERGUID)_Caster)
+AND
+NOT DB_LLMIME_Skills_FinalWish_Target(_Target, _Caster)
+//LeaderLib_Helper_QRY_HasStatus(_Caster, "LLMIME_SACRIFICED")
+THEN
+DB_LLMIME_Skills_FinalWish_Target(_Target, _Caster);
+
+IF
+CharacterResurrected(_Target)
+AND
+DB_LLMIME_Skills_FinalWish_Target(_Target, _Caster)
+THEN
+NOT DB_LLMIME_Skills_FinalWish_Target(_Target, _Caster);
+CharacterCharacterSetEvent(_Target, _Caster, "Mimicry_Events_RevivedByFinalWish");
 //END_REGION
 
 //REGION DECOY

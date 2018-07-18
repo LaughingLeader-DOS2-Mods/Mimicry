@@ -103,6 +103,33 @@ THEN
 	
 ENDIF
 
+EVENT LLMIME_FinalWish_Resurrected
+VARS
+	CHARACTER:_Character
+	CHARACTER:_Caster
+	FLOAT:_Vitality
+	FLOAT:_VitalityMax
+ON
+	OnCharacterCharacterEvent(_Character, _Caster, "Mimicry_Events_RevivedByFinalWish")
+ACTIONS
+	CharacterApplyStatus(_Character, LLMIME_FINAL_WISH_HEAL, -2, 1, _Caster)
+	//CharacterApplyStatus(_Character, LLMIME_FINAL_WISH_ARMOR, -2, 1, _Caster)
+	//CharacterApplyStatus(_Character, LLMIME_FINAL_WISH_MAGICARMOR, -2, 1, _Caster)
+IF "c1&c2"
+	CharacterGetStat(_Vitality, _Character, Vitality)
+	CharacterGetStat(_VitalityMax, _Character, VitalityMax)
+THEN
+	Divide(_Vitality, _VitalityMax)
+	Set(_VitalityMax, 0.5)
+	Subtract(_VitalityMax, _Vitality)
+	//SetHealth(_Character, _VitalityMax)
+ENDIF
+
+IF "!c1"
+	ContainsSurface(_Character, 2.0, SurfaceNone)
+THEN
+	TransformSurfaceAt(_Character, Bless, 0, 2.0, 2, _Caster)
+ENDIF
 /*
 //Undead spill poison when hit, so clear it after a delay//
 EVENT LLMIME_SealEvil_StartClearTimer
