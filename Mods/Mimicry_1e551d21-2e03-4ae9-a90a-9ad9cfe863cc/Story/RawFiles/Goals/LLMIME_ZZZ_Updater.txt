@@ -3,13 +3,7 @@ SubGoalCombiner SGC_AND
 INITSECTION
 LeaderUpdater_Register_Mod("Mimicry", "LaughingLeader", "0.9.1.0");
 LeaderUpdater_Register_ActiveGoal("Mimicry", "LaughingLeader", "LLMIME_ZZZ_Updater");
-LLMIME_Updater_RegisterDatabasesOnce();
 KBSECTION
-PROC
-LLMIME_Updater_RegisterDatabasesOnce()
-THEN
-DB_NOOP(1);
-
 IF
 GameStarted(_,_)
 AND

@@ -112,9 +112,8 @@ VARS
 ON
 	OnCharacterCharacterEvent(_Character, _Caster, "Mimicry_Events_RevivedByFinalWish")
 ACTIONS
-	CharacterApplyStatus(_Character, LLMIME_FINAL_WISH_HEAL, -2, 1, _Caster)
-	//CharacterApplyStatus(_Character, LLMIME_FINAL_WISH_ARMOR, -2, 1, _Caster)
-	//CharacterApplyStatus(_Character, LLMIME_FINAL_WISH_MAGICARMOR, -2, 1, _Caster)
+	CharacterApplyStatus(_Character, LLMIME_FINAL_WISH_BUFF, 3, 1, _Caster)
+/*
 IF "c1&c2"
 	CharacterGetStat(_Vitality, _Character, Vitality)
 	CharacterGetStat(_VitalityMax, _Character, VitalityMax)
@@ -124,6 +123,50 @@ THEN
 	Subtract(_VitalityMax, _Vitality)
 	//SetHealth(_Character, _VitalityMax)
 ENDIF
+*/
+
+EVENT LLMIME_FinalWish_Remove_Buff_A
+VARS
+	CHARACTER:_Character
+ON
+	OnTurn(_Character, _)
+	OnLeftCombat(_Character, _)
+	OnCharacterEvent(_Character, "Mimcry_Events_FinalWish_RemoveStatus")
+ACTIONS
+IF "c1"
+	CharacterHasStatus(_Character, LLMIME_FINAL_WISH_BUFF)
+THEN
+	CharacterRemoveStatus(_Character, LLMIME_FINAL_WISH_BUFF)
+ENDIF
+IF "c1"
+	HasFlag(_Character, "Mimicry_FinalWish_RemovingStatus")
+THEN
+	ClearFlag(_Character, "Mimicry_FinalWish_RemovingStatus")
+ENDIF
+
+EVENT LLMIME_FinalWish_Remove_Buff_B
+VARS
+	CHARACTER:_Character
+	FLOAT:_Vitality
+	STRING:_CompleteEvent
+ON
+	OnCharacterEvent(_Character, "Mimicry_Events_FinalWish_OnAttacked")
+	OnCharacterVitalityChanged(_Character, _)
+ACTIONS
+IF "c1&c2&(c3|c4)&!c5"
+	CharacterHasStatus(_Character, LLMIME_FINAL_WISH_BUFF)
+	CharacterGetStat(_Vitality, _Character, VitalityPoints)
+	IsEqual(_Vitality, 1)
+	IsLessThen(_Vitality, 1)
+	HasFlag(_Character, "Mimicry_FinalWish_RemovingStatus")
+THEN
+	SetFlag(_Character, "Mimicry_FinalWish_RemovingStatus")
+	SetVar(_Character, "LeaderLib_Timer_CompleteEvent", STRING:"Mimcry_Events_FinalWish_RemoveStatus")
+	SetVar(_Character, "LeaderLib_Timer_Delay", INT:3000)
+	CharacterEvent(_Character, "LeaderLib_Commands_StartObjectTimer")
+ENDIF
+
+/*
 
 IF "!c1"
 	ContainsSurface(_Character, 2.0, SurfaceNone)

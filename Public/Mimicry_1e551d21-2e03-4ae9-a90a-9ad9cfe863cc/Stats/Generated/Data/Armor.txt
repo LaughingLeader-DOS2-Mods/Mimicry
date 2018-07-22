@@ -9,7 +9,7 @@ data "Value" "999"
 data "StrengthBoost" "1"
 data "FinesseBoost" "1"
 data "ExtraProperties" "Self:OnEquip:LLMIME_MASK_INFO"
-data "Flags" "CharmImmunity"
+data "Flags" "CharmImmunity;Unbreakable"
 data "ComboCategory" "Helmet"
 data "Unique" "1"
 

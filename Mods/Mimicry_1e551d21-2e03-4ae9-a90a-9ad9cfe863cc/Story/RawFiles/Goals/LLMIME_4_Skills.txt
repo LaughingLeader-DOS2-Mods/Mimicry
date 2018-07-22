@@ -70,6 +70,13 @@ DB_LLMIME_Skills_FinalWish_Target(_Target, _Caster)
 THEN
 NOT DB_LLMIME_Skills_FinalWish_Target(_Target, _Caster);
 CharacterCharacterSetEvent(_Target, _Caster, "Mimicry_Events_RevivedByFinalWish");
+
+IF
+CharacterReceivedDamage(_Character, _, _)
+AND
+HasActiveStatus(_Character, "LLMIME_FINAL_WISH_BUFF", 1)
+THEN
+SetStoryEvent(_Character, "Mimicry_Events_FinalWish_OnAttacked");
 //END_REGION
 
 //REGION DECOY
