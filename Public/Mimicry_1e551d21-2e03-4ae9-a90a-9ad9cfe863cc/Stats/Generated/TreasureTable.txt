@@ -3,9 +3,25 @@ new treasuretable "ST_LLMIME_SkillbookMime"
 MinLevel "-30"
 MaxLevel "0"
 new subtable "1,1"
+object category "I_SKILLBOOK_LLMIME_Decoy",1,0,0,0,0,0,0,0
+new subtable "1,1"
+object category "I_SKILLBOOK_LLMIME_EvasiveManeuver",1,0,0,0,0,0,0,0
+new subtable "1,1"
+object category "I_SKILLBOOK_LLMIME_Vault",1,0,0,0,0,0,0,0
+new subtable "1,1"
+object category "I_SKILLBOOK_LLMIME_SilencingStare",1,0,0,0,0,0,0,0
+new subtable "1,1"
+object category "I_SKILLBOOK_LLMIME_KneeBreaker",1,0,0,0,0,0,0,0
+new subtable "1,1"
+object category "I_SKILLBOOK_LLMIME_DisarmingBlow",1,0,0,0,0,0,0,0
+new subtable "1,1"
+object category "I_SKILLBOOK_LLMIME_Overthrow",1,0,0,0,0,0,0,0
+new subtable "1,1"
 object category "I_SKILLBOOK_LLMIME_SourceMimicking",1,0,0,0,0,0,0,0
 new subtable "1,1"
-object category "I_SKILLBOOK_LLMIME_DecoyPloy",1,0,0,0,0,0,0,0
+object category "I_SKILLBOOK_LLMIME_FinalWish",1,0,0,0,0,0,0,0
+new subtable "1,1"
+object category "I_SKILLBOOK_LLMIME_Fatality",1,0,0,0,0,0,0,0
 new treasuretable "LLMIME_Mime_Equipment"
 IgnoreLevelDiff 1
 new subtable "-1"

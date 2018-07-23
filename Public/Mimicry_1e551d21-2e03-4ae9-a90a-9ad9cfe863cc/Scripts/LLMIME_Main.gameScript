@@ -8,7 +8,7 @@ INIT
 	EXTERN INT:%SourceRegenDuration = 10
 EVENTS
 
-EVENT InitStatusList
+EVENT LLMIME_InitStatusList
 VARS
 	INT:_ListSize
 ON
@@ -26,7 +26,7 @@ THEN
 	ListAdd(%MimeStatuses, LLMIME_CONCENTRATION)
 ENDIF
 
-EVENT LeaderLib_InitEvent
+EVENT LLMIME_LeaderLib_InitEvent
 ON
 	OnItemEvent(_, "LeaderLib_Initialized")
 ACTIONS

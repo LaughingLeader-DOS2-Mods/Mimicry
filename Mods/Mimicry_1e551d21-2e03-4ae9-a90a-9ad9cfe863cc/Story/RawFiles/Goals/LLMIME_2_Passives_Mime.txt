@@ -22,8 +22,18 @@ DB_LLMIME_Mime_Skills("Shout_LLMIME_OpenMenu");
 DB_LLMIME_Mime_Skills("Shout_LLMIME_DisableMimicking");
 
 SysClear("DB_LLMIME_Mime_LearnableSkills", 1);
-DB_LLMIME_Mime_LearnableSkills("Shout_LLMIME_DisableMimicking");
 DB_LLMIME_Mime_LearnableSkills("Projectile_LLMIME_Decoy");
+DB_LLMIME_Mime_LearnableSkills("Projectile_LLMIME_FinalWish");
+DB_LLMIME_Mime_LearnableSkills("Shout_LLMIME_SourceMimicking");
+//Skill alternatives (muted bypass)
+DB_LLMIME_Mime_LearnableSkills("Shout_LLMIME_Overthrow");
+DB_LLMIME_Mime_LearnableSkills("Shout_LLMIME_EvasiveManeuver");
+DB_LLMIME_Mime_LearnableSkills("MultiStrike_LLMIME_MimeVault");
+DB_LLMIME_Mime_LearnableSkills("Target_LLMIME_SilencingStare");
+DB_LLMIME_Mime_LearnableSkills("Target_LLMIME_KneeBreaker");
+DB_LLMIME_Mime_LearnableSkills("Target_LLMIME_DisarmingBlow");
+DB_LLMIME_Mime_LearnableSkills("Target_LLMIME_SealEvil");
+DB_LLMIME_Mime_LearnableSkills("Target_LLMIME_Fatality");
 //END_REGION
 
 //REGION UPDATING

@@ -1,0 +1,50 @@
+INIT
+	ITEM:__Me
+	EXTERN STRING:%LoopEffect = ""
+	EXTERN FIXEDSTRING:%BoneName = ""
+	INT:%EffectActive = 0
+	INT64:%EffectHandle = 0
+EVENTS
+
+EVENT LLMIME_Item_PlayLoopEffect
+ON
+	OnFunction("LLMIME_Item_PlayLoopEffect")
+ACTIONS
+	CallFunction("LLMIME_Item_StopLoopEffect")
+IF "!c1"
+	IsEqual(%LoopEffect, "")
+THEN
+	ItemPlayLoopEffect(%EffectHandle, __Me, %LoopEffect, %BoneName)
+	Set(%EffectActive, 1)
+ENDIF
+
+EVENT LLMIME_Item_StopLoopEffect
+ON
+	OnFunction("LLMIME_Item_StopLoopEffect")
+ACTIONS
+IF "!c1"
+	IsEqual(%EffectHandle, 0)
+THEN
+	StopLoopEffect(%EffectHandle)
+	Set(%EffectHandle, 0)
+ENDIF
+	Set(%EffectActive, 0)
+
+EVENT LLMIME_Item_OnPickedUp
+ON
+	OnPickupItem(_, __Me)
+ACTIONS
+	CallFunction("LLMIME_Item_StopLoopEffect")
+
+BEHAVIOUR
+
+REACTION LLMIME_Item_StartLoopEffect, 10
+USAGE ALL
+CHECK "c1|c2"
+	IsEqual(%EffectActive, 0)
+	IsEqual(%EffectHandle, 0)
+ACTIONS
+	CallFunction("LLMIME_Item_PlayLoopEffect")
+INTERRUPT
+ACTIONS
+	Reset()
