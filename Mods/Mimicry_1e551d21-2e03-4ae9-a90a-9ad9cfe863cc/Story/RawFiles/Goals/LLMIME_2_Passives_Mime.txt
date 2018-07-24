@@ -162,28 +162,25 @@ CharacterRemoveSkill(_Mime, _Skill);
 //END_REGION
 
 //REGION EFFECTS
-IF
-CanUseItem(_Mime, _Mask, _RequestID)
+PROC
+ProcProcessUseOfItem((CHARACTERGUID)_Character,(ITEMGUID)_Item,(INTEGER)_RequestID)
 AND
-GetTemplate(_Mask, _Template)
+NOT DB_CustomUseItemResponse(_Character, _Item, 0)
 AND
-LLMIME_QRY_IsMaskTemplate(_Template)
+GetTemplate(_Item, _Template)
 AND
-NOT CharacterGetEquippedItem(_Mime, "Helmet", _Mask)
+DB_LLMIME_Templates("Mask_A", _Template)
 THEN
-PlayEffect(_Mime, "LLMIME_FX_MimeMask_Transform_Root_02");
-PlayEffect(_Mime, "LLMIME_FX_MimeMask_Transform_Overlay_Equipped_01");
-RequestProcessed(_Mime, _RequestID, 1);
+SetStoryEvent(_Character, "Mimicry_Events_Mime_MaskEquipped");
 
 IF
-ItemUnEquipped(_Mask, _Mime)
+ItemUnEquipped(_Item, _Character)
 AND
-GetTemplate(_Mask, _Template)
+GetTemplate(_Item, _Template)
 AND
 LLMIME_QRY_IsMaskTemplate(_Template)
 THEN
-PlayEffect(_Mime, "LLMIME_FX_MimeMask_Transform_Root_02");
-PlayEffect(_Mime, "LLMIME_FX_MimeMask_Transform_Overlay_Unequipped_01");
+SetStoryEvent(_Character, "Mimicry_Events_Mime_MaskUnEquipped");
 //END_REGION
 
 //REGION MASK_LEVELING

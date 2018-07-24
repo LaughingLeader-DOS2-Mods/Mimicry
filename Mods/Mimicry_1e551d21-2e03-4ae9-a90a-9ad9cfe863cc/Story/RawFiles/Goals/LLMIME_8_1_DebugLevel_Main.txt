@@ -42,6 +42,13 @@ LLMIME_Debug_TracePartyCount(_Player);
 
 /*
 IF
+CharacterStatusAttempt(_Char, "INVISIBLE", _)
+THEN
+RemoveStatus(_Char, "INVISIBLE");
+*/
+
+/*
+IF
 TimerFinished("LLMIME_Debug_Test")
 THEN
 //LeaderLib_Math_Sine(131.0);

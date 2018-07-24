@@ -166,7 +166,7 @@ NOT DB_LLMIME_Brawler_JustToggledStance(_Mime)
 AND
 NOT LLMIME_Brawler_QRY_StanceIsActive(_Mime)
 THEN
-SetStoryEvent(_Mime, "LLMIME_Events_BrawlerStanceActivated_Start");
+SetStoryEvent(_Mime, "Mimicry_Events_BrawlerStanceActivated_Start");
 
 IF
 CharacterUsedSkill(_Mime, "Shout_LLMIME_BrawlerStance", _)
@@ -175,7 +175,7 @@ NOT DB_LLMIME_Brawler_JustToggledStance(_Mime)
 AND
 LLMIME_Brawler_QRY_StanceIsActive(_Mime)
 THEN
-SetStoryEvent(_Mime, "LLMIME_Events_BrawlerStanceDeactivated_Start");
+SetStoryEvent(_Mime, "Mimicry_Events_BrawlerStanceDeactivated_Start");
 
 IF
 CharacterUsedSkill(_Mime, "Shout_LLMIME_BrawlerStance", _)
@@ -184,7 +184,7 @@ NOT DB_LLMIME_Brawler_JustToggledStance(_Mime)
 AND
 NOT LLMIME_Brawler_QRY_StanceIsActive(_Mime)
 THEN
-SetStoryEvent(_Mime, "LLMIME_Events_BrawlerStanceActivated_Cast");
+SetStoryEvent(_Mime, "Mimicry_Events_BrawlerStanceActivated_Cast");
 LLMIME_Brawler_ApplyStance(_Mime);
 DB_LLMIME_Brawler_JustToggledStance(_Mime);
 
@@ -195,7 +195,7 @@ NOT DB_LLMIME_Brawler_JustToggledStance(_Mime)
 AND
 LLMIME_Brawler_QRY_StanceIsActive(_Mime)
 THEN
-SetStoryEvent(_Mime, "LLMIME_Events_BrawlerStanceDeactivated_Cast");
+SetStoryEvent(_Mime, "Mimicry_Events_BrawlerStanceDeactivated_Cast");
 LLMIME_Brawler_RemoveStance(_Mime);
 DB_LLMIME_Brawler_JustToggledStance(_Mime);
 
@@ -260,7 +260,7 @@ AND
 HasActiveStatus(_Mime, _Status, 1)
 THEN
 RemoveStatus(_Mime, _Status);
-SetStoryEvent(_Mime, "LLMIME_Events_BrawlerStanceDeactivated_Status");
+SetStoryEvent(_Mime, "Mimicry_Events_BrawlerStanceDeactivated_Status");
 
 PROC
 LLMIME_Brawler_RemoveStance((CHARACTERGUID)_Mime)
@@ -346,7 +346,7 @@ CharacterStatusApplied(_Target, "LLMIME_UNARMED_BONUS_DAMAGE", (CHARACTERGUID)_M
 AND
 Random(99999, _Seed)
 THEN
-PlayEffect(_Target, "RS3_FX_Skills_Voodoo_Impact_Attack_Precision_01", "Dummy_BodyFX");
+SetStoryEvent(_Target, "Mimicry_Events_HitByUnarmedBonusDamage");
 LLMIME_Brawler_ApplyBonusDamageDebuffs(_Target, _Seed, _Mime);
 
 PROC

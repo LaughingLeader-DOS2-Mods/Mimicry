@@ -492,12 +492,9 @@ AND
 NOT LLMIME_Follower_QRY_WithinTalkingDistance(_Char, _Mime)
 AND
 LLMIME_Follower_QRY_IsInitialized(_Mime)
-AND
-GetPosition(_Mime, _x, _y, _z)
 THEN
 LeaderLog_Log("DEBUG", "[LLMIME:Follower:StartSummoning] Teleporting mime to summoner after timer.");
-PlayEffectAtPosition("RS3_FX_Skills_Rogue_CloakDagger_Cast_01", _x, _y, _z);
-PlayEffect(_Mime, "LLMIME_FX_Scripted_Follower_Summon_TeleportOverlay_01");
+SetStoryEvent(_Mime, "Mimicry_Events_Follower_SummoningTeleportStarted");
 LeaderLib_StartCharacterItemTimer(_Char, _Item, 100, "LLMIME_Timers_FollowerSummonTimer_", "LLMIME_StartSummoningFollower");
 
 PROC
@@ -579,8 +576,7 @@ AND
 GetPosition(_Item, _x, _y, _z)
 THEN
 LeaderLog_Log("DEBUG", "[LLMIME:Follower:SummonFollower] Teleporting Mime to summoner's position.");
-PlayEffectAtPosition("RS3_FX_Skills_Void_Cast_VoidGlide_Root_01", _x, _y, _z);
-TeleportToPosition(_Mime, _x, _y, _z, "Mimicry_Follower_MimeSummoned_Item", 0);
+TeleportToPosition(_Mime, _x, _y, _z, "Mimicry_Events_Follower_OnTeleported", 0);
 SetOnStage(_Mime, 1);
 CharacterCharacterSetEvent(_Char, _Mime, "Mimicry_MimeSummoned");
 
@@ -593,7 +589,7 @@ IsTagged(_Mime, "LeaderLib_IsFollower", 0)
 AND
 ItemIsInInventory(_Item, 1)
 THEN
-TeleportTo(_Mime, _Char, "Mimicry_Follower_MimeSummoned_Char", 0);
+TeleportTo(_Mime, _Char, "Mimicry_Events_Follower_OnTeleported", 0);
 SetOnStage(_Mime, 1);
 CharacterCharacterSetEvent(_Char, _Mime, "Mimicry_MimeSummoned");
 
@@ -605,13 +601,6 @@ AND
 IsTagged(_Mime, "LeaderLib_IsFollower", 1)
 THEN
 LeaderLog_Log("DEBUG", "[LLMIME:Follower:SummonFollower] Mime follower is already recruited [LeaderLib_IsFollower].");
-
-IF
-StoryEvent((CHARACTERGUID)_Mime, "Mimicry_Follower_MimeSummoned_Char")
-AND
-GetPosition(_Mime, _x, _y, _z)
-THEN
-PlayEffectAtPosition("RS3_FX_Skills_Void_Cast_VoidGlide_Root_01", _x, _y, _z);
 
 IF
 CharacterCharacterEvent(_Summoner, _Mime, "Mimicry_MimeSummoned")
@@ -974,12 +963,7 @@ TeleportTo(_Follower, _Owner, "Shout_LLMIME_ReturnToOwner", 1);
 IF
 StoryEvent((CHARACTERGUID)_Follower, "Shout_LLMIME_ReturnToOwner")
 THEN
-LeaderLib_StartObjectTimer(_Follower, 500, "LLMIME_Timers_ReturnEffectDelay_", "LLMIME_Events_PlayReturnEffect");
-
-IF
-StoryEvent((CHARACTERGUID)_Follower, "LLMIME_Events_PlayReturnEffect")
-THEN
-PlayEffect(_Follower, "RS3_FX_Skills_Void_Cast_VoidGlide_Root_01");
+LeaderLib_StartObjectTimer(_Follower, 500, "LLMIME_Timers_ReturnEffectDelay_", "Mimicry_Events_Follower_OnTeleported");
 //END_REGION
 
 //REGION LEVEL_UP
@@ -1302,19 +1286,14 @@ DialogGetInvolvedNPC(_Instance, 1, (CHARACTERGUID)_Ghost)
 AND
 GetPosition(_Ghost, _x, _y, _z)
 THEN
-PlayEffectAtPosition("RS3_FX_GP_ScriptedEvent_GhostDissipate_01", _x, _y, _z);
 LLMIME_Follower_Internal_KillGhost(_Ghost);
 
 IF
 ObjectFlagSet("Mimicry_MaskTakenFromFollower", (CHARACTERGUID)_Player, _Instance)
 AND
 DB_LLMIME_Follower_Mime(_Mime)
-AND
-GetPosition(_Mime, _x, _y, _z)
 THEN
-CharacterCharacterSetEvent(_Mime, _Player, "Mimicry_Events_MaskTakenFromFollower");
-//PlayEffectAtPosition("RS3_FX_GP_Impacts_Wand_Void_01", _x, _y, _z);
-PlayEffectAtPosition("RS3_FX_GP_Impacts_Void_Shield_01", _x, _y, _z);
+CharacterCharacterSetEvent(_Mime, _Player, "Mimicry_Events_Follower_OnMaskStolen");
 LeaderLib_Follower_DismissCharacter(_Mime, "", 0);
 SetTag(_Mime, "BLOCK_RESURRECTION");
 
@@ -1379,7 +1358,7 @@ AND
 GetPosition(_Ghost, _x, _y, _z)
 THEN
 NOT DB_LLMIME_FollowerGhost(_Ghost);
-PlayEffectAtPosition("RS3_FX_GP_ScriptedEvent_GhostDissipate_01", _x, _y, _z);
+SetStoryEvent(_Ghost, "Mimicry_Events_Follower_OnGhostKilled");
 CharacterSetAnimationOverride(_Ghost, "");
 PlayAnimation(_Ghost, "deathfigure_end", "LLMIME_Events_Follower_KillGhost");
 
@@ -1419,6 +1398,7 @@ LLMIME_Follower_BeginResurrection((CHARACTERGUID)_Player, (ITEMGUID)_MusicBox)
 AND
 DB_LLMIME_Follower_Mime(_Mime)
 THEN
+SetStoryEvent(_Mime, "Mimicry_Events_Follower_OnResurrected");
 ClearTag(_Mime, "BLOCK_RESURRECTION");
 ObjectSetFlag(_Player, "Mimicry_PlayerRevivedMimeFollower");
 SetOnStage(_Mime, 1);
@@ -1427,21 +1407,12 @@ ObjectSetFlag(_Mime, "Mimicry_WasResurrectedByMask");
 LeaderLib_StartCharacterItemTimer(_Player, _MusicBox, 2500, "LLMIME_Timers_FollowerrTimer_", "Mimicry_MimeFollowerResurrected");
 DB_LLMIME_Follower_RevivedBy(_Player);
 
-PROC
-LLMIME_Follower_BeginResurrection((CHARACTERGUID)_Player, (ITEMGUID)_MusicBox)
-AND
-DB_LLMIME_Follower_Mime(_Mime)
-AND
-GetPosition(_Mime, _x, _y, _z)
-THEN
-PlayEffectAtPosition("RS3_FX_Char_Animals_Bear_A_VoidTransform_01", _x, _y, _z);
-
 IF
 CharacterResurrected(_Mime)
 AND
 DB_LLMIME_Follower_Mime(_Mime)
 THEN
-SetStoryEvent(_Mime, "LLMIME_MimeFollowerRevived");
+SetStoryEvent(_Mime, "Mimicry_Events_OnMimeFollowerRevived");
 
 IF
 ObjectFlagSet("Mimicry_ResurrectionEvent_RemoveAndDestroyMask", (CHARACTERGUID)_Player, _Instance)

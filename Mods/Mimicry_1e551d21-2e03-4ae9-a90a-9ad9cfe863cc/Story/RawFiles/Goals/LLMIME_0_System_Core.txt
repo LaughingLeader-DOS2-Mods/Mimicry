@@ -82,7 +82,7 @@ PROC
 LLMIME_System_InitTemplates()
 THEN
 SysClear("DB_LLMIME_Templates", 2);
-DB_LLMIME_Templates("Mask_A", "EQ_Armor_UNIQUE_LLMIME_Mime_Mask_A_8e66ce79-8c8e-4c22-a8ea-5a99977f4ea8");
+DB_LLMIME_Templates("Mask_A", "EQ_Armor_LLMIME_Mime_Mask_A_8e66ce79-8c8e-4c22-a8ea-5a99977f4ea8");
 DB_LLMIME_Templates("Mask_A_Preview", "EQ_Armor_LLMIME_Mime_Mask_Preview_36348beb-6126-42f5-ba26-05acf6b65bae");
 DB_LLMIME_Templates("Mask_A_NoVisual", "EQ_Armor_LLMIME_Mime_Mask_NoVisual_38d7f6c3-ab60-43e5-b20c-f5faf06801dd");
 DB_LLMIME_Templates("BrawlerFist", "WPN_LLMIME_BrawlerFist_e1bda904-93c2-4f6f-8136-1a547279fd1f");

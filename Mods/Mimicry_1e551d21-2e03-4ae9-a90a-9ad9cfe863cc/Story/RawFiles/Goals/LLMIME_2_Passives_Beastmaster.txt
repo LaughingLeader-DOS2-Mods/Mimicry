@@ -559,7 +559,7 @@ IntegerDivide(_CasterHealth, 2, _NextHealth)
 AND
 _NextHealth > 1
 THEN
-PlayEffect(_Caster, "LLMIME_FX_Skills_Wish_Cast_Root_01");
+SetStoryEvent(_Caster, "Mimicry_Events_Wish_UsedSkill");
 DB_LLMIME_Beastmaster_Temp_NextWish(_Caster, _Target);
 
 IF
@@ -577,7 +577,7 @@ THEN
 NOT DB_LLMIME_Beastmaster_Temp_NextWish(_Caster, _Target);
 SetVarFloat(_Caster, "Mimicry_Wish_HealPercentage", 0.50);
 CharacterCharacterSetEvent(_Caster, _Target, "Mimicry_Events_OnWishCast");
-PlayEffect(_Target, "LLMIME_FX_Skills_Wish_Cast_Target_Root_01");
+SetStoryEvent(_Target, "Mimicry_Events_Wish_SkillCast");
 
 IF
 SkillCast(_Caster, "Target_LLMIME_Wish", _)

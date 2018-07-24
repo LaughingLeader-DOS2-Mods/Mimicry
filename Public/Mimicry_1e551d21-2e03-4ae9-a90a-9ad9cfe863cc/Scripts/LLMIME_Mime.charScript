@@ -73,7 +73,7 @@ ENDIF
 EVENT LLMIME_MimeFollower_Apply_BrawlerStance
 ON
 	OnCharacterEvent(__Me, "Mimicry_MimickedWeaponsRemoved")
-	OnCharacterEvent(__Me, "LLMIME_MimeFollowerRevived")
+	OnCharacterEvent(__Me, "Mimicry_Events_OnMimeFollowerRevived")
 	OnCharacterStatusApplied(__Me, "LLMIME_MIME")
 ACTIONS
 	CallFunction("Mimicry_MimeFollower_ActivateBrawlerStance")
@@ -133,7 +133,7 @@ ENDIF
 
 EVENT LLMIME_MimeFollower_RemoveGeneratedTreasure_Start
 ON
-	OnCharacterEvent(__Me, "LLMIME_MimeFollowerRevived")
+	OnCharacterEvent(__Me, "Mimicry_Events_OnMimeFollowerRevived")
 ACTIONS
 	IterateParty("LLMIME_Iterator_IterateInventoryForMimeFollowerTreasure")
 	IterateItems("LLMIME_Iterator_RemoveGeneratedMimeTreasure", "LLMIME_MimeFollowerTreasure")

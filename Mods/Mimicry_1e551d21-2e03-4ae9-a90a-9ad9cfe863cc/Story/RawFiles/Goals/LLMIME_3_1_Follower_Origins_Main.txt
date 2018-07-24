@@ -161,8 +161,7 @@ AND
 GetPosition(_Mime, _x, _y, _z)
 THEN
 ObjectSetFlag(_Mime, "LLMIME_TUT_MimeIsInvisible");
-PlayEffectAtPosition("RS3_FX_Skills_Rogue_CloakDagger_Cast_01", _x, _y, _z);
-PlayEffect(_Mime, "RS3_FX_Skills_Void_Cast_VoidGlide_Overlay_01");
+SetStoryEvent(_Mime, "Mimicry_Events_Follower_SummoningTeleportStarted");
 PlayAnimation(_Mime, "Teleport_01_Out", "Mimicry_Events_TUT_SetMimeFollowerToInvisible");
 
 IF
@@ -189,8 +188,9 @@ AND
 GetPosition(_Mime, _x, _y, _z)
 THEN
 ObjectClearFlag(_Mime, "LLMIME_FTJ_MimeIsInvisible");
-PlayEffectAtPosition("RS3_FX_Skills_Rogue_CloakDagger_Cast_01", _x, _y, _z);
-PlayEffect(_Mime, "LLMIME_FX_Scripted_Follower_Summon_TeleportOverlay_01");
+//PlayEffectAtPosition("RS3_FX_Skills_Rogue_CloakDagger_Cast_01", _x, _y, _z);
+//PlayEffect(_Mime, "LLMIME_FX_Scripted_Follower_Summon_TeleportOverlay_01");
+SetStoryEvent(_Mime, "Mimicry_Events_Follower_SummoningTeleportStarted");
 LeaderLib_StartObjectTimer(_Mime, 500, "LLMIME_Timers_FTJ_MimeAppearTimer_", "Mimicry_Origins_FTJ_MimeFollowerAppearedOnBeach");
 CharacterLookAt(_Mime, _Player);
 

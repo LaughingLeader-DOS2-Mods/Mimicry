@@ -87,13 +87,13 @@ NOT DB_LLMIME_Skills_Temp_DecoyPosition(_Character, _, _, _)
 AND
 GetPosition(_Character, _x, _y, _z)
 AND
-LeaderLog_QRY_RealToIntToString("LLMIME.Debug.DecoyPloyPos", _x, _z)
+LeaderLog_QRY_RealToIntToString("LLMIME.Debug.DecoyPos", _x, _z)
 AND
-DB_LeaderLog_Temp_RealString("LLMIME.Debug.DecoyPloyPos", _xstr, _zstr)
+DB_LeaderLog_Temp_RealString("LLMIME.Debug.DecoyPos", _xstr, _zstr)
 THEN
 DB_LLMIME_Skills_Temp_DecoyPosition(_Character, _x, _y, _z);
-LeaderLog_Log("DEBUG", "[LLMIME:Skills:CharacterUsedSkill(DecoyPloy)] Saving decoy spawn position [",_xstr,",",_zstr,"].");
-NOT DB_LeaderLog_Temp_RealString("LLMIME.Debug.DecoyPloyPos", _xstr, _zstr);
+LeaderLog_Log("DEBUG", "[LLMIME:Skills:CharacterUsedSkill(Decoy)] Saving decoy spawn position [",_xstr,",",_zstr,"].");
+NOT DB_LeaderLog_Temp_RealString("LLMIME.Debug.DecoyPos", _xstr, _zstr);
 
 IF
 //SkillCast(_Character, "Projectile_LLMIME_Decoy", _)
@@ -144,7 +144,7 @@ CharacterTransformAppearanceTo(_Decoy, _Character, 1, 1);
 LeaderLib_StartObjectTimer(_Decoy, 50, "LLMIME_Timers_Skills_Internal_SetupDecoy_", "Mimicry_Events_Skills_Internal_SetupDecoy");
 //SetStoryEvent(_Character, "Mimicry_Events_Skills_Internal_SetupDecoyTags");
 TeleportToPosition(_Decoy, _x, _y, _z, "Mimicry_Events_Skills_Internal_DecoyTeleported", 0);
-LeaderLog_Log("DEBUG", "[LLMIME:Skills:SkillCast(DecoyPloy)] Spawned decoy at saved position.");
+LeaderLog_Log("DEBUG", "[LLMIME:Skills:SkillCast(Decoy)] Spawned decoy at saved position.");
 
 /*
 IF
