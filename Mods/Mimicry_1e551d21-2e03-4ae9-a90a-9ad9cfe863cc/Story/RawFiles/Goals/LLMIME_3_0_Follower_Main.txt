@@ -951,19 +951,19 @@ CharacterUseSkill(_Follower, "Shout_LLMIME_ReturnToOwner", _Follower, 1, 1);
 IF
 SkillCast(_Follower, "Shout_LLMIME_ReturnToOwner", _)
 THEN
-LeaderLib_StartObjectTimer(_Follower, 250, "LLMIME_Timers_ReturnDelay_", "LLMIME_Events_StartTeleport");
+LeaderLib_StartObjectTimer(_Follower, 250, "Mimicry_Timers_ReturnToOwner_ReturnDelay_", "Mimicry_Events_Follower_ReturnToOwner_StartTeleport");
 
 IF
-StoryEvent((CHARACTERGUID)_Follower, "LLMIME_Events_StartTeleport")
+StoryEvent((CHARACTERGUID)_Follower, "Mimicry_Events_Follower_ReturnToOwner_StartTeleport")
 AND
 DB_LLLIB_PartyFollower(_Owner, _Follower)
 THEN
-TeleportTo(_Follower, _Owner, "Shout_LLMIME_ReturnToOwner", 1);
+TeleportTo(_Follower, _Owner, "Mimicry_Events_Follower_ReturnToOwner_Teleported", 1);
 
 IF
-StoryEvent((CHARACTERGUID)_Follower, "Shout_LLMIME_ReturnToOwner")
+StoryEvent((CHARACTERGUID)_Follower, "Mimicry_Events_Follower_ReturnToOwner_Teleported")
 THEN
-LeaderLib_StartObjectTimer(_Follower, 500, "LLMIME_Timers_ReturnEffectDelay_", "Mimicry_Events_Follower_OnTeleported");
+LeaderLib_StartObjectTimer(_Follower, 500, "Mimicry_Timers_ReturnToOwner_ReturnEffectDelay_", "Mimicry_Events_Follower_OnTeleported");
 //END_REGION
 
 //REGION LEVEL_UP

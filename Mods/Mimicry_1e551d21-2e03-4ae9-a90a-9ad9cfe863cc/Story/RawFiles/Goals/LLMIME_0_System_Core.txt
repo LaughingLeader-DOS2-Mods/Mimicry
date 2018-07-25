@@ -20,8 +20,6 @@ DB_LLMIME_PassiveData("LLMIME_CONCENTRATION", "LLMIME_CONCENTRATION_BONUS", "LLM
 LLMIME_System_InitTemplates();
 LLMIME_System_InitEffectFlags();
 
-LeaderLib_Register_StatusToggleSkill("Shout_LLMIME_DisableMimicking", "LLMIME_MIMICKING_DISABLED", -1.0, 1);
-
 //SysClear("DB_LLMIME_DialogVars", 1);
 //DB_LLMIME_DialogVars("");
 

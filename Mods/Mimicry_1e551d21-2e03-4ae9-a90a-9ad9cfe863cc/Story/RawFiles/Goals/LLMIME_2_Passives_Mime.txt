@@ -34,6 +34,8 @@ DB_LLMIME_Mime_LearnableSkills("Target_LLMIME_KneeBreaker");
 DB_LLMIME_Mime_LearnableSkills("Target_LLMIME_DisarmingBlow");
 DB_LLMIME_Mime_LearnableSkills("Target_LLMIME_SealEvil");
 DB_LLMIME_Mime_LearnableSkills("Target_LLMIME_Fatality");
+
+LeaderLib_Skills_Register_StatusToggleSkill("Shout_LLMIME_DisableMimicking", "LLMIME_MIMICKING_DISABLED", -1.0, 1);
 //END_REGION
 
 //REGION UPDATING

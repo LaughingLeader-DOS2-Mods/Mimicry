@@ -112,7 +112,7 @@ VARS
 ON
 	OnCharacterCharacterEvent(_Character, _Caster, "Mimicry_Events_RevivedByFinalWish")
 ACTIONS
-	CharacterApplyStatus(_Character, LLMIME_FINAL_WISH_BUFF, 3, 1, _Caster)
+	CharacterApplyStatus(_Character, LLMIME_FINAL_WISH_BUFF, -1, 1, _Caster)
 /*
 IF "c1&c2"
 	CharacterGetStat(_Vitality, _Character, Vitality)
@@ -204,6 +204,15 @@ ELSE
 ENDIF
 */
 
+EVENT LLMIME_Decoy_TauntNearby
+VARS
+	CHARACTER:_Mime
+	CHARACTER:_Decoy
+ON
+	OnCharacterCharacterEvent(_Mime, _Decoy, "Mimicry_Events_Decoy_TauntNearbyEnemies")
+ACTIONS
+	CharacterApplyStatus(_Decoy, LLMIME_APPLY_TAUNTED_AURA, 0, 1, _Mime)
+
 EVENT LLMIME_Decoy_MimickingDisable
 VARS
 	CHARACTER:_Mime
@@ -236,14 +245,16 @@ ENDIF
 EVENT LLMIME_Decoy_Removal
 VARS
 	CHARACTER:_Mime
+	SKILL:_Skill
 ON
-	OnSkillCast(_Mime, _)
+	OnSkillCast(_Mime, _Skill)
 	OnCharacterStartAttackObject(_, _, _, _Mime)
-	OnCharacterStatusApplied(_Mime, WET)
+	OnCharacterStatusApplied(_Mime, WET) // Other statuses handled by story
 	OnCharacterEvent(_Mime, "Mimicry_Events_Decoy_RemoveInvisibility")
 ACTIONS
-IF "c1"
+IF "c1&!c2"
 	CharacterHasStatus(_Mime, LLMIME_DECOY_ACTIVE)
+	IsEqual(_Skill, Shout_LLMIME_DisableMimicking)
 THEN
 	CharacterRemoveStatus(_Mime, LLMIME_DECOY_ACTIVE)
 ENDIF
