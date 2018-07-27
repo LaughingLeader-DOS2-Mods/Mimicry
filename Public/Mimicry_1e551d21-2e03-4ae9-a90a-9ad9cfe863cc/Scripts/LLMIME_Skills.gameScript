@@ -258,3 +258,30 @@ IF "c1&!c2"
 THEN
 	CharacterRemoveStatus(_Mime, LLMIME_DECOY_ACTIVE)
 ENDIF
+
+/*
+EVENT LLMIME_QuakeSlam_Push
+VARS
+	CHARACTER:_Caster
+	CHARACTER:_TargetChar
+	ITEM:_TargetItem
+	FLOAT3:_WorldPos
+ON
+	OnCharacterCharacterEvent(_Caster, _TargetChar, "Mimicry_Events_Skills_LaunchObject")
+	OnCharacterItemEvent(_Caster, _TargetItem, "Mimicry_Events_Skills_LaunchObject")
+ACTIONS
+IF "c1"
+	GetPosition(_Caster, _WorldPos)
+THEN
+	IF "!c1"
+		IsEqual(_TargetChar, null)
+	THEN
+		//ShootWorldConeAt(Cone_LLMIME_S_Push, _Caster, _WorldPos, _TargetChar)
+	ENDIF
+	IF "!c1"
+		IsEqual(_TargetItem, null)
+	THEN
+		//ShootWorldConeAt(Cone_LLMIME_S_Push, _Caster, _WorldPos, _TargetItem)
+	ENDIF
+ENDIF
+*/

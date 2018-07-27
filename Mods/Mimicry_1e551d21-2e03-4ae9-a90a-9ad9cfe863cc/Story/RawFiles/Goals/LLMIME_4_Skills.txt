@@ -303,6 +303,131 @@ LeaderLib_Helper_QRY_IsStunningStatus(_Status)
 THEN
 SetStoryEvent(_Character, "Mimicry_Events_Decoy_RemoveInvisibility");
 //END_REGION
+
+//REGION QUAKE_SLAM
+PROC
+LLMIME_Skills_SpawnSkillPlatform((GUIDSTRING)_Object)
+AND
+NOT DB_LLMIME_Temp_SkillPlatforms(_Object, _)
+AND
+LeaderLib_Random_QRY(700,1100)
+AND
+DB_LeaderLib_Temp_RandomResult(_TimerDelay)
+AND
+GetPosition(_Object, _x, _y, _z)
+AND
+CreateItemTemplateAtPosition("S_LLMIME_SkillPlatform_fa651784-9d7a-442c-b833-8cf4f44e793c", _x, _y, _z, _Platform)
+THEN
+NOT DB_LeaderLib_Temp_RandomResult(_TimerDelay);
+DB_LLMIME_Temp_SkillPlatforms(_Object, _Platform);
+ApplyStatus(_Platform, "LEADERLIB_NO_VISUAL", -1.0, 1);
+DB_LLMIME_Skills_Temp_FallSpeed(_Object, _Platform, _TimerDelay);
+LeaderLib_StartObjectTimer(_Platform, _TimerDelay, "Mimicry_Timers_RemovePlatformTimer_", "Mimicry_Events_Skills_RemovePlatform");
+PlayScaledEffectAtPosition("LLMIME_FX_Status_Launched_Apply_Root_01", 0.25, _x, _y, _z);
+
+IF
+ItemStatusAttempt(_Object, "LLMIME_LAUNCHED", (CHARACTERGUID)_Caster)
+THEN
+SetStoryEvent(_Object, "Mimicry_Skills_KnockUpObject");
+
+IF
+CharacterStatusApplied(_Object, "LLMIME_LAUNCHED", (CHARACTERGUID)_Caster)
+THEN
+SetStoryEvent(_Object, "Mimicry_Skills_KnockUpObject");
+
+IF
+StoryEvent(_Object, "Mimicry_Skills_KnockUpObject")
+AND
+GetPosition(_Object, _x, _y, _z)
+THEN
+LLMIME_Skills_SpawnSkillPlatform(_Object);
+PlayEffectAtPosition("RS3_FX_SubEffects_Ground_Earthquake_01", _x, _y, _z);
+
+IF
+CharacterUsedSkill(_Caster, "Cone_LLMIME_QuakeSlam", _)
+AND
+GetPosition(_Caster, _x, _y, _z)
+THEN
+PlayEffectAtPosition("LLMIME_FX_Skills_QuakeSlam_Cast_Root_01", _x, _y, _z);
+
+IF
+StoryEvent((ITEMGUID)_Platform, "Mimicry_Events_Skills_RemovePlatform")
+AND
+DB_LLMIME_Temp_SkillPlatforms(_Object, _Platform)
+AND
+DB_LLMIME_Skills_Temp_FallSpeed(_Object, _Platform, _TimerDelay)
+AND
+Real(_TimerDelay, _TimerDelayR)
+AND
+RealProduct(_TimerDelayR, 1.05, _DamageDelayR)
+AND
+Integer(_DamageDelayR, _DamageDelay)
+THEN
+NOT DB_LLMIME_Temp_SkillPlatforms(_Object, _Platform);
+NOT DB_LLMIME_Skills_Temp_FallSpeed(_Object, _Platform, _TimerDelay);
+ItemRemove(_Platform);
+LeaderLib_StartObjectTimer(_Object, _DamageDelay, "Mimicry_Timers_Skills_ApplyFallDamage_", "Mimicry_Events_Skills_ApplyFallDamage");
+
+IF
+StoryEvent(_Object, "Mimicry_Events_Skills_ApplyFallDamage")
+AND
+HasActiveStatus(_Object, "LLMIME_LAUNCHED", 1)
+THEN
+RemoveStatus(_Object, "LLMIME_LAUNCHED");
+
+/*
+IF
+ItemStatusAttempt(_Object, "LLMIME_LAUNCHED", (CHARACTERGUID)_Caster)
+AND
+GetUUID(_Object, _ID)
+AND
+GetPosition(_Caster, _x, _y, _z)
+AND
+LLMIME_Dummy_QRY_CreateCharacterDummy(_ID, _x, _y, _z)
+AND
+DB_LLMIME_Dummy_NextCharacterDummy(_ID, _Dummy)
+THEN
+SetStoryEvent(_Object, "Mimicry_Skills_KnockUpObject");
+LeaderLib_StartCharacterItemTimer(_Dummy, _Object, 50, "Mimicry_Timers_Skills_LaunchItem_", "Mimicry_Events_Skills_LaunchObject");
+
+IF
+CharacterStatusApplied(_Object, "LLMIME_LAUNCHED", (CHARACTERGUID)_Caster)
+AND
+GetUUID(_Object, _ID)
+AND
+GetPosition(_Caster, _x, _y, _z)
+AND
+LLMIME_Dummy_QRY_CreateCharacterDummy(_ID, _x, _y, _z)
+AND
+DB_LLMIME_Dummy_NextCharacterDummy(_ID, _Dummy)
+THEN
+SetStoryEvent(_Object, "Mimicry_Skills_KnockUpObject");
+LeaderLib_StartCharacterCharacterTimer(_Dummy, _Object, 50, "Mimicry_Timers_Skills_LaunchCharacter_", "Mimicry_Events_Skills_LaunchObject");
+
+IF
+CharacterCharacterEvent(_Dummy, _Object, "Mimicry_Events_Skills_LaunchObject")
+THEN
+CharacterUseSkill(_Dummy, "Cone_LLMIME_S_Push", _Object, 1, 1, 1);
+LLMIME_Dummy_ResetDummyAfterDelay(_Dummy, 999);
+
+IF
+CharacterItemEvent(_Dummy, _Object, "Mimicry_Events_Skills_LaunchObject")
+THEN
+CharacterUseSkill(_Dummy, "Cone_LLMIME_S_Push", _Object, 1, 1, 1);
+LLMIME_Dummy_ResetDummyAfterDelay(_Dummy, 999);
+*/
+
+/*
+IF
+CharacterStatusRemoved(_Object, "LLMIME_LAUNCHED", _)
+AND
+DB_LLMIME_Temp_SkillPlatforms(_Object, _Platform)
+THEN
+//LeaderLib_StartObjectTimer(_Platform, 500, "Mimicry_Timers_RemovePlatformTimer_", "Mimicry_Events_Skills_RemovePlatform");
+NOT DB_LLMIME_Temp_SkillPlatforms(_Object, _Platform);
+ItemRemove(_Platform);
+*/
+//END_REGION
 EXITSECTION
 
 ENDEXITSECTION
