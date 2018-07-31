@@ -310,17 +310,20 @@ LLMIME_Skills_SpawnSkillPlatform((GUIDSTRING)_Object)
 AND
 NOT DB_LLMIME_Temp_SkillPlatforms(_Object, _)
 AND
-LeaderLib_Random_QRY(700,1100)
-AND
-DB_LeaderLib_Temp_RandomResult(_TimerDelay)
+GetUUID(_Object, _UUID)
 AND
 GetPosition(_Object, _x, _y, _z)
 AND
-CreateItemTemplateAtPosition("S_LLMIME_SkillPlatform_fa651784-9d7a-442c-b833-8cf4f44e793c", _x, _y, _z, _Platform)
+LeaderLIb_Platforms_QRY_SpawnPlatform(_UUID, "Large", 0, _x, _y, _z)
+AND
+DB_LeaderLib_Platforms(_UUID, _Platform)
+AND
+LeaderLib_Random_QRY(700,1100)
+AND
+DB_LeaderLib_Temp_RandomResult(_TimerDelay)
 THEN
 NOT DB_LeaderLib_Temp_RandomResult(_TimerDelay);
 DB_LLMIME_Temp_SkillPlatforms(_Object, _Platform);
-ApplyStatus(_Platform, "LEADERLIB_NO_VISUAL", -1.0, 1);
 DB_LLMIME_Skills_Temp_FallSpeed(_Object, _Platform, _TimerDelay);
 LeaderLib_StartObjectTimer(_Platform, _TimerDelay, "Mimicry_Timers_RemovePlatformTimer_", "Mimicry_Events_Skills_RemovePlatform");
 PlayScaledEffectAtPosition("LLMIME_FX_Status_Launched_Apply_Root_01", 0.25, _x, _y, _z);
@@ -344,7 +347,7 @@ LLMIME_Skills_SpawnSkillPlatform(_Object);
 PlayEffectAtPosition("RS3_FX_SubEffects_Ground_Earthquake_01", _x, _y, _z);
 
 IF
-CharacterUsedSkill(_Caster, "Cone_LLMIME_QuakeSlam", _)
+CharacterUsedSkill(_Caster, "Shout_LLMIME_QuakeSlam", _)
 AND
 GetPosition(_Caster, _x, _y, _z)
 THEN
@@ -365,7 +368,7 @@ Integer(_DamageDelayR, _DamageDelay)
 THEN
 NOT DB_LLMIME_Temp_SkillPlatforms(_Object, _Platform);
 NOT DB_LLMIME_Skills_Temp_FallSpeed(_Object, _Platform, _TimerDelay);
-ItemRemove(_Platform);
+LeaderLib_Platforms_RemovePlatform(_Platform);
 LeaderLib_StartObjectTimer(_Object, _DamageDelay, "Mimicry_Timers_Skills_ApplyFallDamage_", "Mimicry_Events_Skills_ApplyFallDamage");
 
 IF
@@ -427,6 +430,28 @@ THEN
 NOT DB_LLMIME_Temp_SkillPlatforms(_Object, _Platform);
 ItemRemove(_Platform);
 */
+//END_REGION
+
+//REGION VITAL_INFLUENCE
+IF
+CharacterStatusAttempt(_Target, "LLMIME_VITAL_CHECK", (CHARACTERGUID)_Caster)
+AND
+CharacterGetAttribute(_Caster, "Constitution", _CasterCon)
+AND
+CharacterGetAttribute(_Target, "Constitution", _TargetCon)
+AND
+_CasterCon > _TargetCon
+THEN
+ApplyStatus(_Caster, "LLMIME_VITAL_BUFF", 12.0, 0, _Caster);
+ApplyStatus(_Target, "LLMIME_VITAL_DEBUFF", 12.0, 0, _Caster);
+RemoveStatus(_Target, "LLMIME_VITAL_CHECK");
+
+IF
+CharacterStatusAttempt(_Target, "LLMIME_VITAL_CHECK", (CHARACTERGUID)_Caster)
+AND
+NOT LeaderLib_Helper_QRY_HasStatus(_Target, "LLMIME_VITAL_DEBUFF")
+THEN
+CharacterStatusText(_Caster, "LLMIME_StatusText_VitalityCheck_Failed");
 //END_REGION
 EXITSECTION
 
