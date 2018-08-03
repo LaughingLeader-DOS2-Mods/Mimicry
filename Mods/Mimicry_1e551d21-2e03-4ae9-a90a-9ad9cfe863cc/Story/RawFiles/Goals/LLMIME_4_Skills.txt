@@ -33,17 +33,111 @@ LeaderLog_Log("DEBUG", "[LLMIME:Skills] Updating settings from version [",_Versi
 LLMIME_Skills_InitSettings();
 //END_REGION
 
+//REGION QUERIES
+QRY
+LLMIME_Skills_QRY_SkillMatch((STRING)_Skill, (STRING)_CheckedSkill)
+AND
+_Skill == _CheckedSkill
+THEN
+DB_NOOP(1);
+
+//Follower versions
+QRY
+LLMIME_Skills_QRY_SkillMatch((STRING)_Skill, (STRING)_CheckedSkill)
+AND
+StringConcatenate(_CheckedSkill, "_Follower", _Skill)
+THEN
+DB_NOOP(1);
+//END_REGION
+
+//REGION WISH
+IF
+CharacterUsedSkillOnTarget(_Caster, (CHARACTERGUID)_Target, "Target_LLMIME_Wish", _)
+AND
+CharacterGetHitpointsPercentage(_Caster, _CasterHealth)
+AND
+_CasterHealth > 2
+AND
+IntegerDivide(_CasterHealth, 2, _NextHealth)
+AND
+_NextHealth > 1
+THEN
+SetStoryEvent(_Caster, "Mimicry_Events_Wish_UsedSkill");
+DB_LLMIME_Beastmaster_Temp_NextWish(_Caster, _Target);
+
+IF
+CharacterUsedSkillOnTarget(_Caster, (CHARACTERGUID)_Target, "Target_LLMIME_Wish", _)
+AND
+NOT DB_LLMIME_Beastmaster_Temp_NextWish(_Caster, _Target)
+THEN
+DB_LLMIME_Beastmaster_Temp_FailedWish(_Caster);
+
+IF
+SkillCast(_Caster, "Target_LLMIME_Wish", _)
+AND
+DB_LLMIME_Beastmaster_Temp_NextWish(_Caster, _Target)
+THEN
+NOT DB_LLMIME_Beastmaster_Temp_NextWish(_Caster, _Target);
+SetVarFloat(_Caster, "Mimicry_Wish_HealPercentage", 0.50);
+CharacterCharacterSetEvent(_Caster, _Target, "Mimicry_Events_OnWishCast");
+SetStoryEvent(_Target, "Mimicry_Events_Wish_SkillCast");
+
+IF
+SkillCast(_Caster, "Target_LLMIME_Wish", _)
+AND
+DB_LLMIME_Beastmaster_Temp_FailedWish(_Caster)
+THEN
+NOT DB_LLMIME_Beastmaster_Temp_FailedWish(_Caster);
+CharacterStatusText(_Caster, "LLMIME_StatusText_WishFailed");
+
+IF
+CharacterCharacterEvent(_Caster, _Target, "Mimicry_Events_WishDelay")
+AND
+NOT DB_LLMIME_Beastmaster_WishDelayTimer(_Caster, _Target, _)
+AND
+GetUUID(_Caster, _CasterID)
+AND
+StringConcatenate("LLMIME_Timers_WishDelayTimer_", _CasterID, _TimerName)
+THEN
+DB_LLMIME_Beastmaster_WishDelayTimer(_Caster, _Target, _TimerName);
+TimerLaunch(_TimerName, 500);
+
+IF
+TimerFinished(_TimerName)
+AND
+DB_LLMIME_Beastmaster_WishDelayTimer(_Caster, _Target, _TimerName)
+THEN
+NOT DB_LLMIME_Beastmaster_WishDelayTimer(_Caster, _Target, _TimerName);
+CharacterCharacterSetEvent(_Caster, _Target, "Mimicry_Events_HealWishTarget");
+
+//Fix for CharacterHeal sending vitality over the max
+IF
+CharacterVitalityChanged(_Target, _Percentage)
+AND
+ObjectGetFlag(_Target, "Mimicry_Wish_CheckHealthResult", 1)
+AND
+LeaderLib_Helper_QRY_ClearObjectFlag(_Target, "Mimicry_Wish_CheckHealthResult")
+AND
+_Percentage > 100
+THEN
+CharacterSetHitpointsPercentage(_Target, 100);
+//END_REGION
+
 //REGION FINAL_WISH
 /*Delay actually dying so the animation can play out*/
 IF
-CharacterUsedSkill(_Character, "Projectile_LLMIME_FinalWish", _)
+CharacterUsedSkill(_Character, _Skill, _)
+AND
+LLMIME_Skills_QRY_SkillMatch(_Skill, "Projectile_LLMIME_FinalWish")
 THEN
 LeaderLib_StartObjectTimer(_Character, 3000, "Mimicry_Timers_FinalWish_DieEvent", "Mimicry_Events_FinalWish_Die");
 LeaderLib_StartObjectTimer(_Character, 1000, "Mimicry_Timers_FinalWish_UsedEvent_", "Mimicry_Events_FinalWish_SkillUsed");
 LeaderLib_StartObjectTimer(_Character, 2600, "Mimicry_Timers_FinalWish_DeathEffect", "Mimicry_Events_FinalWish_PlayDeathEffect");
 
 IF
-SkillCast(_Character, "Projectile_LLMIME_FinalWish", _)
+SkillCast(_Character, _Skill, _)
+AND
+LLMIME_Skills_QRY_SkillMatch(_Skill, "Projectile_LLMIME_FinalWish")
 THEN
 LeaderLib_CancelObjectTimerByEvent(_Character, "Mimicry_Events_FinalWish_Die");
 LeaderLib_StartObjectTimer(_Character, 1000, "Mimicry_Timers_FinalWish_", "Mimicry_Events_FinalWish_Die");
@@ -83,7 +177,9 @@ SetStoryEvent(_Character, "Mimicry_Events_FinalWish_OnAttacked");
 
 //REGION DECOY
 IF
-CharacterUsedSkill(_Character, "Projectile_LLMIME_Decoy", _)
+CharacterUsedSkill(_Character, _Skill, _)
+AND
+LLMIME_Skills_QRY_SkillMatch(_Skill, "Projectile_LLMIME_Decoy")
 AND
 NOT DB_LLMIME_Skills_Temp_DecoyPosition(_Character, _, _, _)
 AND
@@ -98,8 +194,9 @@ LeaderLog_Log("DEBUG", "[LLMIME:Skills:CharacterUsedSkill(Decoy)] Saving decoy s
 NOT DB_LeaderLog_Temp_RealString("LLMIME.Debug.DecoyPos", _xstr, _zstr);
 
 IF
-//SkillCast(_Character, "Projectile_LLMIME_Decoy", _)
-CharacterUsedSkill(_Character, "Projectile_LLMIME_Decoy", _)
+CharacterUsedSkill(_Character, _Skill, _)
+AND
+LLMIME_Skills_QRY_SkillMatch(_Skill, "Projectile_LLMIME_Decoy")
 AND
 GetPosition(_Character, _x, _y, _z)
 THEN
@@ -347,7 +444,9 @@ LLMIME_Skills_SpawnSkillPlatform(_Object);
 PlayEffectAtPosition("RS3_FX_SubEffects_Ground_Earthquake_01", _x, _y, _z);
 
 IF
-CharacterUsedSkill(_Caster, "Shout_LLMIME_QuakeSlam", _)
+CharacterUsedSkill(_Caster, _Skill, _)
+AND
+LLMIME_Skills_QRY_SkillMatch(_Skill, "Shout_LLMIME_QuakeSlam")
 AND
 GetPosition(_Caster, _x, _y, _z)
 THEN
@@ -434,13 +533,19 @@ ItemRemove(_Platform);
 
 //REGION VITAL_INFLUENCE
 IF
+CharacterUsedSkillOnTarget(_Caster, (CHARACTERGUID)_Target, _Skill, _)
+AND
+LLMIME_Skills_QRY_SkillMatch(_Skill, "Target_LLMIME_VitalInfluence")
+AND
+LeaderLib_Helper_QRY_AttributeIsGreater(_Caster, _Target, "Constitution")
+THEN
+LeaderLog_Log("DEBUG", "[Mimicry:Skills:CharacterUsedSkillOnTarget] Prepared beam effects for [",_Skill,"].");
+DB_LLMIME_Skills_Temp_BeamEffect(_Target, _Caster, _Skill, "LLMIME_FX_Skills_VitalInfluence_Beam_01", "Dummy_BodyFX", "Dummy_BodyFX");
+
+IF
 CharacterStatusAttempt(_Target, "LLMIME_VITAL_CHECK", (CHARACTERGUID)_Caster)
 AND
-CharacterGetAttribute(_Caster, "Constitution", _CasterCon)
-AND
-CharacterGetAttribute(_Target, "Constitution", _TargetCon)
-AND
-_CasterCon > _TargetCon
+LeaderLib_Helper_QRY_AttributeIsGreater(_Caster, _Target, "Constitution")
 THEN
 ApplyStatus(_Caster, "LLMIME_VITAL_BUFF", 12.0, 0, _Caster);
 ApplyStatus(_Target, "LLMIME_VITAL_DEBUFF", 12.0, 0, _Caster);
@@ -452,6 +557,25 @@ AND
 NOT LeaderLib_Helper_QRY_HasStatus(_Target, "LLMIME_VITAL_DEBUFF")
 THEN
 CharacterStatusText(_Caster, "LLMIME_StatusText_VitalityCheck_Failed");
+//END_REGION
+
+//REGION BEAM_EFFECTS
+IF
+SkillCast(_Caster, _Skill, _)
+AND
+DB_LLMIME_Skills_Temp_BeamEffect(_Caster, _Target, _Skill, _Effect, _CasterBone, _TargetBone)
+THEN
+NOT DB_LLMIME_Skills_Temp_BeamEffect(_Caster, _Target, _Skill, _Effect, _CasterBone, _TargetBone);
+PlayBeamEffect(_Caster, _Target, _Effect, _CasterBone, _TargetBone);
+LeaderLog_Log("DEBUG", "[Mimicry:Skills:SkillCast] Played beam effect [",_Effect,"].");
+
+IF
+SkillCast(_Caster, _Skill, _)
+AND
+DB_LLMIME_Skills_Temp_BeamEffect(_Target, _Caster, _Skill, _Effect, _CasterBone, _TargetBone)
+THEN
+NOT DB_LLMIME_Skills_Temp_BeamEffect(_Target, _Caster, _Skill, _Effect, _CasterBone, _TargetBone);
+PlayBeamEffect(_Target, _Caster, _Effect, _CasterBone, _TargetBone);
 //END_REGION
 EXITSECTION
 
