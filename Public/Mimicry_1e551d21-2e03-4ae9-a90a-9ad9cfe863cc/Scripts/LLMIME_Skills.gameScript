@@ -258,7 +258,7 @@ IF "c1&!c2"
 THEN
 	CharacterRemoveStatus(_Mime, LLMIME_DECOY_ACTIVE)
 ENDIF
-
+	
 /*
 EVENT LLMIME_QuakeSlam_Push
 VARS

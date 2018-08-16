@@ -25,6 +25,8 @@ SysClear("DB_LLMIME_Mime_LearnableSkills", 1);
 DB_LLMIME_Mime_LearnableSkills("Projectile_LLMIME_Decoy");
 DB_LLMIME_Mime_LearnableSkills("Projectile_LLMIME_FinalWish");
 DB_LLMIME_Mime_LearnableSkills("Shout_LLMIME_SourceMimicking");
+DB_LLMIME_Mime_LearnableSkills("Shout_LLMIME_QuakeSlam");
+DB_LLMIME_Mime_LearnableSkills("Target_LLMIME_VitalInfluence");
 //Skill alternatives (muted bypass)
 DB_LLMIME_Mime_LearnableSkills("Shout_LLMIME_Overthrow");
 DB_LLMIME_Mime_LearnableSkills("Shout_LLMIME_EvasiveManeuver");
