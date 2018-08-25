@@ -121,7 +121,7 @@ SetCanFight(_Mime,1);
 SetCanJoinCombat(_Mime,1);
 CharacterSetAnimationOverride(_Mime,"");
 CharacterStatusText(_Mime, "LLMIME_StatusText_MimeAmuletShatters");
-CharacterSetHitpointsPercentage(_Mime, 100);
+CharacterSetHitpointsPercentage(_Mime, 100.0);
 GlobalClearFlag("Mimicry_LevelIsOriginsTutorial");
 
 IF
@@ -205,7 +205,7 @@ SetVisible(_Mime, 1);
 IF
 ObjectFlagSet("GLO_Has2MaxMP", (CHARACTERGUID)_Owner, _)
 AND
-DB_LLLIB_PartyFollower(_Owner, _Mime)
+DB_LeaderLib_PartyFollower(_Owner, _Mime)
 AND
 IsTagged(_Mime, "LLMIME_MimeFollower", 1)
 AND
@@ -216,7 +216,7 @@ CharacterOverrideMaxSourcePoints(_Mime, _Amount);
 IF
 ObjectFlagSet("GLO_Has3MaxMP", (CHARACTERGUID)_Owner, _)
 AND
-DB_LLLIB_PartyFollower(_Owner, _Mime)
+DB_LeaderLib_PartyFollower(_Owner, _Mime)
 AND
 IsTagged(_Mime, "LLMIME_MimeFollower", 1)
 AND
@@ -229,7 +229,7 @@ CharacterJoinedParty(_Mime)
 AND
 IsTagged(_Mime, "LLMIME_MimeFollower", 1)
 AND
-DB_LLLIB_PartyFollower(_Owner, _Mime)
+DB_LeaderLib_PartyFollower(_Owner, _Mime)
 AND
 LeaderLib_Helper_QRY_HasStatus(_Owner, "SOURCE_MUTED")
 THEN
@@ -240,7 +240,7 @@ CharacterJoinedParty(_Mime)
 AND
 IsTagged(_Mime, "LLMIME_MimeFollower", 1)
 AND
-DB_LLLIB_PartyFollower(_Owner, _Mime)
+DB_LeaderLib_PartyFollower(_Owner, _Mime)
 AND
 NOT LeaderLib_Helper_QRY_HasStatus(_Owner, "SOURCE_MUTED")
 AND

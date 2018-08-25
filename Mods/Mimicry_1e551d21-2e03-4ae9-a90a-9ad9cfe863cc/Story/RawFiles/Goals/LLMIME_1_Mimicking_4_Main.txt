@@ -27,7 +27,7 @@ KBSECTION
 //This is used to calculate the correct target position. Important to catch this before the player is moved by an animation.
 //REGION ACTION_POSITION
 IF
-CharacterUsedSkill(_Caster, _Skill, _SkillElement)
+CharacterUsedSkill(_Caster, _Skill, _SkillElement, _SkillType)
 AND
 CharacterIsPlayer(_Caster, 1)
 AND
@@ -42,7 +42,7 @@ THEN
 DB_LLMIME_Mimicking_ActionPosition(_Caster, _Skill, "Skill", _x,_CastRotation,_z);
 
 IF
-CharacterUsedSkillAtPosition(_Caster, _,_,_, _Skill, _SkillType)
+CharacterUsedSkillAtPosition(_Caster, _,_,_, _Skill, _SkillType, _SkillElement)
 AND
 CharacterIsPlayer(_Caster, 1)
 AND
@@ -57,7 +57,7 @@ THEN
 DB_LLMIME_Mimicking_ActionPosition(_Caster, _Skill, "Skill", _x,_CastRotation,_z);
 
 IF
-CharacterUsedSkillOnTarget(_Caster, _, _Skill, _SkillType)
+CharacterUsedSkillOnTarget(_Caster, _, _Skill, _SkillType, _SkillElement)
 AND
 CharacterIsPlayer(_Caster, 1)
 AND
@@ -1117,7 +1117,7 @@ DB_LLMIME_Mimicking_DeleteOneTimeUseWeaponsTimer(_TimerName, _Mime, _Action, _Ac
 TimerLaunch(_TimerName, _Delay);
 
 IF
-SkillCast(_Mime, _Action, _)
+SkillCast(_Mime, _Action, _, _)
 AND
 DB_LLMIME_Mimicking_DeleteOneTimeUseWeaponsTimer(_TimerName, _Mime, _Action, _ActionType)
 THEN

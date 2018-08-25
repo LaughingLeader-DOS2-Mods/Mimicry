@@ -788,7 +788,7 @@ SetStoryEvent(_Mime, "LLMIME_Events_MimeFollowerDisappeared");
 IF
 StoryEvent((CHARACTERGUID)_Mime, "LLMIME_Events_MimeFollowerDisappeared")
 THEN
-//LLLIB_Follower_ResetPosition(_Mime);
+//LeaderLib_Follower_ResetPosition(_Mime);
 //LeaderLog_Log("DEBUG", "[LLMIME:Follower] Reset follower's position to the recruit position.");
 Poof(_Mime);
 LeaderLog_Log("DEBUG", "[LLMIME:Follower] Poofed the Mime follower.");
@@ -810,7 +810,7 @@ AND
 DB_LLMIME_Follower_ResetPositionTimer(_Mime, _TimerName, 2)
 THEN
 NOT DB_LLMIME_Follower_ResetPositionTimer(_Mime, _TimerName, 2);
-//LLLIB_Follower_ResetPosition(_Mime, "RS3_FX_GP_ScriptedEvent_Teleport_GenericSmoke_01");
+//LeaderLib_Follower_ResetPosition(_Mime, "RS3_FX_GP_ScriptedEvent_Teleport_GenericSmoke_01");
 //LeaderLog_Log("DEBUG", "[LLMIME:Follower] Reset follower's position to the recruit position.");
 Poof(_Mime);
 LeaderLog_Log("DEBUG", "[LLMIME:Follower] Poofed the Mime follower.");
@@ -838,7 +838,9 @@ IsTagged(_Mime, "LeaderLib_IsFollower", 0)
 AND
 CharacterGetHitpointsPercentage(_Mime, _Percentage)
 AND
-IntegertoString(_Percentage, _HpStr)
+Integer(_Percentage, _PercInt)
+AND
+IntegertoString(_PercInt, _HpStr)
 THEN
 LeaderLog_Log("DEBUG", "[LLMIME:Follower:Debug] Mime follower's health is: [",_HpStr,"%]");
 
@@ -853,7 +855,7 @@ IsTagged(_Mime, "LeaderLib_IsFollower", 0)
 AND
 CharacterGetHitpointsPercentage(_Mime, _Percentage)
 AND
-_Percentage <= 75
+_Percentage <= 75.0
 THEN
 CharacterAddAttitudeTowardsPlayer(_Mime, _Owner, -5);
 
@@ -868,7 +870,7 @@ IsTagged(_Mime, "LeaderLib_IsFollower", 0)
 AND
 CharacterGetHitpointsPercentage(_Mime, _Percentage)
 AND
-_Percentage <= 40
+_Percentage <= 40.0
 THEN
 EnterCombat(_Mime, _Owner);
 
@@ -943,7 +945,7 @@ DisplayText(_Mime, "LLMIME_StatusText_MimeFollowerRecallFailed");
 IF
 CharacterTeleportToFleeWaypoint(_Owner, _)
 AND
-DB_LLLIB_PartyFollower(_Owner, _Follower)
+DB_LeaderLib_PartyFollower(_Owner, _Follower)
 AND
 IsTagged(_Follower, "LLMIME_MimeFollower", 1)
 THEN
@@ -953,14 +955,14 @@ LeaveCombat(_Follower);
 CharacterUseSkill(_Follower, "Shout_LLMIME_ReturnToOwner", _Follower, 1, 1);
 
 IF
-SkillCast(_Follower, "Shout_LLMIME_ReturnToOwner", _)
+SkillCast(_Follower, "Shout_LLMIME_ReturnToOwner", _, _)
 THEN
 LeaderLib_StartObjectTimer(_Follower, 250, "Mimicry_Timers_ReturnToOwner_ReturnDelay_", "Mimicry_Events_Follower_ReturnToOwner_StartTeleport");
 
 IF
 StoryEvent((CHARACTERGUID)_Follower, "Mimicry_Events_Follower_ReturnToOwner_StartTeleport")
 AND
-DB_LLLIB_PartyFollower(_Owner, _Follower)
+DB_LeaderLib_PartyFollower(_Owner, _Follower)
 THEN
 TeleportTo(_Follower, _Owner, "Mimicry_Events_Follower_ReturnToOwner_Teleported", 1);
 
@@ -1003,7 +1005,7 @@ LeaderLog_Log("DEBUG", "[LLMIME:Follower:FollowerRecruited] Mime joined party an
 IF
 CharacterLeveledUp(_Owner)
 AND
-DB_LLLIB_PartyFollower(_Owner, _Mime)
+DB_LeaderLib_PartyFollower(_Owner, _Mime)
 AND
 IsTagged(_Mime, "LLMIME_MimeFollower", 1)
 AND
@@ -1058,7 +1060,7 @@ IsTagged(_Mime, "LLMIME_MimeFollower", 1)
 AND
 NOT DB_CurrentGameMode("Campaign")
 AND
-DB_LLLIB_PartyFollower(_Owner, _Mime)
+DB_LeaderLib_PartyFollower(_Owner, _Mime)
 AND
 CharacterGetMaxSourcePoints(_Owner, _Amount)
 THEN
@@ -1177,7 +1179,7 @@ NOT GlobalGetFlag("Mimicry_MusicBoxShattered", 1)
 AND
 IsTagged(_Mime, "LeaderLib_IsFollower", 1)
 AND
-DB_LLLIB_PartyFollower(_Owner, _Mime)
+DB_LeaderLib_PartyFollower(_Owner, _Mime)
 AND
 CharacterIsInCombat(_Owner, 0)
 THEN
@@ -1193,7 +1195,7 @@ NOT GlobalGetFlag("Mimicry_MusicBoxShattered", 1)
 AND
 IsTagged(_Mime, "LeaderLib_IsFollower", 1)
 AND
-DB_LLLIB_PartyFollower(_Owner, _Mime)
+DB_LeaderLib_PartyFollower(_Owner, _Mime)
 AND
 CharacterIsInCombat(_Owner, 1)
 AND

@@ -10,25 +10,31 @@ KBSECTION
 IF
 GameStarted("TestLevel_LL_Mimicry",1)
 THEN
-ProcDoWaypointUnlock(ITEMGUID_S_LLMIME_TestLevelWaypointShrine_9955a6a5-c7ca-40aa-8fa8-9c3699d65032,NULL_00000000-0000-0000-0000-000000000000);
 DB_LLMIME_Debug_GameStarted(1);
 TimerLaunch("LLMIME_Debug_Start", 500);
 TimerLaunch("LLMIME_Debug_Test", 1000);
-LeaderLib_Treasure_Register_TreasureToTrader("LLMIME.LeaderTrader.DebugTest", "LLLIB_LeaderTrader");
+LeaderLib_Treasure_Register_TreasureToTrader("LLMIME.LeaderTrader.DebugTest", "LeaderLib_LeaderTrader");
 LeaderLib_Treasure_Register_TreasureTable("LLMIME.LeaderTrader.DebugTest", "CheatAllWeapons", "", 1);
-LeaderLib_Treasure_Register_TreasureToTrader("LLMIME.LeaderTrader.DebugTest2", "LLLIB_LeaderTrader");
+LeaderLib_Treasure_Register_TreasureToTrader("LLMIME.LeaderTrader.DebugTest2", "LeaderLib_LeaderTrader");
 LeaderLib_Treasure_Register_TreasureToObject("LLMIME.LeaderTrader.DebugTest2", ITEMGUID_LLMIME_Debug_TestScriptingChest_fbe7bf08-9826-4e1c-a4dd-732d54499176);
 LeaderLib_Treasure_Register_TreasureTable("LLMIME.LeaderTrader.DebugTest2", "Cheat2HMaces", "", 1);
 LeaderLib_Treasure_Configure_AddDeltaMod("LLMIME.LeaderTrader.DebugTest2", "WPN_Mace_2H", "Boost_Weapon_Status_Set_Crippled_Mace", -1);
 LeaderLib_Treasure_Configure_AddDeltaMod("LLMIME.LeaderTrader.DebugTest2", "WPN_Mace_2H", "Boost_Weapon_EmptyRuneSlot", -1);
 LeaderLib_Treasure_Configure_AddDeltaMod("LLMIME.LeaderTrader.DebugTest2", "WPN_Mace_2H", "Boost_Weapon_EmptyRuneSlot", -1);
 LeaderLib_Treasure_Configure_AddDeltaMod("LLMIME.LeaderTrader.DebugTest2", "WPN_Mace_2H", "Boost_Weapon_EmptyRuneSlot", 75);
-DB_LLLIB_Treasure_DeltaModLimit("LLMIME.LeaderTrader.DebugTest2", "WPN_Mace_2H", "Boost_Weapon_EmptyRuneSlot", 99);
+DB_LeaderLib_Treasure_DeltaModLimit("LLMIME.LeaderTrader.DebugTest2", "WPN_Mace_2H", "Boost_Weapon_EmptyRuneSlot", 99);
 //LeaderLib_Treasure_Configure_AddRune("LLMIME.LeaderTrader.DebugTest2", "WPN_Mace_2H", "LOOT_Rune_Flame_Large_9ac874d8-a7e5-48b1-954a-b11b46f6f390", -1);
 //LeaderLib_Treasure_Configure_AddRune("LLMIME.LeaderTrader.DebugTest2", "WPN_Mace_2H", "LOOT_Rune_Frost_Small_42a657df-428c-48d0-a640-c1fbc65268ca", -1);
 //LeaderLib_Treasure_Configure_AddRune("LLMIME.LeaderTrader.DebugTest2", "WPN_Mace_2H", "LOOT_Rune_Masterwork_Giant_fca17b46-c1dc-4cc2-bd61-5df21d55d15e", -1);
 ItemAddDeltaModifier(ITEMGUID_WPN_Wand_A_Water_000_08d2402f-06bb-488b-b23c-c09e27d0fd27, "Boost_Weapon_EmptyRuneSlot");
 ItemAddDeltaModifier(ITEMGUID_WPN_Wand_A_Water_000_08d2402f-06bb-488b-b23c-c09e27d0fd27, "Boost_Weapon_EmptyRuneSlot");
+
+IF
+TimerFinished("LLMIME_Debug_Test")
+AND
+DB_IsPlayer(_Player)
+THEN
+UnlockWaypoint("WAYP_LLMIME_TestLevel", ITEMGUID_S_LLMIME_TestLevelWaypointShrine_9955a6a5-c7ca-40aa-8fa8-9c3699d65032, _Player);
 
 IF
 TimerFinished("LLMIME_Debug_Test")
@@ -139,7 +145,7 @@ StoryEvent((CHARACTERGUID)_Character, "LLMIME_Events_Debug_IterateCharacters")
 AND
 IsTagged(_Character, "COMPANION", 1)
 THEN
-CharacterSetHitpointsPercentage(_Character, 50);
+CharacterSetHitpointsPercentage(_Character, 50.0);
 DB_Dialogs(_Character, "LLMIME_Debug_RecruitCharacter");
 
 IF
@@ -246,7 +252,6 @@ StoryEvent(NULL_00000000-0000-0000-0000-000000000000, "LLMIME_Events_Debug_Itera
 THEN
 NOT DB_LLMIME_Debug_IteratingPlayers(1);
 //TimerLaunch("LLMINE_Events_UnequipDummy", 300);
-TimerLaunch("LLMINE_Events_Debug_DeleteBackpacks", 500);
 IterateParties("LLMIME_Events_Debug_AddPlayers");
 
 IF
@@ -254,37 +259,16 @@ TimerFinished("LLMINE_Events_UnequipDummy")
 AND
 DB_LLMIME_Debug_HostPlayer(_Player)
 THEN
-LLMIME_Debug_UnequipInSlot(_Player, "Weapon");
-LLMIME_Debug_UnequipInSlot(_Player, "Helmet");
+DB_LLMIME_Debug_UnequipInSlot(_Player, "Weapon");
+DB_LLMIME_Debug_UnequipInSlot(_Player, "Helmet");
 
-PROC
-LLMIME_Debug_UnequipInSlot((CHARACTERGUID)_Player, (STRING)_Slot)
+IF
+DB_LLMIME_Debug_UnequipInSlot((CHARACTERGUID)_Player, (STRING)_Slot)
 AND
 CharacterGetEquippedItem(_Player, _Slot, (ITEMGUID)_Item)
-AND
-DB_LLMIME_Debug_DeleteBackpack((ITEMGUID)_Backpack)
 THEN
 CharacterUnequipItem(_Player, _Item);
-ItemToInventory(_Item, _Backpack);
-
-IF
-TimerFinished("LLMINE_Events_UnequipDummy")
-THEN
-TimerLaunch("LLMINE_Events_Debug_DeleteBackpacks", 500);
-
-IF
-ItemAddedToContainer(_Item, _Backpack)
-AND
-IsTagged(_Backpack, "LLMIME_DEBUG_DELETEALL", 1)
-THEN
-ItemDestroy(_Item);
-
-IF
-TimerFinished("LLMINE_Events_Debug_DeleteBackpacks")
-AND
-DB_LLMIME_Debug_DeleteBackpack(_Backpack)
-THEN
-ItemDestroy(_Backpack);
+ItemRemove(_Item);
 
 PROC
 Proc_LLMIME_IterateGameAlreadyStarted()
@@ -301,7 +285,7 @@ THEN
 DB_IsPlayer(_Player);
 
 IF
-CharacterUsedSkill(_Character,_,_)
+CharacterUsedSkill(_Character,_,_,_)
 THEN
 CharacterResetCooldowns(_Character);
 
@@ -523,6 +507,26 @@ AND
 CharacterGetDisplayName(_Character, _, _Name)
 THEN
 LeaderLog_Log("DEBUG", "[LLMIME:Debug:CharacterStatusRemoved] Status [",_Status,"] removed from [",_Name,"] via [",_Cause,"].");
+//END_REGION
+
+//REGION FLAG_TRACING
+IF
+ObjectFlagSet(_Flag, (CHARACTERGUID)_Mime, _)
+AND
+CharacterGetDisplayName(_Mime, _, _Name)
+THEN
+//LeaderLog_SetOneshotTarget(_Mime);
+//LeaderLog_Log("STATUS", "[<font color='#00FA9A'>", _Flag, "</font>] Set");
+LeaderLog_Log("DEBUG", "Flag [", _Flag, "] was set on [",_Name,"].");
+
+IF
+ObjectFlagCleared(_Flag, (CHARACTERGUID)_Mime, _)
+AND
+CharacterGetDisplayName(_Mime, _, _Name)
+THEN
+//LeaderLog_SetOneshotTarget(_Mime);
+//LeaderLog_Log("STATUS", "[<font color='#FF0000'>", _Flag, "</font>] Cleared");
+LeaderLog_Log("DEBUG", "Flag [", _Flag, "] was cleared on [",_Name,"].");
 //END_REGION
 EXITSECTION
 

@@ -255,7 +255,7 @@ DB_LLMIME_Timers_AttackSuccessTimer(_TimerName, _Mime, _Target, _Action);
 TimerLaunch(_TimerName, 3000);
 
 IF
-SkillCast(_Mime, _Skill, _)
+SkillCast(_Mime, _Skill, _SkillType, _SkillElement)
 AND
 DB_LLMIME_Timers_AttackSuccessTimer(_TimerName, _Mime, _Target, _Action)
 THEN

@@ -21,7 +21,7 @@ DB_LLMIME_Settings_Temp_StartedDialog(_Mime);
 */
 
 IF
-CharacterUsedSkill(_Mime, "Shout_LLMIME_OpenMenu", _)
+CharacterUsedSkill(_Mime, "Shout_LLMIME_OpenMenu", _,_)
 AND
 CharacterIsInCombat(_Mime, 0)
 THEN

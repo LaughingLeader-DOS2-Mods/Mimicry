@@ -8,7 +8,7 @@ KBSECTION
 //REGION SKILL_TRACKING
 //Give time for the CharacterUsedSkill event to fire, for tracking the element and type
 IF
-CharacterUsedSkillOnTarget(_Caster, _Target, _Skill, _SkillType)
+CharacterUsedSkillOnTarget(_Caster, _Target, _Skill, _SkillType, _SkillElement)
 AND
 LLMIME_Mimicking_QRY_MimesAvailable()
 AND
@@ -17,14 +17,14 @@ THEN
 DB_LLMIME_Mimicking_Temp_SkillUsedOnTarget(_Caster, _Target, _Skill, _SkillType);
 
 IF
-CharacterUsedSkillOnTarget(_Caster, _Target, _Skill, _SkillType)
+CharacterUsedSkillOnTarget(_Caster, _Target, _Skill, _SkillType, _SkillElement)
 AND
 DB_LLMIME_Mimicking_Temp_TargetPriority(_Caster, _Target, _TargetPriority)
 THEN
 NOT DB_LLMIME_Mimicking_Temp_TargetPriority(_Caster, _Target, _TargetPriority);
 
 IF
-CharacterUsedSkill(_Caster, _Skill, _SkillElement)
+CharacterUsedSkill(_Caster, _Skill, _SkillType, _SkillElement)
 AND
 DB_LLMIME_Mimicking_Temp_SkillUsedOnTarget(_Caster, _Target, _Skill, _SkillType)
 THEN
@@ -75,7 +75,7 @@ LLMIME_Mimicking_QueueNextSelfAction(_Mime, _Caster, _Skill, "Skill");
 
 //Delay by a frame or two so target events will fire first
 IF
-CharacterUsedSkillAtPosition(_Caster, _TargetX, _TargetY, _TargetZ, _Skill, _SkillType)
+CharacterUsedSkillAtPosition(_Caster, _TargetX, _TargetY, _TargetZ, _Skill, _SkillType, _SkillElement)
 AND
 LLMIME_Mimicking_QRY_MimesAvailable()
 AND
@@ -84,7 +84,7 @@ THEN
 DB_LLMIME_Mimicking_Temp_SkillUsedAtPosition(_Caster, _TargetX, _TargetZ, _Skill, _SkillType);
 
 IF
-CharacterUsedSkill(_Caster, _Skill, _SkillElement)
+CharacterUsedSkill(_Caster, _Skill, _SkillType, _SkillElement)
 AND
 DB_LLMIME_Mimicking_Temp_SkillUsedAtPosition(_Caster, _TargetX, _TargetZ, _Skill, _SkillType)
 THEN
@@ -158,7 +158,7 @@ LeaderLog_Log("DEBUG", "[LLMIME:Mime:CharacterUsedSkillAtPosition] Queuing up ne
 LLMIME_Mimicking_QueueNextAction(_Mime, _Caster, _Skill, "Skill", _TargetX, _TargetZ, -1);
 
 IF
-CharacterUsedSkill(_Caster, _Skill, _SkillElement)
+CharacterUsedSkill(_Caster, _Skill, _SkillType, _SkillElement)
 AND
 LLMIME_Mimicking_QRY_ActionQueued(_Caster, _Skill, "Skill")
 AND
@@ -188,7 +188,7 @@ THEN
 NOT DB_LLMIME_Mimicking_CastFallbackTimer(_TimerName, _Caster, _Skill);
 
 IF
-SkillCast(_Caster, _Skill, _SkillElement)
+SkillCast(_Caster, _Skill, _SkillType, _SkillElement)
 AND
 LLMIME_Mimicking_QRY_ActionQueued(_Caster, _Skill, "Skill")
 THEN
@@ -264,7 +264,7 @@ LLMIME_Mimicking_ResetFailTimer(_Mime, _Caster, _Skill, "Skill", 2500);
 CharacterUseSkill(_Mime, _Skill, _Target, 1, 1, 1);
 
 IF
-SkillCast(_Mime, _Skill, _)
+SkillCast(_Mime, _Skill, _SkillType, _SkillElement)
 AND
 DB_LLMIME_Mimicking_Temp_ResetDummyAfterMimicAction(_Mime, _Target, _Skill, "Skill")
 THEN
@@ -272,7 +272,7 @@ NOT DB_LLMIME_Mimicking_Temp_ResetDummyAfterMimicAction(_Mime, _Target, _Skill, 
 LLMIME_Dummy_ResetDummyAfterDelay((GUIDSTRING)_Target, 2000);
 
 IF
-CharacterUsedSkill(_Mime, _Skill, _)
+CharacterUsedSkill(_Mime, _Skill, _SkillType, _SkillElement)
 AND
 ObjectGetFlag(_Mime, "Mimicry_IsMimicking", 1)
 AND
@@ -285,21 +285,21 @@ RemoveStatus(_Mime, "LLMIME_MIMICKING_SOURCE");
 
 //REGION SUCCESS
 IF
-CharacterUsedSkill(_Mime, _Skill, _)
+CharacterUsedSkill(_Mime, _Skill, _SkillType, _SkillElement)
 AND
 LLMIME_Mimicking_QRY_MimeIsCurrentlyMimicking(_Mime)
 THEN
 LLMIME_Mimicking_OnMimicSuccess(_Mime, _Skill, "Skill");
 
 IF
-CharacterUsedSkillOnZoneWithTarget(_Mime, _Target, _Skill, _SkillType)
+CharacterUsedSkillOnZoneWithTarget(_Mime, _Target, _Skill, _SkillType, _SkillElement)
 AND
 LLMIME_Mimicking_QRY_MimeIsCurrentlyMimicking(_Mime)
 THEN
 LLMIME_Mimicking_OnMimicSuccess(_Mime, _Skill, "Skill");
 
 IF
-CharacterUsedSkillOnTarget(_Mime, _Target, _Skill, _SkillType)
+CharacterUsedSkillOnTarget(_Mime, _Target, _Skill, _SkillType, _SkillElement)
 AND
 LLMIME_Mimicking_QRY_MimeIsCurrentlyMimicking(_Mime)
 THEN
@@ -315,7 +315,7 @@ DB_NOOP(1);
 
 //REGION SKILL_DEBUG
 IF
-CharacterUsedSkill(_Caster, _Skill, _SkillType)
+CharacterUsedSkill(_Caster, _Skill, _SkillType, _SkillElement)
 AND
 CharacterGetDisplayName(_Caster, _, _Name)
 AND
@@ -327,7 +327,7 @@ NOT DB_LeaderLog_Temp_CombinedString(_LogDetails);
 LeaderLog_Log("DEBUG", "[LLMIME:Debug:CharacterUsedSkill] ", _LogDetails);
 
 IF
-CharacterUsedSkillOnTarget(_Caster, _Target, _Skill, _SkillType)
+CharacterUsedSkillOnTarget(_Caster, _Target, _Skill, _SkillType, _SkillElement)
 AND
 CharacterGetDisplayName(_Caster, _, _Name)
 AND
@@ -341,7 +341,7 @@ NOT DB_LeaderLog_Temp_CombinedString(_LogDetails);
 LeaderLog_Log("DEBUG", "[LLMIME:Debug:CharacterUsedSkillOnTarget] ", _LogDetails);
 
 IF
-CharacterUsedSkillAtPosition(_Caster, _XReal, _YReal, _ZReal, _Skill, _SkillType)
+CharacterUsedSkillAtPosition(_Caster, _XReal, _YReal, _ZReal, _Skill, _SkillType, _SkillElement)
 AND
 Integer(_XReal, _TargetX)
 AND
@@ -392,7 +392,7 @@ THEN
 LeaderLog_Log("DEBUG", "[LLMIME:Debug:CharacterUsedSkillAtPosition] ", _SkillPrefix, _CasterPosition, _TargetPosition);
 
 IF
-CharacterUsedSkillOnZoneWithTarget(_Caster, (CHARACTERGUID)_Target, _Skill, _SkillType)
+CharacterUsedSkillOnZoneWithTarget(_Caster, (CHARACTERGUID)_Target, _Skill, _SkillType, _SkillElement)
 AND
 CharacterGetDisplayName(_Caster, _, _Name)
 AND
@@ -410,7 +410,7 @@ NOT DB_LeaderLog_Temp_CombinedString(_LogDetails);
 LeaderLog_Log("DEBUG", "[LLMIME:Debug:CharacterUsedSkillOnZoneWithTarget] [",_Name,"](",_CasterID,")",_LogDetails);
 
 IF
-CharacterUsedSkillOnZoneWithTarget(_Caster, (ITEMGUID)_Target, _Skill, _SkillType)
+CharacterUsedSkillOnZoneWithTarget(_Caster, (ITEMGUID)_Target, _Skill, _SkillType, _SkillElement)
 AND
 CharacterGetDisplayName(_Caster, _, _Name)
 AND
@@ -426,7 +426,7 @@ NOT DB_LeaderLog_Temp_CombinedString(_LogDetails);
 LeaderLog_Log("DEBUG", "[LLMIME:Debug:CharacterUsedSkillOnZoneWithTarget] [",_Name,"](",_CasterID,")",_LogDetails);
 
 IF
-SkillCast(_Caster, _Skill, _SkillElement)
+SkillCast(_Caster, _Skill, _SkillType, _SkillElement)
 AND
 CharacterGetDisplayName(_Caster, _, _Name)
 AND

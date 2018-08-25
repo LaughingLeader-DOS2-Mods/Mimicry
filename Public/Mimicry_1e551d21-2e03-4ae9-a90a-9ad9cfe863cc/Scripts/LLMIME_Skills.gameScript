@@ -2,6 +2,7 @@ INIT
 
 EVENTS
 
+//REGION WISH
 EVENT LLMIME_Wish_ReduceHealth
 VARS
 	CHARACTER:_Target
@@ -102,7 +103,9 @@ THEN
 	//CharacterPlayEffect(_Target, "LLMIME_FX_Skills_Wish_Cast_Target_Root_01", "Dummy_Root")
 	
 ENDIF
+//END_REGION
 
+//REGION FINAL_WISH
 EVENT LLMIME_FinalWish_Resurrected
 VARS
 	CHARACTER:_Character
@@ -165,45 +168,9 @@ THEN
 	SetVar(_Character, "LeaderLib_Timer_Delay", INT:3000)
 	CharacterEvent(_Character, "LeaderLib_Commands_StartObjectTimer")
 ENDIF
+//END_REGION
 
-/*
-
-IF "!c1"
-	ContainsSurface(_Character, 2.0, SurfaceNone)
-THEN
-	TransformSurfaceAt(_Character, Bless, 0, 2.0, 2, _Caster)
-ENDIF
-/*
-//Undead spill poison when hit, so clear it after a delay//
-EVENT LLMIME_SealEvil_StartClearTimer
-VARS
-	CHARACTER:_Mime
-	CHARACTER:_Target
-ON
-	OnCharacterStatusApplied(_Target, LLMIME_SEALED)
-ACTIONS
-	SetVar(_Target, "LeaderLib_Timer_Delay", INT:750)
-	SetVar(_Target, "LeaderLib_Timer_CompleteEvent", STRING:"Mimicry_Events_ClearPoisonSurface")
-	CharacterEvent(_Target, "LeaderLib_Commands_StartObjectTimer")
-
-EVENT LLMIME_SealEvil_ClearPoison
-VARS
-	CHARACTER:_Mime
-	CHARACTER:_Target
-ON
-	OnCharacterEvent(_Target, "Mimicry_Events_ClearPoisonSurface")
-ACTIONS
-IF "c1|c2|c3"
-	ContainsSurface(_Target, 5.0, SurfacePoison)
-	ContainsSurface(_Target, 5.0, SurfacePoisonCloud)
-	ContainsSurface(_Target, 5.0, SurfacePoisonCursed)
-THEN
-	CreateSurfaceAt(_Target, SurfaceNone, 3.0, 0)
-ELSE
-	//StatusText(_Target, "No poison found?")
-ENDIF
-*/
-
+//REGION DECOY
 EVENT LLMIME_Decoy_TauntNearby
 VARS
 	CHARACTER:_Mime
@@ -258,30 +225,51 @@ IF "c1&!c2"
 THEN
 	CharacterRemoveStatus(_Mime, LLMIME_DECOY_ACTIVE)
 ENDIF
-	
-/*
-EVENT LLMIME_QuakeSlam_Push
+//END_REGION
+
+//REGION DOUBLE_HIT
+
+EVENT LLMIME_Brawler_OnCriticalHit
 VARS
-	CHARACTER:_Caster
-	CHARACTER:_TargetChar
+	CHARACTER:_Mime
+	CHARACTER:_TargetCharacter
 	ITEM:_TargetItem
-	FLOAT3:_WorldPos
+	INT:_Roll
+	INT:_StartRolling
+	STRING:_Str
+	FIXEDSTRING:_DebugMessage
 ON
-	OnCharacterCharacterEvent(_Caster, _TargetChar, "Mimicry_Events_Skills_LaunchObject")
-	OnCharacterItemEvent(_Caster, _TargetItem, "Mimicry_Events_Skills_LaunchObject")
+	OnCriticalHit(_Mime, _, _TargetCharacter, _TargetItem)
 ACTIONS
-IF "c1"
-	GetPosition(_Caster, _WorldPos)
+IF "!c1&!c2&!c3&c4&c5&c6"
+	HasFlag(_Mime, "Mimicry_IsMimicking")
+	HasFlag(_Mime, "Mimicry_DoubleAttackDisabled")
+	HasFlag(_Mime, "Mimicry_ApplyingUnarmedDamage")
+	HasFlag(_Mime, "Mimicry_MimeIsStartingBasicAttack")
+	HasFlag(_Mime, "Mimicry_MimeIsUnarmed")
+	CharacterHasStatus(_Mime, "LLMIME_BRAWLER_BONUS")
 THEN
-	IF "!c1"
-		IsEqual(_TargetChar, null)
+	GetRandomBetween(_Roll, INT:0, INT:100)
+	
+	//Print(_Str, "Double Hit Roll: [1]", _Roll)
+	//Cast(_DebugMessage, _Str)
+	//DisplayCombatInfoText(_Mime, _DebugMessage, 5.0)
+	
+	IF "c1&(c2|c3)"
+		IsGreaterThen(_Roll, 0)
+		IsLessThen(_Roll, 40)
+		IsEqual(_Roll, 40)
 	THEN
-		//ShootWorldConeAt(Cone_LLMIME_S_Push, _Caster, _WorldPos, _TargetChar)
-	ENDIF
-	IF "!c1"
-		IsEqual(_TargetItem, null)
-	THEN
-		//ShootWorldConeAt(Cone_LLMIME_S_Push, _Caster, _WorldPos, _TargetItem)
+		IF "!c1"
+			IsEqual(_TargetCharacter, null)
+		THEN
+			CharacterCharacterEvent(_Mime, _TargetCharacter, "Mimicry_Events_DoubleHitRollSuccess")
+		ENDIF
+		IF "!c1"
+			IsEqual(_TargetItem, null)
+		THEN
+			CharacterItemEvent(_Mime, _TargetItem, "Mimicry_Events_DoubleHitRollSuccess")
+		ENDIF
 	ENDIF
 ENDIF
-*/
+//END_REGION

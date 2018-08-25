@@ -368,7 +368,7 @@ StringConcatenate("LLMIME_Events_FindMimicTarget_", _UniqueID, _EventName)
 THEN
 //LeaderLog_Log("TRACE", "[LLMIME:Mime:Targeting] Starting dummy character iterator for [",_Action, _ActionType,"].");
 DB_LLMIME_Mimic_Temp_TargetIterator(_Caster, _Mime, _Dummy, _TargetX, _Rotation, _TargetZ, _EventName, _TargetPriority, _Action, _ActionType);
-CharacterLaunchIteratorAroundCharacter(_Dummy, 1.5, _EventName);
+CharacterLaunchIteratorAroundObject(_Dummy, 1.5, _EventName);
 LLMIME_Mimicking_ResetFailTimer(_Mime, _Caster, _Action, _ActionType, 3000);
 
 IF

@@ -70,11 +70,11 @@ DB_LLMIME_MimeStatuses("LLMIME_SOURCE_REGENERATION_HIDDEN");
 PROC
 LLMIME_System_InitEffectFlags()
 AND
-NOT DB_LLLIB_EffectFlags_Effects("Mimicry_EffectFlags", _, _, _, _)
+NOT DB_LeaderLib_EffectFlags_Effects("Mimicry_EffectFlags", _, _, _, _)
 THEN
-DB_LLLIB_EffectFlags_Effects("Mimicry_EffectFlags", "Mimicry_Effects_MaskTaken1", "RS3_FX_Skills_Soul_Cast_Soul_Impact_Root_01", 0, "");
-DB_LLLIB_EffectFlags_Effects("Mimicry_EffectFlags", "Mimicry_Effects_MusicBoxResurrection1", "LLMIME_FX_Scripted_MusicBox_Resurrection_01", 0, "Dummy_Root");
-DB_LLLIB_EffectFlags_Effects("Mimicry_EffectFlags", "Mimicry_Effects_MusicBoxResurrection2", "LLMIME_FX_Scripted_MusicBox_Resurrection_02", 0, "Dummy_Root");
+DB_LeaderLib_EffectFlags_Effects("Mimicry_EffectFlags", "Mimicry_Effects_MaskTaken1", "RS3_FX_Skills_Soul_Cast_Soul_Impact_Root_01", 0, "");
+DB_LeaderLib_EffectFlags_Effects("Mimicry_EffectFlags", "Mimicry_Effects_MusicBoxResurrection1", "LLMIME_FX_Scripted_MusicBox_Resurrection_01", 0, "Dummy_Root");
+DB_LeaderLib_EffectFlags_Effects("Mimicry_EffectFlags", "Mimicry_Effects_MusicBoxResurrection2", "LLMIME_FX_Scripted_MusicBox_Resurrection_02", 0, "Dummy_Root");
 
 PROC
 LLMIME_System_InitTemplates()

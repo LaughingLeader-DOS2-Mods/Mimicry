@@ -7,7 +7,7 @@ KBSECTION
 PROC
 LLMIME_Internal_Start()
 THEN
-DebugBreak("[LLMIME] Mimicry starting.");
+DebugBreak("[LLMIME] Starting Mimicry.");
 GoalCompleted;
 
 IF
@@ -20,7 +20,7 @@ LLMIME_Internal_CompleteIfStarted()
 AND
 DB_StoryStarted(_)
 THEN
-DebugBreak("[LLMIME] Existing save detected. Starting Mimicry.");
+DebugBreak("[LLMIME:CompleteIfStarted] Mimicry was added to an existing save.");
 LLMIME_Internal_Start();
 
 // For saves where this goal is active, but wasn't completed
@@ -29,7 +29,7 @@ SavegameLoaded(_,_,_,_)
 AND
 DB_StoryStarted(_)
 THEN
-DebugBreak("[LLMIME] Existing save detected. Starting Mimicry.");
+DebugBreak("[LLMIME:SavegameLoaded] Mimicry was added to an existing save.");
 LLMIME_Internal_Start();
 EXITSECTION
 

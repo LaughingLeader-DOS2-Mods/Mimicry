@@ -1,0 +1,2 @@
+statusapply ENRAGED -1
+[HistoryLimit]30

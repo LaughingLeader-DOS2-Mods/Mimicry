@@ -247,30 +247,6 @@ THEN
 	CharacterApplyStatus(_Mime, LLMIME_COMBAT_MUTED, 1, 1)
 ENDIF
 
-EVENT Mime_BasicAttack_Event
-VARS
-	CHARACTER:_Mime
-	CHARACTER:_DefenderChar
-	ITEM:_DefenderItem
-ON
-	OnCharacterStartAttackObject(_DefenderChar, _DefenderItem, _, _Mime)
-ACTIONS
-IF "c1&c2"
-	IsTagged(_Mime, "Mimicry_Mime")
-	HasFlag(_Mime, "Mimicry_MimeIsUnarmed")
-THEN
-	IF "!c1"
-		IsEqual(_DefenderChar, null)
-	THEN
-		CharacterCharacterEvent(_Mime, _DefenderChar, "Mimicry_Events_OnMimeUnarmedBasicAttack")
-	ENDIF
-	IF "!c1"
-		IsEqual(_DefenderItem, null)
-	THEN
-		CharacterItemEvent(_Mime, _DefenderItem, "Mimicry_Events_OnMimeUnarmedBasicAttack")
-	ENDIF
-ENDIF
-
 EVENT LLMIME_TestSurfaceFinder
 VARS
     CHARACTER:_Character

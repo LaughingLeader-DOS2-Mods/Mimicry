@@ -8,27 +8,23 @@ StoryEvent(_, "LeaderLib_Initialized")
 AND
 NOT DB_LLMIME_RegisteredLeaderLibSettings(_)
 THEN
-LLMIME_LeaderLib_RegisterSettings();
 DB_LLMIME_RegisteredLeaderLibSettings(1);
 
-PROC
-LLMIME_LeaderLib_RegisterSettings()
+IF
+DB_LLMIME_RegisteredLeaderLibSettings(1)
 THEN
-LeaderLib_Register_ModMenu("LaughingLeader_Mimicry", "[Mimicry] Mime Menu", "LLMIME_SettingsMenu", "Mimicry", "LaughingLeader");
+LeaderLib_Register_ModMenu("LaughingLeader.Mimicry", "[Mimicry] Mime Menu", "LLMIME_SettingsMenu", "Mimicry", "LaughingLeader");
 
-PROC
-LLMIME_LeaderLib_RegisterSettings()
-THEN
-LeaderLib_Trader_Register_Position("LLLIB_LeaderTrader", "TestLevel_LL_Mimicry", 12.0, 0.0, 8.0);
-LeaderLib_Trader_Register_StartingGold("LLLIB_LeaderTrader", "TestLevel_LL_Mimicry", 9999);
-//LeaderLib_Trader_Register_PositionObject("LLLIB_LeaderTrader", "LLNWIZ_DebugLevel", ITEMGUID_WPN_Dwarves_Shield_A_000_ef289002-e5b3-4a3e-8ad5-1d68ac847f67);
-LeaderLib_Treasure_Register_TreasureToTrader("LLMIME.LeaderTrader.MusicBox", "LLLIB_LeaderTrader");
+LeaderLib_Trader_Register_Position("LeaderLib_LeaderTrader", "TestLevel_LL_Mimicry", 12.0, 0.0, 8.0);
+LeaderLib_Trader_Register_StartingGold("LeaderLib_LeaderTrader", "TestLevel_LL_Mimicry", 9999);
+//LeaderLib_Trader_Register_PositionObject("LeaderLib_LeaderTrader", "LLNWIZ_DebugLevel", ITEMGUID_WPN_Dwarves_Shield_A_000_ef289002-e5b3-4a3e-8ad5-1d68ac847f67);
+LeaderLib_Treasure_Register_TreasureToTrader("LLMIME.LeaderTrader.MusicBox", "LeaderLib_LeaderTrader");
 LeaderLib_Treasure_Register_ItemTemplate("LLMIME.LeaderTrader.MusicBox", "UNIQUE_LLMIME_MusicBox_fd03b00c-5366-40e2-a8af-1d9f6a904ecb", 1);
 //LeaderLib_Treasure_Configure_AddMaxAmount("LLMIME.LeaderTrader.MusicBox", "UNIQUE_LLMIME_MusicBox_fd03b00c-5366-40e2-a8af-1d9f6a904ecb", 1);
 LeaderLib_Treasure_Configure_GenerationType("LLMIME.LeaderTrader.MusicBox", "UNIQUE_LLMIME_MusicBox_fd03b00c-5366-40e2-a8af-1d9f6a904ecb", "DIALOG_STARTED");
 LeaderLib_Treasure_Configure_GenerateOnce("LLMIME.LeaderTrader.MusicBox", "UNIQUE_LLMIME_MusicBox_fd03b00c-5366-40e2-a8af-1d9f6a904ecb", "");
 
-LeaderLib_Treasure_Register_TreasureToTrader("LLMIME.LeaderTrader.MimicSkillbooks", "LLLIB_LeaderTrader");
+LeaderLib_Treasure_Register_TreasureToTrader("LLMIME.LeaderTrader.MimicSkillbooks", "LeaderLib_LeaderTrader");
 LeaderLib_Treasure_Configure_GenerateTreasureEndlessly("LLMIME.LeaderTrader.MimicSkillbooks");
 LeaderLib_Treasure_Register_ItemTemplate("LLMIME.LeaderTrader.MimicSkillbooks", "BOOK_Skill_LLMIME_Mimicking_Source_c2e7fcd2-657d-4e6d-8ca2-dbacce23d9fe", 1, "LLMIME_Requirements_EliteMime");
 LeaderLib_Treasure_Configure_AddMaxAmount("LLMIME.LeaderTrader.MimicSkillbooks", "BOOK_Skill_LLMIME_Mimicking_Source_c2e7fcd2-657d-4e6d-8ca2-dbacce23d9fe", 1);
@@ -43,9 +39,9 @@ ItemDestroyed(_Item)
 AND
 GetTemplate(_Item, "UNIQUE_LLMIME_MusicBox_fd03b00c-5366-40e2-a8af-1d9f6a904ecb")
 AND
-DB_LLLIB_Treasure_ItemDoneGenerating(_Object, "LLMIME.LeaderTrader.MusicBox", "UNIQUE_LLMIME_MusicBox_fd03b00c-5366-40e2-a8af-1d9f6a904ecb")
+DB_LeaderLib_Treasure_ItemDoneGenerating(_Object, "LLMIME.LeaderTrader.MusicBox", "UNIQUE_LLMIME_MusicBox_fd03b00c-5366-40e2-a8af-1d9f6a904ecb")
 THEN
-NOT DB_LLLIB_Treasure_ItemDoneGenerating(_Object, "LLMIME.LeaderTrader.MusicBox", "UNIQUE_LLMIME_MusicBox_fd03b00c-5366-40e2-a8af-1d9f6a904ecb");
+NOT DB_LeaderLib_Treasure_ItemDoneGenerating(_Object, "LLMIME.LeaderTrader.MusicBox", "UNIQUE_LLMIME_MusicBox_fd03b00c-5366-40e2-a8af-1d9f6a904ecb");
 EXITSECTION
 
 ENDEXITSECTION
