@@ -1,7 +1,7 @@
 new skillset "Class_LLMIME_Mime"
 add skill "Rush_BatteringRam"
 add skill "Target_CripplingBlow"
-add skill "Shout_Adrenaline"
+add skill "MultiStrike_LLMIME_MimeVault"
 new skillset "Class_LLMIME_Mime_StarterSkills"
 add skill "Shout_LLMIME_BrawlerStance"
 add skill "Shout_LLMIME_DisableMimicking"

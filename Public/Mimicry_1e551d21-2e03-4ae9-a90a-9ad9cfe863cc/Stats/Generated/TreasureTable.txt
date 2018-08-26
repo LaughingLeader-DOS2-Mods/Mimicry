@@ -1,28 +1,65 @@
 treasure itemtypes "Common","Uncommon","Rare","Epic","Legendary","Divine","Unique"
-new treasuretable "ST_LLMIME_SkillbookMime"
-MinLevel "-30"
-MaxLevel "0"
-new subtable "1,1"
-object category "I_SKILLBOOK_LLMIME_Decoy",1,0,0,0,0,0,0,0
-new subtable "1,1"
-object category "I_SKILLBOOK_LLMIME_EvasiveManeuver",1,0,0,0,0,0,0,0
-new subtable "1,1"
+new treasuretable "ST_LLMIME_SkillbookMime_NoRequirements"
+new subtable "-1"
+object category "I_SKILLBOOK_LLMIME_Wish",1,0,0,0,0,0,0,0
+new treasuretable "ST_LLMIME_SkillbookMime_Starter"
+new subtable "-1"
+StartLevel "2"
 object category "I_SKILLBOOK_LLMIME_Vault",1,0,0,0,0,0,0,0
-new subtable "1,1"
-object category "I_SKILLBOOK_LLMIME_SilencingStare",1,0,0,0,0,0,0,0
-new subtable "1,1"
+new treasuretable "ST_LLMIME_SkillbookMime_Novice"
+new subtable "-1"
+StartLevel "6"
+object category "I_SKILLBOOK_LLMIME_Decoy",1,0,0,0,0,0,0,0
+new subtable "-1"
+StartLevel "6"
 object category "I_SKILLBOOK_LLMIME_KneeBreaker",1,0,0,0,0,0,0,0
-new subtable "1,1"
+new subtable "-1"
+StartLevel "6"
 object category "I_SKILLBOOK_LLMIME_DisarmingBlow",1,0,0,0,0,0,0,0
-new subtable "1,1"
-object category "I_SKILLBOOK_LLMIME_Overthrow",1,0,0,0,0,0,0,0
-new subtable "1,1"
+new treasuretable "ST_LLMIME_SkillbookMime_Adept"
+new subtable "-1"
+StartLevel "9"
+object category "I_SKILLBOOK_LLMIME_EvasiveManeuver",1,0,0,0,0,0,0,0
+new subtable "-1"
+StartLevel "9"
+object category "I_SKILLBOOK_LLMIME_QuakeSlam",1,0,0,0,0,0,0,0
+new subtable "-1"
+StartLevel "9"
+object category "I_SKILLBOOK_LLMIME_SilencingStare",1,0,0,0,0,0,0,0
+new subtable "-1"
+StartLevel "9"
+object category "I_SKILLBOOK_LLMIME_VitalInfluence",1,0,0,0,0,0,0,0
+new subtable "-1"
+StartLevel "9"
+object category "I_SKILLBOOK_LLMIME_SealEvil",1,0,0,0,0,0,0,0
+new subtable "-1"
+StartLevel "9"
 object category "I_SKILLBOOK_LLMIME_SourceMimicking",1,0,0,0,0,0,0,0
-new subtable "1,1"
+new treasuretable "ST_LLMIME_SkillbookMime_Master"
+new subtable "-1"
+StartLevel "13"
 object category "I_SKILLBOOK_LLMIME_FinalWish",1,0,0,0,0,0,0,0
-new subtable "1,1"
+new subtable "-1"
+StartLevel "13"
 object category "I_SKILLBOOK_LLMIME_Fatality",1,0,0,0,0,0,0,0
+new treasuretable "ST_LLMIME_SkillbookMime_AllBooks"
+new subtable "-1"
+object category "T_ST_LLMIME_SkillbookMime_NoRequirements",1,0,0,0,0,0,0,0
+new subtable "-1"
+StartLevel "2"
+object category "T_ST_LLMIME_SkillbookMime_Starter",1,0,0,0,0,0,0,0
+new subtable "-1"
+StartLevel "6"
+object category "T_ST_LLMIME_SkillbookMime_Novice",1,0,0,0,0,0,0,0
+new subtable "-1"
+StartLevel "9"
+object category "T_ST_LLMIME_SkillbookMime_Adept",1,0,0,0,0,0,0,0
+new subtable "-1"
+StartLevel "13"
+object category "T_ST_LLMIME_SkillbookMime_Master",1,0,0,0,0,0,0,0
 new treasuretable "LLMIME_Mime_Equipment"
+MinLevel "-19"
+MaxLevel "19"
 IgnoreLevelDiff 1
 new subtable "-1"
 object category "I_ARM_LLMIME_Mime_Light_UpperBody",1,1,0,0,0,0,0,0
@@ -33,5 +70,5 @@ object category "I_ARM_LLMIME_Mime_Light_Boots",1,1,0,0,0,0,0,0
 new subtable "-1"
 object category "I_ARM_LLMIME_Mime_Light_Gloves",1,1,0,0,0,0,0,0
 new treasuretable "LLMIME_MimeFollower_Treasure"
-new subtable "1,1"
+new subtable "-1"
 object category "T_LLMIME_Mime_Equipment",1,0,0,0,0,0,0,1

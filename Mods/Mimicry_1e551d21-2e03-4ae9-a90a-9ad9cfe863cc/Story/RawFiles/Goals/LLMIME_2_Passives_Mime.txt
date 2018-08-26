@@ -197,6 +197,18 @@ SetStoryEvent(_Mime, "Mimicry_MimeLeveledUp");
 //END_REGION
 
 //REGION SKILL_MEMORY
+//Mime preset skills
+IF
+CharacterCreationFinished(_Mime)
+AND
+DB_LLMIME_Mime_LearnableSkills(_Skill)
+AND
+CharacterHasSkill(_Mime, _Skill, 1)
+AND
+NOT DB_LLMIME_Mime_MimeSkillMemory(_Mime, _Skill)
+THEN
+DB_LLMIME_Mime_MimeSkillMemory(_Mime, _Skill);
+
 IF
 CharacterLearnedSkill(_Mime, _Skill)
 AND
