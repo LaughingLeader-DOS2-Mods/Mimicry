@@ -13,9 +13,9 @@ THEN
 DB_LLMIME_Debug_GameStarted(1);
 TimerLaunch("LLMIME_Debug_Start", 500);
 TimerLaunch("LLMIME_Debug_Test", 1000);
-LeaderLib_Treasure_Register_TreasureToTrader("LLMIME.LeaderTrader.DebugTest", "LeaderLib_LeaderTrader");
+LeaderLib_Treasure_Register_TreasureToTrader("LLMIME.LeaderTrader.DebugTest", "LeaderLib.LeaderTrader");
 LeaderLib_Treasure_Register_TreasureTable("LLMIME.LeaderTrader.DebugTest", "CheatAllWeapons", "", 1);
-LeaderLib_Treasure_Register_TreasureToTrader("LLMIME.LeaderTrader.DebugTest2", "LeaderLib_LeaderTrader");
+LeaderLib_Treasure_Register_TreasureToTrader("LLMIME.LeaderTrader.DebugTest2", "LeaderLib.LeaderTrader");
 LeaderLib_Treasure_Register_TreasureToObject("LLMIME.LeaderTrader.DebugTest2", ITEMGUID_LLMIME_Debug_TestScriptingChest_fbe7bf08-9826-4e1c-a4dd-732d54499176);
 LeaderLib_Treasure_Register_TreasureTable("LLMIME.LeaderTrader.DebugTest2", "Cheat2HMaces", "", 1);
 LeaderLib_Treasure_Configure_AddDeltaMod("LLMIME.LeaderTrader.DebugTest2", "WPN_Mace_2H", "Boost_Weapon_Status_Set_Crippled_Mace", -1);
