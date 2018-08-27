@@ -16,11 +16,6 @@ THEN
 SysClear("DB_LLMIME_Mime_MimeActivatingEquipmentTags", 1);
 DB_LLMIME_Mime_MimeActivatingEquipmentTags("LLMIME_ACTIVATE_MIME");
 
-SysClear("DB_LLMIME_Mime_Skills", 1);
-DB_LLMIME_Mime_Skills("Shout_LLMIME_BrawlerStance");
-DB_LLMIME_Mime_Skills("Shout_LLMIME_OpenMenu");
-DB_LLMIME_Mime_Skills("Shout_LLMIME_DisableMimicking");
-
 SysClear("DB_LLMIME_Mime_LearnableSkills", 1);
 DB_LLMIME_Mime_LearnableSkills("Projectile_LLMIME_Decoy");
 DB_LLMIME_Mime_LearnableSkills("Projectile_LLMIME_FinalWish");
@@ -28,7 +23,6 @@ DB_LLMIME_Mime_LearnableSkills("Shout_LLMIME_SourceMimicking");
 DB_LLMIME_Mime_LearnableSkills("Shout_LLMIME_QuakeSlam");
 DB_LLMIME_Mime_LearnableSkills("Target_LLMIME_VitalInfluence");
 //Skill alternatives (muted bypass)
-DB_LLMIME_Mime_LearnableSkills("Shout_LLMIME_Overthrow");
 DB_LLMIME_Mime_LearnableSkills("Shout_LLMIME_EvasiveManeuver");
 DB_LLMIME_Mime_LearnableSkills("MultiStrike_LLMIME_MimeVault");
 DB_LLMIME_Mime_LearnableSkills("Target_LLMIME_SilencingStare");
@@ -36,6 +30,11 @@ DB_LLMIME_Mime_LearnableSkills("Target_LLMIME_KneeBreaker");
 DB_LLMIME_Mime_LearnableSkills("Target_LLMIME_DisarmingBlow");
 DB_LLMIME_Mime_LearnableSkills("Target_LLMIME_SealEvil");
 DB_LLMIME_Mime_LearnableSkills("Target_LLMIME_Fatality");
+
+SysClear("DB_LLMIME_Mime_Skills", 1);
+DB_LLMIME_Mime_Skills("Shout_LLMIME_BrawlerStance");
+DB_LLMIME_Mime_Skills("Shout_LLMIME_OpenMenu");
+DB_LLMIME_Mime_Skills("Shout_LLMIME_DisableMimicking");
 
 LeaderLib_Skills_Register_StatusToggleSkill("Shout_LLMIME_DisableMimicking", "LLMIME_MIMICKING_DISABLED", -1.0, 1);
 //END_REGION
@@ -91,7 +90,6 @@ NOT LLMIME_QRY_CharacterIsADummy(_Mime)
 AND
 NOT LLMIME_QRY_CharacterIsAMime(_Mime)
 THEN
-//LLMIME_RemoveAllMimicryStatuses(_Mime);
 SetStoryEvent(_Mime, "Mimicry_InitMimeJob");
 
 IF
@@ -103,10 +101,13 @@ NOT LLMIME_QRY_CharacterIsADummy(_Mime)
 AND
 NOT LLMIME_QRY_CharacterIsAMime(_Mime)
 THEN
+LeaderLog_Log("DEBUG", "[Mimicry:Passives:Mime:CharacterStatusApplied(LLMIME_MASK_INFO)] LeaderLib is not initialized yet. Activating mime after the game is started.");
 DB_LLMIME_Temp_ActivateMime(_Mime);
 
-IF
-CharacterCreationFinished(_Mime)
+PROC
+PROC_Shared_CharacterCreationFinished()
+AND
+DB_IsPlayer(_Mime)
 AND
 DB_LLMIME_Mime_MimeActivatingEquipmentTags(_Tag)
 AND
@@ -120,8 +121,32 @@ IF
 GameStarted(_,_)
 AND
 DB_LLMIME_Temp_ActivateMime(_Mime)
+AND
+DB_LLMIME_Mime_LearnableSkills(_Skill)
+AND
+CharacterHasSkill(_Mime, _Skill, 1)
+AND
+NOT DB_LLMIME_Mime_MimeSkillMemory(_Mime, _Skill)
 THEN
+LeaderLog_Log("DEBUG", "[Mimicry:Passives:Mime:GameStarted] Added skill [",_Skill,"] learned from the mime preset to [DB_LLMIME_Mime_MimeSkillMemory].");
+DB_LLMIME_Mime_MimeSkillMemory(_Mime, _Skill);
+
+IF
+GameStarted(_,_)
+AND
+DB_LLMIME_Temp_ActivateMime(_Mime)
+AND
+NOT LLMIME_QRY_CharacterIsAMime(_Mime)
+THEN
+NOT DB_LLMIME_Temp_ActivateMime(_Mime);
+LeaderLog_Log("DEBUG", "[Mimicry:Passives:Mime:GameStarted] Initializing mime from the [DB_LLMIME_Temp_ActivateMime] database.");
 SetStoryEvent(_Mime, "Mimicry_InitMimeJob");
+
+IF
+GameStarted(_,_)
+AND
+DB_LLMIME_Temp_ActivateMime(_Mime)
+THEN
 NOT DB_LLMIME_Temp_ActivateMime(_Mime);
 
 IF
@@ -139,30 +164,6 @@ AND
 LLMIME_QRY_CharacterIsAMime(_Mime)
 THEN
 SetStoryEvent(_Mime, "Mimicry_RemoveMimeJob");
-//END_REGION
-
-//REGION SKILLS
-IF
-StoryEvent((CHARACTERGUID)_Mime, "Mimicry_MimeInitialized")
-AND
-IsTagged(_Mime, "LLMIME_MimeFollower", 0)
-AND
-DB_LLMIME_Mime_Skills(_Skill)
-AND
-CharacterHasSkill(_Mime, _Skill, 0)
-THEN
-CharacterAddSkill(_Mime, _Skill);
-
-IF
-StoryEvent((CHARACTERGUID)_Mime, "Mimicry_MimeJobRemoved")
-AND
-IsTagged(_Mime, "LLMIME_MimeFollower", 0)
-AND
-DB_LLMIME_Mime_Skills(_Skill)
-AND
-CharacterHasSkill(_Mime, _Skill, 1)
-THEN
-CharacterRemoveSkill(_Mime, _Skill);
 //END_REGION
 
 //REGION EFFECTS
@@ -197,18 +198,6 @@ SetStoryEvent(_Mime, "Mimicry_MimeLeveledUp");
 //END_REGION
 
 //REGION SKILL_MEMORY
-//Mime preset skills
-IF
-CharacterCreationFinished(_Mime)
-AND
-DB_LLMIME_Mime_LearnableSkills(_Skill)
-AND
-CharacterHasSkill(_Mime, _Skill, 1)
-AND
-NOT DB_LLMIME_Mime_MimeSkillMemory(_Mime, _Skill)
-THEN
-DB_LLMIME_Mime_MimeSkillMemory(_Mime, _Skill);
-
 IF
 CharacterLearnedSkill(_Mime, _Skill)
 AND
@@ -237,6 +226,32 @@ AND
 IsTagged(_Mime, "LLMIME_MimeFollower", 0)
 AND
 DB_LLMIME_Mime_MimeSkillMemory(_Mime, _Skill)
+AND
+CharacterHasSkill(_Mime, _Skill, 1)
+THEN
+CharacterRemoveSkill(_Mime, _Skill);
+//END_REGION
+
+
+//REGION SKILLS
+//This is after the learnable skills, so the menu skills should be further down on the hotbar.
+IF
+StoryEvent((CHARACTERGUID)_Mime, "Mimicry_MimeInitialized")
+AND
+IsTagged(_Mime, "LLMIME_MimeFollower", 0)
+AND
+DB_LLMIME_Mime_Skills(_Skill)
+AND
+CharacterHasSkill(_Mime, _Skill, 0)
+THEN
+CharacterAddSkill(_Mime, _Skill);
+
+IF
+StoryEvent((CHARACTERGUID)_Mime, "Mimicry_MimeJobRemoved")
+AND
+IsTagged(_Mime, "LLMIME_MimeFollower", 0)
+AND
+DB_LLMIME_Mime_Skills(_Skill)
 AND
 CharacterHasSkill(_Mime, _Skill, 1)
 THEN

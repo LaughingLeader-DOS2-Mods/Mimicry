@@ -31,7 +31,7 @@ LeaderLib_Requirements_Add_PartyLevelRequirement("LLMIME_Requirements_MimeMaster
 
 LeaderLib_Treasure_Register_TreasureToTrader("LLMIME.LeaderTrader.MimicSkillbooks", "LeaderLib.LeaderTrader");
 LeaderLib_Treasure_Configure_GenerateTreasureEndlessly("LLMIME.LeaderTrader.MimicSkillbooks");
-LeaderLib_Treasure_Configure_DefaultGenerationType("LLMIME.LeaderTrader.MimicSkillbooks", "PARTY_LEVELED_UP");
+LeaderLib_Treasure_Configure_DefaultGenerationType("LLMIME.LeaderTrader.MimicSkillbooks", "TRADE_GENERATION_END");
 LeaderLib_Treasure_Configure_DefaultGenerationType("LLMIME.LeaderTrader.MimicSkillbooks", "REQUIREMENT_UNLOCKED");
 
 LeaderLib_Treasure_Register_ItemTemplate("LLMIME.LeaderTrader.MimicSkillbooks", "BOOK_Skill_LLMIME_Wish_8fcc10b0-d58b-4246-a882-29f86ee114e9", 1, "");
