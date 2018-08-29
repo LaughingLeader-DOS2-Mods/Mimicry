@@ -404,6 +404,26 @@ CharacterUsedSkillOnTarget(_Caster, (CHARACTERGUID)_Target, "Target_LLMIME_Debug
 AND
 GetPosition(_Target, _x, _y, _z)
 AND
+GetUUID(_Target, _UUID)
+AND
+LeaderLIb_Platforms_QRY_SpawnPlatform(_UUID, "Large", 0, _x, _y, _z)
+AND
+DB_LeaderLib_Platforms(_UUID, _Platform)
+THEN
+ApplyStatus(_Platform, "PERMANENT_NECROFIRE", -1.0, 1);
+ProcObjectTimer(_Platform, "LLMIME_Debug_RemoveSpawnedPlatform", 3000);
+
+PROC
+ProcObjectTimerFinished((ITEMGUID)_Platform, "LLMIME_Debug_RemoveSpawnedPlatform")
+THEN
+LeaderLib_Platforms_RemovePlatform(_Platform);
+
+/*
+IF
+CharacterUsedSkillOnTarget(_Caster, (CHARACTERGUID)_Target, "Target_LLMIME_DebugTargetSkill", _, _)
+AND
+GetPosition(_Target, _x, _y, _z)
+AND
 RealSum(_z, 0.1, _tz)
 AND
 CreateItemTemplateAtPosition("S_LeaderLib_Platform_Large_81d0b457-3569-4c6b-bfbc-e954a768472a", _x, _y, _z, _Object)
@@ -457,6 +477,7 @@ THEN
 CharacterSetAnimationOverride(_Target, "");
 PlayAnimation(_Target, "knockdown_getup", "");
 NOT DB_LLMIME_Debug_ObjectPosition(_Target, _Caster, _Object, _x, _y, _z);
+*/
 //REGION TRACING
 IF
 AttackedByObject(_Target, _Owner, _Attacker, _DamageType, _DamageSource)
