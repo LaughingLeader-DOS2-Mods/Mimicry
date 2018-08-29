@@ -6,6 +6,8 @@ DB_WaypointInfo((ITEMGUID)S_LLMIME_TestLevelWaypointShrine_9955a6a5-c7ca-40aa-8f
 Proc_LLMIME_IterateGameAlreadyStarted();
 
 GlobalSetFlag("LeaderLog_Trace_Enabled");
+
+ProcTriggerRegisterForPlayers((TRIGGERGUID)TRIGGERGUID_MusicVolumeTrigger_LLMIME_Debug_MusicTest_80649d71-e657-4c35-be19-708559c0c60c);
 KBSECTION
 IF
 GameStarted("TestLevel_LL_Mimicry",1)
@@ -397,6 +399,64 @@ CharacterTeleportToFleeWaypoint(_Player, _)
 THEN
 LeaveCombat(_Player);
 
+IF
+CharacterUsedSkillOnTarget(_Caster, (CHARACTERGUID)_Target, "Target_LLMIME_DebugTargetSkill", _, _)
+AND
+GetPosition(_Target, _x, _y, _z)
+AND
+RealSum(_z, 0.1, _tz)
+AND
+CreateItemTemplateAtPosition("S_LeaderLib_Platform_Large_81d0b457-3569-4c6b-bfbc-e954a768472a", _x, _y, _z, _Object)
+THEN
+//ApplyStatus(_Object, "InstantKnockdown", -1.0, 1);
+//ApplyStatus(_Object, "PERMANENT_NECROFIRE", -1.0, 1);
+CharacterStatusText(_Caster, "Fly!");
+DB_LLMIME_Debug_ObjectPosition(_Target, _Caster, _Object, _x, _y, _z);
+TeleportToPosition(_Target, _x, _y, _tz, "LLMIME_Debug_MoveToPillar", 0, 1);
+//TeleportTo(_Target, _Caster, "LLMIME_Debug_MoveToPillar", 0, 1, 0);
+
+IF
+StoryEvent((CHARACTERGUID)_Target, "LLMIME_Debug_MoveToPillar")
+AND
+DB_LLMIME_Debug_ObjectPosition(_Target, _Caster, _Object, _x, _y, _z)
+AND
+LeaderLib_Random_QRY(250,900)
+AND
+DB_LeaderLib_Random(_TimerDelay)
+THEN
+NOT DB_LeaderLib_Random(_TimerDelay);
+CharacterMoveToPosition(_Target, _x, _y, _z, 1, "LLMIME_Debug_SetKnockdownLoop");
+ProcObjectTimer(_Target, "LLMIME_Debug_FallDownPillar", _TimerDelay);
+
+PROC
+ProcObjectTimerFinished((CHARACTERGUID)_Target, "LLMIME_Debug_FallDownPillar")
+AND
+DB_LLMIME_Debug_ObjectPosition(_Target, _Caster, _Object, _x, _y, _z)
+AND
+RealSum(_z, -0.1, _tz)
+THEN
+CharacterPurgeQueue(_Target);
+CharacterLookAt(_Target, _Caster, 1);
+ItemRemove(_Object);
+CharacterSetAnimationOverride(_Target, "knockdown_loop");
+CharacterMoveToPosition(_Target, _x, _y, _tz, 1, "LLMIME_Debug_SetKnockdownLoop");
+CharacterSetAnimationOverride(_Target, "knockdown_loop");
+ProcObjectTimer(_Target, "LLMIME_Debug_GetUp", 1000);
+
+IF
+StoryEvent((CHARACTERGUID)_Target, "LLMIME_Debug_SetKnockdownLoop")
+THEN
+CharacterSetAnimationOverride(_Target, "knockdown_loop");
+
+PROC
+ProcObjectTimerFinished((CHARACTERGUID)_Target, "LLMIME_Debug_GetUp")
+AND
+DB_LLMIME_Debug_ObjectPosition(_Target, _Caster, _Object, _x, _y, _z)
+THEN
+//RemoveStatus(_Object, "InstantKnockdown");
+CharacterSetAnimationOverride(_Target, "");
+PlayAnimation(_Target, "knockdown_getup", "");
+NOT DB_LLMIME_Debug_ObjectPosition(_Target, _Caster, _Object, _x, _y, _z);
 //REGION TRACING
 IF
 AttackedByObject(_Target, _Owner, _Attacker, _DamageType, _DamageSource)

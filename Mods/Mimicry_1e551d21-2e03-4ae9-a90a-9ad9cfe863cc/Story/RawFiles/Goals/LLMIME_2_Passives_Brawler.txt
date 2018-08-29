@@ -280,14 +280,17 @@ IsTagged(_Mime, "Mimicry_Mime", 1)
 AND
 ObjectGetFlag(_Mime, "Mimicry_MimeIsUnarmed", 1)
 THEN
+LeaderLib_CancelObjectTimer(_Mime, "Mimicry_Timers_ResetBasicAttackFlag");
 ObjectSetFlag(_Mime, "Mimicry_MimeIsStartingBasicAttack");
 
+/*
 IF
 CharacterMissedBy(_Target, _, _Mime)
 AND
 ObjectGetFlag(_Mime, "Mimicry_MimeIsStartingBasicAttack", 1)
 THEN
 ObjectClearFlag(_Mime, "Mimicry_MimeIsStartingBasicAttack");
+*/
 
 IF
 CharacterUsedSkill(_Mime, "Target_LLMIME_ApplyUnarmedBonusDamage", _, _)
@@ -340,6 +343,7 @@ ObjectClearFlag(_Mime, "Mimicry_MimeIsStartingBasicAttack");
 IF
 CharacterCharacterEvent(_Mime, _Target, "Mimicry_Events_OnMimeUnarmedBasicAttack")
 THEN
+LeaderLog_Log("DEBUG", "[Mimicry:Brawler:OnMimeUnarmedBasicAttack] Mime hit target with basic unarmed attack.");
 LLMIME_Brawler_OnUnarmedAttack(_Mime, _Target);
 
 /*
@@ -354,22 +358,35 @@ LLMIME_Brawler_OnUnarmedAttack((CHARACTERGUID)_Mime, (CHARACTERGUID)_Target)
 AND
 LLMIME_Brawler_QRY_BrawlerActive(_Mime)
 AND
-NOT DB_LLMIME_Brawler_BonusAttackTimer(_, _Mime, _Target)
-AND
-GetUUID(_Mime, _MimeID)
-AND
-StringConcatenate("LLMIME_Timers_BrawlerBonusAttack_", _MimeID, _TimerName)
+DB_LLMIME_Brawler_BlockBonusAttack(_Mime, _Target)
 THEN
-LLMIME_Brawler_IncrementHits(_Mime, _Target);
-DB_LLMIME_Brawler_BonusAttackTimer(_TimerName, _Mime, _Target);
-TimerLaunch(_TimerName, 250); // Prevents multiple bonus damage calls in a single attack
+LeaderLog_Log("DEBUG", "[Mimicry:Brawler:OnUnarmedAttack] Ignoring unarmed attack, as the hit was already registered.");
 
-IF
-TimerFinished(_TimerName)
+PROC
+LLMIME_Brawler_OnUnarmedAttack((CHARACTERGUID)_Mime, (CHARACTERGUID)_Target)
 AND
-DB_LLMIME_Brawler_BonusAttackTimer(_TimerName, _Mime, _Target)
+LLMIME_Brawler_QRY_BrawlerActive(_Mime)
+AND
+NOT DB_LLMIME_Brawler_BlockBonusAttack(_Mime, _Target)
 THEN
-NOT DB_LLMIME_Brawler_BonusAttackTimer(_TimerName, _Mime, _Target);
+LeaderLog_Log("DEBUG", "[Mimicry:Brawler:OnUnarmedAttack] Incrementing basic attack combo.");
+LLMIME_Brawler_IncrementHits(_Mime, _Target);
+DB_LLMIME_Brawler_BlockBonusAttack(_Mime, _Target);
+ProcObjectTimer(_Mime, "LLMIME_Timers_ClearBonusAttackBlock", 50);
+
+PROC
+ProcObjectTimerFinished((CHARACTERGUID)_Mime, "LLMIME_Timers_ClearBonusAttackBlock")
+AND
+DB_LLMIME_Brawler_BlockBonusAttack(_Mime, _Target)
+THEN
+NOT DB_LLMIME_Brawler_BlockBonusAttack(_Mime, _Target);
+
+PROC
+LLMIME_Brawler_IncrementHits((CHARACTERGUID)_Mime, (CHARACTERGUID)_Target)
+AND
+NOT DB_LLMIME_Brawler_TotalHits(_Mime, _Target, _)
+THEN
+DB_LLMIME_Brawler_TotalHits(_Mime, _Target, 0);
 
 PROC
 LLMIME_Brawler_IncrementHits((CHARACTERGUID)_Mime, (CHARACTERGUID)_Target)
@@ -384,16 +401,12 @@ DB_LLMIME_Brawler_TotalHits(_Mime, _Target, _NextTotalHits);
 PROC
 LLMIME_Brawler_IncrementHits((CHARACTERGUID)_Mime, (CHARACTERGUID)_Target)
 AND
-NOT DB_LLMIME_Brawler_TotalHits(_Mime, _Target, _)
-THEN
-DB_LLMIME_Brawler_TotalHits(_Mime, _Target, 1);
-
-PROC
-LLMIME_Brawler_IncrementHits((CHARACTERGUID)_Mime, (CHARACTERGUID)_Target)
+DB_LLMIME_Brawler_TotalHits(_Mime, _Target, _TotalHits)
 AND
-DB_LLMIME_Brawler_TotalHits(_Mime, _Target, 3)
+_TotalHits >= 3
 THEN
-NOT DB_LLMIME_Brawler_TotalHits(_Mime, _Target, 3);
+NOT DB_LLMIME_Brawler_TotalHits(_Mime, _Target, _TotalHits);
+LeaderLog_Log("DEBUG", "[Mimicry:Brawler:IncrementHits] Casting unarmed damage skill in 1 second.");
 //ApplyStatus(_Target, "LLMIME_UNARMED_BONUS_DAMAGE", 0.0, 1, _Mime);
 LeaderLib_StartCharacterCharacterTimer(_Mime, _Target, 1000, "LLMIME_Timers_Brawler_CastUnarmedBonusDamage_", "Mimicry_Events_CastUnarmedBonusDamage");
 
@@ -401,8 +414,8 @@ IF
 CharacterCharacterEvent(_Mime, _Target, "Mimicry_Events_CastUnarmedBonusDamage")
 THEN
 ObjectSetFlag(_Mime, "Mimicry_ApplyingUnarmedDamage");
-//ObjectClearFlag(_Mime, "Mimicry_MimeIsStartingBasicAttack");
 SetVarObject(_Target, "LLMIME_UnarmedBonusDamageSource", _Mime);
+CharacterAddActionPoints(_Mime, 1);
 CharacterUseSkill(_Mime, "Target_LLMIME_ApplyUnarmedBonusDamage", _Target, 1, 1, 1);
 //END_REGION
 
@@ -412,6 +425,7 @@ CharacterStatusApplied(_Target, "LLMIME_UNARMED_BONUS_DAMAGE", (CHARACTERGUID)_M
 AND
 Random(99999, _Seed)
 THEN
+CharacterAddActionPoints(_Mime, -1);
 SetStoryEvent(_Target, "Mimicry_Events_HitByUnarmedBonusDamage");
 LLMIME_Brawler_ApplyBonusDamageDebuffs(_Target, _Seed, _Mime);
 
@@ -501,7 +515,8 @@ THEN
 CharacterAddActionPoints(_Mime, 2);
 CharacterStatusText(_Mime, "LLMIME_StatusText_DoubleStrike");
 //CharacterAttack(_Mime, _Target);
-CharacterUseSkill(_Mime, "Target_LLMIME_MimicAttack", _Target, 1, 1, 1);
+//CharacterUseSkill(_Mime, "Target_LLMIME_MimicAttack", _Target, 1, 1, 1);
+CharacterUseSkill(_Mime, "Target_LLMIME_DoubleStrike", _Target, 1, 1, 1);
 DB_LLMIME_Brawler_DoubleAttackTimer(_TimerName, _Mime, _FXHandle);
 TimerLaunch(_TimerName, 3000);
 

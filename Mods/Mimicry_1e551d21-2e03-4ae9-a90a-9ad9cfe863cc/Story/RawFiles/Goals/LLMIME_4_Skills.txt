@@ -416,14 +416,25 @@ AND
 DB_LeaderLib_Platforms(_UUID, _Platform)
 AND
 LeaderLib_Random_QRY(700,1100)
+//LeaderLib_Random_QRY(5000,10000)
 AND
 DB_LeaderLib_Random(_TimerDelay)
+AND
+RealSum(_y, 20.0, _py)
 THEN
 NOT DB_LeaderLib_Random(_TimerDelay);
+ApplyStatus(_Platform, "PERMANENT_NECROFIRE", -1.0, 1);
 DB_LLMIME_Temp_SkillPlatforms(_Object, _Platform);
 DB_LLMIME_Skills_Temp_FallSpeed(_Object, _Platform, _TimerDelay);
 LeaderLib_StartObjectTimer(_Platform, _TimerDelay, "Mimicry_Timers_RemovePlatformTimer_", "Mimicry_Events_Skills_RemovePlatform");
 PlayScaledEffectAtPosition("LLMIME_FX_Status_Launched_Apply_Root_01", 0.25, _x, _y, _z);
+//CharacterMoveToPosition((CHARACTERGUID)_Object, _x, _y, _z, 1, "");
+//ProcObjectTimer(_Platform, "LLMIME_QuakeSlam_MakeVisible", 500);
+
+PROC
+ProcObjectTimerFinished(_Object, "LLMIME_QuakeSlam_MakeVisible")
+THEN
+SetVisible(_Object, 1);
 
 IF
 ItemStatusAttempt(_Object, "LLMIME_LAUNCHED", (CHARACTERGUID)_Caster)
@@ -442,6 +453,7 @@ GetPosition(_Object, _x, _y, _z)
 THEN
 LLMIME_Skills_SpawnSkillPlatform(_Object);
 PlayEffectAtPosition("RS3_FX_SubEffects_Ground_Earthquake_01", _x, _y, _z);
+//TeleportToPosition(_Object, _x, _y, _z, "", 0, 1);
 
 IF
 CharacterUsedSkill(_Caster, _Skill, _, _)
