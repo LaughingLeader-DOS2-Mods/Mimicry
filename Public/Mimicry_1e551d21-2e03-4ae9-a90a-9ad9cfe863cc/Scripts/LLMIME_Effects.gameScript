@@ -25,7 +25,15 @@ ON
 	OnCharacterEvent(_Target, "Mimicry_Events_HitByUnarmedBonusDamage")
 ACTIONS
 	CharacterPlayEffect(_Target, "RS3_FX_Skills_Voodoo_Impact_Attack_Precision_01", "Dummy_BodyFX")
-
+	
+EVENT LLMIME_UnarmedBonusDamage_Text
+VARS
+	CHARACTER:_Target
+ON
+	OnCharacterStatusApplied(_Target, LLMIME_UNARMED_BONUS_DAMAGE)
+ACTIONS
+	StatusText(_Target, "LLMIME_StatusText_UnarmedBonusDamage")
+	
 EVENT LLMIME_BrawlerStance_Activated_SkillUsed
 VARS
 	CHARACTER:_Character
