@@ -547,6 +547,86 @@ THEN
 CharacterStatusText(_Caster, "LLMIME_StatusText_VitalityCheck_Failed");
 //END_REGION
 
+//A.K.A. Mime Vault
+//REGION FLANK_AND_SWAP
+IF
+//CharacterUsedSkillOnTarget(_Mime, (CHARACTERGUID)_Target, _Skill, _, _)
+CharacterUsedSkill(_Mime, _Skill, _, _)
+AND
+LLMIME_Skills_QRY_SkillMatch(_Skill, "MultiStrike_LLMIME_MimeVault")
+THEN
+DB_LLMIME_Skills_Temp_LookForFlankingTarget(_Mime);
+
+IF
+CharacterStatusAttempt(_Target, "HIT", (CHARACTERGUID)_Mime)
+AND
+DB_LLMIME_Skills_Temp_LookForFlankingTarget(_Mime)
+THEN
+NOT DB_LLMIME_Skills_Temp_LookForFlankingTarget(_Mime);
+ApplyStatus(_Target, "LLMIME_FLANKING", -1.0, 0, _Mime);
+ObjectSetFlag(_Target, "LLMIME_FlankingApplied");
+ProcObjectTimer(_Target, "Mimicry_FlankAndSwap_FlankingFailSafe", 1500);
+
+//When the target is Grounded
+PROC
+ProcObjectTimerFinished((CHARACTERGUID)_Target, "Mimicry_FlankAndSwap_FlankingFailSafe")
+AND
+ObjectGetFlag(_Target, "LLMIME_FlankingApplied", 1)
+THEN
+ObjectClearFlag(_Target, "LLMIME_FlankingApplied", 1);
+RemoveStatus(_Target, "LLMIME_FLANKING");
+CharacterStatusText(_Target, "LLMIME_StatusText_SwappedFailed");
+
+IF
+CharacterStatusApplied(_Target, "LLMIME_SWAPPING", (CHARACTERGUID)_Mime)
+THEN
+ObjectClearFlag(_Target, "LLMIME_FlankingApplied", 1);
+SetVarObject(_Mime, "LLMIME_SwapTarget", _Target);
+LeaderLib_StartCharacterCharacterTimer(_Mime, _Target, 500, "Mimicry_Timers_StartSwapping_", "Mimicry_FlankAndSwap_StartSwapping");
+
+IF
+CharacterCharacterEvent(_Mime, _Target, "Mimicry_FlankAndSwap_StartSwapping")
+AND
+GetPosition(_Target, _tx, _ty, _tz)
+AND
+GetPosition(_Mime, _mx, _my, _mz)
+THEN
+PlayEffectAtPosition("RS3_FX_Skills_Void_Netherswap_Disappear_Root_01", _tx, _ty, _tz);
+PlayEffectAtPosition("RS3_FX_Skills_Void_Netherswap_Disappear_Root_01", _mx, _my, _mz);
+PlayEffect(_Target, "RS3_FX_Skills_Void_Netherswap_Disappear_Overlay_01");
+PlayEffect(_Mime, "RS3_FX_Skills_Void_Netherswap_Disappear_Overlay_01");
+CharacterSetDetached(_Target, 1);
+CharacterSetDetached(_Mime, 1);
+TeleportToPosition(_Target, _mx, _my, _mz, "", 0, 1);
+TeleportToPosition(_Mime, _tx, _ty, _tz, "Mimicry_FlankAndSwap_MimeSwappedPlaces", 0, 1);
+
+IF
+//SkillCast(_Mime, "Teleportation_MimeVault_Swap", _, _)
+StoryEvent((CHARACTERGUID)_Mime, "Mimicry_FlankAndSwap_MimeSwappedPlaces")
+AND
+GetVarObject(_Mime, "LLMIME_SwapTarget", (CHARACTERGUID)_Target)
+AND
+GetPosition(_Target, _tx, _ty, _tz)
+AND
+GetPosition(_Mime, _mx, _my, _mz)
+THEN
+CharacterSetDetached(_Target, 0);
+CharacterSetDetached(_Mime, 0);
+CharacterLookAt(_Mime, _Target, 1);
+ClearVarObject(_Mime, "LLMIME_SwapTarget");
+RemoveStatus(_Target, "LLMIME_SWAPPING");
+PlayEffectAtPosition("RS3_FX_Skills_Void_Netherswap_Reappear_01", _tx, _ty, _tz);
+PlayEffectAtPosition("RS3_FX_Skills_Void_Netherswap_Reappear_01", _mx, _my, _mz);
+CharacterStatusText(_Target, "LLMIME_StatusText_Swapped");
+
+IF
+CharacterStatusRemoved(_Target, "LLMIME_SWAPPING", _Mime)
+AND
+LeaderLib_Helper_QRY_HasStatus(_Target, "LLMIME_FLANKING")
+THEN
+RemoveStatus(_Target, "LLMIME_FLANKING");
+//END_REGION
+
 //REGION BEAM_EFFECTS
 IF
 SkillCast(_Caster, _Skill, _, _)

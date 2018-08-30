@@ -9,6 +9,8 @@ GlobalSetFlag("LeaderLog_Trace_Enabled");
 
 ProcTriggerRegisterForPlayers((TRIGGERGUID)TRIGGERGUID_MusicVolumeTrigger_LLMIME_Debug_MusicTest_80649d71-e657-4c35-be19-708559c0c60c);
 KBSECTION
+//REGION INIT
+
 IF
 GameStarted("TestLevel_LL_Mimicry",1)
 THEN
@@ -170,6 +172,7 @@ DB_LLMIME_Debug_HostPlayer(_Player);
 //DB_LLMIME_Debug_DeleteBackpack(_Backpack);
 CharacterAddSkill(_Player, "Target_Debug_KillCommand");
 CharacterAddSkill(_Player, "Target_EnemyResurrect");
+//END_REGION
 
 IF
 ObjectFlagSet("LLMIME_IsCompanion", (CHARACTERGUID)_Character, _Instance)
@@ -480,6 +483,37 @@ NOT DB_LLMIME_Debug_ObjectPosition(_Target, _Caster, _Object, _x, _y, _z);
 */
 //REGION TRACING
 IF
+CharacterStartAttackPosition(_,_,_,_,_Character)
+AND
+CharacterGetEquippedWeapon(_Character, _Weapon)
+AND
+GetStatString(_Weapon, _StatName)
+THEN
+LeaderLog_Log("DEBUG", "[LLMIME:Debug:WeaponStat] Character is using mainhand weapon with stat string [",_StatName,"].");
+
+IF
+CharacterStartAttackPosition(_,_,_,_,_Character)
+AND
+CharacterGetEquippedItem(_Character, "Shield", _Weapon)
+AND
+GetStatString(_Weapon, _StatName)
+THEN
+LeaderLog_Log("DEBUG", "[LLMIME:Debug:WeaponStat] Character is using offhand weapon with stat string [",_StatName,"].");
+
+IF
+CharacterStartAttackObject(_Defender, _AttackOwner, _Attacker)
+AND
+HasLineOfSight(_Attacker, _AttackOwner, _HasSight)
+AND
+IntegertoString(_HasSight, _SightStr)
+AND
+GetTemplate(_Defender, _DefTemplate)
+AND
+CharacterGetDisplayName(_Attacker, _, _Name)
+THEN
+LeaderLog_Log("DEBUG", "[LLMIME:Debug:CharacterStartAttackObject] Attacker [",_Name,"] has line of sight to [",_DefTemplate,"] == [",_SightStr,"].");
+
+IF
 AttackedByObject(_Target, _Owner, _Attacker, _DamageType, _DamageSource)
 AND
 GetTemplate(_Attacker, _AttackerID)
@@ -589,6 +623,133 @@ CharacterGetDisplayName(_Character, _, _Name)
 THEN
 LeaderLog_Log("DEBUG", "[LLMIME:Debug:CharacterStatusRemoved] Status [",_Status,"] removed from [",_Name,"] via [",_Cause,"].");
 //END_REGION
+
+
+//REGION SKILL_DEBUG
+IF
+CharacterUsedSkill(_Caster, _Skill, _SkillType, _SkillElement)
+AND
+CharacterGetDisplayName(_Caster, _, _Name)
+AND
+LeaderLog_QRY_Log("COMBINE","[",_Name,"] cast skill [",_Skill,"(",_SkillType,",",_SkillElement,")].")
+AND
+DB_LeaderLog_Temp_CombinedString(_LogDetails)
+THEN
+NOT DB_LeaderLog_Temp_CombinedString(_LogDetails);
+LeaderLog_Log("DEBUG", "[LLMIME:Debug:CharacterUsedSkill] ", _LogDetails);
+
+IF
+CharacterUsedSkillOnTarget(_Caster, _Target, _Skill, _SkillType, _SkillElement)
+AND
+CharacterGetDisplayName(_Caster, _, _Name)
+AND
+GetUUID(_Target, _TargetID)
+AND
+LeaderLog_QRY_Log("COMBINE","[",_Name,"] cast skill [",_Skill,"(",_SkillType,",",_SkillElement,")] on target [", _TargetID, "].")
+AND
+DB_LeaderLog_Temp_CombinedString(_LogDetails)
+THEN
+NOT DB_LeaderLog_Temp_CombinedString(_LogDetails);
+LeaderLog_Log("DEBUG", "[LLMIME:Debug:CharacterUsedSkillOnTarget] ", _LogDetails);
+
+IF
+CharacterUsedSkillAtPosition(_Caster, _XReal, _YReal, _ZReal, _Skill, _SkillType, _SkillElement)
+AND
+Integer(_XReal, _TargetX)
+AND
+Integer(_YReal, _TargetY)
+AND
+Integer(_ZReal, _TargetZ)
+AND
+GetPosition(_Caster, _XCastReal, _YCastReal, _ZCastReal)
+AND
+Integer(_XCastReal, _CastX)
+AND
+Integer(_YCastReal, _CastY)
+AND
+Integer(_ZCastReal, _CastZ)
+AND
+IntegertoString(_TargetX, _TargetXStr)
+AND
+IntegertoString(_TargetY, _TargetYStr)
+AND
+IntegertoString(_TargetZ, _TargetZStr)
+AND
+IntegertoString(_CastX, _CastXStr)
+AND
+IntegertoString(_CastY, _CastYStr)
+AND
+IntegertoString(_CastZ, _CastZStr)
+AND
+CharacterGetDisplayName(_Caster, _, _Name)
+AND
+LeaderLog_QRY_Log("COMBINE","[",_Name,"] cast skill [",_Skill,"(",_SkillType,",",_SkillElement,")] from position [")
+AND
+DB_LeaderLog_Temp_CombinedString(_SkillPrefix)
+AND
+LeaderLog_QRY_ClearCombinedString(_SkillPrefix)
+AND
+LeaderLog_QRY_Log("COMBINE",_CastXStr,",",_CastYStr,",",_CastZStr,"] to target position [")
+AND
+DB_LeaderLog_Temp_CombinedString(_CasterPosition)
+AND
+LeaderLog_QRY_ClearCombinedString(_CasterPosition)
+AND
+LeaderLog_QRY_Log("COMBINE",_TargetXStr,",",_TargetYStr,",",_TargetZStr,"].")
+AND
+DB_LeaderLog_Temp_CombinedString(_TargetPosition)
+AND
+LeaderLog_QRY_ClearCombinedString(_TargetPosition)
+THEN
+LeaderLog_Log("DEBUG", "[LLMIME:Debug:CharacterUsedSkillAtPosition] ", _SkillPrefix, _CasterPosition, _TargetPosition);
+
+IF
+CharacterUsedSkillOnZoneWithTarget(_Caster, (CHARACTERGUID)_Target, _Skill, _SkillType, _SkillElement)
+AND
+CharacterGetDisplayName(_Caster, _, _Name)
+AND
+CharacterGetDisplayName(_Target, _, _TargetName)
+AND
+GetUUID(_Caster, _CasterID)
+AND
+GetUUID(_Target, _TargetID)
+AND
+LeaderLog_QRY_Log("COMBINE"," cast skill [",_Skill,"(",_SkillType,",",_SkillElement,")] on target [",_TargetName,"](",_TargetID,").")
+AND
+DB_LeaderLog_Temp_CombinedString(_LogDetails)
+THEN
+NOT DB_LeaderLog_Temp_CombinedString(_LogDetails);
+LeaderLog_Log("DEBUG", "[LLMIME:Debug:CharacterUsedSkillOnZoneWithTarget] [",_Name,"](",_CasterID,")",_LogDetails);
+
+IF
+CharacterUsedSkillOnZoneWithTarget(_Caster, (ITEMGUID)_Target, _Skill, _SkillType, _SkillElement)
+AND
+CharacterGetDisplayName(_Caster, _, _Name)
+AND
+GetUUID(_Caster, _CasterID)
+AND
+GetUUID(_Target, _TargetID)
+AND
+LeaderLog_QRY_Log("COMBINE"," cast skill [",_Skill,"(",_SkillType,",",_SkillElement,")] on target [Item](",_TargetID,").")
+AND
+DB_LeaderLog_Temp_CombinedString(_LogDetails)
+THEN
+NOT DB_LeaderLog_Temp_CombinedString(_LogDetails);
+LeaderLog_Log("DEBUG", "[LLMIME:Debug:CharacterUsedSkillOnZoneWithTarget] [",_Name,"](",_CasterID,")",_LogDetails);
+
+IF
+SkillCast(_Caster, _Skill, _SkillType, _SkillElement)
+AND
+CharacterGetDisplayName(_Caster, _, _Name)
+AND
+LeaderLog_QRY_Log("COMBINE","[",_Name,"] cast skill [",_Skill,"(",_SkillType,",",_SkillElement,")]")
+AND
+DB_LeaderLog_Temp_CombinedString(_LogDetails)
+THEN
+NOT DB_LeaderLog_Temp_CombinedString(_LogDetails);
+LeaderLog_Log("DEBUG", "[LLMIME:Debug:SkillCast] ", _LogDetails);
+//END_REGION
+
 
 //REGION FLAG_TRACING
 IF

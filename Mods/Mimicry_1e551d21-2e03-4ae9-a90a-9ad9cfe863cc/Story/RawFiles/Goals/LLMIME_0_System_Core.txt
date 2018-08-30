@@ -700,24 +700,18 @@ THEN
 DB_NOOP(1);
 
 QRY
-LLMIME_QRY_NotSolo((CHARACTERGUID)_Mime)
+LLMIME_QRY_MimeIsSolo((CHARACTERGUID)_Mime)
 AND
 GetVarInteger(_Mime, "LeaderLib_PartyCount", _Count)
 AND
-_Count > 1
+_Count <= 1
 THEN
 DB_NOOP(1);
 
 QRY
-LLMIME_QRY_NotSolo((CHARACTERGUID)_Mime)
+LLMIME_QRY_MimeIsSolo((CHARACTERGUID)_Mime)
 AND
-LLMIME_QRY_Internal_PartyCountNotSet(_Mime)
-AND
-LeaderLib_Party_QRY_CountParties()
-AND
-GetVarInteger(_Mime, "LeaderLib_PartyCount", _Count)
-AND
-_Count > 1
+NOT GetVarInteger(_Mime, "LeaderLib_PartyCount", _)
 THEN
 DB_NOOP(1);
 

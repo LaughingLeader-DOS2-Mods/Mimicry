@@ -55,7 +55,7 @@ ON
 ACTIONS
 	CharacterEvent(_Mime, "Mimicry_InitMimeJob")
 
-EVENT Mime_Setup
+EVENT LLMIME_MimeSetup
 VARS
 	CHARACTER:_Mime
 	INT:_Size
@@ -247,6 +247,48 @@ THEN
 	CharacterApplyStatus(_Mime, LLMIME_COMBAT_MUTED, 1, 1)
 ENDIF
 
+EVENT Mime_Combat_SkillMimicAP
+VARS
+	CHARACTER:_Mime
+	FLOAT:_CurrentAP
+	FLOAT:_APStart
+	FLOAT:_APRec
+	FLOAT:_TargetAP
+	INT:_APBonus
+	STRING:_LogMessage
+ON
+	OnCharacterEvent(_Mime, "Mimicry_Events_CheckMimickingAP")
+ACTIONS
+IF "c1&c2&c3&c4"
+	IsTagged(_Mime, "Mimicry_Mime")
+	CharacterGetStat(_CurrentAP, _Mime, ActionPoints)
+	CharacterGetStat(_APStart, _Mime, APStart)
+	CharacterGetStat(_APRec, _Mime, APRecovery)
+THEN
+	Set(_TargetAP, _APStart)
+	Add(_TargetAP, _APRec)
+	IF "c1"
+		IsLessThen(_CurrentAP, _TargetAP)
+	THEN
+		Cast(_APBonus, _TargetAP)
+		Subtract(_APBonus, _CurrentAP)
+		IF "c1"
+			IsGreaterThen(_APBonus, 0)
+		THEN
+			CharacterAddActionPoints(_Mime, _APBonus)
+			IF "c1"
+				HasGlobalFlag("LeaderLog_Debug_Enabled")
+			THEN
+				Print(_LogMessage, "[Mimicry:MainGameScript:MimeAP] Added ([1]) AP to Mime after mimicking. APStart([2]) APRecovery([3])", _APBonus, _APStart, _APRec)
+				SetVar(_Mime, "LeaderLog_Message", _LogMessage)
+				CharacterEvent(_Mime, "LeaderLog_Commands_Log")
+			ENDIF
+		ENDIF
+	ENDIF
+ENDIF
+
+//REGION DEBUG
+/*
 EVENT LLMIME_TestSurfaceFinder
 VARS
     CHARACTER:_Character
@@ -284,3 +326,30 @@ DO
 	ENDIF
 	Add(_SurfaceCount, 1)
 ENDWHILE
+*/
+
+/*
+EVENT LLMIME_Debug_TraceWeaponStat
+VARS
+	CHARACTER:_Char
+	ITEM:_MainWeapon
+	FIXEDSTRING:_ItemType
+	ITEMTEMPLATE:_Template
+	STRING:_Message
+ON
+	OnCharacterStartAttackPosition(_, _, _Char)
+	OnCharacterStartAttackObject(_, _, _, _Char)
+ACTIONS
+IF "c1&c2&(c3|c4)"
+	HasGlobalFlag("LeaderLog_Debug_Enabled")
+	CharacterGetEquippedItem(_Char, "Weapon", _MainWeapon)
+	ItemGetItemType(_MainWeapon, _ItemType)
+	ItemGetTemplate(_MainWeapon, _Template)
+THEN
+	Print(_Message, "[Mimicry:MainGameScript:WeaponStat] Type([1]) Template([2])", _ItemType, _Template)
+	SetVar(_Char, "LeaderLog_Message", _Message)
+	CharacterEvent(_Char, "LeaderLog_Commands_Log")
+ENDIF
+*/
+
+//END_REGION

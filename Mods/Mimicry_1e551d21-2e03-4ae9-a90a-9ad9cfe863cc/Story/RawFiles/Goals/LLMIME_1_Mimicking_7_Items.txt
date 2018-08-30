@@ -5,6 +5,40 @@ INITSECTION
 //DB_LLMIME_Mimicking_Items_DelayTimer(_TimerName, _Caster, _Template)
 KBSECTION
 //REGION ITEM_TRACKING
+QRY
+LLMIME_Mimicking_QRY_ItemIsSafeForUndead((CHARACTERGUID)_Caster, (CHARACTERGUID)_Mime, (ITEMGUID)_Item, (STRING)_Template)
+AND
+NOT QRY_IsTrueUndead(_Mime)
+THEN
+DB_NOOP(1);
+
+QRY
+LLMIME_Mimicking_QRY_ItemIsSafeForUndead((CHARACTERGUID)_Caster, (CHARACTERGUID)_Mime, (ITEMGUID)_Item, (STRING)_Template)
+AND
+QRY_IsTrueUndead(_Mime)
+AND
+NOT QRY_IsTrueUndead(_Caster)
+AND
+NOT LLMIME_Mimicking_QRY_ItemWillHarmUndead(_Item, _Template)
+THEN
+DB_NOOP(1);
+
+QRY
+LLMIME_Mimicking_QRY_ItemWillHarmUndead((ITEMGUID)_Item, (STRING)_Template)
+AND
+IsTagged(_Item, "FOOD", 1)
+THEN
+DB_NOOP(1);
+
+QRY
+LLMIME_Mimicking_QRY_ItemWillHarmUndead((ITEMGUID)_Item, (STRING)_Template)
+AND
+IsTagged(_Item, "HEALING_POTION", 1)
+AND
+IsTagged(_Item, "POISONED", 0)
+THEN
+DB_NOOP(1);
+
 IF
 CharacterUsedItem(_Caster, _Item)
 AND
@@ -15,6 +49,9 @@ AND
 DB_LLMIME_Mimicking_MimicNextAction(_Mime)
 AND
 LLMIME_Mimicking_QRY_CanMimicCharacterWithItem(_Caster, _Mime, _Item)
+AND
+// Don't copy healing potions if the caster is non-undead, and the mime is undead
+LLMIME_Mimicking_QRY_ItemIsSafeForUndead(_Caster, _Mime, _Item, _Template)
 THEN
 LeaderLog_Log("DEBUG", "[LLMIME:Mime:CharacterUsedItem] Queueing up next item mimic [",_Template,"] on mime.");
 LLMIME_Mimicking_QueueNextSelfAction(_Mime, _Caster, _Template, "Item");
