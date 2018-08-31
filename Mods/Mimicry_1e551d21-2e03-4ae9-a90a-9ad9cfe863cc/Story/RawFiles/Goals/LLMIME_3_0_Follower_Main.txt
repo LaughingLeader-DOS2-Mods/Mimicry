@@ -484,7 +484,7 @@ ObjectIsOnStage(_Mime, 1)
 AND
 LLMIME_QRY_CharacterIsAMime(_Mime)
 AND
-GetVarInteger(_Mime, "LLMIME_Initialized", 1)
+GetVarInteger(_Mime, "LLMIME_Follower_Initialized", 1)
 THEN
 DB_NOOP(1);
 
@@ -517,7 +517,7 @@ LLMIME_Follower_SummonFollower(_Char, _Item);
 PROC
 LLMIME_Follower_Internal_RefreshIfNeeded((CHARACTERGUID)_Mime)
 AND
-GetVarInteger(_Mime, "LLMIME_InitialRefresh", 1)
+GetVarInteger(_Mime, "LLMIME_Follower_InitialRefresh", 1)
 AND
 NOT LLMIME_QRY_CharacterIsAMime(_Mime)
 THEN
@@ -527,7 +527,7 @@ LLMIME_RefreshMask(_Mime, 50);
 PROC
 LLMIME_Follower_Internal_RefreshIfNeeded((CHARACTERGUID)_Mime)
 AND
-NOT GetVarInteger(_Mime, "LLMIME_InitialRefresh", 1)
+NOT GetVarInteger(_Mime, "LLMIME_Follower_InitialRefresh", 1)
 THEN
 LeaderLog_Log("DEBUG", "[LLMIME:Follower:Internal:RefreshIfNeeded] Mime follower is not initialized. Re-initializing");
 SetStoryEvent(_Mime, "Mimicry_Follower_ReInitialize");
@@ -634,7 +634,7 @@ ObjectClearFlag(_Mime, "Mimicry_MimeFollowerJustSummoned");
 
 //REGION RECRUITMENT_EVENTS
 IF
-CharacterCharacterEvent((CHARACTERGUID)_Owner, (CHARACTERGUID)_Mime, "LeaderLib_Events_FollowerRecruited")
+CharacterCharacterEvent((CHARACTERGUID)_Owner, (CHARACTERGUID)_Mime, "Mimicry_Events_CheckMimickingAP")
 AND
 IsTagged(_Mime, "LLMIME_MimeFollower", 1)
 AND

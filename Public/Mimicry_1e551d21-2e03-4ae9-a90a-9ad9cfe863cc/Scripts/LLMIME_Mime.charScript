@@ -1,26 +1,9 @@
 INIT
 	CHARACTER:__Me
-	INT:%LLMIME_Initialized = 0
-	EXTERN FLOAT:%BrawlerStanceInfluenceStrength = 50.0
-	INT:%LLMIME_InitialRefresh = 0
-	FIXEDSTRING:%RefreshTimerName = ""
+	INT:%LLMIME_Follower_Initialized = 0
+	INT:%LLMIME_Follower_InitialRefresh = 0
+	FIXEDSTRING:%LLMIME_Follower_RefreshTimerName = ""
 EVENTS
-
-/*
-EVENT Init_Vars
-ON
-	OnItemEvent(_, "LeaderLib_Initialized")
-ACTIONS
-	Set(%LLMIME_InitialRefresh, 0)
-*/
-
-/*
-EVENT Region_ReInit
-ON
-	OnRegionEntered(__Me, _, _)
-ACTIONS
-	CharacterEvent(__Me, "Mimicry_Follower_ReInitialize")
-*/
 
 EVENT LLMIME_MimeFollower_Init_Event
 VARS
@@ -40,14 +23,13 @@ THEN
 	SetFlag(__Me, "Mimicry_MimeIsUnarmed")
 ENDIF
 IF "c1"
-	IsEqual(%LLMIME_InitialRefresh, 0)
+	IsEqual(%LLMIME_Follower_InitialRefresh, 0)
 THEN
-	CallFunction("Mimicry_MimeFollower_ActivateBrawlerStance")
 	CharacterEvent(__Me, "Mimicry_InitMimeJob")
-	Set(%LLMIME_InitialRefresh, 1)
+	Set(%LLMIME_Follower_InitialRefresh, 1)
 ENDIF
 IF "c1"
-	IsEqual(%LLMIME_Initialized, 0)
+	IsEqual(%LLMIME_Follower_Initialized, 0)
 THEN
 	CharacterEvent(__Me, "Mimicry_RegisterMimeFollower")
 	IF "!c1"
@@ -57,46 +39,15 @@ THEN
 	ENDIF
 	//SetVar(__Me, "LeaderLib_LogMessage", STRING:"[LLMIME:LLMIME_Mime.charScript:Init_Register] Activated.")
 	//CharacterEvent(__Me, "LeaderLib_DebugLog")
-	Set(%LLMIME_Initialized, 1)
-ENDIF
-
-EVENT LLMIME_MimeFollower_BrawlerStance_Activate
-ON
-	OnFunction("Mimicry_MimeFollower_ActivateBrawlerStance")
-ACTIONS
-IF "!c1"
-	CharacterHasStatus(__Me, LLMIME_BRAWLER_STANCE_CON)
-THEN
+	Set(%LLMIME_Follower_Initialized, 1)
 	CharacterApplyStatus(__Me, LLMIME_BRAWLER_STANCE_CON, -1, 1)
 ENDIF
 
-EVENT LLMIME_MimeFollower_Apply_BrawlerStance
-ON
-	OnCharacterEvent(__Me, "Mimicry_MimickedWeaponsRemoved")
-	OnCharacterEvent(__Me, "Mimicry_Events_OnMimeFollowerRevived")
-	OnCharacterStatusApplied(__Me, "LLMIME_MIME")
-ACTIONS
-	CallFunction("Mimicry_MimeFollower_ActivateBrawlerStance")
-
 EVENT LLMIME_MimeFollower_Refresh_Timer
 ON
-	OnTimer(%RefreshTimerName)
+	OnTimer(%LLMIME_Follower_RefreshTimerName)
 ACTIONS
 	CharacterEvent(__Me, "LeaderLib_Commands_RefreshEquipment_Delayed")
-
-EVENT LLMIME_MimeFollower_Mimicking_Applied
-ON
-	OnCharacterStatusApplied(__Me, LLMIME_MIMICKING)
-ACTIONS
-	SetPriority("Mimic_Attack_Character", 999)
-	SetPriority("Mimic_Attack_Item", 999)
-
-EVENT LLMIME_MimeFollower_Mimicking_Removed
-ON
-	OnCharacterStatusRemoved(__Me, LLMIME_MIMICKING)
-ACTIONS
-	SetPriority("Mimic_Attack_Character", -1)
-	SetPriority("Mimic_Attack_Item", -1)
 	
 EVENT LLMIME_MimeFollower_Owner_Entered_Combat
 VARS
@@ -155,3 +106,15 @@ ON
 ACTIONS
 	ItemEvent(_Item, "LLMIME_Events_OnMimeFollowerTreasureRemoved")
 	ItemEvent(_Item, "LeaderLib_Commands_RemoveItem")
+	
+EVENT LLMIME_MimeFollower_JoinedParty
+VARS
+	CHARACTER:_Owner
+ON
+	OnCharacterCharacterEvent(_Owner, __Me, "LeaderLib_Events_FollowerRecruited")
+ACTIONS
+IF "c1"
+	HasGlobalFlag("Mimicry_Mimic_CombatOnlyDisabled")
+THEN
+	CharacterEvent(__Me, "LLMIME_Events_RequestMimicking")
+ENDIF

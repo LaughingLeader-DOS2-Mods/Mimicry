@@ -110,30 +110,32 @@ DB_CustomUseItemResponse(_Character, _Item, 0);
 
 //REGION MIME_FOLLOWER
 PROC
-ProcBlockUseOfItem(_Character, _Item)
+ProcBlockUseOfItem(_Mime, _Item)
 AND
 IsTagged(_Item, "BOOK", 1)
 AND
-IsTagged(_Character, "LLMIME_MimeFollower", 1)
+IsTagged(_Mime, "LLMIME_MimeFollower", 1)
 THEN
-CharacterStatusText(_Character, "LLMIME_StatusText_SkillbookBlockedForFollower");
-DB_CustomUseItemResponse(_Character, _Item, 0);
+CharacterStatusText(_Mime, "LLMIME_StatusText_SkillbookBlockedForFollower");
+DB_CustomUseItemResponse(_Mime, _Item, 0);
 
-//Prevent general item use with the Mime follower
+//Prevent general item useage with the Mime follower
 PROC
-ProcBlockUseOfItem(_Character, _Item)
+ProcBlockUseOfItem(_Mime, _Item)
 AND
-IsTagged(_Character, "LLMIME_MimeFollower", 1)
+IsTagged(_Mime, "LLMIME_MimeFollower", 1)
 AND
-NOT DB_CustomUseItemResponse(_Character, _Item, _)
+NOT DB_CustomUseItemResponse(_Mime, _Item, _)
+AND
+NOT LLMIME_Mimicking_QRY_IsMimicking(_Mime)
 AND
 ItemIsInInventory(_Item, 1)
 AND
-NOT LLMIME_Mimicking_QRY_IsMimicking(_Character)
+NOT LLMIME_Mimicking_QRY_IsMimicking(_Mime)
 AND
-NOT GetInventoryOwner(_Item, _Character)
+NOT GetInventoryOwner(_Item, _Mime)
 THEN
-DB_CustomUseItemResponse(_Character, _Item, 0);
+DB_CustomUseItemResponse(_Mime, _Item, 0);
 //END_REGION
 
 //REGION MUSIC_BOX_USAGE

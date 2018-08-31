@@ -810,7 +810,7 @@ LLMIME_Mimicking_OnMimicSuccess((CHARACTERGUID)_Mime, (STRING)_Action, (STRING)_
 THEN
 LeaderLog_Log("DEBUG", "[LLMIME:Mime:OnMimicSuccess] Mime successfully mimicked [",_ActionType,"][",_Action,"].");
 SetStoryEvent(_Mime, "LLMIME_Events_MimickingDone");
-LLMIME_Mimicking_MimicDone(_Action, _ActionType);
+LLMIME_Mimicking_MimicDone(_Mime, _Action, _ActionType);
 
 PROC
 LLMIME_Mimicking_OnMimicSuccess((CHARACTERGUID)_Mime, (STRING)_Action, (STRING)_ActionType)
@@ -830,16 +830,22 @@ THEN
 NOT DB_LLMIME_Mimicking_Temp_CasterWeapons(_Caster, _Mainhand, _Offhand, _Action, _ActionType);
 
 PROC
-LLMIME_Mimicking_MimicDone((STRING)_Action, (STRING)_ActionType)
+LLMIME_Mimicking_MimicDone((CHARACTERGUID)_Mime, (STRING)_Action, (STRING)_ActionType)
 AND
 DB_LLMIME_Mimicking_Temp_CasterWeapons(_Caster, _Mainhand, _Offhand, _Action, _ActionType)
 THEN
 NOT DB_LLMIME_Mimicking_Temp_CasterWeapons(_Caster, _Mainhand, _Offhand, _Action, _ActionType);
 
+PROC
+LLMIME_Mimicking_MimicDone((CHARACTERGUID)_Mime, (STRING)_Action, "Skill")
+AND
+CharacterIsInCombat(_Mime, 1)
+THEN
+SetStoryEvent(_Mime, "Mimicry_Events_CheckMimickingAP");
+
 IF
 StoryEvent((CHARACTERGUID)_Mime, "LLMIME_Events_MimickingDone")
 THEN
-SetStoryEvent(_Mime, "Mimicry_Events_CheckMimickingAP");
 ObjectClearFlag(_Mime, "Mimicry_IsMimicking");
 
 IF
@@ -1106,62 +1112,15 @@ THEN
 DB_NOOP(1);
 
 PROC
-LLMIME_Mimicking_StartDeleteOneTimeUseWeaponsTimer((CHARACTERGUID)_Mime, (STRING)_Action, "Skill")
-THEN
-LLMIME_Mimicking_Internal_CreateUseWeaponsTimer(_Mime, _Action, "Skill", 4000);
-
-PROC
-LLMIME_Mimicking_StartDeleteOneTimeUseWeaponsTimer((CHARACTERGUID)_Mime, (STRING)_Action, "Attack")
-THEN
-LLMIME_Mimicking_Internal_CreateUseWeaponsTimer(_Mime, _Action, "Attack", 1500);
-
-PROC
 LLMIME_Mimicking_StartDeleteOneTimeUseWeaponsTimer((CHARACTERGUID)_Mime, (STRING)_Action, (STRING)_ActionType)
 AND
-_ActionType != "Attack"
-AND
-_ActionType != "Skill"
-THEN
-LLMIME_Mimicking_Internal_CreateUseWeaponsTimer(_Mime, _Action, _ActionType, 500);
-
-PROC
-LLMIME_Mimicking_Internal_CreateUseWeaponsTimer((CHARACTERGUID)_Mime, (STRING)_Action, (STRING)_ActionType, (INTEGER)_Delay)
-AND
-NOT DB_LLMIME_Mimicking_DeleteOneTimeUseWeaponsTimer(_, _Mime, _Action, _ActionType)
-AND
-GetUUID(_Mime, _ID)
-AND
-StringConcatenate(_ActionType, "_", _Str1)
-AND
-StringConcatenate(_Str1, _Action, _Str2)
-AND
-StringConcatenate(_Str2, "_", _Str3)
-AND
-StringConcatenate(_Str3, _ID, _TimerID)
-AND
-StringConcatenate("LLMIME_Timers_DeleteOneTimeUseWeapons_", _TimerID, _TimerName)
+StringConcatenate("LLMIME_Timers_DeleteMimickedWeapons_", _Action, _TimerName)
 THEN
 DB_LLMIME_Mimicking_DeleteOneTimeUseWeaponsTimer(_TimerName, _Mime, _Action, _ActionType);
-TimerLaunch(_TimerName, _Delay);
+ProcObjectTimer(_Mime, _TimerName, 1980);
 
-IF
-SkillCast(_Mime, _Action, _, _)
-AND
-DB_LLMIME_Mimicking_DeleteOneTimeUseWeaponsTimer(_TimerName, _Mime, _Action, _ActionType)
-THEN
-TimerCancel(_TimerName);
-TimerLaunch(_TimerName, 2000);
-
-IF
-CharacterStartAttackObject(_, _, _Mime)
-AND
-DB_LLMIME_Mimicking_DeleteOneTimeUseWeaponsTimer(_TimerName, _Mime, _Action, "Attack")
-THEN
-TimerCancel(_TimerName);
-TimerLaunch(_TimerName, 1000);
-
-IF
-TimerFinished(_TimerName)
+PROC
+ProcObjectTimerFinished((CHARACTERGUID)_Mime, _TimerName)
 AND
 DB_LLMIME_Mimicking_DeleteOneTimeUseWeaponsTimer(_TimerName, _Mime, _Action, _ActionType)
 THEN

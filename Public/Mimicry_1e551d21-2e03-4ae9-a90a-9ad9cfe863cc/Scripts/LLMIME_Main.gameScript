@@ -33,7 +33,7 @@ ACTIONS
 	CallFunction("Mimicry_InitStatusList")
 	IterateCharacters("LLMIME_Iterator_CheckUnarmed", null, null, "Mimicry_Mime")
 
-EVENT Mime_InitIterate
+EVENT LLMIME_Mime_InitIterate
 VARS
 	CHARACTER:_Mime
 ON
@@ -41,13 +41,13 @@ ON
 ACTIONS
 	CharacterEvent(_Mime, "Mimicry_MimeInitialized")
 	
-EVENT CheckMaskWearers
+EVENT LLMIME_CheckMaskWearers
 ON
 	OnItemEvent(_, "LeaderLib_Events_OnDefaultEventFlowComplete")
 ACTIONS
 	IterateCharacters("LLMIME_Iterator_InitMime", null, null, "Mimicry_WearingMask")
 
-EVENT Mime_MaskWearers_InitMimeJob
+EVENT LLMIME_MaskWearers_InitMimeJob
 VARS
 	CHARACTER:_Mime
 ON
@@ -110,7 +110,7 @@ ENDIF
 	SetVar(_Mime, "LeaderLib_LogMessage", _Message)
 	CharacterEvent(_Mime, "LeaderLib_DebugLog")
 	*/
-EVENT Mime_Remove
+EVENT LLMIME_Mime_Remove
 VARS
 	CHARACTER:_Mime
 ON
@@ -127,7 +127,7 @@ ENDIF
 	CharacterEvent(_Mime, "Mimicry_MimeJobRemoved")
 	CharacterRemoveStatus(_Mime, LLMIME_SOURCE_REGENERATION_HIDDEN, null, 0)
 	
-EVENT Apply_Mimicking_Start
+EVENT LLMIME_Apply_Mimicking_Start
 ON
 	OnGlobalFlagSet("Mimicry_Mimic_CombatOnlyDisabled")
 ACTIONS
@@ -135,7 +135,7 @@ ACTIONS
 	//CharacterApplyStatus(LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9, LLMIME_MIMICKING, -1)
 
 
-EVENT Apply_Mimicking
+EVENT LLMIME_Apply_Mimicking
 VARS
 	CHARACTER:_Mime
 ON
@@ -143,7 +143,7 @@ ON
 ACTIONS
 	CharacterEvent(_Mime, "LLMIME_Events_RequestMimicking")
 	
-EVENT Apply_Mimicking_CombatEnded
+EVENT LLMIME_Apply_Mimicking_CombatEnded
 VARS
 	CHARACTER:_Mime
 ON
@@ -155,13 +155,13 @@ THEN
 	CharacterEvent(_Mime, "LLMIME_Events_RequestMimicking")
 ENDIF
 
-EVENT Remove_Mimicking_Start
+EVENT LLMIME_Remove_Mimicking_Start
 ON
 	OnGlobalFlagCleared("Mimicry_Mimic_CombatOnlyDisabled")
 ACTIONS
 	IterateCharacters("LLMIME_Iterator_RemoveMimicking", null, null, "Mimicry_Mime")
 
-EVENT Remove_Mimicking
+EVENT LLMIME_Remove_Mimicking
 VARS
 	CHARACTER:_Mime
 ON
@@ -175,7 +175,48 @@ THEN
 	CharacterEvent(_Mime, "LLMIME_Events_RemoveMimicking")
 ENDIF
 
-EVENT Dummy_Iterate_NearbyItems
+EVENT LLMIME_CanSeeAttackTarget_Character
+VARS
+	CHARACTER:_Mime
+	CHARACTER:_Target
+ON
+	OnCharacterCharacterEvent(_Mime, _Target, "LLMIME_Events_Mimicking_CheckAttackTarget")
+ACTIONS
+IF "(c1&c2)|(!c3&c4)"
+	CharacterHasRangedWeapon(_Mime)
+	CharacterCanHitTargetWithRangedWeapon(_Mime, _Target)
+	CharacterHasRangedWeapon(_Mime)
+	CharacterInWeaponRange(_Mime, _Target)
+THEN
+	CharacterCharacterEvent(_Mime, _Target, "LLMIME_Events_Mimicking_UseBasicAttackOnTarget")
+ELSE
+	CharacterCharacterEvent(_Mime, _Target, "LLMIME_Events_Mimicking_UseBasicAttackSkillOnTarget")
+ENDIF
+
+EVENT LLMIME_CanSeeAttackTarget_Item
+VARS
+	CHARACTER:_Mime
+	ITEM:_Target
+	FLOAT:_MaxRange
+	FLOAT:_Dist
+ON
+	OnCharacterItemEvent(_Mime, _Target, "LLMIME_Events_Mimicking_CheckAttackTarget")
+ACTIONS
+IF "(c1&c2)|(!c3&c4&c5&(c6|c7))"
+	CharacterHasRangedWeapon(_Mime)
+	CharacterCanHitTargetWithRangedWeapon(_Mime, _Target)
+	CharacterHasRangedWeapon(_Mime)
+	CharacterGetWeaponRange(_, _MaxRange, _Mime)
+	GetInnerDistance(_Dist, _Mime, _Target)
+	IsLessThen(_Dist, _MaxRange)
+	IsEqual(_Dist, _MaxRange)
+THEN
+	CharacterItemEvent(_Mime, _Target, "LLMIME_Events_Mimicking_UseBasicAttackOnTarget")
+ELSE
+	CharacterItemEvent(_Mime, _Target, "LLMIME_Events_Mimicking_UseBasicAttackSkillOnTarget")
+ENDIF
+
+EVENT LLMIME_Dummy_Iterate_NearbyItems
 VARS
 	CHARACTER:_Dummy
 	FIXEDSTRING:_EventName
@@ -192,7 +233,7 @@ THEN
 	SetVar(_Dummy, "LLMIME_Dummy_IterationEvent", %EmptyFixedStr)
 ENDIF
 
-EVENT Dummy_OnIterate
+EVENT LLMIME_Dummy_OnIterate
 VARS
 	ITEM:_Item
 	FIXEDSTRING:_EventName
@@ -203,7 +244,7 @@ ACTIONS
 	Cast(_EventNameStr, _EventName)
 	ItemEvent(_Item, _EventNameStr)
 	
-EVENT Mime_ApplySourceRegen
+EVENT LLMIME_Mime_ApplySourceRegen
 VARS
 	CHARACTER:_Mime
 	FLOAT:_Level
@@ -222,7 +263,7 @@ THEN
 	CharacterApplyStatus(_Mime, LLMIME_SOURCE_REGENERATION_HIDDEN, %SourceRegenDuration, 0)
 ENDIF
 
-EVENT Mime_Combat_Muted_Apply
+EVENT LLMIME_Mime_Combat_Muted_Apply
 VARS
 	CHARACTER:_Mime
 ON
@@ -234,7 +275,7 @@ THEN
 	CharacterApplyStatus(_Mime, LLMIME_COMBAT_MUTED, -1, 1)
 ENDIF
 	
-EVENT Mime_Combat_Muted_Remove
+EVENT LLMIME_Mime_Combat_Muted_Remove
 VARS
 	CHARACTER:_Mime
 ON
@@ -247,7 +288,7 @@ THEN
 	CharacterApplyStatus(_Mime, LLMIME_COMBAT_MUTED, 1, 1)
 ENDIF
 
-EVENT Mime_Combat_SkillMimicAP
+EVENT LLMIME_Mime_Combat_SkillMimicAP
 VARS
 	CHARACTER:_Mime
 	FLOAT:_CurrentAP
@@ -279,7 +320,7 @@ THEN
 			IF "c1"
 				HasGlobalFlag("LeaderLog_Debug_Enabled")
 			THEN
-				Print(_LogMessage, "[Mimicry:MainGameScript:MimeAP] Added ([1]) AP to Mime after mimicking. APStart([2]) APRecovery([3])", _APBonus, _APStart, _APRec)
+				Print(_LogMessage, "[Mimicry:MainGameScript:MimeAP] Added ([1]) AP to Mime after mimicking. Current([2]) APStart([3]) APRecovery([4])", _APBonus, _CurrentAP, _APStart, _APRec)
 				SetVar(_Mime, "LeaderLog_Message", _LogMessage)
 				CharacterEvent(_Mime, "LeaderLog_Commands_Log")
 			ENDIF

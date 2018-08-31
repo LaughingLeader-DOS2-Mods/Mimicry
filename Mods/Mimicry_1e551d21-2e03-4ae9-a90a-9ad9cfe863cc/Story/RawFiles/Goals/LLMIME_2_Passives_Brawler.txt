@@ -556,13 +556,6 @@ ItemIsDestroyed((ITEMGUID)_Target, 0)
 THEN
 DB_NOOP(1);
 
-/*
-IF
-SkillCast(_Mime, "Target_LLMIME_ApplyUnarmedBonusDamage", _, _)
-THEN
-SetStoryEvent(_Mime, "Mimicry_Events_CheckMimickingAP");
-*/
-
 IF
 CharacterDied(_Mime)
 AND
