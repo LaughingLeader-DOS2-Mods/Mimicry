@@ -836,12 +836,14 @@ DB_LLMIME_Mimicking_Temp_CasterWeapons(_Caster, _Mainhand, _Offhand, _Action, _A
 THEN
 NOT DB_LLMIME_Mimicking_Temp_CasterWeapons(_Caster, _Mainhand, _Offhand, _Action, _ActionType);
 
+/*
 PROC
 LLMIME_Mimicking_MimicDone((CHARACTERGUID)_Mime, (STRING)_Action, "Skill")
 AND
 CharacterIsInCombat(_Mime, 1)
 THEN
 SetStoryEvent(_Mime, "Mimicry_Events_CheckMimickingAP");
+*/
 
 IF
 StoryEvent((CHARACTERGUID)_Mime, "LLMIME_Events_MimickingDone")

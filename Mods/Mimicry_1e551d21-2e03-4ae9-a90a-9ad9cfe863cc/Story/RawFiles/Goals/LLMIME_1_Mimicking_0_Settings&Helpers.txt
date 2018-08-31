@@ -29,13 +29,15 @@ THEN
 DB_LLMIME_Mimicking_Blacklist_SkillTypes("Path", "Mimicry_Mimic_SkillType_Path_Enabled", 1);
 DB_LLMIME_Mimicking_Blacklist_SkillTypes("Summon", "Mimicry_Mimic_SkillType_Summons_Enabled", 1);
 DB_LLMIME_Mimicking_Blacklist_SkillElements("Shout", ""); // Special type shout skills, typically used for toggle abilities in mods
-DB_LLMIME_Mimicking_Blacklist_Skills("Shout_FavourableWind");
 DB_LLMIME_Mimicking_Blacklist_Skills("Target_LLMIME_MimicAttack");
 DB_LLMIME_Mimicking_Blacklist_Skills("Shout_LLMIME_ReturnToOwner");
 DB_LLMIME_Mimicking_Blacklist_Skills("Shout_LLMIME_BrawlerStance");
 //Source skills
 DB_LLMIME_Mimicking_Blacklist_Skills("Target_Challenge");
 DB_LLMIME_Mimicking_Blacklist_Skills("Projectile_LLMIME_FinalWish");
+//DOS2 Skills
+DB_LLMIME_Mimicking_Blacklist_Skills("Shout_FavourableWind");
+DB_LLMIME_Mimicking_Blacklist_Skills("Target_ElementalArrowheads");
 //Summon Infusions
 DB_LLMIME_Mimicking_Blacklist_Skills("Target_ElectricInfusion");
 DB_LLMIME_Mimicking_Blacklist_Skills("Target_IceInfusion");
@@ -85,7 +87,7 @@ DB_LLMIME_Mimicking_Blacklist_WeaponCopy_IgnoreSkillsWith("_Grenade_");
 QRY
 LLMIME_Mimicking_Internal_QRY_VersionNeedsUpdating((STRING)_Version)
 AND
-_Version == "0.9.0.0"
+_Version == "1.0.1.0"
 THEN
 DB_NOOP(1);
 

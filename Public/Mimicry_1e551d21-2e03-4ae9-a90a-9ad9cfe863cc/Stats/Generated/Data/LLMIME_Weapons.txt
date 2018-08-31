@@ -48,7 +48,7 @@ type "Weapon"
 using "_LLMIME_BrawlerFist_Base"
 data "Requirements" "Finesse 0"
 
-new entry "_Boost_LLMIME_BrawlerFist_DamageEnhancement"
+new entry "_Boost_LLMIME_BrawlerFist_PiercingDamageSmall"
 type "Weapon"
 using "_BOOSTS_Weapon"
 data "Damage Type" "Piercing"

@@ -44,22 +44,22 @@
                         <node id="EquipmentProperty">
                             <attribute id="RaceName" value="Undead_Human" type="22" />
                             <attribute id="PreviewEquipmentSet" value="Class_LLMIME_Mime_Preview" type="22" />
-                            <attribute id="StartingEquipmentSet" value="Class_LLMIME_Mime_Start" type="22" />
+                            <attribute id="StartingEquipmentSet" value="Class_LLMIME_Mime_Start_Undead" type="22" />
                         </node>
                         <node id="EquipmentProperty">
                             <attribute id="RaceName" value="Undead_Dwarf" type="22" />
                             <attribute id="PreviewEquipmentSet" value="Class_LLMIME_Mime_Preview" type="22" />
-                            <attribute id="StartingEquipmentSet" value="Class_LLMIME_Mime_Start" type="22" />
+                            <attribute id="StartingEquipmentSet" value="Class_LLMIME_Mime_Start_Undead" type="22" />
                         </node>
                         <node id="EquipmentProperty">
                             <attribute id="RaceName" value="Undead_Elf" type="22" />
                             <attribute id="PreviewEquipmentSet" value="Class_LLMIME_Mime_Preview" type="22" />
-                            <attribute id="StartingEquipmentSet" value="Class_LLMIME_Mime_Start" type="22" />
+                            <attribute id="StartingEquipmentSet" value="Class_LLMIME_Mime_Start_Undead" type="22" />
                         </node>
                         <node id="EquipmentProperty">
                             <attribute id="RaceName" value="Undead_Lizard" type="22" />
                             <attribute id="PreviewEquipmentSet" value="Class_LLMIME_Mime_Preview" type="22" />
-                            <attribute id="StartingEquipmentSet" value="Class_LLMIME_Mime_Start" type="22" />
+                            <attribute id="StartingEquipmentSet" value="Class_LLMIME_Mime_Start_Undead" type="22" />
                         </node>
                     </children>
                 </node>

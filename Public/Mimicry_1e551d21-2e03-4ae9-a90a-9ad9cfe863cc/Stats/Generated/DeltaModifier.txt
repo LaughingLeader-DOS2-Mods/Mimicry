@@ -1,28 +1,52 @@
-new deltamod "Boost_LLMIME_BrawlerFist_Boost1"
+new deltamod "Boost_LLMIME_BrawlerFist_OneHanded"
 param "BoostType" "ItemCombo"
 param "Frequency" "1"
 param "ModifierType" "Weapon"
 new boost "_Boost_Weapon_Ability_OneHanded",1
 
-new deltamod "Boost_LLMIME_BrawlerFist_Boost2"
+new deltamod "Boost_LLMIME_BrawlerFist_CritChanceSmall"
 param "BoostType" "ItemCombo"
 param "Frequency" "1"
 param "ModifierType" "Weapon"
-new boost "_Boost_Weapon_Secondary_CriticalChance_Medium",1
+new boost "_Boost_Weapon_Secondary_CriticalChance",1
 
-new deltamod "Boost_LLMIME_BrawlerFist_Boost3"
+new deltamod "Boost_LLMIME_BrawlerFist_PiercingDamageSmall"
 param "BoostType" "ItemCombo"
 param "Frequency" "1"
 param "ModifierType" "Weapon"
-new boost "_Boost_LLMIME_BrawlerFist_DamageEnhancement",1
+new boost "_Boost_LLMIME_BrawlerFist_PiercingDamageSmall",1
 
-new deltamod "Boost_LLMIME_BrawlerFist_Boost4"
+new deltamod "Boost_LLMIME_BrawlerFist_CritDamageSmall"
 param "BoostType" "ItemCombo"
 param "Frequency" "1"
 param "ModifierType" "Weapon"
 new boost "_Boost_Weapon_Secondary_CriticalModifier_Small",1
 
-new deltamod "Boost_LLMIME_BrawlerFist_Boost5"
+new deltamod "Boost_LLMIME_BrawlerFist_WarfareBoost"
+param "BoostType" "ItemCombo"
+param "Frequency" "1"
+param "ModifierType" "Weapon"
+new boost "_Boost_Weapon_Ability_WarriorLore",1
+
+new deltamod "Boost_LLMIME_BrawlerFist_ScoundrelBoost"
+param "BoostType" "ItemCombo"
+param "Frequency" "1"
+param "ModifierType" "Weapon"
+new boost "_Boost_Weapon_Ability_RogueLore",1
+
+new deltamod "Boost_LLMIME_BrawlerFist_LifeStealBoost"
+param "BoostType" "ItemCombo"
+param "Frequency" "1"
+param "ModifierType" "Weapon"
+new boost "_Boost_Weapon_Ability_Necromancy",1
+
+new deltamod "Boost_LLMIME_BrawlerFist_CritDamageLarge"
+param "BoostType" "ItemCombo"
+param "Frequency" "1"
+param "ModifierType" "Weapon"
+new boost "_Boost_Weapon_Secondary_CriticalModifier_Large",1
+
+new deltamod "Boost_LLMIME_BrawlerFist_DamageBoostMedium"
 param "BoostType" "ItemCombo"
 param "Frequency" "1"
 param "ModifierType" "Weapon"
@@ -34,6 +58,13 @@ param "Frequency" "1"
 param "ModifierType" "Armor"
 param "SlotType" "Boots"
 new boost "_Boost_LLMIME_Armor_Skill_EvasiveManeuver_Mime",1
+
+new deltamod "Boost_LLMIME_Armor_Boots_JumpSkill"
+param "BoostType" "ItemCombo"
+param "Frequency" "1"
+param "ModifierType" "Armor"
+param "SlotType" "Boots"
+new boost "_Boost_LLMIME_Armor_Skill_JumpSkill_Mime",1
 
 new deltamod "Boost_LLMIME_Armor_LowerBody_EmptyRuneSlot"
 param "BoostType" "RuneEmpty"

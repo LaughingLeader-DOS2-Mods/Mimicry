@@ -362,7 +362,7 @@ THEN
 ObjectClearFlag(_Mime, "Mimicry_MimeIsStartingBasicAttack");
 
 IF
-AttackedByObject(_Target, _, (CHARACTERGUID)_Mime, _, _)
+AttackedByObject(_Target, _, (CHARACTERGUID)_Mime, _, "Attack")
 AND
 ObjectGetFlag(_Mime, "Mimicry_MimeIsStartingBasicAttack", 1)
 AND
@@ -373,7 +373,7 @@ THEN
 CharacterItemSetEvent(_Mime, _Target, "Mimicry_Events_OnMimeUnarmedBasicAttack");
 
 IF
-AttackedByObject(_Target, _, (CHARACTERGUID)_Mime, _, _)
+AttackedByObject(_Target, _, (CHARACTERGUID)_Mime, _, "Attack")
 AND
 ObjectGetFlag(_Mime, "Mimicry_MimeIsStartingBasicAttack", 1)
 AND
@@ -471,12 +471,26 @@ DB_LLMIME_Brawler_UsedUnarmedSkill(_Mime, _Skill)
 THEN
 NOT DB_LLMIME_Brawler_UsedUnarmedSkill(_Mime, _Skill);
 
+QRY
+LLMIME_Brawler_QRY_BonusAttackBlocked((CHARACTERGUID)_Mime, (GUIDSTRING)_Target)
+AND
+ObjectGetFlag(_Mime, "Mimicry_ApplyingUnarmedDamage", 1)
+THEN
+DB_NOOP(1);
+
+QRY
+LLMIME_Brawler_QRY_BonusAttackBlocked((CHARACTERGUID)_Mime, (GUIDSTRING)_Target)
+AND
+DB_LLMIME_Brawler_BlockBonusAttack(_Mime, _Target)
+THEN
+DB_NOOP(1);
+
 PROC
 LLMIME_Brawler_OnUnarmedAttack((CHARACTERGUID)_Mime, (GUIDSTRING)_Target)
 AND
 LLMIME_Brawler_QRY_BrawlerActive(_Mime)
 AND
-DB_LLMIME_Brawler_BlockBonusAttack(_Mime, _Target)
+LLMIME_Brawler_QRY_BonusAttackBlocked(_Mime, _Target)
 THEN
 LeaderLog_Log("DEBUG", "[Mimicry:Brawler:OnUnarmedAttack] Ignoring unarmed attack, as the hit was already registered.");
 
@@ -485,12 +499,12 @@ LLMIME_Brawler_OnUnarmedAttack((CHARACTERGUID)_Mime, (GUIDSTRING)_Target)
 AND
 LLMIME_Brawler_QRY_BrawlerActive(_Mime)
 AND
-NOT DB_LLMIME_Brawler_BlockBonusAttack(_Mime, _Target)
+NOT LLMIME_Brawler_QRY_BonusAttackBlocked(_Mime, _Target)
 THEN
 LeaderLog_Log("TRACE", "[Mimicry:Brawler:OnUnarmedAttack] Incrementing basic attack combo.");
 LLMIME_Brawler_IncrementHits(_Mime, _Target);
 DB_LLMIME_Brawler_BlockBonusAttack(_Mime, _Target);
-ProcObjectTimer(_Mime, "LLMIME_Timers_ClearBonusAttackBlock", 50);
+ProcObjectTimer(_Mime, "LLMIME_Timers_ClearBonusAttackBlock", 250);
 
 PROC
 ProcObjectTimerFinished((CHARACTERGUID)_Mime, "LLMIME_Timers_ClearBonusAttackBlock")
@@ -524,6 +538,7 @@ AND
 _TotalHits >= 3
 THEN
 NOT DB_LLMIME_Brawler_TotalHits(_Mime, _Target, _TotalHits);
+ObjectSetFlag(_Mime, "Mimicry_ApplyingUnarmedDamage");
 LeaderLog_Log("TRACE", "[Mimicry:Brawler:IncrementHits] Casting unarmed damage skill in 1 second.");
 LeaderLib_StartObjectObjectTimer(_Mime, _Target, 1000, "LLMIME_Timers_Brawler_CastUnarmedBonusDamage_", "Mimicry_Events_CastUnarmedBonusDamage");
 
@@ -534,7 +549,6 @@ CharacterIsDead(_Mime, 0)
 AND
 LLMIME_Brawler_QRY_ObjectIsAlive(_Target)
 THEN
-ObjectSetFlag(_Mime, "Mimicry_ApplyingUnarmedDamage");
 SetVarObject(_Target, "LLMIME_UnarmedBonusDamageSource", _Mime);
 CharacterUseSkill(_Mime, "Target_LLMIME_ApplyUnarmedBonusDamage", _Target, 1, 1, 1);
 

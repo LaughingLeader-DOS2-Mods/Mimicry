@@ -37,10 +37,10 @@ LeaderLib_Treasure_Configure_DefaultGenerationType("LLMIME.LeaderTrader.MimicSki
 LeaderLib_Treasure_Register_ItemTemplate("LLMIME.LeaderTrader.MimicSkillbooks", "BOOK_Skill_LLMIME_Wish_8fcc10b0-d58b-4246-a882-29f86ee114e9", 1, "");
 
 LeaderLib_Treasure_Register_ItemTemplate("LLMIME.LeaderTrader.MimicSkillbooks", "BOOK_Skill_LLMIME_Vault_efe31bf3-ba08-45eb-bcf5-cfe5e58ff720", 1, "LLMIME_Requirements_MimeStarter");
+LeaderLib_Treasure_Register_ItemTemplate("LLMIME.LeaderTrader.MimicSkillbooks", "BOOK_Skill_LLMIME_DisarmingBlow_789b415b-f594-4577-a4e9-e4ff28a077d6", 1, "LLMIME_Requirements_MimeStarter");
 
 LeaderLib_Treasure_Register_ItemTemplate("LLMIME.LeaderTrader.MimicSkillbooks", "BOOK_Skill_LLMIME_Decoy_d64990b4-1e66-4097-a958-ea4afcc2af20", 1, "LLMIME_Requirements_MimeNovice");
 LeaderLib_Treasure_Register_ItemTemplate("LLMIME.LeaderTrader.MimicSkillbooks", "BOOK_Skill_LLMIME_KneeBreaker_9c405336-eacb-4981-9232-6f27626f2bc6", 1, "LLMIME_Requirements_MimeNovice");
-LeaderLib_Treasure_Register_ItemTemplate("LLMIME.LeaderTrader.MimicSkillbooks", "BOOK_Skill_LLMIME_DisarmingBlow_789b415b-f594-4577-a4e9-e4ff28a077d6", 1, "LLMIME_Requirements_MimeNovice");
 
 LeaderLib_Treasure_Register_ItemTemplate("LLMIME.LeaderTrader.MimicSkillbooks", "BOOK_Skill_LLMIME_EvasiveManeuver_9393ea65-0b69-425b-bb94-f826ea99159d", 1, "LLMIME_Requirements_MimeAdept");
 LeaderLib_Treasure_Register_ItemTemplate("LLMIME.LeaderTrader.MimicSkillbooks", "BOOK_Skill_LLMIME_QuakeSlam_ea56794e-29a0-4881-a258-e18389706194", 1, "LLMIME_Requirements_MimeAdept");

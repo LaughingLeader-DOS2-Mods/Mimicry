@@ -16,8 +16,8 @@ PROC
 LLMIME_Follower_InitSettings()
 THEN
 LeaderLib_Growth_Characters_Register_Skill("Mimicry.MimeFollower", 2, "Target_EnemyCripplingBlow", "Tag", "LLMIME_MimeFollower");
-LeaderLib_Growth_Characters_Register_Skill("Mimicry.MimeFollower", 3, "Target_LLMIME_Wish_Follower", "Tag", "LLMIME_MimeFollower");
-LeaderLib_Growth_Characters_Register_Skill("Mimicry.MimeFollower", 4, "MultiStrike_LLMIME_MimeVault_Follower", "Tag", "LLMIME_MimeFollower");
+LeaderLib_Growth_Characters_Register_Skill("Mimicry.MimeFollower", 3, "MultiStrike_LLMIME_MimeVault_Follower", "Tag", "LLMIME_MimeFollower");
+LeaderLib_Growth_Characters_Register_Skill("Mimicry.MimeFollower", 4, "Target_LLMIME_Wish_Follower", "Tag", "LLMIME_MimeFollower");
 LeaderLib_Growth_Characters_Register_Skill("Mimicry.MimeFollower", 6, "Target_LLMIME_DisarmingBlow_Follower", "Tag", "LLMIME_MimeFollower");
 LeaderLib_Growth_Characters_Register_Skill("Mimicry.MimeFollower", 7, "Projectile_LLMIME_Decoy_Follower", "Tag", "LLMIME_MimeFollower");
 LeaderLib_Growth_Characters_Register_Skill("Mimicry.MimeFollower", 8, "Target_LLMIME_SealEvil_Follower", "Tag", "LLMIME_MimeFollower");
@@ -634,7 +634,7 @@ ObjectClearFlag(_Mime, "Mimicry_MimeFollowerJustSummoned");
 
 //REGION RECRUITMENT_EVENTS
 IF
-CharacterCharacterEvent((CHARACTERGUID)_Owner, (CHARACTERGUID)_Mime, "Mimicry_Events_CheckMimickingAP")
+CharacterCharacterEvent((CHARACTERGUID)_Owner, (CHARACTERGUID)_Mime, "LeaderLib_Events_FollowerRecruited")
 AND
 IsTagged(_Mime, "LLMIME_MimeFollower", 1)
 AND
@@ -973,6 +973,7 @@ LeaderLib_StartObjectTimer(_Follower, 500, "Mimicry_Timers_ReturnToOwner_ReturnE
 //END_REGION
 
 //REGION LEVEL_UP
+/*
 IF
 CharacterCharacterEvent((CHARACTERGUID)_Owner, (CHARACTERGUID)_Mime, "LeaderLib_Events_FollowerRecruited")
 AND
@@ -987,6 +988,21 @@ AND
 IntegertoString(_MimeLevel, _MimeLevelStr)
 THEN
 LeaderLog_Log("DEBUG", "[LLMIME:Follower:FollowerRecruited_Debug] Level: Mime[",_MimeLevelStr,"] Owner[",_LevelStr,"]");
+*/
+
+IF
+CharacterCharacterEvent((CHARACTERGUID)_Summoner, (CHARACTERGUID)_Mime, "Mimicry_MimeSummoned")
+AND
+IsTagged(_Mime, "LLMIME_MimeFollower", 1)
+AND
+CharacterGetLevel(_Summoner, _Level)
+AND
+CharacterGetLevel(_Mime, _MimeLevel)
+AND
+_MimeLevel < _Level
+THEN
+CharacterLevelUpTo(_Mime, _Level);
+LeaderLog_Log("DEBUG", "[LLMIME:Follower:Mimicry_MimeSummoned] Mime follower was summoned. Leveling up.");
 
 IF
 CharacterCharacterEvent((CHARACTERGUID)_Owner, (CHARACTERGUID)_Mime, "LeaderLib_PlayerIsRecruitingCharacter")
