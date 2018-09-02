@@ -402,6 +402,31 @@ CharacterTeleportToFleeWaypoint(_Player, _)
 THEN
 LeaveCombat(_Player);
 
+//REGION PROJECTILE_TEST
+
+
+IF
+CharacterUsedSkillOnTarget(_Caster, (CHARACTERGUID)_Target, "Target_LLMIME_DebugTargetSkill", _, _)
+AND
+GetPosition(_Target, _tx, _ty, _tz)
+AND
+GetPosition(_Caster, _x, _y, _z)
+AND
+TemporaryCharacterCreateAtPosition(_x, _y, _z, "CHARACTERGUID_LLMIME_Dummy_Character_e2f3f6f7-c069-4928-830e-f1d46e2c898", 0, _Dummy)
+THEN
+Transform(_Dummy, "ITEMGUID_WPN_Tool_Scythe_2H_A_44525b09-a2b1-4b45-8d52-e893d04390dd", 0, 1, 0);
+CharacterUseSkill(_Dummy, "Projectile_EnemyFlight", _Target, 1, 1, 1);
+ProcObjectTimer(_Dummy, "LLMIME_Debug_RemoveDummy", 3000);
+
+PROC
+ProcObjectTimerFinished((CHARACTERGUID)_Dummy, "LLMIME_Debug_RemoveDummy")
+THEN
+SetOnStage(_Dummy, 0);
+CharacterDieImmediate(_Dummy, 0, "None", _Dummy);
+//END_REGION
+
+//REGION PLATFORM_TEST
+/*
 IF
 CharacterUsedSkillOnTarget(_Caster, (CHARACTERGUID)_Target, "Target_LLMIME_DebugTargetSkill", _, _)
 AND
@@ -420,6 +445,7 @@ PROC
 ProcObjectTimerFinished((ITEMGUID)_Platform, "LLMIME_Debug_RemoveSpawnedPlatform")
 THEN
 LeaderLib_Platforms_RemovePlatform(_Platform);
+*/
 
 /*
 IF
@@ -481,6 +507,8 @@ CharacterSetAnimationOverride(_Target, "");
 PlayAnimation(_Target, "knockdown_getup", "");
 NOT DB_LLMIME_Debug_ObjectPosition(_Target, _Caster, _Object, _x, _y, _z);
 */
+//END_REGION
+
 //REGION TRACING
 IF
 CharacterStartAttackPosition(_,_,_,_,_Character)
@@ -624,7 +652,6 @@ THEN
 LeaderLog_Log("DEBUG", "[LLMIME:Debug:CharacterStatusRemoved] Status [",_Status,"] removed from [",_Name,"] via [",_Cause,"].");
 //END_REGION
 
-
 //REGION SKILL_DEBUG
 IF
 CharacterUsedSkill(_Caster, _Skill, _SkillType, _SkillElement)
@@ -749,7 +776,6 @@ THEN
 NOT DB_LeaderLog_Temp_CombinedString(_LogDetails);
 LeaderLog_Log("DEBUG", "[LLMIME:Debug:SkillCast] ", _LogDetails);
 //END_REGION
-
 
 //REGION FLAG_TRACING
 IF

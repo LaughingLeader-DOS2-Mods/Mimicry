@@ -9,11 +9,29 @@ LLMIME_Skills_InitSettings()
 THEN
 SysClear("DB_LLMIME_Skills_DecoyTags", 1);
 DB_LLMIME_Skills_DecoyTags("LLMIME_Decoy");
-//DB_LLMIME_Skills_DecoyTags("LLMIME_Dummy");
 DB_LLMIME_Skills_DecoyTags("AI_PREFERRED_TARGET");
 DB_LLMIME_Skills_DecoyTags("IGNORE_UNDEAD_CRIME");
 DB_LLMIME_Skills_DecoyTags("IGNORESEENCOMBAT");
 DB_LLMIME_Skills_DecoyTags("IGNOREVANDALISE");
+
+SysClear("DB_LLMIME_Skills_StealWeapon", 2);
+DB_LLMIME_Skills_StealWeapon("Sword_1H", "Projectile_LLMIME_ThrowWeapon_Sword1H");
+DB_LLMIME_Skills_StealWeapon("Sword_2H", "Projectile_LLMIME_ThrowWeapon_Sword2H");
+DB_LLMIME_Skills_StealWeapon("Axe_1H", "Projectile_LLMIME_ThrowWeapon_Axe1H");
+DB_LLMIME_Skills_StealWeapon("Axe_2H", "Projectile_LLMIME_ThrowWeapon_Axe2H");
+DB_LLMIME_Skills_StealWeapon("Mace_1H", "Projectile_LLMIME_ThrowWeapon_Mace1H");
+DB_LLMIME_Skills_StealWeapon("Mace_2H", "Projectile_LLMIME_ThrowWeapon_Mace2H");
+DB_LLMIME_Skills_StealWeapon("_Dagger_", "Projectile_LLMIME_ThrowWeapon_Dagger");
+DB_LLMIME_Skills_StealWeapon("_Spear_", "Projectile_LLMIME_ThrowWeapon_Spear");
+DB_LLMIME_Skills_StealWeapon("_Staff_", "Projectile_LLMIME_ThrowWeapon_Staff");
+DB_LLMIME_Skills_StealWeapon("_Wand_", "Projectile_LLMIME_ThrowWeapon_Wand");
+DB_LLMIME_Skills_StealWeapon("_Bow_", "Projectile_LLMIME_ThrowWeapon_Bow");
+DB_LLMIME_Skills_StealWeapon("_Crossbow_", "Projectile_LLMIME_ThrowWeapon_Crossbow");
+DB_LLMIME_Skills_StealWeapon("_Shield_", "Projectile_LLMIME_ThrowWeapon_Shield");
+DB_LLMIME_Skills_StealWeapon("_Scythe_", "Projectile_LLMIME_ThrowWeapon_Scythe");
+
+//DB_LLMIME_Skills_Temp_NextWish(_Caster, _Target)
+//DB_LLMIME_Skills_Temp_FailedWish(_Caster)
 //END_REGION
 
 //REGION UPDATING
@@ -63,21 +81,21 @@ AND
 _NextHealth > 1.0
 THEN
 SetStoryEvent(_Caster, "Mimicry_Events_Wish_UsedSkill");
-DB_LLMIME_Beastmaster_Temp_NextWish(_Caster, _Target);
+DB_LLMIME_Skills_Temp_NextWish(_Caster, _Target);
 
 IF
 CharacterUsedSkillOnTarget(_Caster, (CHARACTERGUID)_Target, "Target_LLMIME_Wish", _, _)
 AND
-NOT DB_LLMIME_Beastmaster_Temp_NextWish(_Caster, _Target)
+NOT DB_LLMIME_Skills_Temp_NextWish(_Caster, _Target)
 THEN
-DB_LLMIME_Beastmaster_Temp_FailedWish(_Caster);
+DB_LLMIME_Skills_Temp_FailedWish(_Caster);
 
 IF
 SkillCast(_Caster, "Target_LLMIME_Wish", _, _)
 AND
-DB_LLMIME_Beastmaster_Temp_NextWish(_Caster, _Target)
+DB_LLMIME_Skills_Temp_NextWish(_Caster, _Target)
 THEN
-NOT DB_LLMIME_Beastmaster_Temp_NextWish(_Caster, _Target);
+NOT DB_LLMIME_Skills_Temp_NextWish(_Caster, _Target);
 SetVarFloat(_Caster, "Mimicry_Wish_HealPercentage", 0.50);
 CharacterCharacterSetEvent(_Caster, _Target, "Mimicry_Events_OnWishCast");
 SetStoryEvent(_Target, "Mimicry_Events_Wish_SkillCast");
@@ -85,29 +103,29 @@ SetStoryEvent(_Target, "Mimicry_Events_Wish_SkillCast");
 IF
 SkillCast(_Caster, "Target_LLMIME_Wish", _, _)
 AND
-DB_LLMIME_Beastmaster_Temp_FailedWish(_Caster)
+DB_LLMIME_Skills_Temp_FailedWish(_Caster)
 THEN
-NOT DB_LLMIME_Beastmaster_Temp_FailedWish(_Caster);
+NOT DB_LLMIME_Skills_Temp_FailedWish(_Caster);
 CharacterStatusText(_Caster, "LLMIME_StatusText_WishFailed");
 
 IF
 CharacterCharacterEvent(_Caster, _Target, "Mimicry_Events_WishDelay")
 AND
-NOT DB_LLMIME_Beastmaster_WishDelayTimer(_Caster, _Target, _)
+NOT DB_LLMIME_Skills_WishDelayTimer(_Caster, _Target, _)
 AND
 GetUUID(_Caster, _CasterID)
 AND
 StringConcatenate("LLMIME_Timers_WishDelayTimer_", _CasterID, _TimerName)
 THEN
-DB_LLMIME_Beastmaster_WishDelayTimer(_Caster, _Target, _TimerName);
+DB_LLMIME_Skills_WishDelayTimer(_Caster, _Target, _TimerName);
 TimerLaunch(_TimerName, 500);
 
 IF
 TimerFinished(_TimerName)
 AND
-DB_LLMIME_Beastmaster_WishDelayTimer(_Caster, _Target, _TimerName)
+DB_LLMIME_Skills_WishDelayTimer(_Caster, _Target, _TimerName)
 THEN
-NOT DB_LLMIME_Beastmaster_WishDelayTimer(_Caster, _Target, _TimerName);
+NOT DB_LLMIME_Skills_WishDelayTimer(_Caster, _Target, _TimerName);
 CharacterCharacterSetEvent(_Caster, _Target, "Mimicry_Events_HealWishTarget");
 
 //Fix for CharacterHeal sending vitality over the max
@@ -582,6 +600,8 @@ CharacterStatusApplied(_Target, "LLMIME_SWAPPING", (CHARACTERGUID)_Mime)
 THEN
 ObjectClearFlag(_Target, "LLMIME_FlankingApplied", 1);
 SetVarObject(_Mime, "LLMIME_SwapTarget", _Target);
+PlayEffect(_Target, "RS3_FX_Skills_Void_Netherswap_Disappear_Overlay_01");
+PlayEffect(_Mime, "RS3_FX_Skills_Void_Netherswap_Disappear_Overlay_01");
 LeaderLib_StartCharacterCharacterTimer(_Mime, _Target, 500, "Mimicry_Timers_StartSwapping_", "Mimicry_FlankAndSwap_StartSwapping");
 
 IF
@@ -593,8 +613,6 @@ GetPosition(_Mime, _mx, _my, _mz)
 THEN
 PlayEffectAtPosition("RS3_FX_Skills_Void_Netherswap_Disappear_Root_01", _tx, _ty, _tz);
 PlayEffectAtPosition("RS3_FX_Skills_Void_Netherswap_Disappear_Root_01", _mx, _my, _mz);
-PlayEffect(_Target, "RS3_FX_Skills_Void_Netherswap_Disappear_Overlay_01");
-PlayEffect(_Mime, "RS3_FX_Skills_Void_Netherswap_Disappear_Overlay_01");
 CharacterSetDetached(_Target, 1);
 CharacterSetDetached(_Mime, 1);
 TeleportToPosition(_Target, _mx, _my, _mz, "", 0, 1);
@@ -645,6 +663,98 @@ THEN
 NOT DB_LLMIME_Skills_Temp_BeamEffect(_Target, _Caster, _Skill, _Effect, _CasterBone, _TargetBone);
 PlayBeamEffect(_Target, _Caster, _Effect, _CasterBone, _TargetBone);
 //END_REGION
+
+//REGION STEAL_WEAPON
+IF
+CharacterStatusApplied(_Target, "LLMIME_STEAL_WEAPON", (CHARACTERGUID)_Mime)
+AND
+NOT DB_LLMIME_Skills_Temp_WeaponMatch(_Mime)
+AND
+CharacterGetEquippedWeapon(_Target, _Weapon)
+AND
+_Weapon != NULL_00000000-0000-0000-0000-000000000000
+AND
+GetTemplate(_Weapon, _Template)
+AND
+DB_LLMIME_Skills_StealWeapon(_String, _Skill)
+AND
+NOT DB_LLMIME_Skills_Temp_WeaponMatch(_Mime)
+AND
+StringContains(_Template, _String, 1)
+THEN
+CharacterAddSkill(_Mime, _Skill, 1);
+DB_LLMIME_Skills_Temp_WeaponMatch(_Mime);
+
+IF
+CharacterStatusApplied(_Target, "LLMIME_STEAL_WEAPON", (CHARACTERGUID)_Mime)
+AND
+DB_LLMIME_Skills_Temp_WeaponMatch(_Mime)
+THEN
+NOT DB_LLMIME_Skills_Temp_WeaponMatch(_Mime);
+
+/*
+IF
+SkillCast(_Mime, _Skill, _, _)
+AND
+DB_LLMIME_Skills_StealWeapon(_String, _Skill)
+THEN
+CharacterRemoveSkill(_Mime, _Skill);
+*/
+//END_REGION
+
+//REGION CLEAR_TEMP_DATA
+IF
+CharacterDied(_Character)
+AND
+LLMIME_SKILLS_QRY_HasSkillData(_Character)
+THEN
+LLMIME_MonsterSkill_ClearTemporaryDatabases(_Character);
+
+QRY
+LLMIME_SKILLS_QRY_HasSkillData((CHARACTERGUID)_Character)
+AND
+DB_LLMIME_Skills_Temp_NextWish(_Character, _Target)
+THEN
+NOT DB_LLMIME_Skills_Temp_NextWish(_Character, _Target);
+
+PROC
+LLMIME_MonsterSkill_ClearTemporaryDatabases((CHARACTERGUID)_Character)
+AND
+DB_LLMIME_Skills_Temp_NextWish(_Character, _Target)
+THEN
+NOT DB_LLMIME_Skills_Temp_NextWish(_Character, _Target);
+
+PROC
+LLMIME_MonsterSkill_ClearTemporaryDatabases((CHARACTERGUID)_Character)
+AND
+DB_LLMIME_Skills_Temp_NextWish(_OtherCharacter, _Character)
+THEN
+NOT DB_LLMIME_Skills_Temp_NextWish(_OtherCharacter, _Character);
+
+PROC
+LLMIME_MonsterSkill_ClearTemporaryDatabases((CHARACTERGUID)_Character)
+AND
+DB_LLMIME_Skills_Temp_FailedWish(_Character)
+THEN
+NOT DB_LLMIME_Skills_Temp_FailedWish(_Character);
+
+PROC
+LLMIME_MonsterSkill_ClearTemporaryDatabases((CHARACTERGUID)_Character)
+AND
+DB_LLMIME_Skills_WishDelayTimer(_Character, _Target, _TimerName)
+THEN
+NOT DB_LLMIME_Skills_WishDelayTimer(_Character, _Target, _TimerName);
+TimerCancel(_TimerName);
+
+PROC
+LLMIME_MonsterSkill_ClearTemporaryDatabases((CHARACTERGUID)_Character)
+AND
+DB_LLMIME_Skills_WishDelayTimer(_Caster, _Character, _TimerName)
+THEN
+NOT DB_LLMIME_Skills_WishDelayTimer(_Caster, _Character, _TimerName);
+TimerCancel(_TimerName);
+//END_REGION
+
 EXITSECTION
 
 ENDEXITSECTION

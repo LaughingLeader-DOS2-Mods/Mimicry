@@ -13,8 +13,6 @@ LLMIME_Beastmaster_InitSettings();
 //DB_LLMIME_MonsterSkill_Temp_AddedSkill(_Summon, _Skill)
 //DB_LLMIME_MonsterSkill_Temp_AddedStatus(_Summon, _Status)
 //DB_LLMIME_MonsterSkill_OriginalName(_Summon, _Name, _CustomName)
-//DB_LLMIME_Beastmaster_Temp_NextWish(_Caster, _Target)
-//DB_LLMIME_Beastmaster_Temp_FailedWish(_Caster)
 KBSECTION
 //REGION SETTINGS
 PROC
@@ -169,43 +167,6 @@ AND
 DB_LLMIME_MonsterSkill_OriginalName(_Summon, _Name, _CustomName)
 THEN
 NOT DB_LLMIME_MonsterSkill_OriginalName(_Summon, _Name, _CustomName);
-
-PROC
-LLMIME_MonsterSkill_ClearTemporaryDatabases((CHARACTERGUID)_Summon)
-AND
-DB_LLMIME_Beastmaster_Temp_NextWish(_Caster, _Summon)
-THEN
-NOT DB_LLMIME_Beastmaster_Temp_NextWish(_Caster, _Summon);
-
-PROC
-LLMIME_MonsterSkill_ClearTemporaryDatabases((CHARACTERGUID)_Summon)
-AND
-DB_LLMIME_Beastmaster_Temp_NextWish(_Summon, _Target)
-THEN
-NOT DB_LLMIME_Beastmaster_Temp_NextWish(_Summon, _Target);
-
-PROC
-LLMIME_MonsterSkill_ClearTemporaryDatabases((CHARACTERGUID)_Summon)
-AND
-DB_LLMIME_Beastmaster_Temp_FailedWish(_Summon)
-THEN
-NOT DB_LLMIME_Beastmaster_Temp_FailedWish(_Summon);
-
-PROC
-LLMIME_MonsterSkill_ClearTemporaryDatabases((CHARACTERGUID)_Summon)
-AND
-DB_LLMIME_Beastmaster_WishDelayTimer(_Summon, _Target, _TimerName)
-THEN
-NOT DB_LLMIME_Beastmaster_WishDelayTimer(_Summon, _Target, _TimerName);
-TimerCancel(_TimerName);
-
-PROC
-LLMIME_MonsterSkill_ClearTemporaryDatabases((CHARACTERGUID)_Summon)
-AND
-DB_LLMIME_Beastmaster_WishDelayTimer(_Caster, _Summon, _TimerName)
-THEN
-NOT DB_LLMIME_Beastmaster_WishDelayTimer(_Caster, _Summon, _TimerName);
-TimerCancel(_TimerName);
 //END_REGION
 
 //REGION MONSTER_SKILLS
