@@ -702,6 +702,13 @@ DB_NOOP(1);
 QRY
 LLMIME_QRY_MimeIsSolo((CHARACTERGUID)_Mime)
 AND
+GlobalGetFlag("GEN_SoloPlayer", 1)
+THEN
+DB_NOOP(1);
+
+QRY
+LLMIME_QRY_MimeIsSolo((CHARACTERGUID)_Mime)
+AND
 GetVarInteger(_Mime, "LeaderLib_PartyCount", _Count)
 AND
 _Count <= 1
