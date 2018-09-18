@@ -151,7 +151,14 @@ DB_LLMIME_Mimicking_Temp_TargetPriority(_Caster, (GUIDSTRING)_Target, _IsEnemy);
 PROC
 LLMIME_Mimicking_SetTargetPriority((CHARACTERGUID)_Caster, (GUIDSTRING)_Target, (INTEGER)_FallbackValue)
 AND
-NOT ObjectIsCharacter(_Target, 1)
+ObjectIsItem(_Target, 1)
+THEN
+DB_LLMIME_Mimicking_Temp_TargetPriority(_Caster, _Target, 0);
+
+PROC
+LLMIME_Mimicking_SetTargetPriority((CHARACTERGUID)_Caster, (GUIDSTRING)_Target, (INTEGER)_FallbackValue)
+AND
+NOT DB_LLMIME_Mimicking_Temp_TargetPriority(_Caster, _Target, _)
 THEN
 DB_LLMIME_Mimicking_Temp_TargetPriority(_Caster, _Target, _FallbackValue);
 //END_REGION
@@ -636,8 +643,10 @@ PROC
 LLMIME_Mimicking_Internal_ProcessMimicQueue((CHARACTERGUID)_Mime, (CHARACTERGUID)_Caster, (STRING)_Action, (STRING)_ActionType, (REAL)_CastX, (REAL)_CastRotation, (REAL)_CastZ, (REAL)_TargetX, (REAL)_TargetY, (REAL)_TargetZ, (INTEGER)_TargetPriority, (INTEGER)_IsTarget)
 AND
 LLMIME_Mimicking_QRY_CanStartMimic(_Mime)
+AND
+IntegertoString(_TargetPriority, _PriorityStr)
 THEN
-LeaderLog_Log("DEBUG", "[LLMIME:Mimicking:ProcessMimicQueue] Starting target calculation for [",_ActionType,"][",_Action,"].");
+LeaderLog_Log("DEBUG", "[LLMIME:Mimicking:ProcessMimicQueue] Starting target calculation for [",_ActionType,"][",_Action,"] with TargetPriority [",_PriorityStr,"].");
 ObjectSetFlag(_Mime, "Mimicry_IsMimicking");
 LLMIME_Mimicking_Internal_StartWeaponMimicking(_Mime, _Caster, _ActionType);
 DB_LLMIME_Mimicking_FinalMimicQueue(_Mime, _Caster, _Action, _ActionType, _CastX, _CastRotation, _CastZ, _TargetX, _TargetY, _TargetZ, _TargetPriority, _IsTarget);

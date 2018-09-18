@@ -186,7 +186,9 @@ SetOnStage(_Mime, 0);
 
 //REGION MASK_FIX
 IF
-GameStarted(_,_)
+GameStarted(_Level,_)
+AND
+IsGameLevel(_Level, 1)
 THEN
 LLMIME_Follower_Internal_SetupMask();
 

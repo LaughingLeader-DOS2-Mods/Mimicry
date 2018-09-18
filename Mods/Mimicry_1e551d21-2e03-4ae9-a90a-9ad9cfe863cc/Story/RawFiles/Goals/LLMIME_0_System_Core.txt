@@ -575,7 +575,9 @@ THEN
 RemoveStatus(_Mime, _BonusStatus);
 
 IF
-GameStarted(_,_)
+GameStarted(_Level,_)
+AND
+IsGameLevel(_Level, 1)
 AND
 DB_IsPlayer(_Mime)
 AND

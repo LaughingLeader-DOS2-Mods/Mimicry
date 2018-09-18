@@ -132,7 +132,9 @@ LeaderLog_Log("DEBUG", "[Mimicry:Passives:Mime:GameStarted] Added skill [",_Skil
 DB_LLMIME_Mime_MimeSkillMemory(_Mime, _Skill);
 
 IF
-GameStarted(_,_)
+GameStarted(_Level,_)
+AND
+IsGameLevel(_Level, 1)
 AND
 DB_LLMIME_Temp_ActivateMime(_Mime)
 AND

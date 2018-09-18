@@ -356,6 +356,37 @@ DebugBreak("[LLMIME:Position] Spawned skill dummy.");
 */
 
 IF
+TextEventSet("llmime_setup")
+AND
+DB_IsPlayer(_Player)
+AND
+CharacterIsControlled(_Player, 1)
+THEN
+CharacterAddAttribute(_Player, "Memory", 10);
+
+IF
+TextEventSet("llmime_setup")
+AND
+DB_IsPlayer(_Player)
+AND
+CharacterIsControlled(_Player, 1)
+AND
+DB_LLMIME_Mime_Skills(_Skill)
+THEN
+CharacterAddSkill(_Player, _Skill, 0);
+
+IF
+TextEventSet("llmime_setup")
+AND
+DB_IsPlayer(_Player)
+AND
+CharacterIsControlled(_Player, 1)
+AND
+DB_LLMIME_Mime_LearnableSkills(_Skill)
+THEN
+CharacterAddSkill(_Player, _Skill, 0);
+
+IF
 TextEventSet("mimicdupe")
 AND
 GlobalGetFlag("LLMIME_DUPLICATE_ITEMS", _Val)
@@ -389,9 +420,9 @@ LeaveCombat(_Player);
 IF
 CharacterTeleportToFleeWaypoint(_Player, _)
 AND
-DB_LeaderLib_Combat_Objects(_CombatID, _Player)
+DB_CombatCharacters(_Player, _CombatID)
 AND
-DB_LeaderLib_Combat_Objects(_CombatID, _Object)
+DB_CombatCharacters(_Object, _CombatID)
 AND
 CharacterIsEnemy((CHARACTERGUID)_Object, _Player, 1)
 THEN
@@ -401,6 +432,19 @@ IF
 CharacterTeleportToFleeWaypoint(_Player, _)
 THEN
 LeaveCombat(_Player);
+
+//REGION SKILL_TEST
+IF
+CharacterMissedBy(_Mime, _AttackerOwner, _Attacker)
+AND
+HasActiveStatus(_Mime, "LLMIME_COUNTER_THROW", 1)
+AND
+NOT LeaderUpdater_QRY_ModIsActive("WeaponExpansion", "LaughingLeader")
+AND
+LeaderLib_Roll_QRY(60)
+THEN
+CharacterUseSkill(_Mime, "Projectile_ThrowingKnife", _Attacker, 0, 1, 1);
+//END_REGION
 
 //REGION PROJECTILE_TEST
 
@@ -451,18 +495,96 @@ LeaderLib_Platforms_RemovePlatform(_Platform);
 IF
 CharacterUsedSkillOnTarget(_Caster, (CHARACTERGUID)_Target, "Target_LLMIME_DebugTargetSkill", _, _)
 AND
+NOT LeaderLib_Helper_QRY_HasStatus(_Target, "KNOCKED_DOWN")
+AND
+GetPosition(_Target, _x, _y, _z)
+AND
+RealSum(_y, 50.0, _ty)
+AND
+CreateItemTemplateAtPosition("S_LeaderLib_Platform_Large_81d0b457-3569-4c6b-bfbc-e954a768472a", _x, _y, _z, _Pillar)
+THEN
+DB_LLMIME_Debug_FlyPosition(_Caster, _Target, _Pillar, _x, _ty, _z);
+CharacterSetAnimationOverride(_Target, "knockdown_loop");
+LeaderLib_StartCharacterCharacterTimer(_Caster, _Target, 10, "LLMIME_Timers_Debug_FlyTimer_", "LLMIME_Debug_FlyTargetToPosition");
+
+IF
+CharacterCharacterEvent(_Caster, _Target, "LLMIME_Debug_FlyTargetToPosition")
+AND
+DB_LLMIME_Debug_FlyPosition(_Caster, _Target, _Pillar, _x, _ty, _z)
+AND
+GetPosition(_Target, _cx, _cy, _cz)
+AND
+_cy == _ty
+THEN
+NOT DB_LLMIME_Debug_FlyPosition(_Caster, _Target, _Pillar, _x, _ty, _z);
+ItemRemove(_Pillar);
+
+IF
+CharacterCharacterEvent(_Caster, _Target, "LLMIME_Debug_FlyTargetToPosition")
+AND
+DB_LLMIME_Debug_FlyPosition(_Caster, _Target, _Pillar, _x, _ty, _z)
+AND
+GetPosition(_Target, _cx, _cy, _cz)
+AND
+_cy != _ty
+AND
+RealSum(_cy, 0.5, _ny)
+THEN
+LeaderLog_Log("DEBUG", "[Mimicry:Debug:_FlyTargetToPosition] Flying target up to position via teleporting.");
+TeleportToPosition(_Target, _x, _ny, _z, "LLMIME_Debug_KeepFlying", 0, 1);
+
+IF
+StoryEvent((CHARACTERGUID)_Target, "LLMIME_Debug_KeepFlying")
+AND
+DB_LLMIME_Debug_FlyPosition(_Caster, _Target, _Pillar, _x, _ty, _z)
+THEN
+LeaderLib_StartCharacterCharacterTimer(_Caster, _Target, 10, "LLMIME_Timers_Debug_FlyTimer_", "LLMIME_Debug_FlyTargetToPosition");
+*/
+
+IF
+CharacterUsedSkillOnTarget(_Caster, (CHARACTERGUID)_Target, "Target_LLMIME_DebugTargetSkill", _, _)
+AND
+NOT LeaderLib_Helper_QRY_HasStatus(_Target, "KNOCKED_DOWN")
+AND
 GetPosition(_Target, _x, _y, _z)
 AND
 RealSum(_z, 0.1, _tz)
 AND
 CreateItemTemplateAtPosition("S_LeaderLib_Platform_Large_81d0b457-3569-4c6b-bfbc-e954a768472a", _x, _y, _z, _Object)
 THEN
+//PlayAnimation(_Target, "knockdown_loop");
+//CharacterSetAnimationOverride(_Target, "knockdown_loop");
+//CharacterFlushQueue(_Target);
 //ApplyStatus(_Object, "InstantKnockdown", -1.0, 1);
 //ApplyStatus(_Object, "PERMANENT_NECROFIRE", -1.0, 1);
 CharacterStatusText(_Caster, "Fly!");
 DB_LLMIME_Debug_ObjectPosition(_Target, _Caster, _Object, _x, _y, _z);
 TeleportToPosition(_Target, _x, _y, _tz, "LLMIME_Debug_MoveToPillar", 0, 1);
 //TeleportTo(_Target, _Caster, "LLMIME_Debug_MoveToPillar", 0, 1, 0);
+
+IF
+CharacterUsedSkillOnTarget(_Caster, (CHARACTERGUID)_Target, "Target_LLMIME_DebugTargetSkill", _, _)
+AND
+LeaderLib_Helper_QRY_HasStatus(_Target, "KNOCKED_DOWN")
+THEN
+RemoveStatus(_Target, "KNOCKED_DOWN");
+CharacterSetAnimationOverride(_Target, "knockdown_loop");
+LeaderLib_StartCharacterCharacterTimer(_Caster, _Target, 2450, "LLMIME_Timers_Debug_StartLaunchingDelay_", "LLMIME_Debug_LaunchTargetAfterDelay");
+
+IF
+CharacterCharacterEvent(_Caster, _Target, "LLMIME_Debug_LaunchTargetAfterDelay")
+AND
+GetPosition(_Target, _x, _y, _z)
+AND
+RealSum(_z, 0.1, _tz)
+AND
+CreateItemTemplateAtPosition("S_LeaderLib_Platform_Large_81d0b457-3569-4c6b-bfbc-e954a768472a", _x, _y, _z, _Object)
+THEN
+CharacterStatusText(_Caster, "Fly!");
+DB_LLMIME_Debug_ObjectPosition(_Target, _Caster, _Object, _x, _y, _z);
+CharacterSetAnimationOverride(_Target, "knockdown_loop");
+TeleportToPosition(_Target, _x, _y, _tz, "LLMIME_Debug_MoveToPillar", 0, 1);
+CharacterSetAnimationOverride(_Target, "knockdown_loop");
 
 IF
 StoryEvent((CHARACTERGUID)_Target, "LLMIME_Debug_MoveToPillar")
@@ -474,6 +596,7 @@ AND
 DB_LeaderLib_Random(_TimerDelay)
 THEN
 NOT DB_LeaderLib_Random(_TimerDelay);
+CharacterSetAnimationOverride(_Target, "knockdown_loop");
 CharacterMoveToPosition(_Target, _x, _y, _z, 1, "LLMIME_Debug_SetKnockdownLoop");
 ProcObjectTimer(_Target, "LLMIME_Debug_FallDownPillar", _TimerDelay);
 
@@ -504,9 +627,10 @@ DB_LLMIME_Debug_ObjectPosition(_Target, _Caster, _Object, _x, _y, _z)
 THEN
 //RemoveStatus(_Object, "InstantKnockdown");
 CharacterSetAnimationOverride(_Target, "");
-PlayAnimation(_Target, "knockdown_getup", "");
+//PlayAnimation(_Target, "knockdown_getup", "");
+ApplyStatus(_Target, "KNOCKED_DOWN", 6.0);
 NOT DB_LLMIME_Debug_ObjectPosition(_Target, _Caster, _Object, _x, _y, _z);
-*/
+
 //END_REGION
 
 //REGION TRACING

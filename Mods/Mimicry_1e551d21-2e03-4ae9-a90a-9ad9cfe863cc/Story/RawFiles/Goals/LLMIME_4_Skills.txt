@@ -15,21 +15,23 @@ DB_LLMIME_Skills_DecoyTags("IGNORESEENCOMBAT");
 DB_LLMIME_Skills_DecoyTags("IGNOREVANDALISE");
 
 SysClear("DB_LLMIME_Skills_StealWeapon", 2);
-DB_LLMIME_Skills_StealWeapon("Sword_1H", "Projectile_LLMIME_ThrowWeapon_Sword1H");
-DB_LLMIME_Skills_StealWeapon("Sword_2H", "Projectile_LLMIME_ThrowWeapon_Sword2H");
-DB_LLMIME_Skills_StealWeapon("Axe_1H", "Projectile_LLMIME_ThrowWeapon_Axe1H");
-DB_LLMIME_Skills_StealWeapon("Axe_2H", "Projectile_LLMIME_ThrowWeapon_Axe2H");
-DB_LLMIME_Skills_StealWeapon("Mace_1H", "Projectile_LLMIME_ThrowWeapon_Mace1H");
-DB_LLMIME_Skills_StealWeapon("Mace_2H", "Projectile_LLMIME_ThrowWeapon_Mace2H");
-DB_LLMIME_Skills_StealWeapon("_Dagger_", "Projectile_LLMIME_ThrowWeapon_Dagger");
-DB_LLMIME_Skills_StealWeapon("_Spear_", "Projectile_LLMIME_ThrowWeapon_Spear");
-DB_LLMIME_Skills_StealWeapon("_Staff_", "Projectile_LLMIME_ThrowWeapon_Staff");
-DB_LLMIME_Skills_StealWeapon("_Wand_", "Projectile_LLMIME_ThrowWeapon_Wand");
-DB_LLMIME_Skills_StealWeapon("_Bow_", "Projectile_LLMIME_ThrowWeapon_Bow");
-DB_LLMIME_Skills_StealWeapon("_Crossbow_", "Projectile_LLMIME_ThrowWeapon_Crossbow");
-DB_LLMIME_Skills_StealWeapon("_Shield_", "Projectile_LLMIME_ThrowWeapon_Shield");
-DB_LLMIME_Skills_StealWeapon("_Scythe_", "Projectile_LLMIME_ThrowWeapon_Scythe");
-
+DB_LLMIME_Skills_StealWeapon("Axe_1H", "WPN_LLWEAPONEX_Throwing_Axe1H_50a05d6a-90c5-44b7-aeae-c8329550e283");
+DB_LLMIME_Skills_StealWeapon("Axe_2H", "WPN_LLWEAPONEX_Throwing_Axe2H_5f83d71c-d529-4363-bd8b-33eb433c81c8");
+DB_LLMIME_Skills_StealWeapon("_Bow_", "WPN_LLWEAPONEX_Throwing_Bow_2473fceb-8232-4265-80e8-8e1b3d13c193");
+DB_LLMIME_Skills_StealWeapon("_Crossbow_", "WPN_LLWEAPONEX_Throwing_Crossbow_c40ef0c4-74a8-47f4-a31b-73ea3b56ae8c");
+DB_LLMIME_Skills_StealWeapon("_Dagger_", "WPN_LLWEAPONEX_Throwing_Dagger_63896c15-2c42-40c6-a032-5415039ea03e");
+DB_LLMIME_Skills_StealWeapon("Mace_1H", "WPN_LLWEAPONEX_Throwing_Mace1H_68f7e90e-ac76-40b9-8fdf-fa82e8b058f8");
+DB_LLMIME_Skills_StealWeapon("Mace_2H", "WPN_LLWEAPONEX_Throwing_Mace2H_4327c16c-e992-4445-8e16-e38ebb2bfd34");
+DB_LLMIME_Skills_StealWeapon("_Scythe_", "WPN_LLWEAPONEX_Throwing_Scythe_7a4acd18-b18a-46e9-ae80-2deca72f110e");
+DB_LLMIME_Skills_StealWeapon("_Shield_", "WPN_LLWEAPONEX_Throwing_Shield_8916a325-b0b4-4bb0-a0bb-d3c8740832c4");
+DB_LLMIME_Skills_StealWeapon("_Sickle_", "WPN_LLWEAPONEX_Throwing_Sickle_a64ebf8f-66c3-4bef-924c-ae8ecffe96ba");
+DB_LLMIME_Skills_StealWeapon("_Spear_", "WPN_LLWEAPONEX_Throwing_Spear_46d7a5f4-dd51-498f-a2e5-7fc3d2c97b6a");
+DB_LLMIME_Skills_StealWeapon("_Staff_", "WPN_LLWEAPONEX_Throwing_Staff_9a7d3a8d-f55e-4bd0-8073-cda53953a102");
+DB_LLMIME_Skills_StealWeapon("Sword_1H", "WPN_LLWEAPONEX_Throwing_Sword1H_34fc51f7-87d1-4d36-ac49-6df9d1d32155");
+DB_LLMIME_Skills_StealWeapon("Sword_2H", "WPN_LLWEAPONEX_Throwing_Sword2H_56e4cc0d-1f96-4930-a33f-93ca33a28018");
+DB_LLMIME_Skills_StealWeapon("_Wand_", "WPN_LLWEAPONEX_Throwing_Wand_97f3844d-100e-49a0-8814-eed74c040bb1");
+DB_LLMIME_Skills_StealWeapon("Chair", "WPN_LLWEAPONEX_Throwing_Chair_01_ef9f3937-a609-45cb-999c-9178a02eb7ca");
+DB_LLMIME_Skills_StealWeapon("Rock", "WPN_LLWEAPONEX_Throwing_Rock_eb7b3d1f-43f8-43c3-b529-2713eba49000");
 //DB_LLMIME_Skills_Temp_NextWish(_Caster, _Target)
 //DB_LLMIME_Skills_Temp_FailedWish(_Caster)
 //END_REGION
@@ -452,24 +454,31 @@ NOT DB_LLMIME_Skills_Temp_QuakeSlamTarget(_Target, _Caster, _, _, _, _, _)
 AND
 GetUUID(_Target, _UUID)
 AND
-GetPosition(_Target, _x, _y, _z)
-AND
-LeaderLIb_Platforms_QRY_SpawnPlatform(_UUID, "Large", 0, _x, _y, _z)
-AND
-DB_LeaderLib_Platforms(_UUID, _Platform)
-AND
 LeaderLib_Random_QRY(400,900)
+//LeaderLib_Random_QRY(1500,2000)
 AND
 DB_LeaderLib_Random(_TimerDelay)
+AND
+GetPosition(_Target, _x, _y, _z)
+AND
+IntegertoString(_TimerDelay, _TimerDelayStr)
+AND
+StringConcatenate(_UUID, _TimerDelayStr, _PlatformID)
+AND
+LeaderLIb_Platforms_QRY_SpawnPlatform(_PlatformID, "Large", 0, _x, _y, _z)
+AND
+DB_LeaderLib_Platforms(_PlatformID, _Platform)
 AND
 RealSum(_z, 0.1, _tz)
 THEN
 NOT DB_LeaderLib_Random(_TimerDelay);
+//ApplyStatus(_Platform, "NECROFIRE", -1.0, 1); // Check if it gets spawned
 PlayScaledEffectAtPosition("LLMIME_FX_Status_Launched_Apply_Root_01", 0.25, _x, _y, _z);
 DB_LLMIME_Skills_Temp_QuakeSlamTarget(_Target, _Caster, _x, _y, _z, _Platform, _TimerDelay);
 SetVarObject(_Target, "LLMIME_QuakeSlamCaster", _Caster);
 TeleportToPosition(_Target, _x, _y, _tz, "LLMIME_Skills_QuakeSlam_FlyUpPillar", 0, 1);
 LeaderLib_StartObjectTimer(_Platform, _TimerDelay, "Mimicry_Timers_RemovePlatformTimer_", "Mimicry_Events_Skills_RemovePlatform");
+//LeaderLib_StartObjectTimer(_Target, 2000, "Mimicry_Timers_ResetAnimOverrideFailsafe_", "Mimicry_Events_Skills_ResetAnimationOverride");
 
 IF
 StoryEvent(_Target, "LLMIME_Skills_QuakeSlam_FlyUpPillar")
@@ -499,8 +508,17 @@ IF
 StoryEvent(_Target, "LLMIME_Skills_QuakeSlam_SetKnockdownLoop")
 AND
 ObjectIsCharacter((CHARACTERGUID)_Target, 1)
+AND
+NOT LeaderLib_Helper_QRY_HasStatus(_Target, "KNOCKED_DOWN")
 THEN
 CharacterSetAnimationOverride(_Target, "knockdown_loop");
+
+IF
+StoryEvent(_Target, "Mimicry_Events_Skills_ResetAnimationOverride")
+AND
+ObjectIsCharacter((CHARACTERGUID)_Target, 1)
+THEN
+CharacterSetAnimationOverride(_Target, "");
 
 IF
 StoryEvent((ITEMGUID)_Platform, "Mimicry_Events_Skills_RemovePlatform")
@@ -518,20 +536,21 @@ THEN
 NOT DB_LLMIME_Skills_Temp_QuakeSlamTarget(_Target, _Caster, _x, _y, _z, _Platform, _TimerDelay);
 LeaderLib_Platforms_RemovePlatform(_Platform);
 LLMIME_Skills_Internal_MoveToPillar(_Target, _x, _y, _tz, "LLMIME_Skills_QuakeSlam_SetKnockdownLoop");
-ProcObjectTimer(_Target, "Mimicry_Timers_QuakeSlamFinished", _EndTimerDelay);
+LeaderLib_StartObjectTimer(_Target, _EndTimerDelay, "Mimicry_Timers_Skills_QuakeSlam_FinishLanding_", "Mimicry_Events_Skills_QuakeSlam_TargetLanded");
 
-PROC
-ProcObjectTimerFinished(_Target, "Mimicry_Timers_QuakeSlamFinished")
+IF
+StoryEvent(_Target, "Mimicry_Events_Skills_QuakeSlam_TargetLanded")
 AND
 ObjectIsCharacter((CHARACTERGUID)_Target, 1)
 AND
 GetVarObject(_Target, "LLMIME_QuakeSlamCaster", _Caster)
 THEN
+CharacterFlushQueue(_Target);
 CharacterSetAnimationOverride(_Target, "");
-ApplyStatus(_Target, "KNOCKED_DOWN", 6.0, 0, _Caster);
+ApplyStatus(_Target, "KNOCKED_DOWN", 6.0, 1, _Caster);
 
-PROC
-ProcObjectTimerFinished(_Target, "Mimicry_Timers_QuakeSlamFinished")
+IF
+StoryEvent(_Target, "Mimicry_Events_Skills_QuakeSlam_TargetLanded")
 THEN
 RemoveStatus(_Target, "LLMIME_LAUNCHED");
 ClearVarObject(_Target, "LLMIME_QuakeSlamCaster");
@@ -668,6 +687,8 @@ PlayBeamEffect(_Target, _Caster, _Effect, _CasterBone, _TargetBone);
 IF
 CharacterStatusApplied(_Target, "LLMIME_STEAL_WEAPON", (CHARACTERGUID)_Mime)
 AND
+LeaderUpdater_QRY_ModIsActive("WeaponExpansion", "LaughingLeader")
+AND
 NOT DB_LLMIME_Skills_Temp_WeaponMatch(_Mime)
 AND
 CharacterGetEquippedWeapon(_Target, _Weapon)
@@ -676,13 +697,27 @@ _Weapon != NULL_00000000-0000-0000-0000-000000000000
 AND
 GetTemplate(_Weapon, _Template)
 AND
-DB_LLMIME_Skills_StealWeapon(_String, _Skill)
+DB_LLMIME_Skills_StealWeapon(_String, _ThrowingItemTemplate)
 AND
 NOT DB_LLMIME_Skills_Temp_WeaponMatch(_Mime)
 AND
 StringContains(_Template, _String, 1)
 THEN
-CharacterAddSkill(_Mime, _Skill, 1);
+//CharacterAddSkill(_Mime, _Skill, 1);
+ItemTemplateAddTo(_ThrowingItemTemplate, _Mime, 1, 1);
+DB_LLMIME_Skills_Temp_WeaponMatch(_Mime);
+
+//No match
+IF
+CharacterStatusApplied(_Target, "LLMIME_STEAL_WEAPON", (CHARACTERGUID)_Mime)
+AND
+LeaderUpdater_QRY_ModIsActive("WeaponExpansion", "LaughingLeader")
+AND
+NOT DB_LLMIME_Skills_Temp_WeaponMatch(_Mime)
+AND
+DB_LLMIME_Skills_StealWeapon("Rock", _ThrowingItemTemplate)
+THEN
+ItemTemplateAddTo(_ThrowingItemTemplate, _Mime, 1, 1);
 DB_LLMIME_Skills_Temp_WeaponMatch(_Mime);
 
 IF
@@ -700,6 +735,21 @@ DB_LLMIME_Skills_StealWeapon(_String, _Skill)
 THEN
 CharacterRemoveSkill(_Mime, _Skill);
 */
+//END_REGION
+
+//REGION COUNTER_THROW
+IF
+CharacterMissedBy(_Mime, _AttackerOwner, _Attacker)
+AND
+HasActiveStatus(_Mime, "LLMIME_COUNTER_THROW", 1)
+AND
+CharacterIsEnemy(_Mime, _Attacker, 1)
+AND
+LeaderUpdater_QRY_ModIsActive("WeaponExpansion", "LaughingLeader")
+AND
+LeaderLib_Roll_QRY(60)
+THEN
+CharacterUseSkill(_Mime, "Projectile_LLWEAPONEX_Throw_Rock_Instant", _Attacker, 0, 1, 1);
 //END_REGION
 
 //REGION CLEAR_TEMP_DATA

@@ -27,6 +27,8 @@ QRY
 LLMIME_Mimicking_QRY_ItemWillHarmUndead((ITEMGUID)_Item, (STRING)_Template)
 AND
 IsTagged(_Item, "FOOD", 1)
+AND
+IsTagged(_Item, "POISONED", 0)
 THEN
 DB_NOOP(1);
 

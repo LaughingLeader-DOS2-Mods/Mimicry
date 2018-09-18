@@ -16,6 +16,7 @@ object category "I_SKILLBOOK_LLMIME_KneeBreaker",1,0,0,0,0,0,0,0
 new subtable "-1"
 StartLevel "6"
 object category "I_SKILLBOOK_LLMIME_DisarmingBlow",1,0,0,0,0,0,0,0
+
 new treasuretable "ST_LLMIME_SkillbookMime_Adept"
 new subtable "-1"
 StartLevel "9"
@@ -42,6 +43,7 @@ object category "I_SKILLBOOK_LLMIME_FinalWish",1,0,0,0,0,0,0,0
 new subtable "-1"
 StartLevel "13"
 object category "I_SKILLBOOK_LLMIME_Fatality",1,0,0,0,0,0,0,0
+
 new treasuretable "ST_LLMIME_SkillbookMime_AllBooks"
 new subtable "-1"
 object category "T_ST_LLMIME_SkillbookMime_NoRequirements",1,0,0,0,0,0,0,0
@@ -57,6 +59,7 @@ object category "T_ST_LLMIME_SkillbookMime_Adept",1,0,0,0,0,0,0,0
 new subtable "-1"
 StartLevel "13"
 object category "T_ST_LLMIME_SkillbookMime_Master",1,0,0,0,0,0,0,0
+
 new treasuretable "LLMIME_Mime_Equipment"
 MinLevel "-19"
 MaxLevel "19"

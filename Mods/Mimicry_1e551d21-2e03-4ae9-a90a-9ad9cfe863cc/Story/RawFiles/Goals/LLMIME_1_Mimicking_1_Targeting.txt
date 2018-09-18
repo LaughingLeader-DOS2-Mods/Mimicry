@@ -311,7 +311,6 @@ NOT LLMIME_Mimicking_Targeting_QRY_PositionMismatch(_Dummy, _TargetX, _TargetZ)
 THEN
 NOT DB_LLMIME_Targeting_Temp_NextDummy(_DummyTaskID, _Caster, _Mime, _TargetX, _TargetY, _TargetZ, _TargetPriority, _Action, _ActionType);
 NOT DB_LLMIME_Dummy_NextCharacterDummy(_DummyTaskID, _Dummy);
-ObjectClearFlag(_Dummy, "LLMIME_Target_ItemIteratorFinished");
 LLMIME_Mimicking_ResetFailTimer(_Mime, _Caster, _Action, _ActionType, 1500);
 LLMIME_Mimic_Target_StartDummyIteration(_Dummy, _Caster, _Mime, _TargetX, _TargetY, _TargetZ, _TargetPriority, _Action, _ActionType);
 
@@ -326,7 +325,6 @@ LLMIME_Mimicking_Targeting_QRY_PositionMismatch(_Dummy, _TargetX, _TargetZ)
 //AND
 //FindValidPosition(_TargetX, _TargetY, _TargetZ, 1.0, _Dummy, _x, _y, _z)
 THEN
-ObjectClearFlag(_Dummy, "LLMIME_Target_ItemIteratorFinished");
 NOT DB_LLMIME_Dummy_NextCharacterDummy(_DummyTaskID, _Dummy);
 LLMIME_Mimicking_ResetFailTimer(_Mime, _Caster, _Action, _ActionType, 1500);
 CharacterMoveToPosition(_Dummy, _TargetX, _TargetY, _TargetZ, 1, _DummyTaskID);
@@ -484,7 +482,7 @@ DB_NOOP(1);
 PROC
 LLMIME_Mimic_Target_EvaluateTarget((CHARACTERGUID)_CheckChar, (CHARACTERGUID)_OtherTarget, (CHARACTERGUID)_Mime, (CHARACTERGUID)_Caster, (CHARACTERGUID)_Dummy, (INTEGER)_TargetPriority)
 AND
-_TargetPriority == -1
+_TargetPriority < 0
 AND
 LLMIME_QRY_Mimic_Targeting_IsCloserToDummy(_CheckChar, _OtherTarget, _Dummy)
 THEN
@@ -494,7 +492,7 @@ LLMIME_Mimic_Targeting_SetTarget(_Mime, _Caster, (GUIDSTRING)_CheckChar);
 PROC
 LLMIME_Mimic_Target_EvaluateSingleTarget((CHARACTERGUID)_CheckChar, (CHARACTERGUID)_Mime, (CHARACTERGUID)_Caster, (CHARACTERGUID)_Dummy, (INTEGER)_TargetPriority)
 AND
-_TargetPriority == -1
+_TargetPriority < 0
 THEN
 LeaderLog_Log("DEBUG", "[LLMIME:Mime:Targeting:EvaluateSingleTarget] Set mimic target to character (priority is -1).");
 LLMIME_Mimic_Targeting_SetTarget(_Mime, _Caster, (GUIDSTRING)_CheckChar);
@@ -551,28 +549,56 @@ THEN
 NOT DB_LLMIME_Mimic_Temp_TargetIterator(_Caster, _Mime, _Dummy, _TargetX, _TargetY, _TargetZ, _EventName, _TargetPriority, _Action, _ActionType);
 LLMIME_Mimicking_Targeting_OnIteratorFinished(_Caster, _Mime, _Dummy, _Action, _ActionType, _TargetPriority, _EventName, _TargetX, _TargetY, _TargetZ);
 
+QRY
+LLMIME_Mimicking_Targeting_QRY_PrioritizeTheGround((INTEGER)_TargetPriority, (STRING)_ActionType)
+AND
+_TargetPriority < 0
+AND
+_ActionType == "Skill"
+THEN
+DB_NOOP(1);
+
 PROC
 LLMIME_Mimicking_Targeting_OnIteratorFinished((CHARACTERGUID)_Caster, (CHARACTERGUID)_Mime, (CHARACTERGUID)_Dummy, (STRING)_Action, (STRING)_ActionType, (INTEGER)_TargetPriority, (STRING)_EventName, (REAL)_TargetX, (REAL)_TargetY, (REAL)_TargetZ)
 AND
 NOT DB_LLMIME_Mimic_Temp_TargetItemIterator(_Caster, _Mime, _Dummy, _TargetX, _TargetY, _TargetZ, _, _TargetPriority, _Action, _ActionType, _)
 AND
-DB_LLMIME_Mimic_Temp_MimicTarget(_Mime, _Caster, _Target)
-AND
-_Target == _Dummy
-AND
-ObjectGetFlag(_Dummy, "LLMIME_Target_ItemIteratorFinished", 0)
-AND
 StringConcatenate(_EventName, "_Item", _NextEventName)
 AND
 StringConcatenate(_EventName, "_Timer", _TimerName)
 THEN
+DB_LLMIME_Mimic_Temp_TargetItemIterator(_Caster, _Mime, _Dummy, _TargetX, _TargetY, _TargetZ, _NextEventName, _TargetPriority, _Action, _ActionType, _TimerName);
+
+PROC
+LLMIME_Mimicking_Targeting_OnIteratorFinished((CHARACTERGUID)_Caster, (CHARACTERGUID)_Mime, (CHARACTERGUID)_Dummy, (STRING)_Action, (STRING)_ActionType, (INTEGER)_TargetPriority, (STRING)_EventName, (REAL)_TargetX, (REAL)_TargetY, (REAL)_TargetZ)
+AND
+DB_LLMIME_Mimic_Temp_TargetItemIterator(_Caster, _Mime, _Dummy, _TargetX, _TargetY, _TargetZ, _NextEventName, _TargetPriority, _Action, _ActionType, _TimerName)
+AND
+NOT LLMIME_Mimicking_Targeting_QRY_PrioritizeTheGround(_TargetPriority, _ActionType) //Prefer positional targets for skills
+AND
+DB_LLMIME_Mimic_Temp_MimicTarget(_Mime, _Caster, _Target)
+AND
+_Target == _Dummy
+THEN
 LLMIME_Mimicking_ResetFailTimer(_Mime, _Caster, _Action, _ActionType, 1500);
 LeaderLog_Log("DEBUG", "[LLMIME:Mime:Targeting:OnIteratorFinished] No characters found. Searching for nearby items with event [",_NextEventName,"].");
-DB_LLMIME_Mimic_Temp_TargetItemIterator(_Caster, _Mime, _Dummy, _TargetX, _TargetY, _TargetZ, _NextEventName, _TargetPriority, _Action, _ActionType, _TimerName);
 SetVarFixedString(_Dummy, "LLMIME_Dummy_IterationEvent", _NextEventName);
 SetVarFloat(_Dummy, "LLMIME_Dummy_IterationRange", 1.0);
 SetStoryEvent(_Dummy, "LLMIME_Events_StartDummyItemIterator");
-TimerLaunch(_TimerName, 100);
+
+PROC
+LLMIME_Mimicking_Targeting_OnIteratorFinished((CHARACTERGUID)_Caster, (CHARACTERGUID)_Mime, (CHARACTERGUID)_Dummy, (STRING)_Action, (STRING)_ActionType, (INTEGER)_TargetPriority, (STRING)_EventName, (REAL)_TargetX, (REAL)_TargetY, (REAL)_TargetZ)
+AND
+LLMIME_Mimicking_Targeting_QRY_PrioritizeTheGround(_TargetPriority, _ActionType)
+THEN
+LeaderLog_Log("DEBUG", "[LLMIME:Mime:Targeting] Skipping item iterator, since the mimicked spell targeted the ground [",_EventName,"].");
+
+PROC
+LLMIME_Mimicking_Targeting_OnIteratorFinished((CHARACTERGUID)_Caster, (CHARACTERGUID)_Mime, (CHARACTERGUID)_Dummy, (STRING)_Action, (STRING)_ActionType, (INTEGER)_TargetPriority, (STRING)_EventName, (REAL)_TargetX, (REAL)_TargetY, (REAL)_TargetZ)
+AND
+DB_LLMIME_Mimic_Temp_TargetItemIterator(_Caster, _Mime, _Dummy, _TargetX, _TargetY, _TargetZ, _NextEventName, _TargetPriority, _Action, _ActionType, _TimerName)
+THEN
+TimerLaunch(_TimerName, 250);
 
 /*
 IF
@@ -616,19 +642,19 @@ DB_NOOP(1);
 IF
 StoryEvent((ITEMGUID)_Item, _EventName)
 AND
+DB_LLMIME_Mimic_Temp_TargetItemIterator(_Caster, _Mime, _Dummy, _TargetX, _TargetY, _TargetZ, _EventName, _TargetPriority, _Action, _ActionType, _TimerName)
+AND
 _Item != NULL_00000000-0000-0000-0000-000000000000
 AND
 ItemIsDestroyed(_Item, 0)
 AND
 ItemIsInInventory(_Item, 0)
 AND
-DB_LLMIME_Mimic_Temp_TargetItemIterator(_Caster, _Mime, _Dummy, _TargetX, _TargetY, _TargetZ, _EventName, _TargetPriority, _Action, _ActionType, _TimerName)
-AND
 GetDistanceTo(_Item, _Dummy, _Dist)
 AND
 LLMIME_Mimic_Targeting_QRY_CanReplaceTarget(_Mime, _Caster, _Dummy, _Dist)
 THEN
-LeaderLog_Log("DEBUG", "[LLMIME:Mime:Targeting:",_EventName,"] Found item target.");
+LeaderLog_Log("DEBUG", "[LLMIME:Mime:Targeting] Found item target [",_EventName,"].");
 LLMIME_Mimic_Targeting_SetTarget(_Mime, _Caster, (GUIDSTRING)_Item);
 
 IF
@@ -636,33 +662,28 @@ TimerFinished(_TimerName)
 AND
 DB_LLMIME_Mimic_Temp_TargetItemIterator(_Caster, _Mime, _Dummy, _TargetX, _TargetY, _TargetZ, _EventName, _TargetPriority, _Action, _ActionType, _TimerName)
 THEN
-LeaderLog_Log("DEBUG", "[LLMIME:Mime:Targeting:",_EventName,"] Item iteration finished. Finalizing.");
-ObjectSetFlag(_Dummy, "LLMIME_Target_ItemIteratorFinished");
-LLMIME_Mimicking_Targeting_OnIteratorFinished(_Caster, _Mime, _Dummy, _Action, _ActionType, _TargetPriority, "", _TargetX, _TargetY, _TargetZ);
+LeaderLog_Log("DEBUG", "[LLMIME:Mime:Targeting] Item iteration finished. Finalizing [",_EventName,"].");
+LLMIME_Mimicking_Targeting_OnItemIteratorFinished(_Caster, _Mime, _Dummy, _Action, _ActionType, _TargetPriority, "", _TargetX, _TargetY, _TargetZ);
 NOT DB_LLMIME_Mimic_Temp_TargetItemIterator(_Caster, _Mime, _Dummy, _TargetX, _TargetY, _TargetZ, _EventName, _TargetPriority, _Action, _ActionType, _TimerName);
 
 PROC
-LLMIME_Mimicking_Targeting_OnIteratorFinished((CHARACTERGUID)_Caster, (CHARACTERGUID)_Mime, (CHARACTERGUID)_Dummy, (STRING)_Action, (STRING)_ActionType, (INTEGER)_TargetPriority, (STRING)_EventName, (REAL)_TargetX, (REAL)_TargetY, (REAL)_TargetZ)
+LLMIME_Mimicking_Targeting_OnItemIteratorFinished((CHARACTERGUID)_Caster, (CHARACTERGUID)_Mime, (CHARACTERGUID)_Dummy, (STRING)_Action, (STRING)_ActionType, (INTEGER)_TargetPriority, (STRING)_EventName, (REAL)_TargetX, (REAL)_TargetY, (REAL)_TargetZ)
 AND
 DB_LLMIME_Mimic_Temp_MimicTarget(_Mime, _Caster, _Target)
 AND
 _Target == _Dummy
-AND
-ObjectGetFlag(_Dummy, "LLMIME_Target_ItemIteratorFinished", 1)
 THEN
 LeaderLog_Log("DEBUG", "[LLMIME:Mime:Targeting:OnIteratorFinished] Target is dummy.");
-ObjectClearFlag(_Dummy, "LLMIME_Target_ItemIteratorFinished");
 LLMIME_Mimicking_Targeting_OnTargetSearchFinished(_Caster, _Mime, _Dummy, _Action, _ActionType, _TargetPriority);
 
 PROC
-LLMIME_Mimicking_Targeting_OnIteratorFinished((CHARACTERGUID)_Caster, (CHARACTERGUID)_Mime, (CHARACTERGUID)_Dummy, (STRING)_Action, (STRING)_ActionType, (INTEGER)_TargetPriority, (STRING)_EventName, (REAL)_TargetX, (REAL)_TargetY, (REAL)_TargetZ)
+LLMIME_Mimicking_Targeting_OnItemIteratorFinished((CHARACTERGUID)_Caster, (CHARACTERGUID)_Mime, (CHARACTERGUID)_Dummy, (STRING)_Action, (STRING)_ActionType, (INTEGER)_TargetPriority, (STRING)_EventName, (REAL)_TargetX, (REAL)_TargetY, (REAL)_TargetZ)
 AND
 DB_LLMIME_Mimic_Temp_MimicTarget(_Mime, _Caster, _Target)
 AND
 _Target != _Dummy
 THEN
 LeaderLog_Log("DEBUG", "[LLMIME:Mime:Targeting:OnIteratorFinished] Target is not dummy.");
-ObjectClearFlag(_Dummy, "LLMIME_Target_ItemIteratorFinished");
 LLMIME_Mimicking_Targeting_OnTargetSearchFinished(_Caster, _Mime, _Dummy, _Action, _ActionType, _TargetPriority);
 //END_REGION
 
@@ -737,7 +758,7 @@ LLMIME_Mimicking_TargetSystem_SetFinalTarget((CHARACTERGUID)_Caster, (CHARACTERG
 AND
 _Target == _Dummy
 AND
-_TargetPriority <= -1
+_TargetPriority < 0
 THEN
 SetFaction(_Dummy,"Neutral NPC");
 //LeaderLog_Log("TRACE", "[LLMIME:Mime:Targeting] Set dummy faction to [Neutral NPC] for next mimic skill [",_Action, _ActionType,"].");
