@@ -433,6 +433,39 @@ CharacterTeleportToFleeWaypoint(_Player, _)
 THEN
 LeaveCombat(_Player);
 
+//REGION FOLLOWER_GHOST_SPAWN
+IF
+GameStarted(_,_)
+AND
+DB_LLMIME_Follower_Mime(_Mime)
+AND
+CharacterIsDead(_Mime, 1)
+AND
+NOT ObjectGetFlag(_Mime, "Mimicry_MimeFollowerMaskTaken", 1)
+AND
+NOT LLMIME_Follower_QRY_GhostExists()
+THEN
+LeaderLib_StartObjectTimer(_Mime, 500, "Mimicry_Timers_Follower_SpawnGhost_", "Mimicry_Follower_SpawnGhost");
+
+IF
+CharacterSawCharacter(_Player, _Mime)
+AND
+DB_LLMIME_Follower_Mime(_Mime)
+AND
+CharacterIsDead(_Mime, 1)
+AND
+NOT ObjectGetFlag(_Mime, "Mimicry_MimeFollowerMaskTaken", 1)
+AND
+NOT LLMIME_Follower_QRY_GhostExists()
+THEN
+LeaderLib_StartObjectTimer(_Mime, 500, "Mimicry_Timers_Follower_SpawnGhost_", "Mimicry_Follower_SpawnGhost");
+
+IF
+StoryEvent((CHARACTERGUID)_Mime, "Mimicry_Follower_SpawnGhost")
+THEN
+LLMIME_Follower_SpawnGhost(_Mime);
+//END_REGION
+
 //REGION SKILL_TEST
 IF
 CharacterMissedBy(_Mime, _AttackerOwner, _Attacker)

@@ -1,7 +1,6 @@
 {
    "save" : {
       "header" : {
-         "time" : 1530585279,
          "version" : "2.0.8.2"
       },
       "regions" : {
@@ -26,13 +25,7 @@
                               "Emotion" : {"type" : 23, "value" : "Default"},
                               "ExtraWaitTime" : {"type" : 4, "value" : 0},
                               "MusicInstrumentSounds" : [ {} ],
-                              "OriginSound" : [
-                                 {
-                                    "OriginOnly" : {"type" : 22, "value" : ""},
-                                    "OriginTheme" : {"type" : 22, "value" : ""},
-                                    "OriginThemeAddInstrument" : {"type" : 19, "value" : 0}
-                                 }
-                              ],
+                              "OriginSound" : [ {} ],
                               "SoundEvent" : {"type" : 23, "value" : ""}
                            }
                         ],
@@ -97,6 +90,10 @@
                            {
                               "data" : [
                                  {
+                                    "key" : {"type" : 22, "value" : "ID"},
+                                    "val" : {"type" : 23, "value" : "N1"}
+                                 },
+                                 {
                                     "key" : {"type" : 22, "value" : "NodeContext"},
                                     "val" : {"type" : 23, "value" : ""}
                                  },
@@ -150,13 +147,7 @@
                               "Emotion" : {"type" : 23, "value" : "Default"},
                               "ExtraWaitTime" : {"type" : 4, "value" : 0},
                               "MusicInstrumentSounds" : [ {} ],
-                              "OriginSound" : [
-                                 {
-                                    "OriginOnly" : {"type" : 22, "value" : ""},
-                                    "OriginTheme" : {"type" : 22, "value" : ""},
-                                    "OriginThemeAddInstrument" : {"type" : 19, "value" : 0}
-                                 }
-                              ],
+                              "OriginSound" : [ {} ],
                               "SoundEvent" : {"type" : 23, "value" : ""}
                            }
                         ],
@@ -200,6 +191,10 @@
                            {
                               "data" : [
                                  {
+                                    "key" : {"type" : 22, "value" : "ID"},
+                                    "val" : {"type" : 23, "value" : "N2"}
+                                 },
+                                 {
                                     "key" : {"type" : 22, "value" : "NodeContext"},
                                     "val" : {"type" : 23, "value" : ""}
                                  },
@@ -213,7 +208,7 @@
                                  },
                                  {
                                     "key" : {"type" : 22, "value" : "position"},
-                                    "val" : {"type" : 23, "value" : "5135;1329"}
+                                    "val" : {"type" : 23, "value" : "5135;2643"}
                                  },
                                  {
                                     "key" : {"type" : 22, "value" : "sourcetemplate"},
@@ -240,13 +235,7 @@
                               "Emotion" : {"type" : 23, "value" : "Default"},
                               "ExtraWaitTime" : {"type" : 4, "value" : 0},
                               "MusicInstrumentSounds" : [ {} ],
-                              "OriginSound" : [
-                                 {
-                                    "OriginOnly" : {"type" : 22, "value" : ""},
-                                    "OriginTheme" : {"type" : 22, "value" : ""},
-                                    "OriginThemeAddInstrument" : {"type" : 19, "value" : 0}
-                                 }
-                              ],
+                              "OriginSound" : [ {} ],
                               "SoundEvent" : {"type" : 23, "value" : ""}
                            }
                         ],
@@ -337,6 +326,10 @@
                            {
                               "data" : [
                                  {
+                                    "key" : {"type" : 22, "value" : "ID"},
+                                    "val" : {"type" : 23, "value" : "N3"}
+                                 },
+                                 {
                                     "key" : {"type" : 22, "value" : "NodeContext"},
                                     "val" : {"type" : 23, "value" : ""}
                                  },
@@ -377,13 +370,7 @@
                               "Emotion" : {"type" : 23, "value" : "Default"},
                               "ExtraWaitTime" : {"type" : 4, "value" : 0},
                               "MusicInstrumentSounds" : [ {} ],
-                              "OriginSound" : [
-                                 {
-                                    "OriginOnly" : {"type" : 22, "value" : ""},
-                                    "OriginTheme" : {"type" : 22, "value" : ""},
-                                    "OriginThemeAddInstrument" : {"type" : 19, "value" : 0}
-                                 }
-                              ],
+                              "OriginSound" : [ {} ],
                               "SoundEvent" : {"type" : 23, "value" : ""}
                            }
                         ],
@@ -435,6 +422,10 @@
                            {
                               "data" : [
                                  {
+                                    "key" : {"type" : 22, "value" : "ID"},
+                                    "val" : {"type" : 23, "value" : "N4"}
+                                 },
+                                 {
                                     "key" : {"type" : 22, "value" : "NodeContext"},
                                     "val" : {"type" : 23, "value" : ""}
                                  },
@@ -475,13 +466,7 @@
                               "Emotion" : {"type" : 23, "value" : "Default"},
                               "ExtraWaitTime" : {"type" : 4, "value" : 0},
                               "MusicInstrumentSounds" : [ {} ],
-                              "OriginSound" : [
-                                 {
-                                    "OriginOnly" : {"type" : 22, "value" : ""},
-                                    "OriginTheme" : {"type" : 22, "value" : ""},
-                                    "OriginThemeAddInstrument" : {"type" : 19, "value" : 0}
-                                 }
-                              ],
+                              "OriginSound" : [ {} ],
                               "SoundEvent" : {"type" : 23, "value" : ""}
                            }
                         ],
@@ -543,6 +528,10 @@
                            {
                               "data" : [
                                  {
+                                    "key" : {"type" : 22, "value" : "ID"},
+                                    "val" : {"type" : 23, "value" : "N5"}
+                                 },
+                                 {
                                     "key" : {"type" : 22, "value" : "NodeContext"},
                                     "val" : {"type" : 23, "value" : ""}
                                  },
@@ -594,6 +583,10 @@
                            {
                               "data" : [
                                  {
+                                    "key" : {"type" : 22, "value" : "ID"},
+                                    "val" : {"type" : 23, "value" : "N7"}
+                                 },
+                                 {
                                     "key" : {"type" : 22, "value" : "collapsed"},
                                     "val" : {"type" : 23, "value" : "False"}
                                  },
@@ -629,13 +622,7 @@
                               "Emotion" : {"type" : 23, "value" : "Default"},
                               "ExtraWaitTime" : {"type" : 4, "value" : 0},
                               "MusicInstrumentSounds" : [ {} ],
-                              "OriginSound" : [
-                                 {
-                                    "OriginOnly" : {"type" : 22, "value" : ""},
-                                    "OriginTheme" : {"type" : 22, "value" : ""},
-                                    "OriginThemeAddInstrument" : {"type" : 19, "value" : 0}
-                                 }
-                              ],
+                              "OriginSound" : [ {} ],
                               "SoundEvent" : {"type" : 23, "value" : ""}
                            }
                         ],
@@ -697,6 +684,10 @@
                            {
                               "data" : [
                                  {
+                                    "key" : {"type" : 22, "value" : "ID"},
+                                    "val" : {"type" : 23, "value" : "N8"}
+                                 },
+                                 {
                                     "key" : {"type" : 22, "value" : "NodeContext"},
                                     "val" : {"type" : 23, "value" : ""}
                                  },
@@ -747,13 +738,7 @@
                               "Emotion" : {"type" : 23, "value" : "Default"},
                               "ExtraWaitTime" : {"type" : 4, "value" : 0},
                               "MusicInstrumentSounds" : [ {} ],
-                              "OriginSound" : [
-                                 {
-                                    "OriginOnly" : {"type" : 22, "value" : ""},
-                                    "OriginTheme" : {"type" : 22, "value" : ""},
-                                    "OriginThemeAddInstrument" : {"type" : 19, "value" : 0}
-                                 }
-                              ],
+                              "OriginSound" : [ {} ],
                               "SoundEvent" : {"type" : 23, "value" : ""}
                            }
                         ],
@@ -805,6 +790,10 @@
                            {
                               "data" : [
                                  {
+                                    "key" : {"type" : 22, "value" : "ID"},
+                                    "val" : {"type" : 23, "value" : "N9"}
+                                 },
+                                 {
                                     "key" : {"type" : 22, "value" : "NodeContext"},
                                     "val" : {"type" : 23, "value" : ""}
                                  },
@@ -845,13 +834,7 @@
                               "Emotion" : {"type" : 23, "value" : "Default"},
                               "ExtraWaitTime" : {"type" : 4, "value" : 0},
                               "MusicInstrumentSounds" : [ {} ],
-                              "OriginSound" : [
-                                 {
-                                    "OriginOnly" : {"type" : 22, "value" : ""},
-                                    "OriginTheme" : {"type" : 22, "value" : ""},
-                                    "OriginThemeAddInstrument" : {"type" : 19, "value" : 0}
-                                 }
-                              ],
+                              "OriginSound" : [ {} ],
                               "SoundEvent" : {"type" : 23, "value" : ""}
                            }
                         ],
@@ -913,6 +896,10 @@
                            {
                               "data" : [
                                  {
+                                    "key" : {"type" : 22, "value" : "ID"},
+                                    "val" : {"type" : 23, "value" : "N10"}
+                                 },
+                                 {
                                     "key" : {"type" : 22, "value" : "NodeContext"},
                                     "val" : {"type" : 23, "value" : ""}
                                  },
@@ -963,13 +950,7 @@
                               "Emotion" : {"type" : 23, "value" : "Default"},
                               "ExtraWaitTime" : {"type" : 4, "value" : 0},
                               "MusicInstrumentSounds" : [ {} ],
-                              "OriginSound" : [
-                                 {
-                                    "OriginOnly" : {"type" : 22, "value" : ""},
-                                    "OriginTheme" : {"type" : 22, "value" : ""},
-                                    "OriginThemeAddInstrument" : {"type" : 19, "value" : 0}
-                                 }
-                              ],
+                              "OriginSound" : [ {} ],
                               "SoundEvent" : {"type" : 23, "value" : ""}
                            }
                         ],
@@ -1021,6 +1002,10 @@
                            {
                               "data" : [
                                  {
+                                    "key" : {"type" : 22, "value" : "ID"},
+                                    "val" : {"type" : 23, "value" : "N11"}
+                                 },
+                                 {
                                     "key" : {"type" : 22, "value" : "NodeContext"},
                                     "val" : {"type" : 23, "value" : ""}
                                  },
@@ -1061,13 +1046,7 @@
                               "Emotion" : {"type" : 23, "value" : "Default"},
                               "ExtraWaitTime" : {"type" : 4, "value" : 0},
                               "MusicInstrumentSounds" : [ {} ],
-                              "OriginSound" : [
-                                 {
-                                    "OriginOnly" : {"type" : 22, "value" : ""},
-                                    "OriginTheme" : {"type" : 22, "value" : ""},
-                                    "OriginThemeAddInstrument" : {"type" : 19, "value" : 0}
-                                 }
-                              ],
+                              "OriginSound" : [ {} ],
                               "SoundEvent" : {"type" : 23, "value" : ""}
                            }
                         ],
@@ -1127,6 +1106,24 @@
                                     "UUID" : {"type" : 22, "value" : "54610120-0949-4593-b295-a51a4122e7a9"}
                                  },
                                  {
+                                    "UUID" : {"type" : 22, "value" : "393269c4-f1f3-4e0c-8cc6-39a999368849"}
+                                 },
+                                 {
+                                    "UUID" : {"type" : 22, "value" : "b0d030be-c5ca-40d8-b68c-b29f36ec475e"}
+                                 },
+                                 {
+                                    "UUID" : {"type" : 22, "value" : "6d7217a5-f3f1-4cdd-a9a9-6e741a18bf14"}
+                                 },
+                                 {
+                                    "UUID" : {"type" : 22, "value" : "5bb37950-a2dd-41be-bebf-501a1b9cc640"}
+                                 },
+                                 {
+                                    "UUID" : {"type" : 22, "value" : "419bdf2a-c043-4cd8-9b1d-b403cceca48b"}
+                                 },
+                                 {
+                                    "UUID" : {"type" : 22, "value" : "60d7f93a-7684-44e2-9ba1-4d3e06c19ad1"}
+                                 },
+                                 {
                                     "UUID" : {"type" : 22, "value" : "078767a5-cbf0-4ace-8c93-f96cf3137d0a"}
                                  }
                               ]
@@ -1136,6 +1133,10 @@
                         "editorData" : [
                            {
                               "data" : [
+                                 {
+                                    "key" : {"type" : 22, "value" : "ID"},
+                                    "val" : {"type" : 23, "value" : "N12"}
+                                 },
                                  {
                                     "key" : {"type" : 22, "value" : "NodeContext"},
                                     "val" : {"type" : 23, "value" : ""}
@@ -1177,13 +1178,7 @@
                               "Emotion" : {"type" : 23, "value" : "Default"},
                               "ExtraWaitTime" : {"type" : 4, "value" : 0},
                               "MusicInstrumentSounds" : [ {} ],
-                              "OriginSound" : [
-                                 {
-                                    "OriginOnly" : {"type" : 22, "value" : ""},
-                                    "OriginTheme" : {"type" : 22, "value" : ""},
-                                    "OriginThemeAddInstrument" : {"type" : 19, "value" : 0}
-                                 }
-                              ],
+                              "OriginSound" : [ {} ],
                               "SoundEvent" : {"type" : 23, "value" : ""}
                            }
                         ],
@@ -1245,6 +1240,10 @@
                            {
                               "data" : [
                                  {
+                                    "key" : {"type" : 22, "value" : "ID"},
+                                    "val" : {"type" : 23, "value" : "N13"}
+                                 },
+                                 {
                                     "key" : {"type" : 22, "value" : "NodeContext"},
                                     "val" : {"type" : 23, "value" : ""}
                                  },
@@ -1295,13 +1294,7 @@
                               "Emotion" : {"type" : 23, "value" : "Default"},
                               "ExtraWaitTime" : {"type" : 4, "value" : 0},
                               "MusicInstrumentSounds" : [ {} ],
-                              "OriginSound" : [
-                                 {
-                                    "OriginOnly" : {"type" : 22, "value" : ""},
-                                    "OriginTheme" : {"type" : 22, "value" : ""},
-                                    "OriginThemeAddInstrument" : {"type" : 19, "value" : 0}
-                                 }
-                              ],
+                              "OriginSound" : [ {} ],
                               "SoundEvent" : {"type" : 23, "value" : ""}
                            }
                         ],
@@ -1363,6 +1356,10 @@
                            {
                               "data" : [
                                  {
+                                    "key" : {"type" : 22, "value" : "ID"},
+                                    "val" : {"type" : 23, "value" : "N14"}
+                                 },
+                                 {
                                     "key" : {"type" : 22, "value" : "NodeContext"},
                                     "val" : {"type" : 23, "value" : ""}
                                  },
@@ -1413,13 +1410,129 @@
                               "Emotion" : {"type" : 23, "value" : "Default"},
                               "ExtraWaitTime" : {"type" : 4, "value" : 0},
                               "MusicInstrumentSounds" : [ {} ],
-                              "OriginSound" : [
+                              "OriginSound" : [ {} ],
+                              "SoundEvent" : {"type" : 23, "value" : ""}
+                           }
+                        ],
+                        "ShowOnce" : {"type" : 19, "value" : 0},
+                        "TaggedTexts" : [
+                           {
+                              "TaggedText" : [
                                  {
-                                    "OriginOnly" : {"type" : 22, "value" : ""},
-                                    "OriginTheme" : {"type" : 22, "value" : ""},
-                                    "OriginThemeAddInstrument" : {"type" : 19, "value" : 0}
+                                    "HasTagRule" : {"type" : 19, "value" : 1},
+                                    "RuleGroup" : [
+                                       {
+                                          "Rules" : [ {} ],
+                                          "TagCombineOp" : {"type" : 1, "value" : 0}
+                                       }
+                                    ],
+                                    "TagTexts" : [
+                                       {
+                                          "TagText" : [
+                                             {
+                                                "TagText" : {
+                                                   "handle" : "ls::TranslatedStringRepository::s_HandleUnknown",
+                                                   "type" : 28,
+                                                   "value" : "*Hide the Brawler Stance status.*"
+                                                },
+                                                "stub" : {"type" : 19, "value" : 1}
+                                             }
+                                          ]
+                                       }
+                                    ]
                                  }
-                              ],
+                              ]
+                           }
+                        ],
+                        "Tags" : [ {} ],
+                        "UUID" : {"type" : 22, "value" : "393269c4-f1f3-4e0c-8cc6-39a999368849"},
+                        "addressedspeaker" : {"type" : 4, "value" : -1},
+                        "checkflags" : [
+                           {
+                              "flaggroup" : [
+                                 {
+                                    "flag" : [
+                                       {
+                                          "name" : {"type" : 22, "value" : "Mimicry_HideBrawlerStance"},
+                                          "paramval" : {"type" : 4, "value" : 1},
+                                          "value" : {"type" : 19, "value" : 0}
+                                       }
+                                    ],"type" : {"type" : 22, "value" : "Character"}}
+                              ]
+                           }
+                        ],
+                        "children" : [
+                           {
+                              "child" : [
+                                 {
+                                    "UUID" : {"type" : 22, "value" : "edcd1570-7e7c-4a70-a5bf-2bdbd78904f7"}
+                                 }
+                              ]
+                           }
+                        ],
+                        "constructor" : {"type" : 22, "value" : "TagQuestion"},
+                        "editorData" : [
+                           {
+                              "data" : [
+                                 {
+                                    "key" : {"type" : 22, "value" : "ID"},
+                                    "val" : {"type" : 23, "value" : "N66"}
+                                 },
+                                 {
+                                    "key" : {"type" : 22, "value" : "NodeContext"},
+                                    "val" : {"type" : 23, "value" : ""}
+                                 },
+                                 {
+                                    "key" : {"type" : 22, "value" : "collapsed"},
+                                    "val" : {"type" : 23, "value" : "False"}
+                                 },
+                                 {
+                                    "key" : {"type" : 22, "value" : "logicalname"},
+                                    "val" : {"type" : 23, "value" : "Question"}
+                                 },
+                                 {
+                                    "key" : {"type" : 22, "value" : "position"},
+                                    "val" : {"type" : 23, "value" : "5135;1329"}
+                                 },
+                                 {
+                                    "key" : {"type" : 22, "value" : "sourcetemplate"},
+                                    "val" : {"type" : 23, "value" : ""}
+                                 }
+                              ]
+                           }
+                        ],
+                        "endnode" : {"type" : 19, "value" : 0},
+                        "exclusive" : {"type" : 19, "value" : 0},
+                        "optional" : {"type" : 19, "value" : 0},
+                        "setflags" : [
+                           {
+                              "flaggroup" : [
+                                 {
+                                    "flag" : [
+                                       {
+                                          "name" : {"type" : 22, "value" : "Mimicry_HideBrawlerStance"},
+                                          "paramval" : {"type" : 4, "value" : 1},
+                                          "value" : {"type" : 19, "value" : 1}
+                                       }
+                                    ],"type" : {"type" : 22, "value" : "Character"}}
+                              ]
+                           }
+                        ],
+                        "speaker" : {"type" : 4, "value" : 1},
+                        "stub" : {"type" : 19, "value" : 0},
+                        "transitionmode" : {"type" : 1, "value" : 0},
+                        "waittime" : {"type" : 6, "value" : -1.0}
+                     },
+                     {
+                        "GameData" : [
+                           {
+                              "AiPersonalities" : [ {} ],
+                              "CameraTarget" : {"type" : 4, "value" : -1},
+                              "CustomMovie" : {"type" : 23, "value" : ""},
+                              "Emotion" : {"type" : 23, "value" : "Default"},
+                              "ExtraWaitTime" : {"type" : 4, "value" : 0},
+                              "MusicInstrumentSounds" : [ {} ],
+                              "OriginSound" : [ {} ],
                               "SoundEvent" : {"type" : 23, "value" : ""}
                            }
                         ],
@@ -1489,6 +1602,10 @@
                            {
                               "data" : [
                                  {
+                                    "key" : {"type" : 22, "value" : "ID"},
+                                    "val" : {"type" : 23, "value" : "N15"}
+                                 },
+                                 {
                                     "key" : {"type" : 22, "value" : "NodeContext"},
                                     "val" : {"type" : 23, "value" : ""}
                                  },
@@ -1552,13 +1669,7 @@
                               "Emotion" : {"type" : 23, "value" : "Default"},
                               "ExtraWaitTime" : {"type" : 4, "value" : 0},
                               "MusicInstrumentSounds" : [ {} ],
-                              "OriginSound" : [
-                                 {
-                                    "OriginOnly" : {"type" : 22, "value" : ""},
-                                    "OriginTheme" : {"type" : 22, "value" : ""},
-                                    "OriginThemeAddInstrument" : {"type" : 19, "value" : 0}
-                                 }
-                              ],
+                              "OriginSound" : [ {} ],
                               "SoundEvent" : {"type" : 23, "value" : ""}
                            }
                         ],
@@ -1628,6 +1739,10 @@
                            {
                               "data" : [
                                  {
+                                    "key" : {"type" : 22, "value" : "ID"},
+                                    "val" : {"type" : 23, "value" : "N16"}
+                                 },
+                                 {
                                     "key" : {"type" : 22, "value" : "NodeContext"},
                                     "val" : {"type" : 23, "value" : ""}
                                  },
@@ -1691,13 +1806,129 @@
                               "Emotion" : {"type" : 23, "value" : "Default"},
                               "ExtraWaitTime" : {"type" : 4, "value" : 0},
                               "MusicInstrumentSounds" : [ {} ],
-                              "OriginSound" : [
+                              "OriginSound" : [ {} ],
+                              "SoundEvent" : {"type" : 23, "value" : ""}
+                           }
+                        ],
+                        "ShowOnce" : {"type" : 19, "value" : 0},
+                        "TaggedTexts" : [
+                           {
+                              "TaggedText" : [
                                  {
-                                    "OriginOnly" : {"type" : 22, "value" : ""},
-                                    "OriginTheme" : {"type" : 22, "value" : ""},
-                                    "OriginThemeAddInstrument" : {"type" : 19, "value" : 0}
+                                    "HasTagRule" : {"type" : 19, "value" : 1},
+                                    "RuleGroup" : [
+                                       {
+                                          "Rules" : [ {} ],
+                                          "TagCombineOp" : {"type" : 1, "value" : 0}
+                                       }
+                                    ],
+                                    "TagTexts" : [
+                                       {
+                                          "TagText" : [
+                                             {
+                                                "TagText" : {
+                                                   "handle" : "ls::TranslatedStringRepository::s_HandleUnknown",
+                                                   "type" : 28,
+                                                   "value" : "*Disable self-preservation when mimicking specific self-targeting healing spells. If a non-undead casts a spell such as First Aid on themselves, and you're undead, you will no longer ignore mimicking that action.*"
+                                                },
+                                                "stub" : {"type" : 19, "value" : 1}
+                                             }
+                                          ]
+                                       }
+                                    ]
                                  }
-                              ],
+                              ]
+                           }
+                        ],
+                        "Tags" : [ {} ],
+                        "UUID" : {"type" : 22, "value" : "419bdf2a-c043-4cd8-9b1d-b403cceca48b"},
+                        "addressedspeaker" : {"type" : 4, "value" : -1},
+                        "checkflags" : [
+                           {
+                              "flaggroup" : [
+                                 {
+                                    "flag" : [
+                                       {
+                                          "name" : {"type" : 22, "value" : "Mimicry_SkillMimickingSafetyDisabled"},
+                                          "paramval" : {"type" : 4, "value" : 1},
+                                          "value" : {"type" : 19, "value" : 0}
+                                       }
+                                    ],"type" : {"type" : 22, "value" : "Character"}}
+                              ]
+                           }
+                        ],
+                        "children" : [
+                           {
+                              "child" : [
+                                 {
+                                    "UUID" : {"type" : 22, "value" : "edcd1570-7e7c-4a70-a5bf-2bdbd78904f7"}
+                                 }
+                              ]
+                           }
+                        ],
+                        "constructor" : {"type" : 22, "value" : "TagQuestion"},
+                        "editorData" : [
+                           {
+                              "data" : [
+                                 {
+                                    "key" : {"type" : 22, "value" : "ID"},
+                                    "val" : {"type" : 23, "value" : "N79"}
+                                 },
+                                 {
+                                    "key" : {"type" : 22, "value" : "NodeContext"},
+                                    "val" : {"type" : 23, "value" : ""}
+                                 },
+                                 {
+                                    "key" : {"type" : 22, "value" : "collapsed"},
+                                    "val" : {"type" : 23, "value" : "False"}
+                                 },
+                                 {
+                                    "key" : {"type" : 22, "value" : "logicalname"},
+                                    "val" : {"type" : 23, "value" : "Question"}
+                                 },
+                                 {
+                                    "key" : {"type" : 22, "value" : "position"},
+                                    "val" : {"type" : 23, "value" : "5135;2205"}
+                                 },
+                                 {
+                                    "key" : {"type" : 22, "value" : "sourcetemplate"},
+                                    "val" : {"type" : 23, "value" : ""}
+                                 }
+                              ]
+                           }
+                        ],
+                        "endnode" : {"type" : 19, "value" : 0},
+                        "exclusive" : {"type" : 19, "value" : 0},
+                        "optional" : {"type" : 19, "value" : 0},
+                        "setflags" : [
+                           {
+                              "flaggroup" : [
+                                 {
+                                    "flag" : [
+                                       {
+                                          "name" : {"type" : 22, "value" : "Mimicry_SkillMimickingSafetyDisabled"},
+                                          "paramval" : {"type" : 4, "value" : 1},
+                                          "value" : {"type" : 19, "value" : 1}
+                                       }
+                                    ],"type" : {"type" : 22, "value" : "Character"}}
+                              ]
+                           }
+                        ],
+                        "speaker" : {"type" : 4, "value" : 1},
+                        "stub" : {"type" : 19, "value" : 0},
+                        "transitionmode" : {"type" : 1, "value" : 0},
+                        "waittime" : {"type" : 6, "value" : -1.0}
+                     },
+                     {
+                        "GameData" : [
+                           {
+                              "AiPersonalities" : [ {} ],
+                              "CameraTarget" : {"type" : 4, "value" : -1},
+                              "CustomMovie" : {"type" : 23, "value" : ""},
+                              "Emotion" : {"type" : 23, "value" : "Default"},
+                              "ExtraWaitTime" : {"type" : 4, "value" : 0},
+                              "MusicInstrumentSounds" : [ {} ],
+                              "OriginSound" : [ {} ],
                               "SoundEvent" : {"type" : 23, "value" : ""}
                            }
                         ],
@@ -1759,6 +1990,10 @@
                            {
                               "data" : [
                                  {
+                                    "key" : {"type" : 22, "value" : "ID"},
+                                    "val" : {"type" : 23, "value" : "N17"}
+                                 },
+                                 {
                                     "key" : {"type" : 22, "value" : "NodeContext"},
                                     "val" : {"type" : 23, "value" : ""}
                                  },
@@ -1810,6 +2045,10 @@
                            {
                               "data" : [
                                  {
+                                    "key" : {"type" : 22, "value" : "ID"},
+                                    "val" : {"type" : 23, "value" : "N19"}
+                                 },
+                                 {
                                     "key" : {"type" : 22, "value" : "collapsed"},
                                     "val" : {"type" : 23, "value" : "False"}
                                  },
@@ -1845,13 +2084,108 @@
                               "Emotion" : {"type" : 23, "value" : "Default"},
                               "ExtraWaitTime" : {"type" : 4, "value" : 0},
                               "MusicInstrumentSounds" : [ {} ],
-                              "OriginSound" : [
+                              "OriginSound" : [ {} ],
+                              "SoundEvent" : {"type" : 23, "value" : ""}
+                           }
+                        ],
+                        "ShowOnce" : {"type" : 19, "value" : 0},
+                        "TaggedTexts" : [
+                           {
+                              "TaggedText" : [
                                  {
-                                    "OriginOnly" : {"type" : 22, "value" : ""},
-                                    "OriginTheme" : {"type" : 22, "value" : ""},
-                                    "OriginThemeAddInstrument" : {"type" : 19, "value" : 0}
+                                    "HasTagRule" : {"type" : 19, "value" : 1},
+                                    "RuleGroup" : [
+                                       {
+                                          "Rules" : [ {} ],
+                                          "TagCombineOp" : {"type" : 1, "value" : 0}
+                                       }
+                                    ],
+                                    "TagTexts" : [
+                                       {
+                                          "TagText" : [
+                                             {
+                                                "TagText" : {
+                                                   "handle" : "ls::TranslatedStringRepository::s_HandleUnknown",
+                                                   "type" : 28,
+                                                   "value" : "*The mask heeds your call...*"
+                                                },
+                                                "stub" : {"type" : 19, "value" : 1}
+                                             }
+                                          ]
+                                       }
+                                    ]
                                  }
-                              ],
+                              ]
+                           }
+                        ],
+                        "Tags" : [ {} ],
+                        "UUID" : {"type" : 22, "value" : "4ed5a4ec-f157-46c0-8ce4-c90562887962"},
+                        "addressedspeaker" : {"type" : 4, "value" : -1},
+                        "checkflags" : [
+                           {
+                              "flaggroup" : [
+                                 {
+                                    "flag" : [
+                                       {
+                                          "name" : {"type" : 22, "value" : "Mimicry_MimeVendorReady"},
+                                          "paramval" : {"type" : 4, "value" : 1},
+                                          "value" : {"type" : 19, "value" : 1}
+                                       }
+                                    ],"type" : {"type" : 22, "value" : "Character"}}
+                              ]
+                           }
+                        ],
+                        "children" : [ {} ],
+                        "constructor" : {"type" : 22, "value" : "TagAnswer"},
+                        "editorData" : [
+                           {
+                              "data" : [
+                                 {
+                                    "key" : {"type" : 22, "value" : "ID"},
+                                    "val" : {"type" : 23, "value" : "N54"}
+                                 },
+                                 {
+                                    "key" : {"type" : 22, "value" : "NodeContext"},
+                                    "val" : {"type" : 23, "value" : ""}
+                                 },
+                                 {
+                                    "key" : {"type" : 22, "value" : "collapsed"},
+                                    "val" : {"type" : 23, "value" : "False"}
+                                 },
+                                 {
+                                    "key" : {"type" : 22, "value" : "logicalname"},
+                                    "val" : {"type" : 23, "value" : "Answer"}
+                                 },
+                                 {
+                                    "key" : {"type" : 22, "value" : "position"},
+                                    "val" : {"type" : 23, "value" : "975;672"}
+                                 },
+                                 {
+                                    "key" : {"type" : 22, "value" : "sourcetemplate"},
+                                    "val" : {"type" : 23, "value" : ""}
+                                 }
+                              ]
+                           }
+                        ],
+                        "endnode" : {"type" : 19, "value" : 1},
+                        "exclusive" : {"type" : 19, "value" : 0},
+                        "optional" : {"type" : 19, "value" : 0},
+                        "setflags" : [ {} ],
+                        "speaker" : {"type" : 4, "value" : 0},
+                        "stub" : {"type" : 19, "value" : 0},
+                        "transitionmode" : {"type" : 1, "value" : 0},
+                        "waittime" : {"type" : 6, "value" : -1.0}
+                     },
+                     {
+                        "GameData" : [
+                           {
+                              "AiPersonalities" : [ {} ],
+                              "CameraTarget" : {"type" : 4, "value" : -1},
+                              "CustomMovie" : {"type" : 23, "value" : ""},
+                              "Emotion" : {"type" : 23, "value" : "Default"},
+                              "ExtraWaitTime" : {"type" : 4, "value" : 0},
+                              "MusicInstrumentSounds" : [ {} ],
+                              "OriginSound" : [ {} ],
                               "SoundEvent" : {"type" : 23, "value" : ""}
                            }
                         ],
@@ -1902,6 +2236,9 @@
                                     "UUID" : {"type" : 22, "value" : "ca648612-2ecd-4459-90f6-42a54c409c60"}
                                  },
                                  {
+                                    "UUID" : {"type" : 22, "value" : "8bddbd94-1f4d-4275-acfc-466f1481c875"}
+                                 },
+                                 {
                                     "UUID" : {"type" : 22, "value" : "8fca79ac-5c1e-4037-8136-0b76bd749c74"}
                                  }
                               ]
@@ -1911,6 +2248,10 @@
                         "editorData" : [
                            {
                               "data" : [
+                                 {
+                                    "key" : {"type" : 22, "value" : "ID"},
+                                    "val" : {"type" : 23, "value" : "N20"}
+                                 },
                                  {
                                     "key" : {"type" : 22, "value" : "NodeContext"},
                                     "val" : {"type" : 23, "value" : ""}
@@ -1952,13 +2293,7 @@
                               "Emotion" : {"type" : 23, "value" : "Default"},
                               "ExtraWaitTime" : {"type" : 4, "value" : 0},
                               "MusicInstrumentSounds" : [ {} ],
-                              "OriginSound" : [
-                                 {
-                                    "OriginOnly" : {"type" : 22, "value" : ""},
-                                    "OriginTheme" : {"type" : 22, "value" : ""},
-                                    "OriginThemeAddInstrument" : {"type" : 19, "value" : 0}
-                                 }
-                              ],
+                              "OriginSound" : [ {} ],
                               "SoundEvent" : {"type" : 23, "value" : ""}
                            }
                         ],
@@ -2023,6 +2358,10 @@
                            {
                               "data" : [
                                  {
+                                    "key" : {"type" : 22, "value" : "ID"},
+                                    "val" : {"type" : 23, "value" : "N21"}
+                                 },
+                                 {
                                     "key" : {"type" : 22, "value" : "NodeContext"},
                                     "val" : {"type" : 23, "value" : ""}
                                  },
@@ -2076,13 +2415,228 @@
                               "Emotion" : {"type" : 23, "value" : "Default"},
                               "ExtraWaitTime" : {"type" : 4, "value" : 0},
                               "MusicInstrumentSounds" : [ {} ],
-                              "OriginSound" : [
+                              "OriginSound" : [ {} ],
+                              "SoundEvent" : {"type" : 23, "value" : ""}
+                           }
+                        ],
+                        "ShowOnce" : {"type" : 19, "value" : 0},
+                        "TaggedTexts" : [
+                           {
+                              "TaggedText" : [
                                  {
-                                    "OriginOnly" : {"type" : 22, "value" : ""},
-                                    "OriginTheme" : {"type" : 22, "value" : ""},
-                                    "OriginThemeAddInstrument" : {"type" : 19, "value" : 0}
+                                    "HasTagRule" : {"type" : 19, "value" : 1},
+                                    "RuleGroup" : [
+                                       {
+                                          "Rules" : [ {} ],
+                                          "TagCombineOp" : {"type" : 1, "value" : 0}
+                                       }
+                                    ],
+                                    "TagTexts" : [
+                                       {
+                                          "TagText" : [
+                                             {
+                                                "TagText" : {
+                                                   "handle" : "ls::TranslatedStringRepository::s_HandleUnknown",
+                                                   "type" : 28,
+                                                   "value" : " *You focus your thoughts on the mask...*"
+                                                },
+                                                "stub" : {"type" : 19, "value" : 1}
+                                             }
+                                          ]
+                                       }
+                                    ]
                                  }
-                              ],
+                              ]
+                           }
+                        ],
+                        "Tags" : [ {} ],
+                        "UUID" : {"type" : 22, "value" : "5b72da97-8a73-4b0f-a537-0b143846f129"},
+                        "addressedspeaker" : {"type" : 4, "value" : -1},
+                        "checkflags" : [ {} ],
+                        "children" : [
+                           {
+                              "child" : [
+                                 {
+                                    "UUID" : {"type" : 22, "value" : "4ed5a4ec-f157-46c0-8ce4-c90562887962"}
+                                 },
+                                 {
+                                    "UUID" : {"type" : 22, "value" : "8012554a-d3e2-409b-99ef-d68c58ebce87"}
+                                 }
+                              ]
+                           }
+                        ],
+                        "constructor" : {"type" : 22, "value" : "TagAnswer"},
+                        "editorData" : [
+                           {
+                              "data" : [
+                                 {
+                                    "key" : {"type" : 22, "value" : "ID"},
+                                    "val" : {"type" : 23, "value" : "N55"}
+                                 },
+                                 {
+                                    "key" : {"type" : 22, "value" : "NodeContext"},
+                                    "val" : {"type" : 23, "value" : ""}
+                                 },
+                                 {
+                                    "key" : {"type" : 22, "value" : "collapsed"},
+                                    "val" : {"type" : 23, "value" : "False"}
+                                 },
+                                 {
+                                    "key" : {"type" : 22, "value" : "logicalname"},
+                                    "val" : {"type" : 23, "value" : "Answer"}
+                                 },
+                                 {
+                                    "key" : {"type" : 22, "value" : "position"},
+                                    "val" : {"type" : 23, "value" : "655;672"}
+                                 },
+                                 {
+                                    "key" : {"type" : 22, "value" : "sourcetemplate"},
+                                    "val" : {"type" : 23, "value" : ""}
+                                 }
+                              ]
+                           }
+                        ],
+                        "endnode" : {"type" : 19, "value" : 0},
+                        "exclusive" : {"type" : 19, "value" : 0},
+                        "optional" : {"type" : 19, "value" : 0},
+                        "setflags" : [ {} ],
+                        "speaker" : {"type" : 4, "value" : 0},
+                        "stub" : {"type" : 19, "value" : 1},
+                        "transitionmode" : {"type" : 1, "value" : 2},
+                        "waittime" : {"type" : 6, "value" : -1.0}
+                     },
+                     {
+                        "GameData" : [
+                           {
+                              "AiPersonalities" : [ {} ],
+                              "CameraTarget" : {"type" : 4, "value" : -1},
+                              "CustomMovie" : {"type" : 23, "value" : ""},
+                              "Emotion" : {"type" : 23, "value" : "Default"},
+                              "ExtraWaitTime" : {"type" : 4, "value" : 0},
+                              "MusicInstrumentSounds" : [ {} ],
+                              "OriginSound" : [ {} ],
+                              "SoundEvent" : {"type" : 23, "value" : ""}
+                           }
+                        ],
+                        "ShowOnce" : {"type" : 19, "value" : 0},
+                        "TaggedTexts" : [
+                           {
+                              "TaggedText" : [
+                                 {
+                                    "HasTagRule" : {"type" : 19, "value" : 1},
+                                    "RuleGroup" : [
+                                       {
+                                          "Rules" : [ {} ],
+                                          "TagCombineOp" : {"type" : 1, "value" : 0}
+                                       }
+                                    ],
+                                    "TagTexts" : [
+                                       {
+                                          "TagText" : [
+                                             {
+                                                "TagText" : {
+                                                   "handle" : "ls::TranslatedStringRepository::s_HandleUnknown",
+                                                   "type" : 28,
+                                                   "value" : "*Enable self-preservation when mimicking item usage. If an undead drinks a poison potion (and you're not undead), or a non-undead drinks a healing potion (and you're undead), you will skip mimicking that action.*"
+                                                },
+                                                "stub" : {"type" : 19, "value" : 1}
+                                             }
+                                          ]
+                                       }
+                                    ]
+                                 }
+                              ]
+                           }
+                        ],
+                        "Tags" : [ {} ],
+                        "UUID" : {"type" : 22, "value" : "5bb37950-a2dd-41be-bebf-501a1b9cc640"},
+                        "addressedspeaker" : {"type" : 4, "value" : -1},
+                        "checkflags" : [
+                           {
+                              "flaggroup" : [
+                                 {
+                                    "flag" : [
+                                       {
+                                          "name" : {"type" : 22, "value" : "Mimicry_ItemMimickingSafetyDisabled"},
+                                          "paramval" : {"type" : 4, "value" : 1},
+                                          "value" : {"type" : 19, "value" : 1}
+                                       }
+                                    ],"type" : {"type" : 22, "value" : "Character"}}
+                              ]
+                           }
+                        ],
+                        "children" : [
+                           {
+                              "child" : [
+                                 {
+                                    "UUID" : {"type" : 22, "value" : "edcd1570-7e7c-4a70-a5bf-2bdbd78904f7"}
+                                 }
+                              ]
+                           }
+                        ],
+                        "constructor" : {"type" : 22, "value" : "TagQuestion"},
+                        "editorData" : [
+                           {
+                              "data" : [
+                                 {
+                                    "key" : {"type" : 22, "value" : "ID"},
+                                    "val" : {"type" : 23, "value" : "N75"}
+                                 },
+                                 {
+                                    "key" : {"type" : 22, "value" : "NodeContext"},
+                                    "val" : {"type" : 23, "value" : ""}
+                                 },
+                                 {
+                                    "key" : {"type" : 22, "value" : "collapsed"},
+                                    "val" : {"type" : 23, "value" : "False"}
+                                 },
+                                 {
+                                    "key" : {"type" : 22, "value" : "logicalname"},
+                                    "val" : {"type" : 23, "value" : "Question"}
+                                 },
+                                 {
+                                    "key" : {"type" : 22, "value" : "position"},
+                                    "val" : {"type" : 23, "value" : "5135;1986"}
+                                 },
+                                 {
+                                    "key" : {"type" : 22, "value" : "sourcetemplate"},
+                                    "val" : {"type" : 23, "value" : ""}
+                                 }
+                              ]
+                           }
+                        ],
+                        "endnode" : {"type" : 19, "value" : 0},
+                        "exclusive" : {"type" : 19, "value" : 0},
+                        "optional" : {"type" : 19, "value" : 0},
+                        "setflags" : [
+                           {
+                              "flaggroup" : [
+                                 {
+                                    "flag" : [
+                                       {
+                                          "name" : {"type" : 22, "value" : "Mimicry_ItemMimickingSafetyDisabled"},
+                                          "paramval" : {"type" : 4, "value" : 1},
+                                          "value" : {"type" : 19, "value" : 0}
+                                       }
+                                    ],"type" : {"type" : 22, "value" : "Character"}}
+                              ]
+                           }
+                        ],
+                        "speaker" : {"type" : 4, "value" : 1},
+                        "stub" : {"type" : 19, "value" : 0},
+                        "transitionmode" : {"type" : 1, "value" : 0},
+                        "waittime" : {"type" : 6, "value" : -1.0}
+                     },
+                     {
+                        "GameData" : [
+                           {
+                              "AiPersonalities" : [ {} ],
+                              "CameraTarget" : {"type" : 4, "value" : -1},
+                              "CustomMovie" : {"type" : 23, "value" : ""},
+                              "Emotion" : {"type" : 23, "value" : "Default"},
+                              "ExtraWaitTime" : {"type" : 4, "value" : 0},
+                              "MusicInstrumentSounds" : [ {} ],
+                              "OriginSound" : [ {} ],
                               "SoundEvent" : {"type" : 23, "value" : ""}
                            }
                         ],
@@ -2134,6 +2688,10 @@
                            {
                               "data" : [
                                  {
+                                    "key" : {"type" : 22, "value" : "ID"},
+                                    "val" : {"type" : 23, "value" : "N22"}
+                                 },
+                                 {
                                     "key" : {"type" : 22, "value" : "NodeContext"},
                                     "val" : {"type" : 23, "value" : ""}
                                  },
@@ -2174,13 +2732,129 @@
                               "Emotion" : {"type" : 23, "value" : "Default"},
                               "ExtraWaitTime" : {"type" : 4, "value" : 0},
                               "MusicInstrumentSounds" : [ {} ],
-                              "OriginSound" : [
+                              "OriginSound" : [ {} ],
+                              "SoundEvent" : {"type" : 23, "value" : ""}
+                           }
+                        ],
+                        "ShowOnce" : {"type" : 19, "value" : 0},
+                        "TaggedTexts" : [
+                           {
+                              "TaggedText" : [
                                  {
-                                    "OriginOnly" : {"type" : 22, "value" : ""},
-                                    "OriginTheme" : {"type" : 22, "value" : ""},
-                                    "OriginThemeAddInstrument" : {"type" : 19, "value" : 0}
+                                    "HasTagRule" : {"type" : 19, "value" : 1},
+                                    "RuleGroup" : [
+                                       {
+                                          "Rules" : [ {} ],
+                                          "TagCombineOp" : {"type" : 1, "value" : 0}
+                                       }
+                                    ],
+                                    "TagTexts" : [
+                                       {
+                                          "TagText" : [
+                                             {
+                                                "TagText" : {
+                                                   "handle" : "ls::TranslatedStringRepository::s_HandleUnknown",
+                                                   "type" : 28,
+                                                   "value" : "*Enable self-preservation when mimicking specific self-targeting healing spells. If a non-undead casts a spell such as First Aid on themselves, and you're undead, you will ignore mimicking that action.*"
+                                                },
+                                                "stub" : {"type" : 19, "value" : 1}
+                                             }
+                                          ]
+                                       }
+                                    ]
                                  }
-                              ],
+                              ]
+                           }
+                        ],
+                        "Tags" : [ {} ],
+                        "UUID" : {"type" : 22, "value" : "60d7f93a-7684-44e2-9ba1-4d3e06c19ad1"},
+                        "addressedspeaker" : {"type" : 4, "value" : -1},
+                        "checkflags" : [
+                           {
+                              "flaggroup" : [
+                                 {
+                                    "flag" : [
+                                       {
+                                          "name" : {"type" : 22, "value" : "Mimicry_SkillMimickingSafetyDisabled"},
+                                          "paramval" : {"type" : 4, "value" : 1},
+                                          "value" : {"type" : 19, "value" : 1}
+                                       }
+                                    ],"type" : {"type" : 22, "value" : "Character"}}
+                              ]
+                           }
+                        ],
+                        "children" : [
+                           {
+                              "child" : [
+                                 {
+                                    "UUID" : {"type" : 22, "value" : "edcd1570-7e7c-4a70-a5bf-2bdbd78904f7"}
+                                 }
+                              ]
+                           }
+                        ],
+                        "constructor" : {"type" : 22, "value" : "TagQuestion"},
+                        "editorData" : [
+                           {
+                              "data" : [
+                                 {
+                                    "key" : {"type" : 22, "value" : "ID"},
+                                    "val" : {"type" : 23, "value" : "N83"}
+                                 },
+                                 {
+                                    "key" : {"type" : 22, "value" : "NodeContext"},
+                                    "val" : {"type" : 23, "value" : ""}
+                                 },
+                                 {
+                                    "key" : {"type" : 22, "value" : "collapsed"},
+                                    "val" : {"type" : 23, "value" : "False"}
+                                 },
+                                 {
+                                    "key" : {"type" : 22, "value" : "logicalname"},
+                                    "val" : {"type" : 23, "value" : "Question"}
+                                 },
+                                 {
+                                    "key" : {"type" : 22, "value" : "position"},
+                                    "val" : {"type" : 23, "value" : "5135;2424"}
+                                 },
+                                 {
+                                    "key" : {"type" : 22, "value" : "sourcetemplate"},
+                                    "val" : {"type" : 23, "value" : ""}
+                                 }
+                              ]
+                           }
+                        ],
+                        "endnode" : {"type" : 19, "value" : 0},
+                        "exclusive" : {"type" : 19, "value" : 0},
+                        "optional" : {"type" : 19, "value" : 0},
+                        "setflags" : [
+                           {
+                              "flaggroup" : [
+                                 {
+                                    "flag" : [
+                                       {
+                                          "name" : {"type" : 22, "value" : "Mimicry_SkillMimickingSafetyDisabled"},
+                                          "paramval" : {"type" : 4, "value" : 1},
+                                          "value" : {"type" : 19, "value" : 0}
+                                       }
+                                    ],"type" : {"type" : 22, "value" : "Character"}}
+                              ]
+                           }
+                        ],
+                        "speaker" : {"type" : 4, "value" : 1},
+                        "stub" : {"type" : 19, "value" : 0},
+                        "transitionmode" : {"type" : 1, "value" : 0},
+                        "waittime" : {"type" : 6, "value" : -1.0}
+                     },
+                     {
+                        "GameData" : [
+                           {
+                              "AiPersonalities" : [ {} ],
+                              "CameraTarget" : {"type" : 4, "value" : -1},
+                              "CustomMovie" : {"type" : 23, "value" : ""},
+                              "Emotion" : {"type" : 23, "value" : "Default"},
+                              "ExtraWaitTime" : {"type" : 4, "value" : 0},
+                              "MusicInstrumentSounds" : [ {} ],
+                              "OriginSound" : [ {} ],
                               "SoundEvent" : {"type" : 23, "value" : ""}
                            }
                         ],
@@ -2250,6 +2924,10 @@
                            {
                               "data" : [
                                  {
+                                    "key" : {"type" : 22, "value" : "ID"},
+                                    "val" : {"type" : 23, "value" : "N23"}
+                                 },
+                                 {
                                     "key" : {"type" : 22, "value" : "NodeContext"},
                                     "val" : {"type" : 23, "value" : ""}
                                  },
@@ -2314,6 +2992,10 @@
                            {
                               "data" : [
                                  {
+                                    "key" : {"type" : 22, "value" : "ID"},
+                                    "val" : {"type" : 23, "value" : "N25"}
+                                 },
+                                 {
                                     "key" : {"type" : 22, "value" : "collapsed"},
                                     "val" : {"type" : 23, "value" : "False"}
                                  },
@@ -2349,13 +3031,7 @@
                               "Emotion" : {"type" : 23, "value" : "Default"},
                               "ExtraWaitTime" : {"type" : 4, "value" : 0},
                               "MusicInstrumentSounds" : [ {} ],
-                              "OriginSound" : [
-                                 {
-                                    "OriginOnly" : {"type" : 22, "value" : ""},
-                                    "OriginTheme" : {"type" : 22, "value" : ""},
-                                    "OriginThemeAddInstrument" : {"type" : 19, "value" : 0}
-                                 }
-                              ],
+                              "OriginSound" : [ {} ],
                               "SoundEvent" : {"type" : 23, "value" : ""}
                            }
                         ],
@@ -2417,6 +3093,10 @@
                            {
                               "data" : [
                                  {
+                                    "key" : {"type" : 22, "value" : "ID"},
+                                    "val" : {"type" : 23, "value" : "N26"}
+                                 },
+                                 {
                                     "key" : {"type" : 22, "value" : "NodeContext"},
                                     "val" : {"type" : 23, "value" : ""}
                                  },
@@ -2467,13 +3147,7 @@
                               "Emotion" : {"type" : 23, "value" : "Default"},
                               "ExtraWaitTime" : {"type" : 4, "value" : 0},
                               "MusicInstrumentSounds" : [ {} ],
-                              "OriginSound" : [
-                                 {
-                                    "OriginOnly" : {"type" : 22, "value" : ""},
-                                    "OriginTheme" : {"type" : 22, "value" : ""},
-                                    "OriginThemeAddInstrument" : {"type" : 19, "value" : 0}
-                                 }
-                              ],
+                              "OriginSound" : [ {} ],
                               "SoundEvent" : {"type" : 23, "value" : ""}
                            }
                         ],
@@ -2538,6 +3212,10 @@
                            {
                               "data" : [
                                  {
+                                    "key" : {"type" : 22, "value" : "ID"},
+                                    "val" : {"type" : 23, "value" : "N27"}
+                                 },
+                                 {
                                     "key" : {"type" : 22, "value" : "NodeContext"},
                                     "val" : {"type" : 23, "value" : ""}
                                  },
@@ -2578,13 +3256,129 @@
                               "Emotion" : {"type" : 23, "value" : "Default"},
                               "ExtraWaitTime" : {"type" : 4, "value" : 0},
                               "MusicInstrumentSounds" : [ {} ],
-                              "OriginSound" : [
+                              "OriginSound" : [ {} ],
+                              "SoundEvent" : {"type" : 23, "value" : ""}
+                           }
+                        ],
+                        "ShowOnce" : {"type" : 19, "value" : 0},
+                        "TaggedTexts" : [
+                           {
+                              "TaggedText" : [
                                  {
-                                    "OriginOnly" : {"type" : 22, "value" : ""},
-                                    "OriginTheme" : {"type" : 22, "value" : ""},
-                                    "OriginThemeAddInstrument" : {"type" : 19, "value" : 0}
+                                    "HasTagRule" : {"type" : 19, "value" : 1},
+                                    "RuleGroup" : [
+                                       {
+                                          "Rules" : [ {} ],
+                                          "TagCombineOp" : {"type" : 1, "value" : 0}
+                                       }
+                                    ],
+                                    "TagTexts" : [
+                                       {
+                                          "TagText" : [
+                                             {
+                                                "TagText" : {
+                                                   "handle" : "ls::TranslatedStringRepository::s_HandleUnknown",
+                                                   "type" : 28,
+                                                   "value" : "*Disable self-preservation when mimicking item usage. If an undead drinks a poison potion (and you're not undead), or a non-undead drinks a healing potion (and you're undead), you will no longer skip mimicking that action.*"
+                                                },
+                                                "stub" : {"type" : 19, "value" : 1}
+                                             }
+                                          ]
+                                       }
+                                    ]
                                  }
-                              ],
+                              ]
+                           }
+                        ],
+                        "Tags" : [ {} ],
+                        "UUID" : {"type" : 22, "value" : "6d7217a5-f3f1-4cdd-a9a9-6e741a18bf14"},
+                        "addressedspeaker" : {"type" : 4, "value" : -1},
+                        "checkflags" : [
+                           {
+                              "flaggroup" : [
+                                 {
+                                    "flag" : [
+                                       {
+                                          "name" : {"type" : 22, "value" : "Mimicry_ItemMimickingSafetyDisabled"},
+                                          "paramval" : {"type" : 4, "value" : 1},
+                                          "value" : {"type" : 19, "value" : 0}
+                                       }
+                                    ],"type" : {"type" : 22, "value" : "Character"}}
+                              ]
+                           }
+                        ],
+                        "children" : [
+                           {
+                              "child" : [
+                                 {
+                                    "UUID" : {"type" : 22, "value" : "edcd1570-7e7c-4a70-a5bf-2bdbd78904f7"}
+                                 }
+                              ]
+                           }
+                        ],
+                        "constructor" : {"type" : 22, "value" : "TagQuestion"},
+                        "editorData" : [
+                           {
+                              "data" : [
+                                 {
+                                    "key" : {"type" : 22, "value" : "ID"},
+                                    "val" : {"type" : 23, "value" : "N71"}
+                                 },
+                                 {
+                                    "key" : {"type" : 22, "value" : "NodeContext"},
+                                    "val" : {"type" : 23, "value" : ""}
+                                 },
+                                 {
+                                    "key" : {"type" : 22, "value" : "collapsed"},
+                                    "val" : {"type" : 23, "value" : "False"}
+                                 },
+                                 {
+                                    "key" : {"type" : 22, "value" : "logicalname"},
+                                    "val" : {"type" : 23, "value" : "Question"}
+                                 },
+                                 {
+                                    "key" : {"type" : 22, "value" : "position"},
+                                    "val" : {"type" : 23, "value" : "5135;1767"}
+                                 },
+                                 {
+                                    "key" : {"type" : 22, "value" : "sourcetemplate"},
+                                    "val" : {"type" : 23, "value" : ""}
+                                 }
+                              ]
+                           }
+                        ],
+                        "endnode" : {"type" : 19, "value" : 0},
+                        "exclusive" : {"type" : 19, "value" : 0},
+                        "optional" : {"type" : 19, "value" : 0},
+                        "setflags" : [
+                           {
+                              "flaggroup" : [
+                                 {
+                                    "flag" : [
+                                       {
+                                          "name" : {"type" : 22, "value" : "Mimicry_ItemMimickingSafetyDisabled"},
+                                          "paramval" : {"type" : 4, "value" : 1},
+                                          "value" : {"type" : 19, "value" : 1}
+                                       }
+                                    ],"type" : {"type" : 22, "value" : "Character"}}
+                              ]
+                           }
+                        ],
+                        "speaker" : {"type" : 4, "value" : 1},
+                        "stub" : {"type" : 19, "value" : 0},
+                        "transitionmode" : {"type" : 1, "value" : 0},
+                        "waittime" : {"type" : 6, "value" : -1.0}
+                     },
+                     {
+                        "GameData" : [
+                           {
+                              "AiPersonalities" : [ {} ],
+                              "CameraTarget" : {"type" : 4, "value" : -1},
+                              "CustomMovie" : {"type" : 23, "value" : ""},
+                              "Emotion" : {"type" : 23, "value" : "Default"},
+                              "ExtraWaitTime" : {"type" : 4, "value" : 0},
+                              "MusicInstrumentSounds" : [ {} ],
+                              "OriginSound" : [ {} ],
                               "SoundEvent" : {"type" : 23, "value" : ""}
                            }
                         ],
@@ -2646,6 +3440,10 @@
                            {
                               "data" : [
                                  {
+                                    "key" : {"type" : 22, "value" : "ID"},
+                                    "val" : {"type" : 23, "value" : "N28"}
+                                 },
+                                 {
                                     "key" : {"type" : 22, "value" : "NodeContext"},
                                     "val" : {"type" : 23, "value" : ""}
                                  },
@@ -2696,13 +3494,7 @@
                               "Emotion" : {"type" : 23, "value" : "Default"},
                               "ExtraWaitTime" : {"type" : 4, "value" : 0},
                               "MusicInstrumentSounds" : [ {} ],
-                              "OriginSound" : [
-                                 {
-                                    "OriginOnly" : {"type" : 22, "value" : ""},
-                                    "OriginTheme" : {"type" : 22, "value" : ""},
-                                    "OriginThemeAddInstrument" : {"type" : 19, "value" : 0}
-                                 }
-                              ],
+                              "OriginSound" : [ {} ],
                               "SoundEvent" : {"type" : 23, "value" : ""}
                            }
                         ],
@@ -2754,6 +3546,10 @@
                            {
                               "data" : [
                                  {
+                                    "key" : {"type" : 22, "value" : "ID"},
+                                    "val" : {"type" : 23, "value" : "N29"}
+                                 },
+                                 {
                                     "key" : {"type" : 22, "value" : "NodeContext"},
                                     "val" : {"type" : 23, "value" : ""}
                                  },
@@ -2794,13 +3590,265 @@
                               "Emotion" : {"type" : 23, "value" : "Default"},
                               "ExtraWaitTime" : {"type" : 4, "value" : 0},
                               "MusicInstrumentSounds" : [ {} ],
-                              "OriginSound" : [
+                              "OriginSound" : [ {} ],
+                              "SoundEvent" : {"type" : 23, "value" : ""}
+                           }
+                        ],
+                        "ShowOnce" : {"type" : 19, "value" : 0},
+                        "TaggedTexts" : [
+                           {
+                              "TaggedText" : [
                                  {
-                                    "OriginOnly" : {"type" : 22, "value" : ""},
-                                    "OriginTheme" : {"type" : 22, "value" : ""},
-                                    "OriginThemeAddInstrument" : {"type" : 19, "value" : 0}
+                                    "HasTagRule" : {"type" : 19, "value" : 1},
+                                    "RuleGroup" : [
+                                       {
+                                          "Rules" : [ {} ],
+                                          "TagCombineOp" : {"type" : 1, "value" : 0}
+                                       }
+                                    ],
+                                    "TagTexts" : [
+                                       {
+                                          "TagText" : [
+                                             {
+                                                "TagText" : {
+                                                   "handle" : "ls::TranslatedStringRepository::s_HandleUnknown",
+                                                   "type" : 28,
+                                                   "value" : "*The mask remains silent. Perhaps it's busy?*"
+                                                },
+                                                "stub" : {"type" : 19, "value" : 1}
+                                             }
+                                          ]
+                                       }
+                                    ]
                                  }
-                              ],
+                              ]
+                           }
+                        ],
+                        "Tags" : [ {} ],
+                        "UUID" : {"type" : 22, "value" : "8012554a-d3e2-409b-99ef-d68c58ebce87"},
+                        "addressedspeaker" : {"type" : 4, "value" : -1},
+                        "checkflags" : [
+                           {
+                              "flaggroup" : [
+                                 {
+                                    "flag" : [
+                                       {
+                                          "name" : {"type" : 22, "value" : "Mimicry_MimeVendorReady"},
+                                          "paramval" : {"type" : 4, "value" : 1},
+                                          "value" : {"type" : 19, "value" : 0}
+                                       }
+                                    ],"type" : {"type" : 22, "value" : "Character"}}
+                              ]
+                           }
+                        ],
+                        "children" : [
+                           {
+                              "child" : [
+                                 {
+                                    "UUID" : {"type" : 22, "value" : "8ad93153-ae47-45f4-8e8a-0e77cd3f3992"}
+                                 }
+                              ]
+                           }
+                        ],
+                        "constructor" : {"type" : 22, "value" : "TagAnswer"},
+                        "editorData" : [
+                           {
+                              "data" : [
+                                 {
+                                    "key" : {"type" : 22, "value" : "ID"},
+                                    "val" : {"type" : 23, "value" : "N56"}
+                                 },
+                                 {
+                                    "key" : {"type" : 22, "value" : "NodeContext"},
+                                    "val" : {"type" : 23, "value" : ""}
+                                 },
+                                 {
+                                    "key" : {"type" : 22, "value" : "collapsed"},
+                                    "val" : {"type" : 23, "value" : "False"}
+                                 },
+                                 {
+                                    "key" : {"type" : 22, "value" : "logicalname"},
+                                    "val" : {"type" : 23, "value" : "Answer"}
+                                 },
+                                 {
+                                    "key" : {"type" : 22, "value" : "position"},
+                                    "val" : {"type" : 23, "value" : "975;891"}
+                                 },
+                                 {
+                                    "key" : {"type" : 22, "value" : "sourcetemplate"},
+                                    "val" : {"type" : 23, "value" : ""}
+                                 }
+                              ]
+                           }
+                        ],
+                        "endnode" : {"type" : 19, "value" : 0},
+                        "exclusive" : {"type" : 19, "value" : 0},
+                        "optional" : {"type" : 19, "value" : 0},
+                        "setflags" : [ {} ],
+                        "speaker" : {"type" : 4, "value" : 0},
+                        "stub" : {"type" : 19, "value" : 1},
+                        "transitionmode" : {"type" : 1, "value" : 0},
+                        "waittime" : {"type" : 6, "value" : -1.0}
+                     },
+                     {
+                        "ShowOnce" : {"type" : 19, "value" : 0},
+                        "Tags" : [ {} ],
+                        "UUID" : {"type" : 22, "value" : "8ad93153-ae47-45f4-8e8a-0e77cd3f3992"},
+                        "children" : [ {} ],
+                        "constructor" : {"type" : 22, "value" : "Jump"},
+                        "editorData" : [
+                           {
+                              "data" : [
+                                 {
+                                    "key" : {"type" : 22, "value" : "ID"},
+                                    "val" : {"type" : 23, "value" : "N58"}
+                                 },
+                                 {
+                                    "key" : {"type" : 22, "value" : "collapsed"},
+                                    "val" : {"type" : 23, "value" : "False"}
+                                 },
+                                 {
+                                    "key" : {"type" : 22, "value" : "logicalname"},
+                                    "val" : {"type" : 23, "value" : "Jump"}
+                                 },
+                                 {
+                                    "key" : {"type" : 22, "value" : "position"},
+                                    "val" : {"type" : 23, "value" : "1295;891"}
+                                 },
+                                 {
+                                    "key" : {"type" : 22, "value" : "sourcetemplate"},
+                                    "val" : {"type" : 23, "value" : ""}
+                                 }
+                              ]
+                           }
+                        ],
+                        "endnode" : {"type" : 19, "value" : 0},
+                        "exclusive" : {"type" : 19, "value" : 0},
+                        "jumptarget" : {"type" : 22, "value" : "514c7488-da94-4282-9f29-8e089259fa45"},
+                        "jumptargetpoint" : {"type" : 1, "value" : 1},
+                        "optional" : {"type" : 19, "value" : 0},
+                        "transitionmode" : {"type" : 1, "value" : 0},
+                        "waittime" : {"type" : 6, "value" : -1.0}
+                     },
+                     {
+                        "GameData" : [
+                           {
+                              "AiPersonalities" : [ {} ],
+                              "CameraTarget" : {"type" : 4, "value" : -1},
+                              "CustomMovie" : {"type" : 23, "value" : ""},
+                              "Emotion" : {"type" : 23, "value" : "Default"},
+                              "ExtraWaitTime" : {"type" : 4, "value" : 0},
+                              "MusicInstrumentSounds" : [ {} ],
+                              "OriginSound" : [ {} ],
+                              "SoundEvent" : {"type" : 23, "value" : ""}
+                           }
+                        ],
+                        "ShowOnce" : {"type" : 19, "value" : 1},
+                        "TaggedTexts" : [
+                           {
+                              "TaggedText" : [
+                                 {
+                                    "HasTagRule" : {"type" : 19, "value" : 1},
+                                    "RuleGroup" : [
+                                       {
+                                          "Rules" : [ {} ],
+                                          "TagCombineOp" : {"type" : 1, "value" : 0}
+                                       }
+                                    ],
+                                    "TagTexts" : [
+                                       {
+                                          "TagText" : [
+                                             {
+                                                "TagText" : {
+                                                   "handle" : "ls::TranslatedStringRepository::s_HandleUnknown",
+                                                   "type" : 28,
+                                                   "value" : "[SKILLS] *Communicate with the Mask of Mimicry.*"
+                                                },
+                                                "stub" : {"type" : 19, "value" : 1}
+                                             }
+                                          ]
+                                       }
+                                    ]
+                                 }
+                              ]
+                           }
+                        ],
+                        "Tags" : [ {} ],
+                        "UUID" : {"type" : 22, "value" : "8bddbd94-1f4d-4275-acfc-466f1481c875"},
+                        "addressedspeaker" : {"type" : 4, "value" : -1},
+                        "checkflags" : [ {} ],
+                        "children" : [
+                           {
+                              "child" : [
+                                 {
+                                    "UUID" : {"type" : 22, "value" : "5b72da97-8a73-4b0f-a537-0b143846f129"}
+                                 }
+                              ]
+                           }
+                        ],
+                        "constructor" : {"type" : 22, "value" : "TagQuestion"},
+                        "editorData" : [
+                           {
+                              "data" : [
+                                 {
+                                    "key" : {"type" : 22, "value" : "ID"},
+                                    "val" : {"type" : 23, "value" : "N49"}
+                                 },
+                                 {
+                                    "key" : {"type" : 22, "value" : "NodeContext"},
+                                    "val" : {"type" : 23, "value" : ""}
+                                 },
+                                 {
+                                    "key" : {"type" : 22, "value" : "collapsed"},
+                                    "val" : {"type" : 23, "value" : "False"}
+                                 },
+                                 {
+                                    "key" : {"type" : 22, "value" : "logicalname"},
+                                    "val" : {"type" : 23, "value" : "Question"}
+                                 },
+                                 {
+                                    "key" : {"type" : 22, "value" : "position"},
+                                    "val" : {"type" : 23, "value" : "335;672"}
+                                 },
+                                 {
+                                    "key" : {"type" : 22, "value" : "sourcetemplate"},
+                                    "val" : {"type" : 23, "value" : ""}
+                                 }
+                              ]
+                           }
+                        ],
+                        "endnode" : {"type" : 19, "value" : 0},
+                        "exclusive" : {"type" : 19, "value" : 0},
+                        "optional" : {"type" : 19, "value" : 0},
+                        "setflags" : [
+                           {
+                              "flaggroup" : [
+                                 {
+                                    "flag" : [
+                                       {
+                                          "name" : {"type" : 22, "value" : "Mimicry_PrepareMimeVendor"},
+                                          "paramval" : {"type" : 4, "value" : 1},
+                                          "value" : {"type" : 19, "value" : 1}
+                                       }
+                                    ],"type" : {"type" : 22, "value" : "Character"}}
+                              ]
+                           }
+                        ],
+                        "speaker" : {"type" : 4, "value" : 1},
+                        "stub" : {"type" : 19, "value" : 1},
+                        "transitionmode" : {"type" : 1, "value" : 0},
+                        "waittime" : {"type" : 6, "value" : -1.0}
+                     },
+                     {
+                        "GameData" : [
+                           {
+                              "AiPersonalities" : [ {} ],
+                              "CameraTarget" : {"type" : 4, "value" : -1},
+                              "CustomMovie" : {"type" : 23, "value" : ""},
+                              "Emotion" : {"type" : 23, "value" : "Default"},
+                              "ExtraWaitTime" : {"type" : 4, "value" : 0},
+                              "MusicInstrumentSounds" : [ {} ],
+                              "OriginSound" : [ {} ],
                               "SoundEvent" : {"type" : 23, "value" : ""}
                            }
                         ],
@@ -2844,6 +3892,10 @@
                            {
                               "data" : [
                                  {
+                                    "key" : {"type" : 22, "value" : "ID"},
+                                    "val" : {"type" : 23, "value" : "N30"}
+                                 },
+                                 {
                                     "key" : {"type" : 22, "value" : "NodeContext"},
                                     "val" : {"type" : 23, "value" : ""}
                                  },
@@ -2857,7 +3909,7 @@
                                  },
                                  {
                                     "key" : {"type" : 22, "value" : "position"},
-                                    "val" : {"type" : 23, "value" : "335;672"}
+                                    "val" : {"type" : 23, "value" : "335;1110"}
                                  },
                                  {
                                     "key" : {"type" : 22, "value" : "sourcetemplate"},
@@ -2884,13 +3936,7 @@
                               "Emotion" : {"type" : 23, "value" : "Default"},
                               "ExtraWaitTime" : {"type" : 4, "value" : 0},
                               "MusicInstrumentSounds" : [ {} ],
-                              "OriginSound" : [
-                                 {
-                                    "OriginOnly" : {"type" : 22, "value" : ""},
-                                    "OriginTheme" : {"type" : 22, "value" : ""},
-                                    "OriginThemeAddInstrument" : {"type" : 19, "value" : 0}
-                                 }
-                              ],
+                              "OriginSound" : [ {} ],
                               "SoundEvent" : {"type" : 23, "value" : ""}
                            }
                         ],
@@ -2934,6 +3980,10 @@
                            {
                               "data" : [
                                  {
+                                    "key" : {"type" : 22, "value" : "ID"},
+                                    "val" : {"type" : 23, "value" : "N31"}
+                                 },
+                                 {
                                     "key" : {"type" : 22, "value" : "NodeContext"},
                                     "val" : {"type" : 23, "value" : ""}
                                  },
@@ -2974,13 +4024,7 @@
                               "Emotion" : {"type" : 23, "value" : "Default"},
                               "ExtraWaitTime" : {"type" : 4, "value" : 0},
                               "MusicInstrumentSounds" : [ {} ],
-                              "OriginSound" : [
-                                 {
-                                    "OriginOnly" : {"type" : 22, "value" : ""},
-                                    "OriginTheme" : {"type" : 22, "value" : ""},
-                                    "OriginThemeAddInstrument" : {"type" : 19, "value" : 0}
-                                 }
-                              ],
+                              "OriginSound" : [ {} ],
                               "SoundEvent" : {"type" : 23, "value" : ""}
                            }
                         ],
@@ -3031,6 +4075,10 @@
                         "editorData" : [
                            {
                               "data" : [
+                                 {
+                                    "key" : {"type" : 22, "value" : "ID"},
+                                    "val" : {"type" : 23, "value" : "N32"}
+                                 },
                                  {
                                     "key" : {"type" : 22, "value" : "NodeContext"},
                                     "val" : {"type" : 23, "value" : ""}
@@ -3085,13 +4133,7 @@
                               "Emotion" : {"type" : 23, "value" : "Default"},
                               "ExtraWaitTime" : {"type" : 4, "value" : 0},
                               "MusicInstrumentSounds" : [ {} ],
-                              "OriginSound" : [
-                                 {
-                                    "OriginOnly" : {"type" : 22, "value" : ""},
-                                    "OriginTheme" : {"type" : 22, "value" : ""},
-                                    "OriginThemeAddInstrument" : {"type" : 19, "value" : 0}
-                                 }
-                              ],
+                              "OriginSound" : [ {} ],
                               "SoundEvent" : {"type" : 23, "value" : ""}
                            }
                         ],
@@ -3156,6 +4198,10 @@
                            {
                               "data" : [
                                  {
+                                    "key" : {"type" : 22, "value" : "ID"},
+                                    "val" : {"type" : 23, "value" : "N33"}
+                                 },
+                                 {
                                     "key" : {"type" : 22, "value" : "NodeContext"},
                                     "val" : {"type" : 23, "value" : ""}
                                  },
@@ -3209,13 +4255,7 @@
                               "Emotion" : {"type" : 23, "value" : "Default"},
                               "ExtraWaitTime" : {"type" : 4, "value" : 0},
                               "MusicInstrumentSounds" : [ {} ],
-                              "OriginSound" : [
-                                 {
-                                    "OriginOnly" : {"type" : 22, "value" : ""},
-                                    "OriginTheme" : {"type" : 22, "value" : ""},
-                                    "OriginThemeAddInstrument" : {"type" : 19, "value" : 0}
-                                 }
-                              ],
+                              "OriginSound" : [ {} ],
                               "SoundEvent" : {"type" : 23, "value" : ""}
                            }
                         ],
@@ -3277,6 +4317,10 @@
                            {
                               "data" : [
                                  {
+                                    "key" : {"type" : 22, "value" : "ID"},
+                                    "val" : {"type" : 23, "value" : "N34"}
+                                 },
+                                 {
                                     "key" : {"type" : 22, "value" : "NodeContext"},
                                     "val" : {"type" : 23, "value" : ""}
                                  },
@@ -3327,13 +4371,129 @@
                               "Emotion" : {"type" : 23, "value" : "Default"},
                               "ExtraWaitTime" : {"type" : 4, "value" : 0},
                               "MusicInstrumentSounds" : [ {} ],
-                              "OriginSound" : [
+                              "OriginSound" : [ {} ],
+                              "SoundEvent" : {"type" : 23, "value" : ""}
+                           }
+                        ],
+                        "ShowOnce" : {"type" : 19, "value" : 0},
+                        "TaggedTexts" : [
+                           {
+                              "TaggedText" : [
                                  {
-                                    "OriginOnly" : {"type" : 22, "value" : ""},
-                                    "OriginTheme" : {"type" : 22, "value" : ""},
-                                    "OriginThemeAddInstrument" : {"type" : 19, "value" : 0}
+                                    "HasTagRule" : {"type" : 19, "value" : 1},
+                                    "RuleGroup" : [
+                                       {
+                                          "Rules" : [ {} ],
+                                          "TagCombineOp" : {"type" : 1, "value" : 0}
+                                       }
+                                    ],
+                                    "TagTexts" : [
+                                       {
+                                          "TagText" : [
+                                             {
+                                                "TagText" : {
+                                                   "handle" : "ls::TranslatedStringRepository::s_HandleUnknown",
+                                                   "type" : 28,
+                                                   "value" : "*Show the Brawler Stance status.*"
+                                                },
+                                                "stub" : {"type" : 19, "value" : 1}
+                                             }
+                                          ]
+                                       }
+                                    ]
                                  }
-                              ],
+                              ]
+                           }
+                        ],
+                        "Tags" : [ {} ],
+                        "UUID" : {"type" : 22, "value" : "b0d030be-c5ca-40d8-b68c-b29f36ec475e"},
+                        "addressedspeaker" : {"type" : 4, "value" : -1},
+                        "checkflags" : [
+                           {
+                              "flaggroup" : [
+                                 {
+                                    "flag" : [
+                                       {
+                                          "name" : {"type" : 22, "value" : "Mimicry_HideBrawlerStance"},
+                                          "paramval" : {"type" : 4, "value" : 1},
+                                          "value" : {"type" : 19, "value" : 1}
+                                       }
+                                    ],"type" : {"type" : 22, "value" : "Character"}}
+                              ]
+                           }
+                        ],
+                        "children" : [
+                           {
+                              "child" : [
+                                 {
+                                    "UUID" : {"type" : 22, "value" : "edcd1570-7e7c-4a70-a5bf-2bdbd78904f7"}
+                                 }
+                              ]
+                           }
+                        ],
+                        "constructor" : {"type" : 22, "value" : "TagQuestion"},
+                        "editorData" : [
+                           {
+                              "data" : [
+                                 {
+                                    "key" : {"type" : 22, "value" : "ID"},
+                                    "val" : {"type" : 23, "value" : "N70"}
+                                 },
+                                 {
+                                    "key" : {"type" : 22, "value" : "NodeContext"},
+                                    "val" : {"type" : 23, "value" : ""}
+                                 },
+                                 {
+                                    "key" : {"type" : 22, "value" : "collapsed"},
+                                    "val" : {"type" : 23, "value" : "False"}
+                                 },
+                                 {
+                                    "key" : {"type" : 22, "value" : "logicalname"},
+                                    "val" : {"type" : 23, "value" : "Question"}
+                                 },
+                                 {
+                                    "key" : {"type" : 22, "value" : "position"},
+                                    "val" : {"type" : 23, "value" : "5135;1548"}
+                                 },
+                                 {
+                                    "key" : {"type" : 22, "value" : "sourcetemplate"},
+                                    "val" : {"type" : 23, "value" : ""}
+                                 }
+                              ]
+                           }
+                        ],
+                        "endnode" : {"type" : 19, "value" : 0},
+                        "exclusive" : {"type" : 19, "value" : 0},
+                        "optional" : {"type" : 19, "value" : 0},
+                        "setflags" : [
+                           {
+                              "flaggroup" : [
+                                 {
+                                    "flag" : [
+                                       {
+                                          "name" : {"type" : 22, "value" : "Mimicry_HideBrawlerStance"},
+                                          "paramval" : {"type" : 4, "value" : 1},
+                                          "value" : {"type" : 19, "value" : 0}
+                                       }
+                                    ],"type" : {"type" : 22, "value" : "Character"}}
+                              ]
+                           }
+                        ],
+                        "speaker" : {"type" : 4, "value" : 1},
+                        "stub" : {"type" : 19, "value" : 0},
+                        "transitionmode" : {"type" : 1, "value" : 0},
+                        "waittime" : {"type" : 6, "value" : -1.0}
+                     },
+                     {
+                        "GameData" : [
+                           {
+                              "AiPersonalities" : [ {} ],
+                              "CameraTarget" : {"type" : 4, "value" : -1},
+                              "CustomMovie" : {"type" : 23, "value" : ""},
+                              "Emotion" : {"type" : 23, "value" : "Default"},
+                              "ExtraWaitTime" : {"type" : 4, "value" : 0},
+                              "MusicInstrumentSounds" : [ {} ],
+                              "OriginSound" : [ {} ],
                               "SoundEvent" : {"type" : 23, "value" : ""}
                            }
                         ],
@@ -3385,6 +4545,10 @@
                            {
                               "data" : [
                                  {
+                                    "key" : {"type" : 22, "value" : "ID"},
+                                    "val" : {"type" : 23, "value" : "N35"}
+                                 },
+                                 {
                                     "key" : {"type" : 22, "value" : "NodeContext"},
                                     "val" : {"type" : 23, "value" : ""}
                                  },
@@ -3425,13 +4589,7 @@
                               "Emotion" : {"type" : 23, "value" : "Default"},
                               "ExtraWaitTime" : {"type" : 4, "value" : 0},
                               "MusicInstrumentSounds" : [ {} ],
-                              "OriginSound" : [
-                                 {
-                                    "OriginOnly" : {"type" : 22, "value" : ""},
-                                    "OriginTheme" : {"type" : 22, "value" : ""},
-                                    "OriginThemeAddInstrument" : {"type" : 19, "value" : 0}
-                                 }
-                              ],
+                              "OriginSound" : [ {} ],
                               "SoundEvent" : {"type" : 23, "value" : ""}
                            }
                         ],
@@ -3493,6 +4651,10 @@
                            {
                               "data" : [
                                  {
+                                    "key" : {"type" : 22, "value" : "ID"},
+                                    "val" : {"type" : 23, "value" : "N36"}
+                                 },
+                                 {
                                     "key" : {"type" : 22, "value" : "NodeContext"},
                                     "val" : {"type" : 23, "value" : ""}
                                  },
@@ -3543,13 +4705,7 @@
                               "Emotion" : {"type" : 23, "value" : "Default"},
                               "ExtraWaitTime" : {"type" : 4, "value" : 0},
                               "MusicInstrumentSounds" : [ {} ],
-                              "OriginSound" : [
-                                 {
-                                    "OriginOnly" : {"type" : 22, "value" : ""},
-                                    "OriginTheme" : {"type" : 22, "value" : ""},
-                                    "OriginThemeAddInstrument" : {"type" : 19, "value" : 0}
-                                 }
-                              ],
+                              "OriginSound" : [ {} ],
                               "SoundEvent" : {"type" : 23, "value" : ""}
                            }
                         ],
@@ -3593,6 +4749,10 @@
                            {
                               "data" : [
                                  {
+                                    "key" : {"type" : 22, "value" : "ID"},
+                                    "val" : {"type" : 23, "value" : "N37"}
+                                 },
+                                 {
                                     "key" : {"type" : 22, "value" : "NodeContext"},
                                     "val" : {"type" : 23, "value" : ""}
                                  },
@@ -3633,13 +4793,7 @@
                               "Emotion" : {"type" : 23, "value" : "Default"},
                               "ExtraWaitTime" : {"type" : 4, "value" : 0},
                               "MusicInstrumentSounds" : [ {} ],
-                              "OriginSound" : [
-                                 {
-                                    "OriginOnly" : {"type" : 22, "value" : ""},
-                                    "OriginTheme" : {"type" : 22, "value" : ""},
-                                    "OriginThemeAddInstrument" : {"type" : 19, "value" : 0}
-                                 }
-                              ],
+                              "OriginSound" : [ {} ],
                               "SoundEvent" : {"type" : 23, "value" : ""}
                            }
                         ],
@@ -3701,6 +4855,10 @@
                            {
                               "data" : [
                                  {
+                                    "key" : {"type" : 22, "value" : "ID"},
+                                    "val" : {"type" : 23, "value" : "N38"}
+                                 },
+                                 {
                                     "key" : {"type" : 22, "value" : "NodeContext"},
                                     "val" : {"type" : 23, "value" : ""}
                                  },
@@ -3752,6 +4910,10 @@
                            {
                               "data" : [
                                  {
+                                    "key" : {"type" : 22, "value" : "ID"},
+                                    "val" : {"type" : 23, "value" : "N40"}
+                                 },
+                                 {
                                     "key" : {"type" : 22, "value" : "collapsed"},
                                     "val" : {"type" : 23, "value" : "False"}
                                  },
@@ -3787,13 +4949,7 @@
                               "Emotion" : {"type" : 23, "value" : "Default"},
                               "ExtraWaitTime" : {"type" : 4, "value" : 0},
                               "MusicInstrumentSounds" : [ {} ],
-                              "OriginSound" : [
-                                 {
-                                    "OriginOnly" : {"type" : 22, "value" : ""},
-                                    "OriginTheme" : {"type" : 22, "value" : ""},
-                                    "OriginThemeAddInstrument" : {"type" : 19, "value" : 0}
-                                 }
-                              ],
+                              "OriginSound" : [ {} ],
                               "SoundEvent" : {"type" : 23, "value" : ""}
                            }
                         ],
@@ -3816,7 +4972,7 @@
                                                 "TagText" : {
                                                    "handle" : "ls::TranslatedStringRepository::s_HandleUnknown",
                                                    "type" : 28,
-                                                   "value" : "[MIME] *Reflect on your life as a Mime.*"
+                                                   "value" : "[SETTINGS] *Reflect on your life as a Mime.*"
                                                 },
                                                 "stub" : {"type" : 19, "value" : 1}
                                              }
@@ -3844,6 +5000,10 @@
                         "editorData" : [
                            {
                               "data" : [
+                                 {
+                                    "key" : {"type" : 22, "value" : "ID"},
+                                    "val" : {"type" : 23, "value" : "N41"}
+                                 },
                                  {
                                     "key" : {"type" : 22, "value" : "NodeContext"},
                                     "val" : {"type" : 23, "value" : ""}
@@ -3885,13 +5045,7 @@
                               "Emotion" : {"type" : 23, "value" : "Default"},
                               "ExtraWaitTime" : {"type" : 4, "value" : 0},
                               "MusicInstrumentSounds" : [ {} ],
-                              "OriginSound" : [
-                                 {
-                                    "OriginOnly" : {"type" : 22, "value" : ""},
-                                    "OriginTheme" : {"type" : 22, "value" : ""},
-                                    "OriginThemeAddInstrument" : {"type" : 19, "value" : 0}
-                                 }
-                              ],
+                              "OriginSound" : [ {} ],
                               "SoundEvent" : {"type" : 23, "value" : ""}
                            }
                         ],
@@ -3943,6 +5097,10 @@
                            {
                               "data" : [
                                  {
+                                    "key" : {"type" : 22, "value" : "ID"},
+                                    "val" : {"type" : 23, "value" : "N42"}
+                                 },
+                                 {
                                     "key" : {"type" : 22, "value" : "NodeContext"},
                                     "val" : {"type" : 23, "value" : ""}
                                  },
@@ -3983,13 +5141,7 @@
                               "Emotion" : {"type" : 23, "value" : "Default"},
                               "ExtraWaitTime" : {"type" : 4, "value" : 0},
                               "MusicInstrumentSounds" : [ {} ],
-                              "OriginSound" : [
-                                 {
-                                    "OriginOnly" : {"type" : 22, "value" : ""},
-                                    "OriginTheme" : {"type" : 22, "value" : ""},
-                                    "OriginThemeAddInstrument" : {"type" : 19, "value" : 0}
-                                 }
-                              ],
+                              "OriginSound" : [ {} ],
                               "SoundEvent" : {"type" : 23, "value" : ""}
                            }
                         ],
@@ -4051,6 +5203,10 @@
                            {
                               "data" : [
                                  {
+                                    "key" : {"type" : 22, "value" : "ID"},
+                                    "val" : {"type" : 23, "value" : "N43"}
+                                 },
+                                 {
                                     "key" : {"type" : 22, "value" : "NodeContext"},
                                     "val" : {"type" : 23, "value" : ""}
                                  },
@@ -4102,6 +5258,10 @@
                            {
                               "data" : [
                                  {
+                                    "key" : {"type" : 22, "value" : "ID"},
+                                    "val" : {"type" : 23, "value" : "N45"}
+                                 },
+                                 {
                                     "key" : {"type" : 22, "value" : "collapsed"},
                                     "val" : {"type" : 23, "value" : "False"}
                                  },
@@ -4137,13 +5297,7 @@
                               "Emotion" : {"type" : 23, "value" : "Default"},
                               "ExtraWaitTime" : {"type" : 4, "value" : 0},
                               "MusicInstrumentSounds" : [ {} ],
-                              "OriginSound" : [
-                                 {
-                                    "OriginOnly" : {"type" : 22, "value" : ""},
-                                    "OriginTheme" : {"type" : 22, "value" : ""},
-                                    "OriginThemeAddInstrument" : {"type" : 19, "value" : 0}
-                                 }
-                              ],
+                              "OriginSound" : [ {} ],
                               "SoundEvent" : {"type" : 23, "value" : ""}
                            }
                         ],
@@ -4204,6 +5358,10 @@
                            {
                               "data" : [
                                  {
+                                    "key" : {"type" : 22, "value" : "ID"},
+                                    "val" : {"type" : 23, "value" : "N46"}
+                                 },
+                                 {
                                     "key" : {"type" : 22, "value" : "NodeContext"},
                                     "val" : {"type" : 23, "value" : ""}
                                  },
@@ -4244,6 +5402,10 @@
                         "editorData" : [
                            {
                               "data" : [
+                                 {
+                                    "key" : {"type" : 22, "value" : "ID"},
+                                    "val" : {"type" : 23, "value" : "N48"}
+                                 },
                                  {
                                     "key" : {"type" : 22, "value" : "collapsed"},
                                     "val" : {"type" : 23, "value" : "False"}
@@ -4290,7 +5452,8 @@
             ]
          },
          "editorData" : {
-            "needLayout" : {"type" : 19, "value" : 0}
+            "needLayout" : {"type" : 19, "value" : 0},
+            "nextNodeId" : {"type" : 5, "value" : 83}
          }
       }
    }

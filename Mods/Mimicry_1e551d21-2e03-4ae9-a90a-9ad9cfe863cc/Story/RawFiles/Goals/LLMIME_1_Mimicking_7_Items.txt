@@ -5,15 +5,49 @@ INITSECTION
 //DB_LLMIME_Mimicking_Items_DelayTimer(_TimerName, _Caster, _Template)
 KBSECTION
 //REGION ITEM_TRACKING
+
 QRY
-LLMIME_Mimicking_QRY_ItemIsSafeForUndead((CHARACTERGUID)_Caster, (CHARACTERGUID)_Mime, (ITEMGUID)_Item, (STRING)_Template)
+LLMIME_Mimicking_QRY_ItemIsSafeForRace((CHARACTERGUID)_Caster, (CHARACTERGUID)_Mime, (ITEMGUID)_Item, (STRING)_Template)
 AND
-NOT QRY_IsTrueUndead(_Mime)
+ObjectGetFlag(_Mime, "Mimicry_ItemMimickingSafetyDisabled", 1)
 THEN
 DB_NOOP(1);
 
+//Mimic if both races aren't undead
 QRY
-LLMIME_Mimicking_QRY_ItemIsSafeForUndead((CHARACTERGUID)_Caster, (CHARACTERGUID)_Mime, (ITEMGUID)_Item, (STRING)_Template)
+LLMIME_Mimicking_QRY_ItemIsSafeForRace((CHARACTERGUID)_Caster, (CHARACTERGUID)_Mime, (ITEMGUID)_Item, (STRING)_Template)
+AND
+NOT QRY_IsTrueUndead(_Mime)
+AND
+NOT QRY_IsTrueUndead(_Caster)
+THEN
+DB_NOOP(1);
+
+//Mimic if both races are undead
+QRY
+LLMIME_Mimicking_QRY_ItemIsSafeForRace((CHARACTERGUID)_Caster, (CHARACTERGUID)_Mime, (ITEMGUID)_Item, (STRING)_Template)
+AND
+QRY_IsTrueUndead(_Mime)
+AND
+QRY_IsTrueUndead(_Caster)
+THEN
+DB_NOOP(1);
+
+//Mimic if an undead drinks a regular potion
+QRY
+LLMIME_Mimicking_QRY_ItemIsSafeForRace((CHARACTERGUID)_Caster, (CHARACTERGUID)_Mime, (ITEMGUID)_Item, (STRING)_Template)
+AND
+NOT QRY_IsTrueUndead(_Mime)
+AND
+QRY_IsTrueUndead(_Caster)
+AND
+LLMIME_Mimicking_QRY_ItemWillHarmUndead(_Item, _Template)
+THEN
+DB_NOOP(1);
+
+//Mimic if the item is safe for undead
+QRY
+LLMIME_Mimicking_QRY_ItemIsSafeForRace((CHARACTERGUID)_Caster, (CHARACTERGUID)_Mime, (ITEMGUID)_Item, (STRING)_Template)
 AND
 QRY_IsTrueUndead(_Mime)
 AND
@@ -52,8 +86,8 @@ DB_LLMIME_Mimicking_MimicNextAction(_Mime)
 AND
 LLMIME_Mimicking_QRY_CanMimicCharacterWithItem(_Caster, _Mime, _Item)
 AND
-// Don't copy healing potions if the caster is non-undead, and the mime is undead
-LLMIME_Mimicking_QRY_ItemIsSafeForUndead(_Caster, _Mime, _Item, _Template)
+// Don't copy healing potions if the caster is non-undead, and the mime is undead, or vice versa
+LLMIME_Mimicking_QRY_ItemIsSafeForRace(_Caster, _Mime, _Item, _Template)
 THEN
 LeaderLog_Log("DEBUG", "[LLMIME:Mime:CharacterUsedItem] Queueing up next item mimic [",_Template,"] on mime.");
 LLMIME_Mimicking_QueueNextSelfAction(_Mime, _Caster, _Template, "Item");
@@ -95,11 +129,22 @@ CreateItemTemplateAtPosition(_Template, _x, _y, _z, _Item)
 THEN
 ObjectSetFlag(_Mime, "Mimicry_IsMimicking");
 DB_LLMIME_Mimicking_Items_DestroyNext(_Mime, _Item, _Template, _Caster);
-ItemToInventory(_Item, _Mime, 1, 0, 1);
-CharacterUseItem(_Mime, _Item, "");
-//ItemDestroy(_Item);
-//SetOnStage(_Item, 0);
+//ItemToInventory(_Item, _Mime, 1, 0, 1);
+SetVisible(_Item, 0);
+CharacterUseItem(_Mime, _Item, "Mimicry_Events_MimeUsedMimickedItem");
+ProcObjectTimer(_Item, "Mimicry_Events_RemoveMimickedItem", 500);
 NOT DB_LLMIME_Mimicking_MimicQueue_Self(_Mime, _Caster, _Template, "Item");
+
+PROC
+ProcObjectTimerFinished((ITEMGUID)_Item, "Mimicry_Events_RemoveMimickedItem")
+AND
+ObjectExists(_Item, 1)
+AND
+DB_LLMIME_Mimicking_Items_DestroyNext(_Mime, _Item, _Template, _Caster)
+THEN
+ItemDestroy(_Item);
+LLMIME_Mimicking_OnMimicFailed(_Mime, _Caster, _Template, "Item");
+NOT DB_LLMIME_Mimicking_Items_DestroyNext(_Mime, _Item, _Template, _Caster);
 
 IF
 DB_CustomUseItemResponse(_Char, _Item, 0)
@@ -107,7 +152,6 @@ AND
 DB_LLMIME_Mimicking_Items_DestroyNext(_Mime, _Item, _Template, _Caster)
 THEN
 ItemDestroy(_Item);
-SetOnStage(_Item, 0);
 LLMIME_Mimicking_OnMimicFailed(_Mime, _Caster, _Template, "Item");
 NOT DB_LLMIME_Mimicking_Items_DestroyNext(_Mime, _Item, _Template, _Caster);
 
@@ -116,10 +160,15 @@ CharacterUsedItemFailed(_Mime, _Item)
 AND
 DB_LLMIME_Mimicking_Items_DestroyNext(_Mime, _Item, _Template, _Caster)
 THEN
-ItemDestroy(_Item);
-SetOnStage(_Item, 0);
+ItemRemove(_Item);
 LLMIME_Mimicking_OnMimicFailed(_Mime, _Caster, _Template, "Item");
 NOT DB_LLMIME_Mimicking_Items_DestroyNext(_Mime, _Item, _Template, _Caster);
+
+/*
+IF
+StoryEvent((CHARACTERGUID)_Mime, "Mimicry_Events_MimeUsedMimickedItem")
+AND
+*/
 
 IF
 CharacterUsedItem(_Mime, _Item)
@@ -128,8 +177,7 @@ DB_LLMIME_Mimicking_Items_DestroyNext(_Mime, _Item, _Template, _Caster)
 AND
 ItemIsDestroyed(_Item, 0)
 THEN
-ItemDestroy(_Item);
-SetOnStage(_Item, 0);
+ItemRemove(_Item);
 
 IF
 CharacterUsedItem(_Mime, _Item)

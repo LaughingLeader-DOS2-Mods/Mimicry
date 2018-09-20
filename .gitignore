@@ -12,6 +12,8 @@ Editor/Mods/Mimicry_1e551d21-2e03-4ae9-a90a-9ad9cfe863cc/Levels/*
 ######################
 *.div
 *.raw
+story_orphanqueries_ignore.txt
+Mods/Mimicry_1e551d21-2e03-4ae9-a90a-9ad9cfe863cc/Story/Dialogs/Recovered/*
 
 # Asset Folders      #
 ######################
@@ -110,5 +112,3 @@ ehthumbs.db
 Thumbs.db
 *.lnk
 launch.json
-Mods/Mimicry_1e551d21-2e03-4ae9-a90a-9ad9cfe863cc/Story/story_orphanqueries_ignore.txt
-Mods/Mimicry_1e551d21-2e03-4ae9-a90a-9ad9cfe863cc/Story/story_orphanqueries_ignore.txt

@@ -1087,33 +1087,6 @@ CharacterOverrideMaxSourcePoints(_Mime, _Amount);
 
 //REGION GHOST_SPAWNING_START
 IF
-GameStarted(_,_)
-AND
-DB_LLMIME_Follower_Mime(_Mime)
-AND
-CharacterIsDead(_Mime, 1)
-AND
-NOT LLMIME_Follower_QRY_GhostExists()
-THEN
-LeaderLib_StartObjectTimer(_Mime, 500, "Mimicry_Timers_Follower_SpawnGhost_", "Mimicry_Follower_SpawnGhost");
-
-IF
-CharacterSawCharacter(_Player, _Mime)
-AND
-DB_LLMIME_Follower_Mime(_Mime)
-AND
-CharacterIsDead(_Mime, 1)
-AND
-NOT LLMIME_Follower_QRY_GhostExists()
-THEN
-LeaderLib_StartObjectTimer(_Mime, 500, "Mimicry_Timers_Follower_SpawnGhost_", "Mimicry_Follower_SpawnGhost");
-
-IF
-StoryEvent((CHARACTERGUID)_Mime, "Mimicry_Follower_SpawnGhost")
-THEN
-LLMIME_Follower_SpawnGhost(_Mime);
-
-IF
 CharacterDied(_Mime)
 AND
 DB_LLMIME_Follower_Mime(_Mime)
@@ -1331,6 +1304,7 @@ AND
 CreateItemTemplateAtPosition("CONT_Humans_Backpack_Merchant_A_360e3e11-c7f8-4281-848a-596e37df884b", _x, _y, _z, _Backpack)
 THEN
 LeaderLib_StartCharacterCharacterTimer(_Mime, _Player, 750, "LLMIME_Timers_TreasureEffectsTimer", "Mimicry_Events_MimeFollowerLootSpawned");
+ObjectSetFlag(_Mime, "Mimicry_MimeFollowerMaskTaken", 0);
 SetTag(_Mime, "LLMIME_MimeFollower_TagTreasure");
 GenerateTreasure(_Backpack, "LLMIME_MimeFollower_Treasure", -1, _Player);
 MoveAllItemsTo(_Backpack, _Mime, 1, 1, 1);
@@ -1386,6 +1360,7 @@ SetStoryEvent(_Ghost, "Mimicry_Events_Follower_OnGhostKilled");
 CharacterSetAnimationOverride(_Ghost, "");
 PlayAnimation(_Ghost, "deathfigure_end", "LLMIME_Events_Follower_KillGhost");
 
+/*
 IF
 StoryEvent((CHARACTERGUID)_Ghost, "LLMIME_Events_Follower_KillGhost")
 AND
@@ -1393,6 +1368,7 @@ DB_LLMIME_Follower_Temp_GhostEffect(_Ghost, _Handle)
 THEN
 StopLoopEffect(_Handle);
 NOT DB_LLMIME_Follower_Temp_GhostEffect(_Ghost, _Handle);
+*/
 
 IF
 StoryEvent((CHARACTERGUID)_Ghost, "LLMIME_Events_Follower_KillGhost")
@@ -1425,6 +1401,7 @@ THEN
 SetStoryEvent(_Mime, "Mimicry_Events_Follower_OnResurrected");
 ClearTag(_Mime, "BLOCK_RESURRECTION");
 ObjectSetFlag(_Player, "Mimicry_PlayerRevivedMimeFollower");
+ObjectClearFlag(_Mime, "Mimicry_MimeFollowerMaskTaken");
 SetOnStage(_Mime, 1);
 CharacterResurrectCustom(_Mime, "resurrect");
 ObjectSetFlag(_Mime, "Mimicry_WasResurrectedByMask");

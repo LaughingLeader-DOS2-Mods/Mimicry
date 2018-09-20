@@ -274,6 +274,20 @@ IF "c1"
 THEN
 	CharacterApplyStatus(_Mime, LLMIME_COMBAT_MUTED, -1, 1)
 ENDIF
+
+EVENT LLMIME_Mime_Combat_Muted_Apply_Resurrected
+VARS
+	CHARACTER:_Mime
+ON
+	OnCharacterStatusRemoved(_Mime, RESURRECT)
+ACTIONS
+IF "c1&!c2&c3"
+	IsTagged(_Mime, "Mimicry_Mime")
+	CharacterHasStatus(_Mime, LLMIME_COMBAT_MUTED)
+	IsInCombat(_Mime)
+THEN
+	CharacterApplyStatus(_Mime, LLMIME_COMBAT_MUTED, -1, 1)
+ENDIF
 	
 EVENT LLMIME_Mime_Combat_Muted_Remove
 VARS

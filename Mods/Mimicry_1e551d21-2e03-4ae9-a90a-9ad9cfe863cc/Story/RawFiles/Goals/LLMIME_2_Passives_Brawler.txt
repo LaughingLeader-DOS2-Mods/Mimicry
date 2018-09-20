@@ -15,9 +15,9 @@ PROC
 LLMIME_Brawler_InitSettings()
 THEN
 SysClear("DB_LLMIME_Brawler_StanceStatuses", 5);
-DB_LLMIME_Brawler_StanceStatuses("LLMIME_BRAWLER_STANCE_CON", "Mimicry_BrawlerStance_UseCon", "LLMIME_BRAWLER_STANCE_CON_INFO", "Mimicry_HideMimePassives", "LLMIME_Settings_BrawlerStance_Con_1f4bd5ba-4cf3-4262-af49-455e2530c986");
-DB_LLMIME_Brawler_StanceStatuses("LLMIME_BRAWLER_STANCE_STR", "Mimicry_BrawlerStance_UseStr", "LLMIME_BRAWLER_STANCE_STR_INFO", "Mimicry_HideMimePassives", "LLMIME_Settings_BrawlerStance_Str_694fa103-1089-492b-a7db-aef0e5cf0efd");
-DB_LLMIME_Brawler_StanceStatuses("LLMIME_BRAWLER_STANCE_FIN", "Mimicry_BrawlerStance_UseFin", "LLMIME_BRAWLER_STANCE_FIN_INFO", "Mimicry_HideMimePassives", "LLMIME_Settings_BrawlerStance_Fin_c2f6f50c-8e29-4fdc-8391-f8a4e823f658");
+DB_LLMIME_Brawler_StanceStatuses("LLMIME_BRAWLER_STANCE_CON", "Mimicry_BrawlerStance_UseCon", "LLMIME_BRAWLER_STANCE_CON_INFO", "Mimicry_HideBrawlerStance", "LLMIME_Settings_BrawlerStance_Con_1f4bd5ba-4cf3-4262-af49-455e2530c986");
+DB_LLMIME_Brawler_StanceStatuses("LLMIME_BRAWLER_STANCE_STR", "Mimicry_BrawlerStance_UseStr", "LLMIME_BRAWLER_STANCE_STR_INFO", "Mimicry_HideBrawlerStance", "LLMIME_Settings_BrawlerStance_Str_694fa103-1089-492b-a7db-aef0e5cf0efd");
+DB_LLMIME_Brawler_StanceStatuses("LLMIME_BRAWLER_STANCE_FIN", "Mimicry_BrawlerStance_UseFin", "LLMIME_BRAWLER_STANCE_FIN_INFO", "Mimicry_HideBrawlerStance", "LLMIME_Settings_BrawlerStance_Fin_c2f6f50c-8e29-4fdc-8391-f8a4e823f658");
 
 SysClear("DB_LLMIME_Brawler_StanceStatuses", 3);
 //These need to be hard-coded strings rather than translates strings, since the engine doesn't seem to translate a string passed from a variable
@@ -48,7 +48,7 @@ DB_LLMIME_Brawler_UnarmedDOS2Skills("Target_Flurry");
 QRY
 LLMIME_Brawler_Internal_QRY_VersionNeedsUpdating((STRING)_Version)
 AND
-_Version == "1.0.0.0"
+_Version == "1.0.2.0"
 THEN
 DB_NOOP(1);
 

@@ -42,7 +42,7 @@
                 </node>
                 <node id="TextureAtlasTextureSize">
                     <attribute id="Height" value="128" type="4" />
-                    <attribute id="Width" value="256" type="4" />
+                    <attribute id="Width" value="512" type="4" />
                 </node>
             </children>
         </node>

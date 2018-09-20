@@ -161,7 +161,10 @@ SetStoryEvent(_Mime, "Mimicry_InitMimeJob");
 
 //REGION REMOVAL
 IF
-CharacterStatusRemoved(_Mime, "LLMIME_MASK_INFO", _)
+ItemUnEquipped(_Mask, _Mime)
+//CharacterStatusRemoved(_Mime, "LLMIME_MASK_INFO", _)
+AND
+IsTagged(_Mask, "LLMIME_ACTIVATE_MIME", 1)
 AND
 LLMIME_QRY_CharacterIsAMime(_Mime)
 THEN
@@ -233,7 +236,6 @@ CharacterHasSkill(_Mime, _Skill, 1)
 THEN
 CharacterRemoveSkill(_Mime, _Skill);
 //END_REGION
-
 
 //REGION SKILLS
 //This is after the learnable skills, so the menu skills should be further down on the hotbar.

@@ -41,6 +41,8 @@ IF
 DialogEnded("LLMIME_SettingsMenu", _Instance)
 AND
 DialogGetInvolvedPlayer(_Instance, 1, (CHARACTERGUID)_Mime)
+AND
+NOT ObjectGetFlag(_Mime, "Mimicry_MimeVendorReady", 1)
 THEN
 CharacterSetAnimationOverride(_Mime, "");
 //END_REGION
@@ -68,6 +70,237 @@ LeaderLib_Helper_QRY_ClearObjectFlag(_Mime, "Mimicry_Debug_RefreshMask")
 THEN
 LLMIME_RefreshMask(_Mime);
 LLMIME_RemoveAllMimicryStatuses(_Mime);
+//END_REGION
+
+//REGION MIME_VENDOR
+IF
+GameStarted(_Level,_)
+AND
+IsGameLevel(_Level, 1)
+AND
+NOT DB_LLMIME_Settings_MimeVendor(_)
+THEN
+LLMIME_Settings_Internal_InitMimeVendor();
+
+PROC
+LLMIME_Settings_Internal_InitMimeVendor()
+AND
+ObjectExists((CHARACTERGUID)CHARACTERGUID_S_LLMIME_MimeVendor_3744df74-87c5-49c0-9eb4-b3c4528dd516, 1)
+AND
+NOT ObjectGetFlag(CHARACTERGUID_S_LLMIME_MimeVendor_3744df74-87c5-49c0-9eb4-b3c4528dd516, "Mimicry_MimeVendorInitialized", 1)
+THEN
+LeaderLib_Helper_SetupDummy(CHARACTERGUID_S_LLMIME_MimeVendor_3744df74-87c5-49c0-9eb4-b3c4528dd516);
+ObjectSetFlag(CHARACTERGUID_S_LLMIME_MimeVendor_3744df74-87c5-49c0-9eb4-b3c4528dd516, "Mimicry_MimeVendorInitialized");
+SysClear("DB_LLMIME_Settings_MimeVendor", 1);
+DB_LLMIME_Settings_MimeVendor((CHARACTERGUID)CHARACTERGUID_S_LLMIME_MimeVendor_3744df74-87c5-49c0-9eb4-b3c4528dd516);
+
+PROC
+LLMIME_Settings_Internal_InitMimeVendor()
+AND
+NOT DB_LLMIME_Settings_MimeVendor(_)
+AND
+ObjectExists((CHARACTERGUID)CHARACTERGUID_S_LLMIME_MimeVendor_3744df74-87c5-49c0-9eb4-b3c4528dd516, 0)
+AND
+CharacterGetHostCharacter(_Host)
+AND
+GetPosition(_Host, _x, _y, _z)
+AND
+TemporaryCharacterCreateAtPosition(_x, _y, _z, "S_LLMIME_Ghost_Mime_d699d0e5-250d-4d4d-bacf-96e19e60235c", 0, _MimeVendor)
+THEN
+LeaderLib_Helper_SetupDummy(_MimeVendor);
+ObjectSetFlag(_MimeVendor, "Mimicry_MimeVendorInitialized");
+DB_LLMIME_Settings_MimeVendor(_MimeVendor);
+
+//Why is it dead?
+IF
+DB_LLMIME_Settings_MimeVendor(_MimeVendor)
+AND
+CharacterIsDead(_MimeVendor, 1)
+THEN
+CharacterResurrectCustom(_MimeVendor, "");
+
+//Non-global vendor resetting
+IF
+RegionEnded(_Level)
+AND
+IsGameLevel(_Level, 1)
+AND
+DB_LLMIME_Settings_MimeVendor(_MimeVendor)
+AND
+ObjectIsGlobal(_MimeVendor, 0)
+THEN
+NOT DB_LLMIME_Settings_MimeVendor(_MimeVendor);
+SetOnStage(_MimeVendor, 0);
+CharacterDieImmediate(_MimeVendor, 0, "", _MimeVendor);
+
+IF
+RegionEnded(_Level)
+AND
+IsGameLevel(_Level, 1)
+AND
+DB_LLMIME_Settings_MimeVendor(CHARACTERGUID_S_LLMIME_MimeVendor_3744df74-87c5-49c0-9eb4-b3c4528dd516)
+THEN
+ObjectClearFlag(CHARACTERGUID_S_LLMIME_MimeVendor_3744df74-87c5-49c0-9eb4-b3c4528dd516, "Mimicry_MimeVendorInitialized");
+
+IF
+ObjectFlagSet("Mimicry_PrepareMimeVendor", (CHARACTERGUID)_Mime, _Instance)
+AND
+LLMIME_Settings_QRY_PrepareMimeVendor(_Mime)
+THEN
+LeaderLog_Log("DEBUG", "[Mimicry:Settings:PrepareMimeVendor] Mime vendor is ready.");
+
+IF
+ObjectFlagSet("Mimicry_PrepareMimeVendor", (CHARACTERGUID)_Mime, _Instance)
+THEN
+ObjectClearFlag(_Mime, "Mimicry_PrepareMimeVendor");
+
+IF
+DialogEnded("LLMIME_SettingsMenu", _Instance)
+AND
+DialogGetInvolvedPlayer(_Instance, 1, (CHARACTERGUID)_Mime)
+AND
+ObjectGetFlag(_Mime, "Mimicry_MimeVendorReady", 1)
+AND
+DB_LLMIME_Settings_MimeVendor(_MimeVendor)
+THEN
+Proc_StartDialog(0, "LLMIME_MimeVendor", _MimeVendor, _Mime);
+
+IF
+DialogEnded("LLMIME_MimeVendor", _Instance)
+AND
+DialogGetInvolvedPlayer(_Instance, 1, (CHARACTERGUID)_Mime)
+THEN
+ObjectClearFlag(_Mime, "Mimicry_MimeVendorReady");
+Proc_StartDialog(0, "LLMIME_SettingsMenu", _Mime, _Mime);
+
+QRY
+LLMIME_Settings_QRY_PrepareMimeVendor((CHARACTERGUID)_Mime)
+THEN
+LLMIME_Settings_Internal_PrepareMimeVendor(_Mime);
+
+//Safety 1
+PROC
+LLMIME_Settings_Internal_PrepareMimeVendor((CHARACTERGUID)_Mime)
+AND
+DB_LLMIME_Settings_MimeVendor(_MimeVendor)
+AND
+CharacterIsDead(_MimeVendor, 1)
+THEN
+CharacterResurrectCustom(_MimeVendor, "");
+
+//Safety 2
+PROC
+LLMIME_Settings_Internal_PrepareMimeVendor((CHARACTERGUID)_Mime)
+AND
+NOT DB_LLMIME_Settings_MimeVendor(_)
+THEN
+LLMIME_Settings_Internal_InitMimeVendor();
+
+PROC
+LLMIME_Settings_Internal_PrepareMimeVendor((CHARACTERGUID)_Mime)
+AND
+LLMIME_QRY_CharacterIsAMime(_Mime)
+AND
+DB_LLMIME_Settings_MimeVendor(_MimeVendor)
+AND
+CharacterGetAttitudeTowardsPlayer(_MimeVendor, _Mime, _Attitude)
+AND
+_Attitude != 100
+THEN
+CharacterAddAttitudeTowardsPlayer(_MimeVendor, _Mime, 200);
+
+PROC
+LLMIME_Settings_Internal_PrepareMimeVendor((CHARACTERGUID)_Mime)
+AND
+DB_LLMIME_Settings_MimeVendor(_MimeVendor)
+AND
+GetPosition(_Mime, _x, _y, _z)
+THEN
+ObjectSetFlag(_Mime, "Mimicry_MimeVendorReady");
+TeleportToPosition(_MimeVendor, _x, _y, _z, "Mimicry_Settings_MoveMimeVendorToPlayer", 0, 1);
+//LeaderLib_StartCharacterCharacterTimer(_MimeVendor, _Mime, 250, "Mimicry_Timers_Settings_MoveMimeVendorToPlayer", "Mimicry_Settings_MoveMimeVendorToPlayer");
+
+IF
+CharacterCharacterEvent(_MimeVendor, _Mime, "Mimicry_Settings_MoveMimeVendorToPlayer")
+AND
+GetPosition(_Mime, _x, _y, _z)
+THEN
+CharacterMoveToPosition(_MimeVendor, _x, _y, _z, 1, "");
+//END_REGION
+
+//REGION MIME_VENDOR_LIQUIDATE
+IF
+ObjectFlagSet("Mimicry_LiquidateMimeVendorInventory", (CHARACTERGUID)_MimeVendor, _Instance)
+AND
+GetPosition(_MimeVendor, _x, _y, _z)
+AND
+CreateItemTemplateAtPosition("LOOT_LeaderLib_BackPack_Invisible_98fa7688-0810-4113-ba94-9a8c8463f830", _x, _y, _z, _Backpack)
+THEN
+LeaderLog_Log("DEBUG", "[Mimicry:Settings:Mimicry_LiquidateMimeVendorInventory] Starting item liquidation for Mime Vendor.");
+SetVisible(_Backpack, 0);
+ItemSetOwner(_Backpack, _MimeVendor);
+MoveAllItemsTo(_MimeVendor, _Backpack, 0, 0, 0);
+ProcObjectTimer(_Backpack, "Mimicry_Timers_StartLiquidationIterator", 100);
+ObjectClearFlag(_MimeVendor, "Mimicry_LiquidateMimeVendorInventory");
+
+PROC
+ProcObjectTimerFinished((ITEMGUID)_Backpack, "Mimicry_Timers_StartLiquidationIterator")
+AND
+GetUUID(_Backpack, _UUID)
+AND
+StringConcatenate("Mimicy_Iterator_BackpackFinished_", _UUID, _GlobalFlag)
+THEN
+DB_LLMIME_Settings_BackpackIterator(_Backpack, _GlobalFlag);
+InventoryLaunchIterator(_Backpack, "Mimicy_Iterator_RemoveNonMimeItems", _GlobalFlag);
+ProcObjectTimer(_Backpack, "Mimicry_OnMimeVendorLiquidationComplete", 1000);
+
+IF
+GlobalFlagSet(_GlobalFlag)
+AND
+DB_LLMIME_Settings_BackpackIterator(_Backpack, _GlobalFlag)
+THEN
+NOT DB_LLMIME_Settings_BackpackIterator(_Backpack, _GlobalFlag);
+ProcObjectTimerCancel(_Backpack, "Mimicry_OnMimeVendorLiquidationComplete");
+GlobalClearFlag(_GlobalFlag);
+LeaderLog_Log("DEBUG", "[Mimicry:Settings:Mimicy_Iterator_BackpackFinished] InventoryLaunchIterator set global flag [",_GlobalFlag,"].");
+SetStoryEvent(_Backpack, "Mimicry_Settings_OnBackpackIteratorFinished");
+
+IF
+StoryEvent((ITEMGUID)_Item, "Mimicy_Iterator_RemoveNonMimeItems")
+AND
+IsTagged(_Item, "Mimicry_MimeItem", 0)
+AND
+ItemIsStoryItem(_Item, 0)
+AND
+ItemGetGoldValue(_Item, _Value)
+AND
+DB_LLMIME_Settings_MimeVendor(_MimeVendor)
+THEN
+ItemRemove(_Item);
+CharacterAddGold(_MimeVendor, _Value);
+
+PROC
+ProcObjectTimerFinished((ITEMGUID)_Backpack, "Mimicry_OnMimeVendorLiquidationComplete")
+AND
+DB_LLMIME_Settings_BackpackIterator(_Backpack, _GlobalFlag)
+THEN
+NOT DB_LLMIME_Settings_BackpackIterator(_Backpack, _GlobalFlag);
+LeaderLog_Log("DEBUG", "[Mimicry:Settings:Mimicry_OnMimeVendorLiquidationComplete] Object timer finished before the global flag was set. Manually completing.");
+SetStoryEvent(_Backpack, "Mimicry_Settings_OnBackpackIteratorFinished");
+
+IF
+StoryEvent((ITEMGUID)_Backpack, "Mimicry_Settings_OnBackpackIteratorFinished")
+AND
+ItemGetOwner(_Backpack, _MimeVendor)
+THEN
+MoveAllItemsTo(_Backpack, _MimeVendor, 0, 0, 0);
+ProcObjectTimer(_Backpack, "Mimicry_Timers_RemoveIteratorBackpack", 500);
+LeaderLog_Log("DEBUG", "[Mimicry:Settings:OnMimeVendorLiquidationComplete] Mime vendor liquidated all non-mime items.");
+
+PROC
+ProcObjectTimerFinished((ITEMGUID)_Backpack, "Mimicry_Timers_RemoveIteratorBackpack")
+THEN
+ItemRemove(_Backpack);
 //END_REGION
 EXITSECTION
 

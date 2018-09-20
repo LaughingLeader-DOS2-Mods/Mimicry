@@ -5,6 +5,59 @@ INITSECTION
 //DB_LLMIME_Mimicking_Temp_SkillUsedOnTarget(_Caster, _Target, _Skill, _SkillType)
 //DB_LLMIME_Mimicking_Temp_SkillUsedAtPosition(_Caster, _TargetX, _TargetY, _TargetZ, _Skill, _SkillType)
 KBSECTION
+//REGION UNDEAD_SAFETY
+QRY
+LLMIME_Mimicking_QRY_SkillIsSafeForRace((CHARACTERGUID)_Caster, (CHARACTERGUID)_Mime, (STRING)_Skill)
+AND
+ObjectGetFlag(_Mime, "Mimicry_SkillMimickingSafetyDisabled", 1)
+THEN
+DB_NOOP(1);
+
+//Mimic if both races aren't undead
+QRY
+LLMIME_Mimicking_QRY_SkillIsSafeForRace((CHARACTERGUID)_Caster, (CHARACTERGUID)_Mime, (STRING)_Skill)
+AND
+NOT QRY_IsTrueUndead(_Mime)
+AND
+NOT QRY_IsTrueUndead(_Caster)
+THEN
+DB_NOOP(1);
+
+//Mimic if both races are undead
+QRY
+LLMIME_Mimicking_QRY_SkillIsSafeForRace((CHARACTERGUID)_Caster, (CHARACTERGUID)_Mime, (STRING)_Skill)
+AND
+QRY_IsTrueUndead(_Mime)
+AND
+QRY_IsTrueUndead(_Caster)
+THEN
+DB_NOOP(1);
+
+//Mimic if an undead casts a healing spell on themselves
+QRY
+LLMIME_Mimicking_QRY_SkillIsSafeForRace((CHARACTERGUID)_Caster, (CHARACTERGUID)_Mime, (STRING)_Skill)
+AND
+NOT QRY_IsTrueUndead(_Mime)
+AND
+QRY_IsTrueUndead(_Caster)
+AND
+DB_LLMIME_Mimicking_HarmfulHealingSkills(_Skill)
+THEN
+DB_NOOP(1);
+
+//Mimic if the skill is safe for undead
+QRY
+LLMIME_Mimicking_QRY_SkillIsSafeForRace((CHARACTERGUID)_Caster, (CHARACTERGUID)_Mime, (STRING)_Skill)
+AND
+QRY_IsTrueUndead(_Mime)
+AND
+NOT QRY_IsTrueUndead(_Caster)
+AND
+NOT DB_LLMIME_Mimicking_HarmfulHealingSkills(_Skill)
+THEN
+DB_NOOP(1);
+//END_REGION
+
 //REGION SKILL_TRACKING
 //Give time for the CharacterUsedSkill event to fire, for tracking the element and type
 IF
@@ -69,6 +122,8 @@ AND
 LLMIME_Mimicking_QRY_CanMimicSourceSkill(_Skill, _Mime)
 AND
 LLMIME_Mimicking_QRY_CanMimicCharacter(_Caster, _Mime, _Skill, _SkillType)
+AND
+LLMIME_Mimicking_QRY_SkillIsSafeForRace(_Caster, _Mime, _Skill)
 THEN
 LeaderLog_Log("DEBUG", "[LLMIME:Mime:CharacterUsedSkillOnTarget] Queueing up next mimic self-target skill [",_Skill,"].");
 LLMIME_Mimicking_QueueNextSelfAction(_Mime, _Caster, _Skill, "Skill");

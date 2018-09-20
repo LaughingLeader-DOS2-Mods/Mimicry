@@ -22,6 +22,7 @@ SysClear("DB_LLMIME_Mimicking_Blacklist_ItemTemplates", 1);
 SysClear("DB_LLMIME_Mimicking_Whitelist_WeaponCopy_SkillTypes", 1);
 SysClear("DB_LLMIME_Mimicking_Whitelist_WeaponCopy_Skills", 1);
 SysClear("DB_LLMIME_Mimicking_Blacklist_WeaponCopy_IgnoreSkillsWith", 1);
+SysClear("DB_LLMIME_Mimicking_HarmfulHealingSkills", 1);
 
 PROC
 LLMIME_Mimicking_InitSettings()
@@ -84,13 +85,16 @@ DB_LLMIME_Mimicking_Whitelist_WeaponCopy_SkillTypes("Rain_");
 DB_LLMIME_Mimicking_Whitelist_WeaponCopy_Skills("Shout_RecoverArmour");
 
 DB_LLMIME_Mimicking_Blacklist_WeaponCopy_IgnoreSkillsWith("_Grenade_");
+
+DB_LLMIME_Mimicking_HarmfulHealingSkills("Target_FirstAid");
+DB_LLMIME_Mimicking_HarmfulHealingSkills("Target_Restoration");
 //END_REGION
 
 //REGION UPDATING
 QRY
 LLMIME_Mimicking_Internal_QRY_VersionNeedsUpdating((STRING)_Version)
 AND
-_Version == "1.0.1.0"
+_Version == "1.0.2.0"
 THEN
 DB_NOOP(1);
 
