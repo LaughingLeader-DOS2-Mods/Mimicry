@@ -226,9 +226,28 @@ AND
 GetPosition(_Mime, _x, _y, _z)
 THEN
 CharacterMoveToPosition(_MimeVendor, _x, _y, _z, 1, "");
+
+//"Warping" items.
+IF
+HappyWithDeal(_Mime, _MimeVendor, _ValuePlayer, _ValueNpc)
+AND
+_ValuePlayer >= _ValueNpc
+AND
+DB_LLMIME_Settings_MimeVendor(_MimeVendor)
+AND
+LLMIME_QRY_CharacterIsAMime(_Mime)
+THEN
+PlayEffect(_Mime, "LLMIME_FX_Mime_Mask_TradeTransaction_Overlay_01");
 //END_REGION
 
 //REGION MIME_VENDOR_LIQUIDATE
+IF
+ObjectFlagSet("Mimicry_LiquidateMimeVendorInventory", (CHARACTERGUID)_MimeVendor, _Instance)
+AND
+DialogGetInvolvedPlayer(_Instance, 1, _Player)
+THEN
+PlayEffect(_Player, "LLMIME_FX_Mime_Mask_Liquidation_Overlay_01");
+
 IF
 ObjectFlagSet("Mimicry_LiquidateMimeVendorInventory", (CHARACTERGUID)_MimeVendor, _Instance)
 AND

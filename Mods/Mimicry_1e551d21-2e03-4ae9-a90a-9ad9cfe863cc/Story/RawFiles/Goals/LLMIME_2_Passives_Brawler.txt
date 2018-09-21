@@ -654,12 +654,16 @@ ApplyStatus(_Target, "LLMIME_WEAK_ARMOR_BYPASS", 1.0, 0, _Mime);
 //Set via LLMIME_Skills.gameScript
 IF
 CharacterCharacterEvent(_Mime, _Target, "Mimicry_Events_DoubleHitRollSuccess")
+AND
+CharacterIsDead(_Target, 0)
 THEN
 ObjectSetFlag(_Mime, "Mimicry_DoubleAttackDisabled");
 LLMIME_Brawler_StartDoubleAttack(_Mime, _Target);
 
 IF
 CharacterItemEvent(_Mime, _Target, "Mimicry_Events_DoubleHitRollSuccess")
+AND
+ItemIsDestroyed(_Target, 0)
 THEN
 ObjectSetFlag(_Mime, "Mimicry_DoubleAttackDisabled");
 LLMIME_Brawler_StartDoubleAttack(_Mime, _Target);
@@ -682,6 +686,15 @@ LLMIME_Brawler_DoubleAttack(_Mime, _Target);
 
 PROC
 LLMIME_Brawler_DoubleAttack((CHARACTERGUID)_Mime, (GUIDSTRING)_Target)
+AND
+NOT LeaderLib_Helper_QRY_ObjectIsAlive(_Target)
+THEN
+ObjectClearFlag(_Mime, "Mimicry_DoubleAttackDisabled");
+
+PROC
+LLMIME_Brawler_DoubleAttack((CHARACTERGUID)_Mime, (GUIDSTRING)_Target)
+AND
+LeaderLib_Helper_QRY_ObjectIsAlive(_Target)
 AND
 NOT DB_LLMIME_Brawler_DoubleAttackTimer(_, _Mime)
 AND

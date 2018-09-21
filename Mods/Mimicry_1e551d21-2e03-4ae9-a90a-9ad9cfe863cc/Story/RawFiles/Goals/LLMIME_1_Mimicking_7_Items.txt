@@ -11,69 +11,72 @@ LLMIME_Mimicking_QRY_ItemIsSafeForRace((CHARACTERGUID)_Caster, (CHARACTERGUID)_M
 AND
 ObjectGetFlag(_Mime, "Mimicry_ItemMimickingSafetyDisabled", 1)
 THEN
-DB_NOOP(1);
+LeaderLog_Log("TRACE", "[Mimicry:Mimicking:Items:ItemIsSafeForRace] Flag [Mimicry_ItemMimickingSafetyDisabled] is set on mime. Skipping self-preservation.");
+DB_LLMIME_Mimicking_Items_Temp_ItemAllowed(_Caster, _Mime, _Item);
 
 //Mimic if both races aren't undead
 QRY
 LLMIME_Mimicking_QRY_ItemIsSafeForRace((CHARACTERGUID)_Caster, (CHARACTERGUID)_Mime, (ITEMGUID)_Item, (STRING)_Template)
 AND
+NOT DB_LLMIME_Mimicking_Items_Temp_ItemAllowed(_Caster, _Mime, _Item)
+AND
 NOT QRY_IsTrueUndead(_Mime)
 AND
 NOT QRY_IsTrueUndead(_Caster)
 THEN
-DB_NOOP(1);
+LeaderLog_Log("TRACE", "[Mimicry:Mimicking:Items:ItemIsSafeForRace] Both mime and caster are not undead. Item [",_Template,"] is allowed.");
+DB_LLMIME_Mimicking_Items_Temp_ItemAllowed(_Caster, _Mime, _Item);
 
 //Mimic if both races are undead
 QRY
 LLMIME_Mimicking_QRY_ItemIsSafeForRace((CHARACTERGUID)_Caster, (CHARACTERGUID)_Mime, (ITEMGUID)_Item, (STRING)_Template)
 AND
+NOT DB_LLMIME_Mimicking_Items_Temp_ItemAllowed(_Caster, _Mime, _Item)
+AND
 QRY_IsTrueUndead(_Mime)
 AND
 QRY_IsTrueUndead(_Caster)
 THEN
-DB_NOOP(1);
+LeaderLog_Log("TRACE", "[Mimicry:Mimicking:Items:ItemIsSafeForRace] Both mime and caster are undead. Item [",_Template,"] is allowed.");
+DB_LLMIME_Mimicking_Items_Temp_ItemAllowed(_Caster, _Mime, _Item);
 
 //Mimic if an undead drinks a regular potion
 QRY
 LLMIME_Mimicking_QRY_ItemIsSafeForRace((CHARACTERGUID)_Caster, (CHARACTERGUID)_Mime, (ITEMGUID)_Item, (STRING)_Template)
 AND
+NOT DB_LLMIME_Mimicking_Items_Temp_ItemAllowed(_Caster, _Mime, _Item)
+AND
 NOT QRY_IsTrueUndead(_Mime)
 AND
 QRY_IsTrueUndead(_Caster)
 AND
-LLMIME_Mimicking_QRY_ItemWillHarmUndead(_Item, _Template)
+NOT LeaderLib_Helper_QRY_ItemIsPoisoned(_Item)
 THEN
-DB_NOOP(1);
+LeaderLog_Log("TRACE", "[Mimicry:Mimicking:Items:ItemIsSafeForRace] Item [",_Template,"] is unsafe for undead, but the caster is undead and the mime is not.");
+DB_LLMIME_Mimicking_Items_Temp_ItemAllowed(_Caster, _Mime, _Item);
 
 //Mimic if the item is safe for undead
 QRY
 LLMIME_Mimicking_QRY_ItemIsSafeForRace((CHARACTERGUID)_Caster, (CHARACTERGUID)_Mime, (ITEMGUID)_Item, (STRING)_Template)
 AND
+NOT DB_LLMIME_Mimicking_Items_Temp_ItemAllowed(_Caster, _Mime, _Item)
+AND
 QRY_IsTrueUndead(_Mime)
 AND
 NOT QRY_IsTrueUndead(_Caster)
 AND
-NOT LLMIME_Mimicking_QRY_ItemWillHarmUndead(_Item, _Template)
+LeaderLib_Helper_QRY_ItemIsPoisoned(_Item)
 THEN
-DB_NOOP(1);
+LeaderLog_Log("TRACE", "[Mimicry:Mimicking:Items:ItemIsSafeForRace] Item [",_Template,"] is safe for undead.");
+DB_LLMIME_Mimicking_Items_Temp_ItemAllowed(_Caster, _Mime, _Item);
 
+//This DB is used to skip other query calls
 QRY
-LLMIME_Mimicking_QRY_ItemWillHarmUndead((ITEMGUID)_Item, (STRING)_Template)
+LLMIME_Mimicking_QRY_ItemIsSafeForRace((CHARACTERGUID)_Caster, (CHARACTERGUID)_Mime, (ITEMGUID)_Item, (STRING)_Template)
 AND
-IsTagged(_Item, "FOOD", 1)
-AND
-IsTagged(_Item, "POISONED", 0)
+DB_LLMIME_Mimicking_Items_Temp_ItemAllowed(_Caster, _Mime, _Item)
 THEN
-DB_NOOP(1);
-
-QRY
-LLMIME_Mimicking_QRY_ItemWillHarmUndead((ITEMGUID)_Item, (STRING)_Template)
-AND
-IsTagged(_Item, "HEALING_POTION", 1)
-AND
-IsTagged(_Item, "POISONED", 0)
-THEN
-DB_NOOP(1);
+NOT DB_LLMIME_Mimicking_Items_Temp_ItemAllowed(_Caster, _Mime, _Item);
 
 IF
 CharacterUsedItem(_Caster, _Item)
@@ -86,10 +89,9 @@ DB_LLMIME_Mimicking_MimicNextAction(_Mime)
 AND
 LLMIME_Mimicking_QRY_CanMimicCharacterWithItem(_Caster, _Mime, _Item)
 AND
-// Don't copy healing potions if the caster is non-undead, and the mime is undead, or vice versa
 LLMIME_Mimicking_QRY_ItemIsSafeForRace(_Caster, _Mime, _Item, _Template)
 THEN
-LeaderLog_Log("DEBUG", "[LLMIME:Mime:CharacterUsedItem] Queueing up next item mimic [",_Template,"] on mime.");
+LeaderLog_Log("DEBUG", "[Mimicry:Mimicking:Items:CharacterUsedItem] Queueing up next item mimic [",_Template,"] on mime.");
 LLMIME_Mimicking_QueueNextSelfAction(_Mime, _Caster, _Template, "Item");
 
 IF

@@ -42,7 +42,7 @@
                     <attribute id="Version" value="268632064" type="4" />
                     <children>
                         <node id="PublishVersion">
-                            <attribute id="Version" value="907879730" type="4" />
+                            <attribute id="Version" value="907936416" type="4" />
                         </node>
                         <node id="Scripts">
                             <children>
