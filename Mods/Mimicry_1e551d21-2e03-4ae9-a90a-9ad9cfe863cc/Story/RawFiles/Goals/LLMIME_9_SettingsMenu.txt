@@ -89,6 +89,7 @@ ObjectExists((CHARACTERGUID)CHARACTERGUID_S_LLMIME_MimeVendor_3744df74-87c5-49c0
 AND
 NOT ObjectGetFlag(CHARACTERGUID_S_LLMIME_MimeVendor_3744df74-87c5-49c0-9eb4-b3c4528dd516, "Mimicry_MimeVendorInitialized", 1)
 THEN
+LeaderLog_Log("DEBUG", "[Mimicry:Settings:InitMimeVendor] Global mime vendor found.");
 LeaderLib_Helper_SetupDummy(CHARACTERGUID_S_LLMIME_MimeVendor_3744df74-87c5-49c0-9eb4-b3c4528dd516);
 ObjectSetFlag(CHARACTERGUID_S_LLMIME_MimeVendor_3744df74-87c5-49c0-9eb4-b3c4528dd516, "Mimicry_MimeVendorInitialized");
 SysClear("DB_LLMIME_Settings_MimeVendor", 1);
@@ -105,8 +106,9 @@ CharacterGetHostCharacter(_Host)
 AND
 GetPosition(_Host, _x, _y, _z)
 AND
-TemporaryCharacterCreateAtPosition(_x, _y, _z, "S_LLMIME_Ghost_Mime_d699d0e5-250d-4d4d-bacf-96e19e60235c", 0, _MimeVendor)
+TemporaryCharacterCreateAtPosition(_x, _y, _z, "LLMIME_MimeVendor_6c698e8f-9149-4933-95c0-da6e37df8968", 0, _MimeVendor)
 THEN
+LeaderLog_Log("DEBUG", "[Mimicry:Settings:InitMimeVendor] Global mime vendor not found. Creating new mime vendor.");
 LeaderLib_Helper_SetupDummy(_MimeVendor);
 ObjectSetFlag(_MimeVendor, "Mimicry_MimeVendorInitialized");
 DB_LLMIME_Settings_MimeVendor(_MimeVendor);
