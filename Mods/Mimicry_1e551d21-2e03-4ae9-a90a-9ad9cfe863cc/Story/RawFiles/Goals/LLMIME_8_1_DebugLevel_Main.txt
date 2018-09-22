@@ -472,7 +472,7 @@ CharacterMissedBy(_Mime, _AttackerOwner, _Attacker)
 AND
 HasActiveStatus(_Mime, "LLMIME_COUNTER_THROW", 1)
 AND
-NOT LeaderUpdater_QRY_ModIsActive("WeaponExpansion", "LaughingLeader")
+NOT DB_GlobalFlag("WeaponExpansion_IsActive")
 AND
 LeaderLib_Roll_QRY(60)
 THEN

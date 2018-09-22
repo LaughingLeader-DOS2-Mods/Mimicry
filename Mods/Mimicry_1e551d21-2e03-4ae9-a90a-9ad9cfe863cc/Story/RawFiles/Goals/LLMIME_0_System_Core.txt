@@ -104,11 +104,11 @@ THEN
 DB_NOOP(1);
 
 PROC
-LeaderUpdater_ModUpdated("Mimicry", "LaughingLeader", _Version)
+LeaderUpdater_ModUpdated("Mimicry", "LaughingLeader", (STRING)_PastVersion, (STRING)_NewVersion)
 AND
-LLMIME_System_Internal_QRY_VersionNeedsUpdating(_Version)
+LLMIME_System_Internal_QRY_VersionNeedsUpdating(_PastVersion)
 THEN
-LeaderLog_Log("DEBUG", "[LLMIME:System] Updating settings from version [",_Version,"]");
+LeaderLog_Log("DEBUG", "[LLMIME:System] Updating settings from version [",_PastVersion,"] to [",_NewVersion,"]");
 LLMIME_System_InitSettings();
 //END_REGION
 

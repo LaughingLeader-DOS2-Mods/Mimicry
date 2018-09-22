@@ -1,8 +1,26 @@
 Version 1
 SubGoalCombiner SGC_AND
 INITSECTION
+LLMIME_Settings_InitSettings();
 
 KBSECTION
+//REGION SETTINGS
+PROC
+LLMIME_Settings_InitSettings()
+AND
+NOT DB_LLBARTER_DialogBlacklist("Mimicry", _)
+THEN
+DB_LLBARTER_DialogBlacklist("Mimicry", "LLMIME_MimeVendor");
+DB_LLBARTER_DialogBlacklist("Mimicry", "LLMIME_SettingsMenu");
+
+PROC
+LeaderUpdater_ModUpdated("Mimicry", "LaughingLeader", (STRING)_PastVersion, (STRING)_NewVersion)
+AND
+NOT DB_LLBARTER_DialogBlacklist("Mimicry", _)
+THEN
+LLMIME_Settings_InitSettings();
+//END_REGION
+
 //REGION MENU_SKILL
 /*
 IF
@@ -147,9 +165,23 @@ ObjectClearFlag(CHARACTERGUID_S_LLMIME_MimeVendor_3744df74-87c5-49c0-9eb4-b3c452
 IF
 ObjectFlagSet("Mimicry_PrepareMimeVendor", (CHARACTERGUID)_Mime, _Instance)
 AND
+NOT LLMIME_Settings_QRY_MimeVendorIsBusy()
+AND
 LLMIME_Settings_QRY_PrepareMimeVendor(_Mime)
+AND
+DB_LLMIME_Settings_MimeVendor(_MimeVendor)
 THEN
+DialogAddActorAt(_Instance, _MimeVendor, 3);
 LeaderLog_Log("DEBUG", "[Mimicry:Settings:PrepareMimeVendor] Mime vendor is ready.");
+
+QRY
+LLMIME_Settings_QRY_MimeVendorIsBusy()
+AND
+DB_LLMIME_Settings_MimeVendor(_MimeVendor)
+AND
+DB_DialogNPCs(_, _MimeVendor, _)
+THEN
+DB_NOOP(1);
 
 IF
 ObjectFlagSet("Mimicry_PrepareMimeVendor", (CHARACTERGUID)_Mime, _Instance)
@@ -157,30 +189,42 @@ THEN
 ObjectClearFlag(_Mime, "Mimicry_PrepareMimeVendor");
 
 IF
-DialogEnded("LLMIME_SettingsMenu", _Instance)
-AND
-DialogGetInvolvedPlayer(_Instance, 1, (CHARACTERGUID)_Mime)
-AND
-ObjectGetFlag(_Mime, "Mimicry_MimeVendorReady", 1)
-AND
-DB_LLMIME_Settings_MimeVendor(_MimeVendor)
-THEN
-Proc_StartDialog(0, "LLMIME_MimeVendor", _MimeVendor, _Mime);
-
-IF
 DialogEnded("LLMIME_MimeVendor", _Instance)
 AND
 DialogGetInvolvedPlayer(_Instance, 1, (CHARACTERGUID)_Mime)
 THEN
 ObjectClearFlag(_Mime, "Mimicry_MimeVendorReady");
-Proc_StartDialog(0, "LLMIME_SettingsMenu", _Mime, _Mime);
+
+IF
+DialogEnded("LLMIME_MimeVendor", _Instance)
+AND
+DB_DialogName("LLMIME_SettingsMenu", _MainInstance)
+AND
+DB_DialogNPCs(_MainInstance, _MimeVendor, _)
+AND
+DB_LLMIME_Settings_MimeVendor((CHARACTERGUID)_MimeVendor)
+AND
+DialogRemoveActorFromDialog(_MainInstance, _MimeVendor, _Success)
+AND
+IntegertoString(_Success, _SuccessStr)
+THEN
+LeaderLog_Log("DEBUG", "[Mimicry:Settings:DialogEnded(LLMIME_MimeVendor)] Attempted to remove mime vendor from dialog. Success[",_SuccessStr,"].");
 
 QRY
 LLMIME_Settings_QRY_PrepareMimeVendor((CHARACTERGUID)_Mime)
 THEN
 LLMIME_Settings_Internal_PrepareMimeVendor(_Mime);
 
-//Safety 1
+PROC
+LLMIME_Settings_Internal_PrepareMimeVendor((CHARACTERGUID)_Mime)
+AND
+DB_LLMIME_Settings_MimeVendor(_MimeVendor)
+AND
+ObjectIsOnStage(_MimeVendor, 0)
+THEN
+SetOnStage(_MimeVendor, 1);
+
+//Safety
 PROC
 LLMIME_Settings_Internal_PrepareMimeVendor((CHARACTERGUID)_Mime)
 AND
@@ -219,14 +263,28 @@ AND
 GetPosition(_Mime, _x, _y, _z)
 THEN
 ObjectSetFlag(_Mime, "Mimicry_MimeVendorReady");
-TeleportToPosition(_MimeVendor, _x, _y, _z, "Mimicry_Settings_MoveMimeVendorToPlayer", 0, 1);
-//LeaderLib_StartCharacterCharacterTimer(_MimeVendor, _Mime, 250, "Mimicry_Timers_Settings_MoveMimeVendorToPlayer", "Mimicry_Settings_MoveMimeVendorToPlayer");
+TeleportTo(_MimeVendor, _Mime, "", 0);
+DB_LLMIME_Settings_MimeVendorTarget(_MimeVendor, _Mime);
+PROC_Helper_SafeTeleportTo(_MimeVendor, _Mime, "Mimicry_Settings_MoveMimeVendorToPlayer", 0);
+//TeleportToPosition(_MimeVendor, _x, _y, _z, "Mimicry_Settings_MoveMimeVendorToPlayer", 0, 1);
 
 IF
-CharacterCharacterEvent(_MimeVendor, _Mime, "Mimicry_Settings_MoveMimeVendorToPlayer")
+StoryEvent((CHARACTERGUID)_MimeVendor, "Mimicry_Settings_MoveMimeVendorToPlayer")
+AND
+DB_GlobalFlag("LeaderLib_IsEditorMode")
+AND
+GetPosition(_MimeVendor, _x, _y, _z)
+THEN
+PlayEffectAtPosition("RS3_FX_GP_ScriptedEvent_Teleport_GenericSmoke_01", _x, _y, _z);
+
+IF
+StoryEvent((CHARACTERGUID)_MimeVendor, "Mimicry_Settings_MoveMimeVendorToPlayer")
+AND
+DB_LLMIME_Settings_MimeVendorTarget(_MimeVendor, _Mime)
 AND
 GetPosition(_Mime, _x, _y, _z)
 THEN
+NOT DB_LLMIME_Settings_MimeVendorTarget(_MimeVendor, _Mime);
 CharacterMoveToPosition(_MimeVendor, _x, _y, _z, 1, "");
 
 //"Warping" items.

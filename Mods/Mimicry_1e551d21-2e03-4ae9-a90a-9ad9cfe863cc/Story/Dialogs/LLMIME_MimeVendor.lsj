@@ -223,7 +223,7 @@
                         "optional" : {"type" : 19, "value" : 0},
                         "setflags" : [ {} ],
                         "speaker" : {"type" : 4, "value" : 0},
-                        "stub" : {"type" : 19, "value" : 1},
+                        "stub" : {"type" : 19, "value" : 0},
                         "transitionmode" : {"type" : 1, "value" : 0},
                         "waittime" : {"type" : 6, "value" : -1.0}
                      },
@@ -995,7 +995,7 @@
                   "speaker" : [
                      {
                         "index" : {"type" : 22, "value" : "0"},
-                        "list" : {"type" : 23, "value" : "e8782d3e-cf30-483f-8be8-ed4aab366ca0"}
+                        "list" : {"type" : 23, "value" : "89044c75-0131-4f81-81b2-7452ce60afd6"}
                      },
                      {
                         "index" : {"type" : 22, "value" : "1"},
@@ -1007,7 +1007,7 @@
          },
          "editorData" : {
             "needLayout" : {"type" : 19, "value" : 0},
-            "nextNodeId" : {"type" : 5, "value" : 26}
+            "nextNodeId" : {"type" : 5, "value" : 28}
          }
       }
    }

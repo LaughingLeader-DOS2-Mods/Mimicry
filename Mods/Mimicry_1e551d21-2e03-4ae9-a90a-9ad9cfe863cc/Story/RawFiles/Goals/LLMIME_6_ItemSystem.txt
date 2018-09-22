@@ -76,11 +76,11 @@ THEN
 TimerLaunch("LLMIME_Timers_UpdateMimeEquipmentGrowth", 1000);
 
 PROC
-LeaderUpdater_ModUpdated("Mimicry", "LaughingLeader", _Version)
+LeaderUpdater_ModUpdated("Mimicry", "LaughingLeader", (STRING)_PastVersion, (STRING)_NewVersion)
 AND
-LLMIME_ItemSystem_Internal_QRY_VersionNeedsUpdating(_Version)
+LLMIME_ItemSystem_Internal_QRY_VersionNeedsUpdating(_PastVersion)
 THEN
-LeaderLog_Log("DEBUG", "[LLMIME:ItemSystem] Updating settings from version [",_Version,"]");
+LeaderLog_Log("DEBUG", "[LLMIME:ItemSystem] Updating settings from version [",_PastVersion,"]");
 LLMIME_ItemSystem_InitSettings();
 LLMIME_ItemSystem_ResetMimeEquipment();
 
