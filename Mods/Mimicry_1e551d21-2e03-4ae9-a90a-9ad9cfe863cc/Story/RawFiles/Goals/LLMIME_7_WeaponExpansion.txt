@@ -1,0 +1,24 @@
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+
+KBSECTION
+
+//LLWEAPONEX_Kevin_IgnoreEnergy
+IF
+ObjectFlagSet("Mimicry_IsMimicking", (CHARACTERGUID)_Player, _)
+AND
+DB_GlobalFlag("WeaponExpansion_IsActive")
+THEN
+ObjectSetFlag(_Player, "LLWEAPONEX_Kevin_IgnoreEnergy");
+
+IF
+ObjectFlagCleared("Mimicry_IsMimicking", (CHARACTERGUID)_Player, _)
+AND
+ObjectGetFlag(_Player, "LLWEAPONEX_Kevin_IgnoreEnergy", 1)
+THEN
+ObjectClearFlag(_Player, "LLWEAPONEX_Kevin_IgnoreEnergy");
+EXITSECTION
+
+ENDEXITSECTION
+ParentTargetEdge "LaughingLeader_Mimicry"

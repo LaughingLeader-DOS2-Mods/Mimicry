@@ -58,6 +58,20 @@ LLMIME_Mime_InitSettings();
 
 //REGION QUERIES
 QRY
+LLMIME_Mime_QRY_IsMimeSkill((STRING)_Skill)
+AND
+DB_LLMIME_Mime_LearnableSkills(_Skill)
+THEN
+DB_NOOP(1);
+
+QRY
+LLMIME_Mime_QRY_IsMimeSkill((STRING)_Skill)
+AND
+DB_LLMIME_Mime_Skills(_Skill)
+THEN
+DB_NOOP(1);
+
+QRY
 LLMIME_Mime_QRY_IsMimeItem((ITEMGUID)_Item)
 AND
 DB_LLMIME_Mime_MimeActivatingEquipmentTags(_Tag)
@@ -272,6 +286,33 @@ NOT LLMIME_QRY_CharacterIsAMime(_Character)
 THEN
 RemoveStatus(_Character, _Status);
 //END_REGION
+
+//REGION MIMICKED_SKILL_LEARNING
+IF
+SkillAdded(_Mime, _Skill, 0)
+AND
+ObjectGetFlag(_Mime, "Mimicry_IsMimicking", 1)
+AND
+NOT LLMIME_Mime_QRY_IsMimeSkill(_Skill)
+THEN
+DB_LLMIME_Mime_Temp_AddedSkills(_Mime, _Skill);
+
+IF
+ObjectFlagCleared("Mimicry_IsMimicking", (CHARACTERGUID)_Mime, _)
+AND
+DB_LLMIME_Mime_Temp_AddedSkills(_Mime, _Skill)
+THEN
+NOT DB_LLMIME_Mime_Temp_AddedSkills(_Mime, _Skill);
+LLMIME_Mime_Internal_CheckAddedSkill(_Mime, _Skill);
+
+PROC
+LLMIME_Mime_Internal_CheckAddedSkill((CHARACTERGUID)_Mime, (STRING)_Skill)
+AND
+IsSkillActive(_Mime, _Skill, 0)
+THEN
+CharacterRemoveSkill(_Mime, _Skill);
+//END_REGION
+
 EXITSECTION
 
 ENDEXITSECTION
