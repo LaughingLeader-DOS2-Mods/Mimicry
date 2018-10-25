@@ -751,6 +751,59 @@ THEN
 CharacterUseSkill(_Mime, "Projectile_LLWEAPONEX_Throw_Rock_Instant", _Attacker, 0, 1, 1);
 //END_REGION
 
+//REGION FORCED_EVOLUTION
+IF
+SkillCast(_Summon, "Shout_LLMIME_ForcedEvolution", _SkillType, _SkillElement)
+AND
+IsTagged(_Summon, "INCARNATE_S", 1)
+AND
+CharacterGetOwner(_Summon, _Owner)
+AND
+GetPosition(_Summon, _x, _y, _z)
+THEN
+CharacterDie(_Summon, 0, "None");
+DB_LLMIME_Skills_ForcedEvolutionPosition(_Owner, _x, _y, _z);
+LeaderLib_StartObjectTimer(_Owner, 900, "LLMIME_Timers_EvolveIncarnate_", "Mimicry_StartIncarnateEvolution");
+
+IF
+StoryEvent((CHARACTERGUID)_Owner, "Mimicry_StartIncarnateEvolution")
+AND
+DB_LLMIME_Skills_ForcedEvolutionPosition(_Owner, _x, _y, _z)
+AND
+LLMIME_Dummy_QRY_CreateItemDummy("LLMIME_Dummy_EvolutionTarget", _x, _y, _z)
+AND
+DB_LLMIME_Dummy_NextItemDummy("LLMIME_Dummy_EvolutionTarget", _Dummy)
+THEN
+CharacterUseSkill(_Owner, "Summon_LLMIME_EvolvedIncarnate", _Dummy, 1, 1, 1);
+PlayEffectAtPosition("RS3_FX_GP_Impacts_Air_LightningBolt_Vertical_01", _x, _y, _z);
+NOT DB_LLMIME_Dummy_NextItemDummy("LLMIME_Dummy_EvolutionTarget", _Dummy);
+NOT DB_LLMIME_Skills_ForcedEvolutionPosition(_Owner, _x, _y, _z);
+LLMIME_Dummy_ResetDummy(_Dummy);
+
+IF
+CharacterStatusApplied(_Summon, "LLMIME_FORCED_EVOLUTION", _Summoner)
+AND
+IsTagged(_Summon, "INCARNATE_G", 1)
+AND
+GetPosition(_Summon, _x, _y, _z)
+THEN
+JumpToTurn(_Summon);
+PlayScaledEffectAtPosition("RS3_FX_Elven_Pillar_Explosion", 0.5, _x, _y, _z);
+SetStoryEvent(_Summon, "Mimicry_SummonEvolved");
+
+/*
+//Re-apply monster skills
+IF
+StoryEvent((CHARACTERGUID)_Summon, "Mimicry_SummonEvolved")
+AND
+//HasActiveStatus(_Summon, "LLMIME_FORCED_EVOLUTION", 1)
+HasActiveStatus(_Summon, "LLMIME_BEASTMASTER_MONSTERSKILL", 1)
+THEN
+RemoveStatus(_Summon, "LLMIME_BEASTMASTER_MONSTERSKILL");
+ApplyStatus(_Summon, "LLMIME_BEASTMASTER_MONSTERSKILL", -1.0, 1);
+*/
+//END_REGION
+
 //REGION CLEAR_TEMP_DATA
 IF
 CharacterDied(_Character)
@@ -765,6 +818,13 @@ AND
 DB_LLMIME_Skills_Temp_NextWish(_Character, _Target)
 THEN
 NOT DB_LLMIME_Skills_Temp_NextWish(_Character, _Target);
+
+QRY
+LLMIME_SKILLS_QRY_HasSkillData((CHARACTERGUID)_Character)
+AND
+DB_LLMIME_Skills_ForcedEvolutionPosition(_Character, _x, _y, _z)
+THEN
+NOT DB_LLMIME_Skills_ForcedEvolutionPosition(_Character, _x, _y, _z);
 
 PROC
 LLMIME_MonsterSkill_ClearTemporaryDatabases((CHARACTERGUID)_Character)

@@ -1,3 +1,7 @@
+#INCLUDE LLMIME_Effects
+#INCLUDE LLMIME_Skills
+#INCLUDE LLMIME_Statuses
+
 INIT
 	FIXEDSTRING:%EmptyFixedStr = ""
 	FLOAT3:%EmptyPos = null
@@ -6,6 +10,10 @@ INIT
 	FLOAT:%StatusStrength = 50
 	EXTERN FLOAT:%SourceRegenMinimumLevel = 10
 	EXTERN INT:%SourceRegenDuration = 10
+	
+	USING LLMIME_Effects
+	USING LLMIME_Skills
+	USING LLMIME_Statuses
 EVENTS
 
 EVENT LLMIME_InitStatusList

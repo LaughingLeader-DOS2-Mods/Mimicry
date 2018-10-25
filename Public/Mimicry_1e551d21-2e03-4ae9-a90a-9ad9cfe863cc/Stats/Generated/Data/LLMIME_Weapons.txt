@@ -32,6 +32,12 @@ data "MinAmount" "1"
 data "MaxAmount" "1"
 data "Priority" "1"
 data "MinLevel" "1"
+data "Boosts" "LLMIME_Boost_Unarmed_OnHit"
+
+new entry "LLMIME_Boost_Unarmed_OnHit"
+type "Weapon"
+using "_BOOSTS_Weapon"
+data "ExtraProperties" "LLMIME_UNARMED_HIT,100,0"
 
 new entry "LLMIME_BrawlerFist_Con"
 type "Weapon"

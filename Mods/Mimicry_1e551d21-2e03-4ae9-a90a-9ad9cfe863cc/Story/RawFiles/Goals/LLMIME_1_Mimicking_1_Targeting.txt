@@ -416,7 +416,7 @@ LLMIME_Mimic_Target_EvaluateSingleTarget(_CheckChar, _Mime, _Caster, _Dummy, _Ta
 
 //REGION EVALUATE_TARGET
 QRY
-LLMIME_QRY_Mimic_Targeting_IsCloserToDummy((CHARACTERGUID)_CheckChar, (CHARACTERGUID)_OtherTarget, (CHARACTERGUID)_Dummy)
+LLMIME_QRY_Mimic_Targeting_IsCloserToDummy((GUIDSTRING)_CheckChar, (GUIDSTRING)_OtherTarget, (CHARACTERGUID)_Dummy)
 AND
 GetDistanceTo(_CheckChar, _Dummy, _Dist1)
 AND

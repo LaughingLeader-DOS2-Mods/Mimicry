@@ -12,7 +12,7 @@ KBSECTION
 //REGION INIT
 
 IF
-GameStarted("TestLevel_LL_Mimicry",1)
+GameStarted("TestLevel_LL_Mimicry", 1)
 THEN
 DB_LLMIME_Debug_GameStarted(1);
 TimerLaunch("LLMIME_Debug_Start", 500);
@@ -32,6 +32,15 @@ DB_LeaderLib_Treasure_DeltaModLimit("LLMIME.LeaderTrader.DebugTest2", "WPN_Mace_
 //LeaderLib_Treasure_Configure_AddRune("LLMIME.LeaderTrader.DebugTest2", "WPN_Mace_2H", "LOOT_Rune_Masterwork_Giant_fca17b46-c1dc-4cc2-bd61-5df21d55d15e", -1);
 ItemAddDeltaModifier(ITEMGUID_WPN_Wand_A_Water_000_08d2402f-06bb-488b-b23c-c09e27d0fd27, "Boost_Weapon_EmptyRuneSlot");
 ItemAddDeltaModifier(ITEMGUID_WPN_Wand_A_Water_000_08d2402f-06bb-488b-b23c-c09e27d0fd27, "Boost_Weapon_EmptyRuneSlot");
+
+IF
+GameStarted("TestLevel_LL_Mimicry", 0)
+THEN
+CharacterSetHitpointsPercentage(CHARACTERGUID_Elves_Male_Clothing_002_36f910a9-e4e9-493b-828a-3f3a9368c617, 100.0);
+CharacterSetHitpointsPercentage(CHARACTERGUID_Elves_Male_Clothing_001_5eb986d0-d085-41ab-8806-d2477797832f, 100.0);
+CharacterSetHitpointsPercentage(CHARACTERGUID_Elves_Male_Clothing_004_0e77fc6a-d4d8-4ab4-bb23-77b9140f3c90, 100.0);
+CharacterSetHitpointsPercentage(CHARACTERGUID_Elves_Male_Clothing_003_8122b9ab-28a8-448b-b9cd-f1ccc1da6637, 100.0);
+CharacterSetHitpointsPercentage(CHARACTERGUID_Elves_Male_Clothing_000_95424c71-3223-4414-aa3e-44437e18051b, 100.0);
 
 IF
 TimerFinished("LLMIME_Debug_Test")

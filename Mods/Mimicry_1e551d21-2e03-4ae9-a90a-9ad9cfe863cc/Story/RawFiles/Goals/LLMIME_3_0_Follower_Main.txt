@@ -952,9 +952,19 @@ AND
 IsTagged(_Follower, "LLMIME_MimeFollower", 1)
 THEN
 LLMIME_Mimicking_RemoveMimicking(_Follower);
-ApplyStatus(_Follower, "INVISIBLE", 9.0, 1);
+//ApplyStatus(_Follower, "INVISIBLE", 9.0, 1);
+//CharacterUseSkill(_Follower, "Shout_LLMIME_ReturnToOwner", _Follower, 1, 1);
+TeleportTo(_Follower, _Owner, "Mimicry_Events_Follower_ReturnToOwner_Teleported", 1, 0);
 LeaveCombat(_Follower);
-CharacterUseSkill(_Follower, "Shout_LLMIME_ReturnToOwner", _Follower, 1, 1);
+
+IF
+CharacterTeleportToWaypoint(_Owner, _)
+AND
+DB_LeaderLib_PartyFollower(_Owner, _Follower)
+AND
+IsTagged(_Follower, "LLMIME_MimeFollower", 1)
+THEN
+TeleportTo(_Follower, _Owner, "", 1, 0);
 
 IF
 SkillCast(_Follower, "Shout_LLMIME_ReturnToOwner", _, _)

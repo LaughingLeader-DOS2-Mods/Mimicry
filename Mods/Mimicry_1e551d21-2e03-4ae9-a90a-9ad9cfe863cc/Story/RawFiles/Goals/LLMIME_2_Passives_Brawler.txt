@@ -25,6 +25,7 @@ DB_LLMIME_Brawler_SettingsString("Mimicry_BrawlerStance_UseCon", "*Prefer a body
 DB_LLMIME_Brawler_SettingsString("Mimicry_BrawlerStance_UseStr", "*Prefer a strength-based Brawler Stance (Scales with Strength).*");
 DB_LLMIME_Brawler_SettingsString("Mimicry_BrawlerStance_UseFin", "*Prefer a finesse-based Brawler Stance (Scales with Finesse).*");
 
+/* Deprecated in favor of the brawler fist applying an "OnHit" status
 SysClear("DB_LLMIME_Brawler_UnarmedSkills", 1);
 DB_LLMIME_Brawler_UnarmedMimeSkills("Target_LLMIME_EyeGouge");
 DB_LLMIME_Brawler_UnarmedMimeSkills("Shout_LLMIME_QuakeSlam");
@@ -41,6 +42,7 @@ DB_LLMIME_Brawler_UnarmedDOS2Skills("MultiStrike_BlinkStrike");
 DB_LLMIME_Brawler_UnarmedDOS2Skills("Shout_Whirlwind");
 DB_LLMIME_Brawler_UnarmedDOS2Skills("Target_Overpower");
 DB_LLMIME_Brawler_UnarmedDOS2Skills("Target_Flurry");
+*/
 //END_REGION
 
 //REGION UPDATING
@@ -107,33 +109,12 @@ DialogSetVariableStringForInstance(_Instance, _DialogVar, _FinalStr);
 //END_REGION
 
 //REGION CLEAR_DATA
-QRY
-LLMIME_Brawler_QRY_TargetDataExists((GUIDSTRING)_Target)
-AND
-DB_LLMIME_Brawler_TotalHits(_Mime, _Target, _TotalHits)
-THEN
-DB_LLMIME_Brawler_Temp_MatchedMime(_Target, _Mime);
-
 PROC
 LLMIME_Brawler_ClearMimeData((CHARACTERGUID)_Mime)
 AND
 DB_LLMIME_Brawler_TotalHits(_Mime, _Target, _TotalHits)
 THEN
 NOT DB_LLMIME_Brawler_TotalHits(_Mime, _Target, _TotalHits);
-
-PROC
-LLMIME_Brawler_ClearMimeData((CHARACTERGUID)_Mime)
-AND
-DB_LLMIME_Brawler_UsedUnarmedSkill(_Mime, _Skill)
-THEN
-NOT DB_LLMIME_Brawler_UsedUnarmedSkill(_Mime, _Skill);
-
-PROC
-LLMIME_Brawler_ClearMimeData((CHARACTERGUID)_Mime)
-AND
-ObjectGetFlag(_Mime, "Mimicry_ApplyingUnarmedDamage", 1)
-THEN
-ObjectClearFlag(_Mime, "Mimicry_ApplyingUnarmedDamage");
 //END_REGION
 
 //REGION DEBUG
@@ -327,191 +308,32 @@ THEN
 ObjectClearFlag(_Mime, "Mimicry_BrawlerStatusActive");
 //END_REGION
 
-//REGION BASIC_ATTACK_FLAGGING
-IF
-CharacterStartAttackObject(_Target, _, _Mime)
-AND
-IsTagged(_Mime, "Mimicry_Mime", 1)
-AND
-ObjectGetFlag(_Mime, "Mimicry_MimeIsUnarmed", 1)
-THEN
-LeaderLib_CancelObjectTimer(_Mime, "Mimicry_Timers_ResetBasicAttackFlag");
-ObjectSetFlag(_Mime, "Mimicry_MimeIsStartingBasicAttack");
-
-/*
-IF
-CharacterMissedBy(_Target, _, _Mime)
-AND
-ObjectGetFlag(_Mime, "Mimicry_MimeIsStartingBasicAttack", 1)
-THEN
-ObjectClearFlag(_Mime, "Mimicry_MimeIsStartingBasicAttack");
-*/
-
-IF
-CharacterUsedSkill(_Mime, "Target_LLMIME_ApplyUnarmedBonusDamage", _, _)
-AND
-ObjectGetFlag(_Mime, "Mimicry_MimeIsStartingBasicAttack", 1)
-THEN
-ObjectClearFlag(_Mime, "Mimicry_MimeIsStartingBasicAttack");
-
-IF
-CharacterUsedSkill(_Mime, "Target_LLMIME_MimicAttack", _, _)
-AND
-ObjectGetFlag(_Mime, "Mimicry_MimeIsStartingBasicAttack", 1)
-THEN
-ObjectClearFlag(_Mime, "Mimicry_MimeIsStartingBasicAttack");
-
-IF
-AttackedByObject(_Target, _, (CHARACTERGUID)_Mime, _, "Attack")
-AND
-ObjectGetFlag(_Mime, "Mimicry_MimeIsStartingBasicAttack", 1)
-AND
-ObjectIsItem((ITEMGUID)_Target, 1)
-AND
-ItemIsDestructible(_Target, 1)
-THEN
-CharacterItemSetEvent(_Mime, _Target, "Mimicry_Events_OnMimeUnarmedBasicAttack");
-
-IF
-AttackedByObject(_Target, _, (CHARACTERGUID)_Mime, _, "Attack")
-AND
-ObjectGetFlag(_Mime, "Mimicry_MimeIsStartingBasicAttack", 1)
-AND
-ObjectIsCharacter((CHARACTERGUID)_Target, 1)
-THEN
-CharacterCharacterSetEvent(_Mime, _Target, "Mimicry_Events_OnMimeUnarmedBasicAttack");
-
-IF
-AttackedByObject(_Target, _, _Mime, _, _)
-AND
-ObjectGetFlag(_Mime, "Mimicry_MimeIsStartingBasicAttack", 1)
-THEN
-LeaderLib_StartObjectTimer(_Mime, 1500, "Mimicry_Timers_ResetBasicAttackFlag", "Mimicry_Events_ResetBasicAttackFlag");
-
-IF
-StoryEvent(_Mime, "Mimicry_Events_ResetBasicAttackFlag")
-AND
-ObjectGetFlag(_Mime, "Mimicry_MimeIsStartingBasicAttack", 1)
-THEN
-ObjectClearFlag(_Mime, "Mimicry_MimeIsStartingBasicAttack");
-//END_REGION
-
 //REGION UNARMED_BONUS_DAMAGE
 IF
-CharacterCharacterEvent(_Mime, _Target, "Mimicry_Events_OnMimeUnarmedBasicAttack")
+CharacterStatusApplied(_Target, "LLMIME_UNARMED_HIT", (CHARACTERGUID)_Mime)
+AND
+IsTagged(_Mime, "Mimicry_Mime", 1)
 THEN
-LeaderLog_Log("DEBUG", "[Mimicry:Brawler:OnMimeUnarmedBasicAttack] Mime hit character target with basic unarmed attack.");
+LeaderLog_Log("DEBUG", "[Mimicry:Brawler:OnMimeUnarmedBasicAttack] Mime hit character target with an unarmed attack.");
 LLMIME_Brawler_OnUnarmedAttack(_Mime, _Target);
 
 IF
-CharacterItemEvent(_Mime, _Target, "Mimicry_Events_OnMimeUnarmedBasicAttack")
-THEN
-LeaderLog_Log("DEBUG", "[Mimicry:Brawler:OnMimeUnarmedBasicAttack] Mime hit item target with basic unarmed attack.");
-LLMIME_Brawler_OnUnarmedAttack(_Mime, _Target);
-
-//Workaround for skills that don't fire CharacterUsedSkillOnTarget
-IF
-CharacterUsedSkill(_Mime, _Skill, _, _)
+ItemStatusChange(_Target, "LLMIME_UNARMED_HIT", (CHARACTERGUID)_Mime)
 AND
 IsTagged(_Mime, "Mimicry_Mime", 1)
 AND
-ObjectGetFlag(_Mime, "Mimicry_MimeIsUnarmed", 1)
-AND
-ObjectGetFlag(_Mime, "Mimicry_IsMimicking", 0)
-AND
-NOT DB_LLMIME_Brawler_UsedUnarmedSkill(_Mime, _Skill)
-AND
-DB_LLMIME_Brawler_UnarmedDOS2Skills(_Skill)
+ItemIsStoryItem(_Target, 0)
 THEN
-DB_LLMIME_Brawler_UsedUnarmedSkill(_Mime, _Skill);
-
-IF
-CharacterUsedSkill(_Mime, _Skill, _, _)
-AND
-IsTagged(_Mime, "Mimicry_Mime", 1)
-AND
-ObjectGetFlag(_Mime, "Mimicry_MimeIsUnarmed", 1)
-AND
-ObjectGetFlag(_Mime, "Mimicry_IsMimicking", 0)
-AND
-NOT DB_LLMIME_Brawler_UsedUnarmedSkill(_Mime, _Skill)
-AND
-DB_LLMIME_Brawler_UnarmedMimeSkills(_UnarmedSkill)
-AND
-NOT DB_LLMIME_Brawler_UsedUnarmedSkill(_Mime, _Skill)
-AND
-LLMIME_Skills_QRY_SkillMatch(_Skill, _UnarmedSkill)
-THEN
-DB_LLMIME_Brawler_UsedUnarmedSkill(_Mime, _Skill);
-
-IF
-DB_LLMIME_Brawler_UsedUnarmedSkill(_Mime, _Skill)
-THEN
-ProcObjectTimer(_Mime, "Mimicry_ResetUsedUnarmedSkill", 1500);
-
-IF
-CharacterStatusAttempt(_Target, "HIT", (CHARACTERGUID)_Mime)
-AND
-DB_LLMIME_Brawler_UsedUnarmedSkill(_Mime, _Skill)
-THEN
+LeaderLog_Log("DEBUG", "[Mimicry:Brawler:OnMimeUnarmedBasicAttack] Mime hit item target with an unarmed attack.");
 LLMIME_Brawler_OnUnarmedAttack(_Mime, _Target);
-
-IF
-SkillCast(_Mime, _Skill, _, _)
-AND
-DB_LLMIME_Brawler_UsedUnarmedSkill(_Mime, _Skill)
-THEN
-ProcObjectTimerCancel(_Mime, "Mimicry_ResetUsedUnarmedSkill");
-ProcObjectTimer(_Mime, "Mimicry_ResetUsedUnarmedSkill", 1000);
-
-PROC
-ProcObjectTimerFinished((CHARACTERGUID)_Mime, "Mimicry_ResetUsedUnarmedSkill")
-AND
-DB_LLMIME_Brawler_UsedUnarmedSkill(_Mime, _Skill)
-THEN
-NOT DB_LLMIME_Brawler_UsedUnarmedSkill(_Mime, _Skill);
-
-QRY
-LLMIME_Brawler_QRY_BonusAttackBlocked((CHARACTERGUID)_Mime, (GUIDSTRING)_Target)
-AND
-ObjectGetFlag(_Mime, "Mimicry_ApplyingUnarmedDamage", 1)
-THEN
-DB_NOOP(1);
-
-QRY
-LLMIME_Brawler_QRY_BonusAttackBlocked((CHARACTERGUID)_Mime, (GUIDSTRING)_Target)
-AND
-DB_LLMIME_Brawler_BlockBonusAttack(_Mime, _Target)
-THEN
-DB_NOOP(1);
 
 PROC
 LLMIME_Brawler_OnUnarmedAttack((CHARACTERGUID)_Mime, (GUIDSTRING)_Target)
 AND
 LLMIME_Brawler_QRY_BrawlerActive(_Mime)
-AND
-LLMIME_Brawler_QRY_BonusAttackBlocked(_Mime, _Target)
 THEN
-LeaderLog_Log("DEBUG", "[Mimicry:Brawler:OnUnarmedAttack] Ignoring unarmed attack, as the hit was already registered.");
-
-PROC
-LLMIME_Brawler_OnUnarmedAttack((CHARACTERGUID)_Mime, (GUIDSTRING)_Target)
-AND
-LLMIME_Brawler_QRY_BrawlerActive(_Mime)
-AND
-NOT LLMIME_Brawler_QRY_BonusAttackBlocked(_Mime, _Target)
-THEN
-LeaderLog_Log("TRACE", "[Mimicry:Brawler:OnUnarmedAttack] Incrementing basic attack combo.");
+LeaderLog_Log("TRACE", "[Mimicry:Brawler:OnUnarmedAttack] Incrementing unarmed attack combo.");
 LLMIME_Brawler_IncrementHits(_Mime, _Target);
-DB_LLMIME_Brawler_BlockBonusAttack(_Mime, _Target);
-ProcObjectTimer(_Mime, "LLMIME_Timers_ClearBonusAttackBlock", 250);
-
-PROC
-ProcObjectTimerFinished((CHARACTERGUID)_Mime, "LLMIME_Timers_ClearBonusAttackBlock")
-AND
-DB_LLMIME_Brawler_BlockBonusAttack(_Mime, _Target)
-THEN
-NOT DB_LLMIME_Brawler_BlockBonusAttack(_Mime, _Target);
 
 PROC
 LLMIME_Brawler_IncrementHits((CHARACTERGUID)_Mime, (GUIDSTRING)_Target)
@@ -538,37 +360,34 @@ AND
 _TotalHits >= 3
 THEN
 NOT DB_LLMIME_Brawler_TotalHits(_Mime, _Target, _TotalHits);
-ObjectSetFlag(_Mime, "Mimicry_ApplyingUnarmedDamage");
-LeaderLog_Log("TRACE", "[Mimicry:Brawler:IncrementHits] Casting unarmed damage skill in 1 second.");
-LeaderLib_StartObjectObjectTimer(_Mime, _Target, 1000, "LLMIME_Timers_Brawler_CastUnarmedBonusDamage_", "Mimicry_Events_CastUnarmedBonusDamage");
+LeaderLog_Log("TRACE", "[Mimicry:Brawler:IncrementHits] Applying unarmed bonus damage.");
+LLMIME_Brawler_ApplyUnarmedBonusDamage(_Mime, _Target);
 
 PROC
-LeaderLib_ObjectObjectTimerFinished((CHARACTERGUID)_Mime, _Target, "Mimicry_Events_CastUnarmedBonusDamage")
+LLMIME_Brawler_ApplyUnarmedBonusDamage((CHARACTERGUID)_Mime, (GUIDSTRING)_Target)
+AND
+ObjectExists(_Target, 1)
 AND
 CharacterIsDead(_Mime, 0)
 AND
-LLMIME_Brawler_QRY_ObjectIsAlive(_Target)
+ObjectIsCharacter((CHARACTERGUID)_Target, 1)
+AND
+CharacterIsDead(_Target, 0)
 THEN
-SetVarObject(_Target, "LLMIME_UnarmedBonusDamageSource", _Mime);
-CharacterUseSkill(_Mime, "Target_LLMIME_ApplyUnarmedBonusDamage", _Target, 1, 1, 1);
+CharacterCharacterSetEvent(_Mime, _Target, "Mimicry_ApplyUnarmedBonusDamage");
 
-QRY
-LLMIME_Brawler_QRY_ObjectIsAlive((GUIDSTRING)_Target)
+PROC
+LLMIME_Brawler_ApplyUnarmedBonusDamage((CHARACTERGUID)_Mime, (GUIDSTRING)_Target)
 AND
-ObjectIsCharacter(_Target, 1)
+ObjectExists(_Target, 1)
 AND
-CharacterIsDead((CHARACTERGUID)_Target, 0)
+CharacterIsDead(_Mime, 0)
+AND
+ObjectIsItem((ITEMGUID)_Target, 1)
+AND
+ItemIsDestroyed(_Target, 0)
 THEN
-DB_NOOP(1);
-
-QRY
-LLMIME_Brawler_QRY_ObjectIsAlive((GUIDSTRING)_Target)
-AND
-ObjectIsItem(_Target, 1)
-AND
-ItemIsDestroyed((ITEMGUID)_Target, 0)
-THEN
-DB_NOOP(1);
+CharacterItemSetEvent(_Mime, _Target, "Mimicry_ApplyUnarmedBonusDamage");
 
 IF
 CharacterDied(_Mime)
@@ -580,21 +399,17 @@ LLMIME_Brawler_ClearMimeData(_Mime);
 IF
 CharacterDied(_Target)
 AND
-LLMIME_Brawler_QRY_TargetDataExists((GUIDSTRING)_Target)
-AND
-DB_LLMIME_Brawler_Temp_MatchedMime(_Target, _Mime)
+DB_LLMIME_Brawler_TotalHits(_Mime, (GUIDSTRING)_Target, _TotalHits)
 THEN
-NOT DB_LLMIME_Brawler_Temp_MatchedMime(_Target, _Mime);
+NOT DB_LLMIME_Brawler_TotalHits(_Mime, _Target, _TotalHits);
 LLMIME_Brawler_ClearMimeData(_Mime);
 
 IF
 ItemDestroyed(_Target)
 AND
-LLMIME_Brawler_QRY_TargetDataExists((GUIDSTRING)_Target)
-AND
-DB_LLMIME_Brawler_Temp_MatchedMime(_Target, _Mime)
+DB_LLMIME_Brawler_TotalHits(_Mime, (GUIDSTRING)_Target, _TotalHits)
 THEN
-NOT DB_LLMIME_Brawler_Temp_MatchedMime(_Target, _Mime);
+NOT DB_LLMIME_Brawler_TotalHits(_Mime, _Target, _TotalHits);
 LLMIME_Brawler_ClearMimeData(_Mime);
 //END_REGION
 
@@ -651,77 +466,137 @@ ApplyStatus(_Target, "LLMIME_WEAK_ARMOR_BYPASS", 1.0, 0, _Mime);
 //END_REGION
 
 //REGION DOUBLE_STRIKE
-//Set via LLMIME_Skills.gameScript
 IF
-CharacterCharacterEvent(_Mime, _Target, "Mimicry_Events_DoubleHitRollSuccess")
+CharacterCharacterEvent(_Mime, _Target, "Mimicry_Events_OnCriticalHit")
+AND
+CharacterIsDead(_Mime, 0)
 AND
 CharacterIsDead(_Target, 0)
+AND
+LeaderLib_Roll_QRY(40)
 THEN
-ObjectSetFlag(_Mime, "Mimicry_DoubleAttackDisabled");
 LLMIME_Brawler_StartDoubleAttack(_Mime, _Target);
 
 IF
-CharacterItemEvent(_Mime, _Target, "Mimicry_Events_DoubleHitRollSuccess")
+CharacterItemEvent(_Mime, _Target, "Mimicry_Events_OnCriticalHit")
+AND
+CharacterIsDead(_Mime, 0)
 AND
 ItemIsDestroyed(_Target, 0)
+AND
+LeaderLib_Roll_QRY(40)
 THEN
-ObjectSetFlag(_Mime, "Mimicry_DoubleAttackDisabled");
 LLMIME_Brawler_StartDoubleAttack(_Mime, _Target);
 
 PROC
 LLMIME_Brawler_StartDoubleAttack((CHARACTERGUID)_Mime, (GUIDSTRING)_Target)
 AND
-NOT DB_LLMIME_Brawler_Temp_DoubleAttackTarget(_Mime, _)
-THEN
-DB_LLMIME_Brawler_Temp_DoubleAttackTarget(_Mime, _Target);
-LeaderLib_StartObjectTimer(_Mime, 1000, "Mimicry_Timers_StartDoubleAttack_", "Mimicry_StartDoubleAttack");
-
-IF
-StoryEvent((CHARACTERGUID)_Mime, "Mimicry_StartDoubleAttack")
+NOT DB_LeaderLib_Skills_Temp_SkillDummyData(_, _Mime, _Target, "Target_LLMIME_DoubleStrike_DummyVisual")
 AND
-DB_LLMIME_Brawler_Temp_DoubleAttackTarget(_Mime, _Target)
+GetPosition(_Mime, _x, _y, _z)
 THEN
-NOT DB_LLMIME_Brawler_Temp_DoubleAttackTarget(_Mime, _Target);
-LLMIME_Brawler_DoubleAttack(_Mime, _Target);
+LeaderLib_Skills_UseSkillOnTargetFromPosition(_Mime, _Target, "Target_LLMIME_DoubleStrike_DummyVisual", _x, _y, _z, 0, 1);
+LLMIME_Brawler_IncrementDoubleStrikes(_Mime);
+ProcObjectTimerCancel(_Mime, "Mimicry_Timers_DisplayDoubleStrikeText");
+ProcObjectTimer(_Mime, "Mimicry_Timers_DisplayDoubleStrikeText", 250);
 
 PROC
-LLMIME_Brawler_DoubleAttack((CHARACTERGUID)_Mime, (GUIDSTRING)_Target)
+ProcObjectTimerFinished((CHARACTERGUID)_Mime, "Mimicry_Timers_DisplayDoubleStrikeText")
 AND
-NOT LeaderLib_Helper_QRY_ObjectIsAlive(_Target)
+DB_LLMIME_Brawler_TotalDoubleStrikes(_Mime, _Total)
+AND
+_Total > 1
+AND
+IntegertoString(_Total, _TotalStr)
+AND
+StringConcatenate("<font color='#8A2BE2' size='24'>Double Strike x", _TotalStr, _Str1)
+AND
+StringConcatenate(_Str1, "!</font>", _StatusText)
 THEN
-ObjectClearFlag(_Mime, "Mimicry_DoubleAttackDisabled");
+CharacterStatusText(_Mime, _StatusText);
+NOT DB_LLMIME_Brawler_TotalDoubleStrikes(_Mime, _Total);
 
 PROC
-LLMIME_Brawler_DoubleAttack((CHARACTERGUID)_Mime, (GUIDSTRING)_Target)
+ProcObjectTimerFinished((CHARACTERGUID)_Mime, "Mimicry_Timers_DisplayDoubleStrikeText")
 AND
-LeaderLib_Helper_QRY_ObjectIsAlive(_Target)
+DB_LLMIME_Brawler_TotalDoubleStrikes(_Mime, _Total)
 AND
-NOT DB_LLMIME_Brawler_DoubleAttackTimer(_, _Mime)
-AND
-GetUUID(_Mime, _ID)
-AND
-StringConcatenate("LLMIME_Timers_BrawlerDoubleAttack_", _ID, _TimerName)
+_Total <= 1
 THEN
 CharacterStatusText(_Mime, "LLMIME_StatusText_DoubleStrike");
-CharacterUseSkill(_Mime, "Target_LLMIME_DoubleStrike", _Target, 1, 1, 1);
-DB_LLMIME_Brawler_DoubleAttackTimer(_TimerName, _Mime);
-TimerLaunch(_TimerName, 3000);
+NOT DB_LLMIME_Brawler_TotalDoubleStrikes(_Mime, _Total);
+
+PROC
+LLMIME_Brawler_IncrementDoubleStrikes((CHARACTERGUID)_Mime)
+AND
+NOT DB_LLMIME_Brawler_TotalDoubleStrikes(_Mime, _)
+THEN
+DB_LLMIME_Brawler_TotalDoubleStrikes(_Mime, 0);
+
+PROC
+LLMIME_Brawler_IncrementDoubleStrikes((CHARACTERGUID)_Mime)
+AND
+DB_LLMIME_Brawler_TotalDoubleStrikes(_Mime, _Total)
+AND
+IntegerSum(_Total, 1, _NextTotal)
+THEN
+NOT DB_LLMIME_Brawler_TotalDoubleStrikes(_Mime, _Total);
+DB_LLMIME_Brawler_TotalDoubleStrikes(_Mime, _NextTotal);
 
 IF
-AttackedByObject(_Target, _, (CHARACTERGUID)_Mime, _, _)
+StoryEvent((CHARACTERGUID)_Dummy, "LeaderLib_Events_SkillDummyTeleported")
 AND
-DB_LLMIME_Brawler_DoubleAttackTimer(_TimerName, _Mime)
+DB_LeaderLib_Skills_Temp_SkillDummyData(_Dummy, _Mime, _Target, "Target_LLMIME_DoubleStrike_DummyVisual")
+AND
+NOT DB_LLMIME_Brawler_DoubleStrikeData(_Mime, _Target, _Dummy)
 THEN
-TimerCancel(_TimerName);
-TimerLaunch(_TimerName, 250);
+DB_LLMIME_Brawler_DoubleStrikeData(_Mime, _Target, _Dummy);
 
 IF
-TimerFinished(_TimerName)
+StoryEvent((CHARACTERGUID)_Dummy, "LeaderLib_Events_SkillDummyArrived")
 AND
-DB_LLMIME_Brawler_DoubleAttackTimer(_TimerName, _Mime)
+DB_LLMIME_Brawler_DoubleStrikeData(_Mime, _Target, _Dummy)
 THEN
-NOT DB_LLMIME_Brawler_DoubleAttackTimer(_TimerName, _Mime);
-ObjectClearFlag(_Mime, "Mimicry_DoubleAttackDisabled");
+SetVisible(_Dummy, 1);
+CharacterSetDetached(_Dummy, 0);
+
+IF
+CharacterStatusAttempt(_Target, "LLMIME_DOUBLE_STRIKE_CAST", (CHARACTERGUID)_Dummy)
+AND
+DB_LLMIME_Brawler_DoubleStrikeData(_Mime, (GUIDSTRING)_Target, _Dummy)
+THEN
+NOT DB_LLMIME_Brawler_DoubleStrikeData(_Mime, _Target, _Dummy);
+CharacterCharacterSetEvent(_Mime, (CHARACTERGUID)_Target, "Mimicry_ApplyDoubleStrike");
+LeaderLib_Skills_ResetDummy(_Dummy);
+
+IF
+ItemStatusAttempt(_Target, "LLMIME_DOUBLE_STRIKE_CAST", (CHARACTERGUID)_Dummy)
+AND
+DB_LLMIME_Brawler_DoubleStrikeData(_Mime, (GUIDSTRING)_Target, _Dummy)
+THEN
+NOT DB_LLMIME_Brawler_DoubleStrikeData(_Mime, _Target, _Dummy);
+CharacterItemSetEvent(_Mime, (ITEMGUID)_Target, "Mimicry_ApplyDoubleStrike");
+LeaderLib_Skills_ResetDummy(_Dummy);
+
+//Prevent double strikes from double strike crits
+IF
+CharacterStatusApplied(_Target, "LLMIME_DOUBLE_STRIKE", _)
+AND
+CharacterIsInCombat(_Target, 1)
+THEN
+ProcObjectTimer(_Target, "Mimicry_Timers_ResetDoubleStrikeBlocking", 500);
+
+IF
+ItemStatusChange(_Target, "LLMIME_DOUBLE_STRIKE", _)
+AND
+DB_CombatObjects(_Target, _CombatID)
+THEN
+ProcObjectTimer(_Target, "Mimicry_Timers_ResetDoubleStrikeBlocking", 500);
+
+PROC
+ProcObjectTimerFinished(_Target, "Mimicry_Timers_ResetDoubleStrikeBlocking")
+THEN
+RemoveStatus(_Target, "LLMIME_DOUBLE_STRIKE");
 //END_REGION
 
 //REGION WEAPON_MIMICKING_STANCE_SAVING
@@ -807,6 +682,7 @@ DB_NOOP(1);
 //END_REGION
 
 //REGION RESET
+/*
 IF
 StoryEvent((CHARACTERGUID)_Mime, "Mimicry_ResetMimeCombatData")
 AND
@@ -815,6 +691,7 @@ THEN
 NOT DB_LLMIME_Brawler_DoubleAttackTimer(_TimerName, _Mime);
 TimerCancel(_TimerName);
 ObjectClearFlag(_Mime, "Mimicry_DoubleAttackDisabled");
+*/
 //END_REGION
 EXITSECTION
 
