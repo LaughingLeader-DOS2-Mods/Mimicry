@@ -54,6 +54,8 @@ DB_LLMIME_Mimicking_Blacklist_Skills("Target_NecrofireInfusion");
 DB_LLMIME_Mimicking_Blacklist_Skills("Target_WaterInfusion");
 DB_LLMIME_Mimicking_Blacklist_Skills("Target_AcidInfusion");
 DB_LLMIME_Mimicking_Blacklist_Skills("Target_CursedElectricInfusion");
+//DOS2 Prefixes
+DB_LLMIME_Mimicking_Blacklist_SkillPrefixes("_Quest_");
 //Prefixes (i.e. mod skills)
 DB_LLMIME_Mimicking_Blacklist_SkillPrefixes("_LLCIVIL_");
 DB_LLMIME_Mimicking_Blacklist_SkillPrefixes("_LLEQSET_");
