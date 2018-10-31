@@ -15,7 +15,7 @@ DB_LLEQSET_Blacklist("Tag", "LLMIME_BrawlerFist");
 
 //REGION UPDATING
 QRY
-LLMIME_ModCompatibility_Internal_QRY_VersionNeedsUpdating((STRING)_Version)
+LLMIME_ModCompatibility_Internal_QRY_VersionNeedsUpdating("-1")
 THEN
 DB_NOOP(1);
 

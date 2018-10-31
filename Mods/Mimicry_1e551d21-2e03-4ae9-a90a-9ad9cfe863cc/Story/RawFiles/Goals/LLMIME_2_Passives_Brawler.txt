@@ -50,7 +50,7 @@ DB_LLMIME_Brawler_UnarmedDOS2Skills("Target_Flurry");
 QRY
 LLMIME_Brawler_Internal_QRY_VersionNeedsUpdating((STRING)_Version)
 AND
-_Version == "1.0.2.0"
+_Version == "-1"
 THEN
 DB_NOOP(1);
 

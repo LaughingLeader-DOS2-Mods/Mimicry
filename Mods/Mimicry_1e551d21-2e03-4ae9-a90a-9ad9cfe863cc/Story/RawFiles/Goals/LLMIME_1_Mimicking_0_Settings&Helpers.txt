@@ -80,7 +80,7 @@ DB_LLMIME_Mimicking_Whitelist_WeaponCopy_SkillTypes("Projectile_");
 DB_LLMIME_Mimicking_Whitelist_WeaponCopy_SkillTypes("ProjectileStrike_");
 DB_LLMIME_Mimicking_Whitelist_WeaponCopy_SkillTypes("Cone_");
 DB_LLMIME_Mimicking_Whitelist_WeaponCopy_SkillTypes("Zone_");
-DB_LLMIME_Mimicking_Whitelist_WeaponCopy_SkillTypes("MultiStrike_");
+//DB_LLMIME_Mimicking_Whitelist_WeaponCopy_SkillTypes("MultiStrike_");
 DB_LLMIME_Mimicking_Whitelist_WeaponCopy_SkillTypes("Rush_");
 DB_LLMIME_Mimicking_Whitelist_WeaponCopy_SkillTypes("Rain_");
 
@@ -96,7 +96,7 @@ DB_LLMIME_Mimicking_HarmfulHealingSkills("Target_Restoration");
 QRY
 LLMIME_Mimicking_Internal_QRY_VersionNeedsUpdating((STRING)_Version)
 AND
-_Version == "1.0.2.0"
+_Version == "-1"
 THEN
 DB_NOOP(1);
 

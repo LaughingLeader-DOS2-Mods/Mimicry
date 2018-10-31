@@ -78,7 +78,7 @@ DB_LLMIME_Follower_RandomAnimation(_Index, _Animation);
 
 //REGION UPDATING
 QRY
-LLMIME_Follower_Internal_QRY_VersionNeedsUpdating("0.9.0.0")
+LLMIME_Follower_Internal_QRY_VersionNeedsUpdating("-1")
 THEN
 DB_NOOP(1);
 

@@ -43,7 +43,7 @@ LeaderLib_Skills_Register_StatusToggleSkill("Shout_LLMIME_DisableMimicking", "LL
 QRY
 LLMIME_Mime_Internal_QRY_VersionNeedsUpdating((STRING)_Version)
 AND
-_Version == "0.9.0.0"
+_Version == "-1"
 THEN
 DB_NOOP(1);
 

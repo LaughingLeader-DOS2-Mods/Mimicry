@@ -99,7 +99,7 @@ CharacterGetDisplayName(_Player, _, _Name)
 THEN
 LeaderLog_Log("DEBUG", "[LLMIME:Debug:PartyCount] [",_Name,"] party count is [",_CountStr,"].");
 
-
+/*
 IF
 DB_LeaderLib_Math_Sine(131.0, _Result)
 AND
@@ -127,7 +127,7 @@ AND
 GetVarString(_Char, "LeaderLog_RealString", _RealStr)
 THEN
 LeaderLog_Log("DEBUG", "[LLMIME:Debug:Math] Cosine | Angle [131] = [",_RealStr,"]");
-
+*/
 /*
 IF
 RegionEnded("TestLevel_LL_Mimicry")

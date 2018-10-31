@@ -69,12 +69,18 @@ DB_LLMIME_ItemSystem_MimeEquipment("Boots", "EQ_Armor_LLMIME_Mime_Legs_A_5b2a846
 
 //REGION UPDATING
 QRY
+LLMIME_ItemSystem_Internal_QRY_VersionNeedsUpdating("-1")
+THEN
+DB_NOOP(1);
+
+/*
+QRY
 LLMIME_ItemSystem_Internal_QRY_VersionNeedsUpdating((STRING)_Version)
 AND
 LeaderLib_StringExt_QRY_VersionIsLessThan(_Version, 1, 0, 2, 0)
 THEN
 TimerLaunch("LLMIME_Timers_UpdateMimeEquipmentGrowth", 1000);
-
+*/
 PROC
 LeaderUpdater_ModUpdated("Mimicry", "LaughingLeader", (STRING)_PastVersion, (STRING)_NewVersion)
 AND
