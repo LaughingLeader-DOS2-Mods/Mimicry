@@ -143,6 +143,24 @@ THEN
 DB_NOOP(1);
 
 QRY
+LLMIME_Mimicking_QRY_HasTaggedWeapon((CHARACTERGUID)_Mime, (STRING)_Tag)
+AND
+CharacterGetEquippedItem(_Mime, "Weapon", _Weapon)
+AND
+IsTagged(_Weapon, _Tag, 1)
+THEN
+DB_NOOP(1);
+
+QRY
+LLMIME_Mimicking_QRY_HasTaggedWeapon((CHARACTERGUID)_Mime, (STRING)_Tag)
+AND
+CharacterGetEquippedItem(_Mime, "Shield", _Weapon)
+AND
+IsTagged(_Weapon, _Tag, 1)
+THEN
+DB_NOOP(1);
+
+QRY
 LLMIME_Mimicking_QRY_Internal_WeaponStringMatch((GUIDSTRING)_Weapon, (STRING)_Type)
 AND
 GetStatString(_Weapon, _Stat)
@@ -264,6 +282,18 @@ LLMIME_Mimicking_QRY_HasEquippedWeaponType(_Mime, "Crossbow")
 THEN
 CharacterUseSkill(_Mime, "Projectile_LLMIME_MimicCrossbowAttack", _Target, 1, 1, 1);
 LLMIME_Mimicking_Attack_StartSuccessTimer(_Mime, _Target, _Action, "Projectile_LLMIME_MimicCrossbowAttack");
+DB_LLMIME_Mimicking_Temp_JustAttacked(_Mime);
+
+//Weapon Expansion support
+PROC
+LLMIME_Mimicking_Attack_UseAttackSkill((CHARACTERGUID)_Mime, (CHARACTERGUID)_Caster, (GUIDSTRING)_Target, (STRING)_Action)
+AND
+NOT DB_LLMIME_Mimicking_Temp_JustAttacked(_Mime)
+AND
+LLMIME_Mimicking_QRY_HasTaggedWeapon(_Mime, "LLWEAPONEX_Greatbow")
+THEN
+CharacterUseSkill(_Mime, "Projectile_LLMIME_MimicGreatBowAttack", _Target, 1, 1, 1);
+LLMIME_Mimicking_Attack_StartSuccessTimer(_Mime, _Target, _Action, "Projectile_LLMIME_MimicGreatBowAttack");
 DB_LLMIME_Mimicking_Temp_JustAttacked(_Mime);
 
 PROC

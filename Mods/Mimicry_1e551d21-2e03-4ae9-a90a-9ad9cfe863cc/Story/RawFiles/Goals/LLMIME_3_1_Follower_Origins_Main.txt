@@ -3,7 +3,7 @@ SubGoalCombiner SGC_AND
 INITSECTION
 
 KBSECTION
-//REGION TUTORIAL_IMMUNITY
+//REGION SOURCE_BLAST
 IF
 CharacterCharacterEvent(_Summoner, _Mime, "Mimicry_MimeSummoned")
 AND
@@ -106,6 +106,23 @@ ItemToInventory(_Amulet, _Mime, 1, 1);
 PartyClearFlag(_Player, "Mimicry_HasMimeAmulet", 0);
 
 IF
+StoryEvent((CHARACTERGUID)_Owner, "TUT_LowerDeck_KnockDownEveryoneExceptForWindego")
+AND
+DB_LeaderLib_PartyFollower(_Owner, _Mime)
+AND
+DB_LLMIME_Follower_Mime(_Mime)
+AND
+NOT DB_TUT_LowerDeck_WindegoKnockedDownAttempt(_Mime)
+THEN
+DB_TUT_LowerDeck_WindegoKnockedDownAttempt(_Mime);
+ProcTutAttemptWindegoKnockdown(_Mime);
+
+PROC
+ProcTutAttemptWindegoKnockdown((CHARACTERGUID)_Mime)
+THEN
+DB_NOOP(1);
+
+IF
 FadeInDone(_,"TUT_LowerDeck_WakeUpAfterWindego")
 AND
 DB_LLMIME_Follower_Mime(_Mime)
@@ -141,6 +158,11 @@ ObjectClearFlag(_Mime, "Mimicry_MimeFollower_SourceBlastImmunityDisabled");
 
 /*For disappearing when the player escapes on the boat, and re-appearing on the beach.*/
 //REGION TUT_ESCAPE_FTJ_BEACH
+PROC
+PROC_TUT_SummonTheKraken()
+THEN
+LLMIME_Follower_Origins_OnTutorialDone();
+
 IF
 GlobalFlagSet("TUT_LowerBoatReadyToLower")
 THEN
@@ -156,10 +178,13 @@ LLMIME_Follower_Origins_OnTutorialDone()
 AND
 DB_LLMIME_Follower_Mime(_Mime)
 AND
+NOT DB_Dead(_Mime)
+AND
 ObjectGetFlag(_Mime, "LLMIME_TUT_MimeIsInvisible", 0)
 AND
 GetPosition(_Mime, _x, _y, _z)
 THEN
+RemoveStatus(_Mime,"KNOCKED_DOWN");
 ObjectSetFlag(_Mime, "LLMIME_TUT_MimeIsInvisible");
 SetStoryEvent(_Mime, "Mimicry_Events_Follower_SummoningTeleportStarted");
 PlayAnimation(_Mime, "Teleport_01_Out", "Mimicry_Events_TUT_SetMimeFollowerToInvisible");
@@ -176,7 +201,6 @@ DB_LLMIME_Follower_Mime(_Mime)
 THEN
 SetVisible(_Mime, 0);
 ObjectSetFlag(_Mime, "LLMIME_FTJ_MimeIsInvisible");
-
 
 PROC
 ProcObjectTimerFinished((CHARACTERGUID)_Player,"FTJ_WakeUpTimer")
@@ -197,8 +221,15 @@ CharacterLookAt(_Mime, _Player);
 IF
 StoryEvent(_Mime, "Mimicry_Origins_FTJ_MimeFollowerAppearedOnBeach")
 THEN
-PlayAnimation(_Mime, "Teleport_In_01", "");
 SetVisible(_Mime, 1);
+PlayAnimation(_Mime, "Teleport_In_01", "");
+
+IF
+StoryEvent((CHARACTERGUID)_Mime, "Mimicry_Origins_FTJ_MimeFollowerAppearedOnBeach")
+AND
+CharacterIsDead(_Mime, 1)
+THEN
+LLMIME_Follower_Internal_StartSpawningGhost(_Mime);
 //END_REGION
 
 //REGION SOURCE

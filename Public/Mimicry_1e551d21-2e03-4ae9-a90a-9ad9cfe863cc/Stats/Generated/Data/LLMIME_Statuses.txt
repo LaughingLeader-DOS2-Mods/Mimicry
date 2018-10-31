@@ -366,7 +366,7 @@ type "Weapon"
 data "ModifierType" "Skill"
 data "Damage Type" "Physical"
 data "Damage" "1"
-data "Damage Range" "30"
+data "Damage Range" "10"
 data "DamageFromBase" "45"
 data "Charges" "0"
 
