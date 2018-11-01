@@ -63,7 +63,7 @@ DB_LLMIME_MonsterSkill_SummonRename("Tag", "TOTEM", "Rage Totem", "#DC143C", "24
 //Giant Incarnate
 DB_LLMIME_MonsterSkill_SummonRename("Status", "INF_FIRE_G", 		"Ifrit", 		"#fe6e27", "24", "Full");
 DB_LLMIME_MonsterSkill_SummonRename("Status", "INF_WATER_G", 		"Bismarck", 	"#4197e2", "24", "Full");
-DB_LLMIME_MonsterSkill_SummonRename("Status", "INF_BLOOD_G", 		"Lich", 		"#b823cb", "24", "Full");
+DB_LLMIME_MonsterSkill_SummonRename("Status", "INF_BLOOD_G", 		"Blood-Sin", 		"#b823cb", "24", "Full");
 DB_LLMIME_MonsterSkill_SummonRename("Status", "INF_ELECTRIC_G", 	"Ramuh", 		"#7d71d9", "24", "Full");
 DB_LLMIME_MonsterSkill_SummonRename("Status", "INF_POISON_G", 		"Midgardsormr", "#65c900", "24", "Full");
 DB_LLMIME_MonsterSkill_SummonRename("Status", "INF_OIL_G", 			"Titan", 		"#7f3d00", "24", "Full");

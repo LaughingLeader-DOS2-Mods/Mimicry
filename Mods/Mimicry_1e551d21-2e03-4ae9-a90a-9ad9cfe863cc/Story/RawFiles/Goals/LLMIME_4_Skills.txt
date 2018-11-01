@@ -403,7 +403,9 @@ THEN
 SetStoryEvent(_Character, "Mimicry_Events_Decoy_RemoveInvisibility");
 
 IF
-AttackedByObject((CHARACTERGUID)_Character, _, _Attacker, _, _)
+CharacterStatusApplied(_Character, "HIT", _)
+AND
+DB_LLMIME_Skills_Temp_Decoy(_Character, _Decoy)
 AND
 LeaderLib_Helper_QRY_HasStatus(_Character, "LLMIME_DECOY_ACTIVE")
 THEN
@@ -412,7 +414,7 @@ SetStoryEvent(_Character, "Mimicry_Events_Decoy_RemoveInvisibility");
 IF
 CharacterStatusApplied(_Character, _Status, _)
 AND
-_Status != "LLMIME_DECOY_ACTIVE"
+DB_LLMIME_Skills_Temp_Decoy(_Character, _Decoy)
 AND
 LeaderLib_Helper_QRY_HasStatus(_Character, "LLMIME_DECOY_ACTIVE")
 AND
@@ -718,6 +720,25 @@ DB_LLMIME_Skills_StealWeapon("Rock", _ThrowingItemTemplate)
 THEN
 ItemTemplateAddTo(_ThrowingItemTemplate, _Mime, 1, 1);
 DB_LLMIME_Skills_Temp_WeaponMatch(_Mime);
+
+//No WeaponExpansion
+IF
+CharacterStatusApplied(_Target, "LLMIME_STEAL_WEAPON", (CHARACTERGUID)_Mime)
+AND
+CharacterIsEnemy(_Mime, _Target, 1)
+AND
+CharacterGetLevel(_Mime, _Level)
+AND
+LeaderLib_Random_QRY(37)
+AND
+DB_LeaderLib_Random(_Ran)
+AND
+IntegerSum(_Ran, 15, _GoldMult)
+AND
+IntegerProduct(_Level, _GoldMult, _Gold)
+THEN
+NOT DB_LeaderLib_Random(_Ran);
+CharacterAddGold(_Mime, _Gold);
 
 IF
 CharacterStatusApplied(_Target, "LLMIME_STEAL_WEAPON", (CHARACTERGUID)_Mime)

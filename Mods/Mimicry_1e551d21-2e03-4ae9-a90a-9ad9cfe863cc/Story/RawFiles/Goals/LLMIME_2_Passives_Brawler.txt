@@ -491,6 +491,8 @@ LLMIME_Brawler_StartDoubleAttack(_Mime, _Target);
 PROC
 LLMIME_Brawler_StartDoubleAttack((CHARACTERGUID)_Mime, (GUIDSTRING)_Target)
 AND
+NOT DB_LLMIME_Brawler_DoubleStrikeData(_Mime, _Target, (CHARACTERGUID)_)
+AND
 NOT DB_LeaderLib_Skills_Temp_SkillDummyData(_, _Mime, _Target, "Target_LLMIME_DoubleStrike_DummyVisual")
 AND
 GetPosition(_Mime, _x, _y, _z)

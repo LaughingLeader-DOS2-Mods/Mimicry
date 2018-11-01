@@ -721,7 +721,7 @@ AND
 HasActiveStatus(_Mime, "LLMIME_MIMIC_WEAPON_REQUIREMENTS", 0)
 THEN
 ApplyStatus(_Mime, "LLMIME_MIMIC_WEAPON_REQUIREMENTS", 30.0, 1);
-LLMIME_Mimicking_CopyAttributes(_Mime, _Caster);
+//LLMIME_Mimicking_CopyAttributes(_Mime, _Caster);
 
 IF
 CharacterStatusRemoved(_Mime, "LLMIME_MIMIC_WEAPON_REQUIREMENTS", _)

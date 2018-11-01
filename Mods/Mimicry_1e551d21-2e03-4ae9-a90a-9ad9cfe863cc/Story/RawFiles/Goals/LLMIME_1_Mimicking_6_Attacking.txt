@@ -7,8 +7,19 @@ DB_LLMIME_Timers_AttackAtPositionTimer(_TimerName, _Caster, _TargetX, _TargetY, 
 */
 KBSECTION
 //REGION ATTACK_TRACKING
+QRY
+LLMIME_Mimicking_Attack_QRY_IsAttackOfOpportunity((CHARACTERGUID)_Attacker)
+AND
+GetVarObject(_Attacker, "AttackOfOpportunity", _Target)
+AND
+_Target != NULL_00000000-0000-0000-0000-000000000000
+THEN
+DB_NOOP(1);
+
 IF
 CharacterStartAttackObject(_Target, _Owner, _Caster)
+AND
+NOT LLMIME_Mimicking_Attack_QRY_IsAttackOfOpportunity(_Caster)
 AND
 LLMIME_Mimicking_QRY_CharacterIsMimickable(_Caster)
 AND
@@ -44,6 +55,8 @@ NOT DB_LLMIME_Mimicking_Temp_TargetPriority(_Caster, _Target, _TargetPriority);
 //Delay by a few frames so the target event sticks first, if possible
 IF
 CharacterStartAttackPosition(_TargetX, _TargetY, _TargetZ, _Owner, _Caster)
+AND
+NOT LLMIME_Mimicking_Attack_QRY_IsAttackOfOpportunity(_Caster)
 AND
 NOT DB_LLMIME_Timers_AttackAtPositionTimer(_, _Caster, _TargetX, _TargetY, _TargetZ)
 AND
@@ -427,8 +440,11 @@ TimerCancel(_TimerName);
 
 //REGION DEBUG
 //query GetRotation([in](GUIDSTRING)_Target, [out](REAL)_X, [out](REAL)_Y, [out](REAL)_Z)
+/*
 IF
 CharacterStartAttackPosition(_txf, _tyf, _tzf, _Owner, _Caster)
+AND
+DB_GlobalFlag("LeaderLib_IsEditorMode")
 AND
 LeaderLog_QRY_RealToIntToString("MimicryAttackDebugTargetPosition", _txf, _tyf, _tzf)
 AND
@@ -488,6 +504,7 @@ LeaderLog_Log("DEBUG", "[LLMIME:AttackDebug:CharacterStartAttackObject] Characte
 LeaderLog_Log("DEBUG", "[LLMIME:AttackDebug:CharacterStartAttackObject] Position[",_pxstr,",",_pystr,",",_pzstr,"] | Target: [",_txstr,",",_tystr,",",_tzstr,"]");
 LeaderLog_Log("DEBUG", "[LLMIME:AttackDebug:CharacterStartAttackObject] Rotation: [",_rxstr,",",_rystr,",",_rzstr,"]");
 LeaderLog_Log("DEBUG", "[LLMIME:AttackDebug:CharacterStartAttackObject] **************************************");
+*/
 //END_REGION
 EXITSECTION
 
