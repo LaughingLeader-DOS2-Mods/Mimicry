@@ -41,7 +41,7 @@ SysClear("DB_LLMIME_MonsterSkill_Statuses", 3);
 LLMIME_MonsterSkill_RegisterToStatus("INF_FIRE_G", 		"Shout_LLMIME_Explosion", "Skill");
 LLMIME_MonsterSkill_RegisterToStatus("INF_WATER_G", 	"Cone_Enemy_WaterSpit", "Skill");
 LLMIME_MonsterSkill_RegisterToStatus("INF_BLOOD_G", 	"Target_EnemyInfect", "Skill");
-LLMIME_MonsterSkill_RegisterToStatus("INF_ELECTRIC_G", 	"Projectile_EnemyFrog_Air", "Skill");
+LLMIME_MonsterSkill_RegisterToStatus("INF_ELECTRIC_G", 	"Storm_LLMIME_IncarnateLightning", "Skill");
 LLMIME_MonsterSkill_RegisterToStatus("INF_POISON_G", 	"Projectile_EnemyBeetleDart_Poison", "Skill");
 LLMIME_MonsterSkill_RegisterToStatus("INF_OIL_G", 		"Quake_EnemyEarthquake", "Skill");
 
@@ -129,16 +129,27 @@ RemoveStatus(_Summon, "LLMIME_BEASTMASTER_MONSTERSKILL");
 IF
 CharacterStatusApplied(_Summon, "LLMIME_BEASTMASTER_MONSTERSKILL", _Mime)
 THEN
+SetVarObject(_Summon, "LLMIME_Beastmaster", _Mime);
 LLMIME_Beastmaster_AddMonsterSkill(_Summon);
 LLMIME_Beastmaster_AddMonsterStatus(_Summon);
 LLMIME_Beastmaster_OnMonsterSkillApplied(_Summon);
 
 IF
-CharacterStatusRemoved(_Summon, "LLMIME_BEASTMASTER_MONSTERSKILL", _Mime)
+CharacterStatusRemoved(_Summon, "LLMIME_BEASTMASTER_MONSTERSKILL", _)
 THEN
 LLMIME_Beastmaster_RemoveMonsterSkill(_Summon);
 LLMIME_Beastmaster_RemoveMonsterStatus(_Summon);
 LLMIME_Beastmaster_OnMonsterSkillRemoved(_Summon);
+
+IF
+CharacterStatusRemoved(_Summon, "LLMIME_BEASTMASTER_MONSTERSKILL", _)
+AND
+ObjectGetFlag(_Summon, "LLMIME_ApplyMonsterSkill", 1)
+AND
+GetVarObject(_Summon, "LLMIME_Beastmaster", _Mime)
+THEN
+ObjectClearFlag(_Summon, "LLMIME_ApplyMonsterSkill");
+ApplyStatus(_Summon, "LLMIME_BEASTMASTER_MONSTERSKILL", -1.0, 0, _Mime);
 //END_REGION
 
 //REGION REMOVAL_EVENTS
