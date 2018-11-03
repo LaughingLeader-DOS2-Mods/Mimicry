@@ -34,20 +34,36 @@ DB_LLMIME_Skills_StealWeapon("Chair", "WPN_LLWEAPONEX_Throwing_Chair_01_ef9f3937
 DB_LLMIME_Skills_StealWeapon("Rock", "WPN_LLWEAPONEX_Throwing_Rock_eb7b3d1f-43f8-43c3-b529-2713eba49000");
 //DB_LLMIME_Skills_Temp_NextWish(_Caster, _Target)
 //DB_LLMIME_Skills_Temp_FailedWish(_Caster)
+
+SysClear("DB_LLMIME_Skills_IncarnateInfusions", 2);
+DB_LLMIME_Skills_IncarnateInfusions("INF_ACID", "INF_ACID_G");
+DB_LLMIME_Skills_IncarnateInfusions("INF_BLESSED_ICE", "INF_BLESSED_ICE_G");
+DB_LLMIME_Skills_IncarnateInfusions("INF_BLOOD", "INF_BLOOD_G");
+DB_LLMIME_Skills_IncarnateInfusions("INF_CURSED_ELECTRIC", "INF_CURSED_ELECTRIC_G");
+DB_LLMIME_Skills_IncarnateInfusions("INF_ELECTRIC", "INF_ELECTRIC_G");
+DB_LLMIME_Skills_IncarnateInfusions("INF_FIRE", "INF_FIRE_G");
+DB_LLMIME_Skills_IncarnateInfusions("INF_NECROFIRE", "INF_NECROFIRE_G");
+DB_LLMIME_Skills_IncarnateInfusions("INF_OIL", "INF_OIL_G");
+DB_LLMIME_Skills_IncarnateInfusions("INF_POISON", "INF_POISON_G");
+DB_LLMIME_Skills_IncarnateInfusions("INF_POWER", "INF_POWER");
+DB_LLMIME_Skills_IncarnateInfusions("INF_RANGED", "INF_RANGED");
+DB_LLMIME_Skills_IncarnateInfusions("INF_SHADOW", "INF_SHADOW");
+DB_LLMIME_Skills_IncarnateInfusions("INF_WARP", "INF_WARP");
+DB_LLMIME_Skills_IncarnateInfusions("INF_WATER", "INF_WATER_G");
 //END_REGION
 
 //REGION UPDATING
 QRY
-LLMIME_Skills_Internal_QRY_VersionNeedsUpdating((STRING)_Version)
+LLMIME_Skills_Internal_QRY_VersionNeedsUpdating((STRING)_PastVersion, (STRING)_NewVersion)
 AND
-_Version == "-1"
+_NewVersion == "0.9.7.2"
 THEN
 DB_NOOP(1);
 
 PROC
 LeaderUpdater_ModUpdated("Mimicry", "LaughingLeader", (STRING)_PastVersion, (STRING)_NewVersion)
 AND
-LLMIME_Skills_Internal_QRY_VersionNeedsUpdating(_PastVersion)
+LLMIME_Skills_Internal_QRY_VersionNeedsUpdating(_PastVersion, _NewVersion)
 THEN
 LeaderLog_Log("DEBUG", "[LLMIME:Skills] Updating settings from version [",_PastVersion,"]");
 LLMIME_Skills_InitSettings();
@@ -797,7 +813,7 @@ LLMIME_Skills_EvolveIncarnateBuffs(_Owner, _Summon);
 PROC
 LLMIME_Skills_EvolveIncarnateBuffs((CHARACTERGUID)_Owner, (CHARACTERGUID)_Summon)
 AND
-DB_LeaderLib_Skills_IncarnateInfusions(_SmallStatus, _LargeStatus)
+DB_LLMIME_Skills_IncarnateInfusions(_SmallStatus, _LargeStatus)
 AND
 HasActiveStatus(_Summon, _SmallStatus, 1)
 AND
@@ -843,6 +859,56 @@ AND
 CharacterIsSummon(_Summon, 1)
 THEN
 CharacterDie(_Summon, 0, "LifeTime", _Summon);
+//END_REGION
+
+//REGION HIDDEN_APPROACH_TIMELY_RETREAT
+IF
+CharacterUsedSkill(_Mime, "Jump_LLMIME_HiddenApproach", _, _)
+AND
+GetPosition(_Mime, _x, _y, _z)
+THEN
+DB_LLMIME_Skills_Temp_HiddenApproachPosition(_Mime, _x, _y, _z);
+
+IF
+CharacterUsedSkill(_Mime, "Shout_LLMIME_TimelyRetreat", _, _)
+THEN
+ProcObjectTimer(_Mime, "LLMIME_Timers_TimelyRetreat_PlayOverlay", 500);
+
+PROC
+ProcObjectTimerFinished((CHARACTERGUID)_Mime, "LLMIME_Timers_TimelyRetreat_PlayOverlay")
+THEN
+PlayEffect(_Mime, "LLMIME_FX_Skills_TimelyRetreat_Cast_Overlay_01");
+
+IF
+SkillCast(_Mime, "Shout_LLMIME_TimelyRetreat", _, _)
+THEN
+ProcObjectTimer(_Mime, "LLMIME_Timers_TimelyRetreat_TeleportIn", 550);
+
+PROC
+ProcObjectTimerFinished((CHARACTERGUID)_Mime, "LLMIME_Timers_TimelyRetreat_TeleportIn")
+THEN
+CharacterPurgeQueue(_Mime);
+PlayAnimation(_Mime, "skill_cast_self_teleport_in_01_cast");
+
+IF
+SkillCast(_Mime, "Shout_LLMIME_TimelyRetreat", _, _)
+AND
+DB_LLMIME_Skills_Temp_HiddenApproachPosition(_Mime, _x, _y, _z)
+THEN
+NOT DB_LLMIME_Skills_Temp_HiddenApproachPosition(_Mime, _x, _y, _z);
+TeleportToPosition(_Mime, _x, _y, _z, "LLMIME_Skills_TimelyRetreat_TeleportedIn", 0, 1);
+
+IF
+StoryEvent((CHARACTERGUID)_Mime, "LLMIME_Skills_TimelyRetreat_TeleportedIn")
+THEN
+RemoveStatus(_Mime, "LLMIME_ADDSKILL_TIMELY_RETREAT");
+
+IF
+CharacterStatusRemoved(_Mime, "LLMIME_ADDSKILL_TIMELY_RETREAT", _)
+AND
+DB_LLMIME_Skills_Temp_HiddenApproachPosition(_Mime, _x, _y, _z)
+THEN
+NOT DB_LLMIME_Skills_Temp_HiddenApproachPosition(_Mime, _x, _y, _z);
 //END_REGION
 
 //REGION CLEAR_TEMP_DATA
