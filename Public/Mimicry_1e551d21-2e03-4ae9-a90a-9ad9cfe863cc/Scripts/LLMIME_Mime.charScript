@@ -3,6 +3,7 @@ INIT
 	INT:%LLMIME_Follower_Initialized = 0
 	INT:%LLMIME_Follower_InitialRefresh = 0
 	FIXEDSTRING:%LLMIME_Follower_RefreshTimerName = ""
+	CHARACTER:%LeaderLib_Follower_Owner
 EVENTS
 
 EVENT LLMIME_MimeFollower_Init_Event
@@ -49,37 +50,89 @@ ON
 ACTIONS
 	CharacterEvent(__Me, "LeaderLib_Commands_RefreshEquipment_Delayed")
 	
-EVENT LLMIME_MimeFollower_Owner_Entered_Combat
+EVENT LLMIME_MimeFollower_Owner_Unsheathed
 VARS
-	CHARACTER:_Character
+	FLOAT:_Dist
+ON
+	OnCharacterStatusAttempt(%LeaderLib_Follower_Owner, UNSHEATHED)
+ACTIONS
+IF "!c1&!c2&c3&c4"
+	CharacterHasStatus(__Me, UNSHEATHED)
+	CharacterIsDead(__Me, 1)
+	GetDistance(_Dist, %LeaderLib_Follower_Owner, __Me)
+	IsLessThen(_Dist, 50)
+THEN
+	CharacterApplyStatus(__Me, UNSHEATHED, -1, 0, __Me)
+ENDIF
+
+EVENT LLMIME_MimeFollower_Owner_Unsheathed_Joined
+VARS
 	CHARACTER:_Owner
 	FLOAT:_Dist
 ON
-	OnEnteredCombat(_Character, _)
+	OnCharacterCharacterEvent(_Owner, __Me, "LeaderLib_Events_FollowerRecruited")
 ACTIONS
-IF "c1&c2&c3&c4"
-	GetVar(_Owner, __Me, "LeaderLib_Follower_Owner")
-	IsEqual(_Character, _Owner)
-	GetDistance(_Dist, _Character, __Me)
-	IsLessThen(_Dist, 50)
+IF "c1&!c2"
+	CharacterHasStatus(_Owner, UNSHEATHED)
+	CharacterHasStatus(__Me, UNSHEATHED)
 THEN
-	EnterCombat(__Me, _Owner)
+	CharacterApplyStatus(__Me, UNSHEATHED, -1, 0, __Me)
+ENDIF
+
+EVENT LLMIME_MimeFollower_Owner_Unsheathed_Resurrected
+VARS
+	FLOAT:_Dist
+ON
+	OnCharacterStatusRemoved(__Me, RESURRECT)
+ACTIONS
+IF "c1&!c2&!c3"
+	CharacterHasStatus(%LeaderLib_Follower_Owner, UNSHEATHED)
+	CharacterHasStatus(__Me, UNSHEATHED)
+	IsInCombat(__Me)
+THEN
+	CharacterApplyStatus(__Me, UNSHEATHED, -1, 0, __Me)
+ENDIF
+
+EVENT LLMIME_MimeFollower_Owner_Sheathed
+VARS
+	FLOAT:_Dist
+ON
+	OnCharacterStatusRemoved(%LeaderLib_Follower_Owner, UNSHEATHED)
+ACTIONS
+IF "!c1&!c2&c3"
+	IsInCombat(__Me)
+	CharacterIsDead(__Me, 1)
+	CharacterHasStatus(__Me, UNSHEATHED)
+THEN
+	CharacterRemoveStatus(__Me, UNSHEATHED)
+ENDIF
+
+EVENT LLMIME_MimeFollower_Owner_Entered_Combat
+VARS
+	FLOAT:_Dist
+ON
+	OnEnteredCombat(%LeaderLib_Follower_Owner, _)
+ACTIONS
+IF "(c1&c2)|c3"
+	GetDistance(_Dist, %LeaderLib_Follower_Owner, __Me)
+	IsLessThen(_Dist, 20)
+	CharacterCanSee(%LeaderLib_Follower_Owner, __Me)
+THEN
+	EnterCombat(__Me, %LeaderLib_Follower_Owner)
 ENDIF
 
 EVENT LLMIME_MimeFollower_Entered_Combat
 VARS
-	CHARACTER:_Owner
 	FLOAT:_Dist
 ON
 	OnEnteredCombat(__Me, _)
 ACTIONS
-IF "c1&!c2&c3&c4"
-	GetVar(_Owner, __Me, "LeaderLib_Follower_Owner")
-	IsEqual(_Owner, null)
-	GetDistance(_Dist, _Owner, __Me)
-	IsLessThen(_Dist, 50)
+IF "(c1&c2)|c3"
+	GetDistance(_Dist, %LeaderLib_Follower_Owner, __Me)
+	IsLessThen(_Dist, 20)
+	CharacterCanSee(%LeaderLib_Follower_Owner, __Me)
 THEN
-	EnterCombat(_Owner, __Me)
+	EnterCombat(%LeaderLib_Follower_Owner, __Me)
 ENDIF
 
 EVENT LLMIME_MimeFollower_RemoveGeneratedTreasure_Start
@@ -118,3 +171,15 @@ IF "c1"
 THEN
 	CharacterEvent(__Me, "LLMIME_Events_RequestMimicking")
 ENDIF
+
+/*
+BEHAVIOUR
+
+REACTION LLMIME_MimeFollower_OwnerDied, 1000
+USAGE COMBAT
+CHECK "c1&c2"
+	CharacterIsDead(%LeaderLib_Follower_Owner, 1)
+	IsInActiveTurn(__Me)
+	CharacterHasSkill(__Me, 
+ACTIONS
+*/

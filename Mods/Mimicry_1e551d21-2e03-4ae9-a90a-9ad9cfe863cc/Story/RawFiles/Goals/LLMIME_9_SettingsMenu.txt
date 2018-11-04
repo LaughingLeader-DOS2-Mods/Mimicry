@@ -88,6 +88,13 @@ LeaderLib_Helper_QRY_ClearObjectFlag(_Mime, "Mimicry_Debug_RefreshMask")
 THEN
 LLMIME_RefreshMask(_Mime);
 LLMIME_RemoveAllMimicryStatuses(_Mime);
+
+IF
+ObjectFlagSet("Mimicry_Commands_ResetMimeEquipment", (CHARACTERGUID)_Mime, _Instance)
+AND
+LeaderLib_Helper_QRY_ClearObjectFlag(_Mime, "Mimicry_Commands_ResetMimeEquipment")
+THEN
+LLMIME_ItemSystem_ResetMimeEquipment();
 //END_REGION
 
 //REGION MIME_VENDOR
@@ -381,6 +388,7 @@ ProcObjectTimerFinished((ITEMGUID)_Backpack, "Mimicry_Timers_RemoveIteratorBackp
 THEN
 ItemRemove(_Backpack);
 //END_REGION
+
 EXITSECTION
 
 ENDEXITSECTION

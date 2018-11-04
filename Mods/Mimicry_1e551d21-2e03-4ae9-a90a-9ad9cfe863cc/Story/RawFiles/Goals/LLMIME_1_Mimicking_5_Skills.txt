@@ -315,6 +315,8 @@ NOT DB_LLMIME_Mimicking_MimicQueue_Self(_Mime, _Caster, _Skill, "Skill");
 
 PROC
 LLMIME_Mimicking_MimicActionOnTarget((CHARACTERGUID)_Mime, (CHARACTERGUID)_Caster, (GUIDSTRING)_Target, (STRING)_Skill, "Skill")
+//AND
+//StringContains(_Skill, "Rush_", 0)
 THEN
 ObjectSetFlag(_Mime, "Mimicry_IsMimicking");
 LLMIME_Mimicking_ResetFailTimer(_Mime, _Caster, _Skill, "Skill", 2500);
@@ -331,6 +333,107 @@ AND
 HasActiveStatus(_Mime, "LLMIME_MIMICKING_SOURCE", 1)
 THEN
 RemoveStatus(_Mime, "LLMIME_MIMICKING_SOURCE");
+//END_REGION
+
+//REGION MIMIC_RUSH
+/*
+//Prevent rushing through walls
+PROC
+LLMIME_Mimicking_MimicActionOnTarget((CHARACTERGUID)_Mime, (CHARACTERGUID)_Caster, (GUIDSTRING)_Target, (STRING)_Skill, "Skill")
+AND
+NOT DB_LLMIME_Mimicking_Skills_Temp_ListenForSuccess(_Mime, _Caster, _Skill)
+AND
+StringContains(_Skill, "Rush_", 1)
+AND
+HasLineOfSight(_Mime, _Target, 1)
+THEN
+ObjectSetFlag(_Mime, "Mimicry_IsMimicking");
+LLMIME_Mimicking_ResetFailTimer(_Mime, _Caster, _Skill, "Skill", 2500);
+DB_LLMIME_Mimicking_Skills_Temp_ListenForSuccess(_Mime, _Caster, _Skill);
+CharacterUseSkill(_Mime, _Skill, _Target, 1, 1, 1);
+
+PROC
+LLMIME_Mimicking_MimicActionOnTarget((CHARACTERGUID)_Mime, (CHARACTERGUID)_Caster, (GUIDSTRING)_Target, (STRING)_Skill, "Skill")
+AND
+NOT DB_LLMIME_Mimicking_Skills_Temp_ListenForSuccess(_Mime, _Caster, _Skill)
+AND
+StringContains(_Skill, "Rush_", 1)
+AND
+HasLineOfSight(_Mime, _Target, 0)
+AND
+IsTagged(_Target, "LLMIME_Dummy", 1)
+AND
+ObjectIsCharacter(_Target, 1)
+THEN
+DB_LLMIME_Mimicking_Skills_Temp_RushLineOfSightCheck(_Mime, _Caster, (GUIDSTRING)_Target, _Skill);
+LeaderLib_StartCharacterCharacterTimer(_Mime, (CHARACTERGUID)_Target, 25, "LLMIME_Timers_Skills_CheckRushLineOfSight_", "LLMIME_Internal_CheckRushLineOfSight");
+CharacterMoveTo((CHARACTERGUID)_Target, _Mime, 0, "LLMIME_Mimicking_SkillDummyArrived", 0);
+
+IF
+CharacterCharacterEvent(_Mime, _Target, "LLMIME_Internal_CheckRushLineOfSight")
+AND
+HasLineOfSight(_Mime, _Target, 1)
+AND
+DB_LLMIME_Mimicking_Skills_Temp_RushLineOfSightCheck(_Mime, _Caster, _Target, _Skill)
+THEN
+NOT DB_LLMIME_Mimicking_Skills_Temp_RushLineOfSightCheck(_Mime, _Caster, _Target, _Skill);
+CharacterPurgeQueue(_Target);
+ObjectSetFlag(_Mime, "Mimicry_IsMimicking");
+LLMIME_Mimicking_ResetFailTimer(_Mime, _Caster, _Skill, "Skill", 2500);
+DB_LLMIME_Mimicking_Skills_Temp_ListenForSuccess(_Mime, _Caster, _Skill);
+CharacterUseSkill(_Mime, _Skill, _Target, 1, 1, 1);
+
+PROC
+LLMIME_Mimicking_MimicActionOnTarget((CHARACTERGUID)_Mime, (CHARACTERGUID)_Caster, (GUIDSTRING)_Target, (STRING)_Skill, "Skill")
+AND
+NOT DB_LLMIME_Mimicking_Skills_Temp_ListenForSuccess(_Mime, _Caster, _Skill)
+AND
+StringContains(_Skill, "Rush_", 1)
+AND
+HasLineOfSight(_Mime, _Target, 0)
+AND
+IsTagged(_Target, "LLMIME_Dummy", 1)
+AND
+ObjectIsItem(_Target, 1)
+AND
+GetPosition(_Mime, _x, _y, _z)
+THEN
+DB_LLMIME_Mimicking_Skills_Temp_RushLineOfSightCheck(_Mime, _Caster, (GUIDSTRING)_Target, _Skill);
+LeaderLib_StartCharacterItemTimer(_Mime, (ITEMGUID)_Target, 25, "LLMIME_Timers_Skills_CheckRushLineOfSight_", "LLMIME_Internal_CheckRushLineOfSight");
+ItemMoveToPosition((ITEMGUID)_Target, _x, _y, _z, 6.0, 0.0, "LLMIME_Mimicking_SkillDummyArrived", 0);
+
+IF
+CharacterItemEvent(_Mime, _Target, "LLMIME_Internal_CheckRushLineOfSight")
+AND
+HasLineOfSight(_Mime, _Target, 1)
+AND
+DB_LLMIME_Mimicking_Skills_Temp_RushLineOfSightCheck(_Mime, _Caster, _Target, _Skill)
+AND
+GetPosition(_Target, _x, _y, _z)
+THEN
+NOT DB_LLMIME_Mimicking_Skills_Temp_RushLineOfSightCheck(_Mime, _Caster, _Target, _Skill);
+ItemMoveToPosition(_Target, _x, _y, _z, 6.0, 0.0, "", 0);
+ObjectSetFlag(_Mime, "Mimicry_IsMimicking");
+LLMIME_Mimicking_ResetFailTimer(_Mime, _Caster, _Skill, "Skill", 2500);
+DB_LLMIME_Mimicking_Skills_Temp_ListenForSuccess(_Mime, _Caster, _Skill);
+CharacterUseSkill(_Mime, _Skill, _Target, 1, 1, 1);
+
+IF
+CharacterItemEvent(_Mime, _Target, "LLMIME_Internal_CheckRushLineOfSight")
+AND
+HasLineOfSight(_Mime, _Target, 0)
+AND
+DB_LLMIME_Mimicking_Skills_Temp_RushLineOfSightCheck(_Mime, _Caster, _Target, _Skill)
+THEN
+LeaderLib_StartCharacterItemTimer(_Mime, _Target, 25, "LLMIME_Timers_Skills_CheckRushLineOfSight_", "LLMIME_Internal_CheckRushLineOfSight");
+
+IF
+StoryEvent(_Target, "LLMIME_Mimicking_SkillDummyArrived")
+AND
+DB_LLMIME_Mimicking_Skills_Temp_RushLineOfSightCheck(_Mime, _Caster, _Target, _Skill)
+THEN
+NOT DB_LLMIME_Mimicking_Skills_Temp_RushLineOfSightCheck(_Mime, _Caster, _Target, _Skill);
+*/
 //END_REGION
 
 //REGION SUCCESS

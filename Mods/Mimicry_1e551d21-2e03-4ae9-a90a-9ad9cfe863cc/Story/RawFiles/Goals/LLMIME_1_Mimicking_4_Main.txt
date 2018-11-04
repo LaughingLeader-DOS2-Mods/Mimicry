@@ -1128,7 +1128,8 @@ AND
 StringConcatenate("LLMIME_Timers_DeleteMimickedWeapons_", _Action, _TimerName)
 THEN
 DB_LLMIME_Mimicking_DeleteOneTimeUseWeaponsTimer(_TimerName, _Mime, _Action, _ActionType);
-ProcObjectTimer(_Mime, _TimerName, 1980);
+//ProcObjectTimer(_Mime, _TimerName, 1200);
+ProcObjectTimer(_Mime, _TimerName, 250);
 
 PROC
 ProcObjectTimerFinished((CHARACTERGUID)_Mime, _TimerName)

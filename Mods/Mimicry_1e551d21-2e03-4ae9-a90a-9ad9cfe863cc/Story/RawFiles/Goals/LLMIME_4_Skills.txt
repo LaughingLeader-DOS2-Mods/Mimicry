@@ -332,7 +332,8 @@ SetFaction(_Decoy, _Faction);
 CharacterDisableAllCrimes(_Decoy);
 CharacterSetCorpseLootable(_Decoy, 0);
 //CharacterAddTalent(_Decoy, "Unstable");
-CharacterAddTalent(_Decoy, "Raistlin"); // AI exploit ;)
+//Set in the decoy's character stats instead, as this call only works on players
+//CharacterAddTalent(_Decoy, "Raistlin"); // AI exploit ;)
 
 /*
 PROC
@@ -356,6 +357,7 @@ DB_LLMIME_Skills_Temp_Decoy(_Character, _Decoy)
 THEN
 CharacterCharacterSetEvent(_Character, _Decoy, "Mimicry_Events_Decoy_TauntNearbyEnemies");
 
+/* Disabled for now - having to stay invisible for 2 turns to get the full use out of the decoy is a little much.
 IF
 CharacterStatusRemoved(_Character, "LLMIME_DECOY_ACTIVE", _)
 AND
@@ -364,6 +366,7 @@ AND
 DB_LLMIME_Skills_Temp_Decoy(_Character, _Decoy)
 THEN
 LLMIME_Skills_Internal_OnDecoyRemoved(_Decoy);
+*/
 //CharacterDieImmediate(_Decoy, 0, "None");
 
 IF
@@ -701,7 +704,7 @@ NOT DB_LLMIME_Skills_Temp_BeamEffect(_Target, _Caster, _Skill, _Effect, _CasterB
 PlayBeamEffect(_Target, _Caster, _Effect, _CasterBone, _TargetBone);
 //END_REGION
 
-//REGION STEAL_WEAPON
+//REGION MUGGING
 IF
 CharacterStatusApplied(_Target, "LLMIME_MUGGED", (CHARACTERGUID)_Mime)
 AND
@@ -781,11 +784,70 @@ HasActiveStatus(_Mime, "LLMIME_COUNTER_THROW", 1)
 AND
 CharacterIsEnemy(_Mime, _Attacker, 1)
 AND
+LeaderLib_Roll_QRY(90)
+THEN
+CharacterCharacterSetEvent(_Mime, _Attacker, "LLMIME_Events_Skills_CounterAttack");
+//PlayBeamEffect(_Mime, _Attacker, "LLMIME_FX_Projectiles_Status_CounterAttack_01", "Dummy_BodyFX", "Dummy_BodyFX");
+//PlayBeamEffect(_Mime, _Attacker, "LLMIME_FX_Status_CounterAttack_Beam_01", "Dummy_BodyFX", "Dummy_BodyFX");
+
+IF
+CharacterMissedBy(_Mime, _AttackerOwner, _Attacker)
+AND
+HasActiveStatus(_Mime, "LLMIME_COUNTER_THROW", 1)
+AND
+CharacterIsEnemy(_Mime, _Attacker, 1)
+AND
 DB_GlobalFlag("WeaponExpansion_IsActive")
 AND
 LeaderLib_Roll_QRY(60)
 THEN
+DB_LLMIME_Skills_Temp_CounterThrow_Queue(_Mime, _Attacker);
+
+IF
+DB_LLMIME_Skills_Temp_CounterThrow_Queue(_Mime, _Attacker)
+AND
+NOT DB_LLMIME_Skills_Temp_CounterThrow_Attacking(_Mime)
+THEN
+DB_LLMIME_Skills_Temp_CounterThrow_Attacking(_Mime);
+NOT DB_LLMIME_Skills_Temp_CounterThrow_Queue(_Mime, _Attacker);
 CharacterUseSkill(_Mime, "Projectile_LLWEAPONEX_Throw_Rock_Instant", _Attacker, 0, 1, 1);
+
+IF
+SkillCast(_Mime, "Projectile_LLWEAPONEX_Throw_Rock_Instant", _, _)
+AND
+DB_LLMIME_Skills_Temp_CounterThrow_Attacking(_Mime)
+THEN
+NOT DB_LLMIME_Skills_Temp_CounterThrow_Attacking(_Mime);
+ProcObjectTimer(_Mime, "LLMIME_Timers_CheckForNextCounterThrow", 500);
+
+PROC
+ProcObjectTimerFinished((CHARACTERGUID)_Mime, "LLMIME_Timers_CheckForNextCounterThrow")
+AND
+DB_LLMIME_Skills_Temp_CounterThrow_Queue(_Mime, _Attacker)
+AND
+NOT DB_LLMIME_Skills_Temp_CounterThrow_Attacking(_Mime)
+THEN
+DB_LLMIME_Skills_Temp_CounterThrow_Attacking(_Mime);
+NOT DB_LLMIME_Skills_Temp_CounterThrow_Queue(_Mime, _Attacker);
+CharacterUseSkill(_Mime, "Projectile_LLWEAPONEX_Throw_Rock_Instant", _Attacker, 0, 1, 1);
+
+IF
+CharacterStatusRemoved(_Mime, "EVADING", _)
+AND
+NOT LeaderLib_Helper_QRY_HasStatus(_Mime, "EVADING")
+AND
+HasActiveStatus(_Mime, "LLMIME_COUNTER_THROW", 1)
+THEN
+ApplyStatus(_Mime, "LLMIME_EVADING2", 6.0, 0, _Mime);
+
+IF
+CharacterStatusRemoved(_Mime, "LLMIME_EVADING2", _)
+AND
+NOT LeaderLib_Helper_QRY_HasStatus(_Mime, "EVADING")
+AND
+HasActiveStatus(_Mime, "LLMIME_COUNTER_THROW", 1)
+THEN
+ApplyStatus(_Mime, "LLMIME_EVADING3", 6.0, 0, _Mime);
 //END_REGION
 
 //REGION FORCED_EVOLUTION
@@ -794,6 +856,7 @@ CharacterUsedSkill(_Summon, "Shout_LLMIME_ForcedEvolution", _SkillType, _SkillEl
 AND
 GetPosition(_Summon, _x, _y, _z)
 THEN
+ClearTag(_Summon, "INCARNATE_S");
 PlayEffectAtPosition("RS3_FX_Skills_Voodoo_Cast_Curse_Shout_Root_01", _x, _y, _z);
 //RS3_FX_Skills_Voodoo_Cast_Curse_Shout_Root_01;RS3_FX_Skills_Voodoo_Cast_Taunt_Icon_01:Dummy_OverheadFX:shout
 PlayEffect(_Summon, "LLMIME_FX_Status_ForcedEvolution_Disappear_01");
@@ -808,6 +871,7 @@ StoryEvent((CHARACTERGUID)_Summon, "Mimicry_ForcedEvolution_TransformDone")
 AND
 CharacterGetOwner(_Summon, _Owner)
 THEN
+CharacterRemoveSkill(_Summon, "Shout_LLMIME_ForcedEvolution");
 LLMIME_Skills_EvolveIncarnateBuffs(_Owner, _Summon);
 
 PROC

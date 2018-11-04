@@ -182,6 +182,12 @@ CharacterCreateOutOfSightToObject("LLMIME_Elves_Male_Mime_d8b7efbb-6e60-4700-af8
 THEN
 LLMIME_Follower_Internal_SetMime(_Mime);
 SetOnStage(_Mime, 0);
+
+IF
+DB_LLMIME_Follower_Mime(_Mime)
+THEN
+DB_BlockThreatenedDialog(_Mime);
+DB_NoLowAttitudeDialog(_Mime);
 //END_REGION
 
 //REGION MASK_FIX

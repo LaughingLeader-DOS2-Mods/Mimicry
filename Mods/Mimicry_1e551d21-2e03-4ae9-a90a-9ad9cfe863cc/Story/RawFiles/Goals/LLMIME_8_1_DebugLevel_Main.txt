@@ -181,6 +181,7 @@ DB_LLMIME_Debug_HostPlayer(_Player);
 //DB_LLMIME_Debug_DeleteBackpack(_Backpack);
 //CharacterAddSkill(_Player, "Target_Debug_KillCommand");
 //CharacterAddSkill(_Player, "Target_EnemyResurrect");
+CharacterAddSkill(_Player, "Jump_LLMIME_HiddenApproach");
 CharacterAddSkill(_Player, "Shout_LLMIME_TimelyRetreat");
 CharacterAddSkill(_Player, "Jump_LLMIME_Debug_Textkeys");
 //END_REGION
@@ -478,6 +479,7 @@ LLMIME_Follower_SpawnGhost(_Mime);
 //END_REGION
 
 //REGION SKILL_TEST
+/*
 IF
 CharacterMissedBy(_Mime, _AttackerOwner, _Attacker)
 AND
@@ -488,6 +490,7 @@ AND
 LeaderLib_Roll_QRY(60)
 THEN
 CharacterUseSkill(_Mime, "Projectile_ThrowingKnife", _Attacker, 0, 1, 1);
+*/
 //END_REGION
 
 //REGION PROJECTILE_TEST

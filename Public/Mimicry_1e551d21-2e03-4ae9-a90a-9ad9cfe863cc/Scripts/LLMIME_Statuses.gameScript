@@ -23,6 +23,21 @@ THEN
 	ItemApplyStatus(_TargetItem, LLMIME_UNARMED_BONUS_DAMAGE, 0, 0, _Mime)
 ENDIF
 
+EVENT LLMIME_Statuses_CounterThrow_CounterAttack
+VARS
+	CHARACTER:_Mime
+	CHARACTER:_Target
+	FLOAT3:_Pos
+ON
+	OnCharacterCharacterEvent(_Mime, _Target, "LLMIME_Events_Skills_CounterAttack")
+ACTIONS
+IF "!c1&c2"
+	CharacterIsDead(_Target)
+	GetPosition(_Target, _Pos)
+THEN
+	ShootLocalProjectileAt(Projectile_LLMIME_Status_CounterAttack, _Mime, {0.0;2.0;0.0}, _Target, -1, _Mime)
+	//ShootLocalProjectile(Projectile_LLMIME_Status_CounterAttack, _Mime, {0.0;0.0;0.0}, _Pos, -1, _Mime)
+ENDIF
 //REGION DOUBLE_STRIKE
 
 EVENT LLMIME_Brawler_OnCriticalHit

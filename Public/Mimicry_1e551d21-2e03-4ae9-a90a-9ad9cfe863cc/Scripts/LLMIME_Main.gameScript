@@ -190,6 +190,8 @@ VARS
 ON
 	OnCharacterCharacterEvent(_Mime, _Target, "LLMIME_Events_Mimicking_CheckAttackTarget")
 ACTIONS
+	CharacterCharacterEvent(_Mime, _Target, "LLMIME_Events_Mimicking_UseBasicAttackSkillOnTarget")
+/*
 IF "(c1&c2)|(!c3&c4)"
 	CharacterHasRangedWeapon(_Mime)
 	CharacterCanHitTargetWithRangedWeapon(_Mime, _Target)
@@ -200,7 +202,7 @@ THEN
 ELSE
 	CharacterCharacterEvent(_Mime, _Target, "LLMIME_Events_Mimicking_UseBasicAttackSkillOnTarget")
 ENDIF
-
+*/
 EVENT LLMIME_CanSeeAttackTarget_Item
 VARS
 	CHARACTER:_Mime
@@ -210,6 +212,8 @@ VARS
 ON
 	OnCharacterItemEvent(_Mime, _Target, "LLMIME_Events_Mimicking_CheckAttackTarget")
 ACTIONS
+	CharacterItemEvent(_Mime, _Target, "LLMIME_Events_Mimicking_UseBasicAttackSkillOnTarget")
+/*
 IF "(c1&c2)|(!c3&c4&c5&(c6|c7))"
 	CharacterHasRangedWeapon(_Mime)
 	CharacterCanHitTargetWithRangedWeapon(_Mime, _Target)
@@ -223,6 +227,7 @@ THEN
 ELSE
 	CharacterItemEvent(_Mime, _Target, "LLMIME_Events_Mimicking_UseBasicAttackSkillOnTarget")
 ENDIF
+*/
 
 EVENT LLMIME_Dummy_Iterate_NearbyItems
 VARS

@@ -228,6 +228,10 @@ data "Finesse" "4"
 data "Intelligence" "4"
 data "Constitution" "4"
 
+new entry "LLMIME_MIMICKED_WEAPON_CAST"
+type "StatusData"
+using "LLMIME_HIDDEN_CONSUME_BASE"
+
 new entry "LLMIME_SOURCE_REGENERATION_HIDDEN"
 type "StatusData"
 using "LLMIME_HIDDEN_CONSUME_BASE"
@@ -917,6 +921,31 @@ data "DescriptionRef" "Character has a 60% chance to throw a rock at an attacker
 data "Icon" "LLMIME_Status_CounterThrow"
 data "FormatColor" "Air"
 data "StackId" "Stack_LLMIME_CounterThrow"
+
+new entry "LLMIME_EVADING2"
+type "StatusData"
+using "EVADING"
+data "Description" "LLMIME_EVADING2_Description"
+data "StatsId" "Stats_LLMIME_Evading2"
+
+new entry "Stats_LLMIME_Evading2"
+type "Potion"
+data "Act" "1"
+data "Act part" "0"
+data "DodgeBoost" "45"
+data "ExtraProperties" "CLEANSE:FLANKED"
+
+new entry "LLMIME_EVADING3"
+type "StatusData"
+using "LLMIME_EVADING2"
+data "StatsId" "Stats_LLMIME_Evading3"
+
+new entry "Stats_LLMIME_Evading3"
+type "Potion"
+data "Act" "1"
+data "Act part" "0"
+data "DodgeBoost" "20"
+data "ExtraProperties" "CLEANSE:FLANKED"
 
 new entry "LLMIME_ADDSKILL_TIMELY_RETREAT"
 type "StatusData"
