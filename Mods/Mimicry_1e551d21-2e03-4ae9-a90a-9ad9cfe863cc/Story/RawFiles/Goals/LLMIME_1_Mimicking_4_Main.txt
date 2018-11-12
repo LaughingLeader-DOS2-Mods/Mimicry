@@ -610,12 +610,16 @@ LLMIME_Mimicking_MimicAction(_Caster, _Action, _ActionType);
 QRY
 LLMIME_Mimicking_QRY_CanStartMimic((CHARACTERGUID)_Mime)
 AND
+CharacterIsDeadOrFeign(_Mime, 0) // Skip if Play Dead is active
+AND
 LeaderLib_Combat_QRY_HasAliveEnemies(_Mime)
 THEN
 DB_NOOP(1);
 
 QRY
 LLMIME_Mimicking_QRY_CanStartMimic((CHARACTERGUID)_Mime)
+AND
+CharacterIsDeadOrFeign(_Mime, 0)
 AND
 NOT LeaderLib_Combat_QRY_HasAliveEnemies(_Mime)
 AND

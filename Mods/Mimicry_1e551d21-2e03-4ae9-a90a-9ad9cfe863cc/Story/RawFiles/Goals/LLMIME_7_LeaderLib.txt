@@ -10,6 +10,11 @@ NOT DB_LLMIME_RegisteredLeaderLibSettings(_)
 THEN
 DB_LLMIME_RegisteredLeaderLibSettings(1);
 
+PROC
+LeaderUpdater_ModUpdated("Mimicry", "LaughingLeader", (STRING)_PastVersion, "0.9.7.3")
+THEN
+LeaderLib_PresetMenu_RegisterPreset("LLMIME_MimeClass", "Mime [Mimicry]", "Mimicry_IsActive");
+
 IF
 DB_LLMIME_RegisteredLeaderLibSettings(1)
 THEN
@@ -23,6 +28,7 @@ LeaderLib_Treasure_Register_ItemTemplate("LLMIME.LeaderTrader.MusicBox", "UNIQUE
 //LeaderLib_Treasure_Configure_AddMaxAmount("LLMIME.LeaderTrader.MusicBox", "UNIQUE_LLMIME_MusicBox_fd03b00c-5366-40e2-a8af-1d9f6a904ecb", 1);
 LeaderLib_Treasure_Configure_GenerationType("LLMIME.LeaderTrader.MusicBox", "UNIQUE_LLMIME_MusicBox_fd03b00c-5366-40e2-a8af-1d9f6a904ecb", "DIALOG_STARTED");
 LeaderLib_Treasure_Configure_GenerateOnce("LLMIME.LeaderTrader.MusicBox", "UNIQUE_LLMIME_MusicBox_fd03b00c-5366-40e2-a8af-1d9f6a904ecb", "");
+LeaderLib_PresetMenu_RegisterPreset("LLMIME_MimeClass", "Mime [Mimicry]", "Mimicry_IsActive");
 
 /*
 LeaderLib_Requirements_Add_PartyLevelRequirement("LLMIME_Requirements_MimeStarter", 2, -1, 0);

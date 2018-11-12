@@ -27,7 +27,7 @@ LLMIME_MonsterSkill_RegisterToTemplate("Summons_FireOoze_67a658f4-8312-4993-966a
 LLMIME_MonsterSkill_RegisterToTemplate("Summons_FireSlug_163befcc-d8f6-4c3a-ba1d-536d1f7568bc",			"Projectile_EnemyFireball", 			"Skill");
 //LLMIME_MonsterSkill_RegisterToTemplate("Summons_GiantIncarnate_13f9314d-e744-4dc5-acf2-c6bf77a04892",	"Shout_EnemyOverthrow", 				"Skill");
 //LLMIME_MonsterSkill_RegisterToTemplate("Summons_Incarnate_118d7359-b7d5-41ea-8c55-86ce27afceba",		"Target_SingleHandedAttack", 			"Skill");
-LLMIME_MonsterSkill_RegisterToTemplate("Summons_Incarnate_118d7359-b7d5-41ea-8c55-86ce27afceba",		"Shout_LLMIME_ForcedEvolution", 		"Skill");
+//LLMIME_MonsterSkill_RegisterToTemplate("Summons_Incarnate_118d7359-b7d5-41ea-8c55-86ce27afceba",		"Shout_LLMIME_ForcedEvolution", 		"Skill");
 LLMIME_MonsterSkill_RegisterToTemplate("Summons_OilBlob_e61da3a2-6dfd-4f2e-8f62-6bfbddb5a7f9",			"Target_TargetedOilSurface", 			"Skill");
 LLMIME_MonsterSkill_RegisterToTemplate("Summons_Plant_e63a712f-fc87-4469-8848-fd8941043afd",			"Cone_LLMIME_BadBreath", 				"Skill");
 LLMIME_MonsterSkill_RegisterToTemplate("Summons_PoisonOoze_7ecb0aa4-376f-4e9a-99d6-6eff900c3c77",		"Projectile_EnemyPoisonDart", 			"Skill");
@@ -35,6 +35,8 @@ LLMIME_MonsterSkill_RegisterToTemplate("Summons_SoulWolf_53f49a2d-36a1-4c47-8cef
 LLMIME_MonsterSkill_RegisterToTemplate("Summons_WaterOoze_b4fc88e6-1e7f-425e-b901-0be379f19168",		"ProjectileStrike_EnemyHailStrike", 	"Skill");
 
 SysClear("DB_LLMIME_MonsterSkill_Tags", 3);
+ // Instead of the template, since we're just visually transforming it now
+LLMIME_MonsterSkill_RegisterToTag("INCARNATE_S", "Shout_LLMIME_ForcedEvolution", "Skill");
 LLMIME_MonsterSkill_RegisterToTag("TOTEM", "LLMIME_TOTEMRAGE", "Status");
 //Giant Incarnate
 SysClear("DB_LLMIME_MonsterSkill_Statuses", 3);
@@ -127,7 +129,12 @@ RemoveStatus(_Summon, "LLMIME_BEASTMASTER_MONSTERSKILL");
 
 //REGION MONSTERSKILL_EVENTS
 IF
-CharacterStatusApplied(_Summon, "LLMIME_BEASTMASTER_MONSTERSKILL", _Mime)
+CharacterStatusApplied(_Summon, "LLMIME_BEASTMASTER_MONSTERSKILL", (CHARACTERGUID)_Mime)
+THEN
+LLMIME_Beastmaster_ApplyBeastmasterBonus(_Summon, _Mime);
+
+PROC
+LLMIME_Beastmaster_ApplyBeastmasterBonus((CHARACTERGUID)_Summon, (CHARACTERGUID)_Mime)
 THEN
 SetVarObject(_Summon, "LLMIME_Beastmaster", _Mime);
 LLMIME_Beastmaster_AddMonsterSkill(_Summon);
@@ -137,19 +144,14 @@ LLMIME_Beastmaster_OnMonsterSkillApplied(_Summon);
 IF
 CharacterStatusRemoved(_Summon, "LLMIME_BEASTMASTER_MONSTERSKILL", _)
 THEN
+LLMIME_Beastmaster_RemoveBeastmasterBonus(_Summon);
+
+PROC
+LLMIME_Beastmaster_RemoveBeastmasterBonus((CHARACTERGUID)_Summon)
+THEN
 LLMIME_Beastmaster_RemoveMonsterSkill(_Summon);
 LLMIME_Beastmaster_RemoveMonsterStatus(_Summon);
 LLMIME_Beastmaster_OnMonsterSkillRemoved(_Summon);
-
-IF
-CharacterStatusRemoved(_Summon, "LLMIME_BEASTMASTER_MONSTERSKILL", _)
-AND
-ObjectGetFlag(_Summon, "LLMIME_ApplyMonsterSkill", 1)
-AND
-GetVarObject(_Summon, "LLMIME_Beastmaster", _Mime)
-THEN
-ObjectClearFlag(_Summon, "LLMIME_ApplyMonsterSkill");
-ApplyStatus(_Summon, "LLMIME_BEASTMASTER_MONSTERSKILL", -1.0, 0, _Mime);
 //END_REGION
 
 //REGION REMOVAL_EVENTS
@@ -190,6 +192,7 @@ DB_LLMIME_MonsterSkill_Templates(_Template, _Skill, "Skill")
 AND
 CharacterHasSkill(_Summon, _Skill, 0)
 THEN
+LeaderLog_Log("DEBUG", "[LLMIME:Beastmaster:AddMonsterSkill] Adding skill [",_Skill,"] to summon via Template [",_Template,"]");
 ObjectSetFlag(_Summon, "LLMIME_MONSTERSKILL_SKILLADDED");
 CharacterAddSkill(_Summon, _Skill);
 DB_LLMIME_MonsterSkill_Temp_AddedSkill(_Summon, _Skill);
@@ -203,6 +206,7 @@ IsTagged(_Summon, _Tag, 1)
 AND
 CharacterHasSkill(_Summon, _Skill, 0)
 THEN
+LeaderLog_Log("DEBUG", "[LLMIME:Beastmaster:AddMonsterSkill] Adding skill [",_Skill,"] to summon via Tag [",_Tag,"]");
 ObjectSetFlag(_Summon, "LLMIME_MONSTERSKILL_SKILLADDED");
 CharacterAddSkill(_Summon, _Skill);
 DB_LLMIME_MonsterSkill_Temp_AddedSkill(_Summon, _Skill);
@@ -216,6 +220,7 @@ HasActiveStatus(_Summon, _Status, 1)
 AND
 CharacterHasSkill(_Summon, _Skill, 0)
 THEN
+LeaderLog_Log("DEBUG", "[LLMIME:Beastmaster:AddMonsterSkill] Adding skill [",_Skill,"] to summon via Status [",_Status,"]");
 ObjectSetFlag(_Summon, "LLMIME_MONSTERSKILL_SKILLADDED");
 CharacterAddSkill(_Summon, _Skill);
 DB_LLMIME_MonsterSkill_Temp_AddedSkill(_Summon, _Skill);
@@ -436,7 +441,7 @@ CharacterStatusText(_Summon, _Name);
 PROC
 LLMIME_Beastmaster_AddMonsterSkill((CHARACTERGUID)_Summon)
 AND
-GetTemplate(_Summon, "Summons_GiantIncarnate_13f9314d-e744-4dc5-acf2-c6bf77a04892")
+IsTagged(_Summon, "INCARNATE_G", 1)
 AND
 LLMIME_Beastmaster_QRY_NoIncarnateElement(_Summon)
 AND
