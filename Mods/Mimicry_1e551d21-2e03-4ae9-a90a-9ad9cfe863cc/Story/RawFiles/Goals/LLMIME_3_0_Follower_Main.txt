@@ -1397,6 +1397,16 @@ CharacterDie(_Ghost, 0, "None");
 //END_REGION
 
 //REGION RESURRECTION_EVENT
+//Resurrecting via dialog
+IF
+ObjectFlagSet("Mimicry_ResurrectMimeFollower", (CHARACTERGUID)_Player, _Instance)
+AND
+LeaderLib_Helper_QRY_ClearObjectFlag(_Player, "Mimicry_ResurrectMimeFollower")
+AND
+DB_LLMIME_Follower_Mime(_Mime)
+THEN
+CharacterResurrect(_Mime);
+
 IF
 DialogEnded("LLMIME_MusicBox_Resurrection", _Instance)
 AND
