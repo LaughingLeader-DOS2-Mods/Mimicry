@@ -445,7 +445,7 @@
                                                 "TagText" : {
                                                    "handle" : "ls::TranslatedStringRepository::s_HandleUnknown",
                                                    "type" : 28,
-                                                   "value" : "*Resurrect the Mime using a spare Resurrection Scroll you forgot you had.*"
+                                                   "value" : "*Resurrect the Mime using a spare Resurrection Scroll found on the body.*"
                                                 },
                                                 "stub" : {"type" : 19, "value" : 1}
                                              }
@@ -1070,7 +1070,7 @@
          },
          "editorData" : {
             "needLayout" : {"type" : 19, "value" : 0},
-            "nextNodeId" : {"type" : 5, "value" : 12}
+            "nextNodeId" : {"type" : 5, "value" : 13}
          }
       }
    }
