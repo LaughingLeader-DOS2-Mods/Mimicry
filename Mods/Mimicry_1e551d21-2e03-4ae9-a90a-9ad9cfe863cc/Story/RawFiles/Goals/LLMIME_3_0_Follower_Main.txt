@@ -652,6 +652,7 @@ ObjectClearFlag(_Mime, "Mimicry_FollowerIsLeaving");
 CharacterEnableAllCrimes(_Mime);
 SetCanJoinCombat(_Mime, 1);
 SetFaction(_Mime, _Faction);
+CharacterPurgeQueue(_Mime);
 
 IF
 CharacterCharacterEvent((CHARACTERGUID)_Owner, (CHARACTERGUID)_Mime, "LeaderLib_Events_FollowerRecruited")

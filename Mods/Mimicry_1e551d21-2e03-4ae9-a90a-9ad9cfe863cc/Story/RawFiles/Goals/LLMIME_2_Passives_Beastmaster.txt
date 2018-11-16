@@ -29,7 +29,7 @@ LLMIME_MonsterSkill_RegisterToTemplate("Summons_FireSlug_163befcc-d8f6-4c3a-ba1d
 //LLMIME_MonsterSkill_RegisterToTemplate("Summons_Incarnate_118d7359-b7d5-41ea-8c55-86ce27afceba",		"Target_SingleHandedAttack", 			"Skill");
 //LLMIME_MonsterSkill_RegisterToTemplate("Summons_Incarnate_118d7359-b7d5-41ea-8c55-86ce27afceba",		"Shout_LLMIME_ForcedEvolution", 		"Skill");
 LLMIME_MonsterSkill_RegisterToTemplate("Summons_OilBlob_e61da3a2-6dfd-4f2e-8f62-6bfbddb5a7f9",			"Target_TargetedOilSurface", 			"Skill");
-LLMIME_MonsterSkill_RegisterToTemplate("Summons_Plant_e63a712f-fc87-4469-8848-fd8941043afd",			"Cone_LLMIME_BadBreath", 				"Skill");
+LLMIME_MonsterSkill_RegisterToTemplate("Summons_Plant_e63a712f-fc87-4469-8848-fd8941043afd",			"Cone_LLMIME_BadBreath_Plant", 			"Skill");
 LLMIME_MonsterSkill_RegisterToTemplate("Summons_PoisonOoze_7ecb0aa4-376f-4e9a-99d6-6eff900c3c77",		"Projectile_EnemyPoisonDart", 			"Skill");
 LLMIME_MonsterSkill_RegisterToTemplate("Summons_SoulWolf_53f49a2d-36a1-4c47-8cef-91c0f3ae0ef9",			"Rush_BullRush", 						"Skill");
 LLMIME_MonsterSkill_RegisterToTemplate("Summons_WaterOoze_b4fc88e6-1e7f-425e-b901-0be379f19168",		"ProjectileStrike_EnemyHailStrike", 	"Skill");

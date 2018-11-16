@@ -54,7 +54,8 @@ DB_LLMIME_MimeStatuses("LLMIME_BRAWLER_STANCE_FIN");
 DB_LLMIME_MimeStatuses("LLMIME_BRAWLER_STANCE_FIN_INFO");
 //Passives
 DB_LLMIME_MimeStatuses("LLMIME_MIME");
-DB_LLMIME_MimeStatuses("LLMIME_MASK_INFO");
+DB_LLMIME_MimeStatuses("LLMIME_MIMICRY_MASK");
+DB_LLMIME_MimeStatuses("LLMIME_MIMICRY_MASK_INFO");
 DB_LLMIME_MimeStatuses("LLMIME_BRAWLER");
 DB_LLMIME_MimeStatuses("LLMIME_BRAWLER_BONUS");
 DB_LLMIME_MimeStatuses("LLMIME_BRAWLER_INFO");
@@ -115,12 +116,12 @@ LLMIME_System_InitSettings();
 //REGION MASK_TAG
 /* For easy iteration */
 IF
-CharacterStatusApplied(_Mime, "LLMIME_MASK_INFO", _)
+CharacterStatusApplied(_Mime, "LLMIME_MIMICRY_MASK", _)
 THEN
 SetTag(_Mime, "Mimicry_WearingMask");
 
 IF
-CharacterStatusRemoved(_Mime, "LLMIME_MASK_INFO", _)
+CharacterStatusRemoved(_Mime, "LLMIME_MIMICRY_MASK", _)
 THEN
 ClearTag(_Mime, "Mimicry_WearingMask");
 //END_REGION

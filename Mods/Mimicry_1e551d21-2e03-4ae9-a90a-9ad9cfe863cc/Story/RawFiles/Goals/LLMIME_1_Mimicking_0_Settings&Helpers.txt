@@ -44,6 +44,7 @@ DB_LLMIME_Mimicking_Blacklist_Skills("Shout_FavourableWind");
 DB_LLMIME_Mimicking_Blacklist_Skills("Target_ElementalArrowheads");
 //Adrenaline reduces the Mime's AP by the time their turn swings around
 DB_LLMIME_Mimicking_Blacklist_Skills("Shout_Adrenaline");
+DB_LLMIME_Mimicking_Blacklist_Skills("Shout_EnemyAdrenaline");
 //Summon Skills
 DB_LLMIME_Mimicking_Blacklist_Skills("Target_BloatedCorpse");
 DB_LLMIME_Mimicking_Blacklist_Skills("Shout_NecromancerTotems");
@@ -79,7 +80,7 @@ DB_LLMIME_Mimicking_Blacklist_ItemTemplates("CON_Potion_BloodRose_8c89072f-820b-
 DB_LLMIME_Mimicking_Blacklist_ItemTemplates("CON_Potion_Source_A_23cdecb1-06a4-4290-bb2c-de300cba5dd0");
 DB_LLMIME_Mimicking_Blacklist_ItemTemplates("LOOT_Source_Orb_106a7107-cf36-4331-b5b5-6de71969f370");
 
-//Skill types with the "UseWeaponDamage" property. Checking the skill name itself.
+//Skill types with the "UseWeaponDamage" property.
 DB_LLMIME_Mimicking_Whitelist_WeaponCopy_SkillTypes("Target_");
 DB_LLMIME_Mimicking_Whitelist_WeaponCopy_SkillTypes("Shout_");
 DB_LLMIME_Mimicking_Whitelist_WeaponCopy_SkillTypes("Projectile_");
@@ -254,33 +255,52 @@ DB_NOOP(1);
 //END_REGION
 
 //REGION WEAPON_SKILLTYPE
+QRY
+LLMIME_Mimicking_Skills_QRY_IgnoredSkillStringMatch((STRING)_Skill)
+AND
+DB_LLMIME_Mimicking_Blacklist_WeaponCopy_IgnoreSkillsWith(_Str)
+AND
+NOT DB_LLMIME_Mimicking_Temp_IgnoredSkill(_Skill)
+AND
+StringContains(_Skill, _Str, 1)
+THEN
+DB_LLMIME_Mimicking_Temp_IgnoredSkill(_Skill);
+
+QRY
+LLMIME_Mimicking_Skills_QRY_IgnoredSkillStringMatch((STRING)_Skill)
+AND
+DB_LLMIME_Mimicking_Temp_IgnoredSkill(_Skill)
+THEN
+NOT DB_LLMIME_Mimicking_Temp_IgnoredSkill(_Skill);
+
 //Only bother with skill types that allow weapon requirements
 QRY
 LLMIME_Mimicking_Skills_QRY_WeaponSkillTypeMatch((STRING)_Skill)
 AND
 DB_LLMIME_Mimicking_Whitelist_WeaponCopy_SkillTypes(_SkillType)
 AND
+NOT DB_LLMIME_Mimicking_Temp_WeaponCopyMatch(_Skill)
+AND
 StringContains(_Skill, _SkillType, 1)
 AND
 NOT LLMIME_Mimicking_Skills_QRY_IgnoredSkillStringMatch(_Skill)
 THEN
-DB_NOOP(1);
+LeaderLog_Log("DEBUG", "[LLMIME:Mimicking:MimicAction] [",_Skill,"] is possibly a weapon skill.");
+DB_LLMIME_Mimicking_Temp_WeaponCopyMatch(_Skill);
 
 QRY
-LLMIME_Mimicking_Skills_QRY_IgnoredSkillStringMatch((STRING)_Skill)
-AND
-DB_LLMIME_Mimicking_Blacklist_WeaponCopy_IgnoreSkillsWith(_Str)
-AND
-StringContains(_Skill, _Str, 1)
-THEN
-DB_NOOP(1);
-
-QRY
-LLMIME_Mimicking_Skills_QRY_WeaponSkillTypeMatch(_Skill)
+LLMIME_Mimicking_Skills_QRY_WeaponSkillTypeMatch((STRING)_Skill)
 AND
 DB_LLMIME_Mimicking_Whitelist_WeaponCopy_Skills(_Skill)
 THEN
-DB_NOOP(1);
+DB_LLMIME_Mimicking_Temp_WeaponCopyMatch(_Skill);
+
+QRY
+LLMIME_Mimicking_Skills_QRY_WeaponSkillTypeMatch((STRING)_Skill)
+AND
+DB_LLMIME_Mimicking_Temp_WeaponCopyMatch(_Skill)
+THEN
+NOT DB_LLMIME_Mimicking_Temp_WeaponCopyMatch(_Skill);
 //END_REGION
 
 //REGION CHECK_QUERIES

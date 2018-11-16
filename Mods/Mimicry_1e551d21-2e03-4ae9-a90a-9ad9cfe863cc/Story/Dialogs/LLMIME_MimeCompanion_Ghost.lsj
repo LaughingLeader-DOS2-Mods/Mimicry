@@ -445,7 +445,7 @@
                                                 "TagText" : {
                                                    "handle" : "ls::TranslatedStringRepository::s_HandleUnknown",
                                                    "type" : 28,
-                                                   "value" : "*Resurrect the Mime using a spare Resurrection Scroll found on the body.*"
+                                                   "value" : "*Resurrect the Mime using a spare Resurrection Scroll found on his body.*"
                                                 },
                                                 "stub" : {"type" : 19, "value" : 1}
                                              }
@@ -483,7 +483,7 @@
                                  },
                                  {
                                     "key" : {"type" : 22, "value" : "position"},
-                                    "val" : {"type" : 23, "value" : "335;453"}
+                                    "val" : {"type" : 23, "value" : "335;-204"}
                                  },
                                  {
                                     "key" : {"type" : 22, "value" : "sourcetemplate"},
@@ -565,10 +565,10 @@
                            {
                               "child" : [
                                  {
-                                    "UUID" : {"type" : 22, "value" : "0993930b-a73c-4cb3-bd0a-89311a0f759c"}
+                                    "UUID" : {"type" : 22, "value" : "4af624ae-69b9-4e5c-88e4-4b94eed186fc"}
                                  },
                                  {
-                                    "UUID" : {"type" : 22, "value" : "4af624ae-69b9-4e5c-88e4-4b94eed186fc"}
+                                    "UUID" : {"type" : 22, "value" : "0993930b-a73c-4cb3-bd0a-89311a0f759c"}
                                  },
                                  {
                                     "UUID" : {"type" : 22, "value" : "da9c15b5-93df-48d5-befd-ddb29c56b27d"}
@@ -918,7 +918,7 @@
                                  },
                                  {
                                     "key" : {"type" : 22, "value" : "position"},
-                                    "val" : {"type" : 23, "value" : "335;672"}
+                                    "val" : {"type" : 23, "value" : "335;234"}
                                  },
                                  {
                                     "key" : {"type" : 22, "value" : "sourcetemplate"},
@@ -1070,7 +1070,7 @@
          },
          "editorData" : {
             "needLayout" : {"type" : 19, "value" : 0},
-            "nextNodeId" : {"type" : 5, "value" : 13}
+            "nextNodeId" : {"type" : 5, "value" : 14}
          }
       }
    }

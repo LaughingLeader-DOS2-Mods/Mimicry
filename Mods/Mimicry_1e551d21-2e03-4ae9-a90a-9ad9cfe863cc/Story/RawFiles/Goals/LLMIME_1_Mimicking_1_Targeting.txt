@@ -777,7 +777,7 @@ AND
 _TargetPriority == 0
 THEN
 SetFaction(_Dummy,"Good NPC");
-//LeaderLog_Log("TRACE", "[LLMIME:Mime:Targeting] Set dummy faction to [Good NPC] for next mimic skill [",_Action, _ActionType,"].");
+LeaderLog_Log("TRACE", "[LLMIME:Mime:Targeting] Set dummy faction to [Good NPC] for next mimic skill [",_Action, _ActionType,"].");
 
 PROC
 LLMIME_Mimicking_TargetSystem_SetFinalTarget((CHARACTERGUID)_Caster, (CHARACTERGUID)_Mime, (CHARACTERGUID)_Dummy, (STRING)_Action, (STRING)_ActionType, (GUIDSTRING)_Target, (INTEGER)_TargetPriority)
@@ -787,7 +787,7 @@ AND
 _TargetPriority >= 1
 THEN
 SetFaction(_Dummy,"Evil NPC");
-//LeaderLog_Log("TRACE", "[LLMIME:Mime:Targeting] Set dummy faction to [Evil NPC] for next mimic skill [",_Action, _ActionType,"].");
+LeaderLog_Log("TRACE", "[LLMIME:Mime:Targeting] Set dummy faction to [Evil NPC] for next mimic skill [",_Action, _ActionType,"].");
 
 PROC
 LLMIME_Mimicking_TargetSystem_SetFinalTarget((CHARACTERGUID)_Caster, (CHARACTERGUID)_Mime, (CHARACTERGUID)_Dummy, (STRING)_Action, (STRING)_ActionType, (GUIDSTRING)_Target, (INTEGER)_TargetPriority)
@@ -797,7 +797,7 @@ AND
 _TargetPriority < 0
 THEN
 SetFaction(_Dummy,"Neutral NPC");
-//LeaderLog_Log("TRACE", "[LLMIME:Mime:Targeting] Set dummy faction to [Neutral NPC] for next mimic skill [",_Action, _ActionType,"].");
+LeaderLog_Log("TRACE", "[LLMIME:Mime:Targeting] Set dummy faction to [Neutral NPC] for next mimic skill [",_Action, _ActionType,"].");
 
 PROC
 LLMIME_Mimicking_TargetSystem_SetFinalTarget((CHARACTERGUID)_Caster, (CHARACTERGUID)_Mime, (CHARACTERGUID)_Dummy, (STRING)_Action, (STRING)_ActionType, (GUIDSTRING)_Target, (INTEGER)_TargetPriority)

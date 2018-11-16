@@ -96,7 +96,7 @@ AND
 LLMIME_Mime_QRY_IsMimeItem(_Item)
 */
 IF
-CharacterStatusApplied(_Mime, "LLMIME_MASK_INFO", _)
+CharacterStatusApplied(_Mime, "LLMIME_MIMICRY_MASK", _)
 AND
 GlobalGetFlag("LeaderLib_Initialized", 1)
 AND
@@ -107,7 +107,7 @@ THEN
 SetStoryEvent(_Mime, "Mimicry_InitMimeJob");
 
 IF
-CharacterStatusApplied(_Mime, "LLMIME_MASK_INFO", _)
+CharacterStatusApplied(_Mime, "LLMIME_MIMICRY_MASK", _)
 AND
 NOT GlobalGetFlag("LeaderLib_Initialized", 1)
 AND
@@ -115,7 +115,7 @@ NOT LLMIME_QRY_CharacterIsADummy(_Mime)
 AND
 NOT LLMIME_QRY_CharacterIsAMime(_Mime)
 THEN
-LeaderLog_Log("DEBUG", "[Mimicry:Passives:Mime:CharacterStatusApplied(LLMIME_MASK_INFO)] LeaderLib is not initialized yet. Activating mime after the game is started.");
+LeaderLog_Log("DEBUG", "[Mimicry:Passives:Mime:CharacterStatusApplied(LLMIME_MIMICRY_MASK)] LeaderLib is not initialized yet. Activating mime after the game is started.");
 DB_LLMIME_Temp_ActivateMime(_Mime);
 
 PROC
@@ -176,13 +176,43 @@ SetStoryEvent(_Mime, "Mimicry_InitMimeJob");
 //REGION REMOVAL
 IF
 ItemUnEquipped(_Mask, _Mime)
-//CharacterStatusRemoved(_Mime, "LLMIME_MASK_INFO", _)
+//CharacterStatusRemoved(_Mime, "LLMIME_MIMICRY_MASK", _)
 AND
 IsTagged(_Mask, "LLMIME_ACTIVATE_MIME", 1)
 AND
 LLMIME_QRY_CharacterIsAMime(_Mime)
 THEN
 SetStoryEvent(_Mime, "Mimicry_RemoveMimeJob");
+//END_REGION
+
+//REGION INFO_STATUS
+IF
+CharacterStatusRemoved(_Mime, "LLMIME_MIMICRY_MASK", _)
+THEN
+RemoveStatus(_Mime, "LLMIME_MIMICRY_MASK_INFO");
+
+IF
+CharacterStatusApplied(_Mime, "LLMIME_MIMICRY_MASK", _)
+AND
+NOT ObjectGetFlag(_Mime, "Mimicry_HideMimicryMaskInfo", 1)
+AND
+HasActiveStatus(_Mime, "LLMIME_MIMICRY_MASK_INFO", 0)
+THEN
+ApplyStatus(_Mime, "LLMIME_MIMICRY_MASK_INFO", -1.0, 1);
+
+IF
+ObjectFlagSet("Mimicry_HideMimicryMaskInfo", (CHARACTERGUID)_Mime, _Instance)
+THEN
+RemoveStatus(_Mime, "LLMIME_MIMICRY_MASK_INFO");
+
+IF
+ObjectFlagCleared("Mimicry_HideMimicryMaskInfo", (CHARACTERGUID)_Mime, _Instance)
+AND
+HasActiveStatus(_Mime, "LLMIME_MIMICRY_MASK", 1)
+AND
+NOT LeaderLib_Helper_QRY_HasStatus(_Mime, "LLMIME_MIMICRY_MASK_INFO")
+THEN
+ApplyStatus(_Mime, "LLMIME_MIMICRY_MASK_INFO", -1.0, 1);
 //END_REGION
 
 //REGION EFFECTS
