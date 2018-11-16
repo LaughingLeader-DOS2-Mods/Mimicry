@@ -109,7 +109,7 @@ ON
 	OnCharacterEvent(_Character, "Mimicry_Events_Mime_MaskEquipped")
 ACTIONS
 	CharacterPlayEffect(_Character, "LLMIME_FX_Mime_Mask_Transform_Root_02")
-	CharacterPlayEffect(_Character, "LLMIME_FX_Mime_Mask_Transform_Overlay_Equipped_01")	
+	CharacterPlayEffect(_Character, "LLMIME_FX_Mime_Mask_Transform_Overlay_Equipped_01")
 	
 EVENT LLMIME_Mask_UnEquipped
 VARS
@@ -118,7 +118,15 @@ ON
 	OnCharacterEvent(_Character, "Mimicry_Events_Mime_MaskUnEquipped")
 ACTIONS
 	CharacterPlayEffect(_Character, "LLMIME_FX_Mime_Mask_Transform_Root_02")
-	CharacterPlayEffect(_Character, "LLMIME_FX_Mime_Mask_Transform_Overlay_Unequipped_01")	
+	CharacterPlayEffect(_Character, "LLMIME_FX_Mime_Mask_Transform_Overlay_Unequipped_01")
+	
+EVENT LLMIME_Mask_LeveledUp
+VARS
+	CHARACTER:_Character
+ON
+	OnCharacterFlagSet("LLMIME_NewSkillbooksAvailable", _Character)
+ACTIONS
+	CharacterPlayEffect(_Character, "LLMIME_FX_Mime_Mask_TradeTransaction_Overlay_01")
 
 EVENT LLMIME_Follower_Summoned
 VARS

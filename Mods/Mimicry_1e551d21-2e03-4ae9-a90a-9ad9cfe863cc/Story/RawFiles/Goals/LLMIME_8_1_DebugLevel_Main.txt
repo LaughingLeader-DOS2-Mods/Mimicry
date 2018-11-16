@@ -303,6 +303,8 @@ DB_IsPlayer(_Player);
 
 IF
 CharacterUsedSkill(_Character,_,_,_)
+AND
+CharacterIsPlayer(_Character, 1)
 THEN
 CharacterResetCooldowns(_Character);
 
@@ -347,10 +349,26 @@ CharacterTransformAppearanceToWithEquipmentSet(_Character, CHARACTERGUID_LLMIME_
 
 IF
 CharacterUsedItem(_Character, ITEMGUID_LLMIME_Debug_Lever_LevelUpMimeFollower_69094caf-1984-4812-aca0-f7e0c1071380)
+THEN
+CharacterAddAttribute(_Character, "Memory", 10);
+CharacterAddSkill(_Character, "Shout_LLMIME_BrawlerStance", 0);
+CharacterAddSkill(_Character, "Shout_LLMIME_OpenMenu", 0);
+
+IF
+CharacterUsedItem(_Character, ITEMGUID_LLMIME_Debug_Lever_LevelUpMimeFollower_69094caf-1984-4812-aca0-f7e0c1071380)
+AND
+DB_LeaderLib_Growth_Characters_Skills("Mimicry.MimeFollower", _MinLevel, _Skill, _MatchType, _MatchValue)
+THEN
+CharacterAddSkill(_Character, _Skill, 0);
+
+/*
+IF
+CharacterUsedItem(_Character, ITEMGUID_LLMIME_Debug_Lever_LevelUpMimeFollower_69094caf-1984-4812-aca0-f7e0c1071380)
 AND
 CharacterGetLevel(_Character, _Level)
 THEN
 CharacterLevelUpTo(CHARACTERGUID_LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9, _Level);
+*/
 
 //REGION TEXT_EVENTS
 /*
@@ -503,9 +521,9 @@ GetPosition(_Target, _tx, _ty, _tz)
 AND
 GetPosition(_Caster, _x, _y, _z)
 AND
-TemporaryCharacterCreateAtPosition(_x, _y, _z, "CHARACTERGUID_LLMIME_Dummy_Character_e2f3f6f7-c069-4928-830e-f1d46e2c898", 0, _Dummy)
+TemporaryCharacterCreateAtPosition(_x, _y, _z, "LLMIME_Dummy_Character_e2f3f6f7-c069-4928-830e-f1d46e2c898", 0, _Dummy)
 THEN
-Transform(_Dummy, "ITEMGUID_WPN_Tool_Scythe_2H_A_44525b09-a2b1-4b45-8d52-e893d04390dd", 0, 1, 0);
+Transform(_Dummy, "WPN_Tool_Scythe_2H_A_44525b09-a2b1-4b45-8d52-e893d04390dd", 0, 1, 0);
 CharacterUseSkill(_Dummy, "Projectile_EnemyFlight", _Target, 1, 1, 1);
 ProcObjectTimer(_Dummy, "LLMIME_Debug_RemoveDummy", 3000);
 
@@ -881,7 +899,11 @@ IntegertoString(_CastZ, _CastZStr)
 AND
 CharacterGetDisplayName(_Caster, _, _Name)
 AND
-LeaderLog_QRY_Log("COMBINE","[",_Name,"] cast skill [",_Skill,"(",_SkillType,",",_SkillElement,")] from position [")
+IsSourceSkill(_Skill, _IsSourceSkill)
+AND
+IntegertoString(_IsSourceSkill, _IsSourceSkillStr)
+AND
+LeaderLog_QRY_Log("COMBINE","[",_Name,"] cast skill [",_Skill,"(",_SkillType,",",_SkillElement,")] Source[",_IsSourceSkillStr,"] from position [")
 AND
 DB_LeaderLog_Temp_CombinedString(_SkillPrefix)
 AND
@@ -912,7 +934,11 @@ GetUUID(_Caster, _CasterID)
 AND
 GetUUID(_Target, _TargetID)
 AND
-LeaderLog_QRY_Log("COMBINE"," cast skill [",_Skill,"(",_SkillType,",",_SkillElement,")] on target [",_TargetName,"](",_TargetID,").")
+IsSourceSkill(_Skill, _IsSourceSkill)
+AND
+IntegertoString(_IsSourceSkill, _IsSourceSkillStr)
+AND
+LeaderLog_QRY_Log("COMBINE"," cast skill [",_Skill,"(",_SkillType,",",_SkillElement,")] Source[",_IsSourceSkillStr,"] on target [",_TargetName,"](",_TargetID,").")
 AND
 DB_LeaderLog_Temp_CombinedString(_LogDetails)
 THEN
@@ -928,7 +954,11 @@ GetUUID(_Caster, _CasterID)
 AND
 GetUUID(_Target, _TargetID)
 AND
-LeaderLog_QRY_Log("COMBINE"," cast skill [",_Skill,"(",_SkillType,",",_SkillElement,")] on target [Item](",_TargetID,").")
+IsSourceSkill(_Skill, _IsSourceSkill)
+AND
+IntegertoString(_IsSourceSkill, _IsSourceSkillStr)
+AND
+LeaderLog_QRY_Log("COMBINE"," cast skill [",_Skill,"(",_SkillType,",",_SkillElement,")] Source[",_IsSourceSkillStr,"] on target [Item](",_TargetID,").")
 AND
 DB_LeaderLog_Temp_CombinedString(_LogDetails)
 THEN

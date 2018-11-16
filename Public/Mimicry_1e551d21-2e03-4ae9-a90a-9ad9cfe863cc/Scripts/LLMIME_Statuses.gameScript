@@ -2,6 +2,24 @@ INIT
 
 EVENTS
 
+/*
+EVENT LLMIME_Statuses_Test
+VARS
+	CHARACTER:_Source
+	CHARACTER:_Target
+	INT:_Turns
+ON
+	OnCharacterStatusApplied(_Target, HASTED)
+ACTIONS
+IF "c1&c2"
+	GetStatusTurns(_Target, HASTED, _Turns)
+	CharacterGetStatusSourceCharacter(_Target, HASTED, _Source)
+THEN
+	CharacterApplyStatus(_Target, SHACKLES_OF_PAIN, _Turns, 1, _Source)
+ENDIF
+	CharacterRemoveStatus(_Target, HASTED)
+*/
+
 EVENT LLMIME_Statuses_UnarmedBonusDamage
 VARS
 	CHARACTER:_Mime
@@ -190,56 +208,3 @@ THEN
 ENDIF
 	CharacterRemoveStatus(_Target, LLMIME_PHYSICAL_SILENCED)
 //END_REGION
-
-/*
-EVENT LLMIME_Statuses_ForcedEvolution_PreserveAP_Start
-VARS
-	CHARACTER:_Owner
-	CHARACTER:_Summon
-	FLOAT:_ApCurrentF
-	INT:_ApCurrent
-ON
-	OnSkillCast(_Summon, Shout_LLMIME_ForcedEvolution)
-ACTIONS
-IF "c1&c2"
-	CharacterGetOwner(_Owner, _Summon)
-	CharacterGetStat(_ApCurrentF, _Summon, ActionPoints)
-THEN
-	Clamp(_ApCurrentF, 1, _ApCurrentF) // Min 1 AP
-	Cast(_ApCurrent, _ApCurrentF)
-	SetVar(_Owner, "LLMIME_ForcedEvolution_SummonAP", _ApCurrent)
-ENDIF
-
-EVENT LLMIME_Statuses_ForcedEvolution_PreserveAP_End
-VARS
-	CHARACTER:_Owner
-	CHARACTER:_Summon
-	FLOAT:_ApCurrentF
-	INT:_ApCurrent
-	INT:_ApTarget
-	STRING:_Str
-	FIXEDSTRING:_StrF
-ON
-	OnCharacterStatusApplied(_Summon, LLMIME_FORCED_EVOLUTION)
-ACTIONS
-IF "c1&c2&c3&!c4&c5"
-	IsTagged(_Summon, "INCARNATE_G")
-	CharacterGetOwner(_Owner, _Summon)
-	GetVar(_ApTarget, _Owner, "LLMIME_ForcedEvolution_SummonAP")
-	IsEqual(_ApTarget, null)
-	CharacterGetStat(_ApCurrentF, _Summon, ActionPoints)
-THEN
-	Cast(_ApCurrent, _ApCurrentF)
-	Subtract(_ApTarget, _ApCurrent)
-IF "c1"
-	IsLessThen(_ApTarget, 0)
-THEN
-	Multiply(_ApTarget, -1)
-ENDIF
-	Print(_Str, "Removing [1] AP", _ApTarget)
-	Cast(_StrF, _Str)
-	DisplayCombatInfoText(_Summon, _StrF, 3.0)
-	CharacterUseActionPoints(_Summon, _ApTarget)
-	SetVar(_Owner, "LLMIME_ForcedEvolution_SummonAP", INT:null)
-ENDIF
-*/

@@ -115,7 +115,7 @@ data "RootTemplate" "9a4817a2-5ba0-4c1c-bfa6-f3031e494969"
 data "ComboCategory" ""
 data "ObjectCategory" "LLMIME_MimeSkillBooks"
 data "MinLevel" "4"
-data "Requirements" "WarriorLore 1; EarthSpecialist 1"
+data "Requirements" "WarriorLore 1; Polymorph 1"
 
 new entry "SKILLBOOK_LLMIME_Fatality"
 type "Object"

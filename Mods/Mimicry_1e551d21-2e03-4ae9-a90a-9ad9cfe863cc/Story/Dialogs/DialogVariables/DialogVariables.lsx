@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <save>
-    <header version="2" time="1529497171" />
-    <version major="3" minor="1" revision="8" build="0" />
+    <header version="2" />
+    <version major="3" minor="6" revision="1" build="0" />
     <region id="DialogVariables">
         <node id="root">
             <children>
@@ -24,6 +24,13 @@
                     <attribute id="Description" value="" type="23" />
                     <attribute id="UUID" value="694fa103-1089-492b-a7db-aef0e5cf0efd" type="31" />
                     <attribute id="name" value="LLMIME_Settings_BrawlerStance_Str" type="22" />
+                    <attribute id="type" value="String" type="23" />
+                </node>
+                <node id="DialogVariable">
+                    <attribute id="DefaultValue" value="[SKILLS]" type="23" />
+                    <attribute id="Description" value="" type="23" />
+                    <attribute id="UUID" value="e73495dd-e972-4213-acc4-7ec9740d3f68" type="31" />
+                    <attribute id="name" value="LLMIME_Settings_NewSkillbooksText" type="22" />
                     <attribute id="type" value="String" type="23" />
                 </node>
             </children>

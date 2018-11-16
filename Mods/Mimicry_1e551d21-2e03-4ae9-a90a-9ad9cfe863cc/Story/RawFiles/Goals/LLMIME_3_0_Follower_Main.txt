@@ -15,6 +15,7 @@ KBSECTION
 PROC
 LLMIME_Follower_InitSettings()
 THEN
+//DB_LeaderLib_Growth_Characters_Skills("Mimicry.MimeFollower", _MinLevel, _Skill, _MatchType, _MatchValue)
 //LeaderLib_Growth_Characters_Register_Skill("Mimicry.MimeFollower", 1, "Target_EnemyCripplingBlow", "Tag", "LLMIME_MimeFollower");
 LeaderLib_Growth_Characters_Register_Skill("Mimicry.MimeFollower", 2, "MultiStrike_LLMIME_MimeVault_Follower", "Tag", "LLMIME_MimeFollower");
 LeaderLib_Growth_Characters_Register_Skill("Mimicry.MimeFollower", 3, "Target_LLMIME_Wish_Follower", "Tag", "LLMIME_MimeFollower");
@@ -127,7 +128,7 @@ ObjectExists(CHARACTERGUID_LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-
 AND
 NOT GlobalGetFlag("Mimicry_MusicBoxShattered", 1)
 AND
-CharacterCreateOutOfSightToObject("CHARACTERGUID_LLMIME_Elves_Male_Mime_d8b7efbb-6e60-4700-af8a-4295b0c1ed41", _Summoner,_Summoner, 1, "", _Mime)
+CharacterCreateOutOfSightToObject("LLMIME_Elves_Male_Mime_d8b7efbb-6e60-4700-af8a-4295b0c1ed41", _Summoner, _Summoner, 1, "", _Mime)
 THEN
 LeaderLog_Log("DEBUG", "[LLMIME:Follower:CreateMimeIfNeeded] Global mime follower does not exist. Creating new mime follower.");
 LLMIME_Follower_Internal_SetMime(_Mime);

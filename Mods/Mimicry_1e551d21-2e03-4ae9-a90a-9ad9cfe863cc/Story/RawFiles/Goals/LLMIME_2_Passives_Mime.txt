@@ -37,6 +37,12 @@ DB_LLMIME_Mime_Skills("Shout_LLMIME_OpenMenu");
 DB_LLMIME_Mime_Skills("Shout_LLMIME_DisableMimicking");
 
 LeaderLib_Skills_Register_StatusToggleSkill("Shout_LLMIME_DisableMimicking", "LLMIME_MIMICKING_DISABLED", -1.0, 1);
+
+DB_LLMIME_Mime_NewSkillbookLevels(4);
+DB_LLMIME_Mime_NewSkillbookLevels(6);
+DB_LLMIME_Mime_NewSkillbookLevels(10);
+DB_LLMIME_Mime_NewSkillbookLevels(12);
+DB_LLMIME_Mime_NewSkillbookLevels(14);
 //END_REGION
 
 //REGION UPDATING
@@ -237,13 +243,63 @@ THEN
 SetStoryEvent(_Character, "Mimicry_Events_Mime_MaskUnEquipped");
 //END_REGION
 
-//REGION MASK_LEVELING
+//REGION LEVELING
 IF
 CharacterLeveledUp(_Mime)
 AND
 LLMIME_QRY_CharacterIsAMime(_Mime)
 THEN
 SetStoryEvent(_Mime, "Mimicry_MimeLeveledUp");
+
+IF
+StoryEvent((CHARACTERGUID)_Mime, "Mimicry_MimeLeveledUp")
+AND
+CharacterGetLevel(_Mime, _Level)
+AND
+DB_LLMIME_Mime_NewSkillbookLevels(_Level)
+THEN
+ObjectSetFlag(_Mime, "LLMIME_NewSkillbooksAvailable");
+
+IF
+TextEventSet("llmime_newskillbookstest")
+AND
+DB_IsPlayer(_Player)
+AND
+LLMIME_QRY_CharacterIsAMime(_Player)
+THEN
+ObjectSetFlag(_Player, "LLMIME_NewSkillbooksAvailable");
+
+IF
+ObjectFlagSet("LLMIME_NewSkillbooksAvailable", (CHARACTERGUID)_Mime, _)
+THEN
+CharacterStatusText(_Mime, "LLMIME_StatusText_NewSkillbooksAvailable");
+
+IF
+DialogStarted("LLMIME_SettingsMenu", _Instance)
+AND
+DialogGetInvolvedPlayer(_Instance, 1, _Mime)
+AND
+ObjectGetFlag(_Mime, "LLMIME_NewSkillbooksAvailable", 1)
+THEN
+DialogSetVariableStringForInstance(_Instance, "LLMIME_Settings_NewSkillbooksText_e73495dd-e972-4213-acc4-7ec9740d3f68", "[SKILLS] <b>(New)</b>");
+//DialogSetVariableTranslatedStringForInstance(_Instance, "LLMIME_Settings_NewSkillbooksText_e73495dd-e972-4213-acc4-7ec9740d3f68", "LLMIME_MenuText_NewSkillbooksAvailable", "Test");
+//DialogSetVariableFixedStringForInstance(_Instance, "LLMIME_Settings_NewSkillbooksText_e73495dd-e972-4213-acc4-7ec9740d3f68", "LLMIME_MenuText_NewSkillbooksAvailable");
+
+IF
+TradeEnds(_Mime, _MimeVendor)
+AND
+DB_LLMIME_Settings_MimeVendor(_MimeVendor)
+AND
+ObjectGetFlag(_Mime, "LLMIME_NewSkillbooksAvailable", 1)
+AND
+DB_DialogName("LLMIME_SettingsMenu", _Instance)
+AND
+DB_DialogPlayers(_Instance, _Mime, _)
+THEN
+ObjectClearFlag(_Mime, "LLMIME_NewSkillbooksAvailable");
+DialogSetVariableStringForInstance(_Instance, "LLMIME_Settings_NewSkillbooksText_e73495dd-e972-4213-acc4-7ec9740d3f68", "[SKILLS]");
+//DialogSetVariableFixedStringForInstance(_OtherInstance, "LLMIME_Settings_NewSkillbooksText_e73495dd-e972-4213-acc4-7ec9740d3f68", "");
+//DialogSetVariableTranslatedStringForInstance(_Instance, "LLMIME_Settings_NewSkillbooksText_e73495dd-e972-4213-acc4-7ec9740d3f68", "", "");
 //END_REGION
 
 //REGION SKILL_MEMORY

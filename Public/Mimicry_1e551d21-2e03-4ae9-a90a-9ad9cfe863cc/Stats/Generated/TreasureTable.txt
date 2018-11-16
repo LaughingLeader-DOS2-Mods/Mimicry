@@ -28,6 +28,7 @@ new subtable "1,1"
 object category "I_SKILLBOOK_LLMIME_Fatality",1,0,0,0,0,0,0,0
 
 new treasuretable "ST_LLMIME_Skillbook_Cheat"
+IgnoreLevelDiff 1
 new subtable "-1"
 object category "I_SKILLBOOK_LLMIME_Wish",1,0,0,0,0,0,0,0
 new subtable "-1"

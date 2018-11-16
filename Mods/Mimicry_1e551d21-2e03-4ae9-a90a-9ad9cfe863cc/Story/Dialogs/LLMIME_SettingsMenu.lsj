@@ -4039,10 +4039,15 @@
                                        {
                                           "TagText" : [
                                              {
+                                                "DialogVariables" : [
+                                                   {
+                                                      "DialogVariables" : {"type" : 22, "value" : "e73495dd-e972-4213-acc4-7ec9740d3f68"}
+                                                   }
+                                                ],
                                                 "TagText" : {
                                                    "handle" : "ls::TranslatedStringRepository::s_HandleUnknown",
                                                    "type" : 28,
-                                                   "value" : "[SKILLS] *Communicate with the Mask of Mimicry.*"
+                                                   "value" : "[LLMIME_Settings_NewSkillbooksText_e73495dd-e972-4213-acc4-7ec9740d3f68] *Communicate with the Mask of Mimicry*"
                                                 },
                                                 "stub" : {"type" : 19, "value" : 1}
                                              }
@@ -6104,7 +6109,7 @@
          },
          "editorData" : {
             "needLayout" : {"type" : 19, "value" : 0},
-            "nextNodeId" : {"type" : 5, "value" : 147}
+            "nextNodeId" : {"type" : 5, "value" : 155}
          }
       }
    }
