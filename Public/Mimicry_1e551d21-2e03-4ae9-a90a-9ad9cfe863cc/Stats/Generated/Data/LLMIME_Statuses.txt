@@ -520,7 +520,7 @@ data "ImmuneFlag" "ChickenImmunity"
 data "StatsId" "Stats_Polymorphed"
 data "StackId" "Stack_Polymorphing"
 data "LoseControl" "Yes"
-data "PolymorphResult" "8bbd8af9-4a40-46ca-844b-dbb513a6e9e8"
+data "PolymorphResult" "a4500b12-5c7d-427c-87ba-6294fa4ac9a4"
 data "DisableInteractions" "Yes"
 
 new entry "LLMIME_BLIND_ARMOR_BYPASS"
