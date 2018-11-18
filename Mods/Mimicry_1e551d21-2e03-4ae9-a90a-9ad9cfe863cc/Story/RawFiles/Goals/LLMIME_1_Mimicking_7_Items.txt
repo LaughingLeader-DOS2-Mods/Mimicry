@@ -81,6 +81,10 @@ NOT DB_LLMIME_Mimicking_Items_Temp_ItemAllowed(_Caster, _Mime, _Item);
 IF
 CharacterUsedItem(_Caster, _Item)
 AND
+CharacterIsPartyMember(_Caster, 1)
+AND
+LLMIME_Mimicking_QRY_MimesAvailable()
+AND
 LLMIME_Mimicking_QRY_ItemIsAllowed(_Item)
 AND
 GetTemplate(_Item, _Template)
@@ -93,11 +97,12 @@ LLMIME_Mimicking_QRY_ItemIsSafeForRace(_Caster, _Mime, _Item, _Template)
 THEN
 LeaderLog_Log("DEBUG", "[Mimicry:Mimicking:Items:CharacterUsedItem] Queueing up next item mimic [",_Template,"] on mime.");
 LLMIME_Mimicking_QueueNextSelfAction(_Mime, _Caster, _Template, "Item");
+LLMIME_Mimicking_StartItemTimer(_Caster, _Item);
 
-IF
-CharacterUsedItem(_Caster, _Item)
+PROC
+LLMIME_Mimicking_StartItemTimer((CHARACTERGUID)_Caster, (ITEMGUID)_Item)
 AND
-LLMIME_Mimicking_QRY_ActionTypeQueued(_Caster, "Item")
+NOT DB_LLMIME_Mimicking_Items_DelayTimer(_, _Caster, _Item, _)
 AND
 GetTemplate(_Item, _Template)
 AND
@@ -107,15 +112,15 @@ StringConcatenate(_Template, _ID, _Str)
 AND
 StringConcatenate("LLMIME_Timers_MimicItemDelayTimer_", _Str, _TimerName)
 THEN
-DB_LLMIME_Mimicking_Items_DelayTimer(_TimerName, _Caster, _Template);
+DB_LLMIME_Mimicking_Items_DelayTimer(_TimerName, _Caster, _Item, _Template);
 TimerLaunch(_TimerName, 500);
 
 IF
 TimerFinished(_TimerName)
 AND
-DB_LLMIME_Mimicking_Items_DelayTimer(_TimerName, _Caster, _Template)
+DB_LLMIME_Mimicking_Items_DelayTimer(_TimerName, _Caster, _Item, _Template)
 THEN
-NOT DB_LLMIME_Mimicking_Items_DelayTimer(_TimerName, _Caster, _Template);
+NOT DB_LLMIME_Mimicking_Items_DelayTimer(_TimerName, _Caster, _Item, _Template);
 LLMIME_Mimicking_StartNextMimic(_Caster, _Template, "Item");
 //END_REGION
 
@@ -227,21 +232,31 @@ LLMIME_Mimicking_Items_ClearAllDataForMime(_Mime);
 PROC
 LLMIME_Mimicking_Items_ClearAllDataForMime((CHARACTERGUID)_Mime)
 AND
-DB_LLMIME_Mimicking_Items_DelayTimer(_TimerName, _Caster, _Template)
+DB_LLMIME_Mimicking_Items_DestroyNext(_Mime, _Item, _Action, _Caster)
+AND
+ItemIsDestroyed(_Item, 0)
 THEN
-NOT DB_LLMIME_Mimicking_Items_DelayTimer(_TimerName, _Caster, _Template);
-TimerCancel(_TimerName);
+ItemRemove(_Item);
+NOT DB_LLMIME_Mimicking_Items_DestroyNext(_Mime, _Item, _Action, _Caster);
+//END_REGION
 
+//REGION SCRIPT_DISABLED
 PROC
-LLMIME_Mimicking_Items_ClearAllDataForMime((CHARACTERGUID)_Mime)
+LLMIME_Mimicking_OnScriptsCompleting()
 AND
 DB_LLMIME_Mimicking_Items_DestroyNext(_Mime, _Item, _Action, _Caster)
 AND
 ItemIsDestroyed(_Item, 0)
 THEN
-ItemDestroy(_Item);
-SetOnStage(_Item, 0);
+ItemRemove(_Item);
 NOT DB_LLMIME_Mimicking_Items_DestroyNext(_Mime, _Item, _Action, _Caster);
+
+PROC
+LLMIME_Mimicking_OnScriptsCompleting()
+THEN
+SysClear("DB_LLMIME_Mimicking_Items_Temp_ItemAllowed", 3);
+SysClear("DB_LLMIME_Mimicking_Items_DelayTimer", 4);
+SysClear("DB_LLMIME_Mimicking_Items_DestroyNext", 4);
 //END_REGION
 
 EXITSECTION

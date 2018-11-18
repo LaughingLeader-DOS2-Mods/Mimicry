@@ -486,6 +486,20 @@ StoryEvent((CHARACTERGUID)_Mime, "Mimicry_ClearMimeBonuses")
 THEN
 DB_NOOP(1);
 //END_REGION
+
+//REGION SCRIPT_DISABLED
+PROC
+LLMIME_Mimicking_OnScriptsCompleting()
+THEN
+SysClear("DB_LLMIME_Mimicking_Temp_SkillUsedOnTarget", 4);
+SysClear("DB_LLMIME_Mimicking_Temp_TargetPriority", 3);
+SysClear("DB_LLMIME_Mimicking_Temp_SkillUsedAtPosition", 6);
+SysClear("DB_LLMIME_Timers_SkillCastAtPosition", 7);
+SysClear("DB_LLMIME_Mimicking_CastFallbackTimer", 3);
+SysClear("DB_LLMIME_Mimicking_Skills_Temp_ListenForSuccess", 3);
+SysClear("DB_LLMIME_Mimicking_Temp_CastSelfSkill", 3);
+//END_REGION
+
 EXITSECTION
 
 ENDEXITSECTION

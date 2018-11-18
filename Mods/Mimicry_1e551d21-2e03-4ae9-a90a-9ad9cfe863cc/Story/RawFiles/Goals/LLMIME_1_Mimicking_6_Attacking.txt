@@ -506,6 +506,19 @@ LeaderLog_Log("DEBUG", "[LLMIME:AttackDebug:CharacterStartAttackObject] Rotation
 LeaderLog_Log("DEBUG", "[LLMIME:AttackDebug:CharacterStartAttackObject] **************************************");
 */
 //END_REGION
+
+//REGION SCRIPT_DISABLED
+PROC
+LLMIME_Mimicking_OnScriptsCompleting()
+THEN
+SysClear("DB_LLMIME_Timers_AttackAtPositionTimer", 5);
+SysClear("DB_LLMIME_Mimicking_Attacking_Temp_MimicData", 4);
+SysClear("DB_LLMIME_Mimicking_Temp_JustAttacked", 1);
+SysClear("DB_LLMIME_Mimicking_MimicFailTimer", 5);
+SysClear("DB_LLMIME_Timers_AttackSuccessTimer", 5);
+SysClear("DB_LLMIME_Mimicking_Temp_ResetDummyAfterMimicAction", 4);
+//END_REGION
+
 EXITSECTION
 
 ENDEXITSECTION
