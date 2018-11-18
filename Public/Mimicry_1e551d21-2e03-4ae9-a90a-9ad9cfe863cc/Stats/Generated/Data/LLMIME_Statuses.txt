@@ -225,7 +225,6 @@ type "StatusData"
 using "LLMIME_HIDDEN_CONSUME_BASE"
 data "StatsId" "Stats_LLMIME_MimicWeaponRequirements"
 data "StackId" "Stack_LLMIME_MimicWeaponRequirements"
-data "Icon" "unknown"
 
 new entry "ARM_LLMIME_WeaponRequirements"
 type "Armor"

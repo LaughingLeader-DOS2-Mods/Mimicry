@@ -308,13 +308,16 @@ CharacterUseSkill(_Mime, _Skill, _Mime, 1, 1, 1);
 PROC
 LLMIME_Mimicking_MimicActionOnTarget((CHARACTERGUID)_Mime, (CHARACTERGUID)_Caster, (GUIDSTRING)_Target, (STRING)_Skill, "Skill")
 AND
-NOT LLMIME_Mimicking_QRY_IsMovementSkill(_Skill)
+NOT DB_LLMIME_Mimicking_Skills_Temp_ListenForSuccess(_Mime, _Caster, _Skill)
+//AND
+//NOT LLMIME_Mimicking_QRY_IsMovementSkill(_Skill)
 THEN
 ObjectSetFlag(_Mime, "Mimicry_IsMimicking");
 LLMIME_Mimicking_ResetFailTimer(_Mime, _Caster, _Skill, "Skill", 2500);
 DB_LLMIME_Mimicking_Skills_Temp_ListenForSuccess(_Mime, _Caster, _Skill);
 CharacterUseSkill(_Mime, _Skill, _Target, 1, 1, 1);
 
+/*
 PROC
 LLMIME_Mimicking_MimicActionOnTarget((CHARACTERGUID)_Mime, (CHARACTERGUID)_Caster, (GUIDSTRING)_Target, (STRING)_Skill, "Skill")
 AND
@@ -328,6 +331,7 @@ ObjectSetFlag(_Mime, "Mimicry_IsMimicking");
 LLMIME_Mimicking_ResetFailTimer(_Mime, _Caster, _Skill, "Skill", 2500);
 DB_LLMIME_Mimicking_Skills_Temp_ListenForSuccess(_Mime, _Caster, _Skill);
 CharacterUseSkillAtPosition(_Mime, _Skill, _x, _y, _z, 0, 1);
+*/
 
 IF
 CharacterUsedSkill(_Mime, _Skill, _SkillType, _SkillElement)

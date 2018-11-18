@@ -18,6 +18,8 @@ LeaderLib_PresetMenu_RegisterPreset("LLMIME_MimeClass", "Mime [Mimicry]", "Mimic
 IF
 DB_LLMIME_RegisteredLeaderLibSettings(1)
 THEN
+DB_LeaderLib_EngineStatus("LLMIME_UNARMED_HIT");
+
 LeaderLib_Register_ModMenu("LaughingLeader.Mimicry", "[Mimicry] Mime Menu", "LLMIME_SettingsMenu", "Mimicry", "LaughingLeader");
 
 LeaderLib_Trader_Register_Position("LeaderLib.LeaderTrader", "TestLevel_LL_Mimicry", 12.0, 0.0, 8.0);

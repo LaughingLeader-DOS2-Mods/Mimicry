@@ -176,6 +176,44 @@ THEN
 DB_NOOP(1);
 //END_REGION
 
+//REGION AUTO_DISABLED_MIMICKING_REENABLE
+//In case mimicking is re-enabled by the skill
+IF
+CharacterStatusRemoved(_Mime, "LLMIME_MIMICKING_DISABLED", _)
+AND
+ObjectGetFlag(_Mime, "LLMIME_MimickingAutoDisabled", 1)
+THEN
+ObjectClearFlag(_Mime, "LLMIME_MimickingAutoDisabled");
+
+IF
+CharacterStatusRemoved(_Mime, _Status, _)
+AND
+DB_LLMIME_Mimicking_Temp_DisablingStatus(_Mime, _Status)
+THEN
+NOT DB_LLMIME_Mimicking_Temp_DisablingStatus(_Mime, _Status);
+LLMIME_Mimicking_OnDisablingStatusRemoved(_Mime);
+
+QRY
+LLMIME_Mimicking_QRY_HasDisablingStatus((CHARACTERGUID)_Mime)
+AND
+DB_LLMIME_Mimicking_Temp_DisablingStatus(_Mime, _Status)
+AND
+HasActiveStatus(_Mime, _Status, 1)
+THEN
+DB_NOOP(1);
+
+PROC
+LLMIME_Mimicking_OnDisablingStatusRemoved((CHARACTERGUID)_Mime)
+AND
+NOT LLMIME_Mimicking_QRY_HasDisablingStatus(_Mime)
+AND
+ObjectGetFlag(_Mime, "LLMIME_MimickingAutoDisabled", 1)
+THEN
+ObjectClearFlag(_Mime, "LLMIME_MimickingAutoDisabled");
+RemoveStatus(_Mime, "LLMIME_MIMICKING_DISABLED");
+SetStoryEvent(_Mime, "LLMIME_Events_RequestMimicking");
+//END_REGION
+
 EXITSECTION
 
 ENDEXITSECTION

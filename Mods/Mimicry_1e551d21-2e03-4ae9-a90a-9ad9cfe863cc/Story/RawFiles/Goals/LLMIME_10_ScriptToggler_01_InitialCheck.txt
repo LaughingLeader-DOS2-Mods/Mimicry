@@ -1,7 +1,7 @@
 Version 1
 SubGoalCombiner SGC_AND
 INITSECTION
-
+DB_LLMIME_ScriptToggler_ScriptsEnabled(1);
 KBSECTION
 
 IF
@@ -9,6 +9,7 @@ GameStarted(_,_)
 AND
 NOT DB_LLMIME_ScriptToggle_InitialCheckRan(1)
 THEN
+LeaderLog_Log("SYSTEM", "[Mimicry:ScriptToggler:InitialCheck] Running initial toggle check.");
 DB_LLMIME_ScriptToggle_InitialCheckRan(1);
 LLMIME_ScriptToggle_Internal_RunInitialCheck();
 GoalCompleted;
@@ -16,23 +17,20 @@ GoalCompleted;
 PROC
 LLMIME_ScriptToggle_Internal_RunInitialCheck()
 AND
-NOT DB_LLMIME_ScriptToggle_ScriptsEnabled(1)
+NOT DB_LLMIME_ScriptToggler_ScriptsEnabled(1)
 AND
-SysCount("DB_LLMIME_Mimicking_MimicNextAction", 1, _Count)
-AND
-_Count > 0
+LLMIME_Mimicking_QRY_MimesAvailable()
 THEN
-LLMIME_ScriptToggle_ToggleScriptsOn();
+LeaderLog_Log("SYSTEM", "[Mimicry:ScriptToggler:InitialCheck] Found some mimicking mimes. Running [LLMIME_ScriptToggler_ToggleScriptsOn].");
+LLMIME_ScriptToggler_ToggleScriptsOn();
 
 PROC
 LLMIME_ScriptToggle_Internal_RunInitialCheck()
 AND
-NOT DB_LLMIME_ScriptToggle_ScriptsEnabled(1)
-AND
-SysCount("DB_LLMIME_Mimicking_MimicNextAction", 1, 0)
+NOT DB_LLMIME_Mimicking_MimicNextAction(_)
 THEN
-LLMIME_ScriptToggle_ToggleScriptsOff();
-
+LeaderLog_Log("SYSTEM", "[Mimicry:ScriptToggler:InitialCheck] No mimicking mimes found. Running [LLMIME_ScriptToggler_ToggleScriptsOff].");
+LLMIME_ScriptToggler_ToggleScriptsOff();
 EXITSECTION
 
 ENDEXITSECTION

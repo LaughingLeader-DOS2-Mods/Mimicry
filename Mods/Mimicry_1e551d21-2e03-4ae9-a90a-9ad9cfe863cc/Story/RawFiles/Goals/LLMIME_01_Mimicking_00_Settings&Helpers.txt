@@ -27,8 +27,27 @@ SysClear("DB_LLMIME_Mimicking_HarmfulHealingSkills", 1);
 PROC
 LLMIME_Mimicking_InitSettings()
 THEN
+DB_LLMIME_Mimicking_AutoDisableStatuses("CHICKEN");
+DB_LLMIME_Mimicking_AutoDisableStatuses("COW");
+DB_LLMIME_Mimicking_AutoDisableStatuses("ZOMBIE_CHICKEN");
+
+DB_LLMIME_Mimicking_AutoDisableStatusTypes("DEACTIVATED");
+//DB_LLMIME_Mimicking_AutoDisableStatusTypes("INVISIBLE"); // Handled manually
+DB_LLMIME_Mimicking_AutoDisableStatusTypes("CHARMED");
+DB_LLMIME_Mimicking_AutoDisableStatusTypes("FEAR");
+DB_LLMIME_Mimicking_AutoDisableStatusTypes("KNOCKED_DOWN");
+DB_LLMIME_Mimicking_AutoDisableStatusTypes("INCAPACITATED");
+DB_LLMIME_Mimicking_AutoDisableStatusTypes("PLAY_DEAD");
+
+PROC
+LLMIME_Mimicking_InitSettings()
+THEN
 DB_LLMIME_Mimicking_Blacklist_SkillTypes("Path", "Mimicry_Mimic_SkillType_Path_Enabled", 1);
 DB_LLMIME_Mimicking_Blacklist_SkillTypes("Summon", "Mimicry_Mimic_SkillType_Summons_Enabled", 1);
+//New: Blacklisting Rush & Jump skills, mainly because they have a habit of moving mimes through walls or up to strange areas of the map
+DB_LLMIME_Mimicking_Blacklist_SkillTypes("Rush", "", 0);
+DB_LLMIME_Mimicking_Blacklist_SkillTypes("Jump", "", 0);
+
 //Special type shout skills, typically used for toggle abilities in mods
 DB_LLMIME_Mimicking_Blacklist_SkillElements("Shout", "");
 //Special Mime Skills
@@ -160,11 +179,20 @@ DB_NOOP(1);
 
 //REGION BLACKLIST_CHECK_SKILLS
 QRY
+LLMIME_Mimicking_QRY_BlacklistFlagEnabled((STRING)_GlobalFlag, (INTEGER)_EnabledState)
+AND
+_GlobalFlag != ""
+AND
+GlobalGetFlag(_GlobalFlag, _EnabledState)
+THEN
+DB_NOOP(1);
+
+QRY
 LLMIME_Mimicking_QRY_Internal_BlockedSkillTypeIsEnabled((STRING)_SkillType)
 AND
 DB_LLMIME_Mimicking_Blacklist_SkillTypes(_SkillType, _GlobalFlag, _EnabledState)
 AND
-GlobalGetFlag(_GlobalFlag, _EnabledState)
+LLMIME_Mimicking_QRY_BlacklistFlagEnabled(_GlobalFlag, _EnabledState)
 THEN
 DB_NOOP(1);
 

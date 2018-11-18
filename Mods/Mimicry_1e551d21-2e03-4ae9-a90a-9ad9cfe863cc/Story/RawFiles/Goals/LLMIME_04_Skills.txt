@@ -412,6 +412,7 @@ NOT LeaderLib_QRY_ObjectTimerStarted(_Character, "LLMIME_Timers_Skills_RemoveDec
 THEN
 LeaderLib_StartObjectTimer(_Character, 250, "LLMIME_Timers_Skills_RemoveDecoyActiveStatus_", "Mimicry_Events_Skills_Internal_RemoveDecoyActiveStatus");
 
+/*
 IF
 StoryEvent((CHARACTERGUID)_Character, "Mimicry_Events_Skills_Internal_RemoveDecoyActiveStatus")
 AND
@@ -440,6 +441,7 @@ AND
 LeaderLib_Helper_QRY_IsStunningStatus(_Status)
 THEN
 SetStoryEvent(_Character, "Mimicry_Events_Decoy_RemoveInvisibility");
+*/
 //END_REGION
 
 //REGION QUAKE_SLAM

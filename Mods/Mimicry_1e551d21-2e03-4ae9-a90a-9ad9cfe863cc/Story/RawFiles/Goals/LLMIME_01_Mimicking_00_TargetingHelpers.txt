@@ -38,15 +38,19 @@ AND
 RealSum(_MimeX, _xdiff, _MimeTargetX)
 AND
 RealSum(_MimeZ, _zdiff, _MimeTargetZ)
+/*
 AND
 LLMIME_Mimic_QRY_ValidatePosition(_Caster, _Mime, _MimeTargetX, _MimeTargetZ, _TargetX, _TargetY, _TargetZ, _MimeX, _MimeZ, _Action, _ActionType)
 AND
-DB_LLMIME_Mimic_Temp_ValidPosition(_Caster, _Mime, _MimeTargetX, _TargetY, _MimeTargetZ, _Action, _ActionType)
+DB_LLMIME_Mimic_Temp_ValidPosition(_Caster, _Mime, _ValidX, _ValidY, _ValidZ, _Action, _ActionType)
+*/
 THEN
-NOT DB_LLMIME_Mimic_Temp_ValidPosition(_Caster, _Mime, _MimeTargetX, _TargetY, _MimeTargetZ, _Action, _ActionType);
+//NOT DB_LLMIME_Mimic_Temp_ValidPosition(_Caster, _Mime, _ValidX, _ValidY, _ValidZ, _Action, _ActionType);
+//LLMIME_Mimic_GetTargetNearPosition(_Caster, _Mime, _ValidX, _ValidY, _ValidZ, _TargetPriority, _Action, _ActionType);
 LLMIME_Mimic_GetTargetNearPosition(_Caster, _Mime, _MimeTargetX, _TargetY, _MimeTargetZ, _TargetPriority, _Action, _ActionType);
 //LLMINE_Debug_TracePositions(_StartX, _StartY, _StartZ, _TargetX, _Rotation, _TargetZ, _MimeX, _MimeY, _MimeZ, _MimeTargetX, _MimeTargetY, _MimeTargetZ);
 
+/*
 QRY
 LLMIME_Mimicking_QRY_IsMovementSkill((STRING)_Skill)
 AND
@@ -77,6 +81,7 @@ AND
 NOT LLMIME_Mimicking_QRY_IsMovementSkill(_Action)
 THEN
 DB_LLMIME_Mimic_Temp_ValidPosition(_Caster, _Mime, _MimeTargetX, _TargetY, _MimeTargetZ, _Action, _ActionType);
+*/
 //END_REGION
 
 //REGION CALCULATE_WITH_ROTATION

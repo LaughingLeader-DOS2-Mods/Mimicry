@@ -24,6 +24,54 @@ DB_LLMIME_Mimicking_LastEquipped(_Mime, _Slot, _Item)
 DB_LLMIME_Mimicking_Temp_MimicWeapon(_Mime, _Weapon, _Action, _ActionType)
 */
 KBSECTION
+
+//REGION AUTO_DISABLE_MIMICKING
+IF
+CharacterStatusApplied(_Mime, _Status, _)
+AND
+NOT DB_LeaderLib_EngineStatus(_Status)
+AND
+LLMIME_Mimicking_QRY_IsMimicking(_Mime)
+AND
+GetStatusType(_Status, _Type)
+AND
+DB_LLMIME_Mimicking_AutoDisableStatusTypes(_Type)
+THEN
+DB_LLMIME_Mimicking_Temp_DisablingStatus(_Mime, _Status);
+
+IF
+CharacterStatusApplied(_Mime, _Status, _)
+AND
+DB_LLMIME_Mimicking_AutoDisableStatuses(_Status)
+AND
+LLMIME_Mimicking_QRY_IsMimicking(_Mime)
+THEN
+DB_LLMIME_Mimicking_Temp_DisablingStatus(_Mime, _Status);
+
+IF
+DB_LLMIME_Mimicking_Temp_DisablingStatus(_Mime, _Status)
+AND
+ObjectGetFlag(_Mime, "LLMIME_MimickingAutoDisabled", 0)
+THEN
+ApplyStatus(_Mime, "LLMIME_MIMICKING_DISABLED", -1.0, 0, _Mime);
+ObjectSetFlag(_Mime, "LLMIME_MimickingAutoDisabled");
+
+IF
+CharacterStatusApplied(_Mime, _Status, _)
+AND
+NOT DB_LeaderLib_EngineStatus(_Status)
+AND
+LLMIME_Mimicking_QRY_IsMimicking(_Mime)
+AND
+GetStatusType(_Status, "INVISIBLE")
+AND
+NOT UserGetFlag(_Mime, "Mimicry_InvisibilityMimickingEnabled", 1)
+THEN
+DB_LLMIME_Mimicking_Temp_DisablingStatus(_Mime, _Status);
+
+//Re-enabling Mimicking is handled by Mimicking_01_Start
+//END_REGION
+
 //This is used to calculate the correct target position. Important to catch this before the player is moved by an animation.
 //REGION ACTION_POSITION
 IF
@@ -1027,7 +1075,7 @@ THEN
 ProcObjectTimerCancel(_Mime, _TimerName);
 DB_LLMIME_Mimicking_DeleteOneTimeUseWeaponsTimer(_TimerName, _Mime, _Action, _ActionType);
 //ProcObjectTimer(_Mime, _TimerName, 1200);
-ProcObjectTimer(_Mime, _TimerName, 750);
+ProcObjectTimer(_Mime, _TimerName, 999);
 
 PROC
 ProcObjectTimerFinished((CHARACTERGUID)_Mime, _TimerName)
