@@ -1,0 +1,76 @@
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+
+KBSECTION
+
+/*
+Some of the mimicking events can be quite broad, so this script is used to disable them when nobody is mimicking.
+*/
+
+//REGION SCRIPT_TOGGLING
+PROC
+LLMIME_Mimicking_OnMimickingEnabled((CHARACTERGUID)_Mime)
+THEN
+LLMIME_ScriptToggle_ToggleScriptsOn();
+
+PROC
+LLMIME_ScriptToggle_ToggleScriptsOn()
+AND
+NOT DB_LLMIME_ScriptToggle_ScriptsEnabled(1)
+THEN
+DB_LLMIME_ScriptToggle_ScriptsEnabled(1);
+SysActivateGoal("LLMIME_01_Mimicking_02_Main");
+SysActivateGoal("LLMIME_01_Mimicking_03_Skills");
+SysActivateGoal("LLMIME_01_Mimicking_04_Attacking");
+SysActivateGoal("LLMIME_01_Mimicking_05_Items");
+
+//Delay disabling scripts so they have time to clear data after this event
+IF
+StoryEvent((CHARACTERGUID)_Mime, "Mimicry_ClearMimeBonuses")
+AND
+DB_LLMIME_ScriptToggle_ScriptsEnabled(1)
+AND
+SysCount("DB_LLMIME_Mimicking_MimicNextAction", 1, _Count)
+AND
+_Count <= 1
+THEN
+DB_LLMIME_ScriptToggle_Temp_BlockScriptDisable(1);
+TimerCancel("LLMIME_Timers_ResetScriptToggleBlocker");
+TimerLaunch("LLMIME_Timers_ResetScriptToggleBlocker", 500);
+
+IF
+TimerFinished("LLMIME_Timers_ResetScriptToggleBlocker")
+AND
+DB_LLMIME_ScriptToggle_ScriptsEnabled(1)
+AND
+SysCount("DB_LLMIME_Mimicking_MimicNextAction", 1, 0)
+THEN
+LLMIME_ScriptToggle_ToggleScriptsOff();
+
+PROC
+LLMIME_Mimicking_OnMimickingDisabled((CHARACTERGUID)_Mime)
+AND
+SysCount("DB_LLMIME_Mimicking_MimicNextAction", 1, 0)
+THEN
+LLMIME_ScriptToggle_ToggleScriptsOff();
+
+PROC
+LLMIME_ScriptToggle_ToggleScriptsOff()
+AND
+NOT DB_LLMIME_ScriptToggle_Temp_BlockScriptDisable(1)
+AND
+DB_LLMIME_ScriptToggle_ScriptsEnabled(1)
+THEN
+NOT DB_LLMIME_ScriptToggle_ScriptsEnabled(1);
+LLMIME_Mimicking_OnScriptsCompleting();
+SysCompleteGoal("LLMIME_01_Mimicking_02_Main");
+SysCompleteGoal("LLMIME_01_Mimicking_03_Skills");
+SysCompleteGoal("LLMIME_01_Mimicking_04_Attacking");
+SysCompleteGoal("LLMIME_01_Mimicking_05_Items");
+//END_REGION
+
+EXITSECTION
+
+ENDEXITSECTION
+ParentTargetEdge "LaughingLeader_Mimicry"

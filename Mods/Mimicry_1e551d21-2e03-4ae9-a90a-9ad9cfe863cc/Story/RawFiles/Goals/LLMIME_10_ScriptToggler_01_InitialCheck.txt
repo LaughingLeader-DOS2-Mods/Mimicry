@@ -1,0 +1,39 @@
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+
+KBSECTION
+
+IF
+GameStarted(_,_)
+AND
+NOT DB_LLMIME_ScriptToggle_InitialCheckRan(1)
+THEN
+DB_LLMIME_ScriptToggle_InitialCheckRan(1);
+LLMIME_ScriptToggle_Internal_RunInitialCheck();
+GoalCompleted;
+
+PROC
+LLMIME_ScriptToggle_Internal_RunInitialCheck()
+AND
+NOT DB_LLMIME_ScriptToggle_ScriptsEnabled(1)
+AND
+SysCount("DB_LLMIME_Mimicking_MimicNextAction", 1, _Count)
+AND
+_Count > 0
+THEN
+LLMIME_ScriptToggle_ToggleScriptsOn();
+
+PROC
+LLMIME_ScriptToggle_Internal_RunInitialCheck()
+AND
+NOT DB_LLMIME_ScriptToggle_ScriptsEnabled(1)
+AND
+SysCount("DB_LLMIME_Mimicking_MimicNextAction", 1, 0)
+THEN
+LLMIME_ScriptToggle_ToggleScriptsOff();
+
+EXITSECTION
+
+ENDEXITSECTION
+ParentTargetEdge "LaughingLeader_Mimicry"

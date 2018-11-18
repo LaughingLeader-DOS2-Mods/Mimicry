@@ -5,6 +5,12 @@ INITSECTION
 KBSECTION
 
 //REGION MIMICKING_STATUS
+/*
+We handle applying the mimicking status in this script, rather than Mimicking_Main,
+since it governs the database that we check to determine if 
+he mimicking scripts need to be on or off.
+*/
+
 IF
 ObjectWasTagged((CHARACTERGUID)_Mime, "Mimicry_Mime")
 THEN
@@ -168,35 +174,6 @@ PROC
 LLMIME_Mimicking_OnMimickingDisabled((CHARACTERGUID)_Mime)
 THEN
 DB_NOOP(1);
-//END_REGION
-
-
-/*
-Some of the mimicking events can be quite broad, so this script is used to disable them when nobody is mimicking.
-*/
-
-//REGION SCRIPT_TOGGLING
-PROC
-LLMIME_Mimicking_OnMimickingEnabled((CHARACTERGUID)_Mime)
-AND
-NOT DB_LLMIME_Mimicking_ScriptsEnabled(1)
-THEN
-DB_LLMIME_Mimicking_ScriptsEnabled(1);
-SysActivateGoal("LLMIME_01_Mimicking_04_Main");
-SysActivateGoal("LLMIME_01_Mimicking_05_Skills");
-SysActivateGoal("LLMIME_01_Mimicking_06_Attacking");
-SysActivateGoal("LLMIME_01_Mimicking_07_Items");
-
-PROC
-LLMIME_Mimicking_OnMimickingDisabled((CHARACTERGUID)_Mime)
-AND
-SysCount("DB_LLMIME_Mimicking_MimicNextAction", 1, 0)
-THEN
-LLMIME_Mimicking_OnScriptsCompleting();
-SysCompleteGoal("LLMIME_01_Mimicking_04_Main");
-SysCompleteGoal("LLMIME_01_Mimicking_05_Skills");
-SysCompleteGoal("LLMIME_01_Mimicking_06_Attacking");
-SysCompleteGoal("LLMIME_01_Mimicking_07_Items");
 //END_REGION
 
 EXITSECTION
