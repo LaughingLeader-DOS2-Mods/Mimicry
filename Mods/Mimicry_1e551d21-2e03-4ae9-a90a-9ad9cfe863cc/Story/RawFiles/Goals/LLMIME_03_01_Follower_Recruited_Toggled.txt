@@ -1,0 +1,117 @@
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+LLMIME_Follower_CompleteScriptInitially();
+
+KBSECTION
+/*
+This script contains rules that should only be active while the Mime follower is recruited as a follower.
+We deactive this script otherwise.
+*/
+
+
+PROC
+LLMIME_Follower_CompleteScriptInitially()
+AND
+NOT DB_LLMIME_Follower_ScriptCompletedInitially(_)
+AND
+DB_LLMIME_Follower_Mime(_Mime)
+AND
+CharacterIsPartyFollower(_Mime, 0)
+THEN
+GoalCompleted;
+
+PROC
+LLMIME_Follower_CompleteScriptInitially()
+AND
+NOT DB_LLMIME_Follower_ScriptCompletedInitially(_)
+AND
+NOT DB_LLMIME_Follower_Mime(_)
+THEN
+GoalCompleted;
+
+PROC
+LLMIME_Follower_CompleteScriptInitially()
+AND
+NOT DB_LLMIME_Follower_ScriptCompletedInitially(_)
+THEN
+DB_LLMIME_Follower_ScriptCompletedInitially(1);
+
+IF
+CharacterLeveledUp(_Owner)
+AND
+DB_LeaderLib_PartyFollower(_Owner, _Mime)
+AND
+IsTagged(_Mime, "LLMIME_MimeFollower", 1)
+AND
+CharacterGetLevel(_Owner, _Level)
+AND
+CharacterGetLevel(_Mime, _MimeLevel)
+AND
+_MimeLevel < _Level
+THEN
+CharacterRemoveFromPlayerCharacter(_Mime, _Owner);
+LeaderLib_StartCharacterCharacterTimer(_Owner, _Mime, 100, "Mimicry_Timers_Follower_LevelUpDelay_", "Mimicry_Follower_LevelUpAndAttachFollower");
+
+//REGION GHOST_SPAWNING_START
+IF
+CharacterDied(_Mime)
+AND
+DB_LLMIME_Follower_Mime(_Mime)
+THEN
+LLMIME_Follower_Internal_StartSpawningGhost(_Mime);
+
+IF
+CharacterDied(_Mime)
+AND
+DB_LLMIME_Follower_Mime(_Mime)
+AND
+IsTagged(_Mime, "LeaderLib_IsFollower", 1)
+THEN
+CharacterSetCorpseLootable(_Mime, 0);
+
+/*
+IF
+CharacterDied(_Mime)
+AND
+DB_LLMIME_Follower_Mime(_Mime)
+AND
+IsTagged(_Mime, "LeaderLib_IsFollower", 0)
+THEN
+CharacterSetCorpseLootable(_Mime, 1);
+*/
+
+/*
+IF
+ObjectLostTag((CHARACTERGUID)_Mime, "LeaderLib_IsFollower")
+AND
+DB_LLMIME_Follower_Mime(_Mime)
+THEN
+CharacterSetCorpseLootable(_Mime, 1);
+*/
+
+IF
+CombatEnded(_CombatID)
+AND
+DB_LLMIME_Follower_Temp_SpawnedGhostAfterCombat(_CombatID, _Mime)
+AND
+CharacterIsDead(_Mime, 1)
+THEN
+LLMIME_Follower_Internal_StartSpawningGhost(_Mime);
+
+IF
+CombatEnded(_CombatID)
+AND
+DB_LLMIME_Follower_Temp_SpawnedGhostAfterCombat(_CombatID, _Mime)
+THEN
+NOT DB_LLMIME_Follower_Temp_SpawnedGhostAfterCombat(_CombatID, _Mime);
+//END_REGION
+
+//REGION GHOST_EVENTS
+
+//END_REGION
+
+EXITSECTION
+
+ENDEXITSECTION
+ParentTargetEdge "LaughingLeader_Mimicry"

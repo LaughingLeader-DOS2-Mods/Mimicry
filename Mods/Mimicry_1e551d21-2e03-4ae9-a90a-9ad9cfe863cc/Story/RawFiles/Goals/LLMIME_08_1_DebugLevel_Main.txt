@@ -997,6 +997,29 @@ THEN
 //LeaderLog_Log("STATUS", "[<font color='#FF0000'>", _Flag, "</font>] Cleared");
 LeaderLog_Log("DEBUG", "Flag [", _Flag, "] was cleared on [",_Name,"].");
 //END_REGION
+
+//REGION ATTACK_DEBUG
+IF
+AttackedByObject(_Target, _Owner, (CHARACTERGUID)_Mime, _DamageType, _DamageSource)
+AND
+LLMIME_QRY_CharacterIsAMime(_Mime)
+AND
+ObjectGetFlag(_Mime, "Mimicry_MimeIsUnarmed", 1)
+THEN
+LeaderLog_Log("DEBUG", "[LLMIME:Mime:AttackedByObject] Mime attacked something. DamageType[",_DamageType,"] DamageSource[",_DamageSource,"].");
+
+IF
+CharacterReceivedDamage(_Target, _Percentage, (CHARACTERGUID)_Mime)
+AND
+LLMIME_QRY_CharacterIsAMime(_Mime)
+AND
+ObjectGetFlag(_Mime, "Mimicry_MimeIsUnarmed", 1)
+AND
+IntegertoString(_Percentage, _DamageStr)
+THEN
+LeaderLog_Log("DEBUG", "[LLMIME:Mime:CharacterReceivedDamage] Mime did [",_DamageStr,"]% damage. Whatever that means.");
+//END_REGION
+
 EXITSECTION
 
 ENDEXITSECTION

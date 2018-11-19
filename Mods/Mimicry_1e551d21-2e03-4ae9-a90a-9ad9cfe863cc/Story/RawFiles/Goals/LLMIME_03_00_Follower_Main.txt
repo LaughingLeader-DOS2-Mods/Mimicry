@@ -192,6 +192,8 @@ DB_NoLowAttitudeDialog(_Mime);
 //END_REGION
 
 //REGION MASK_FIX
+//No longer needed, since the mask is part of the visual set
+/*
 IF
 GameStarted(_Level,_)
 AND
@@ -235,7 +237,7 @@ AND
 CreateItemTemplateAtPosition(_Template, _x, _y, _z, _Mask)
 THEN
 CharacterEquipItem(_Mime, _Mask);
-
+*/
 /*
 IF
 GameStarted(_,_)
@@ -654,6 +656,7 @@ CharacterEnableAllCrimes(_Mime);
 SetCanJoinCombat(_Mime, 1);
 SetFaction(_Mime, _Faction);
 CharacterPurgeQueue(_Mime);
+LLMIME_Follower_OnMimeFollowerRecruited(_Mime);
 
 IF
 CharacterCharacterEvent((CHARACTERGUID)_Owner, (CHARACTERGUID)_Mime, "LeaderLib_Events_FollowerRecruited")
@@ -675,6 +678,7 @@ THEN
 CharacterDisableAllCrimes(_Mime);
 SetCanJoinCombat(_Mime, 0);
 SetFaction(_Mime,"Neutral NPC");
+LLMIME_Follower_OnMimeFollowerDismissed(_Mime);
 
 IF
 CharacterCharacterEvent((CHARACTERGUID)_Owner, (CHARACTERGUID)_Mime, "LeaderLib_Events_FollowerDismissed")
@@ -1040,22 +1044,6 @@ CharacterLevelUpTo(_Mime, _Level);
 LeaderLog_Log("DEBUG", "[LLMIME:Follower:FollowerRecruited] Mime joined party and is a lower level than the recruiting character. Leveling up.");
 
 IF
-CharacterLeveledUp(_Owner)
-AND
-DB_LeaderLib_PartyFollower(_Owner, _Mime)
-AND
-IsTagged(_Mime, "LLMIME_MimeFollower", 1)
-AND
-CharacterGetLevel(_Owner, _Level)
-AND
-CharacterGetLevel(_Mime, _MimeLevel)
-AND
-_MimeLevel < _Level
-THEN
-CharacterRemoveFromPlayerCharacter(_Mime, _Owner);
-LeaderLib_StartCharacterCharacterTimer(_Owner, _Mime, 100, "Mimicry_Timers_Follower_LevelUpDelay_", "Mimicry_Follower_LevelUpAndAttachFollower");
-
-IF
 CharacterCharacterEvent((CHARACTERGUID)_Owner, (CHARACTERGUID)_Mime, "Mimicry_Follower_LevelUpAndAttachFollower")
 AND
 CharacterGetLevel(_Owner, _Level)
@@ -1102,60 +1090,6 @@ AND
 CharacterGetMaxSourcePoints(_Owner, _Amount)
 THEN
 CharacterOverrideMaxSourcePoints(_Mime, _Amount);
-//END_REGION
-
-//REGION GHOST_SPAWNING_START
-IF
-CharacterDied(_Mime)
-AND
-DB_LLMIME_Follower_Mime(_Mime)
-THEN
-LLMIME_Follower_Internal_StartSpawningGhost(_Mime);
-
-IF
-CharacterDied(_Mime)
-AND
-DB_LLMIME_Follower_Mime(_Mime)
-AND
-IsTagged(_Mime, "LeaderLib_IsFollower", 1)
-THEN
-CharacterSetCorpseLootable(_Mime, 0);
-
-/*
-IF
-CharacterDied(_Mime)
-AND
-DB_LLMIME_Follower_Mime(_Mime)
-AND
-IsTagged(_Mime, "LeaderLib_IsFollower", 0)
-THEN
-CharacterSetCorpseLootable(_Mime, 1);
-*/
-
-/*
-IF
-ObjectLostTag((CHARACTERGUID)_Mime, "LeaderLib_IsFollower")
-AND
-DB_LLMIME_Follower_Mime(_Mime)
-THEN
-CharacterSetCorpseLootable(_Mime, 1);
-*/
-
-IF
-CombatEnded(_CombatID)
-AND
-DB_LLMIME_Follower_Temp_SpawnedGhostAfterCombat(_CombatID, _Mime)
-AND
-CharacterIsDead(_Mime, 1)
-THEN
-LLMIME_Follower_Internal_StartSpawningGhost(_Mime);
-
-IF
-CombatEnded(_CombatID)
-AND
-DB_LLMIME_Follower_Temp_SpawnedGhostAfterCombat(_CombatID, _Mime)
-THEN
-NOT DB_LLMIME_Follower_Temp_SpawnedGhostAfterCombat(_CombatID, _Mime);
 //END_REGION
 
 //REGION GHOST_SPAWN
@@ -1269,7 +1203,7 @@ ObjectSetFlag(_Ghost, "GLO_Ghost_Visible");
 SetStoryEvent(_Ghost, "Mimicry_Events_MimeFollower_GhostAppeared");
 
 IF
-CharacterResurrected(_Mime)
+CharacterStatusRemoved(_Mime, "RESURRECT", _)
 AND
 DB_LLMIME_Follower_Mime(_Mime)
 AND
@@ -1278,20 +1212,21 @@ THEN
 SetStoryEvent(_Ghost, "Mimicry_Events_MimeFollower_Resurrected");
 
 IF
-RegionEnded(_)
-AND
-DB_LLMIME_FollowerGhost(_Ghost)
-THEN
-SetOnStage(_Ghost, 0);
-NOT DB_LLMIME_FollowerGhost(_Ghost);
-
-IF
 CharacterDied(_Ghost)
 AND
 DB_LLMIME_FollowerGhost(_Ghost)
 THEN
 NOT DB_LLMIME_FollowerGhost(_Ghost);
+RemoveTemporaryCharacter(_Ghost);
 LeaderLog_Log("DEBUG", "[LLMIME:Follower] Mime ghost died.");
+
+IF
+RegionEnded(_)
+AND
+DB_LLMIME_FollowerGhost(_Ghost)
+THEN
+RemoveTemporaryCharacter(_Ghost);
+NOT DB_LLMIME_FollowerGhost(_Ghost);
 //END_REGION
 
 //REGION GHOST_FOLLOWER_DEATH
@@ -1438,7 +1373,7 @@ LeaderLib_StartCharacterItemTimer(_Player, _MusicBox, 2500, "LLMIME_Timers_Follo
 DB_LLMIME_Follower_RevivedBy(_Player);
 
 IF
-CharacterResurrected(_Mime)
+CharacterStatusRemoved(_Mime, "RESURRECT", _)
 AND
 DB_LLMIME_Follower_Mime(_Mime)
 THEN
@@ -1462,24 +1397,13 @@ ItemRemove(_Mask);
 DB_LLMIME_Follower_Temp_RemovedMask(_Player);
 
 IF
-CharacterResurrected(_Mime)
+CharacterStatusRemoved(_Mime, "RESURRECT", _)
 AND
 DB_LLMIME_Follower_Mime(_Mime)
 AND
 DB_LLMIME_Follower_RevivedBy(_Player)
-AND
-DB_LLMIME_Templates("MimeFollower", _MimeTemplate)
 THEN
-//CharacterTransform(_Mime, _MimeTemplate, 0, 0, 0, 0, 0, 0, 0);
 ChangeAttitude(_Mime, _Player, 0);
-
-IF
-CharacterResurrected(_Mime)
-AND
-DB_LLMIME_Follower_Mime(_Mime)
-AND
-DB_LLMIME_Follower_RevivedBy(_Player)
-THEN
 NOT DB_LLMIME_Follower_RevivedBy(_Player);
 NOT DB_LLMIME_Follower_Temp_RemovedMask(_Player);
 

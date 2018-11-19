@@ -21,10 +21,10 @@ AND
 NOT DB_LLMIME_ScriptToggler_ScriptsEnabled(1)
 THEN
 DB_LLMIME_ScriptToggler_ScriptsEnabled(1);
-SysActivateGoal("LLMIME_01_Mimicking_02_Main");
-SysActivateGoal("LLMIME_01_Mimicking_03_Skills");
-SysActivateGoal("LLMIME_01_Mimicking_04_Attacking");
-SysActivateGoal("LLMIME_01_Mimicking_05_Items");
+SysActivateGoal("LLMIME_01_Mimicking_02_Main_Toggled");
+SysActivateGoal("LLMIME_01_Mimicking_03_Skills_Toggled");
+SysActivateGoal("LLMIME_01_Mimicking_04_Attacking_Toggled");
+SysActivateGoal("LLMIME_01_Mimicking_05_Items_Toggled");
 LeaderLog_Log("SYSTEM", "[Mimicry:ScriptToggler:ToggleScriptsOn] Enabled mimicking scripts.");
 
 //Delay disabling scripts so they have time to clear data after this event
@@ -98,10 +98,10 @@ NOT DB_LLMIME_Mimicking_MimicNextAction(_)
 THEN
 NOT DB_LLMIME_ScriptToggler_ScriptsEnabled(1);
 LLMIME_Mimicking_OnScriptsCompleting();
-SysCompleteGoal("LLMIME_01_Mimicking_02_Main");
-SysCompleteGoal("LLMIME_01_Mimicking_03_Skills");
-SysCompleteGoal("LLMIME_01_Mimicking_04_Attacking");
-SysCompleteGoal("LLMIME_01_Mimicking_05_Items");
+SysCompleteGoal("LLMIME_01_Mimicking_02_Main_Toggled");
+SysCompleteGoal("LLMIME_01_Mimicking_03_Skills_Toggled");
+SysCompleteGoal("LLMIME_01_Mimicking_04_Attacking_Toggled");
+SysCompleteGoal("LLMIME_01_Mimicking_05_Items_Toggled");
 LeaderLog_Log("SYSTEM", "[Mimicry:ScriptToggler:ToggleScriptsOff] No mimes are mimicking. Disabled mimicking scripts.");
 
 IF
@@ -113,6 +113,77 @@ LLMIME_Mimicking_QRY_MimesAvailable()
 THEN
 LeaderLog_Log("SYSTEM", "[Mimicry:ScriptToggler:ToggleScriptsOff] Skipped disabling scripts - Mimes are mimicking again.");
 //END_REGION
+
+//REGION MIME_SKILL_SCRIPT_TOGGLE
+PROC
+LLMIME_ScriptToggle_AddActiveMime((CHARACTERGUID)_Mime)
+THEN
+DB_LLMIME_ActiveMimes(_Mime);
+
+PROC
+LLMIME_ScriptToggle_RemoveActiveMime((CHARACTERGUID)_Mime)
+THEN
+NOT DB_LLMIME_ActiveMimes(_Mime);
+
+IF
+StoryEvent((CHARACTERGUID)_Mime, "Mimicry_MimeInitialized")
+AND
+CharacterIsPartyMember(_Mime, 1)
+THEN
+LLMIME_ScriptToggle_AddActiveMime(_Mime);
+TimerCancel("LLMIME_Timers_DisableMimeSkillScripts");
+
+PROC
+LLMIME_ScriptToggle_AddActiveMime((CHARACTERGUID)_Mime)
+AND
+NOT SysIsActive("LLMIME_04_Skills_02_MimeSkills_Toggled")
+THEN
+LeaderLog_Log("SYSTEM", "[Mimicry:ScriptToggler] Activated script [LLMIME_04_Skills_02_MimeSkills_Toggled].");
+SysActivateGoal("LLMIME_04_Skills_02_MimeSkills_Toggled");
+
+IF
+StoryEvent((CHARACTERGUID)_Mime, "Mimicry_MimeJobRemoved")
+THEN
+LLMIME_ScriptToggle_RemoveActiveMime(_Mime);
+
+PROC
+LLMIME_ScriptToggle_RemoveActiveMime((CHARACTERGUID)_Mime)
+AND
+NOT DB_LLMIME_ActiveMimes(_)
+AND
+SysIsActive("LLMIME_04_Skills_02_MimeSkills_Toggled")
+THEN
+TimerCancel("LLMIME_Timers_DisableMimeSkillScripts");
+TimerLaunch("LLMIME_Timers_DisableMimeSkillScripts", 2500);
+LeaderLog_Log("SYSTEM", "[Mimicry:ScriptToggler:Mimicry_MimeJobRemoved] Starting mime skill script disable timer.");
+
+IF
+TimerFinished("LLMIME_Timers_DisableMimeSkillScripts")
+AND
+NOT DB_LLMIME_ActiveMimes(_)
+THEN
+LeaderLog_Log("SYSTEM", "[Mimicry:ScriptToggler:LLMIME_Timers_DisableMimeSkillScripts] Disabled script [LLMIME_04_Skills_02_MimeSkills].");
+SysCompleteGoal("LLMIME_04_Skills_02_MimeSkills_Toggled");
+//END_REGION
+
+//REGION MIME_FOLLOWER
+PROC
+LLMIME_Follower_OnMimeFollowerRecruited((CHARACTERGUID)_Mime)
+AND
+NOT SysIsActive("LLMIME_03_01_Follower_Recruited_Toggled")
+THEN
+LeaderLog_Log("SYSTEM", "[Mimicry:ScriptToggler] Activated script [LLMIME_03_01_Follower_Recruited_Toggled].");
+SysActivateGoal("LLMIME_03_01_Follower_Recruited_Toggled");
+
+PROC
+LLMIME_Follower_OnMimeFollowerDismissed((CHARACTERGUID)_Mime)
+AND
+NOT SysIsActive("LLMIME_03_01_Follower_Recruited_Toggled")
+THEN
+LeaderLog_Log("SYSTEM", "[Mimicry:ScriptToggler] Disabled script [LLMIME_03_01_Follower_Recruited_Toggled].");
+SysCompleteGoal("LLMIME_03_01_Follower_Recruited_Toggled");
+//END_REGION
+
 
 EXITSECTION
 

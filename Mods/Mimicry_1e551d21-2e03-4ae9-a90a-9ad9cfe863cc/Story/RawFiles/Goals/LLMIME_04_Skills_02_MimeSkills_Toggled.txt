@@ -1,179 +1,40 @@
 Version 1
 SubGoalCombiner SGC_AND
 INITSECTION
-LLMIME_Skills_InitSettings();
+
 KBSECTION
-//REGION SETTINGS
-PROC
-LLMIME_Skills_InitSettings()
-THEN
-SysClear("DB_LLMIME_Skills_DecoyTags", 1);
-DB_LLMIME_Skills_DecoyTags("LLMIME_Decoy");
-DB_LLMIME_Skills_DecoyTags("AI_PREFERRED_TARGET");
-DB_LLMIME_Skills_DecoyTags("IGNORE_UNDEAD_CRIME");
-DB_LLMIME_Skills_DecoyTags("IGNORESEENCOMBAT");
-DB_LLMIME_Skills_DecoyTags("IGNOREVANDALISE");
-
-SysClear("DB_LLMIME_Skills_StealWeapon", 2);
-DB_LLMIME_Skills_StealWeapon("Axe_1H", "WPN_LLWEAPONEX_Throwing_Axe1H_50a05d6a-90c5-44b7-aeae-c8329550e283");
-DB_LLMIME_Skills_StealWeapon("Axe_2H", "WPN_LLWEAPONEX_Throwing_Axe2H_5f83d71c-d529-4363-bd8b-33eb433c81c8");
-DB_LLMIME_Skills_StealWeapon("_Bow_", "WPN_LLWEAPONEX_Throwing_Bow_2473fceb-8232-4265-80e8-8e1b3d13c193");
-DB_LLMIME_Skills_StealWeapon("_Crossbow_", "WPN_LLWEAPONEX_Throwing_Crossbow_c40ef0c4-74a8-47f4-a31b-73ea3b56ae8c");
-DB_LLMIME_Skills_StealWeapon("_Dagger_", "WPN_LLWEAPONEX_Throwing_Dagger_63896c15-2c42-40c6-a032-5415039ea03e");
-DB_LLMIME_Skills_StealWeapon("Mace_1H", "WPN_LLWEAPONEX_Throwing_Mace1H_68f7e90e-ac76-40b9-8fdf-fa82e8b058f8");
-DB_LLMIME_Skills_StealWeapon("Mace_2H", "WPN_LLWEAPONEX_Throwing_Mace2H_4327c16c-e992-4445-8e16-e38ebb2bfd34");
-DB_LLMIME_Skills_StealWeapon("_Scythe_", "WPN_LLWEAPONEX_Throwing_Scythe_7a4acd18-b18a-46e9-ae80-2deca72f110e");
-DB_LLMIME_Skills_StealWeapon("_Shield_", "WPN_LLWEAPONEX_Throwing_Shield_8916a325-b0b4-4bb0-a0bb-d3c8740832c4");
-DB_LLMIME_Skills_StealWeapon("_Sickle_", "WPN_LLWEAPONEX_Throwing_Sickle_a64ebf8f-66c3-4bef-924c-ae8ecffe96ba");
-DB_LLMIME_Skills_StealWeapon("_Spear_", "WPN_LLWEAPONEX_Throwing_Spear_46d7a5f4-dd51-498f-a2e5-7fc3d2c97b6a");
-DB_LLMIME_Skills_StealWeapon("_Staff_", "WPN_LLWEAPONEX_Throwing_Staff_9a7d3a8d-f55e-4bd0-8073-cda53953a102");
-DB_LLMIME_Skills_StealWeapon("Sword_1H", "WPN_LLWEAPONEX_Throwing_Sword1H_34fc51f7-87d1-4d36-ac49-6df9d1d32155");
-DB_LLMIME_Skills_StealWeapon("Sword_2H", "WPN_LLWEAPONEX_Throwing_Sword2H_56e4cc0d-1f96-4930-a33f-93ca33a28018");
-DB_LLMIME_Skills_StealWeapon("_Wand_", "WPN_LLWEAPONEX_Throwing_Wand_97f3844d-100e-49a0-8814-eed74c040bb1");
-DB_LLMIME_Skills_StealWeapon("Chair", "WPN_LLWEAPONEX_Throwing_Chair_01_ef9f3937-a609-45cb-999c-9178a02eb7ca");
-DB_LLMIME_Skills_StealWeapon("Rock", "WPN_LLWEAPONEX_Throwing_Rock_eb7b3d1f-43f8-43c3-b529-2713eba49000");
-//DB_LLMIME_Skills_Temp_NextWish(_Caster, _Target)
-//DB_LLMIME_Skills_Temp_FailedWish(_Caster)
-
-SysClear("DB_LLMIME_Skills_IncarnateInfusions", 2);
-DB_LLMIME_Skills_IncarnateInfusions("INF_ACID", "INF_ACID_G");
-DB_LLMIME_Skills_IncarnateInfusions("INF_BLESSED_ICE", "INF_BLESSED_ICE_G");
-DB_LLMIME_Skills_IncarnateInfusions("INF_BLOOD", "INF_BLOOD_G");
-DB_LLMIME_Skills_IncarnateInfusions("INF_CURSED_ELECTRIC", "INF_CURSED_ELECTRIC_G");
-DB_LLMIME_Skills_IncarnateInfusions("INF_ELECTRIC", "INF_ELECTRIC_G");
-DB_LLMIME_Skills_IncarnateInfusions("INF_FIRE", "INF_FIRE_G");
-DB_LLMIME_Skills_IncarnateInfusions("INF_NECROFIRE", "INF_NECROFIRE_G");
-DB_LLMIME_Skills_IncarnateInfusions("INF_OIL", "INF_OIL_G");
-DB_LLMIME_Skills_IncarnateInfusions("INF_POISON", "INF_POISON_G");
-DB_LLMIME_Skills_IncarnateInfusions("INF_POWER", "INF_POWER");
-DB_LLMIME_Skills_IncarnateInfusions("INF_RANGED", "INF_RANGED");
-DB_LLMIME_Skills_IncarnateInfusions("INF_SHADOW", "INF_SHADOW");
-DB_LLMIME_Skills_IncarnateInfusions("INF_WARP", "INF_WARP");
-DB_LLMIME_Skills_IncarnateInfusions("INF_WATER", "INF_WATER_G");
-//END_REGION
-
-//REGION UPDATING
-QRY
-LLMIME_Skills_Internal_QRY_VersionNeedsUpdating((STRING)_PastVersion, (STRING)_NewVersion)
-AND
-_NewVersion == "0.9.7.2"
-THEN
-DB_NOOP(1);
-
-PROC
-LeaderUpdater_ModUpdated("Mimicry", "LaughingLeader", (STRING)_PastVersion, (STRING)_NewVersion)
-AND
-LLMIME_Skills_Internal_QRY_VersionNeedsUpdating(_PastVersion, _NewVersion)
-THEN
-LeaderLog_Log("DEBUG", "[LLMIME:Skills] Updating settings from version [",_PastVersion,"]");
-LLMIME_Skills_InitSettings();
-//END_REGION
-
-//REGION QUERIES
-QRY
-LLMIME_Skills_QRY_SkillMatch((STRING)_Skill, (STRING)_CheckedSkill)
-AND
-_Skill == _CheckedSkill
-THEN
-DB_NOOP(1);
-
-//Follower versions
-QRY
-LLMIME_Skills_QRY_SkillMatch((STRING)_Skill, (STRING)_CheckedSkill)
-AND
-StringConcatenate(_CheckedSkill, "_Follower", _Skill)
-THEN
-DB_NOOP(1);
-//END_REGION
-
-//REGION WISH
-IF
-CharacterUsedSkillOnTarget(_Caster, (CHARACTERGUID)_Target, "Target_LLMIME_Wish", _, _)
-AND
-CharacterGetHitpointsPercentage(_Caster, _CasterHealth)
-AND
-_CasterHealth > 2.0
-AND
-RealDivide(_CasterHealth, 2.0, _NextHealth)
-AND
-_NextHealth > 1.0
-THEN
-SetStoryEvent(_Caster, "Mimicry_Events_Wish_UsedSkill");
-DB_LLMIME_Skills_Temp_NextWish(_Caster, _Target);
-
-IF
-CharacterUsedSkillOnTarget(_Caster, (CHARACTERGUID)_Target, "Target_LLMIME_Wish", _, _)
-AND
-NOT DB_LLMIME_Skills_Temp_NextWish(_Caster, _Target)
-THEN
-DB_LLMIME_Skills_Temp_FailedWish(_Caster);
-
-IF
-SkillCast(_Caster, "Target_LLMIME_Wish", _, _)
-AND
-DB_LLMIME_Skills_Temp_NextWish(_Caster, _Target)
-THEN
-NOT DB_LLMIME_Skills_Temp_NextWish(_Caster, _Target);
-SetVarFloat(_Caster, "Mimicry_Wish_HealPercentage", 0.50);
-CharacterCharacterSetEvent(_Caster, _Target, "Mimicry_Events_OnWishCast");
-SetStoryEvent(_Target, "Mimicry_Events_Wish_SkillCast");
-
-IF
-SkillCast(_Caster, "Target_LLMIME_Wish", _, _)
-AND
-DB_LLMIME_Skills_Temp_FailedWish(_Caster)
-THEN
-NOT DB_LLMIME_Skills_Temp_FailedWish(_Caster);
-CharacterStatusText(_Caster, "LLMIME_StatusText_WishFailed");
-
-IF
-CharacterCharacterEvent(_Caster, _Target, "Mimicry_Events_WishDelay")
-AND
-NOT DB_LLMIME_Skills_WishDelayTimer(_Caster, _Target, _)
-AND
-GetUUID(_Caster, _CasterID)
-AND
-StringConcatenate("LLMIME_Timers_WishDelayTimer_", _CasterID, _TimerName)
-THEN
-DB_LLMIME_Skills_WishDelayTimer(_Caster, _Target, _TimerName);
-TimerLaunch(_TimerName, 500);
-
-IF
-TimerFinished(_TimerName)
-AND
-DB_LLMIME_Skills_WishDelayTimer(_Caster, _Target, _TimerName)
-THEN
-NOT DB_LLMIME_Skills_WishDelayTimer(_Caster, _Target, _TimerName);
-CharacterCharacterSetEvent(_Caster, _Target, "Mimicry_Events_HealWishTarget");
-
-//Fix for CharacterHeal sending vitality over the max
-IF
-CharacterVitalityChanged(_Target, _Percentage)
-AND
-ObjectGetFlag(_Target, "Mimicry_Wish_CheckHealthResult", 1)
-AND
-LeaderLib_Helper_QRY_ClearObjectFlag(_Target, "Mimicry_Wish_CheckHealthResult")
-AND
-_Percentage > 100
-THEN
-CharacterSetHitpointsPercentage(_Target, 100.0);
-//END_REGION
 
 //REGION FINAL_WISH
 /*Delay actually dying so the animation can play out*/
 IF
-CharacterUsedSkill(_Character, _Skill, _, _)
-AND
-LLMIME_Skills_QRY_SkillMatch(_Skill, "Projectile_LLMIME_FinalWish")
+CharacterUsedSkill(_Character, "Projectile_LLMIME_FinalWish", _, _)
+THEN
+LLMIME_Skills_OnSkillUsed(_Character, "FinalWish");
+
+IF
+CharacterUsedSkill(_Character, "Projectile_LLMIME_FinalWish_Follower", _, _)
+THEN
+LLMIME_Skills_OnSkillUsed(_Character, "FinalWish");
+
+PROC
+LLMIME_Skills_OnSkillUsed((CHARACTERGUID)_Character, "FinalWish")
 THEN
 LeaderLib_StartObjectTimer(_Character, 3000, "Mimicry_Timers_FinalWish_DieEvent", "Mimicry_Events_FinalWish_Die");
 LeaderLib_StartObjectTimer(_Character, 1000, "Mimicry_Timers_FinalWish_UsedEvent_", "Mimicry_Events_FinalWish_SkillUsed");
 LeaderLib_StartObjectTimer(_Character, 2600, "Mimicry_Timers_FinalWish_DeathEffect", "Mimicry_Events_FinalWish_PlayDeathEffect");
 
 IF
-SkillCast(_Character, _Skill, _, _)
-AND
-LLMIME_Skills_QRY_SkillMatch(_Skill, "Projectile_LLMIME_FinalWish")
+SkillCast(_Character, "Projectile_LLMIME_FinalWish", _, _)
+THEN
+LLMIME_Skills_OnSkillCast(_Character, "FinalWish");
+
+IF
+SkillCast(_Character, "Projectile_LLMIME_FinalWish_Follower", _, _)
+THEN
+LLMIME_Skills_OnSkillCast(_Character, "FinalWish");
+
+PROC
+LLMIME_Skills_OnSkillCast((CHARACTERGUID)_Character, "FinalWish")
 THEN
 LeaderLib_CancelObjectTimerByEvent(_Character, "Mimicry_Events_FinalWish_Die");
 LeaderLib_StartObjectTimer(_Character, 1000, "Mimicry_Timers_FinalWish_", "Mimicry_Events_FinalWish_Die");
@@ -213,26 +74,17 @@ SetStoryEvent(_Character, "Mimicry_Events_FinalWish_OnAttacked");
 
 //REGION DECOY
 IF
-CharacterUsedSkill(_Character, _Skill, _, _)
-AND
-LLMIME_Skills_QRY_SkillMatch(_Skill, "Projectile_LLMIME_Decoy")
-AND
-NOT DB_LLMIME_Skills_Temp_DecoyPosition(_Character, _, _, _)
-AND
-GetPosition(_Character, _x, _y, _z)
-AND
-LeaderLog_QRY_RealToIntToString("LLMIME.Debug.DecoyPos", _x, _z)
-AND
-DB_LeaderLog_Temp_RealString("LLMIME.Debug.DecoyPos", _xstr, _zstr)
+CharacterUsedSkill(_Character, "Projectile_LLMIME_Decoy", _, _)
 THEN
-DB_LLMIME_Skills_Temp_DecoyPosition(_Character, _x, _y, _z);
-LeaderLog_Log("DEBUG", "[LLMIME:Skills:CharacterUsedSkill(Decoy)] Saving decoy spawn position [",_xstr,",",_zstr,"].");
-NOT DB_LeaderLog_Temp_RealString("LLMIME.Debug.DecoyPos", _xstr, _zstr);
+LLMIME_Skills_OnSkillUsed(_Character, "Decoy");
 
 IF
-CharacterUsedSkill(_Character, _Skill, _, _)
-AND
-LLMIME_Skills_QRY_SkillMatch(_Skill, "Projectile_LLMIME_Decoy")
+CharacterUsedSkill(_Character, "Projectile_LLMIME_Decoy_Follower", _, _)
+THEN
+LLMIME_Skills_OnSkillUsed(_Character, "Decoy");
+
+PROC
+LLMIME_Skills_OnSkillUsed((CHARACTERGUID)_Character, "Decoy")
 AND
 GetPosition(_Character, _x, _y, _z)
 THEN
@@ -240,7 +92,6 @@ DB_LLMIME_Skills_Temp_DecoyPosition(_Character, _x, _y, _z);
 LeaderLib_StartObjectTimer(_Character, 450, "LLMIME_Timers_Skills_Internal_Decoy_SmokeEffect_", "Mimicry_Events_Skills_Internal_PlayDecoySmokeEffect");
 LeaderLib_StartObjectTimer(_Character, 500, "LLMIME_Timers_Skills_Internal_StartDecoySetup_", "Mimicry_Events_Skills_Internal_StartDecoySetup");
 //SetStoryEvent(_Character, "Mimicry_Events_Skills_Internal_StartDecoySetup");
-
 
 IF
 StoryEvent((CHARACTERGUID)_Character, "Mimicry_Events_Skills_Internal_PlayDecoySmokeEffect")
@@ -372,12 +223,12 @@ LLMIME_Skills_Internal_OnDecoyRemoved(_Decoy);
 IF
 CharacterStatusRemoved(_Decoy, "LLMIME_DECOY_LIFETIME", _)
 AND
-NOT LeaderLib_Helper_QRY_HasStatus(_Decoy, "LLMIME_DECOY_LIFETIME")
+HasAppliedStatus(_Decoy, "LLMIME_DECOY_LIFETIME", 0)
 THEN
 LLMIME_Skills_Internal_OnDecoyRemoved(_Decoy);
 
 IF
-CharacterDying(_Decoy)
+CharacterPrecogDying(_Decoy)
 AND
 DB_LLMIME_Skills_Temp_Decoy(_Character, _Decoy)
 THEN
@@ -393,7 +244,7 @@ THEN
 //PlayEffectAtPosition("RS3_FX_GP_Combat_CorpseExplosion_Wood_01_Small", _x, _y, _z);
 //PlayEffectAtPosition("RS3_FX_Poof_Wood_01", _x, _y, _z);
 PlayEffectAtPosition("RS3_FX_GP_ScriptedEvent_Ambushers_Smoke_01", _x, _y, _z);
-SetOnStage(_Decoy, 0);
+RemoveTemporaryCharacter(_Decoy);
 
 PROC
 LLMIME_Skills_Internal_OnDecoyRemoved((CHARACTERGUID)_Decoy)
@@ -462,11 +313,19 @@ LLMIME_Skills_SpawnSkillPlatform(_Target, _Caster);
 PlayEffectAtPosition("RS3_FX_SubEffects_Ground_Earthquake_01", _x, _y, _z);
 
 IF
-CharacterUsedSkill(_Caster, _Skill, _, _)
+CharacterUsedSkill(_Character, "Shout_LLMIME_QuakeSlam", _, _)
+THEN
+LLMIME_Skills_OnSkillUsed(_Character, "QuakeSlam");
+
+IF
+CharacterUsedSkill(_Character, "Shout_LLMIME_QuakeSlam_Follower", _, _)
+THEN
+LLMIME_Skills_OnSkillUsed(_Character, "QuakeSlam");
+
+PROC
+LLMIME_Skills_OnSkillUsed((CHARACTERGUID)_Character, "QuakeSlam")
 AND
-LLMIME_Skills_QRY_SkillMatch(_Skill, "Shout_LLMIME_QuakeSlam")
-AND
-GetPosition(_Caster, _x, _y, _z)
+GetPosition(_Character, _x, _y, _z)
 THEN
 PlayEffectAtPosition("LLMIME_FX_Skills_QuakeSlam_Cast_Root_01", _x, _y, _z);
 
@@ -581,14 +440,43 @@ ClearVarObject(_Target, "LLMIME_QuakeSlamCaster");
 
 //REGION VITAL_INFLUENCE
 IF
-CharacterUsedSkillOnTarget(_Caster, (CHARACTERGUID)_Target, _Skill, _, _)
-AND
-LLMIME_Skills_QRY_SkillMatch(_Skill, "Target_LLMIME_VitalInfluence")
-AND
-LeaderLib_Helper_QRY_AttributeIsGreater(_Caster, _Target, "Constitution")
+CharacterUsedSkillOnTarget(_Character, _Target, "Target_LLMIME_VitalInfluence", _, _)
 THEN
-LeaderLog_Log("DEBUG", "[Mimicry:Skills:CharacterUsedSkillOnTarget] Prepared beam effects for [",_Skill,"].");
-DB_LLMIME_Skills_Temp_BeamEffect(_Target, _Caster, _Skill, "LLMIME_FX_Skills_VitalInfluence_Beam_01", "Dummy_BodyFX", "Dummy_BodyFX");
+LLMIME_Skills_OnSkillUsed(_Character, _Target, "VitalInfluence");
+
+IF
+CharacterUsedSkillOnTarget(_Character, _Target, "Target_LLMIME_VitalInfluence_Follower", _, _)
+THEN
+LLMIME_Skills_OnSkillUsed(_Character, _Target, "VitalInfluence");
+
+PROC
+LLMIME_Skills_OnSkillUsed((CHARACTERGUID)_Character, (GUIDSTRING)_Target, "VitalInfluence")
+AND
+ObjectIsCharacter((CHARACTERGUID)_Target, 1)
+AND
+LeaderLib_Helper_QRY_AttributeIsGreater(_Character, _Target, "Constitution")
+THEN
+LeaderLog_Log("DEBUG", "[Mimicry:Skills:CharacterUsedSkillOnTarget] Prepared beam effects for [VitalInfluence].");
+DB_LLMIME_Skills_Temp_BeamEffect(_Target, _Character, "VitalInfluence", "LLMIME_FX_Skills_VitalInfluence_Beam_01", "Dummy_BodyFX", "Dummy_BodyFX");
+
+IF
+SkillCast(_Caster, "Target_LLMIME_VitalInfluence", _, _)
+THEN
+LLMIME_Skills_OnSkillCast(_Caster, "VitalInfluence");
+
+IF
+SkillCast(_Caster, "Target_LLMIME_VitalInfluence_Follower", _, _)
+THEN
+LLMIME_Skills_OnSkillCast(_Caster, "VitalInfluence");
+
+PROC
+LLMIME_Skills_OnSkillCast((CHARACTERGUID)_Character, "VitalInfluence")
+AND
+DB_LLMIME_Skills_Temp_BeamEffect(_Caster, _Target, "VitalInfluence", _Effect, _CasterBone, _TargetBone)
+THEN
+NOT DB_LLMIME_Skills_Temp_BeamEffect(_Caster, _Target, "VitalInfluence", _Effect, _CasterBone, _TargetBone);
+PlayBeamEffect(_Caster, _Target, _Effect, _CasterBone, _TargetBone);
+LeaderLog_Log("DEBUG", "[LLMIME:Skills:OnSkillCast] Played beam effect [",_Effect,"].");
 
 IF
 CharacterStatusAttempt(_Target, "LLMIME_VITAL_CHECK", (CHARACTERGUID)_Caster)
@@ -610,12 +498,19 @@ CharacterStatusText(_Caster, "LLMIME_StatusText_VitalityCheck_Failed");
 //A.K.A. Mime Vault
 //REGION FLANK_AND_SWAP
 IF
-//CharacterUsedSkillOnTarget(_Mime, (CHARACTERGUID)_Target, _Skill, _, _)
-CharacterUsedSkill(_Mime, _Skill, _, _)
-AND
-LLMIME_Skills_QRY_SkillMatch(_Skill, "MultiStrike_LLMIME_MimeVault")
+CharacterUsedSkill(_Character, "MultiStrike_LLMIME_MimeVault", _, _)
 THEN
-DB_LLMIME_Skills_Temp_LookForFlankingTarget(_Mime);
+LLMIME_Skills_OnSkillUsed(_Character, "MimeVault");
+
+IF
+CharacterUsedSkill(_Character, "MultiStrike_LLMIME_MimeVault_Follower", _, _)
+THEN
+LLMIME_Skills_OnSkillUsed(_Character, "MimeVault");
+
+PROC
+LLMIME_Skills_OnSkillUsed((CHARACTERGUID)_Character, "MimeVault")
+THEN
+DB_LLMIME_Skills_Temp_LookForFlankingTarget(_Character);
 
 IF
 CharacterStatusAttempt(_Target, "HIT", (CHARACTERGUID)_Mime)
@@ -685,97 +580,6 @@ AND
 LeaderLib_Helper_QRY_HasStatus(_Target, "LLMIME_FLANKING")
 THEN
 RemoveStatus(_Target, "LLMIME_FLANKING");
-//END_REGION
-
-//REGION BEAM_EFFECTS
-IF
-SkillCast(_Caster, _Skill, _, _)
-AND
-DB_LLMIME_Skills_Temp_BeamEffect(_Caster, _Target, _Skill, _Effect, _CasterBone, _TargetBone)
-THEN
-NOT DB_LLMIME_Skills_Temp_BeamEffect(_Caster, _Target, _Skill, _Effect, _CasterBone, _TargetBone);
-PlayBeamEffect(_Caster, _Target, _Effect, _CasterBone, _TargetBone);
-LeaderLog_Log("DEBUG", "[Mimicry:Skills:SkillCast] Played beam effect [",_Effect,"].");
-
-IF
-SkillCast(_Caster, _Skill, _, _)
-AND
-DB_LLMIME_Skills_Temp_BeamEffect(_Target, _Caster, _Skill, _Effect, _CasterBone, _TargetBone)
-THEN
-NOT DB_LLMIME_Skills_Temp_BeamEffect(_Target, _Caster, _Skill, _Effect, _CasterBone, _TargetBone);
-PlayBeamEffect(_Target, _Caster, _Effect, _CasterBone, _TargetBone);
-//END_REGION
-
-//REGION MUGGING
-IF
-CharacterStatusApplied(_Target, "LLMIME_MUGGED", (CHARACTERGUID)_Mime)
-AND
-DB_GlobalFlag("WeaponExpansion_IsActive")
-AND
-NOT DB_LLMIME_Skills_Temp_WeaponMatch(_Mime)
-AND
-CharacterGetEquippedWeapon(_Target, _Weapon)
-AND
-_Weapon != NULL_00000000-0000-0000-0000-000000000000
-AND
-GetTemplate(_Weapon, _Template)
-AND
-DB_LLMIME_Skills_StealWeapon(_String, _ThrowingItemTemplate)
-AND
-NOT DB_LLMIME_Skills_Temp_WeaponMatch(_Mime)
-AND
-StringContains(_Template, _String, 1)
-THEN
-ItemTemplateAddTo(_ThrowingItemTemplate, _Mime, 1, 1);
-DB_LLMIME_Skills_Temp_WeaponMatch(_Mime);
-
-//No match
-IF
-CharacterStatusApplied(_Target, "LLMIME_MUGGED", (CHARACTERGUID)_Mime)
-AND
-DB_GlobalFlag("WeaponExpansion_IsActive")
-AND
-NOT DB_LLMIME_Skills_Temp_WeaponMatch(_Mime)
-AND
-DB_LLMIME_Skills_StealWeapon("Rock", _ThrowingItemTemplate)
-THEN
-ItemTemplateAddTo(_ThrowingItemTemplate, _Mime, 1, 1);
-DB_LLMIME_Skills_Temp_WeaponMatch(_Mime);
-
-//No WeaponExpansion
-IF
-CharacterStatusApplied(_Target, "LLMIME_MUGGED", (CHARACTERGUID)_Mime)
-AND
-CharacterIsEnemy(_Mime, _Target, 1)
-AND
-CharacterGetLevel(_Mime, _Level)
-AND
-LeaderLib_Random_QRY(15)
-AND
-DB_LeaderLib_Random(_Ran)
-AND
-IntegerSum(_Ran, 5, _GoldMult)
-AND
-IntegerProduct(_Level, _GoldMult, _Gold)
-THEN
-NOT DB_LeaderLib_Random(_Ran);
-CharacterAddGold(_Mime, _Gold);
-
-IF
-CharacterStatusApplied(_Target, "LLMIME_MUGGED", (CHARACTERGUID)_Mime)
-AND
-DB_LLMIME_Skills_Temp_WeaponMatch(_Mime)
-THEN
-NOT DB_LLMIME_Skills_Temp_WeaponMatch(_Mime);
-
-/*
-IF
-SkillCast(_Mime, _Skill, _, _)
-AND
-DB_LLMIME_Skills_StealWeapon(_String, _Skill)
-THEN
-CharacterRemoveSkill(_Mime, _Skill);
-*/
 //END_REGION
 
 //REGION COUNTER_THROW
@@ -852,94 +656,6 @@ THEN
 ApplyStatus(_Mime, "LLMIME_EVADING3", 6.0, 0, _Mime);
 //END_REGION
 
-//REGION FORCED_EVOLUTION
-IF
-CharacterUsedSkill(_Summon, "Shout_LLMIME_ForcedEvolution", _SkillType, _SkillElement)
-AND
-GetPosition(_Summon, _x, _y, _z)
-THEN
-ClearTag(_Summon, "INCARNATE_S");
-SetTag(_Summon, "INCARNATE_G");
-PlayEffectAtPosition("RS3_FX_Skills_Voodoo_Cast_Curse_Shout_Root_01", _x, _y, _z);
-//RS3_FX_Skills_Voodoo_Cast_Curse_Shout_Root_01;RS3_FX_Skills_Voodoo_Cast_Taunt_Icon_01:Dummy_OverheadFX:shout
-PlayEffect(_Summon, "LLMIME_FX_Status_ForcedEvolution_Disappear_01");
-
-IF
-SkillCast(_Summon, "Shout_LLMIME_ForcedEvolution", _SkillType, _SkillElement)
-THEN
-LeaderLib_StartObjectTimer(_Summon, 1200, "LLMIME_Timers_ForcedEvolution_PostTransform", "Mimicry_ForcedEvolution_TransformDone");
-
-IF
-StoryEvent((CHARACTERGUID)_Summon, "Mimicry_ForcedEvolution_TransformDone")
-THEN
-CharacterRemoveSkill(_Summon, "Shout_LLMIME_ForcedEvolution");
-
-PROC
-LLMIME_Skills_EvolveIncarnateBuffs((CHARACTERGUID)_Owner, (CHARACTERGUID)_Summon)
-AND
-DB_LLMIME_Skills_IncarnateInfusions(_SmallStatus, _LargeStatus)
-AND
-HasActiveStatus(_Summon, _SmallStatus, 1)
-AND
-HasActiveStatus(_Summon, _LargeStatus, 0)
-AND
-GetStatusTurns(_Summon, _SmallStatus, _Turns)
-AND
-Real(_Turns, _TurnsR)
-AND
-RealProduct(_TurnsR, 6.0, _Duration)
-THEN
-ApplyStatus(_Summon, _LargeStatus, _Duration, 0, _Owner);
-
-IF
-StoryEvent((CHARACTERGUID)_Summon, "Mimicry_ForcedEvolution_TransformDone")
-AND
-LeaderLib_Random_QRY(2)
-AND
-DB_LeaderLib_Random(_Ran)
-AND
-IntegerMax(1, _Ran, _Turns)
-AND
-Real(_Turns, _TurnsR)
-AND
-RealProduct(_TurnsR, 6.0, _Duration)
-AND
-GetVarObject(_Summon, "LLMIME_Beastmaster", (CHARACTERGUID)_Mime)
-THEN
-ApplyStatus(_Summon, "LLMIME_FORCED_EVOLUTION", _Duration, 0, _Summon);
-LLMIME_Beastmaster_RemoveBeastmasterBonus(_Summon);
-DB_LLMIME_SKills_ForcedEvolution_Beastmaster(_Summon, _Mime);
-
-IF
-CharacterStatusApplied(_Summon, "LLMIME_FORCED_EVOLUTION", _Summoner)
-AND
-GetPosition(_Summon, _x, _y, _z)
-AND
-DB_LLMIME_SKills_ForcedEvolution_Beastmaster(_Summon, _Mime)
-AND
-CharacterGetOwner(_Summon, _Owner)
-THEN
-NOT DB_LLMIME_SKills_ForcedEvolution_Beastmaster(_Summon, _Mime);
-ClearTag(_Summon, "INCARNATE_S");
-SetTag(_Summon, "INCARNATE_G");
-LLMIME_Skills_EvolveIncarnateBuffs(_Owner, _Summon);
-PlayScaledEffectAtPosition("RS3_FX_Elven_Pillar_Explosion", 0.5, _x, _y, _z);
-SetStoryEvent(_Summon, "Mimicry_SummonEvolved");
-LeaderLib_StartCharacterCharacterTimer(_Summon, _Mime, 150, "LLMIME_Timers_ReapplyBeastmaster_", "LLMIME_ForcedEvolution_ReapplyBeastmaster");
-
-IF
-CharacterCharacterEvent(_Summon, _Mime, "LLMIME_ForcedEvolution_ReapplyBeastmaster")
-THEN
-LLMIME_Beastmaster_ApplyBeastmasterBonus(_Summon, _Mime);
-
-IF
-CharacterStatusRemoved(_Summon, "LLMIME_FORCED_EVOLUTION", _)
-AND
-CharacterIsSummon(_Summon, 1)
-THEN
-CharacterDie(_Summon, 0, "LifeTime", _Summon);
-//END_REGION
-
 //REGION HIDDEN_APPROACH_TIMELY_RETREAT
 IF
 CharacterUsedSkill(_Mime, "Jump_LLMIME_HiddenApproach", _, _)
@@ -988,59 +704,6 @@ AND
 DB_LLMIME_Skills_Temp_HiddenApproachPosition(_Mime, _x, _y, _z)
 THEN
 NOT DB_LLMIME_Skills_Temp_HiddenApproachPosition(_Mime, _x, _y, _z);
-//END_REGION
-
-//REGION CLEAR_TEMP_DATA
-IF
-CharacterDied(_Character)
-AND
-LLMIME_SKILLS_QRY_HasSkillData(_Character)
-THEN
-LLMIME_MonsterSkill_ClearTemporaryDatabases(_Character);
-
-QRY
-LLMIME_SKILLS_QRY_HasSkillData((CHARACTERGUID)_Character)
-AND
-DB_LLMIME_Skills_Temp_NextWish(_Character, _Target)
-THEN
-NOT DB_LLMIME_Skills_Temp_NextWish(_Character, _Target);
-
-PROC
-LLMIME_MonsterSkill_ClearTemporaryDatabases((CHARACTERGUID)_Character)
-AND
-DB_LLMIME_Skills_Temp_NextWish(_Character, _Target)
-THEN
-NOT DB_LLMIME_Skills_Temp_NextWish(_Character, _Target);
-
-PROC
-LLMIME_MonsterSkill_ClearTemporaryDatabases((CHARACTERGUID)_Character)
-AND
-DB_LLMIME_Skills_Temp_NextWish(_OtherCharacter, _Character)
-THEN
-NOT DB_LLMIME_Skills_Temp_NextWish(_OtherCharacter, _Character);
-
-PROC
-LLMIME_MonsterSkill_ClearTemporaryDatabases((CHARACTERGUID)_Character)
-AND
-DB_LLMIME_Skills_Temp_FailedWish(_Character)
-THEN
-NOT DB_LLMIME_Skills_Temp_FailedWish(_Character);
-
-PROC
-LLMIME_MonsterSkill_ClearTemporaryDatabases((CHARACTERGUID)_Character)
-AND
-DB_LLMIME_Skills_WishDelayTimer(_Character, _Target, _TimerName)
-THEN
-NOT DB_LLMIME_Skills_WishDelayTimer(_Character, _Target, _TimerName);
-TimerCancel(_TimerName);
-
-PROC
-LLMIME_MonsterSkill_ClearTemporaryDatabases((CHARACTERGUID)_Character)
-AND
-DB_LLMIME_Skills_WishDelayTimer(_Caster, _Character, _TimerName)
-THEN
-NOT DB_LLMIME_Skills_WishDelayTimer(_Caster, _Character, _TimerName);
-TimerCancel(_TimerName);
 //END_REGION
 
 EXITSECTION
