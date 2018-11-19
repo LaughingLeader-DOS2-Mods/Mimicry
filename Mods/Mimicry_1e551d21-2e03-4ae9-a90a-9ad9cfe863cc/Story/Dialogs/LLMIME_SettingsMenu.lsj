@@ -3244,7 +3244,7 @@
                                                 "TagText" : {
                                                    "handle" : "ls::TranslatedStringRepository::s_HandleUnknown",
                                                    "type" : 28,
-                                                   "value" : "Disable Mimicking When Invisible"
+                                                   "value" : "Disable Mimicking When Invisible (Default)"
                                                 },
                                                 "stub" : {"type" : 19, "value" : 1}
                                              }
