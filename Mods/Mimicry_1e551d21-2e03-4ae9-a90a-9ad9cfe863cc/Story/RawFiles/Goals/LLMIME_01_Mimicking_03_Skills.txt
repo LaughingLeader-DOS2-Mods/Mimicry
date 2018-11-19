@@ -59,16 +59,6 @@ DB_NOOP(1);
 //END_REGION
 
 //REGION SKILL_TRACKING
-//Give time for the CharacterUsedSkill event to fire, for tracking the element and type
-IF
-CharacterUsedSkillOnTarget(_Caster, _Target, _Skill, _SkillType, _SkillElement)
-AND
-LLMIME_Mimicking_QRY_MimesAvailable()
-AND
-LLMIME_Mimicking_QRY_CharacterIsMimickable(_Caster)
-THEN
-DB_LLMIME_Mimicking_Temp_SkillUsedOnTarget(_Caster, _Target, _Skill, _SkillType);
-
 IF
 CharacterUsedSkillOnTarget(_Caster, _Target, _Skill, _SkillType, _SkillElement)
 AND
@@ -77,12 +67,40 @@ THEN
 NOT DB_LLMIME_Mimicking_Temp_TargetPriority(_Caster, _Target, _TargetPriority);
 
 IF
-CharacterUsedSkill(_Caster, _Skill, _SkillType, _SkillElement)
+CharacterUsedSkillOnTarget(_Caster, _Target, _Skill, _SkillType, _SkillElement)
 AND
-DB_LLMIME_Mimicking_Temp_SkillUsedOnTarget(_Caster, _Target, _Skill, _SkillType)
+LLMIME_Mimicking_QRY_MimesAvailable()
+AND
+LLMIME_Mimicking_QRY_CharacterIsMimickable(_Caster)
 THEN
-NOT DB_LLMIME_Mimicking_Temp_SkillUsedOnTarget(_Caster, _Target, _Skill, _SkillType);
+LLMIME_Mimicking_OnSkillUsedOnTarget(_Caster, _Target, _Skill, _SkillType, _SkillElement);
+
+PROC
+LLMIME_Mimicking_OnSkillUsedOnTarget((CHARACTERGUID)_Caster, (GUIDSTRING)_Target, (STRING)_Skill, (STRING)_SkillType, (STRING)_SkillElement)
+AND
+NOT DB_LLMIME_Skills_Temp_SkillResolved(_Caster, _Target, _Skill)
+AND
+DB_LLMIME_Mimicking_SkillSwap(_Skill, _ResultSkill, _ResultSkillType, _ResultSkillElement)
+THEN
+DB_LLMIME_Skills_Temp_SkillSwapped(_Caster, _Skill, _ResultSkill);
+LeaderLog_Log("DEBUG", "[LLMIME:Mimicking:Skills:OnSkillUsedOnTarget] Swapped skill [",_Skill,"][",_SkillType,"][",_SkillElement,"] for [",_ResultSkill,"][",_ResultSkillType,"][",_ResultSkillElement,"].");
+LLMIME_Mimicking_OnSkillCastOnTarget(_Caster, _Target, _ResultSkill, _ResultSkillType, _ResultSkillElement);
+DB_LLMIME_Skills_Temp_SkillResolved(_Caster, _Target, _Skill);
+
+PROC
+LLMIME_Mimicking_OnSkillUsedOnTarget((CHARACTERGUID)_Caster, (GUIDSTRING)_Target, (STRING)_Skill, (STRING)_SkillType, (STRING)_SkillElement)
+AND
+NOT DB_LLMIME_Skills_Temp_SkillResolved(_Caster, _Target, _Skill)
+THEN
 LLMIME_Mimicking_OnSkillCastOnTarget(_Caster, _Target, _Skill, _SkillType, _SkillElement);
+DB_LLMIME_Skills_Temp_SkillResolved(_Caster, _Target, _Skill);
+
+PROC
+LLMIME_Mimicking_OnSkillUsedOnTarget((CHARACTERGUID)_Caster, (GUIDSTRING)_Target, (STRING)_Skill, (STRING)_SkillType, (STRING)_SkillElement)
+AND
+DB_LLMIME_Skills_Temp_SkillResolved(_Caster, _Target, _Skill)
+THEN
+NOT DB_LLMIME_Skills_Temp_SkillResolved(_Caster, _Target, _Skill);
 
 PROC
 LLMIME_Mimicking_OnSkillCastOnTarget((CHARACTERGUID)_Caster, (GUIDSTRING)_Target, (STRING)_Skill, (STRING)_SkillType, (STRING)_SkillElement)
@@ -128,7 +146,6 @@ THEN
 LeaderLog_Log("DEBUG", "[LLMIME:Mime:CharacterUsedSkillOnTarget] Queueing up next mimic self-target skill [",_Skill,"].");
 LLMIME_Mimicking_QueueNextSelfAction(_Mime, _Caster, _Skill, "Skill");
 
-//Delay by a frame or two so target events will fire first
 IF
 CharacterUsedSkillAtPosition(_Caster, _TargetX, _TargetY, _TargetZ, _Skill, _SkillType, _SkillElement)
 AND
@@ -136,20 +153,38 @@ LLMIME_Mimicking_QRY_MimesAvailable()
 AND
 LLMIME_Mimicking_QRY_CharacterIsMimickable(_Caster)
 THEN
-DB_LLMIME_Mimicking_Temp_SkillUsedAtPosition(_Caster, _TargetX, _TargetY, _TargetZ, _Skill, _SkillType);
-
-IF
-CharacterUsedSkill(_Caster, _Skill, _SkillType, _SkillElement)
-AND
-DB_LLMIME_Mimicking_Temp_SkillUsedAtPosition(_Caster, _TargetX, _TargetY, _TargetZ, _Skill, _SkillType)
-THEN
-NOT DB_LLMIME_Mimicking_Temp_SkillUsedAtPosition(_Caster, _TargetX, _TargetY, _TargetZ, _Skill, _SkillType);
-LLMIME_Mimicking_StartOnSkillCastOnPosition(_Caster, _TargetX, _TargetY, _TargetZ, _Skill, _SkillType, _SkillElement);
+LLMIME_Mimicking_OnSkillUsedAtPosition(_Caster, _TargetX, _TargetY, _TargetZ, _Skill, _SkillType, _SkillElement);
 
 PROC
-LLMIME_Mimicking_StartOnSkillCastOnPosition((CHARACTERGUID)_Caster, (REAL)_TargetX, (REAL)_TargetY, (REAL)_TargetZ, (STRING)_Skill, (STRING)_SkillType, (STRING)_SkillElement)
+LLMIME_Mimicking_OnSkillUsedAtPosition((CHARACTERGUID)_Caster, (REAL)_TargetX, (REAL)_TargetY, (REAL)_TargetZ, (STRING)_Skill, (STRING)_SkillType, (STRING)_SkillElement)
 AND
-LLMIME_Mimicking_QRY_CharacterIsMimickable(_Caster)
+NOT DB_LLMIME_Skills_Temp_SkillResolved(_Caster, _TargetX, _TargetY, _TargetZ, _Skill)
+AND
+DB_LLMIME_Mimicking_SkillSwap(_Skill, _ResultSkill, _ResultSkillType, _ResultSkillElement)
+THEN
+DB_LLMIME_Skills_Temp_SkillSwapped(_Caster, _Skill, _ResultSkill);
+LeaderLog_Log("DEBUG", "[LLMIME:Mimicking:Skills:OnSkillUsedAtPosition] Swapped skill [",_Skill,"][",_SkillType,"][",_SkillElement,"] for [",_ResultSkill,"][",_ResultSkillType,"][",_ResultSkillElement,"].");
+LLMIME_Mimicking_StartOnSkillCastAtPosition(_Caster, _TargetX, _TargetY, _TargetZ, _ResultSkill, _ResultSkillType, _ResultSkillElement);
+DB_LLMIME_Skills_Temp_SkillResolved(_Caster, _TargetX, _TargetY, _TargetZ, _Skill);
+
+PROC
+LLMIME_Mimicking_OnSkillUsedAtPosition((CHARACTERGUID)_Caster, (REAL)_TargetX, (REAL)_TargetY, (REAL)_TargetZ, (STRING)_Skill, (STRING)_SkillType, (STRING)_SkillElement)
+AND
+NOT DB_LLMIME_Skills_Temp_SkillResolved(_Caster, _TargetX, _TargetY, _TargetZ, _Skill)
+THEN
+LLMIME_Mimicking_StartOnSkillCastAtPosition(_Caster, _TargetX, _TargetY, _TargetZ, _Skill, _SkillType, _SkillElement);
+DB_LLMIME_Skills_Temp_SkillResolved(_Caster, _TargetX, _TargetY, _TargetZ, _Skill);
+
+PROC
+LLMIME_Mimicking_OnSkillUsedAtPosition((CHARACTERGUID)_Caster, (REAL)_TargetX, (REAL)_TargetY, (REAL)_TargetZ, (STRING)_Skill, (STRING)_SkillType, (STRING)_SkillElement)
+AND
+DB_LLMIME_Skills_Temp_SkillResolved(_Caster, _TargetX, _TargetY, _TargetZ, _Skill)
+THEN
+NOT DB_LLMIME_Skills_Temp_SkillResolved(_Caster, _TargetX, _TargetY, _TargetZ, _Skill);
+
+//Delay by a frame or two so target events will fire first
+PROC
+LLMIME_Mimicking_StartOnSkillCastAtPosition((CHARACTERGUID)_Caster, (REAL)_TargetX, (REAL)_TargetY, (REAL)_TargetZ, (STRING)_Skill, (STRING)_SkillType, (STRING)_SkillElement)
 AND
 LLMIME_Mimicking_QRY_CanMimicSkill(_Skill, _SkillType, _SkillElement)
 AND
@@ -212,10 +247,9 @@ THEN
 LeaderLog_Log("DEBUG", "[LLMIME:Mime:CharacterUsedSkillAtPosition] Queuing up next mimic positional skill [",_Skill,"].");
 LLMIME_Mimicking_QueueNextAction(_Mime, _Caster, _Skill, "Skill", _TargetX, _TargetY, _TargetZ, -1);
 
-IF
-CharacterUsedSkill(_Caster, _Skill, _SkillType, _SkillElement)
-AND
-LLMIME_Mimicking_QRY_ActionQueued(_Caster, _Skill, "Skill")
+//Some skills may not fire a "cast" event if the animation doesn't have a textkey for it
+PROC
+LLMIME_Mimicking_QueueNextAction((CHARACTERGUID)_Mime, (CHARACTERGUID)_Caster, (STRING)_Skill, "Skill", (REAL)_TargetX, (REAL)_TargetY, (REAL)_TargetZ, (INTEGER)_TargetPriority, (INTEGER)_IsTarget)
 AND
 GetUUID(_Caster, _ID)
 AND
@@ -230,24 +264,42 @@ IF
 TimerFinished(_TimerName)
 AND
 DB_LLMIME_Mimicking_CastFallbackTimer(_TimerName, _Caster, _Skill)
-AND
-LLMIME_Mimicking_QRY_ActionQueued(_Caster, _Skill, "Skill")
-THEN
-LLMIME_Mimicking_StartNextMimic(_Caster, _Skill, "Skill");
-
-IF
-TimerFinished(_TimerName)
-AND
-DB_LLMIME_Mimicking_CastFallbackTimer(_TimerName, _Caster, _Skill)
 THEN
 NOT DB_LLMIME_Mimicking_CastFallbackTimer(_TimerName, _Caster, _Skill);
+LLMIME_Mimicking_Skills_OnSkillCast(_Caster, _Skill);
 
 IF
 SkillCast(_Caster, _Skill, _SkillType, _SkillElement)
+THEN
+LLMIME_Mimicking_Skills_OnSkillCast(_Caster, _Skill);
+
+PROC
+LLMIME_Mimicking_Skills_OnSkillCast((CHARACTERGUID)_Caster, (STRING)_Skill)
+AND
+DB_LLMIME_Skills_Temp_SkillSwapped(_Caster, _Skill, _ResultSkill)
+AND
+LLMIME_Mimicking_QRY_ActionQueued(_Caster, _ResultSkill, "Skill")
+THEN
+NOT DB_LLMIME_Skills_Temp_SkillSwapped(_Caster, _Skill, _ResultSkill);
+DB_LLMIME_Skills_Temp_SkillCastResolved(_Caster, _Skill);
+LLMIME_Mimicking_StartNextMimic(_Caster, _ResultSkill, "Skill");
+
+PROC
+LLMIME_Mimicking_Skills_OnSkillCast((CHARACTERGUID)_Caster, (STRING)_Skill)
+AND
+NOT DB_LLMIME_Skills_Temp_SkillCastResolved(_Caster, _Skill)
 AND
 LLMIME_Mimicking_QRY_ActionQueued(_Caster, _Skill, "Skill")
 THEN
+DB_LLMIME_Skills_Temp_SkillCastResolved(_Caster, _Skill);
 LLMIME_Mimicking_StartNextMimic(_Caster, _Skill, "Skill");
+
+PROC
+LLMIME_Mimicking_Skills_OnSkillCast((CHARACTERGUID)_Caster, (STRING)_Skill)
+AND
+DB_LLMIME_Skills_Temp_SkillCastResolved(_Caster, _Skill)
+THEN
+NOT DB_LLMIME_Skills_Temp_SkillCastResolved(_Caster, _Skill);
 
 PROC
 LLMIME_Mimicking_StartNextMimic((CHARACTERGUID)_Caster, (STRING)_Action, (STRING)_ActionType)
@@ -495,9 +547,9 @@ DB_NOOP(1);
 PROC
 LLMIME_Mimicking_OnScriptsCompleting()
 THEN
-SysClear("DB_LLMIME_Mimicking_Temp_SkillUsedOnTarget", 4);
+//SysClear("DB_LLMIME_Mimicking_Temp_SkillUsedOnTarget", 4);
+//SysClear("DB_LLMIME_Mimicking_Temp_SkillUsedAtPosition", 6);
 SysClear("DB_LLMIME_Mimicking_Temp_TargetPriority", 3);
-SysClear("DB_LLMIME_Mimicking_Temp_SkillUsedAtPosition", 6);
 SysClear("DB_LLMIME_Timers_SkillCastAtPosition", 7);
 SysClear("DB_LLMIME_Mimicking_CastFallbackTimer", 3);
 SysClear("DB_LLMIME_Mimicking_Skills_Temp_ListenForSuccess", 3);

@@ -65,7 +65,7 @@ LLMIME_Mimicking_QRY_IsMimicking(_Mime)
 AND
 GetStatusType(_Status, "INVISIBLE")
 AND
-NOT UserGetFlag(_Mime, "Mimicry_InvisibilityMimickingEnabled", 1)
+NOT ObjectGetFlag(_Mime, "Mimicry_InvisibilityMimickingEnabled", 1)
 THEN
 DB_LLMIME_Mimicking_Temp_DisablingStatus(_Mime, _Status);
 
@@ -326,10 +326,19 @@ DB_LLMIME_Mimicking_MimicQueue_Self(_Mime, _Caster, _Skill, "Skill")
 THEN
 DB_NOOP(1);
 
+/*
 QRY
 LLMIME_Mimicking_QRY_TargetActionIsQueued((CHARACTERGUID)_Caster, (STRING)_Action, (STRING)_ActionType, (REAL)_TargetX, (REAL)_TargetY, (REAL)_TargetZ, (INTEGER)_IsTarget)
 AND
 DB_LLMIME_Mimicking_MimicQueue(_Mime, _Caster, _Action, _ActionType, _CastX, _CastRotation, _CastZ, _TargetX, _TargetY, _TargetZ, _TargetPriority, _IsTarget)
+THEN
+DB_NOOP(1);
+*/
+
+QRY
+LLMIME_Mimicking_QRY_TargetActionIsQueued((CHARACTERGUID)_Caster, (STRING)_Action, (STRING)_ActionType, (REAL)_TargetX, (REAL)_TargetY, (REAL)_TargetZ, (INTEGER)_IsTarget)
+AND
+DB_LLMIME_Mimicking_MimicQueue(_Mime, _Caster, _Action, _ActionType, _CastX, _CastRotation, _CastZ, _, _, _, _TargetPriority, _IsTarget)
 THEN
 DB_NOOP(1);
 
