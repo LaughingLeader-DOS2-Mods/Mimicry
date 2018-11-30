@@ -104,7 +104,7 @@ TimerFinished("LLMIME_Timers_UpdateMimeEquipmentGrowth")
 AND
 DB_IsPlayer(_Player)
 THEN
-LeaderLibGrowth_Items_CheckEquipmentForMissingDeltamods(_Player);
+LeaderLib_Growth_Items_CheckEquipmentForMissingDeltamods(_Player);
 
 PROC
 LLMIME_ItemSystem_ResetMimeEquipment()

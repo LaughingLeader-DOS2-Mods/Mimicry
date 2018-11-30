@@ -17,17 +17,25 @@ Mimicry, inspired by [the Mime from Final Fantasy Tactics](http://finalfantasy.w
 
 The mime job is unlocked on a character by wearing The Mask of Mimicry. Simply wearing it unlocks all the mime passives and skills.
 
-_Restrictions: Mimes are muted, and therefore cannot cast spells! The power of mimicking comes at a cost..._
+_Restrictions: Mimes are muted in combat, and therefore cannot cast regular non-weapon skills! The power of mimicking comes at a cost._
+
+ If you wish to become a mime without the preset, only one mask exists in the game, which belongs to...
 
 #### Mime Follower
 
-As an alternative to dedicating a party member to the life of a mime, a mime follower can be recruited, and acts as a permanent summon.
+As an alternative to dedicating a party member to the life of a mime, a mime follower can be recruited, and acts as a permanent summon. To recruit the Mime follower, use the music box sold at the LeaderLib trader.
 
 _Restrictions: The mime follower can only mimic the actions of the character who recruited them._
 
+If the mime follower dies, he can be revived either through talking to his ghost, or regular means of resurrection. If the _unthinkable_ happens and you choose a particular option when talking to his ghost, your actions can be undone by using the music box once more.
+
+##### Music Box
+
+As stated previously, the music box acts as a summoning conduit for the mime follower. It's available at Old Man Lothar, the LeaderLib trader. Once recruited, the music box is a quick way to summon the follower to your position.
+
 #### Class Preset
 
-Mimicry also adds a new Mime class preset, allowing you to unlock the Mime from the start.
+Mimicry also adds a new Mime class preset, allowing you to unlock the Mime from the start. This preset is also available in the LeaderLib preset menu.
 
 ### Mimicking
 
@@ -37,7 +45,7 @@ Mimes can mimic the actions of allies in battle.
 
 Both skills and position/target settings are mimicked. Meaning, if a skill was cast on the caster, the mime will cast that skill on themselves. If a skill was cast 10m ahead on an enemy, then the mime will cast 10m ahead and prioritize an enemy target.
 
-*Copied Settings:*
+*Mimicked Attributes:*
 * Target Position
 * Target Preference (Ally, Enemy, or None)
 * Caster Weapons
@@ -45,21 +53,21 @@ Both skills and position/target settings are mimicked. Meaning, if a skill was c
 *Restrictions:*
 * Source skills are ignored.
 * Special-type shout skills are ignored (as these tend to be special skills from mods, like menu skills).
-* Path skills are ignored.
+* Rush & Jump skills are ignored.
 * Summon skills are ignored.
 * Favourable Wind is ignored.
 		
 #### Attack Mimicking
 	
-Like skills, basic attacks are mimicked, and the attacker's target position, target preference, and weapons copied.
+Like skills, basic attacks are mimicked, and the attacker's target position, target preference, and weapons are mimicked.
 
-*Copied Settings:*
+*Mimicked Attributes:*
 * Target Position
 * Target Preference (Ally, Enemy, or None)
 * Caster Weapons
 
 *Restrictions:*
-* If no target is found, the attack will "miss", due to the way DOS2's basic attack system works (weapon attacks don't have an area of effect like skills can).
+* If no target is found, the attack will "miss", due to the way DOS2's basic attack system works (weapon attacks don't have an area of effect like skills do).
 	
 #### Item Mimicking
 
@@ -69,7 +77,9 @@ The following item types are mimicked:
 * Food
 * Drinks
 
-Item mimicking can be disabled in the host settings menu.
+Self-preservation is enabled by default, so an undead ally drinking poison won't be mimicked by a non-undead character, and vice versa.
+
+Item mimicking can be disabled in the host settings menu, and self-preservation can be disabled in the mime settings menu (both available in the Mimicry settings menu).
 
 #### Source Mimicking & Source Regeneration
 
@@ -83,21 +93,21 @@ Additionally, at level 10 or higher, mimes will regenerate 1 source point every 
 
 Mimes are innately gifted with unarmed combat.
 
-*Random Bonus Damage*
-* Every 3rd hit, unarmed attacks will deal random bonus damage. 
+*Unarmed Bonus Damage*
+* Every 3rd consecutive unarmed hit on a target deals random bonus damage. 
 
 *Double Strike*
-* Critical unarmed strikes will cause a Double Strike (one free hit per turn). Double Strike won't occur during a mimicked attack.
+* Critical unarmed strikes have a 40% chance to cause a Double Strike (one free hit). Double Strikes won't occur during a mimicked attack.
 
 *Innate 5% Damage*
 * Brawlers gain a small 5% bonus to all damage.
 	
 *Brawler Stance Skill*
-* A skill that toggles the Brawler Stance, which makes the Mime's fists scale to their level and chosen attribute (Constitution, Strength, or Finesse).
+* A skill that toggles the Brawler Stance, granting the Mime the Brawler's Fist, a two-handed unarmed weapon. The Brawler's Fist scales to the Mime's level and chosen attribute (Constitution by default). Every few levels, the Brawler's Fist will gain new bonuses.
 
 #### Concentration
 
-While unarmed, mimes gain a 100% bonus to accuracy, ensuring attacks will never miss.
+While unarmed, mimes gain a large bonus to accuracy.
 
 #### Beastmaster
 
@@ -121,13 +131,27 @@ Friendly summons within 15m to a mime gain new abilities.
 | Plant Monster | Bad Breath (New skill added by Mimicry) |
 | Poison Ooze | Poison Dart |
 | Water Ooze | Hail Strike |
-| Totem | Totem Rage Status (+50% Crit Chance) |
+| Totem | Totem Rage Status (Increased Crit Chance) |
 | Any Unlisted Summon | Wish (New skill added by Mimicry) |
+
+### Mime Skills
+
+Mime skills can be purchased from the Mask of Mimicry itself, available when meditating (use the Inner Reflection skill or the LeaderLib mod menu).
 
 # Screenshots
 
 # Attribution
 - [Divinity: Original Sin 2](http://store.steampowered.com/app/435150/Divinity_Original_Sin_2/), a game by [Larian Studios](http://larian.com/)
+
+## Icon Credits
+Many of the icons in Mimicry were created through modifying freely available icons.
+
+[https://game-icons.net/](https://game-icons.net/)
+* [Lorc](http://lorcblog.blogspot.com/)
+* [Delapouite](http://delapouite.com/)
+* [Skoll](https://game-icons.net/)
+
+Falling Man Silhouettes from [http://getdrawings.com/falling-man-silhouette](http://getdrawings.com/falling-man-silhouette) under CC BY-NC 4.0
 
 # Support
 If you're feeling generous, an easy way to show support is by tipping me a coffee:
