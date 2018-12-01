@@ -136,7 +136,15 @@ Friendly summons within 15m to a mime gain new abilities.
 
 ### Mime Skills
 
+Mime skills are only usable as a mime. Unequipping the Mask of Mimicry will result in the removal of all mime skills, but they'll magically come back when the mask is equipped once more.
+
+#### Buying Mime Skills
+
 Mime skills can be purchased from the Mask of Mimicry itself, available when meditating (use the Inner Reflection skill or the LeaderLib mod menu).
+
+Special Features:
+* The Mask sells new mime skills at various levels. You'll get an in-game notification when new skills are available, and this will be obvious in the main mime menu.
+* Non-mime related items in its inventory can be "liquidated" into gold, for keeping a tidy merchant inventory.
 
 # Screenshots
 
