@@ -309,8 +309,20 @@ CharacterStatusApplied(_Target, "LLMIME_LAUNCHED", (CHARACTERGUID)_Caster)
 AND
 GetPosition(_Target, _x, _y, _z)
 THEN
-LLMIME_Skills_SpawnSkillPlatform(_Target, _Caster);
 PlayEffectAtPosition("RS3_FX_SubEffects_Ground_Earthquake_01", _x, _y, _z);
+CharacterSetAnimationOverride(_Target, "knockdown_fall");
+LLMIME_Skills_SpawnSkillPlatform(_Target, _Caster);
+ProcObjectTimer(_Target, "LLMIME_Skills_QuakeSlam_PlayKnockdownLoop", 600);
+
+PROC
+ProcObjectTimerFinished((CHARACTERGUID)_Target, "LLMIME_Skills_QuakeSlam_PlayKnockdownLoop")
+THEN
+CharacterSetAnimationOverride(_Target, "knockdown_loop");
+
+IF
+CharacterCharacterEvent(_Target, _Caster, "LLMIME_Skills_QuakeSlam_StartLaunch")
+THEN
+LLMIME_Skills_SpawnSkillPlatform(_Target, _Caster);
 
 IF
 CharacterUsedSkill(_Character, "Shout_LLMIME_QuakeSlam", _, _)
@@ -332,110 +344,80 @@ PlayEffectAtPosition("LLMIME_FX_Skills_QuakeSlam_Cast_Root_01", _x, _y, _z);
 PROC
 LLMIME_Skills_SpawnSkillPlatform((GUIDSTRING)_Target, (CHARACTERGUID)_Caster)
 AND
-NOT DB_LLMIME_Skills_Temp_QuakeSlamTarget(_Target, _Caster, _, _, _, _, _)
+NOT DB_LLMIME_Skills_Temp_QuakeSlamTarget(_Target, _Caster, _)
 AND
 GetUUID(_Target, _UUID)
 AND
-LeaderLib_Random_QRY(400,900)
-//LeaderLib_Random_QRY(1500,2000)
+LeaderLib_Random_QRY(250, 800)
 AND
-DB_LeaderLib_Random(_TimerDelay)
+DB_LeaderLib_Random(_HeightInt)
+AND
+Real(_HeightInt, _HeightR)
+AND
+RealDivide(_HeightR, 100.0, _Height)
+AND
+Integer(_Height, _FallDamageInt)
+AND
+GetPosition(_Target, _x, _y, _z)
+THEN
+SetTag(_Target, "LLMIME_Launched");
+DB_LLMIME_Skills_Temp_QuakeSlamTarget(_Target, _Caster, _FallDamageInt);
+LeaderLib_Platforms_Launch(_Target, "LLMIME_Skills_QuakeSlamDone", _Height);
+PlayScaledEffectAtPosition("LLMIME_FX_Status_Launched_Apply_Root_01", 0.25, _x, _y, _z);
+
+PROC
+LeaderLib_Platforms_OnLaunchFinished((GUIDSTRING)_Target, "LLMIME_Skills_QuakeSlamDone")
+AND
+ObjectIsCharacter((CHARACTERGUID)_Target, 1)
+THEN
+CharacterSetAnimationOverride(_Target, "");
+PlayAnimation(_Target,"knockdown_getup");
+
+PROC
+LeaderLib_Platforms_OnLaunchFinished((GUIDSTRING)_Target, "LLMIME_Skills_QuakeSlamDone")
 AND
 GetPosition(_Target, _x, _y, _z)
 AND
-IntegertoString(_TimerDelay, _TimerDelayStr)
+DB_LLMIME_Skills_Temp_QuakeSlamTarget(_Target, _Caster, _FallDamageInt)
 AND
-StringConcatenate(_UUID, _TimerDelayStr, _PlatformID)
-AND
-LeaderLIb_Platforms_QRY_SpawnPlatform(_PlatformID, "Large", 0, _x, _y, _z)
-AND
-DB_LeaderLib_Platforms(_PlatformID, _Platform)
-AND
-RealSum(_z, 0.1, _tz)
+IntegerSubtract(_FallDamageInt, 1, _FallDamage)
 THEN
-NOT DB_LeaderLib_Random(_TimerDelay);
-//ApplyStatus(_Platform, "NECROFIRE", -1.0, 1); // Check if it gets spawned
-PlayScaledEffectAtPosition("LLMIME_FX_Status_Launched_Apply_Root_01", 0.25, _x, _y, _z);
-DB_LLMIME_Skills_Temp_QuakeSlamTarget(_Target, _Caster, _x, _y, _z, _Platform, _TimerDelay);
-SetVarObject(_Target, "LLMIME_QuakeSlamCaster", _Caster);
-TeleportToPosition(_Target, _x, _y, _tz, "LLMIME_Skills_QuakeSlam_FlyUpPillar", 0, 1);
-LeaderLib_StartObjectTimer(_Platform, _TimerDelay, "Mimicry_Timers_RemovePlatformTimer_", "Mimicry_Events_Skills_RemovePlatform");
-//LeaderLib_StartObjectTimer(_Target, 2000, "Mimicry_Timers_ResetAnimOverrideFailsafe_", "Mimicry_Events_Skills_ResetAnimationOverride");
-
-IF
-StoryEvent(_Target, "LLMIME_Skills_QuakeSlam_FlyUpPillar")
-AND
-DB_LLMIME_Skills_Temp_QuakeSlamTarget(_Target, _Caster, _x, _y, _z, _Platform, _TimerDelay)
-THEN
-LLMIME_Skills_Internal_MoveToPillar(_Target, _x, _y, _z, "LLMIME_Skills_QuakeSlam_SetKnockdownLoop");
-
-PROC
-LLMIME_Skills_Internal_MoveToPillar((GUIDSTRING)_Target, (REAL)_x, (REAL)_y, (REAL)_z, (STRING)_Event)
-AND
-ObjectIsCharacter((CHARACTERGUID)_Target, 1)
-THEN
-CharacterPurgeQueue(_Target);
-CharacterSetAnimationOverride(_Target, "knockdown_loop");
-CharacterMoveToPosition(_Target, _x, _y, _z, 1, _Event);
-CharacterSetAnimationOverride(_Target, "knockdown_loop");
-
-PROC
-LLMIME_Skills_Internal_MoveToPillar((GUIDSTRING)_Target, (REAL)_x, (REAL)_y, (REAL)_z, (STRING)_Event)
-AND
-ObjectIsItem((ITEMGUID)_Target, 1)
-THEN
-ItemMoveToPosition(_Target, _x, _y, _z, 50.0, 25.0, _Event, 0);
-
-IF
-StoryEvent(_Target, "LLMIME_Skills_QuakeSlam_SetKnockdownLoop")
-AND
-ObjectIsCharacter((CHARACTERGUID)_Target, 1)
-AND
-NOT LeaderLib_Helper_QRY_HasStatus(_Target, "KNOCKED_DOWN")
-THEN
-CharacterSetAnimationOverride(_Target, "knockdown_loop");
-
-IF
-StoryEvent(_Target, "Mimicry_Events_Skills_ResetAnimationOverride")
-AND
-ObjectIsCharacter((CHARACTERGUID)_Target, 1)
-THEN
-CharacterSetAnimationOverride(_Target, "");
-
-IF
-StoryEvent((ITEMGUID)_Platform, "Mimicry_Events_Skills_RemovePlatform")
-AND
-DB_LLMIME_Skills_Temp_QuakeSlamTarget(_Target, _Caster, _x, _y, _z, _Platform, _TimerDelay)
-AND
-RealSum(_z, -0.1, _tz)
-AND
-Real(_TimerDelay, _DelayR)
-AND
-RealProduct(_DelayR, 1.75, _EndTimerDelayR)
-AND
-Integer(_EndTimerDelayR, _EndTimerDelay)
-THEN
-NOT DB_LLMIME_Skills_Temp_QuakeSlamTarget(_Target, _Caster, _x, _y, _z, _Platform, _TimerDelay);
-LeaderLib_Platforms_RemovePlatform(_Platform);
-LLMIME_Skills_Internal_MoveToPillar(_Target, _x, _y, _tz, "LLMIME_Skills_QuakeSlam_SetKnockdownLoop");
-LeaderLib_StartObjectTimer(_Target, _EndTimerDelay, "Mimicry_Timers_Skills_QuakeSlam_FinishLanding_", "Mimicry_Events_Skills_QuakeSlam_TargetLanded");
-
-IF
-StoryEvent(_Target, "Mimicry_Events_Skills_QuakeSlam_TargetLanded")
-AND
-ObjectIsCharacter((CHARACTERGUID)_Target, 1)
-AND
-GetVarObject(_Target, "LLMIME_QuakeSlamCaster", _Caster)
-THEN
-CharacterFlushQueue(_Target);
-CharacterSetAnimationOverride(_Target, "");
-ApplyStatus(_Target, "KNOCKED_DOWN", 6.0, 1, _Caster);
-
-IF
-StoryEvent(_Target, "Mimicry_Events_Skills_QuakeSlam_TargetLanded")
-THEN
+NOT DB_LLMIME_Skills_Temp_QuakeSlamTarget(_Target, _Caster, _FallDamageInt);
 RemoveStatus(_Target, "LLMIME_LAUNCHED");
-ClearVarObject(_Target, "LLMIME_QuakeSlamCaster");
+PlayEffectAtPosition("RS3_FX_SubEffects_Ground_Earthquake_01", _x, _y, _z);
+ProcObjectTimer(_Target, "LLMIME_Timers_RemoveLaunchedTag", 4000);
+LLMIME_Skills_QuakeSlam_ApplyFallDamage(_Target, _Caster, _FallDamage);
+PlaySoundResource(_Target, SOUNDRESOURCEGUID_LLMIME_FallDamage_A_3051a10e-72ee-4067-b190-30a2e13505d0);
+
+PROC
+ProcObjectTimerFinished(_Target, "LLMIME_Timers_RemoveLaunchedTag")
+THEN
+ClearTag(_Target, "LLMIME_Launched");
+
+PROC
+LLMIME_Skills_QuakeSlam_ApplyFallDamage((GUIDSTRING)_Target, (CHARACTERGUID)_Caster, (INTEGER)_FallDamage)
+AND
+_FallDamage > 0
+AND
+_FallDamage <= 7
+AND
+IntegertoString(_FallDamage, _FallDamageStr)
+AND
+StringConcatenate("LLMIME_LAUNCHED_FALLDAMAGE", _FallDamageStr, _Status)
+THEN
+ApplyStatus(_Target, _Status, 0.0, 0, _Caster);
+
+PROC
+LLMIME_Skills_QuakeSlam_ApplyFallDamage((GUIDSTRING)_Target, (CHARACTERGUID)_Caster, 0)
+THEN
+ApplyStatus(_Target, "LLMIME_LAUNCHED_FALLDAMAGE1", 0.0, 0, _Caster);
+
+PROC
+LLMIME_Skills_QuakeSlam_ApplyFallDamage((GUIDSTRING)_Target, (CHARACTERGUID)_Caster, (INTEGER)_FallDamage)
+AND
+_FallDamage > 7
+THEN
+ApplyStatus(_Target, "LLMIME_LAUNCHED_FALLDAMAGE7", 0.0, 0, _Caster);
 //END_REGION
 
 //REGION VITAL_INFLUENCE

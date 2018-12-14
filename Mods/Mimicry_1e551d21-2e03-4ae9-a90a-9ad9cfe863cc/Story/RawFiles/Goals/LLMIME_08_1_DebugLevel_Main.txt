@@ -298,6 +298,8 @@ IF
 StoryEvent((CHARACTERGUID)_Player, "LLMIME_Events_Debug_AddPlayers")
 AND
 NOT DB_IsPlayer(_Player)
+AND
+CharacterIsPlayer(_Player, 1)
 THEN
 DB_IsPlayer(_Player);
 
@@ -497,6 +499,76 @@ LLMIME_Follower_SpawnGhost(_Mime);
 //END_REGION
 
 //REGION SKILL_TEST
+IF
+CharacterStatusApplied(_Target, "LLMIME_DEBUG_SCRIPT", (CHARACTERGUID)_Source)
+AND
+GetPosition(_Target, _x, _y, _z)
+THEN
+//CharacterUseSkill(_Target, "Teleportation_LLMIME_FallTest", _Target, 0, 1, 1);
+CharacterUseSkillAtPosition(_Target, "Teleportation_LLMIME_FallTest", _x, _y, _z, 0, 1);
+
+IF
+CharacterUsedItem(_, ITEMGUID_PUZ_Lever_Floor_A_000_daa4b4cf-9876-4a5b-9b78-021e4ccb1ade)
+THEN
+CharacterSetAnimationOverride(CHARACTERGUID_CrateTest_546c0ab3-683b-43cb-8b36-e86c67bf520d, "knockdown_fall");
+ProcObjectTimer(CHARACTERGUID_CrateTest_546c0ab3-683b-43cb-8b36-e86c67bf520d, "LLMIME_Debug_StartLaunch", 250);
+ProcObjectTimer(CHARACTERGUID_CrateTest_546c0ab3-683b-43cb-8b36-e86c67bf520d, "LLMIME_Debug_PlayKnockdownLoop", 500);
+
+PROC
+ProcObjectTimerFinished((CHARACTERGUID)_Char, "LLMIME_Debug_PlayKnockdownLoop")
+THEN
+CharacterSetAnimationOverride(_Char, "knockdown_loop");
+
+PROC
+ProcObjectTimerFinished((CHARACTERGUID)_Character, "LLMIME_Debug_StartLaunch")
+AND
+GetPosition(ITEMGUID_S_LeaderLib_Platform_CrateTest_834a0782-4eb4-4e53-980e-47d2d0d00537, _x, _y, _z)
+AND
+Random(10, _Ran)
+AND
+IntegerMax(4, _Ran, _MultInt)
+AND
+Real(_MultInt, _MultR)
+AND
+RealProduct(1.0, _MultR, _AddY)
+AND
+RealProduct(_MultR, 1.60, _Speed)
+THEN
+LeaderLog_RealToString(_AddY, "[LLMIME:Debug:FakeGravityTest] Launching up. Height [","]");
+ObjectSetFlag(ITEMGUID_S_LeaderLib_Platform_CrateTest_834a0782-4eb4-4e53-980e-47d2d0d00537, "LLMIME_Debug_FakeGravityTestActive");
+LeaderLib_Platforms_Launch(_Character, "LLMIME_Debug_FakeGravityTest_DownDone", _AddY);
+
+/*
+IF
+DB_LeaderLib_Platforms(_ID, _Platform)
+THEN
+SetStoryEvent(_Platform, "LeaderLib_Platform_MakeVisible");
+*/
+
+PROC
+LeaderLib_Platforms_OnLaunchFinished((CHARACTERGUID)_Character, "LLMIME_Debug_FakeGravityTest_DownDone")
+THEN
+LeaderLog_Log("DEBUG", "[LLMIME:Debug:FakeGravityTest] Launching done.");
+CharacterSetAnimationOverride(_Character, "");
+PlayAnimation(_Character,"knockdown_getup");
+
+PROC
+LLMIME_Debug_ItemToTransform((ITEMGUID)_Item, (REAL)_X, (REAL)_Y, (REAL)_Z)
+AND
+GetRotation(_Item, (REAL)_PitchDegree, (REAL)_YawDegree, (REAL)_RollDegree)
+AND
+RealProduct(_PitchDegree, 0.0174533, (REAL)_Pitch)
+AND
+RealProduct(_YawDegree, 0.0174533, (REAL)_Yaw)
+AND
+RealProduct(_RollDegree, 0.0174533, (REAL)_Roll)
+AND
+ItemGetAmount(_Item, (INTEGER)_Amount)
+AND
+ItemGetOwner(_Item, (CHARACTERGUID)_Owner)
+THEN
+ItemToTransform(_Item, _X, _Y, _Z, _Pitch, _Yaw, _Roll, _Amount, _Owner);
+
 /*
 IF
 CharacterMissedBy(_Mime, _AttackerOwner, _Attacker)
@@ -513,7 +585,7 @@ CharacterUseSkill(_Mime, "Projectile_ThrowingKnife", _Attacker, 0, 1, 1);
 
 //REGION PROJECTILE_TEST
 
-
+/*
 IF
 CharacterUsedSkillOnTarget(_Caster, (CHARACTERGUID)_Target, "Target_LLMIME_DebugTargetSkill", _, _)
 AND
@@ -532,6 +604,7 @@ ProcObjectTimerFinished((CHARACTERGUID)_Dummy, "LLMIME_Debug_RemoveDummy")
 THEN
 SetOnStage(_Dummy, 0);
 CharacterDieImmediate(_Dummy, 0, "None", _Dummy);
+*/
 //END_REGION
 
 //REGION PLATFORM_TEST
@@ -606,6 +679,7 @@ THEN
 LeaderLib_StartCharacterCharacterTimer(_Caster, _Target, 10, "LLMIME_Timers_Debug_FlyTimer_", "LLMIME_Debug_FlyTargetToPosition");
 */
 
+/*
 IF
 CharacterUsedSkillOnTarget(_Caster, (CHARACTERGUID)_Target, "Target_LLMIME_DebugTargetSkill", _, _)
 AND
@@ -695,7 +769,7 @@ CharacterSetAnimationOverride(_Target, "");
 //PlayAnimation(_Target, "knockdown_getup", "");
 ApplyStatus(_Target, "KNOCKED_DOWN", 6.0);
 NOT DB_LLMIME_Debug_ObjectPosition(_Target, _Caster, _Object, _x, _y, _z);
-
+*/
 //END_REGION
 
 //REGION TRACING
