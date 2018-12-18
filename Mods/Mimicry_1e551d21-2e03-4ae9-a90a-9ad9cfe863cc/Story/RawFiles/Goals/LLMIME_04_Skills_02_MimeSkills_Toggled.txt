@@ -360,7 +360,9 @@ Integer(_Height, _FallDamageInt)
 AND
 GetPosition(_Target, _x, _y, _z)
 THEN
+TimerCancel("LLMIME_Timers_RemoveLaunchedTags");
 SetTag(_Target, "LLMIME_Launched");
+DB_LLMIME_Skills_Temp_QuakeSlamTagged(_Target);
 DB_LLMIME_Skills_Temp_QuakeSlamTarget(_Target, _Caster, _FallDamageInt);
 LeaderLib_Platforms_Launch(_Target, "LLMIME_Skills_QuakeSlamDone", _Height);
 PlayScaledEffectAtPosition("LLMIME_FX_Status_Launched_Apply_Root_01", 0.25, _x, _y, _z);
@@ -374,6 +376,25 @@ CharacterSetAnimationOverride(_Target, "");
 PlayAnimation(_Target,"knockdown_getup");
 
 PROC
+LeaderLib_Platforms_OnPreApexReached((GUIDSTRING)_Target, "LLMIME_Skills_QuakeSlamDone")
+AND
+DB_LLMIME_Skills_Temp_QuakeSlamTarget(_Target, _Caster, _FallDamageInt)
+AND
+ObjectIsCharacter((CHARACTERGUID)_Target, 1)
+THEN
+CharacterCharacterSetEvent(_Caster, _Target, "LLMIME_Skills_QuakeSlam_CreateSubQuake");
+//PlayEffectAtPosition("RS3_FX_SubEffects_Ground_Earthquake_01", _x, _y, _z);
+
+PROC
+LeaderLib_Platforms_OnPreApexReached((GUIDSTRING)_Target, "LLMIME_Skills_QuakeSlamDone")
+AND
+DB_LLMIME_Skills_Temp_QuakeSlamTarget(_Target, _Caster, _FallDamageInt)
+AND
+ObjectIsItem((ITEMGUID)_Target, 1)
+THEN
+CharacterItemSetEvent(_Caster, _Target, "LLMIME_Skills_QuakeSlam_CreateSubQuake");
+
+PROC
 LeaderLib_Platforms_OnLaunchFinished((GUIDSTRING)_Target, "LLMIME_Skills_QuakeSlamDone")
 AND
 GetPosition(_Target, _x, _y, _z)
@@ -384,14 +405,27 @@ IntegerSubtract(_FallDamageInt, 1, _FallDamage)
 THEN
 NOT DB_LLMIME_Skills_Temp_QuakeSlamTarget(_Target, _Caster, _FallDamageInt);
 RemoveStatus(_Target, "LLMIME_LAUNCHED");
-PlayEffectAtPosition("RS3_FX_SubEffects_Ground_Earthquake_01", _x, _y, _z);
-ProcObjectTimer(_Target, "LLMIME_Timers_RemoveLaunchedTag", 4000);
 LLMIME_Skills_QuakeSlam_ApplyFallDamage(_Target, _Caster, _FallDamage);
 PlaySoundResource(_Target, SOUNDRESOURCEGUID_LLMIME_FallDamage_A_3051a10e-72ee-4067-b190-30a2e13505d0);
 
-PROC
-ProcObjectTimerFinished(_Target, "LLMIME_Timers_RemoveLaunchedTag")
+IF
+CharacterStatusRemoved(_Target, "LLMIME_LAUNCHED", _)
 THEN
+TimerCancel("LLMIME_Timers_RemoveLaunchedTags");
+TimerLaunch("LLMIME_Timers_RemoveLaunchedTags", 1500);
+
+IF
+ItemStatusRemoved(_Target, "LLMIME_LAUNCHED", _)
+THEN
+TimerCancel("LLMIME_Timers_RemoveLaunchedTags");
+TimerLaunch("LLMIME_Timers_RemoveLaunchedTags", 1500);
+
+IF
+TimerFinished("LLMIME_Timers_RemoveLaunchedTags")
+AND
+DB_LLMIME_Skills_Temp_QuakeSlamTagged(_Target)
+THEN
+NOT DB_LLMIME_Skills_Temp_QuakeSlamTagged(_Target);
 ClearTag(_Target, "LLMIME_Launched");
 
 PROC
