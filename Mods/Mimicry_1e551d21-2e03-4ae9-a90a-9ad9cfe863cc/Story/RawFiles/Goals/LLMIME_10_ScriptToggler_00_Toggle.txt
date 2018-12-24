@@ -3,7 +3,6 @@ SubGoalCombiner SGC_AND
 INITSECTION
 
 KBSECTION
-
 /*
 Some of the mimicking events can be quite broad, so this script is used to disable them when nobody is mimicking.
 */
@@ -91,6 +90,11 @@ LeaderLog_Log("SYSTEM", "[Mimicry:ScriptToggler:ToggleScriptsOff] Starting scrip
 
 IF
 TimerFinished("LLMIME_Timers_DisableMimickingScripts")
+THEN
+LLMIME_ScriptToggler_Internal_DisableScripts();
+
+PROC
+LLMIME_ScriptToggler_Internal_DisableScripts()
 AND
 NOT DB_LLMIME_ScriptToggler_Temp_BlockScriptDisable(1)
 AND
@@ -104,8 +108,8 @@ SysCompleteGoal("LLMIME_01_Mimicking_04_Attacking_Toggled");
 SysCompleteGoal("LLMIME_01_Mimicking_05_Items_Toggled");
 LeaderLog_Log("SYSTEM", "[Mimicry:ScriptToggler:ToggleScriptsOff] No mimes are mimicking. Disabled mimicking scripts.");
 
-IF
-TimerFinished("LLMIME_Timers_DisableMimickingScripts")
+PROC
+LLMIME_ScriptToggler_Internal_DisableScripts()
 AND
 NOT DB_LLMIME_ScriptToggler_Temp_BlockScriptDisable(1)
 AND

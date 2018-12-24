@@ -3,9 +3,10 @@ SubGoalCombiner SGC_AND
 INITSECTION
 DB_LLMIME_ScriptToggler_ScriptsEnabled(1);
 KBSECTION
-
 IF
-GameStarted(_,_)
+GameStarted(_Level, _)
+AND
+IsGameLevel(_Level, 1)
 AND
 NOT DB_LLMIME_ScriptToggle_InitialCheckRan(1)
 THEN
