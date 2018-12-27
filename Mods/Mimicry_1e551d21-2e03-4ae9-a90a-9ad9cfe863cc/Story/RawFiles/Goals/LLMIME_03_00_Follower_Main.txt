@@ -78,18 +78,11 @@ DB_LLMIME_Follower_RandomAnimation(_Index, _Animation);
 //END_REGION
 
 //REGION UPDATING
-QRY
-LLMIME_Follower_Internal_QRY_VersionNeedsUpdating("0.9.7.0", (STRING)_NewVersion)
-THEN
-DB_NOOP(1);
-
 PROC
-LeaderUpdater_ModUpdated("Mimicry", "LaughingLeader", (STRING)_PastVersion, (STRING)_NewVersion)
-AND
-LLMIME_Follower_Internal_QRY_VersionNeedsUpdating(_PastVersion, _NewVersion)
+LeaderUpdater_ModUpdated("Mimicry", "LaughingLeader", "0.9.9.1", (STRING)_NewVersion)
 THEN
-LeaderLog_Log("DEBUG", "[LLMIME:Follower] Updating settings from version [",_PastVersion,"]");
-LLMIME_Follower_InitSettings();
+LeaderLog_Log("DEBUG", "[LLMIME:Follower] Updating settings from version [0.9.9.1] to [",_NewVersion,"]");
+LLMIME_Follower_RemoveBlankSkills();
 //END_REGION
 
 //REGION CHARACTER_SETUP
@@ -667,6 +660,7 @@ DB_LLMIME_Follower_ResetPositionTimer(_Mime, _TimerName, _Stage)
 THEN
 NOT DB_LLMIME_Follower_ResetPositionTimer(_Mime, _TimerName, _Stage);
 TimerCancel(_TimerName);
+LLMIME_Follower_RemoveBlankSkills();
 //END_REGION
 
 //REGION DISMISSAL
@@ -1455,6 +1449,18 @@ DB_LLMIME_Follower_Temp_RemoveMessageDisplayed(_Player)
 THEN
 NOT DB_LLMIME_Follower_Temp_RemoveMessageDisplayed(_Player);
 //END_REGION
+
+//REGION BLANK_SKILLS
+PROC
+LLMIME_Follower_RemoveBlankSkills()
+AND
+DB_LLMIME_Follower_Mime(_Mime)
+AND
+DB_LLMIME_BlankSkills(_Skill)
+THEN
+CharacterRemoveSkill(_Mime, _Skill);
+//END_REGION
+
 EXITSECTION
 
 ENDEXITSECTION

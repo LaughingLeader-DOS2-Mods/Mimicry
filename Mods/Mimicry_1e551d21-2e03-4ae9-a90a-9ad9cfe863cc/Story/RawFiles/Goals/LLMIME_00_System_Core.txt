@@ -68,6 +68,31 @@ DB_LLMIME_MimeStatuses("LLMIME_CONCENTRATION_BONUS");
 DB_LLMIME_MimeStatuses("LLMIME_CONCENTRATION_INFO");
 DB_LLMIME_MimeStatuses("LLMIME_SOURCE_REGENERATION_HIDDEN");
 
+DB_LLMIME_BlankSkills("Shout_LLMIME_Blank1");
+DB_LLMIME_BlankSkills("Shout_LLMIME_Blank2");
+DB_LLMIME_BlankSkills("Shout_LLMIME_Blank3");
+DB_LLMIME_BlankSkills("Shout_LLMIME_Blank4");
+DB_LLMIME_BlankSkills("Shout_LLMIME_Blank5");
+DB_LLMIME_BlankSkills("Shout_LLMIME_Blank6");
+DB_LLMIME_BlankSkills("Shout_LLMIME_Blank7");
+DB_LLMIME_BlankSkills("Shout_LLMIME_Blank8");
+DB_LLMIME_BlankSkills("Shout_LLMIME_Blank9");
+DB_LLMIME_BlankSkills("Shout_LLMIME_Blank10");
+DB_LLMIME_BlankSkills("Shout_LLMIME_Blank11");
+DB_LLMIME_BlankSkills("Shout_LLMIME_Blank12");
+DB_LLMIME_BlankSkills("Shout_LLMIME_Blank13");
+DB_LLMIME_BlankSkills("Shout_LLMIME_Blank14");
+DB_LLMIME_BlankSkills("Shout_LLMIME_Blank15");
+DB_LLMIME_BlankSkills("Shout_LLMIME_Blank16");
+DB_LLMIME_BlankSkills("Shout_LLMIME_Blank17");
+DB_LLMIME_BlankSkills("Shout_LLMIME_Blank18");
+DB_LLMIME_BlankSkills("Shout_LLMIME_Blank19");
+DB_LLMIME_BlankSkills("Shout_LLMIME_Blank20");
+DB_LLMIME_BlankSkills("Shout_LLMIME_Blank21");
+DB_LLMIME_BlankSkills("Shout_LLMIME_Blank22");
+DB_LLMIME_BlankSkills("Shout_LLMIME_Blank23");
+DB_LLMIME_BlankSkills("Shout_LLMIME_Blank24");
+
 PROC
 LLMIME_System_InitEffectFlags()
 AND
@@ -97,19 +122,10 @@ DB_LLMIME_Templates("Decoy", "S_LLMIME_Skill_Decoy_30a42871-15cc-4c97-bad6-4a813
 //END_REGION
 
 //REGION UPDATING
-QRY
-LLMIME_System_Internal_QRY_VersionNeedsUpdating((STRING)_Version)
-AND
-_Version == "0.9.0.0"
-THEN
-DB_NOOP(1);
-
 PROC
-LeaderUpdater_ModUpdated("Mimicry", "LaughingLeader", (STRING)_PastVersion, (STRING)_NewVersion)
-AND
-LLMIME_System_Internal_QRY_VersionNeedsUpdating(_PastVersion)
+LeaderUpdater_ModUpdated("Mimicry", "LaughingLeader", "0.9.9.1", (STRING)_NewVersion)
 THEN
-LeaderLog_Log("DEBUG", "[LLMIME:System] Updating settings from version [",_PastVersion,"] to [",_NewVersion,"]");
+LeaderLog_Log("DEBUG", "[LLMIME:System] Updating settings from version [0.9.9.1] to [",_NewVersion,"]");
 LLMIME_System_InitSettings();
 //END_REGION
 
