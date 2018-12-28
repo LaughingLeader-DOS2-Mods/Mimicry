@@ -18,7 +18,7 @@ THEN
 //DB_LeaderLib_Growth_Characters_Skills("Mimicry.MimeFollower", _MinLevel, _Skill, _MatchType, _MatchValue)
 //LeaderLib_Growth_Characters_Register_Skill("Mimicry.MimeFollower", 1, "Target_EnemyCripplingBlow", "Tag", "LLMIME_MimeFollower");
 LeaderLib_Growth_Characters_Register_Skill("Mimicry.MimeFollower", 2, "MultiStrike_LLMIME_MimeVault_Follower", "Tag", "LLMIME_MimeFollower");
-LeaderLib_Growth_Characters_Register_Skill("Mimicry.MimeFollower", 3, "Target_LLMIME_Wish_Follower", "Tag", "LLMIME_MimeFollower");
+//LeaderLib_Growth_Characters_Register_Skill("Mimicry.MimeFollower", 3, "Target_LLMIME_Wish_Follower", "Tag", "LLMIME_MimeFollower");
 LeaderLib_Growth_Characters_Register_Skill("Mimicry.MimeFollower", 4, "Target_LLMIME_DisarmingBlow_Follower", "Tag", "LLMIME_MimeFollower");
 LeaderLib_Growth_Characters_Register_Skill("Mimicry.MimeFollower", 6, "Projectile_LLMIME_Decoy_Follower", "Tag", "LLMIME_MimeFollower");
 LeaderLib_Growth_Characters_Register_Skill("Mimicry.MimeFollower", 7, "Target_LLMIME_SealEvil_Follower", "Tag", "LLMIME_MimeFollower");
@@ -182,6 +182,22 @@ DB_LLMIME_Follower_Mime(_Mime)
 THEN
 DB_BlockThreatenedDialog(_Mime);
 DB_NoLowAttitudeDialog(_Mime);
+ObjectSetFlag(_Mime, "Mimicry_IsMimeFollower");
+
+/*
+IF
+DB_LLMIME_Follower_Mime(_Mime)
+AND
+ObjectGetFlag(_Mime, "LLMIME_Follower_RemovedBlankSkills", 0)
+THEN
+ProcObjectTimer(_Mime, "Mimicry_Timers_Follower_RemoveBlankSkills", 500);
+*/
+
+PROC
+ProcObjectTimerFinished((CHARACTERGUID)_Mime, "Mimicry_Timers_Follower_RemoveBlankSkills")
+THEN
+ObjectSetFlag(_Mime, "LLMIME_Follower_RemovedBlankSkills");
+LLMIME_Follower_RemoveBlankSkills(_Mime);
 //END_REGION
 
 //REGION MASK_FIX
@@ -651,6 +667,20 @@ SetFaction(_Mime, _Faction);
 CharacterPurgeQueue(_Mime);
 LLMIME_Follower_OnMimeFollowerRecruited(_Mime);
 
+PROC
+LLMIME_Follower_OnMimeFollowerRecruited((CHARACTERGUID)_Mime)
+AND
+DB_LeaderLib_PartyFollower(_Owner, _Mime)
+AND
+ObjectGetFlag(_Mime, "LLMIME_Follower_RemovedBlankSkills", 0)
+THEN
+ObjectSetFlag(_Mime, "LLMIME_Follower_RemovedBlankSkills");
+LLMIME_Follower_RemoveBlankSkills(_Mime);
+LLMIME_Brawler_RemoveStance(_Mime);
+LLMIME_Brawler_ApplyStance(_Mime);
+CharacterRemoveFromPlayerCharacter(_Mime, _Owner);
+LeaderLib_StartCharacterCharacterTimer(_Owner, _Mime, 100, "Mimicry_Timers_Follower_LevelUpDelay_", "Mimicry_Follower_LevelUpAndAttachFollower");
+
 IF
 CharacterCharacterEvent((CHARACTERGUID)_Owner, (CHARACTERGUID)_Mime, "LeaderLib_Events_FollowerRecruited")
 AND
@@ -660,7 +690,6 @@ DB_LLMIME_Follower_ResetPositionTimer(_Mime, _TimerName, _Stage)
 THEN
 NOT DB_LLMIME_Follower_ResetPositionTimer(_Mime, _TimerName, _Stage);
 TimerCancel(_TimerName);
-LLMIME_Follower_RemoveBlankSkills();
 //END_REGION
 
 //REGION DISMISSAL
@@ -1027,6 +1056,8 @@ IF
 CharacterCharacterEvent((CHARACTERGUID)_Owner, (CHARACTERGUID)_Mime, "LeaderLib_PlayerIsRecruitingCharacter")
 AND
 IsTagged(_Mime, "LLMIME_MimeFollower", 1)
+AND
+ObjectGetFlag(_Mime, "LLMIME_Follower_RemovedBlankSkills", 1)
 AND
 CharacterGetLevel(_Owner, _Level)
 AND
@@ -1455,6 +1486,11 @@ PROC
 LLMIME_Follower_RemoveBlankSkills()
 AND
 DB_LLMIME_Follower_Mime(_Mime)
+THEN
+LLMIME_Follower_RemoveBlankSkills(_Mime);
+
+PROC
+LLMIME_Follower_RemoveBlankSkills((CHARACTERGUID)_Mime)
 AND
 DB_LLMIME_BlankSkills(_Skill)
 THEN

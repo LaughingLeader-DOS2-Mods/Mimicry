@@ -9,7 +9,6 @@ This script contains rules that should only be active while the Mime follower is
 We deactive this script otherwise.
 */
 
-
 PROC
 LLMIME_Follower_CompleteScriptInitially()
 AND
@@ -19,6 +18,7 @@ DB_LLMIME_Follower_Mime(_Mime)
 AND
 CharacterIsPartyFollower(_Mime, 0)
 THEN
+DB_LLMIME_Follower_ScriptCompletedInitially(1);
 GoalCompleted;
 
 PROC
@@ -28,14 +28,8 @@ NOT DB_LLMIME_Follower_ScriptCompletedInitially(_)
 AND
 NOT DB_LLMIME_Follower_Mime(_)
 THEN
-GoalCompleted;
-
-PROC
-LLMIME_Follower_CompleteScriptInitially()
-AND
-NOT DB_LLMIME_Follower_ScriptCompletedInitially(_)
-THEN
 DB_LLMIME_Follower_ScriptCompletedInitially(1);
+GoalCompleted;
 
 IF
 CharacterLeveledUp(_Owner)
@@ -43,6 +37,8 @@ AND
 DB_LeaderLib_PartyFollower(_Owner, _Mime)
 AND
 IsTagged(_Mime, "LLMIME_MimeFollower", 1)
+AND
+LeaderLog_QRY_Log("DEBUG", "[LLMIME:Follower_Recruited_Toggled:CharacterLeveledUp] Owner leveled up.")
 AND
 CharacterGetLevel(_Owner, _Level)
 AND

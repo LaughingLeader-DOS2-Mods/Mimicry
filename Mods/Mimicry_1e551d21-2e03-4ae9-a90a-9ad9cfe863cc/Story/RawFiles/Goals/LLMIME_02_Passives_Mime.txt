@@ -254,6 +254,8 @@ SetStoryEvent(_Mime, "Mimicry_MimeLeveledUp");
 IF
 StoryEvent((CHARACTERGUID)_Mime, "Mimicry_MimeLeveledUp")
 AND
+IsTagged(_Mime, "LLMIME_MimeFollower", 0)
+AND
 CharacterGetLevel(_Mime, _Level)
 AND
 DB_LLMIME_Mime_NewSkillbookLevels(_Level)

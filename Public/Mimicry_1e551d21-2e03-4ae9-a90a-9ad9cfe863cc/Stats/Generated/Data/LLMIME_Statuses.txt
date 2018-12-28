@@ -273,6 +273,12 @@ using "LLMIME_BRAWLER_STANCE_BASE"
 data "Items" "LLMIME_BrawlerFist_Con"
 data "StatsId" "Stats_LLMIME_BrawlerStance_Con"
 
+new entry "LLMIME_BRAWLER_STANCE_CON_FOLLOWER"
+type "StatusData"
+using "LLMIME_BRAWLER_STANCE_BASE"
+data "Items" "LLMIME_BrawlerFist_Con_Follower"
+data "StatsId" "Stats_LLMIME_BrawlerStance_Con"
+
 new entry "Stats_LLMIME_BrawlerStance_Con"
 type "Potion"
 data "Act" "1"

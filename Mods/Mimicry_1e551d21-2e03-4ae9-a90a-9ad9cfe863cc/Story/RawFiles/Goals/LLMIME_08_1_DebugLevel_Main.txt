@@ -242,6 +242,8 @@ CharacterAddSourcePoints(_Character, 10);
 
 IF
 StoryEvent((CHARACTERGUID)_Character, "LLMIME_Events_Debug_IterateCharacters")
+AND
+IsTagged(_Character, "LLMIME_MimeFollower", 0)
 THEN
 CharacterAddSkill(_Character, "Target_LLMIME_Wish", 0);
 
@@ -773,6 +775,30 @@ NOT DB_LLMIME_Debug_ObjectPosition(_Target, _Caster, _Object, _x, _y, _z);
 //END_REGION
 
 //REGION TRACING
+IF
+CharacterLeveledUp(_Character)
+AND
+CharacterGetDisplayName(_Character, _, _Name)
+AND
+CharacterGetLevel(_Character, _Level)
+AND
+IntegertoString(_Level, _LevelStr)
+THEN
+LeaderLog_Log("DEBUG", "[LLMIME:Debug:CharacterLeveledUp] Character [",_Name,"] leveled up to [",_LevelStr,"].");
+
+IF
+CharacterLeveledUp(_Owner)
+AND
+DB_LeaderLib_PartyFollower(_Owner, _Mime)
+AND
+CharacterGetDisplayName(_Owner, _, _Name)
+AND
+CharacterGetLevel(_Owner, _Level)
+AND
+IntegertoString(_Level, _LevelStr)
+THEN
+LeaderLog_Log("DEBUG", "[LLMIME:Debug:CharacterLeveledUp] Owner [",_Name,"] leveled up to [",_LevelStr,"].");
+
 IF
 CharacterStartAttackPosition(_,_,_,_,_Character)
 AND

@@ -44,7 +44,7 @@ data "Memory Cost" "0"
 
 new entry "Target_LLMIME_Wish_Follower-1"
 type "SkillData"
-using "Target_LLMIME_Wish"
+using "Target_LLMIME_Wish_Follower"
 data "Level" "-1"
 
 new entry "Projectile_LLMIME_FinalWish_Follower"

@@ -16,6 +16,7 @@ LLMIME_Brawler_InitSettings()
 THEN
 SysClear("DB_LLMIME_Brawler_StanceStatuses", 5);
 DB_LLMIME_Brawler_StanceStatuses("LLMIME_BRAWLER_STANCE_CON", "Mimicry_BrawlerStance_UseCon", "LLMIME_BRAWLER_STANCE_CON_INFO", "Mimicry_HideBrawlerStance", "LLMIME_Settings_BrawlerStance_Con_1f4bd5ba-4cf3-4262-af49-455e2530c986");
+DB_LLMIME_Brawler_StanceStatuses("LLMIME_BRAWLER_STANCE_CON_FOLLOWER", "Mimicry_IsMimeFollower", "LLMIME_BRAWLER_STANCE_CON_INFO", "Mimicry_HideBrawlerStance", "LLMIME_Settings_BrawlerStance_Con_1f4bd5ba-4cf3-4262-af49-455e2530c986");
 DB_LLMIME_Brawler_StanceStatuses("LLMIME_BRAWLER_STANCE_STR", "Mimicry_BrawlerStance_UseStr", "LLMIME_BRAWLER_STANCE_STR_INFO", "Mimicry_HideBrawlerStance", "LLMIME_Settings_BrawlerStance_Str_694fa103-1089-492b-a7db-aef0e5cf0efd");
 DB_LLMIME_Brawler_StanceStatuses("LLMIME_BRAWLER_STANCE_FIN", "Mimicry_BrawlerStance_UseFin", "LLMIME_BRAWLER_STANCE_FIN_INFO", "Mimicry_HideBrawlerStance", "LLMIME_Settings_BrawlerStance_Fin_c2f6f50c-8e29-4fdc-8391-f8a4e823f658");
 
@@ -61,6 +62,24 @@ LLMIME_Brawler_Internal_QRY_VersionNeedsUpdating(_PastVersion)
 THEN
 LeaderLog_Log("DEBUG", "[LLMIME:Brawler] Updating settings from version [",_PastVersion,"]");
 LLMIME_Brawler_InitSettings();
+
+PROC
+LeaderUpdater_ModUpdated("Mimicry", "LaughingLeader", (STRING)_PastVersion, "0.9.9.3")
+AND
+DB_LLMIME_Follower_Mime(_Mime)
+AND
+DB_LLMIME_Brawler_StanceStatuses(_Status, _SettingsFlag, _InfoStatus, _DisableInfoFlag, _DialogVar)
+AND
+HasActiveStatus(_Mime, _Status, 1)
+THEN
+RemoveStatus(_Mime, _Status);
+
+PROC
+LeaderUpdater_ModUpdated("Mimicry", "LaughingLeader", (STRING)_PastVersion, "0.9.9.3")
+AND
+DB_LLMIME_Follower_Mime(_Mime)
+THEN
+LLMIME_Brawler_ApplyStance(_Mime);
 //END_REGION
 
 //REGION SETTINGS_DIALOG_VARS
@@ -131,8 +150,19 @@ PROC
 LLMIME_Brawler_SetStancePreference((CHARACTERGUID)_Mime, (STRING)_Flag)
 AND
 NOT ObjectGetFlag(_Mime, _Flag, 1)
+AND
+IsTagged(_Mime, "LLMIME_MimeFollower", 0)
 THEN
 ObjectSetFlag(_Mime, _Flag);
+LLMIME_Brawler_RemoveStance(_Mime);
+LLMIME_Brawler_ApplyStance(_Mime);
+
+PROC
+LLMIME_Brawler_SetStancePreference((CHARACTERGUID)_Mime, (STRING)_Flag)
+AND
+IsTagged(_Mime, "LLMIME_MimeFollower", 1)
+THEN
+ObjectSetFlag(_Mime, "Mimicry_IsMimeFollower");
 LLMIME_Brawler_RemoveStance(_Mime);
 LLMIME_Brawler_ApplyStance(_Mime);
 
@@ -148,6 +178,8 @@ DB_NOOP(1);
 IF
 CharacterUsedSkill(_Mime, "Shout_LLMIME_BrawlerStance", _, _)
 AND
+IsTagged(_Mime, "LLMIME_MimeFollower", 0)
+AND
 NOT LLMIME_Brawler_QRY_StancePreferenceSet(_Mime)
 AND
 DB_LLMIME_Brawler_StanceStatuses("LLMIME_BRAWLER_STANCE_CON", _SettingsFlag, _InfoStatus, _DisableInfoFlag, _DialogVar)
@@ -157,7 +189,11 @@ ObjectSetFlag(_Mime, _SettingsFlag); // Default
 IF
 CharacterStatusApplied(_Mime, "LLMIME_BRAWLER", _)
 AND
+IsTagged(_Mime, "LLMIME_MimeFollower", 0)
+AND
 NOT LLMIME_Brawler_QRY_StancePreferenceSet(_Mime)
+AND
+IsTagged(_Mime, "LLMIME_MimeFollower", 0)
 AND
 DB_LLMIME_Brawler_StanceStatuses("LLMIME_BRAWLER_STANCE_CON", _SettingsFlag, _InfoStatus, _DisableInfoFlag, _DialogVar)
 THEN
