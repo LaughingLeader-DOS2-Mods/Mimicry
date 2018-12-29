@@ -86,6 +86,30 @@ AND
 DB_LLMIME_MimickingStatuses(_Status)
 THEN
 ObjectClearFlag(_Mime, "Mimicry_MimickingWasRemoved");
+LLMIME_Mimicking_OnMimickingApplied(_Mime);
+
+PROC
+LLMIME_Mimicking_OnMimickingApplied((CHARACTERGUID)_Mime)
+AND
+NOT DB_LLMIME_Mimicking_MimicNextAction(_Mime)
+AND
+IsTagged(_Mime, "LLMIME_MimeFollower", _IsFollower)
+THEN
+LLMIME_Mimicking_Internal_AddToNextAction(_Mime, _IsFollower);
+
+PROC
+LLMIME_Mimicking_Internal_AddToNextAction((CHARACTERGUID)_Mime, 0)
+AND
+LLMIME_Mimicking_QRY_MimeShouldBeMimicking(_Mime)
+THEN
+DB_LLMIME_Mimicking_MimicNextAction(_Mime);
+
+PROC
+LLMIME_Mimicking_Internal_AddToNextAction((CHARACTERGUID)_Mime, 1)
+AND
+LLMIME_Mimicking_QRY_FollowerShouldBeMimicking(_Mime)
+THEN
+DB_LLMIME_Mimicking_MimicNextAction(_Mime);
 
 IF
 StoryEvent((CHARACTERGUID)_Mime, "LLMIME_Events_RemoveMimicking")
@@ -143,22 +167,16 @@ IF
 CharacterStatusRemoved(_Mime, _Status, _)
 AND
 DB_LLMIME_MimickingStatuses(_Status)
+THEN
+LLMIME_Mimicking_OnMimickingRemoved(_Mime);
+
+PROC
+LLMIME_Mimicking_OnMimickingRemoved((CHARACTERGUID)_Mime)
 AND
 DB_LLMIME_Mimicking_MimicNextAction(_Mime)
 THEN
 NOT DB_LLMIME_Mimicking_MimicNextAction(_Mime);
 LLMIME_Mimicking_OnMimickingDisabled(_Mime);
-
-IF
-CharacterStatusApplied(_Mime, _Status, _)
-AND
-DB_LLMIME_MimickingStatuses(_Status)
-AND
-NOT DB_LLMIME_Mimicking_MimicNextAction(_Mime)
-AND
-NOT DB_LeaderLib_Combat_ActiveObject(_, (GUIDSTRING)_Mime)
-THEN
-DB_LLMIME_Mimicking_MimicNextAction((CHARACTERGUID)_Mime);
 
 IF
 DB_LLMIME_Mimicking_MimicNextAction(_Mime)
@@ -174,6 +192,35 @@ PROC
 LLMIME_Mimicking_OnMimickingDisabled((CHARACTERGUID)_Mime)
 THEN
 DB_NOOP(1);
+//END_REGION
+
+//REGION DAMAGE_DEBUFF
+//Mimicry_MimickingDamageDebuff1_Enabled
+//Mimicry_MimickingDamageDebuff2_Enabled
+//Mimicry_MimickingDamageDebuff3_Enabled
+
+IF
+ObjectFlagSet("Mimicry_IsMimicking", (CHARACTERGUID)_Mime, _)
+AND
+DB_LLMIME_DebuffStatuses(_Flag, _Status)
+AND
+DB_GlobalFlag(_Flag)
+THEN
+ApplyStatus(_Mime, _Status, -1.0, 1, _Mime);
+
+PROC
+LLMIME_Mimicking_OnMimickingRemoved((CHARACTERGUID)_Mime)
+AND
+DB_LLMIME_DebuffStatuses(_Flag, _Status)
+THEN
+RemoveStatus(_Mime, _Status);
+
+IF
+ObjectFlagCleared("Mimicry_IsMimicking", (CHARACTERGUID)_Mime, _)
+AND
+DB_LLMIME_DebuffStatuses(_Flag, _Status)
+THEN
+RemoveStatus(_Mime, _Status);
 //END_REGION
 
 //REGION AUTO_DISABLED_MIMICKING_REENABLE

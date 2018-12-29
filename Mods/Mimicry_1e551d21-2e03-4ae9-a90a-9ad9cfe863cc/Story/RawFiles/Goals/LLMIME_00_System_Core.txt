@@ -68,6 +68,10 @@ DB_LLMIME_MimeStatuses("LLMIME_CONCENTRATION_BONUS");
 DB_LLMIME_MimeStatuses("LLMIME_CONCENTRATION_INFO");
 DB_LLMIME_MimeStatuses("LLMIME_SOURCE_REGENERATION_HIDDEN");
 
+DB_LLMIME_DebuffStatuses("Mimicry_MimickingDamageDebuff1_Enabled", "LLMIME_MIMICKING_DEBUFF1");
+DB_LLMIME_DebuffStatuses("Mimicry_MimickingDamageDebuff2_Enabled", "LLMIME_MIMICKING_DEBUFF2");
+DB_LLMIME_DebuffStatuses("Mimicry_MimickingDamageDebuff3_Enabled", "LLMIME_MIMICKING_DEBUFF3");
+
 DB_LLMIME_BlankSkills("Shout_LLMIME_Blank1");
 DB_LLMIME_BlankSkills("Shout_LLMIME_Blank2");
 DB_LLMIME_BlankSkills("Shout_LLMIME_Blank3");
