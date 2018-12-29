@@ -2,6 +2,27 @@ INIT
 
 EVENTS
 
+EVENT LLMIME_FROG_DEBUFF
+VARS
+	CHARACTER:_Character
+	CHARACTER:_Source
+	INT:_Turns
+ON
+	OnCharacterStatusApplied(_Character, LLMIME_FROG)
+ACTIONS
+IF "c1"
+	CharacterGetStatusSourceCharacter(_Character, LLMIME_FROG, _Source)
+THEN
+ELSE
+	Set(_Source, _Character)
+ENDIF
+IF "c1"
+	GetStatusTurns(_Character, LLMIME_FROG, _Turns)
+THEN
+	CharacterApplyStatus(_Character, MUTED, _Turns, 1, _Source)
+	CharacterApplyStatus(_Character, DISARMED, _Turns, 1, _Source)
+ENDIF
+
 //REGION WISH
 EVENT LLMIME_Wish_ReduceHealth
 VARS

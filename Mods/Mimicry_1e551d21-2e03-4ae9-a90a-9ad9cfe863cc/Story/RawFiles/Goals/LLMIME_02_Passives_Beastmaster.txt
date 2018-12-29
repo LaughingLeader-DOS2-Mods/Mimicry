@@ -57,7 +57,7 @@ DB_LLMIME_MonsterSkill_BadBreathStatus("BLIND", 75, 9.0);
 DB_LLMIME_MonsterSkill_BadBreathStatus("SLEEP", 30, 9.0);
 DB_LLMIME_MonsterSkill_BadBreathStatus("DISARMED", 25, 9.0);
 DB_LLMIME_MonsterSkill_BadBreathStatus("MUTED", 20, 9.0);
-DB_LLMIME_MonsterSkill_BadBreathStatus("LLMIME_TOAD", 10, 12.0);
+DB_LLMIME_MonsterSkill_BadBreathStatus("LLMIME_FROG", 10, 12.0);
 
 SysClear("DB_LLMIME_MonsterSkill_BadBreathStatus", 6);
 DB_LLMIME_MonsterSkill_SummonRename("Template", "Summons_Plant_e63a712f-fc87-4469-8848-fd8941043afd", "Malboro", "#00FF00", "24", "Full");
