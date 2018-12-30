@@ -133,6 +133,17 @@ LeaderLog_Log("DEBUG", "[LLMIME:System] Updating settings from version [0.9.9.1]
 LLMIME_System_InitSettings();
 //END_REGION
 
+//REGION QUERIES_MISC
+QRY
+LLMIME_QRY_DamageDebuffSet()
+AND
+DB_LLMIME_DebuffStatuses(_Flag, _Status)
+AND
+DB_GlobalFlag(_Flag)
+THEN
+DB_NOOP(1);
+//END_REGION
+
 //REGION MASK_TAG
 /* For easy iteration */
 IF

@@ -27,6 +27,13 @@
                     <attribute id="type" value="String" type="23" />
                 </node>
                 <node id="DialogVariable">
+                    <attribute id="DefaultValue" value="100%" type="23" />
+                    <attribute id="Description" value="" type="23" />
+                    <attribute id="UUID" value="f980d09f-aedb-45cc-bab8-b725834ce6f3" type="31" />
+                    <attribute id="name" value="LLMIME_Settings_MimickingDamagePercentage" type="22" />
+                    <attribute id="type" value="String" type="23" />
+                </node>
+                <node id="DialogVariable">
                     <attribute id="DefaultValue" value="[SKILLS]" type="23" />
                     <attribute id="Description" value="" type="23" />
                     <attribute id="UUID" value="e73495dd-e972-4213-acc4-7ec9740d3f68" type="31" />

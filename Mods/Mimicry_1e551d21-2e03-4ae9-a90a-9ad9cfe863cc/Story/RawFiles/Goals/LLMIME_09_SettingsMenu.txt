@@ -389,6 +389,45 @@ THEN
 ItemRemove(_Backpack);
 //END_REGION
 
+//REGION DAMAGE_DEBUFF_VARIABLE
+IF
+GlobalFlagSet("Mimicry_MimickingDamageDebuff1_Enabled")
+THEN
+DialogSetVariableString("LLMIME_SettingsMenu", "LLMIME_Settings_MimickingDamagePercentage_f980d09f-aedb-45cc-bab8-b725834ce6f3", "90% (-10%)");
+
+IF
+GlobalFlagSet("Mimicry_MimickingDamageDebuff2_Enabled")
+THEN
+DialogSetVariableString("LLMIME_SettingsMenu", "LLMIME_Settings_MimickingDamagePercentage_f980d09f-aedb-45cc-bab8-b725834ce6f3", "75% (-25%)");
+
+IF
+GlobalFlagSet("Mimicry_MimickingDamageDebuff3_Enabled")
+THEN
+DialogSetVariableString("LLMIME_SettingsMenu", "LLMIME_Settings_MimickingDamagePercentage_f980d09f-aedb-45cc-bab8-b725834ce6f3", "50% (-50%)");
+
+IF
+GlobalFlagCleared("Mimicry_MimickingDamageDebuff1_Enabled")
+THEN
+LLMIME_Settings_Internal_UpdateMimickingDamageVariable();
+
+IF
+GlobalFlagCleared("Mimicry_MimickingDamageDebuff2_Enabled")
+THEN
+LLMIME_Settings_Internal_UpdateMimickingDamageVariable();
+
+IF
+GlobalFlagCleared("Mimicry_MimickingDamageDebuff3_Enabled")
+THEN
+LLMIME_Settings_Internal_UpdateMimickingDamageVariable();
+
+PROC
+LLMIME_Settings_Internal_UpdateMimickingDamageVariable()
+AND
+NOT LLMIME_QRY_DamageDebuffSet()
+THEN
+DialogSetVariableString("LLMIME_SettingsMenu", "LLMIME_Settings_MimickingDamagePercentage_f980d09f-aedb-45cc-bab8-b725834ce6f3", "100%");
+//END_REGION
+
 EXITSECTION
 
 ENDEXITSECTION

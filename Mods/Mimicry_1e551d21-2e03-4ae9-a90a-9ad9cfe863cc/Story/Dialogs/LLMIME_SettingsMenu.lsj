@@ -2842,10 +2842,15 @@
                                        {
                                           "TagText" : [
                                              {
+                                                "DialogVariables" : [
+                                                   {
+                                                      "DialogVariables" : {"type" : 22, "value" : "f980d09f-aedb-45cc-bab8-b725834ce6f3"}
+                                                   }
+                                                ],
                                                 "TagText" : {
                                                    "handle" : "ls::TranslatedStringRepository::s_HandleUnknown",
                                                    "type" : 28,
-                                                   "value" : "Mimicking Balance Settings"
+                                                   "value" : "Mimicking Damage Settings<br>Mimicking Damage: [LLMIME_Settings_MimickingDamagePercentage_f980d09f-aedb-45cc-bab8-b725834ce6f3]"
                                                 },
                                                 "stub" : {"type" : 19, "value" : 1}
                                              }
