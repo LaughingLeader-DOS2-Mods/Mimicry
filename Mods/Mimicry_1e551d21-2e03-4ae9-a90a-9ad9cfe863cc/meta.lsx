@@ -27,7 +27,7 @@
                     <attribute id="Author" value="LaughingLeader" type="30" />
                     <attribute id="CharacterCreationLevelName" value="" type="22" />
                     <attribute id="Description" value='Adds the Mask of Mimicry - a mask that transforms a character into a mime. Mimes can mimic the actions of allies in battle, and possess a variety of interesting passives that add an extra layer of strategy. Also adds a special music box, sold by the LeaderLib trader, for summoning a permanent &quot;Mime follower&quot;.' type="30" />
-                    <attribute id="Folder" value="Mimicry_1e551d21-2e03-4ae9-a90a-9ad9cfe863cc" type="30" />
+                    <attribute id="Folder" value="Mimicry_d9cac48f-1294-68f8-dd4d-b5ea38eaf2d6" type="30" />
                     <attribute id="GMTemplate" value="" type="22" />
                     <attribute id="LobbyLevelName" value="" type="22" />
                     <attribute id="MD5" value="" type="23" />
