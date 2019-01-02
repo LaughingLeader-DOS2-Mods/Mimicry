@@ -192,7 +192,7 @@ AND
 DB_LLMIME_Mimicking_Items_DestroyNext(_Mime, _Item, _Template, _Caster)
 THEN
 NOT DB_LLMIME_Mimicking_Items_DestroyNext(_Mime, _Item, _Template, _Caster);
-LLMIME_Mimicking_OnMimicSuccess(_Mime, _Template, "Item");
+LLMIME_Mimicking_OnMimicSuccess(_Mime, _Caster, _Template, "Item");
 
 PROC
 LLMIME_Mimicking_MimicActionOnTarget((CHARACTERGUID)_Mime, (CHARACTERGUID)_Caster, (GUIDSTRING)_Target, (STRING)_Template, "Item")

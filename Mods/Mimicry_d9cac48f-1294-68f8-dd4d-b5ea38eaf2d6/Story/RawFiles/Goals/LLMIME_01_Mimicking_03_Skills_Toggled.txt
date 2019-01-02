@@ -210,7 +210,7 @@ DB_LLMIME_Timers_SkillCastAtPosition(_TimerName, _Caster, _TargetX, _TargetY, _T
 AND
 NOT LLMIME_Mimicking_QRY_SelfActionIsQueued(_Caster, _Skill, "Skill")
 AND
-NOT LLMIME_Mimicking_QRY_TargetActionIsQueued(_Caster, _Skill, "Skill", _TargetX, _TargetY, _TargetZ, 1)
+NOT LLMIME_Mimicking_QRY_PositionActionIsQueued(_Caster, _Skill, "Skill", _TargetX, _TargetY, _TargetZ, 1)
 THEN
 LLMIME_Mimicking_OnSkillCastAtPosition(_Caster, _TargetX, _TargetY, _TargetZ, _Skill, _SkillType);
 
@@ -278,7 +278,7 @@ LLMIME_Mimicking_Skills_OnSkillCast((CHARACTERGUID)_Caster, (STRING)_Skill)
 AND
 DB_LLMIME_Skills_Temp_SkillSwapped(_Caster, _Skill, _ResultSkill)
 AND
-LLMIME_Mimicking_QRY_ActionQueued(_Caster, _ResultSkill, "Skill")
+LLMIME_Mimicking_QRY_ActionIsQueued(_Caster, _ResultSkill, "Skill")
 THEN
 NOT DB_LLMIME_Skills_Temp_SkillSwapped(_Caster, _Skill, _ResultSkill);
 DB_LLMIME_Skills_Temp_SkillCastResolved(_Caster, _Skill);
@@ -289,7 +289,7 @@ LLMIME_Mimicking_Skills_OnSkillCast((CHARACTERGUID)_Caster, (STRING)_Skill)
 AND
 NOT DB_LLMIME_Skills_Temp_SkillCastResolved(_Caster, _Skill)
 AND
-LLMIME_Mimicking_QRY_ActionQueued(_Caster, _Skill, "Skill")
+LLMIME_Mimicking_QRY_ActionIsQueued(_Caster, _Skill, "Skill")
 THEN
 DB_LLMIME_Skills_Temp_SkillCastResolved(_Caster, _Skill);
 LLMIME_Mimicking_StartNextMimic(_Caster, _Skill, "Skill");
@@ -338,7 +338,7 @@ NOT DB_LLMIME_Mimicking_MimicQueue_Self(_Mime, _Caster, _Skill, "Skill");
 LeaderLog_Log("DEBUG", "[LLMIME:Mimicking:MimicAction] Mimicking weapons for self-targeting skill [",_Skill,"].");
 ObjectSetFlag(_Mime, "Mimicry_IsMimicking");
 DB_LLMIME_Mimicking_Temp_CastSelfSkill(_Mime, _Caster, _Skill);
-LLMIME_Mimicking_Internal_StartWeaponMimicking(_Mime, _Caster, "Skill");
+LLMIME_Mimicking_Internal_StartWeaponMimicking(_Mime, _Caster, _Skill, "Skill");
 
 IF
 StoryEvent((CHARACTERGUID)_Mime, "Mimicry_WeaponMimickingStarted")
@@ -515,7 +515,7 @@ DB_LLMIME_Mimicking_Skills_Temp_ListenForSuccess(_Mime, _Caster, _Skill)
 THEN
 NOT DB_LLMIME_Mimicking_Skills_Temp_ListenForSuccess(_Mime, _Caster, _Skill);
 LeaderLog_Log("DEBUG", "[LLMIME:Mimicking:Skills:ProcObjectTimerFinished(LLMIME_Timers_CastFailTimer)] Mimicked skill [",_Skill,"] never fired the SkillCast event. Completing.");
-LLMIME_Mimicking_OnMimicSuccess(_Mime, _Skill, "Skill");
+LLMIME_Mimicking_OnMimicSuccess(_Mime, _Caster, _Skill, "Skill");
 
 IF
 SkillCast(_Mime, _Skill, _SkillType, _SkillElement)
@@ -533,7 +533,7 @@ THEN
 NOT DB_LLMIME_Mimicking_Skills_Temp_ListenForSuccess(_Mime, _Caster, _Skill);
 LeaderLog_Log("DEBUG", "[LLMIME:Mimicking:Skills:SkillCast] Mimicked skill [",_Skill,"] was cast.");
 ProcObjectTimerCancel(_Mime, "LLMIME_Timers_CastFailTimer");
-LLMIME_Mimicking_OnMimicSuccess(_Mime, _Skill, "Skill");
+LLMIME_Mimicking_OnMimicSuccess(_Mime, _Caster, _Skill, "Skill");
 //END_REGION
 
 //REGION CLEAR_MIME

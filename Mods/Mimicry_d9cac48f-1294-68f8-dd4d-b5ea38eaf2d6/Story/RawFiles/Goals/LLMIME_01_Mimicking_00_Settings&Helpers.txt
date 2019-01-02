@@ -431,15 +431,15 @@ CharacterIsDeadOrFeign(_Mime, 0)
 AND
 IsTagged(_Mime, "Mimicry_EnemyMime", 0)
 AND
-NOT LLMIME_Mimicking_QRY_MimeIsCurrentlyMimicking(_Mime)
+QRY_CharacterIsNotDisabled(_Mime)
+//AND
+//NOT LLMIME_Mimicking_QRY_MimeIsCurrentlyMimicking(_Mime)
 AND
 _Character != _Mime
 AND
 LLMIME_Mimicking_QRY_CanMimicMime(_Character, _Mime)
 AND
 LLMIME_Mimicking_QRY_FollowerOwnerMatch(_Character, _Mime)
-AND
-QRY_CharacterIsNotDisabled(_Mime)
 AND
 LLMIME_Mimicking_QRY_CombatConditionsMet(_Character, _Mime)
 AND
@@ -456,8 +456,8 @@ AND
 _SkillType == "shout"
 AND
 IsTagged(_Mime, "Mimicry_EnemyMime", 1)
-AND
-NOT LLMIME_Mimicking_QRY_MimeIsCurrentlyMimicking(_Mime)
+//AND
+//NOT LLMIME_Mimicking_QRY_MimeIsCurrentlyMimicking(_Mime)
 AND
 _Character != _Mime
 AND
@@ -484,8 +484,8 @@ QRY
 LLMIME_Mimicking_QRY_CanMimicCharacterWithItem((CHARACTERGUID)_Character, (CHARACTERGUID)_Mime, (ITEMGUID)_Item)
 AND
 IsTagged(_Mime, "Mimicry_EnemyMime", 1)
-AND
-NOT LLMIME_Mimicking_QRY_MimeIsCurrentlyMimicking(_Mime)
+//AND
+//NOT LLMIME_Mimicking_QRY_MimeIsCurrentlyMimicking(_Mime)
 AND
 _Character != _Mime
 AND
