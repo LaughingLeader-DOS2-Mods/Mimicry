@@ -394,6 +394,7 @@ DB_LLMIME_Timers_AttackSuccessTimer(_TimerName, _Mime, _Caster, _Target, _Action
 TimerCancel(_TimerName);
 TimerLaunch(_TimerName, 3000);
 
+/*
 IF
 SkillCast(_Mime, _Skill, _SkillType, _SkillElement)
 AND
@@ -417,6 +418,14 @@ DB_LLMIME_Timers_AttackSuccessTimer(_TimerName, _Mime, _Caster, _Target, _Action
 THEN
 TimerCancel(_TimerName);
 TimerLaunch(_TimerName, 1250);
+*/
+IF
+CharacterStatusApplied(_Mime, "LLMIME_MIMICKED_WEAPON_CAST", _)
+AND
+DB_LLMIME_Timers_AttackSuccessTimer(_TimerName, _Mime, _Caster, _Target, _Action, _Skill)
+THEN
+TimerCancel(_TimerName);
+TimerLaunch(_TimerName, 800);
 
 IF
 TimerFinished(_TimerName)
