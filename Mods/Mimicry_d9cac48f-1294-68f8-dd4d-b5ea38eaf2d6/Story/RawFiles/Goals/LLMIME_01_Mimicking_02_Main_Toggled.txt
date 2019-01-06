@@ -218,19 +218,14 @@ AND
 NOT LLMIME_Mimicking_QRY_MimeQueuedForAction(_Mime, _Caster, _Action, _ActionType)
 THEN
 DB_LLMIME_Mimicking_MimicQueue_Self(_Mime, _Caster, _Action, _ActionType);
-LLMIME_Mimicking_OnActionQueued(_Caster, _Mime, _Action, _ActionType);
+LLMIME_Mimicking_ActionQueued(_Caster, _Mime, _Action, _ActionType);
 
 /*
-PROC
-LLMIME_Mimicking_OnActionQueued((CHARACTERGUID)_Caster, (CHARACTERGUID)_Mime, (STRING)_Action, (STRING)_ActionType)
-THEN
-DB_NOOP(1);
-*/
-
 PROC
 LLMIME_Mimicking_OnActionQueued((CHARACTERGUID)_Caster, (CHARACTERGUID)_Mime, "Shout_RecoverArmour", "Skill")
 THEN
 LLMIME_Mimicking_TrackWeapons(_Mime, _Caster, "Shout_RecoverArmour", "Skill");
+*/
 
 PROC
 LLMIME_Mimicking_QueueNextAction((CHARACTERGUID)_Mime, (CHARACTERGUID)_Caster, (STRING)_Action, (STRING)_ActionType, (REAL)_TargetX, (REAL)_TargetY, (REAL)_TargetZ, (INTEGER)_TargetPriority)
@@ -614,8 +609,6 @@ NOT DB_LLMIME_Mimicking_Temp_WeaponMimickingReady(_Mime);
 PROC
 LLMIME_Mimicking_ApplyStatRequirementStatus((CHARACTERGUID)_Mime, (CHARACTERGUID)_Caster, (STRING)_ActionType)
 AND
-DB_LLMIME_Mimicking_Temp_CasterWeapons(_Caster, _Mainhand, _Offhand, _Action, _ActionType)
-AND
 HasActiveStatus(_Mime, "LLMIME_MIMIC_WEAPON_REQUIREMENTS", 0)
 THEN
 ApplyStatus(_Mime, "LLMIME_MIMIC_WEAPON_REQUIREMENTS", 30.0, 1, _Mime);
@@ -822,7 +815,13 @@ THEN
 NOT DB_LLMIME_Mimicking_Temp_NextQueueStarted(_Mime);
 //END_REGION
 
-//REGION WEAPON_TRACKING
+//REGION WEAPON_TRACKING_DEPRECATED
+PROC
+LLMIME_Mimicking_ActionQueued((CHARACTERGUID)_Mime, (CHARACTERGUID)_Caster, (STRING)_Action, (STRING)_ActionType)
+THEN
+DB_NOOP(1);
+
+/*
 PROC
 LLMIME_Mimicking_ActionQueued((CHARACTERGUID)_Mime, (CHARACTERGUID)_Caster, (STRING)_AttackID, "Attack")
 THEN
@@ -834,6 +833,7 @@ AND
 LLMIME_Mimicking_Skills_QRY_WeaponSkillTypeMatch(_Skill)
 THEN
 LLMIME_Mimicking_TrackWeapons(_Mime, _Caster, _Skill, "Skill");
+*/
 
 PROC
 LLMIME_Mimicking_Internal_AddTrackedWeapons((CHARACTERGUID)_Caster, (ITEMGUID)_Mainhand, (ITEMGUID)_OffHand, (STRING)_Action, (STRING)_ActionType)
@@ -882,6 +882,7 @@ LLMIME_Mimicking_QRY_CasterAndMimeUnarmed(_Mime, _Caster, _ActionType)
 THEN
 DB_LLMIME_Mimicking_Temp_SkipWeaponMimicking(_Mime, _Caster, _Action, _ActionType);
 
+/*
 QRY
 LLMIME_Mimicking_Skills_QRY_SkipWeaponMimicking((CHARACTERGUID)_Mime, (CHARACTERGUID)_Caster, (STRING)_Action, (STRING)_ActionType)
 AND
@@ -890,6 +891,7 @@ AND
 NOT DB_LLMIME_Mimicking_Temp_CasterWeapons(_Caster, _, _, _Action, _ActionType)
 THEN
 DB_LLMIME_Mimicking_Temp_SkipWeaponMimicking(_Mime, _Caster, _Action, _ActionType);
+*/
 
 QRY
 LLMIME_Mimicking_Skills_QRY_SkipWeaponMimicking((CHARACTERGUID)_Mime, (CHARACTERGUID)_Caster, (STRING)_Action, (STRING)_ActionType)
@@ -966,9 +968,11 @@ NOT DB_LLMIME_Mimicking_Temp_SkipWeaponMimicking(_Mime, _Caster, _Action, _Actio
 QRY
 LLMIME_Mimicking_QRY_MimeAlreadyHasCasterWeapons((CHARACTERGUID)_Mime, (CHARACTERGUID)_Caster, (STRING)_ActionType)
 AND
-DB_LLMIME_Mimicking_Temp_CasterWeapons(_Caster, _Mainhand, _Offhand, _Action, _ActionType)
+CharacterGetEquippedItem(_Caster, "Weapon", (ITEMGUID)_Mainhand)
 AND
 LLMIME_Mimicking_QRY_WeaponMatch(_Mime, _Caster, _Mainhand, "Weapon")
+AND
+CharacterGetEquippedItem(_Caster, "Shield", (ITEMGUID)_Offhand)
 AND
 LLMIME_Mimicking_QRY_WeaponMatch(_Mime, _Caster, _Offhand, "Shield")
 THEN
@@ -1025,6 +1029,19 @@ LeaderLib_StartCharacterCharacterTimer(_Mime, _Dummy, 200, "LLMIME_Timers_TakeDu
 
 IF
 StoryEvent((ITEMGUID)_Item, "Mimicry_Iterator_MarkWeapons")
+THEN
+Mimicry_BlockMimickedWeapon(_Item);
+
+//For other mods to block specific weapons from being mimicked
+PROC
+Mimicry_BlockMimickedWeapon((ITEMGUID)_Item)
+THEN
+DB_NOOP(1);
+
+IF
+StoryEvent((ITEMGUID)_Item, "Mimicry_Iterator_MarkWeapons")
+AND
+NOT DB_Mimicry_BlockWeaponMimicking(_Item)
 AND
 GetTemplate(_Item, _Template)
 AND
@@ -1034,6 +1051,12 @@ GetInventoryOwner(_Item, (CHARACTERGUID)_Dummy)
 THEN
 DB_LLMIME_Mimicking_Temp_DuplicatedWeapon(_Dummy, _Item);
 
+IF
+StoryEvent((ITEMGUID)_Item, "Mimicry_Iterator_MarkWeapons")
+AND
+DB_Mimicry_BlockWeaponMimicking(_Item)
+THEN
+NOT DB_Mimicry_BlockWeaponMimicking(_Item);
 
 PROC
 LLMIME_Mimicking_EquipWeaponsForAction((CHARACTERGUID)_Mime, (CHARACTERGUID)_Caster, (GUIDSTRING)_Target, (STRING)_Action, (STRING)_ActionType)

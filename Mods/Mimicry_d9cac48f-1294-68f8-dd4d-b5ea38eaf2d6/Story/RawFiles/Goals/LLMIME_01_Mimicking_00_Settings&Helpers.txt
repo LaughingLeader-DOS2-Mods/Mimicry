@@ -4,25 +4,46 @@ INITSECTION
 LLMIME_Mimicking_InitSettings();
 
 //DB_LLMIME_Mimicking_Blacklist_SkillTypes(_SkillType, _GlobalFlag, _EnabledState)
-//DB_LLMIME_Mimicking_Blacklist_Skills(_Skill)
 //DB_LLMIME_Mimicking_Blacklist_SkillElements(_SkillType, _SkillElement)
-//DB_LLMIME_Mimicking_Blacklist_SkillPrefixes(_Prefix)
+//DB_LLMIME_Mimicking_Blacklist_Skills(_Group, _Skill)
+//DB_LLMIME_Mimicking_Blacklist_SkillPrefixes(_Group, _Prefix)
 KBSECTION
 //REGION SETTINGS
 PROC
-LLMIME_Mimicking_ClearSettings()
+LLMIME_Mimicking_Internal_ClearAllSettings()
 THEN
 SysClear("DB_LLMIME_Mimicking_Blacklist_SkillTypes", 3);
 SysClear("DB_LLMIME_Mimicking_Blacklist_SkillElements", 2);
-SysClear("DB_LLMIME_Mimicking_Blacklist_Skills", 1);
-SysClear("DB_LLMIME_Mimicking_Blacklist_SkillPrefixes", 1);
-SysClear("DB_LLMIME_Mimicking_Whitelist_Skills", 1);
+SysClear("DB_LLMIME_Mimicking_Blacklist_Skills", 2);
+SysClear("DB_LLMIME_Mimicking_Blacklist_SkillPrefixes", 2);
+SysClear("DB_LLMIME_Mimicking_Whitelist_Skills", 2);
 SysClear("DB_LLMIME_Mimicking_Whitelist_ItemTags", 1);
 SysClear("DB_LLMIME_Mimicking_Blacklist_ItemTemplates", 1);
 SysClear("DB_LLMIME_Mimicking_Whitelist_WeaponCopy_SkillTypes", 1);
 SysClear("DB_LLMIME_Mimicking_Whitelist_WeaponCopy_Skills", 1);
 SysClear("DB_LLMIME_Mimicking_Blacklist_WeaponCopy_IgnoreSkillsWith", 1);
 SysClear("DB_LLMIME_Mimicking_HarmfulHealingSkills", 1);
+
+PROC
+LLMIME_Mimicking_Internal_ClearMimicryBlacklist()
+AND
+DB_LLMIME_Mimicking_Blacklist_Skills("Mimicry", _Skill)
+THEN
+NOT DB_LLMIME_Mimicking_Blacklist_Skills("Mimicry", _Skill);
+
+PROC
+LLMIME_Mimicking_Internal_ClearMimicryBlacklist()
+AND
+DB_LLMIME_Mimicking_Blacklist_SkillPrefixes("Mimicry", _Prefix)
+THEN
+NOT DB_LLMIME_Mimicking_Blacklist_SkillPrefixes("Mimicry", _Prefix);
+
+PROC
+LLMIME_Mimicking_Internal_ClearMimicryBlacklist()
+AND
+DB_LLMIME_Mimicking_Whitelist_Skills("Mimicry", _Skill)
+THEN
+NOT DB_LLMIME_Mimicking_Whitelist_Skills("Mimicry", _Skill);
 
 PROC
 LLMIME_Mimicking_InitSettings()
@@ -60,43 +81,43 @@ DB_LLMIME_Mimicking_Blacklist_SkillTypes("teleportation", "", 0);
 //Special type shout skills, typically used for toggle abilities in mods
 DB_LLMIME_Mimicking_Blacklist_SkillElements("shout", "");
 //Special Mime Skills
-DB_LLMIME_Mimicking_Blacklist_Skills("Target_LLMIME_MimicAttack");
-DB_LLMIME_Mimicking_Blacklist_Skills("Shout_LLMIME_ReturnToOwner");
-DB_LLMIME_Mimicking_Blacklist_Skills("Shout_LLMIME_BrawlerStance");
+DB_LLMIME_Mimicking_Blacklist_Skills("Mimicry", "Target_LLMIME_MimicAttack");
+DB_LLMIME_Mimicking_Blacklist_Skills("Mimicry", "Shout_LLMIME_ReturnToOwner");
+DB_LLMIME_Mimicking_Blacklist_Skills("Mimicry", "Shout_LLMIME_BrawlerStance");
 //Specific Source Skills
-DB_LLMIME_Mimicking_Blacklist_Skills("Target_Challenge");
-DB_LLMIME_Mimicking_Blacklist_Skills("Projectile_LLMIME_FinalWish");
+DB_LLMIME_Mimicking_Blacklist_Skills("Mimicry", "Target_Challenge");
+DB_LLMIME_Mimicking_Blacklist_Skills("Mimicry", "Projectile_LLMIME_FinalWish");
 //DOS2 Skills
-DB_LLMIME_Mimicking_Blacklist_Skills("Shout_PlayDead");
-DB_LLMIME_Mimicking_Blacklist_Skills("Shout_FavourableWind");
-DB_LLMIME_Mimicking_Blacklist_Skills("Target_ElementalArrowheads");
+DB_LLMIME_Mimicking_Blacklist_Skills("Mimicry", "Shout_PlayDead");
+DB_LLMIME_Mimicking_Blacklist_Skills("Mimicry", "Shout_FavourableWind");
+DB_LLMIME_Mimicking_Blacklist_Skills("Mimicry", "Target_ElementalArrowheads");
 //Adrenaline reduces the Mime's AP by the time their turn swings around
-DB_LLMIME_Mimicking_Blacklist_Skills("Shout_Adrenaline");
-DB_LLMIME_Mimicking_Blacklist_Skills("Shout_EnemyAdrenaline");
+DB_LLMIME_Mimicking_Blacklist_Skills("Mimicry", "Shout_Adrenaline");
+DB_LLMIME_Mimicking_Blacklist_Skills("Mimicry", "Shout_EnemyAdrenaline");
 //Summon Skills
-DB_LLMIME_Mimicking_Blacklist_Skills("Target_BloatedCorpse");
-DB_LLMIME_Mimicking_Blacklist_Skills("Shout_NecromancerTotems");
+DB_LLMIME_Mimicking_Blacklist_Skills("Mimicry", "Target_BloatedCorpse");
+DB_LLMIME_Mimicking_Blacklist_Skills("Mimicry", "Shout_NecromancerTotems");
 //Summon Infusions
-DB_LLMIME_Mimicking_Blacklist_Skills("Target_ElectricInfusion");
-DB_LLMIME_Mimicking_Blacklist_Skills("Target_IceInfusion");
-DB_LLMIME_Mimicking_Blacklist_Skills("Target_FireInfusion");
-DB_LLMIME_Mimicking_Blacklist_Skills("Target_WarpInfusion");
-DB_LLMIME_Mimicking_Blacklist_Skills("Target_ShadowInfusion");
-DB_LLMIME_Mimicking_Blacklist_Skills("Target_PowerInfusion");
-DB_LLMIME_Mimicking_Blacklist_Skills("Target_RangedInfusion");
-DB_LLMIME_Mimicking_Blacklist_Skills("Target_PoisonInfusion");
-DB_LLMIME_Mimicking_Blacklist_Skills("Target_NecrofireInfusion");
-DB_LLMIME_Mimicking_Blacklist_Skills("Target_WaterInfusion");
-DB_LLMIME_Mimicking_Blacklist_Skills("Target_AcidInfusion");
-DB_LLMIME_Mimicking_Blacklist_Skills("Target_CursedElectricInfusion");
+DB_LLMIME_Mimicking_Blacklist_Skills("Mimicry", "Target_ElectricInfusion");
+DB_LLMIME_Mimicking_Blacklist_Skills("Mimicry", "Target_IceInfusion");
+DB_LLMIME_Mimicking_Blacklist_Skills("Mimicry", "Target_FireInfusion");
+DB_LLMIME_Mimicking_Blacklist_Skills("Mimicry", "Target_WarpInfusion");
+DB_LLMIME_Mimicking_Blacklist_Skills("Mimicry", "Target_ShadowInfusion");
+DB_LLMIME_Mimicking_Blacklist_Skills("Mimicry", "Target_PowerInfusion");
+DB_LLMIME_Mimicking_Blacklist_Skills("Mimicry", "Target_RangedInfusion");
+DB_LLMIME_Mimicking_Blacklist_Skills("Mimicry", "Target_PoisonInfusion");
+DB_LLMIME_Mimicking_Blacklist_Skills("Mimicry", "Target_NecrofireInfusion");
+DB_LLMIME_Mimicking_Blacklist_Skills("Mimicry", "Target_WaterInfusion");
+DB_LLMIME_Mimicking_Blacklist_Skills("Mimicry", "Target_AcidInfusion");
+DB_LLMIME_Mimicking_Blacklist_Skills("Mimicry", "Target_CursedElectricInfusion");
 //DOS2 Prefixes
-DB_LLMIME_Mimicking_Blacklist_SkillPrefixes("_Quest_");
+DB_LLMIME_Mimicking_Blacklist_SkillPrefixes("Mimicry", "_Quest_");
 //Prefixes (i.e. mod skills)
-DB_LLMIME_Mimicking_Blacklist_SkillPrefixes("_LLCIVIL_");
-DB_LLMIME_Mimicking_Blacklist_SkillPrefixes("_LLEQSET_");
+DB_LLMIME_Mimicking_Blacklist_SkillPrefixes("Mimicry", "_LLCIVIL_");
+DB_LLMIME_Mimicking_Blacklist_SkillPrefixes("Mimicry", "_LLEQSET_");
 //Special skills
-DB_LLMIME_Mimicking_Whitelist_Skills("Shout_RecoverArmour");
-DB_LLMIME_Mimicking_Whitelist_Skills("Shout_EnemyOverthrow");
+DB_LLMIME_Mimicking_Whitelist_Skills("Mimicry", "Shout_RecoverArmour");
+DB_LLMIME_Mimicking_Whitelist_Skills("Mimicry", "Shout_EnemyOverthrow");
 
 DB_LLMIME_Mimicking_Whitelist_ItemTags("Potion");
 DB_LLMIME_Mimicking_Whitelist_ItemTags("POTIONS");
@@ -125,23 +146,22 @@ DB_LLMIME_Mimicking_Blacklist_WeaponCopy_IgnoreSkillsWith("_Grenade_");
 
 DB_LLMIME_Mimicking_HarmfulHealingSkills("Target_FirstAid");
 DB_LLMIME_Mimicking_HarmfulHealingSkills("Target_Restoration");
+
+//Other Mods
+//Odinblade's Umbra
+DB_LLMIME_Mimicking_Blacklist_Skills("Umbra", "Shout_SHADEShadowstep");
 //END_REGION
 
 //REGION UPDATING
-QRY
-LLMIME_Mimicking_Internal_QRY_VersionNeedsUpdating((STRING)_Version)
-AND
-_Version == "0.9.7.4"
-THEN
-DB_NOOP(1);
-
 PROC
 LeaderUpdater_ModUpdated("Mimicry", "LaughingLeader", (STRING)_PastVersion, (STRING)_NewVersion)
 AND
-LLMIME_Mimicking_Internal_QRY_VersionNeedsUpdating(_PastVersion)
+_NewVersion == "0.9.9.4"
 THEN
 LeaderLog_Log("DEBUG", "[LLMIME:Mimicking:System] Updating settings from version [",_PastVersion,"]");
-LLMIME_Mimicking_ClearSettings();
+SysClear("DB_LLMIME_Mimicking_Blacklist_Skills", 1);
+SysClear("DB_LLMIME_Mimicking_Blacklist_SkillPrefixes", 1);
+SysClear("DB_LLMIME_Mimicking_Whitelist_Skills", 1);
 LLMIME_Mimicking_InitSettings();
 //END_REGION
 
@@ -215,7 +235,7 @@ DB_NOOP(1);
 QRY
 LLMIME_Mimicking_QRY_Internal_SkillNameMatchesBlocked((STRING)_Skill)
 AND
-DB_LLMIME_Mimicking_Blacklist_SkillPrefixes(_Prefix)
+DB_LLMIME_Mimicking_Blacklist_SkillPrefixes(_Group, _Prefix)
 AND
 StringContains(_Skill, _Prefix, 1)
 THEN
@@ -260,7 +280,7 @@ DB_NOOP(1);
 QRY
 LLMIME_Mimicking_QRY_SkillIsAllowed((STRING)_Skill, (STRING)_SkillType, (STRING)_SkillElement)
 AND
-DB_LLMIME_Mimicking_Whitelist_Skills(_Skill)
+DB_LLMIME_Mimicking_Whitelist_Skills(_Group, _Skill)
 THEN
 DB_NOOP(1);
 
@@ -278,7 +298,7 @@ DB_NOOP(1);
 QRY
 LLMIME_Mimicking_QRY_SkillIsAllowed((STRING)_Skill, (STRING)_SkillType, (STRING)_SkillElement)
 AND
-NOT DB_LLMIME_Mimicking_Blacklist_Skills(_Skill)
+NOT DB_LLMIME_Mimicking_Blacklist_Skills(_, _Skill)
 AND
 //LeaderLog_QRY_Log("DEBUG", "[LLMIME:QRY_SkillIsAllowed] Checking skill: Name[",_Skill,"] Type[",_SkillType,"] Element[",_SkillElement,"]")
 //AND
