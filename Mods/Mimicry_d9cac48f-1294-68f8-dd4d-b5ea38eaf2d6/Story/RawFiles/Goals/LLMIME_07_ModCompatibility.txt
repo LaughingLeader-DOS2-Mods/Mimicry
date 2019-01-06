@@ -11,6 +11,15 @@ NOT DB_LLEQSET_Blacklist("Tag", "LLMIME_BrawlerFist")
 THEN
 //Prevent brawler fists from being saved to sets
 DB_LLEQSET_Blacklist("Tag", "LLMIME_BrawlerFist");
+
+PROC
+LLMIME_ModCompatibility_InitSettings()
+AND
+NOT DB_NeutralTagIgnore("LLMIME_Dummy")
+THEN
+DB_NeutralTagIgnore("LLMIME_Dummy");
+DB_NeutralTagIgnore("LLMIME_MimeFollower");
+
 //END_REGION
 
 //REGION UPDATING
@@ -22,11 +31,12 @@ DB_NOOP(1);
 PROC
 LeaderUpdater_ModUpdated("Mimicry", "LaughingLeader", (STRING)_PastVersion, (STRING)_NewVersion)
 AND
-LLMIME_ModCompatibility_Internal_QRY_VersionNeedsUpdating(_PastVersion)
+_NewVersion == "0.9.9.5"
 THEN
 LeaderLog_Log("DEBUG", "[LLMIME:ModCompatibility] Updating settings from version [",_PastVersion,"]");
 LLMIME_ModCompatibility_InitSettings();
 //END_REGION
+
 EXITSECTION
 
 ENDEXITSECTION

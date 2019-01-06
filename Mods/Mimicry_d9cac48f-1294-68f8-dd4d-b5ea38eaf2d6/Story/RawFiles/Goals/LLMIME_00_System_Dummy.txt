@@ -94,6 +94,7 @@ LLMIME_Dummy_SetDummyID(_Dummy, _ID);
 //CharacterSetImmortal(_Dummy, 1);
 CharacterSetDetached(_Dummy, 1);
 SetStoryNpc(_Dummy, 1);
+CharacterDisableAllCrimes(_Dummy);
 DB_LLMIME_Dummy_CharacterDummies(_Dummy);
 DB_LLMIME_Dummy_NextCharacterDummy(_ID, _Dummy);
 GlobalClearFlag("LLMIME_CreatingDummy");
