@@ -279,7 +279,7 @@ CharacterIsDead(_Mime, 0)
 AND
 IsTagged(_Mime, "LeaderLib_IsFollower", 1)
 THEN
-LLMIME_Follower_ReturnIfNotInCombat(_Char);
+LLMIME_Follower_ReturnIfNotInCombat(_Char, _Mime);
 
 PROC
 ProcBlockUseOfItem((CHARACTERGUID)_Char, (ITEMGUID)_Item)
@@ -304,7 +304,7 @@ CharacterIsDead(_Mime, 0)
 AND
 IsTagged(_Mime, "LeaderLib_IsFollower", 1)
 THEN
-LLMIME_Follower_ReturnIfNotInCombat(_Char);
+LLMIME_Follower_ReturnIfNotInCombat(_Char, _Mime);
 //END_REGION
 
 //REGION MUSIC_BOX_TRANSFORM

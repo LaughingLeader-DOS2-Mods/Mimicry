@@ -48,20 +48,6 @@ NOT DB_LLMIME_Mimicking_Whitelist_Skills("Mimicry", _Skill);
 PROC
 LLMIME_Mimicking_InitSettings()
 THEN
-SysClear("DB_LLMIME_Mimicking_AutoDisableStatuses", 1);
-DB_LLMIME_Mimicking_AutoDisableStatuses("CHICKEN");
-DB_LLMIME_Mimicking_AutoDisableStatuses("COW");
-DB_LLMIME_Mimicking_AutoDisableStatuses("ZOMBIE_CHICKEN");
-
-SysClear("DB_LLMIME_Mimicking_AutoDisableStatusTypes", 1);
-DB_LLMIME_Mimicking_AutoDisableStatusTypes("DEACTIVATED");
-//DB_LLMIME_Mimicking_AutoDisableStatusTypes("INVISIBLE"); // Handled manually
-DB_LLMIME_Mimicking_AutoDisableStatusTypes("CHARMED");
-DB_LLMIME_Mimicking_AutoDisableStatusTypes("FEAR");
-DB_LLMIME_Mimicking_AutoDisableStatusTypes("KNOCKED_DOWN");
-DB_LLMIME_Mimicking_AutoDisableStatusTypes("INCAPACITATED");
-DB_LLMIME_Mimicking_AutoDisableStatusTypes("PLAY_DEAD");
-
 //Most teleportation spells require 2 targets, and we can only specify one with scripting, so use a target version instead.
 DB_LLMIME_Mimicking_SkillSwap("Teleportation_ResurrectScroll", "Target_LLMIME_ResurrectScroll", "target", "Death");
 DB_LLMIME_Mimicking_SkillSwap("Teleportation_StoryModeFreeResurrect", "Target_LLMIME_ResurrectScroll", "target", "Death");

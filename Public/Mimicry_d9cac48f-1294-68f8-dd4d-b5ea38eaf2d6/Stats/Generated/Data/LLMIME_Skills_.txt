@@ -500,11 +500,6 @@ data "Template" "fdc41e95-65ee-4878-bbd5-9fce2a26e221"
 data "IgnoreVisionBlock" "Yes"
 data "IgnoreSilence" "Yes"
 
-new entry "Target_LLMIME_MimicAttack-1"
-type "SkillData"
-using "Target_LLMIME_MimicAttack"
-data "Level" "-1"
-
 new entry "Projectile_LLMIME_FinalWish"
 type "SkillData"
 data "SkillType" "Projectile"

@@ -13,6 +13,7 @@ THEN
 LeaderLog_Log("SYSTEM", "[Mimicry:ScriptToggler:InitialCheck] Running initial toggle check.");
 DB_LLMIME_ScriptToggle_InitialCheckRan(1);
 LLMIME_ScriptToggle_Internal_RunInitialCheck();
+LLMIME_ScriptToggler_DisableSkillScript();
 GoalCompleted;
 
 PROC

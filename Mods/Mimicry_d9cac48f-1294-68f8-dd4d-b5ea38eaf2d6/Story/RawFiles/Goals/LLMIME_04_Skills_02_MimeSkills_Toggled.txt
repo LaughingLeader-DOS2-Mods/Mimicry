@@ -722,6 +722,21 @@ THEN
 NOT DB_LLMIME_Skills_Temp_HiddenApproachPosition(_Mime, _x, _y, _z);
 //END_REGION
 
+//REGION MUGGABLE_FLAG
+PROC
+LeaderLib_StatusEvents_OnDisablingStatusApplied((CHARACTERGUID)_Character, (GUIDSTRING)_Cause, (STRING)_Status, (STRING)_Type)
+THEN
+DB_LLMIME_Skills_Temp_DisabledCharacter(_Character, _Status);
+LeaderLog_Log("DEBUG", "[LLMIME:StatusEvents:OnDisablingStatusApplied] Disabling status [",_Status,"](",_Type,") was applied to character.");
+
+IF
+CharacterStatusRemoved(_Character, _Status, _)
+AND
+DB_LLMIME_Skills_Temp_DisabledCharacter(_Character, _Status)
+THEN
+NOT DB_LLMIME_Skills_Temp_DisabledCharacter(_Character, _Status);
+//END_REGION
+
 EXITSECTION
 
 ENDEXITSECTION

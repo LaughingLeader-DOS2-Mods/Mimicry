@@ -111,7 +111,7 @@ AND
 _NextHealth > 1.0
 THEN
 SetStoryEvent(_Caster, "Mimicry_Events_Wish_UsedSkill");
-DB_LLMIME_Skills_Temp_NextWish(_Caster, _Target);
+DB_LLMIME_Skills_Temp_NextWish(_Caster, (CHARACTERGUID)_Target);
 
 PROC
 LLMIME_Skills_OnSkillUsed((CHARACTERGUID)_Caster, (GUIDSTRING)_Target, "Wish")
@@ -187,9 +187,16 @@ CharacterSetHitpointsPercentage(_Target, 100.0);
 IF
 CharacterStatusApplied(_Target, "LLMIME_MUGGED", (CHARACTERGUID)_Mime)
 AND
+DB_LLMIME_Skills_Temp_DisabledCharacter(_Target, _Status)
+THEN
+LLMIME_Skills_MugCharacter(_Mime, _Target);
+
+PROC
+LLMIME_Skills_MugCharacter((CHARACTERGUID)_Mime, (CHARACTERGUID)_Target)
+AND
 DB_GlobalFlag("WeaponExpansion_IsActive")
 AND
-NOT DB_LLMIME_Skills_Temp_WeaponMatch(_Mime)
+NOT DB_LLMIME_Skills_Temp_WeaponMatch(_Target, _Mime)
 AND
 CharacterGetEquippedWeapon(_Target, _Weapon)
 AND
@@ -199,31 +206,30 @@ GetTemplate(_Weapon, _Template)
 AND
 DB_LLMIME_Skills_StealWeapon(_String, _ThrowingItemTemplate)
 AND
-NOT DB_LLMIME_Skills_Temp_WeaponMatch(_Mime)
+NOT DB_LLMIME_Skills_Temp_WeaponMatch(_Target, _Mime)
 AND
 StringContains(_Template, _String, 1)
 THEN
 ItemTemplateAddTo(_ThrowingItemTemplate, _Mime, 1, 1);
-DB_LLMIME_Skills_Temp_WeaponMatch(_Mime);
+DB_LLMIME_Skills_Temp_WeaponMatch(_Target, _Mime);
 
 //No match
-IF
-CharacterStatusApplied(_Target, "LLMIME_MUGGED", (CHARACTERGUID)_Mime)
+PROC
+LLMIME_Skills_MugCharacter((CHARACTERGUID)_Mime, (CHARACTERGUID)_Target)
 AND
 DB_GlobalFlag("WeaponExpansion_IsActive")
 AND
-NOT DB_LLMIME_Skills_Temp_WeaponMatch(_Mime)
+NOT DB_LLMIME_Skills_Temp_WeaponMatch(_Target, _Mime)
 AND
 DB_LLMIME_Skills_StealWeapon("Rock", _ThrowingItemTemplate)
 THEN
 ItemTemplateAddTo(_ThrowingItemTemplate, _Mime, 1, 1);
-DB_LLMIME_Skills_Temp_WeaponMatch(_Mime);
+DB_LLMIME_Skills_Temp_WeaponMatch(_Target, _Mime);
 
-//No WeaponExpansion
-IF
-CharacterStatusApplied(_Target, "LLMIME_MUGGED", (CHARACTERGUID)_Mime)
+PROC
+LLMIME_Skills_MugCharacter((CHARACTERGUID)_Mime, (CHARACTERGUID)_Target)
 AND
-CharacterIsEnemy(_Mime, _Target, 1)
+NOT DB_IsPlayer(_Target)
 AND
 CharacterGetLevel(_Mime, _Level)
 AND
@@ -238,12 +244,41 @@ THEN
 NOT DB_LeaderLib_Random(_Ran);
 CharacterAddGold(_Mime, _Gold);
 
+//Player mugging another player
+PROC
+LLMIME_Skills_MugCharacter((CHARACTERGUID)_Mime, (CHARACTERGUID)_Target)
+AND
+DB_IsPlayer(_Target)
+AND
+CharacterGetGold(_Target, _Gold)
+AND
+LeaderLib_Random_QRY(7, 12)
+AND
+DB_LeaderLib_Random(_DivideBy)
+AND
+IntegerDivide(_Gold, _DivideBy, _GainGold)
+AND
+_GainGold > 0
+AND
+IntegerProduct(_GainGold, -1, _RemoveGold)
+THEN
+NOT DB_LeaderLib_Random(_DivideBy);
+CharacterAddGold(_Mime, _GainGold);
+CharacterAddGold(_Target, _RemoveGold);
+LeaderLog_Internal_LogToCombatLog(_Mime, "LLMIME_CombatLog_MimeMuggedPlayer");
+LeaderLog_Internal_LogToCombatLog(_Target, "LLMIME_CombatLog_PlayerMuggedByMime");
+
+IF
+CharacterStatusApplied(_Target, "LLMIME_MUGGED", (CHARACTERGUID)_Mime)
+THEN
+CharacterCharacterSetEvent(_Mime, _Target, "Mimicry_OnCharacterMugged");
+
 IF
 CharacterStatusApplied(_Target, "LLMIME_MUGGED", (CHARACTERGUID)_Mime)
 AND
-DB_LLMIME_Skills_Temp_WeaponMatch(_Mime)
+DB_LLMIME_Skills_Temp_WeaponMatch(_Target, _Mime)
 THEN
-NOT DB_LLMIME_Skills_Temp_WeaponMatch(_Mime);
+NOT DB_LLMIME_Skills_Temp_WeaponMatch(_Target, _Mime);
 
 /*
 IF
@@ -253,6 +288,14 @@ DB_LLMIME_Skills_StealWeapon(_String, _Skill)
 THEN
 CharacterRemoveSkill(_Mime, _Skill);
 */
+
+IF
+RegionEnded(_)
+AND
+DB_LLMIME_Skills_Temp_DisabledCharacter(_Character, _Status)
+THEN
+NOT DB_LLMIME_Skills_Temp_DisabledCharacter(_Character, _Status);
+
 //END_REGION
 
 //REGION FORCED_EVOLUTION

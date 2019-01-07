@@ -38,14 +38,14 @@ DB_LeaderLib_PartyFollower(_Owner, _Mime)
 AND
 IsTagged(_Mime, "LLMIME_MimeFollower", 1)
 AND
-LeaderLog_QRY_Log("DEBUG", "[LLMIME:Follower_Recruited_Toggled:CharacterLeveledUp] Owner leveled up.")
-AND
 CharacterGetLevel(_Owner, _Level)
 AND
 CharacterGetLevel(_Mime, _MimeLevel)
 AND
 _MimeLevel < _Level
 THEN
+//CharacterLevelUp(_Mime);
+LeaderLog_Log("DEBUG", "[LLMIME:Follower_Recruited_Toggled:CharacterLeveledUp] Owner leveled up. Leveling up mime follower.");
 CharacterRemoveFromPlayerCharacter(_Mime, _Owner);
 LeaderLib_StartCharacterCharacterTimer(_Owner, _Mime, 100, "Mimicry_Timers_Follower_LevelUpDelay_", "Mimicry_Follower_LevelUpAndAttachFollower");
 
@@ -86,6 +86,26 @@ THEN
 CharacterSetCorpseLootable(_Mime, 1);
 */
 
+/*
+PROC
+LLMIME_Follower_Internal_StartSpawningGhost((CHARACTERGUID)_Mime)
+AND
+NOT DB_LLMIME_Follower_Temp_SpawnedGhost(_Mime)
+AND
+NOT GlobalGetFlag("Mimicry_MusicBoxShattered", 1)
+AND
+IsTagged(_Mime, "LeaderLib_IsFollower", 1)
+AND
+DB_LeaderLib_PartyFollower(_Owner, _Mime)
+AND
+CharacterIsInCombat(_Owner, 1)
+AND
+CombatGetIDForCharacter(_Owner, _CombatID)
+THEN
+DB_LLMIME_Follower_Temp_SpawnedGhostAfterCombat(_CombatID, _Mime);
+*/
+
+/*
 IF
 CombatEnded(_CombatID)
 AND
@@ -101,12 +121,57 @@ AND
 DB_LLMIME_Follower_Temp_SpawnedGhostAfterCombat(_CombatID, _Mime)
 THEN
 NOT DB_LLMIME_Follower_Temp_SpawnedGhostAfterCombat(_CombatID, _Mime);
+*/
 //END_REGION
 
-//REGION GHOST_EVENTS
-
+//REGION SKILLS
+IF
+CharacterCharacterEvent(_Mime, _Target, "Mimicry_OnCharacterMugged")
+AND
+DB_LeaderLib_PartyFollower(_Owner, _Mime)
+THEN
+MoveAllItemsTo(_Mime, _Owner, 0, 0, 1);
 //END_REGION
 
+//REGION TELEPORT_EVENTS
+
+IF
+CharacterTeleportToFleeWaypoint(_Owner, _)
+AND
+DB_LeaderLib_PartyFollower(_Owner, _Mime)
+AND
+DB_LLMIME_Follower_Mime(_Mime)
+AND
+LLMIME_Follower_QRY_FollowerShouldTeleport(_Owner, _Mime)
+THEN
+LLMIME_Mimicking_RemoveMimicking(_Mime);
+//ApplyStatus(_Follower, "INVISIBLE", 9.0, 1);
+//CharacterUseSkill(_Follower, "Shout_LLMIME_ReturnToOwner", _Follower, 1, 1);
+//LeaveCombat(_Mime);
+TeleportTo(_Mime, _Owner, "Mimicry_Events_Follower_ReturnToOwner_Teleported", 1, 0, 1);
+
+IF
+CharacterTeleportToWaypoint(_Owner, _)
+AND
+DB_LeaderLib_PartyFollower(_Owner, _Mime)
+AND
+DB_LLMIME_Follower_Mime(_Mime)
+AND
+LLMIME_Follower_QRY_FollowerShouldTeleport(_Owner, _Mime)
+THEN
+TeleportTo(_Mime, _Owner, "", 1, 0, 1);
+
+IF
+CharacterTeleported(_Owner, _Cause, _OldX, _OldY, _OldZ, _NewX, _NewY, _NewZ, _Skill)
+AND
+DB_LeaderLib_PartyFollower(_Owner, _Mime)
+AND
+DB_LLMIME_Follower_Mime(_Mime)
+AND
+LLMIME_Follower_QRY_FollowerShouldTeleport(_Owner, _Mime)
+THEN
+TeleportTo(_Mime, _Owner, "", 1, 0, 1);
+//END_REGION
 
 EXITSECTION
 

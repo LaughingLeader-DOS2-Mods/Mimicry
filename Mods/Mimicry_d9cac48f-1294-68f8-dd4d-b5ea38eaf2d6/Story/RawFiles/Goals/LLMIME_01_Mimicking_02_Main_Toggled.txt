@@ -26,27 +26,21 @@ DB_LLMIME_Mimicking_Temp_MimickedWeapon(_Mime, _Caster, _Weapon, _Action, _Actio
 KBSECTION
 
 //REGION AUTO_DISABLE_MIMICKING
-IF
-CharacterStatusApplied(_Mime, _Status, _)
+PROC
+LeaderLib_StatusEvents_OnDisablingStatusApplied((CHARACTERGUID)_Character, (GUIDSTRING)_Cause, (STRING)_Status, (STRING)_Type)
 AND
-NOT DB_LeaderLib_EngineStatus(_Status)
-AND
-LLMIME_Mimicking_QRY_IsMimicking(_Mime)
-AND
-GetStatusType(_Status, _Type)
-AND
-DB_LLMIME_Mimicking_AutoDisableStatusTypes(_Type)
+LLMIME_Mimicking_QRY_IsMimicking(_Character)
 THEN
-DB_LLMIME_Mimicking_Temp_DisablingStatus(_Mime, _Status);
+DB_LLMIME_Mimicking_Temp_DisablingStatus(_Character, _Status);
 
-IF
-CharacterStatusApplied(_Mime, _Status, _)
+PROC
+LeaderLib_StatusEvents_OnStatusApplied((CHARACTERGUID)_Character, (GUIDSTRING)_Cause, (STRING)_Status, "INVISIBLE")
 AND
-DB_LLMIME_Mimicking_AutoDisableStatuses(_Status)
+LLMIME_Mimicking_QRY_IsMimicking(_Character)
 AND
-LLMIME_Mimicking_QRY_IsMimicking(_Mime)
+NOT ObjectGetFlag(_Character, "Mimicry_InvisibilityMimickingEnabled", 1)
 THEN
-DB_LLMIME_Mimicking_Temp_DisablingStatus(_Mime, _Status);
+DB_LLMIME_Mimicking_Temp_DisablingStatus(_Character, _Status);
 
 IF
 DB_LLMIME_Mimicking_Temp_DisablingStatus(_Mime, _Status)
@@ -55,19 +49,6 @@ ObjectGetFlag(_Mime, "LLMIME_MimickingAutoDisabled", 0)
 THEN
 ApplyStatus(_Mime, "LLMIME_MIMICKING_DISABLED", -1.0, 0, _Mime);
 ObjectSetFlag(_Mime, "LLMIME_MimickingAutoDisabled");
-
-IF
-CharacterStatusApplied(_Mime, _Status, _)
-AND
-NOT DB_LeaderLib_EngineStatus(_Status)
-AND
-LLMIME_Mimicking_QRY_IsMimicking(_Mime)
-AND
-GetStatusType(_Status, "INVISIBLE")
-AND
-NOT ObjectGetFlag(_Mime, "Mimicry_InvisibilityMimickingEnabled", 1)
-THEN
-DB_LLMIME_Mimicking_Temp_DisablingStatus(_Mime, _Status);
 
 //Re-enabling Mimicking is handled by Mimicking_01_Start
 //END_REGION

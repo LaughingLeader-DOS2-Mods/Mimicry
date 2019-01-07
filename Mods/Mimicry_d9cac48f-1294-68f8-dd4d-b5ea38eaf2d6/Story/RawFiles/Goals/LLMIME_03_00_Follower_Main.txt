@@ -948,69 +948,46 @@ CharacterUseSkill(_Mime, "Shout_LLMIME_BrawlerStance", _Mime, 1, 1);
 
 //REGION RETURN_SKILL
 QRY
-LLMIME_Follower_QRY_CanReturnToOwner((CHARACTERGUID)_Char, (CHARACTERGUID)_Mime)
+LLMIME_Follower_QRY_FollowerIsTooFar((CHARACTERGUID)_Owner, (CHARACTERGUID)_Mime)
 AND
-CharacterIsInCombat(_Mime, 0)
-AND
-CharacterCanSee(_Char, _Mime, 0)
+CharacterCanSee(_Owner, _Mime, 0)
 THEN
 DB_NOOP(1);
 
 QRY
-LLMIME_Follower_QRY_CanReturnToOwner((CHARACTERGUID)_Char, (CHARACTERGUID)_Mime)
+LLMIME_Follower_QRY_FollowerIsTooFar((CHARACTERGUID)_Owner, (CHARACTERGUID)_Mime)
 AND
-CharacterIsInCombat(_Mime, 0)
-AND
-GetDistanceTo(_Char, _Mime, _Dist)
+GetDistanceTo(_Owner, _Mime, _Dist)
 AND
 _Dist >= 30
 THEN
 DB_NOOP(1);
 
-PROC
-LLMIME_Follower_ReturnIfNotInCombat((CHARACTERGUID)_Char)
+QRY
+LLMIME_Follower_QRY_FollowerShouldTeleport((CHARACTERGUID)_Owner, (CHARACTERGUID)_Mime)
 AND
-CharacterIsInCombat(_Char, 0)
+CharacterIsDeadOrFeign(_Mime, 0)
 AND
-DB_LLMIME_Follower_Mime(_Mime)
+CharacterIsInCombat(_Mime, 0)
 AND
-LLMIME_Follower_QRY_CanReturnToOwner(_Char, _Mime)
+LLMIME_Follower_QRY_FollowerIsTooFar(_Owner, _Mime)
 THEN
-CharacterStatusText(_Char, "LLMIME_StatusText_MimeFollowerRecalled");
-CharacterUseSkill(_Mime, "Shout_LLMIME_ReturnToOwner", _Char, 1, 1);
+DB_NOOP(1);
 
 PROC
-LLMIME_Follower_ReturnIfNotInCombat((CHARACTERGUID)_Char)
+LLMIME_Follower_ReturnIfNotInCombat((CHARACTERGUID)_Owner, (CHARACTERGUID)_Mime)
 AND
-CharacterIsInCombat(_Char, 0)
-AND
-DB_LLMIME_Follower_Mime(_Mime)
-AND
-NOT LLMIME_Follower_QRY_CanReturnToOwner(_Char, _Mime)
+LLMIME_Follower_QRY_FollowerShouldTeleport(_Owner, _Mime)
 THEN
-DisplayText(_Mime, "LLMIME_StatusText_MimeFollowerRecallFailed");
+CharacterStatusText(_Owner, "LLMIME_StatusText_MimeFollowerRecalled");
+CharacterUseSkill(_Mime, "Shout_LLMIME_ReturnToOwner", _Owner, 1, 1);
 
-IF
-CharacterTeleportToFleeWaypoint(_Owner, _)
+PROC
+LLMIME_Follower_ReturnIfNotInCombat((CHARACTERGUID)_Owner, (CHARACTERGUID)_Mime)
 AND
-DB_LeaderLib_PartyFollower(_Owner, _Follower)
-AND
-IsTagged(_Follower, "LLMIME_MimeFollower", 1)
+NOT LLMIME_Follower_QRY_FollowerShouldTeleport(_Owner, _Mime)
 THEN
-LLMIME_Mimicking_RemoveMimicking(_Follower);
-//ApplyStatus(_Follower, "INVISIBLE", 9.0, 1);
-//CharacterUseSkill(_Follower, "Shout_LLMIME_ReturnToOwner", _Follower, 1, 1);
-TeleportTo(_Follower, _Owner, "Mimicry_Events_Follower_ReturnToOwner_Teleported", 1, 0);
-LeaveCombat(_Follower);
-
-IF
-CharacterTeleportToWaypoint(_Owner, _)
-AND
-DB_LeaderLib_PartyFollower(_Owner, _Follower)
-AND
-IsTagged(_Follower, "LLMIME_MimeFollower", 1)
-THEN
-TeleportTo(_Follower, _Owner, "", 1, 0);
+DisplayText(_Owner, "LLMIME_StatusText_MimeFollowerRecallFailed");
 
 IF
 SkillCast(_Follower, "Shout_LLMIME_ReturnToOwner", _, _)
@@ -1142,7 +1119,7 @@ LLMIME_Follower_Internal_StartSpawningGhost((CHARACTERGUID)_Mime)
 AND
 NOT DB_LLMIME_Follower_Temp_SpawnedGhost(_Mime)
 AND
-NOT GlobalGetFlag("Mimicry_MusicBoxShattered", 1)
+NOT DB_GlobalFlag("Mimicry_MusicBoxShattered")
 AND
 NOT IsTagged(_Mime, "LeaderLib_IsFollower", 1)
 THEN
@@ -1154,33 +1131,16 @@ LLMIME_Follower_Internal_StartSpawningGhost((CHARACTERGUID)_Mime)
 AND
 NOT DB_LLMIME_Follower_Temp_SpawnedGhost(_Mime)
 AND
-NOT GlobalGetFlag("Mimicry_MusicBoxShattered", 1)
+NOT DB_GlobalFlag("Mimicry_MusicBoxShattered")
 AND
 IsTagged(_Mime, "LeaderLib_IsFollower", 1)
-AND
+/*AND
 DB_LeaderLib_PartyFollower(_Owner, _Mime)
 AND
-CharacterIsInCombat(_Owner, 0)
+CharacterIsInCombat(_Owner, 0)*/
 THEN
 LLMIME_Follower_SpawnGhost(_Mime);
 DB_LLMIME_Follower_Temp_SpawnedGhost(_Mime);
-
-PROC
-LLMIME_Follower_Internal_StartSpawningGhost((CHARACTERGUID)_Mime)
-AND
-NOT DB_LLMIME_Follower_Temp_SpawnedGhost(_Mime)
-AND
-NOT GlobalGetFlag("Mimicry_MusicBoxShattered", 1)
-AND
-IsTagged(_Mime, "LeaderLib_IsFollower", 1)
-AND
-DB_LeaderLib_PartyFollower(_Owner, _Mime)
-AND
-CharacterIsInCombat(_Owner, 1)
-AND
-CombatGetIDForCharacter(_Owner, _CombatID)
-THEN
-DB_LLMIME_Follower_Temp_SpawnedGhostAfterCombat(_CombatID, _Mime);
 
 PROC
 LLMIME_Follower_Internal_StartSpawningGhost((CHARACTERGUID)_Mime)
@@ -1232,6 +1192,7 @@ LLMIME_Follower_Internal_OnGhostAppeared(_Ghost);
 PROC
 LLMIME_Follower_Internal_OnGhostAppeared((CHARACTERGUID)_Ghost)
 THEN
+CharacterMakeStoryNpc(_Ghost, 1);
 DB_Dialogs(_Ghost, "LLMIME_MimeCompanion_Ghost");
 //SetInvulnerable_UseProcSetInvulnerable(_Ghost,1);
 ObjectSetFlag(_Ghost, "GLO_Ghost_Visible");
@@ -1251,15 +1212,22 @@ CharacterDied(_Ghost)
 AND
 DB_LLMIME_FollowerGhost(_Ghost)
 THEN
-NOT DB_LLMIME_FollowerGhost(_Ghost);
-RemoveTemporaryCharacter(_Ghost);
 LeaderLog_Log("DEBUG", "[LLMIME:Follower] Mime ghost died.");
+LLMIME_Follower_RemoveGhost();
 
 IF
 RegionEnded(_)
 AND
 DB_LLMIME_FollowerGhost(_Ghost)
 THEN
+LLMIME_Follower_RemoveGhost();
+
+PROC
+LLMIME_Follower_RemoveGhost()
+AND
+DB_LLMIME_FollowerGhost(_Ghost)
+THEN
+CharacterMakeStoryNpc(_Ghost, 0);
 RemoveTemporaryCharacter(_Ghost);
 NOT DB_LLMIME_FollowerGhost(_Ghost);
 //END_REGION
@@ -1269,8 +1237,6 @@ IF
 ObjectFlagSet("Mimicry_MaskTakenFromFollower", (CHARACTERGUID)_Player, _Instance)
 AND
 DialogGetInvolvedNPC(_Instance, 1, (CHARACTERGUID)_Ghost)
-AND
-GetPosition(_Ghost, _x, _y, _z)
 THEN
 LLMIME_Follower_Internal_KillGhost(_Ghost);
 
@@ -1362,9 +1328,9 @@ NOT DB_LLMIME_Follower_Temp_GhostEffect(_Ghost, _Handle);
 IF
 StoryEvent((CHARACTERGUID)_Ghost, "LLMIME_Events_Follower_KillGhost")
 THEN
+CharacterMakeStoryNpc(_Ghost, 0);
 CharacterSetImmortal(_Ghost,0);
-SetInvulnerable_UseProcSetInvulnerable(_Ghost,0);
-SetOnStage(_Ghost, 0);
+//SetOnStage(_Ghost, 0);
 CharacterDie(_Ghost, 0, "None");
 //END_REGION
 
