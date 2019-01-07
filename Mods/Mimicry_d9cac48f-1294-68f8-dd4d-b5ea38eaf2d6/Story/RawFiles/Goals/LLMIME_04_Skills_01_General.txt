@@ -88,7 +88,19 @@ DB_NOOP(1);
 
 //REGION WISH
 IF
-CharacterUsedSkillOnTarget(_Caster, (CHARACTERGUID)_Target, "Target_LLMIME_Wish", _, _)
+CharacterUsedSkillOnTarget(_Character, _Target, "Target_LLMIME_Wish", _, _)
+THEN
+LLMIME_Skills_OnSkillUsed(_Character, _Target, "Wish");
+
+IF
+CharacterUsedSkillOnTarget(_Character, _Target, "Target_LLMIME_Wish_Follower", _, _)
+THEN
+LLMIME_Skills_OnSkillUsed(_Character, _Target, "Wish");
+
+PROC
+LLMIME_Skills_OnSkillUsed((CHARACTERGUID)_Caster, (GUIDSTRING)_Target, "Wish")
+AND
+ObjectIsCharacter((CHARACTERGUID)_Target, 1)
 AND
 CharacterGetHitpointsPercentage(_Caster, _CasterHealth)
 AND
@@ -101,8 +113,10 @@ THEN
 SetStoryEvent(_Caster, "Mimicry_Events_Wish_UsedSkill");
 DB_LLMIME_Skills_Temp_NextWish(_Caster, _Target);
 
-IF
-CharacterUsedSkillOnTarget(_Caster, (CHARACTERGUID)_Target, "Target_LLMIME_Wish", _, _)
+PROC
+LLMIME_Skills_OnSkillUsed((CHARACTERGUID)_Caster, (GUIDSTRING)_Target, "Wish")
+AND
+ObjectIsCharacter((CHARACTERGUID)_Target, 1)
 AND
 NOT DB_LLMIME_Skills_Temp_NextWish(_Caster, _Target)
 THEN
@@ -110,6 +124,16 @@ DB_LLMIME_Skills_Temp_FailedWish(_Caster);
 
 IF
 SkillCast(_Caster, "Target_LLMIME_Wish", _, _)
+THEN
+LLMIME_Skills_OnSkillCast(_Caster, "Wish");
+
+IF
+SkillCast(_Caster, "Target_LLMIME_Wish_Follower", _, _)
+THEN
+LLMIME_Skills_OnSkillCast(_Caster, "Wish");
+
+PROC
+LLMIME_Skills_OnSkillCast((CHARACTERGUID)_Character, "Wish")
 AND
 DB_LLMIME_Skills_Temp_NextWish(_Caster, _Target)
 THEN
@@ -118,8 +142,8 @@ SetVarFloat(_Caster, "Mimicry_Wish_HealPercentage", 0.50);
 CharacterCharacterSetEvent(_Caster, _Target, "Mimicry_Events_OnWishCast");
 SetStoryEvent(_Target, "Mimicry_Events_Wish_SkillCast");
 
-IF
-SkillCast(_Caster, "Target_LLMIME_Wish", _, _)
+PROC
+LLMIME_Skills_OnSkillCast((CHARACTERGUID)_Character, "Wish")
 AND
 DB_LLMIME_Skills_Temp_FailedWish(_Caster)
 THEN
