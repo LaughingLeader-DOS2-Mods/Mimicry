@@ -16,7 +16,7 @@ AND
 //"0.9.9.11"
 LeaderLib_StringExt_QRY_VersionIsLessThan(_PastVersion, 0, 9, 9, 11)
 THEN
-LeaderLib_ToggleScripts_EnableScript("LeaderLib_StatusEvents_MainScriptEnabled", "Mimicry");
+DB_LeaderLib_EngineStatus("LLMIME_BEASTMASTER_TYPECHECK");
 LeaderLog_Log("DEBUG", "[LLMIME:LeaderLib] Updated settings from version [",_PastVersion,"]. Activated toggle script [LeaderLib_StatusEvents_MainScriptEnabled].");
 
 IF
@@ -24,7 +24,6 @@ DB_LLMIME_RegisteredLeaderLibSettings(1)
 THEN
 DB_LeaderLib_EngineStatus("LLMIME_UNARMED_HIT");
 DB_LeaderLib_EngineStatus("LLMIME_BEASTMASTER_TYPECHECK");
-LeaderLib_ToggleScripts_EnableScript("LeaderLib_StatusEvents_MainScriptEnabled", "Mimicry");
 LeaderLib_Register_ModMenu("LaughingLeader.Mimicry", "[Mimicry] Mime Menu", "LLMIME_SettingsMenu", "Mimicry", "LaughingLeader");
 
 LeaderLib_Trader_Register_Position("LeaderLib.LeaderTrader", "TestLevel_LL_Mimicry", 12.0, 0.0, 8.0);
