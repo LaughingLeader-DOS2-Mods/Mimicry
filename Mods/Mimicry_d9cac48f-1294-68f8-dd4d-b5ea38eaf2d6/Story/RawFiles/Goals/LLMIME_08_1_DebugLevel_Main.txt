@@ -916,29 +916,35 @@ LeaderLog_Log("DEBUG", "[LLMIME:Debug:Mimicry_MimeIsUnarmed] [",_Name,"] is not 
 IF
 CharacterStatusAttempt(_Character, _Status, _Causee)
 AND
+GetStatusType(_Status, _Type)
+AND
 String(_Causee, _Cause)
 AND
 CharacterGetDisplayName(_Character, _, _Name)
 THEN
-LeaderLog_Log("DEBUG", "[LLMIME:Debug:CharacterStatusAttempt] Status [",_Status,"] attempt on [",_Name,"] via [",_Cause,"].");
+LeaderLog_Log("DEBUG", "[LLMIME:Debug:CharacterStatusAttempt] Status [",_Status,"](",_Type,") attempt on [",_Name,"] via [",_Cause,"].");
 
 IF
 CharacterStatusApplied(_Character, _Status, _Causee)
 AND
+GetStatusType(_Status, _Type)
+AND
 String(_Causee, _Cause)
 AND
 CharacterGetDisplayName(_Character, _, _Name)
 THEN
-LeaderLog_Log("DEBUG", "[LLMIME:Debug:CharacterStatusApplied] Status [",_Status,"] applied on [",_Name,"] via [",_Cause,"].");
+LeaderLog_Log("DEBUG", "[LLMIME:Debug:CharacterStatusApplied] Status [",_Status,"](",_Type,") applied on [",_Name,"] via [",_Cause,"].");
 
 IF
 CharacterStatusRemoved(_Character, _Status, _Causee)
 AND
+GetStatusType(_Status, _Type)
+AND
 String(_Causee, _Cause)
 AND
 CharacterGetDisplayName(_Character, _, _Name)
 THEN
-LeaderLog_Log("DEBUG", "[LLMIME:Debug:CharacterStatusRemoved] Status [",_Status,"] removed from [",_Name,"] via [",_Cause,"].");
+LeaderLog_Log("DEBUG", "[LLMIME:Debug:CharacterStatusRemoved] Status [",_Status,"](",_Type,") removed from [",_Name,"] via [",_Cause,"].");
 //END_REGION
 
 //REGION SKILL_DEBUG
