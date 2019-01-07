@@ -173,6 +173,41 @@ THEN
 TeleportTo(_Mime, _Owner, "", 1, 0, 1);
 //END_REGION
 
+//REGION ARENA_TELEPORT_EVENTS
+PROC
+Proc_Arena_Initiate((INTEGER)_Inst)
+AND
+DB_LLMIME_Follower_Mime(_Mime)
+AND
+CharacterIsDead(_Mime, 0)
+AND
+DB_LeaderLib_PartyFollower(_Char, _Mime)
+AND
+DB_Arena_PlayerParticipants(_Arena,_Inst,_Char,_Team)
+AND
+DB_ArenaPresets_Player((STRING)_Arena,(STRING)_Team,(TRIGGERGUID)_Trig)
+AND
+GetFaction(_Mime,_Faction)
+THEN
+DB_Arena_PlayerParticipants(_Arena,_Inst,_Mime,_Team);
+DB_Arena_PreviousFaction(_Mime,_Faction);
+DB_Arena_CharIsAlive(_Team,_Mime);
+TeleportTo(_Mime,_Trig,"",0);
+SetInArena(_Mime,1);
+SetFaction(_Mime,_Team); 
+
+/*
+IF
+StoryEvent((CHARACTERGUID)_Player, "Arena_CharacterTeleportedOutOfArena")
+AND
+DB_LeaderLib_PartyFollower(_Player, _Mime)
+AND
+DB_LLMIME_Follower_Mime(_Mime)
+THEN
+TeleportTo(_Mime, _Player, "", 1, 0, 1);
+*/
+//END_REGION
+
 EXITSECTION
 
 ENDEXITSECTION
