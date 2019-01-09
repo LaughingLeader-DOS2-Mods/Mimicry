@@ -20,6 +20,7 @@ THEN
 LeaderLib_Growth_Characters_Register_Skill("Mimicry.MimeFollower", 2, "MultiStrike_LLMIME_MimeVault_Follower", "Tag", "LLMIME_MimeFollower");
 //LeaderLib_Growth_Characters_Register_Skill("Mimicry.MimeFollower", 3, "Target_LLMIME_Wish_Follower", "Tag", "LLMIME_MimeFollower");
 LeaderLib_Growth_Characters_Register_Skill("Mimicry.MimeFollower", 4, "Target_LLMIME_DisarmingBlow_Follower", "Tag", "LLMIME_MimeFollower");
+LeaderLib_Growth_Characters_Register_Skill("Mimicry.MimeFollower", 4, "Jump_LLMIME_HiddenApproach", "Tag", "LLMIME_MimeFollower");
 LeaderLib_Growth_Characters_Register_Skill("Mimicry.MimeFollower", 6, "Projectile_LLMIME_Decoy_Follower", "Tag", "LLMIME_MimeFollower");
 LeaderLib_Growth_Characters_Register_Skill("Mimicry.MimeFollower", 7, "Target_LLMIME_SealEvil_Follower", "Tag", "LLMIME_MimeFollower");
 LeaderLib_Growth_Characters_Register_Skill("Mimicry.MimeFollower", 8, "Target_LLMIME_VitalInfluence_Follower", "Tag", "LLMIME_MimeFollower");
@@ -87,12 +88,24 @@ LLMIME_Follower_RemoveBlankSkills();
 PROC
 LeaderUpdater_ModUpdated("Mimicry", "LaughingLeader", (STRING)_OldVersion, (STRING)_NewVersion)
 AND
-_NewVersion == "0.9.9.6"
+LeaderLib_StringExt_QRY_VersionIsLessThan(_OldVersion, 0, 9, 9, 7)
 AND
 DB_LLMIME_Follower_Mime(_Mime)
+AND
+CharacterHasSkill(_Mime, "Shout_EnemyFleshSacrifice", 1)
 THEN
 CharacterRemoveSkill(_Mime, "Shout_EnemyFleshSacrifice");
 CharacterAddSkill(_Mime, "Shout_FleshSacrifice");
+
+PROC
+LeaderUpdater_ModUpdated("Mimicry", "LaughingLeader", (STRING)_OldVersion, (STRING)_NewVersion)
+AND
+LeaderLib_StringExt_QRY_VersionIsLessThan(_OldVersion, 0, 9, 9, 20)
+AND
+DB_LLMIME_Follower_Mime(_Mime)
+THEN
+LeaderLib_Growth_Characters_Register_Skill("Mimicry.MimeFollower", 4, "Jump_LLMIME_HiddenApproach", "Tag", "LLMIME_MimeFollower");
+LeaderLib_Growth_Characters_AddSkills(_Mime);
 //END_REGION
 
 //REGION CHARACTER_SETUP
