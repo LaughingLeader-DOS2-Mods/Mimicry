@@ -122,40 +122,46 @@ DB_LLMIME_Skills_Temp_Decoy(_Character, _Decoy);
 SetVisible(_Decoy, 0);
 PlayEffect(_Decoy, "LLMIME_FX_Skills_Decoy_Overlay_FadeIn_01");
 PlayEffectAtPosition("RS3_FX_GP_ScriptedEvent_Ambushers_Smoke_01", _x, _y, _z);
-ObjectSetFlag(_Decoy, "LLMIME_Decoy");
 SetVarObject(_Decoy, "LLMIME_Decoy_Caster", _Character);
 SetScriptframe(_Decoy, "LLMIME_Decoy_CopyRotation");
+LLMIME_Skills_Internal_TransformDecoy(_Character, _Decoy);
 CharacterLevelUpTo(_Decoy, _Level);
-CharacterTransformAppearanceTo(_Decoy, _Character, 1, 1);
+SetTag(_Decoy, "LLMIME_Decoy");
+SetTag(_Decoy, "LeaderLib_Dummy");
+SetTag(_Decoy, "AI_PREFERRED_TARGET");
 LeaderLib_StartObjectTimer(_Decoy, 50, "LLMIME_Timers_Skills_Internal_SetupDecoy_", "Mimicry_Events_Skills_Internal_SetupDecoy");
 //SetStoryEvent(_Character, "Mimicry_Events_Skills_Internal_SetupDecoyTags");
 TeleportToPosition(_Decoy, _x, _y, _z, "Mimicry_Events_Skills_Internal_DecoyTeleported", 0);
 LeaderLog_Log("DEBUG", "[LLMIME:Skills:SkillCast(Decoy)] Spawned decoy at saved position.");
 
-/*
-IF
-StoryEvent((CHARACTERGUID)_Decoy, "Mimicry_Events_Skills_Internal_DecoyTeleported")
+PROC
+LLMIME_Skills_Internal_TransformDecoy((CHARACTERGUID)_Character, (CHARACTERGUID)_Decoy)
+AND
+IsTagged(_Character, "LLMIME_MimeFollower", 0)
 THEN
-*/
+CharacterTransformAppearanceTo(_Decoy, _Character, 1, 1);
 
-/*
-IF
-StoryEvent((CHARACTERGUID)_Decoy, "Mimicry_Events_Skills_Internal_DecoyTeleported")
+PROC
+LLMIME_Skills_Internal_TransformDecoy((CHARACTERGUID)_Character, (CHARACTERGUID)_Decoy)
 AND
-DB_LLMIME_Skills_Temp_Decoy(_Character, _Decoy)
-AND
-GetStatusTurns(_Character, "LLMIME_DECOY_ACTIVE", _Turns)
-AND
-IntegerProduct(_Turns, 6, _DurationInt)
-AND
-Real(_DurationInt, _Duration)
+IsTagged(_Character, "LLMIME_MimeFollower", 1)
 THEN
-ApplyStatus(_Decoy, "LLMIME_DECOY_LIFETIME", _Duration, 1);
-*/
+CharacterTransform(_Decoy, "LLMIME_Elves_Male_Mime_NoMask_Decoy_d92862d5-5e75-4916-b8a9-de0c5f246cd5", 0, 1, 0, 0, 0, 1, 1);
+
+IF
+StoryEvent((CHARACTERGUID)_Decoy, "Mimicry_Events_Skills_Internal_SetupDecoy")
+AND
+CharacterGetEquippedItem(_Decoy, "Helmet", (ITEMGUID)_Mask)
+AND
+_Mask != NULL_00000000-0000-0000-0000-000000000000
+THEN
+CharacterUnequipItem(_Decoy, _Mask);
+ItemRemove(_Mask);
 
 IF
 StoryEvent((CHARACTERGUID)_Decoy, "Mimicry_Events_Skills_Internal_SetupDecoy")
 THEN
+SetHasDialog(_Decoy, 0);
 LLMIME_Skills_Internal_ApplyDecoyTags(_Decoy);
 SetOnStage(_Decoy, 1);
 LLMIME_Skills_SetupDecoy(_Decoy);
@@ -243,7 +249,14 @@ GetPosition(_Decoy, _x, _y, _z)
 THEN
 //PlayEffectAtPosition("RS3_FX_GP_Combat_CorpseExplosion_Wood_01_Small", _x, _y, _z);
 //PlayEffectAtPosition("RS3_FX_Poof_Wood_01", _x, _y, _z);
+SetOnStage(_Decoy, 0);
 PlayEffectAtPosition("RS3_FX_GP_ScriptedEvent_Ambushers_Smoke_01", _x, _y, _z);
+PROC_StopLoopEffect(_Decoy, "Mimicry.FX.Decoy.Mask");
+ProcObjectTimer(_Decoy, "LLMIME_Timers_Skills_DeleteDecoy", 1000);
+
+PROC
+ProcObjectTimer((CHARACTERGUID)_Decoy, "LLMIME_Timers_Skills_DeleteDecoy")
+THEN
 RemoveTemporaryCharacter(_Decoy);
 
 PROC
@@ -740,4 +753,4 @@ NOT DB_LLMIME_Skills_Temp_DisabledCharacter(_Character, _Status);
 EXITSECTION
 
 ENDEXITSECTION
-ParentTargetEdge "LaughingLeader_Mimicry"
+ParentTargetEdge "LLMIME_10_ToggleScripts"

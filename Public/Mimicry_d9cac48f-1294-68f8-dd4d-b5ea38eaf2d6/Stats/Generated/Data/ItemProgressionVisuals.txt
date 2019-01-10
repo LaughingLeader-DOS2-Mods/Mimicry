@@ -16,6 +16,12 @@ add levelgroup 0,0,"All"
 add rootgroup "36348beb-6126-42f5-ba26-05acf6b65bae",""
 add namegroup "ARM_UNIQUE_LLMIME_Mime_Mask_A","",""
 
+new itemgroup "ARM_LLMIME_Mime_Mask_Decoy_Horns"
+
+add levelgroup 0,0,"All"
+add rootgroup "795a0f87-3db1-4a86-8d63-e7d1ba4fe2c0",""
+add namegroup "ARM_UNIQUE_LLMIME_Mime_Mask_A","",""
+
 new itemgroup "LLMIME_BrawlerFist"
 
 add levelgroup 0,0,"All"

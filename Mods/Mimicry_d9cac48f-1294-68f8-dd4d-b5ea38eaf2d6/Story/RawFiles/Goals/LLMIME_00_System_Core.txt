@@ -97,6 +97,23 @@ DB_LLMIME_BlankSkills("Shout_LLMIME_Blank22");
 DB_LLMIME_BlankSkills("Shout_LLMIME_Blank23");
 DB_LLMIME_BlankSkills("Shout_LLMIME_Blank24");
 
+/*
+PROC
+LLMIME_System_InitSettings()
+AND
+NOT DB_LLMIME_DecoyMaskEffects(_,_,_,_)
+THEN
+//SysClear("DB_LLMIME_DecoyMaskEffects", 4);
+DB_LLMIME_DecoyMaskEffects("DWARF", 1, "LLMIME_FX_Dwarves_Female_MimeMask_A", "Dummy_Root");
+DB_LLMIME_DecoyMaskEffects("DWARF", 0, "LLMIME_FX_Dwarves_Male_MimeMask_A", "Dummy_Root");
+DB_LLMIME_DecoyMaskEffects("ELF", 1, "LLMIME_FX_Elves_Female_MimeMask_A", "Dummy_Root");
+DB_LLMIME_DecoyMaskEffects("ELF", 0, "LLMIME_FX_Elves_Male_MimeMask_A", "Dummy_Root");
+DB_LLMIME_DecoyMaskEffects("HUMAN", 1, "LLMIME_FX_Humans_Female_MimeMask_A", "Head_Bone");
+DB_LLMIME_DecoyMaskEffects("HUMAN", 0, "LLMIME_FX_Humans_Male_MimeMask_A", "Dummy_Root");
+DB_LLMIME_DecoyMaskEffects("LIZARD", 1, "LLMIME_FX_Lizards_Female_MimeMask_A", "Dummy_Root");
+DB_LLMIME_DecoyMaskEffects("LIZARD", 0, "LLMIME_FX_Lizards_Male_MimeMask_A", "Dummy_Root");
+*/
+
 PROC
 LLMIME_System_InitEffectFlags()
 AND
@@ -675,14 +692,14 @@ AND
 IsTagged(_Character, "LLMIME_Dummy", 1)
 THEN
 DB_NOOP(1);
-
+/*
 QRY
 LLMIME_QRY_CharacterIsADummy((CHARACTERGUID)_Character)
 AND
 ObjectGetFlag(_Character, "LLMIME_Decoy", 1)
 THEN
 DB_NOOP(1);
-
+*/
 QRY
 LLMIME_QRY_CharacterIsADummy((CHARACTERGUID)_Character)
 AND

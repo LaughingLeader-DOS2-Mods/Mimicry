@@ -211,4 +211,4 @@ TeleportTo(_Mime, _Player, "", 1, 0, 1);
 EXITSECTION
 
 ENDEXITSECTION
-ParentTargetEdge "LaughingLeader_Mimicry"
+ParentTargetEdge "LLMIME_10_ToggleScripts"

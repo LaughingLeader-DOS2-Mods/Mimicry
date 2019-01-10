@@ -1,0 +1,40 @@
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+
+KBSECTION
+
+IF
+ObjectEnteredCombat((CHARACTERGUID)_Mime, _CombatID)
+AND
+IsTagged(_Mime, "Mimicry_Mime", 1)
+THEN
+LLMIME_Mimicking_ApplyMimicking(_Mime);
+
+IF
+ObjectTurnEnded((CHARACTERGUID)_Mime)
+AND
+IsTagged(_Mime, "Mimicry_Mime", 1)
+AND
+CharacterIsInCombat(_Mime, 1)
+THEN
+LeaderLib_StartObjectTimer(_Mime, 500, "LLMIME_Timers_AfterTurn_ApplyMimicking_", "LLMIME_Events_RequestMimicking");
+
+IF
+ObjectTurnStarted((CHARACTERGUID)_Mime)
+AND
+LLMIME_QRY_CharacterIsAMime(_Mime)
+THEN
+LLMIME_Mimicking_RemoveMimicking(_Mime);
+
+IF
+ObjectLeftCombat((CHARACTERGUID)_Mime, _CombatID)
+AND
+NOT GlobalGetFlag("Mimicry_Mimic_CombatOnlyDisabled", 1)
+THEN
+LLMIME_Mimicking_RemoveMimicking(_Mime);
+
+EXITSECTION
+
+ENDEXITSECTION
+ParentTargetEdge "LLMIME_10_ToggleScripts"

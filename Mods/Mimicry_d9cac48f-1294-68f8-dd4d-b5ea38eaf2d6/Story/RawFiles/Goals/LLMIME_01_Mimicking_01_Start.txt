@@ -27,20 +27,6 @@ THEN
 LLMIME_Mimicking_ApplyMimicking(_Mime);
 
 IF
-ObjectTurnEnded((CHARACTERGUID)_Mime)
-AND
-IsTagged(_Mime, "Mimicry_Mime", 1)
-AND
-CharacterIsInCombat(_Mime, 1)
-THEN
-LeaderLib_StartObjectTimer(_Mime, 500, "LLMIME_Timers_AfterTurn_ApplyMimicking_", "LLMIME_Events_RequestMimicking");
-
-IF
-ObjectEnteredCombat((CHARACTERGUID)_Mime, _CombatID)
-THEN
-LLMIME_Mimicking_ApplyMimicking(_Mime);
-
-IF
 StoryEvent((CHARACTERGUID)_Mime, "LLMIME_Events_RequestMimicking")
 THEN
 LLMIME_Mimicking_ApplyMimicking(_Mime);
@@ -80,14 +66,6 @@ LLMIME_Mimicking_QRY_MimeShouldBeMimicking(_Mime)
 THEN
 ApplyStatus(_Mime, "LLMIME_MIMICKING_ENEMY", -1.0, 1);
 
-IF
-CharacterStatusApplied(_Mime, _Status, _)
-AND
-DB_LLMIME_MimickingStatuses(_Status)
-THEN
-ObjectClearFlag(_Mime, "Mimicry_MimickingWasRemoved");
-LLMIME_Mimicking_OnMimickingApplied(_Mime);
-
 PROC
 LLMIME_Mimicking_OnMimickingApplied((CHARACTERGUID)_Mime)
 AND
@@ -113,20 +91,6 @@ DB_LLMIME_Mimicking_MimicNextAction(_Mime);
 
 IF
 StoryEvent((CHARACTERGUID)_Mime, "LLMIME_Events_RemoveMimicking")
-THEN
-LLMIME_Mimicking_RemoveMimicking(_Mime);
-
-IF
-ObjectTurnStarted((CHARACTERGUID)_Mime)
-AND
-LLMIME_QRY_CharacterIsAMime(_Mime)
-THEN
-LLMIME_Mimicking_RemoveMimicking(_Mime);
-
-IF
-ObjectLeftCombat((CHARACTERGUID)_Mime, _CombatID)
-AND
-NOT GlobalGetFlag("Mimicry_Mimic_CombatOnlyDisabled", 1)
 THEN
 LLMIME_Mimicking_RemoveMimicking(_Mime);
 
@@ -163,13 +127,6 @@ ObjectGetFlag(_Mime, "Mimicry_MimickingWasRemoved", 1)
 THEN
 ObjectClearFlag(_Mime, "Mimicry_MimickingWasRemoved");
 
-IF
-CharacterStatusRemoved(_Mime, _Status, _)
-AND
-DB_LLMIME_MimickingStatuses(_Status)
-THEN
-LLMIME_Mimicking_OnMimickingRemoved(_Mime);
-
 PROC
 LLMIME_Mimicking_OnMimickingRemoved((CHARACTERGUID)_Mime)
 AND
@@ -192,6 +149,70 @@ PROC
 LLMIME_Mimicking_OnMimickingDisabled((CHARACTERGUID)_Mime)
 THEN
 DB_NOOP(1);
+//END_REGION
+
+//REGION STATUS_EVENTS
+/*
+DB_LLMIME_MimickingStatuses("LLMIME_MIMICKING");
+DB_LLMIME_MimickingStatuses("LLMIME_MIMICKING_FOLLOWER");
+DB_LLMIME_MimickingStatuses("LLMIME_MIMICKING_SOURCE");
+DB_LLMIME_MimickingStatuses("LLMIME_MIMICKING_ENEMY");
+*/
+
+IF
+CharacterStatusApplied(_Mime, "LLMIME_MIMICKING", _)
+THEN
+LLMIME_Mimicking_Internal_OnApplied_Check(_Mime);
+
+IF
+CharacterStatusApplied(_Mime, "LLMIME_MIMICKING_FOLLOWER", _)
+THEN
+LLMIME_Mimicking_Internal_OnApplied_Check(_Mime);
+
+IF
+CharacterStatusApplied(_Mime, "LLMIME_MIMICKING_SOURCE", _)
+THEN
+LLMIME_Mimicking_Internal_OnApplied_Check(_Mime);
+
+IF
+CharacterStatusApplied(_Mime, "LLMIME_MIMICKING_ENEMY", _)
+THEN
+LLMIME_Mimicking_Internal_OnApplied_Check(_Mime);
+
+PROC
+LLMIME_Mimicking_Internal_OnApplied_Check((CHARACTERGUID)_Mime)
+AND
+NOT LLMIME_QRY_CharacterIsADummy(_Mime)
+THEN
+ObjectClearFlag(_Mime, "Mimicry_MimickingWasRemoved");
+LLMIME_Mimicking_OnMimickingApplied(_Mime);
+
+IF
+CharacterStatusRemoved(_Mime, "LLMIME_MIMICKING", _)
+THEN
+LLMIME_Mimicking_Internal_OnRemoved_Check(_Mime);
+
+IF
+CharacterStatusRemoved(_Mime, "LLMIME_MIMICKING_FOLLOWER", _)
+THEN
+LLMIME_Mimicking_Internal_OnRemoved_Check(_Mime);
+
+IF
+CharacterStatusRemoved(_Mime, "LLMIME_MIMICKING_SOURCE", _)
+THEN
+LLMIME_Mimicking_Internal_OnRemoved_Check(_Mime);
+
+IF
+CharacterStatusRemoved(_Mime, "LLMIME_MIMICKING_ENEMY", _)
+THEN
+LLMIME_Mimicking_Internal_OnRemoved_Check(_Mime);
+
+PROC
+LLMIME_Mimicking_Internal_OnRemoved_Check((CHARACTERGUID)_Mime)
+AND
+NOT LLMIME_QRY_CharacterIsADummy(_Mime)
+THEN
+LLMIME_Mimicking_OnMimickingRemoved(_Mime);
 //END_REGION
 
 //REGION DAMAGE_DEBUFF

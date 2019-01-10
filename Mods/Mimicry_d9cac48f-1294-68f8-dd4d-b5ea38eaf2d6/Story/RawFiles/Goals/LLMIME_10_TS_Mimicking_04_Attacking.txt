@@ -540,4 +540,4 @@ SysClear("DB_LLMIME_Mimicking_Temp_ResetDummyAfterMimicAction", 4);
 EXITSECTION
 
 ENDEXITSECTION
-ParentTargetEdge "LaughingLeader_Mimicry"
+ParentTargetEdge "LLMIME_10_ToggleScripts"

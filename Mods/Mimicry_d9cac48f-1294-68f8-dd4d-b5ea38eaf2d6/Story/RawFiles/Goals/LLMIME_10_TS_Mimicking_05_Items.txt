@@ -262,4 +262,4 @@ SysClear("DB_LLMIME_Mimicking_Items_DestroyNext", 4);
 EXITSECTION
 
 ENDEXITSECTION
-ParentTargetEdge "LaughingLeader_Mimicry"
+ParentTargetEdge "LLMIME_10_ToggleScripts"

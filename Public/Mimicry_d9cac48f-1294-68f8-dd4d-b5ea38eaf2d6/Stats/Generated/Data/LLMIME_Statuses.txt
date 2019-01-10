@@ -766,6 +766,7 @@ data "DescriptionRef" "Character is a decoy."
 data "Icon" "LLMIME_Status_Decoy"
 data "StatsId" "Stats_LLMIME_DecoyCharacter"
 data "StackId" "Stack_LLMIME_DecoyDisabled"
+data "Items" "ARM_LLMIME_Mime_Mask_Decoy_Horns"
 data "FreezeTime" "1"
 
 new entry "Stats_LLMIME_DecoyCharacter"
@@ -1121,4 +1122,4 @@ data "FormatColor" "Void"
 new entry "LLMIME_DEBUG_SCRIPT"
 type "StatusData"
 using "LLMIME_HIDDEN_CONSUME_BASE"
-
+using "LLMIME_HIDDEN_CONSUME_BASE"

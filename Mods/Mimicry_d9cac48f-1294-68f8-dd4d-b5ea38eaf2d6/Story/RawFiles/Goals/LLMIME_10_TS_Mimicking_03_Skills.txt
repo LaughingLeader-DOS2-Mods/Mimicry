@@ -559,4 +559,4 @@ SysClear("DB_LLMIME_Mimicking_Temp_CastSelfSkill", 3);
 EXITSECTION
 
 ENDEXITSECTION
-ParentTargetEdge "LaughingLeader_Mimicry"
+ParentTargetEdge "LLMIME_10_ToggleScripts"

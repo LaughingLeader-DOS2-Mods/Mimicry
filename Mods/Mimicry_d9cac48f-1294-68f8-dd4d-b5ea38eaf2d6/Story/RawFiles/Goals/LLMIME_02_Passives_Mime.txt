@@ -182,9 +182,10 @@ SetStoryEvent(_Mime, "Mimicry_InitMimeJob");
 //REGION REMOVAL
 IF
 ItemUnEquipped(_Mask, _Mime)
-//CharacterStatusRemoved(_Mime, "LLMIME_MIMICRY_MASK", _)
 AND
 IsTagged(_Mask, "LLMIME_ACTIVATE_MIME", 1)
+AND
+NOT LLMIME_QRY_CharacterIsADummy(_Mime)
 AND
 LLMIME_QRY_CharacterIsAMime(_Mime)
 THEN
