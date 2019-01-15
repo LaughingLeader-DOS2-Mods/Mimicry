@@ -195,11 +195,22 @@ SetStoryEvent(_Mime, "Mimicry_RemoveMimeJob");
 //REGION INFO_STATUS
 IF
 CharacterStatusRemoved(_Mime, "LLMIME_MIMICRY_MASK", _)
+AND
+IsTagged(_Mime, "LLMIME_MimeFollower", 0)
 THEN
 RemoveStatus(_Mime, "LLMIME_MIMICRY_MASK_INFO");
 
 IF
+CharacterStatusRemoved(_Mime, "LLMIME_MIMICRY_MASK", _)
+AND
+IsTagged(_Mime, "LLMIME_MimeFollower", 1)
+THEN
+RemoveStatus(_Mime, "LLMIME_MIMICRY_MASK_INFO_FOLLOWER");
+
+IF
 CharacterStatusApplied(_Mime, "LLMIME_MIMICRY_MASK", _)
+AND
+IsTagged(_Mime, "LLMIME_MimeFollower", 0)
 AND
 NOT ObjectGetFlag(_Mime, "Mimicry_HideMimicryMaskInfo", 1)
 AND
@@ -208,18 +219,51 @@ THEN
 ApplyStatus(_Mime, "LLMIME_MIMICRY_MASK_INFO", -1.0, 1);
 
 IF
+CharacterStatusApplied(_Mime, "LLMIME_MIMICRY_MASK", _)
+AND
+IsTagged(_Mime, "LLMIME_MimeFollower", 1)
+AND
+NOT ObjectGetFlag(_Mime, "Mimicry_HideMimicryMaskInfo", 1)
+AND
+HasActiveStatus(_Mime, "LLMIME_MIMICRY_MASK_INFO_FOLLOWER", 0)
+THEN
+ApplyStatus(_Mime, "LLMIME_MIMICRY_MASK_INFO_FOLLOWER", -1.0, 1);
+
+IF
 ObjectFlagSet("Mimicry_HideMimicryMaskInfo", (CHARACTERGUID)_Mime, _Instance)
+AND
+IsTagged(_Mime, "LLMIME_MimeFollower", 0)
 THEN
 RemoveStatus(_Mime, "LLMIME_MIMICRY_MASK_INFO");
 
 IF
+ObjectFlagSet("Mimicry_HideMimicryMaskInfo", (CHARACTERGUID)_Mime, _Instance)
+AND
+IsTagged(_Mime, "LLMIME_MimeFollower", 1)
+THEN
+RemoveStatus(_Mime, "LLMIME_MIMICRY_MASK_INFO_FOLLOWER");
+
+IF
 ObjectFlagCleared("Mimicry_HideMimicryMaskInfo", (CHARACTERGUID)_Mime, _Instance)
+AND
+IsTagged(_Mime, "LLMIME_MimeFollower", 0)
 AND
 HasActiveStatus(_Mime, "LLMIME_MIMICRY_MASK", 1)
 AND
 NOT LeaderLib_Helper_QRY_HasStatus(_Mime, "LLMIME_MIMICRY_MASK_INFO")
 THEN
 ApplyStatus(_Mime, "LLMIME_MIMICRY_MASK_INFO", -1.0, 1);
+
+IF
+ObjectFlagCleared("Mimicry_HideMimicryMaskInfo", (CHARACTERGUID)_Mime, _Instance)
+AND
+IsTagged(_Mime, "LLMIME_MimeFollower", 1)
+AND
+HasActiveStatus(_Mime, "LLMIME_MIMICRY_MASK", 1)
+AND
+NOT LeaderLib_Helper_QRY_HasStatus(_Mime, "LLMIME_MIMICRY_MASK_INFO_FOLLOWER")
+THEN
+ApplyStatus(_Mime, "LLMIME_MIMICRY_MASK_INFO_FOLLOWER", -1.0, 1);
 //END_REGION
 
 //REGION EFFECTS

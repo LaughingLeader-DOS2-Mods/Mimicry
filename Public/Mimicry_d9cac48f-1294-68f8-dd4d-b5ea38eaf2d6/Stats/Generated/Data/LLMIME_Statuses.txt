@@ -171,6 +171,13 @@ data "Icon" "LLMIME_Status_MaskOfMimicry"
 data "FormatColor" "Decay"
 data "StackId" "Stack_LLMIME_MaskInfo"
 
+new entry "LLMIME_MIMICRY_MASK_INFO_FOLLOWER"
+type "StatusData"
+data "StatusType" "CONSUME"
+using "LLMIME_MIMICRY_MASK_INFO"
+data "Description" "LLMIME_MIMICRY_MASK_INFO_FOLLOWER_Description"
+data "DescriptionRef" "Character is a mime.<br><font color='#FF0000'>Cannot cast spells in combat</font><br><font color='#FF00FF'>Mimics the actions of their owner in combat</font>"
+
 new entry "LLMIME_MIMICKING"
 type "StatusData"
 data "StatusType" "CONSUME"

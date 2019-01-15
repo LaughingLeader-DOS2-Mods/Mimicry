@@ -11,6 +11,7 @@ NOT DB_LLEQSET_Blacklist("Tag", "LLMIME_BrawlerFist")
 THEN
 //Prevent brawler fists from being saved to sets
 DB_LLEQSET_Blacklist("Tag", "LLMIME_BrawlerFist");
+DB_LLEQSET_Blacklist("Tag", "LLMIME_MIMICKED_WEAPON");
 
 PROC
 LLMIME_ModCompatibility_InitSettings()
@@ -20,6 +21,14 @@ THEN
 DB_NeutralTagIgnore("LLMIME_Dummy");
 DB_NeutralTagIgnore("LLMIME_MimeFollower");
 
+//Bartering Tweaks
+PROC
+LLMIME_ModCompatibility_InitSettings()
+AND
+NOT DB_LLBARTER_DialogBlacklist("Mimicry", "LLMIME_MimeVendor")
+THEN
+DB_LLBARTER_DialogBlacklist("Mimicry", "LLMIME_SettingsMenu");
+DB_LLBARTER_DialogBlacklist("Mimicry", "LLMIME_MimeVendor");
 //END_REGION
 
 //REGION UPDATING
