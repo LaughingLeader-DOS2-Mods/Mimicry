@@ -1,19 +1,19 @@
 #INCLUDE LLMIME_Effects
 #INCLUDE LLMIME_Skills
 #INCLUDE LLMIME_Statuses
+#INCLUDE LLMIME_Mime_Passives
 
 INIT
-	FIXEDSTRING:%EmptyFixedStr = ""
-	FLOAT3:%EmptyPos = null
-	CHARACTER:%NullChar = null
-	LIST<STATUS>:%MimeStatuses
-	FLOAT:%StatusStrength = 50
-	EXTERN FLOAT:%SourceRegenMinimumLevel = 10
-	EXTERN INT:%SourceRegenDuration = 10
+	LIST<STATUS>:%LLMIME_PassiveStatuses
+	FLOAT:%LLMIME_StatusStrength = 999
+	FLOAT:%LLMIME_StatusStrengthRemoval = 1000
+	EXTERN FLOAT:%LLMIME_SourceRegenMinimumLevel = 10
+	EXTERN INT:%LLMIME_SourceRegenDuration = 10
 	
 	USING LLMIME_Effects
 	USING LLMIME_Skills
 	USING LLMIME_Statuses
+	USING LLMIME_Mime_Passives
 EVENTS
 
 EVENT LLMIME_InitStatusList
@@ -24,14 +24,14 @@ ON
 	OnFunction("Mimicry_InitStatusList")
 ACTIONS
 IF "!c1|(c1&c2)"
-	ListGetSize(%MimeStatuses, _ListSize)
+	ListGetSize(%LLMIME_PassiveStatuses, _ListSize)
 	IsLessThen(_ListSize, 1)
 THEN
-	ListClear(%MimeStatuses)
-	ListAdd(%MimeStatuses, LLMIME_MIME)
-	ListAdd(%MimeStatuses, LLMIME_BEASTMASTER)
-	ListAdd(%MimeStatuses, LLMIME_BRAWLER)
-	ListAdd(%MimeStatuses, LLMIME_CONCENTRATION)
+	ListClear(%LLMIME_PassiveStatuses)
+	ListAdd(%LLMIME_PassiveStatuses, LLMIME_MIME)
+	ListAdd(%LLMIME_PassiveStatuses, LLMIME_BEASTMASTER)
+	ListAdd(%LLMIME_PassiveStatuses, LLMIME_BRAWLER)
+	ListAdd(%LLMIME_PassiveStatuses, LLMIME_CONCENTRATION)
 ENDIF
 
 EVENT LLMIME_LeaderLib_InitEvent
@@ -85,21 +85,17 @@ ENDIF
 	CharacterEvent(_Mime, "Mimicry_ApplySourceRegen")
 	Set(_Index, 1)
 IF "c1"
-	ListGetSize(%MimeStatuses, _Size)
+	ListGetSize(%LLMIME_PassiveStatuses, _Size)
 THEN
 	WHILE "!c1"
 		IsGreaterThen(_Index,_Size)
 	DO
 		IF "c1"
-			ListGet(%MimeStatuses,_Index,_Status)
+			ListGet(%LLMIME_PassiveStatuses,_Index,_Status)
 		THEN
-			/*
-			IF "!c1"
-				HasStatusInfluence(_Mime, _Status)
-			THEN
-				AddStatusInfluence(_Mime, _Status, %StatusStrength, "", 0, 1)
-			ENDIF
-			*/
+			//RemoveStatusInfluence(_Mime, _Status, %LLMIME_StatusStrengthRemoval, "", 0)
+			//AddStatusInfluence(_Mime, _Status, %LLMIME_StatusStrength, "", 0, 1)
+			
 			IF "!c1|(c2&!c3)"
 				CharacterHasStatus(_Mime, _Status)
 				GetStatusTurns(_Mime, _Status, _Turns)
@@ -107,6 +103,7 @@ THEN
 			THEN
 				CharacterApplyStatus(_Mime, _Status, -1, 1)
 			ENDIF
+			
 		ENDIF
 	Add(_Index, 1)
 	ENDWHILE
@@ -118,6 +115,36 @@ ENDIF
 	SetVar(_Mime, "LeaderLib_LogMessage", _Message)
 	CharacterEvent(_Mime, "LeaderLib_DebugLog")
 	*/
+
+EVENT LLMIME_RemoveMimeStatusInfluences
+VARS
+	CHARACTER:_Mime
+	INT:_Size
+	INT:_Index
+	STATUS:_Status
+ON
+	OnCharacterEvent(_Mime, "Mimicry_RemoveMimeStatusInfluences")
+ACTIONS
+	Set(_Index, 1)
+IF "c1"
+	ListGetSize(%LLMIME_PassiveStatuses, _Size)
+THEN
+	WHILE "!c1"
+		IsGreaterThen(_Index,_Size)
+	DO
+		IF "c1"
+			ListGet(%LLMIME_PassiveStatuses,_Index,_Status)
+		THEN
+			IF "!c1"
+				HasStatusInfluence(_Mime, _Status)
+			THEN
+				RemoveStatusInfluence(_Mime, _Status, %LLMIME_StatusStrengthRemoval, "", 0)
+			ENDIF
+		ENDIF
+	Add(_Index, 1)
+	ENDWHILE
+ENDIF
+
 EVENT LLMIME_Mime_Remove
 VARS
 	CHARACTER:_Mime
@@ -131,6 +158,7 @@ THEN
 	CharacterEvent(_Mime, "LeaderLib_DebugLog")
 	ClearTag(_Mime, "Mimicry_Mime")
 ENDIF
+	//CharacterEvent(_Mime, "Mimicry_RemoveMimeStatusInfluences")
 	CharacterEvent(_Mime, "Mimicry_ClearMimeBonuses")
 	CharacterEvent(_Mime, "Mimicry_MimeJobRemoved")
 	CharacterRemoveStatus(_Mime, LLMIME_SOURCE_REGENERATION_HIDDEN, null, 0)
@@ -242,7 +270,7 @@ IF "c1&c2"
 	//IsEqual(_EventName, %EmptyFixedStr)
 THEN
 	IterateItemsNear(_Dummy, _Radius, _EventName)
-	SetVar(_Dummy, "LLMIME_Dummy_IterationEvent", %EmptyFixedStr)
+	SetVar(_Dummy, "LLMIME_Dummy_IterationEvent", FIXEDSTRING:"")
 ENDIF
 
 EVENT LLMIME_Dummy_OnIterate
@@ -269,10 +297,10 @@ IF "c1&!c2&c3&(c4|c5)"
 	IsTagged(_Mime, "Mimicry_Mime")
 	CharacterHasStatus(_Mime, LLMIME_SOURCE_REGENERATION_HIDDEN)
 	CharacterGetStat(_Level, _Mime, Level)
-	IsGreaterThen(_Level, %SourceRegenMinimumLevel)
-	IsEqual(_Level, %SourceRegenMinimumLevel)
+	IsGreaterThen(_Level, %LLMIME_SourceRegenMinimumLevel)
+	IsEqual(_Level, %LLMIME_SourceRegenMinimumLevel)
 THEN
-	CharacterApplyStatus(_Mime, LLMIME_SOURCE_REGENERATION_HIDDEN, %SourceRegenDuration, 0)
+	CharacterApplyStatus(_Mime, LLMIME_SOURCE_REGENERATION_HIDDEN, %LLMIME_SourceRegenDuration, 0)
 ENDIF
 
 EVENT LLMIME_Mime_Combat_Muted_Apply

@@ -1,0 +1,96 @@
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+
+KBSECTION
+IF
+CharacterStatusRemoved(_Mime, _Status, _)
+AND
+DB_LLMIME_PassiveData(_Status, _BonusStatus, _InfoStatus, _DisableFlag)
+AND
+LLMIME_QRY_CharacterIsAMime(_Mime)
+THEN
+LLMIME_PassiveStatuses_OnPassiveRemoved(_Mime, _Status, _BonusStatus, _InfoStatus, _DisableFlag);
+
+//RemoveHarmfulStatuses removes everything, so re-apply if we're still a Mime
+PROC
+LLMIME_PassiveStatuses_OnPassiveRemoved((CHARACTERGUID)_Mime, (STRING)_Status, (STRING)_BonusStatus, (STRING)_InfoStatus, (STRING)_DisableFlag)
+THEN
+ApplyStatus(_Mime, _Status, -1.0, 1, _Mime);
+
+//Run check for unarmed bonuses again
+PROC
+LLMIME_PassiveStatuses_OnPassiveRemoved((CHARACTERGUID)_Mime, "LLMIME_BRAWLER", (STRING)_BonusStatus, (STRING)_InfoStatus, (STRING)_DisableFlag)
+AND
+IsTagged(_Mime, "LLMIME_MimeFollower", 0)
+THEN
+LLMIME_System_FlagForUnarmed(_Mime);
+
+PROC
+LLMIME_PassiveStatuses_OnPassiveRemoved((CHARACTERGUID)_Mime, (STRING)_Status, (STRING)_BonusStatus, (STRING)_InfoStatus, (STRING)_DisableFlag)
+AND
+NOT LeaderLib_Helper_QRY_HasStatus(_Mime, _BonusStatus)
+THEN
+ApplyStatus(_Mime, _BonusStatus, -1.0, 1, _Mime);
+
+PROC
+LLMIME_PassiveStatuses_OnPassiveRemoved((CHARACTERGUID)_Mime, (STRING)_Status, (STRING)_BonusStatus, (STRING)_InfoStatus, (STRING)_DisableFlag)
+AND
+NOT ObjectGetFlag(_Mime, _DisableFlag, 1)
+AND
+NOT LeaderLib_Helper_QRY_HasStatus(_Mime, _InfoStatus)
+THEN
+ApplyStatus(_Mime, _InfoStatus, -1.0, 1, _Mime);
+
+/*
+PROC
+LLMIME_PassiveStatuses_OnPassiveRemoved((CHARACTERGUID)_Mime, (STRING)_Status, (STRING)_BonusStatus, (STRING)_InfoStatus, (STRING)_DisableFlag)
+THEN
+RemoveStatus(_Mime, _BonusStatus);
+RemoveStatus(_Mime, _InfoStatus);
+*/
+IF
+CharacterStatusApplied(_Mime, _BonusStatus, _)
+AND
+DB_LLMIME_PassiveData(_Status, _BonusStatus, _InfoStatus, _DisableFlag)
+AND
+NOT ObjectGetFlag(_Mime, _DisableFlag, 1)
+AND
+NOT LeaderLib_Helper_QRY_HasStatus(_Mime, _InfoStatus)
+THEN
+ApplyStatus(_Mime, _InfoStatus, -1.0, 1, _Mime);
+
+IF
+CharacterStatusRemoved(_Mime, _BonusStatus, _)
+AND
+DB_LLMIME_PassiveData(_Status, _BonusStatus, _InfoStatus, _DisableFlag)
+AND
+HasActiveStatus(_Mime, _InfoStatus, 1)
+THEN
+RemoveStatus(_Mime, _InfoStatus);
+
+IF
+ObjectFlagCleared(_DisableFlag, _Mime, _)
+AND
+DB_LLMIME_PassiveData(_Status, _BonusStatus, _InfoStatus, _DisableFlag)
+AND
+HasActiveStatus(_Mime, _Status, 1)
+AND
+HasActiveStatus(_Mime, _BonusStatus, 1)
+AND
+HasActiveStatus(_Mime, _InfoStatus, 0)
+THEN
+ApplyStatus(_Mime, _InfoStatus, -1.0, 1, _Mime);
+
+IF
+ObjectFlagSet(_DisableFlag, _Mime, _)
+AND
+DB_LLMIME_PassiveData(_Status, _BonusStatus, _InfoStatus, _DisableFlag)
+AND
+HasActiveStatus(_Mime, _InfoStatus, 1)
+THEN
+RemoveStatus(_Mime, _InfoStatus);
+EXITSECTION
+
+ENDEXITSECTION
+ParentTargetEdge "LLMIME_10_ToggleScripts"

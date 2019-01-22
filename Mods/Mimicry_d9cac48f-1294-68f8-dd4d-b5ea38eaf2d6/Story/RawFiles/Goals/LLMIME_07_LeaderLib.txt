@@ -89,6 +89,8 @@ PROC
 LeaderLib_LeaderTrader_OnSpawned((CHARACTERGUID)_LeaderTrader, (STRING)_Level)
 AND
 NOT DB_GlobalFlag("Mimicry_MusicBoxSpawned")
+AND
+NOT DB_GlobalFlag("Mimicry_MimeFollowerIsPlayer")
 THEN
 GlobalSetFlag("Mimicry_MusicBoxSpawned");
 ItemTemplateAddTo("UNIQUE_LLMIME_MusicBox_fd03b00c-5366-40e2-a8af-1d9f6a904ecb", S_LeaderLib_LeaderTrader_61ae5acc-1537-4970-82bb-d408a3334574, 1);

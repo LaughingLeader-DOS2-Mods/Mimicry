@@ -1,3 +1,15 @@
+new equipment "Origin_LLMIME_Mime_Male"
+add equipmentgroup 
+add equipment entry "ARM_LLMIME_Mime_Mask_Preview"
+add equipmentgroup 
+add equipment entry "ARM_LLMIME_Mime_Light_UpperBody"
+add equipmentgroup 
+add equipment entry "ARM_LLMIME_Mime_Light_LowerBody"
+add equipmentgroup 
+add equipment entry "ARM_LLMIME_Mime_Light_Boots"
+add equipmentgroup 
+add equipment entry "ARM_LLMIME_Mime_Light_Gloves"
+
 new equipment "LLMIME_Equipment_FollowerMime"
 add equipmentgroup 
 add equipment entry "ARM_LLMIME_Mime_Mask_NoVisual"

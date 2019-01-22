@@ -197,13 +197,27 @@ IF
 CharacterStatusRemoved(_Mime, "LLMIME_MIMICRY_MASK", _)
 AND
 IsTagged(_Mime, "LLMIME_MimeFollower", 0)
+AND
+IsTagged(_Mime, "Mimicry_WearingMask", 0)
 THEN
 RemoveStatus(_Mime, "LLMIME_MIMICRY_MASK_INFO");
+
+//RemoveHarmfulStatuses removing everything
+IF
+CharacterStatusRemoved(_Mime, "LLMIME_MIMICRY_MASK_INFO", _)
+AND
+IsTagged(_Mime, "Mimicry_WearingMask", 1)
+AND
+NOT ObjectGetFlag(_Mime, "Mimicry_HideMimicryMaskInfo", 1)
+THEN
+ApplyStatus(_Mime, "LLMIME_MIMICRY_MASK_INFO", -1.0, 1, _Mime);
 
 IF
 CharacterStatusRemoved(_Mime, "LLMIME_MIMICRY_MASK", _)
 AND
 IsTagged(_Mime, "LLMIME_MimeFollower", 1)
+AND
+CharacterIsDead(_Mime, 1)
 THEN
 RemoveStatus(_Mime, "LLMIME_MIMICRY_MASK_INFO_FOLLOWER");
 
@@ -216,7 +230,7 @@ NOT ObjectGetFlag(_Mime, "Mimicry_HideMimicryMaskInfo", 1)
 AND
 HasActiveStatus(_Mime, "LLMIME_MIMICRY_MASK_INFO", 0)
 THEN
-ApplyStatus(_Mime, "LLMIME_MIMICRY_MASK_INFO", -1.0, 1);
+ApplyStatus(_Mime, "LLMIME_MIMICRY_MASK_INFO", -1.0, 1, _Mime);
 
 IF
 CharacterStatusApplied(_Mime, "LLMIME_MIMICRY_MASK", _)
@@ -227,7 +241,7 @@ NOT ObjectGetFlag(_Mime, "Mimicry_HideMimicryMaskInfo", 1)
 AND
 HasActiveStatus(_Mime, "LLMIME_MIMICRY_MASK_INFO_FOLLOWER", 0)
 THEN
-ApplyStatus(_Mime, "LLMIME_MIMICRY_MASK_INFO_FOLLOWER", -1.0, 1);
+ApplyStatus(_Mime, "LLMIME_MIMICRY_MASK_INFO_FOLLOWER", -1.0, 1, _Mime);
 
 IF
 ObjectFlagSet("Mimicry_HideMimicryMaskInfo", (CHARACTERGUID)_Mime, _Instance)
@@ -252,7 +266,7 @@ HasActiveStatus(_Mime, "LLMIME_MIMICRY_MASK", 1)
 AND
 NOT LeaderLib_Helper_QRY_HasStatus(_Mime, "LLMIME_MIMICRY_MASK_INFO")
 THEN
-ApplyStatus(_Mime, "LLMIME_MIMICRY_MASK_INFO", -1.0, 1);
+ApplyStatus(_Mime, "LLMIME_MIMICRY_MASK_INFO", -1.0, 1, _Mime);
 
 IF
 ObjectFlagCleared("Mimicry_HideMimicryMaskInfo", (CHARACTERGUID)_Mime, _Instance)
@@ -263,7 +277,7 @@ HasActiveStatus(_Mime, "LLMIME_MIMICRY_MASK", 1)
 AND
 NOT LeaderLib_Helper_QRY_HasStatus(_Mime, "LLMIME_MIMICRY_MASK_INFO_FOLLOWER")
 THEN
-ApplyStatus(_Mime, "LLMIME_MIMICRY_MASK_INFO_FOLLOWER", -1.0, 1);
+ApplyStatus(_Mime, "LLMIME_MIMICRY_MASK_INFO_FOLLOWER", -1.0, 1, _Mime);
 //END_REGION
 
 //REGION EFFECTS

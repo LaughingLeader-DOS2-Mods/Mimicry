@@ -265,7 +265,7 @@ DB_LLMIME_MonsterSkill_Templates(_Template, _Status, "Status")
 AND
 HasActiveStatus(_Summon, _Status, 0)
 THEN
-ApplyStatus(_Summon, _Status, -1.0, 1);
+ApplyStatus(_Summon, _Status, -1.0, 1, _Summon);
 DB_LLMIME_MonsterSkill_Temp_AddedStatus(_Summon, _Status);
 ObjectSetFlag(_Summon, "LLMIME_MONSTERSKILL_STATUSAPPLIED");
 
@@ -278,7 +278,7 @@ IsTagged(_Summon, _Tag, 1)
 AND
 HasActiveStatus(_Summon, _Status, 0)
 THEN
-ApplyStatus(_Summon, _Status, -1.0, 1);
+ApplyStatus(_Summon, _Status, -1.0, 1, _Summon);
 DB_LLMIME_MonsterSkill_Temp_AddedStatus(_Summon, _Status);
 ObjectSetFlag(_Summon, "LLMIME_MONSTERSKILL_STATUSAPPLIED");
 
@@ -291,7 +291,7 @@ HasActiveStatus(_Summon, _CheckStatus, 1)
 AND
 HasActiveStatus(_Summon, _ApplyStatus, 0)
 THEN
-ApplyStatus(_Summon, _ApplyStatus, -1.0, 1);
+ApplyStatus(_Summon, _ApplyStatus, -1.0, 1, _Summon);
 DB_LLMIME_MonsterSkill_Temp_AddedStatus(_Summon, _ApplyStatus);
 ObjectSetFlag(_Summon, "LLMIME_MONSTERSKILL_STATUSAPPLIED");
 

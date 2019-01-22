@@ -1,0 +1,32 @@
+INIT
+
+
+EVENTS
+
+//REGION PASSIVE_PRESERVATION
+/*
+EVENT LLMIME_Passives_Brawler
+VARS
+	CHARACTER:_Mime
+ON
+	OnCharacterStatusRemoved(_Mime, LLMIME_BRAWLER)
+ACTIONS
+IF "c1"
+	IsTagged(_Mime, "LLMIME_Mime")
+THEN
+	CharacterApplyStatus(_Mime, LLMIME_BRAWLER)
+ENDIF
+
+EVENT LLMIME_Passives_Beastmaster
+VARS
+	CHARACTER:_Mime
+ON
+	OnCharacterStatusRemoved(_Mime, LLMIME_BEASTMASTER)
+ACTIONS
+IF "c1"
+	IsTagged(_Mime, "LLMIME_Mime")
+THEN
+	CharacterApplyStatus(_Mime, LLMIME_BEASTMASTER)
+ENDIF
+*/
+//END_REGION

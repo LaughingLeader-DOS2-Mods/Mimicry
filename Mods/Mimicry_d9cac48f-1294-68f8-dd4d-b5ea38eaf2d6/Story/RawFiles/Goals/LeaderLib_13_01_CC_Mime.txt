@@ -1,0 +1,58 @@
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+
+KBSECTION
+
+IF
+CharacterTeleported(S_LLMIME_Elves_Hero_Male_Mime_191f180c-6270-4cd1-a44a-e02454bd846f, _, _, _, _, _, _, _, _)
+AND
+NOT DB_LLMIME_CC_MimePreviewMask(_)
+THEN
+ItemTemplateAddTo("EQ_Armor_LLMIME_Mime_Mask_Preview_36348beb-6126-42f5-ba26-05acf6b65bae", S_LLMIME_Elves_Hero_Male_Mime_191f180c-6270-4cd1-a44a-e02454bd846f, 1);
+
+IF
+ItemTemplateAddedToCharacter(EQ_Armor_LLMIME_Mime_Mask_Preview_36348beb-6126-42f5-ba26-05acf6b65bae, _Mask, S_LLMIME_Elves_Hero_Male_Mime_191f180c-6270-4cd1-a44a-e02454bd846f)
+AND
+NOT DB_LLMIME_CC_MimePreviewMask(_)
+THEN
+DB_LLMIME_CC_MimePreviewMask(_Mask);
+CharacterEquipItem(S_LLMIME_Elves_Hero_Male_Mime_191f180c-6270-4cd1-a44a-e02454bd846f, _Mask);
+ItemLockUnEquip(_Mask, 1);
+
+IF
+ItemEquipped(_Item, S_LLMIME_Elves_Hero_Male_Mime_191f180c-6270-4cd1-a44a-e02454bd846f)
+AND
+DB_LLMIME_CC_MimePreviewMask(_Mask)
+AND
+_Item != _Mask
+AND
+CharacterGetEquippedItem(S_LLMIME_Elves_Hero_Male_Mime_191f180c-6270-4cd1-a44a-e02454bd846f, "Helmet", _Item)
+THEN
+CharacterEquipItem(S_LLMIME_Elves_Hero_Male_Mime_191f180c-6270-4cd1-a44a-e02454bd846f, _Mask);
+
+IF
+TimerFinished("LeaderLib_Timers_PostCC_Finished")
+AND
+DB_LLMIME_CC_MimePreviewMask(_Mask)
+THEN
+ItemLockUnEquip(_Mask, 0);
+NOT DB_LLMIME_CC_MimePreviewMask(_Mask);
+ItemRemove(_Mask);
+
+IF
+TimerFinished("LeaderLib_Timers_PostCC_Finished")
+AND
+ItemTemplateIsInCharacterInventory(S_LLMIME_Elves_Hero_Male_Mime_191f180c-6270-4cd1-a44a-e02454bd846f, "EQ_Armor_LLMIME_Mime_Mask_A_8e66ce79-8c8e-4c22-a8ea-5a99977f4ea8", 0)
+THEN
+ItemTemplateAddTo("EQ_Armor_LLMIME_Mime_Mask_A_8e66ce79-8c8e-4c22-a8ea-5a99977f4ea8", S_LLMIME_Elves_Hero_Male_Mime_191f180c-6270-4cd1-a44a-e02454bd846f, 1);
+
+IF
+TimerFinished("LeaderLib_Timers_PostCC_Finished")
+THEN
+GoalCompleted;
+
+EXITSECTION
+
+ENDEXITSECTION
+ParentTargetEdge "LeaderLib_13_00_CharacterCreation"

@@ -1,6 +1,7 @@
 Version 1
 SubGoalCombiner SGC_AND
 INITSECTION
+DB_Origins((CHARACTERGUID)S_LLMIME_Elves_Hero_Male_Mime_191f180c-6270-4cd1-a44a-e02454bd846f);
 LLMIME_Internal_CompleteIfStarted(); // Existing saves
 
 KBSECTION

@@ -29,6 +29,7 @@ NOT DB_LLBARTER_DialogBlacklist("Mimicry", "LLMIME_MimeVendor")
 THEN
 DB_LLBARTER_DialogBlacklist("Mimicry", "LLMIME_SettingsMenu");
 DB_LLBARTER_DialogBlacklist("Mimicry", "LLMIME_MimeVendor");
+DB_LLBARTER_DialogBlacklist("Mimicry", "LLMIME_Debug_RecruitCharacter");
 //END_REGION
 
 //REGION UPDATING

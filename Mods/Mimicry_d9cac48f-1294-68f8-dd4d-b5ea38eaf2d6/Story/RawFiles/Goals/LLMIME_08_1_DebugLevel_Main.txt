@@ -218,9 +218,9 @@ CharacterStopFollow(_Character);
 */
 
 IF
-StoryEvent(CHARACTERGUID_LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9, "LLMIME_Events_Debug_IterateCharacters")
+StoryEvent(CHARACTERGUID_S_LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9, "LLMIME_Events_Debug_IterateCharacters")
 THEN
-SetTag(CHARACTERGUID_LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9, "LeaderLib_Follower_DisableAutoResetPosition");
+SetTag(CHARACTERGUID_S_LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9, "LeaderLib_Follower_DisableAutoResetPosition");
 
 IF
 StoryEvent((CHARACTERGUID)_Character, "LLMIME_Events_Debug_IterateCharacters")
@@ -344,8 +344,8 @@ NOT DB_LLMIME_Debug_LeverToggle(ITEMGUID_LLMIME_TestLevel_Lever_ToggleGlobalFlag
 IF
 CharacterUsedItem(_Character, ITEMGUID_LLMIME_Debug_TransformIntoMime_1667be7d-cb2e-497e-8d71-b5a2eac0d641)
 THEN
-//CharacterTransformAppearanceTo(_Character, CHARACTERGUID_LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9, 1, 1);
-CharacterTransformAppearanceToWithEquipmentSet(_Character, CHARACTERGUID_LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9, "Class_LLMIME_Mime_Preview", 1);
+//CharacterTransformAppearanceTo(_Character, CHARACTERGUID_S_LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9, 1, 1);
+CharacterTransformAppearanceToWithEquipmentSet(_Character, CHARACTERGUID_S_LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9, "Class_LLMIME_Mime_Preview", 1);
 //MoviePlay(_Character, "CS_BackToRC");
 //MoviePlay(_Character, "Test");
 //ApplyStatus(_Character, "HASTED", 30.0, 1);
@@ -371,7 +371,7 @@ CharacterUsedItem(_Character, ITEMGUID_LLMIME_Debug_Lever_LevelUpMimeFollower_69
 AND
 CharacterGetLevel(_Character, _Level)
 THEN
-CharacterLevelUpTo(CHARACTERGUID_LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9, _Level);
+CharacterLevelUpTo(CHARACTERGUID_S_LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9, _Level);
 */
 
 //REGION TEXT_EVENTS

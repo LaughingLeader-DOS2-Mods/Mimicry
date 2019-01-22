@@ -2,10 +2,28 @@ Version 1
 SubGoalCombiner SGC_AND
 INITSECTION
 
+LLMIME_ToggleScripts_InitSettings();
 KBSECTION
 /*
 Some of the mimicking events can be quite broad, so this script is used to disable them when nobody is mimicking.
 */
+
+PROC
+LLMIME_ToggleScripts_InitSettings()
+THEN
+LeaderLib_ToggleScripts_Register_Script("LLMIME_10_TS_Skills_01_MimeSkills", "LLMIME_TS_GameHasActiveMime");
+LeaderLib_ToggleScripts_Register_Script("LLMIME_10_TS_PassiveStatuses", "LLMIME_TS_GameHasActiveMime");
+//This needs to be active independent of the mimicking scripts, as it applies/removes mimicking
+LeaderLib_ToggleScripts_Register_Script("LLMIME_10_TS_Mimicking_01_Start", "LLMIME_TS_GameHasActiveMime");
+
+//Mimicking scripts
+LeaderLib_ToggleScripts_Register_Script("LLMIME_10_TS_Mimicking_02_Main", "LLMIME_TS_MimeIsMimicking");
+LeaderLib_ToggleScripts_Register_Script("LLMIME_10_TS_Mimicking_03_Skills", "LLMIME_TS_MimeIsMimicking");
+LeaderLib_ToggleScripts_Register_Script("LLMIME_10_TS_Mimicking_04_Attacking", "LLMIME_TS_MimeIsMimicking");
+LeaderLib_ToggleScripts_Register_Script("LLMIME_10_TS_Mimicking_05_Items", "LLMIME_TS_MimeIsMimicking");
+
+//Mime follower script
+LeaderLib_ToggleScripts_Register_Script("LLMIME_10_TS_Follower_01_Recruited", "LLMIME_TS_MimeFollowerInParty");
 
 //REGION SCRIPT_TOGGLING
 PROC
@@ -17,20 +35,16 @@ LLMIME_ScriptToggler_ToggleScriptsOn();
 PROC
 LLMIME_ScriptToggler_ToggleScriptsOn()
 AND
-NOT DB_LLMIME_ScriptToggler_ScriptsEnabled(1)
+NOT DB_GlobalFlag("LLMIME_TS_MimeIsMimicking")
 THEN
-DB_LLMIME_ScriptToggler_ScriptsEnabled(1);
-SysActivateGoal("LLMIME_10_TS_Mimicking_02_Main");
-SysActivateGoal("LLMIME_10_TS_Mimicking_03_Skills");
-SysActivateGoal("LLMIME_10_TS_Mimicking_04_Attacking");
-SysActivateGoal("LLMIME_10_TS_Mimicking_05_Items");
-LeaderLog_Log("SYSTEM", "[Mimicry:ScriptToggler:ToggleScriptsOn] Enabled mimicking scripts.");
+GlobalSetFlag("LLMIME_TS_MimeIsMimicking");
+LeaderLog_Log("SYSTEM", "[Mimicry:ScriptToggler:ToggleScriptsOn] Enabled mimicking scripts via global flag [LLMIME_TS_MimeIsMimicking].");
 
 //Delay disabling scripts so they have time to clear data after this event
 IF
 StoryEvent((CHARACTERGUID)_Mime, "Mimicry_ClearMimeBonuses")
 AND
-DB_LLMIME_ScriptToggler_ScriptsEnabled(1)
+DB_GlobalFlag("LLMIME_TS_MimeIsMimicking")
 AND
 NOT DB_LLMIME_Mimicking_MimicNextAction(_)
 THEN
@@ -41,7 +55,7 @@ TimerLaunch("LLMIME_Timers_ResetScriptToggleBlocker", 500);
 IF
 TimerFinished("LLMIME_Timers_ResetScriptToggleBlocker")
 AND
-DB_LLMIME_ScriptToggler_ScriptsEnabled(1)
+DB_GlobalFlag("LLMIME_TS_MimeIsMimicking")
 AND
 NOT DB_LLMIME_Mimicking_MimicNextAction(_)
 THEN
@@ -82,7 +96,7 @@ LLMIME_ScriptToggler_ToggleScriptsOff()
 AND
 NOT DB_LLMIME_ScriptToggler_Temp_BlockScriptDisable(1)
 AND
-DB_LLMIME_ScriptToggler_ScriptsEnabled(1)
+DB_GlobalFlag("LLMIME_TS_MimeIsMimicking")
 THEN
 TimerCancel("LLMIME_Timers_DisableMimickingScripts");
 TimerLaunch("LLMIME_Timers_DisableMimickingScripts", 2500);
@@ -98,14 +112,10 @@ LLMIME_ScriptToggler_Internal_DisableScripts()
 AND
 NOT DB_LLMIME_ScriptToggler_Temp_BlockScriptDisable(1)
 AND
-NOT DB_LLMIME_Mimicking_MimicNextAction(_)
+DB_GlobalFlag("LLMIME_TS_MimeIsMimicking")
 THEN
-NOT DB_LLMIME_ScriptToggler_ScriptsEnabled(1);
+GlobalClearFlag("LLMIME_TS_MimeIsMimicking");
 LLMIME_Mimicking_OnScriptsCompleting();
-SysCompleteGoal("LLMIME_10_TS_Mimicking_02_Main");
-SysCompleteGoal("LLMIME_10_TS_Mimicking_03_Skills");
-SysCompleteGoal("LLMIME_10_TS_Mimicking_04_Attacking");
-SysCompleteGoal("LLMIME_10_TS_Mimicking_05_Items");
 LeaderLog_Log("SYSTEM", "[Mimicry:ScriptToggler:ToggleScriptsOff] No mimes are mimicking. Disabled mimicking scripts.");
 
 PROC
@@ -121,18 +131,19 @@ LeaderLog_Log("SYSTEM", "[Mimicry:ScriptToggler:ToggleScriptsOff] Skipped disabl
 //REGION MIME_SKILL_SCRIPT_TOGGLE
 PROC
 LLMIME_ScriptToggler_AddActiveMime((CHARACTERGUID)_Mime)
+AND
+NOT DB_LLMIME_ActiveMimes(_Mime)
 THEN
 DB_LLMIME_ActiveMimes(_Mime);
 
 PROC
 LLMIME_ScriptToggler_AddActiveMime((CHARACTERGUID)_Mime)
 AND
-NOT SysIsActive("LLMIME_10_TS_Skills_01_MimeSkills")
+NOT DB_GlobalFlag("LLMIME_TS_GameHasActiveMime")
 THEN
-LeaderLog_Log("SYSTEM", "[Mimicry:ScriptToggler] Activated script [LLMIME_10_TS_Skills_01_MimeSkills].");
+LeaderLog_Log("SYSTEM", "[Mimicry:ScriptToggler] Activating mime scripts via global flag [LLMIME_TS_GameHasActiveMime].");
 LeaderLib_ToggleScripts_EnableScript("LeaderLib_StatusEvents_DisableScriptEnabled", "Mimicry");
-SysActivateGoal("LLMIME_10_TS_Mimicking_01_Start");
-SysActivateGoal("LLMIME_10_TS_Skills_01_MimeSkills");
+GlobalSetFlag("LLMIME_TS_GameHasActiveMime");
 
 PROC
 LLMIME_ScriptToggler_RemoveActiveMime((CHARACTERGUID)_Mime)
@@ -150,7 +161,7 @@ LLMIME_ScriptToggler_AddActiveMime(_Mime);
 PROC
 LLMIME_ScriptToggler_AddActiveMime((CHARACTERGUID)_Mime)
 THEN
-TimerCancel("LLMIME_Timers_DisableMimeSkillScripts");
+TimerCancel("LLMIME_Timers_DisableMimeScripts");
 
 IF
 StoryEvent((CHARACTERGUID)_Mime, "Mimicry_MimeJobRemoved")
@@ -162,41 +173,56 @@ LLMIME_ScriptToggler_DisableSkillScript()
 AND
 NOT DB_LLMIME_ActiveMimes(_)
 AND
-SysIsActive("LLMIME_10_TS_Skills_01_MimeSkills")
+DB_GlobalFlag("LLMIME_TS_GameHasActiveMime")
 THEN
-TimerCancel("LLMIME_Timers_DisableMimeSkillScripts");
-TimerLaunch("LLMIME_Timers_DisableMimeSkillScripts", 2500);
-LeaderLog_Log("SYSTEM", "[Mimicry:ScriptToggler:Mimicry_MimeJobRemoved] Starting mime skill script disable timer.");
+TimerCancel("LLMIME_Timers_DisableMimeScripts");
+TimerLaunch("LLMIME_Timers_DisableMimeScripts", 2500);
+LeaderLog_Log("SYSTEM", "[Mimicry:ScriptToggler:Mimicry_MimeJobRemoved] Starting mime script disable timer.");
 
 IF
-TimerFinished("LLMIME_Timers_DisableMimeSkillScripts")
+TimerFinished("LLMIME_Timers_DisableMimeScripts")
 AND
 NOT DB_LLMIME_ActiveMimes(_)
 THEN
-LeaderLog_Log("SYSTEM", "[Mimicry:ScriptToggler:LLMIME_Timers_DisableMimeSkillScripts] Disabled script [LLMIME_10_TS_Skills_01_MimeSkills].");
-SysCompleteGoal("LLMIME_10_TS_Mimicking_01_Start");
-SysCompleteGoal("LLMIME_10_TS_Skills_01_MimeSkills");
+LeaderLog_Log("SYSTEM", "[Mimicry:ScriptToggler:LLMIME_Timers_DisableMimeScripts] Clearing global flag [LLMIME_TS_GameHasActiveMime].");
+GlobalClearFlag("LLMIME_TS_GameHasActiveMime");
 LeaderLib_ToggleScripts_DisableAllStatusEvents("Mimicry");
 //END_REGION
 
 //REGION MIME_FOLLOWER
 PROC
 LLMIME_Follower_OnMimeFollowerRecruited((CHARACTERGUID)_Mime)
+THEN
+TimerCancel("LLMIME_Timers_DisableMimeFollowerScripts");
+
+PROC
+LLMIME_Follower_OnMimeFollowerRecruited((CHARACTERGUID)_Mime)
 AND
-NOT SysIsActive("LLMIME_10_TS_Follower_01_Recruited")
+NOT DB_GlobalFlag("LLMIME_TS_MimeFollowerInParty")
 THEN
 LeaderLog_Log("SYSTEM", "[Mimicry:ScriptToggler] Activated script [LLMIME_10_TS_Follower_01_Recruited].");
-SysActivateGoal("LLMIME_10_TS_Follower_01_Recruited");
+GlobalSetFlag("LLMIME_TS_MimeFollowerInParty");
 LLMIME_ScriptToggler_AddActiveMime(_Mime);
 
 PROC
 LLMIME_Follower_OnMimeFollowerDismissed((CHARACTERGUID)_Mime)
 AND
-NOT SysIsActive("LLMIME_10_TS_Follower_01_Recruited")
+DB_GlobalFlag("LLMIME_TS_MimeFollowerInParty")
 THEN
-LeaderLog_Log("SYSTEM", "[Mimicry:ScriptToggler] Disabled script [LLMIME_10_TS_Follower_01_Recruited].");
-SysCompleteGoal("LLMIME_10_TS_Follower_01_Recruited");
 LLMIME_ScriptToggler_RemoveActiveMime(_Mime);
+LeaderLog_Log("SYSTEM", "[Mimicry:ScriptToggler] Disabling mime follower scripts after delay.");
+TimerCancel("LLMIME_Timers_DisableMimeFollowerScripts");
+TimerLaunch("LLMIME_Timers_DisableMimeFollowerScripts", 2000);
+
+IF
+TimerFinished("LLMIME_Timers_DisableMimeFollowerScripts")
+AND
+DB_LLMIME_Follower_Mime(_Mime)
+AND
+NOT DB_LeaderLib_PartyFollower(_, _Mime)
+THEN
+LeaderLog_Log("SYSTEM", "[Mimicry:ScriptToggler:LLMIME_Timers_DisableMimeScripts] Clearing global flag [LLMIME_TS_MimeFollowerInParty].");
+GlobalClearFlag("LLMIME_TS_MimeFollowerInParty");
 //END_REGION
 
 EXITSECTION

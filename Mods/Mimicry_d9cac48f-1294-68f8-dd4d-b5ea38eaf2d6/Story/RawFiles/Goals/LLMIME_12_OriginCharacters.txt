@@ -1,0 +1,31 @@
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+SetTag(S_LLMIME_Elves_Hero_Male_Mime_191f180c-6270-4cd1-a44a-e02454bd846f,"GENERIC");
+SetTag(S_LLMIME_Elves_Hero_Male_Mime_191f180c-6270-4cd1-a44a-e02454bd846f,"REALLY_GENERIC");
+
+DB_LeaderLib_OriginSkills("Mimicry_MimeOrigin", "Target_LLMIME_PerfectDoppleganger");
+
+LLMIME_Origin_EquipMimeMask(S_LLMIME_Elves_Hero_Male_Mime_191f180c-6270-4cd1-a44a-e02454bd846f);
+
+KBSECTION
+
+PROC
+LLMIME_Origin_EquipMimeMask((CHARACTERGUID)_Mime)
+AND
+GetItemForItemTemplateInInventory(_Mime, "EQ_Armor_LLMIME_Mime_Mask_A_8e66ce79-8c8e-4c22-a8ea-5a99977f4ea8", _Mask)
+THEN
+CharacterEquipItem(_Mime, _Mask);
+ItemLockUnEquip(_Mask, 1);
+
+IF
+ItemUnEquipFailed(_Mask, S_LLMIME_Elves_Hero_Male_Mime_191f180c-6270-4cd1-a44a-e02454bd846f)
+AND
+IsTagged(_Mask, "LLMIME_MimeMask", 1)
+THEN
+Proc_StartDialog(1, "LLMIME_AD_MaskWontComeOff", S_LLMIME_Elves_Hero_Male_Mime_191f180c-6270-4cd1-a44a-e02454bd846f);
+
+EXITSECTION
+
+ENDEXITSECTION
+ParentTargetEdge "LLMIME_20_Init"

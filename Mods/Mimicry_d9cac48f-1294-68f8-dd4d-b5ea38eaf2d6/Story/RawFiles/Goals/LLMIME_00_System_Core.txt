@@ -163,16 +163,16 @@ DB_NOOP(1);
 //END_REGION
 
 //REGION MASK_TAG
-/* For easy iteration */
 IF
-CharacterStatusApplied(_Mime, "LLMIME_MIMICRY_MASK", _)
-THEN
-SetTag(_Mime, "Mimicry_WearingMask");
-
-IF
-CharacterStatusRemoved(_Mime, "LLMIME_MIMICRY_MASK", _)
+ItemTemplateUnEquipped("EQ_Armor_LLMIME_Mime_Mask_A_8e66ce79-8c8e-4c22-a8ea-5a99977f4ea8", _Mime)
 THEN
 ClearTag(_Mime, "Mimicry_WearingMask");
+
+/* For easy iteration */
+IF
+ItemTemplateEquipped("EQ_Armor_LLMIME_Mime_Mask_A_8e66ce79-8c8e-4c22-a8ea-5a99977f4ea8", _Mime)
+THEN
+SetTag(_Mime, "Mimicry_WearingMask");
 //END_REGION
 
 //REGION CLEAR_HELPERS
@@ -474,6 +474,13 @@ THEN
 LLMIME_System_FlagForUnarmed(_Mime);
 
 IF
+CharacterStatusApplied(_Mime, "LLMIME_BRAWLER", _)
+AND
+IsTagged(_Mime, "LLMIME_MimeFollower", 0)
+THEN
+LLMIME_System_FlagForUnarmed(_Mime);
+
+IF
 StoryEvent((CHARACTERGUID)_Mime, "Mimicry_MimeInitialized")
 AND
 IsTagged(_Mime, "LLMIME_MimeFollower", 0)
@@ -550,7 +557,7 @@ LeaderLib_Helper_QRY_HasStatus(_Mime, "LLMIME_BRAWLER")
 AND
 NOT LeaderLib_Helper_QRY_HasStatus(_Mime, "LLMIME_BRAWLER_BONUS")
 THEN
-ApplyStatus(_Mime, "LLMIME_BRAWLER_BONUS", -1.0, 1);
+ApplyStatus(_Mime, "LLMIME_BRAWLER_BONUS", -1.0, 1, _Mime);
 
 PROC
 LLMIME_System_CheckUnarmedBonuses((CHARACTERGUID)_Mime)
@@ -579,7 +586,7 @@ LeaderLib_Helper_QRY_HasStatus(_Mime, "LLMIME_CONCENTRATION")
 AND
 NOT LeaderLib_Helper_QRY_HasStatus(_Mime, "LLMIME_CONCENTRATION_BONUS")
 THEN
-ApplyStatus(_Mime, "LLMIME_CONCENTRATION_BONUS", -1.0, 1);
+ApplyStatus(_Mime, "LLMIME_CONCENTRATION_BONUS", -1.0, 1, _Mime);
 
 PROC
 LLMIME_System_CheckUnarmedBonuses((CHARACTERGUID)_Mime)
@@ -603,26 +610,14 @@ IF
 StoryEvent((CHARACTERGUID)_Mime, "Mimicry_ClearMimeBonuses")
 AND
 CharacterGetDisplayName(_Mime, _, _Name)
-THEN
-LeaderLog_Log("DEBUG", "[LLMIME:Mimicry_ClearMimeBonuses] Clearing mime bonuses for [",_Name,"].");
-
-IF
-StoryEvent((CHARACTERGUID)_Mime, "Mimicry_ClearMimeBonuses")
+AND
+LeaderLog_QRY_Log("DEBUG", "[LLMIME:Mimicry_ClearMimeBonuses] Clearing mime bonuses for [",_Name,"].")
 AND
 DB_LLMIME_PassiveData(_Status, _BonusStatus, _InfoStatus, _DisableFlag)
-AND
-HasActiveStatus(_Mime, _Status, 1)
 THEN
 RemoveStatus(_Mime, _Status);
-
-IF
-CharacterStatusRemoved(_Mime, _Status, _)
-AND
-DB_LLMIME_PassiveData(_Status, _BonusStatus, _InfoStatus, _DisableFlag)
-AND
-HasActiveStatus(_Mime, _BonusStatus, 1)
-THEN
 RemoveStatus(_Mime, _BonusStatus);
+RemoveStatus(_Mime, _InfoStatus);
 
 IF
 GameStarted(_Level,_)
@@ -641,49 +636,7 @@ HasActiveStatus(_Mime, _InfoStatus, 0)
 AND
 NOT ObjectGetFlag(_Mime, _DisableFlag, 1)
 THEN
-ApplyStatus(_Mime, _InfoStatus, -1.0, 1);
-
-IF
-CharacterStatusApplied(_Mime, _BonusStatus, _)
-AND
-DB_LLMIME_PassiveData(_Status, _BonusStatus, _InfoStatus, _DisableFlag)
-AND
-NOT ObjectGetFlag(_Mime, _DisableFlag, 1)
-AND
-HasActiveStatus(_Mime, _InfoStatus, 0)
-THEN
-ApplyStatus(_Mime, _InfoStatus, -1.0, 1);
-
-IF
-CharacterStatusRemoved(_Mime, _BonusStatus, _)
-AND
-DB_LLMIME_PassiveData(_Status, _BonusStatus, _InfoStatus, _DisableFlag)
-AND
-HasActiveStatus(_Mime, _InfoStatus, 1)
-THEN
-RemoveStatus(_Mime, _InfoStatus);
-
-IF
-ObjectFlagCleared(_DisableFlag, _Mime, _)
-AND
-DB_LLMIME_PassiveData(_Status, _BonusStatus, _InfoStatus, _DisableFlag)
-AND
-HasActiveStatus(_Mime, _Status, 1)
-AND
-HasActiveStatus(_Mime, _BonusStatus, 1)
-AND
-HasActiveStatus(_Mime, _InfoStatus, 0)
-THEN
-ApplyStatus(_Mime, _InfoStatus, -1.0, 1);
-
-IF
-ObjectFlagSet(_DisableFlag, _Mime, _)
-AND
-DB_LLMIME_PassiveData(_Status, _BonusStatus, _InfoStatus, _DisableFlag)
-AND
-HasActiveStatus(_Mime, _InfoStatus, 1)
-THEN
-RemoveStatus(_Mime, _InfoStatus);
+ApplyStatus(_Mime, _InfoStatus, -1.0, 1, _Mime);
 //END_REGION
 
 //REGION CONDITION_QUERIES

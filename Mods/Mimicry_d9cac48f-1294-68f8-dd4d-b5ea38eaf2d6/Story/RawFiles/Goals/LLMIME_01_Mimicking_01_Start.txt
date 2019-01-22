@@ -42,7 +42,7 @@ LLMIME_Mimicking_QRY_MimeShouldBeMimicking(_Mime)
 AND
 NOT LeaderLib_Helper_QRY_HasStatus(_Mime, "LLMIME_MIMICKING")
 THEN
-ApplyStatus(_Mime, "LLMIME_MIMICKING", -1.0, 1);
+ApplyStatus(_Mime, "LLMIME_MIMICKING", -1.0, 1, _Mime);
 
 PROC
 LLMIME_Mimicking_ApplyMimicking((CHARACTERGUID)_Mime)
@@ -53,7 +53,7 @@ NOT LeaderLib_Helper_QRY_HasStatus(_Mime, "LLMIME_MIMICKING_FOLLOWER")
 AND
 LLMIME_Mimicking_QRY_FollowerShouldBeMimicking(_Mime)
 THEN
-ApplyStatus(_Mime, "LLMIME_MIMICKING_FOLLOWER", -1.0, 1);
+ApplyStatus(_Mime, "LLMIME_MIMICKING_FOLLOWER", -1.0, 1, _Mime);
 
 PROC
 LLMIME_Mimicking_ApplyMimicking((CHARACTERGUID)_Mime)
@@ -64,7 +64,7 @@ NOT LeaderLib_Helper_QRY_HasStatus(_Mime, "LLMIME_MIMICKING_ENEMY")
 AND
 LLMIME_Mimicking_QRY_MimeShouldBeMimicking(_Mime)
 THEN
-ApplyStatus(_Mime, "LLMIME_MIMICKING_ENEMY", -1.0, 1);
+ApplyStatus(_Mime, "LLMIME_MIMICKING_ENEMY", -1.0, 1, _Mime);
 
 PROC
 LLMIME_Mimicking_OnMimickingApplied((CHARACTERGUID)_Mime)
