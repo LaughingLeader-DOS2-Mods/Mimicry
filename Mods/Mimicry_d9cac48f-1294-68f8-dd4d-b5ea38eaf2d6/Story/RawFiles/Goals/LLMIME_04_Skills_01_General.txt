@@ -323,22 +323,20 @@ TemporaryCharacterCreateAtPosition(_tx, _ty, _tz, _Template, 0, _Doppelganger)
 THEN
 NOT DB_LLMIME_Skills_Temp_DoppelgangerTarget(_Mime, _Target);
 DB_LLMIME_Skills_Temp_Doppelganger(_Mime, _Doppelganger);
+SetTag(_Mime, "AI_IGNORED_TARGET");
 CharacterTransformFromCharacter(_Doppelganger, _Target, 1, 1, 1, 1, 1, 1, 1);
 SetFaction(_Doppelganger, _Faction);
 CharacterAddToPlayerCharacter(_Doppelganger, _Mime);
+ApplyStatus(_Doppelganger, "LLMIME_DOPPELGANGER_EFFECT", 12.0, 1, _Mime);
 EnterCombat(_Doppelganger, _Target);
 JumpToTurn(_Doppelganger);
-ApplyStatus(_Mime, "DEACTIVATED", -12.0, 1, _Mime);
+MakePlayerActive(_Doppelganger);
 
 IF
 CharacterStatusRemoved(_Mime, "LLMIME_DOPPELGANGER", _)
 THEN
+ClearTag(_Mime, "AI_IGNORED_TARGET");
 LLMIME_Skills_OnDoppelgangerFinished(_Mime);
-
-PROC
-LLMIME_Skills_OnDoppelgangerFinished((CHARACTERGUID)_Mime)
-THEN
-RemoveStatus(_Mime, "DEACTIVATED");
 
 IF
 CharacterDied(_Doppelganger)
