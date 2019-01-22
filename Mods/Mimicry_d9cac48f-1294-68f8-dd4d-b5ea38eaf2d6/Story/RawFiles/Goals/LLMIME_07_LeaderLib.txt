@@ -36,7 +36,7 @@ LeaderLib_Treasure_Configure_DefaultGenerationType("Mimicry.LeaderTrader.General
 LeaderLib_Treasure_Register_UniqueItemTemplate("Mimicry.LeaderTrader.General", "UNIQUE_LLMIME_MusicBox_fd03b00c-5366-40e2-a8af-1d9f6a904ecb");
 */
 
-LeaderLib_PresetMenu_RegisterPreset("LLMIME_MimeClass", "Mime [Mimicry]", "Mimicry_IsActive");
+LeaderLib_PresetMenu_RegisterPreset("LLMIME_Mime", "Mime [Mimicry]", "Mimicry_IsActive");
 
 /*
 LeaderLib_Requirements_Add_PartyLevelRequirement("LLMIME_Requirements_MimeStarter", 2, -1, 0);

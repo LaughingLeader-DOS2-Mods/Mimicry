@@ -182,7 +182,7 @@ LLMIME_Mimicking_Internal_OnApplied_Check(_Mime);
 PROC
 LLMIME_Mimicking_Internal_OnApplied_Check((CHARACTERGUID)_Mime)
 AND
-NOT LLMIME_QRY_CharacterIsADummy(_Mime)
+LLMIME_QRY_NotADummy(_Mime)
 THEN
 ObjectClearFlag(_Mime, "Mimicry_MimickingWasRemoved");
 LLMIME_Mimicking_OnMimickingApplied(_Mime);
@@ -210,7 +210,7 @@ LLMIME_Mimicking_Internal_OnRemoved_Check(_Mime);
 PROC
 LLMIME_Mimicking_Internal_OnRemoved_Check((CHARACTERGUID)_Mime)
 AND
-NOT LLMIME_QRY_CharacterIsADummy(_Mime)
+LLMIME_QRY_NotADummy(_Mime)
 THEN
 LLMIME_Mimicking_OnMimickingRemoved(_Mime);
 //END_REGION

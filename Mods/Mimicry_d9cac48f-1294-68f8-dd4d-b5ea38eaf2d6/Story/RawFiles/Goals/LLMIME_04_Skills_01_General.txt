@@ -298,6 +298,71 @@ NOT DB_LLMIME_Skills_Temp_DisabledCharacter(_Character, _Status);
 
 //END_REGION
 
+//REGION PERFECT_DOPPELGANGER
+IF
+CharacterUsedSkillOnTarget(_Mime, (CHARACTERGUID)_Target, "Target_LLMIME_PerfectDoppelganger", _, _)
+THEN
+DB_LLMIME_Skills_Temp_DoppelgangerTarget(_Mime, _Target);
+
+IF
+CharacterStatusApplied(_Mime, "LLMIME_DOPPELGANGER", _)
+AND
+DB_LLMIME_Skills_Temp_DoppelgangerTarget(_Mime, _Target)
+AND
+GetPosition(_Target, _x, _y, _z)
+AND
+FindValidPosition(_x, _x, _z, 10.0, _Mime, _tx, _ty, _tz)
+AND
+GetTemplate(_Target, _Template)
+AND
+GetFaction(_Mime, _Faction)
+AND
+CombatGetIDForCharacter(_Mime, _CombatID)
+AND
+TemporaryCharacterCreateAtPosition(_tx, _ty, _tz, _Template, 0, _Doppelganger)
+THEN
+NOT DB_LLMIME_Skills_Temp_DoppelgangerTarget(_Mime, _Target);
+DB_LLMIME_Skills_Temp_Doppelganger(_Mime, _Doppelganger);
+CharacterTransformFromCharacter(_Doppelganger, _Target, 1, 1, 1, 1, 1, 1, 1);
+SetFaction(_Doppelganger, _Faction);
+CharacterAddToPlayerCharacter(_Doppelganger, _Mime);
+EnterCombat(_Doppelganger, _Target);
+JumpToTurn(_Doppelganger);
+ApplyStatus(_Mime, "DEACTIVATED", -12.0, 1, _Mime);
+
+IF
+CharacterStatusRemoved(_Mime, "LLMIME_DOPPELGANGER", _)
+THEN
+LLMIME_Skills_OnDoppelgangerFinished(_Mime);
+
+PROC
+LLMIME_Skills_OnDoppelgangerFinished((CHARACTERGUID)_Mime)
+THEN
+RemoveStatus(_Mime, "DEACTIVATED");
+
+IF
+CharacterDied(_Doppelganger)
+AND
+DB_LLMIME_Skills_Temp_Doppelganger(_Mime, _Doppelganger)
+THEN
+LLMIME_Skills_OnDoppelgangerFinished(_Mime);
+
+PROC
+LLMIME_Skills_OnDoppelgangerFinished((CHARACTERGUID)_Mime)
+AND
+DB_LLMIME_Skills_Temp_Doppelganger(_Mime, _Doppelganger)
+THEN
+NOT DB_LLMIME_Skills_Temp_Doppelganger(_Mime, _Doppelganger);
+CharacterRemoveFromPlayerCharacter(_Doppelganger, _Mime);
+SetOnStage(_Doppelganger, 0);
+ProcObjectTimer(_Doppelganger, "LLMIME_Timers_RemoveDoppelganger");
+
+PROC
+ProcObjectTimerFinished((CHARACTERGUID)_Doppelganger, "LLMIME_Timers_RemoveDoppelganger")
+THEN
+RemoveTemporaryCharacter(_Doppelganger);
+//END_REGION
+
 //REGION FORCED_EVOLUTION
 IF
 CharacterUsedSkill(_Summon, "Shout_LLMIME_ForcedEvolution", _SkillType, _SkillElement)

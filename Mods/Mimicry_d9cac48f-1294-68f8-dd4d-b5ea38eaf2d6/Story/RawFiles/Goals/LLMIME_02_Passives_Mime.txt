@@ -94,19 +94,41 @@ THEN
 DB_NOOP(1);
 //END_REGION
 
-//REGION MIME_INIT
+//REGION EQUIP_EVENTS
 /*
 IF
-ItemEquipped(_Item, _Mime)
+ItemUnEquipped(_Mask, _Mime)
 AND
-LLMIME_Mime_QRY_IsMimeItem(_Item)
+IsTagged(_Mask, "LLMIME_ACTIVATE_MIME", 1)
+AND
+LLMIME_QRY_NotADummy(_Mime)
+THEN
+SetStoryEvent(_Mime, "Mimicry_RemoveMimeJob");
 */
+IF
+ItemTemplateEquipped("EQ_Armor_LLMIME_Mime_Mask_A_8e66ce79-8c8e-4c22-a8ea-5a99977f4ea8", _Mime)
+AND
+LLMIME_QRY_NotADummy(_Mime)
+THEN
+SetStoryEvent(_Mime, "Mimicry_InitMimeJob");
+SetTag(_Mime, "Mimicry_Mime");
+
+IF
+ItemTemplateUnEquipped("EQ_Armor_LLMIME_Mime_Mask_A_8e66ce79-8c8e-4c22-a8ea-5a99977f4ea8", _Mime)
+AND
+LLMIME_QRY_NotADummy(_Mime)
+THEN
+SetStoryEvent(_Mime, "Mimicry_RemoveMimeJob");
+ClearTag(_Mime, "Mimicry_Mime");
+//END_REGION
+
+//REGION MIME_INIT
 IF
 CharacterStatusApplied(_Mime, "LLMIME_MIMICRY_MASK", _)
 AND
 GlobalGetFlag("LeaderLib_Initialized", 1)
 AND
-NOT LLMIME_QRY_CharacterIsADummy(_Mime)
+LLMIME_QRY_NotADummy(_Mime)
 AND
 NOT LLMIME_QRY_CharacterIsAMime(_Mime)
 THEN
@@ -117,7 +139,7 @@ CharacterStatusApplied(_Mime, "LLMIME_MIMICRY_MASK", _)
 AND
 NOT GlobalGetFlag("LeaderLib_Initialized", 1)
 AND
-NOT LLMIME_QRY_CharacterIsADummy(_Mime)
+LLMIME_QRY_NotADummy(_Mime)
 AND
 NOT LLMIME_QRY_CharacterIsAMime(_Mime)
 THEN
@@ -177,19 +199,6 @@ AND
 LLMIME_QRY_CharacterIsAMime(_Mime)
 THEN
 SetStoryEvent(_Mime, "Mimicry_InitMimeJob");
-//END_REGION
-
-//REGION REMOVAL
-IF
-ItemUnEquipped(_Mask, _Mime)
-AND
-IsTagged(_Mask, "LLMIME_ACTIVATE_MIME", 1)
-AND
-NOT LLMIME_QRY_CharacterIsADummy(_Mime)
-AND
-LLMIME_QRY_CharacterIsAMime(_Mime)
-THEN
-SetStoryEvent(_Mime, "Mimicry_RemoveMimeJob");
 //END_REGION
 
 //REGION INFO_STATUS

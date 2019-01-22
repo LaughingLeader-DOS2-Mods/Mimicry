@@ -1,6 +1,16 @@
-new equipment "Origin_LLMIME_Mime_Male"
+new equipment "Origin_LLMIME_Mime_Preview"
 add equipmentgroup 
 add equipment entry "ARM_LLMIME_Mime_Mask_Preview"
+add equipmentgroup 
+add equipment entry "ARM_LLMIME_Mime_Light_UpperBody"
+add equipmentgroup 
+add equipment entry "ARM_LLMIME_Mime_Light_LowerBody"
+add equipmentgroup 
+add equipment entry "ARM_LLMIME_Mime_Light_Boots"
+add equipmentgroup 
+add equipment entry "ARM_LLMIME_Mime_Light_Gloves"
+
+new equipment "Origin_LLMIME_Mime_Armor"
 add equipmentgroup 
 add equipment entry "ARM_LLMIME_Mime_Light_UpperBody"
 add equipmentgroup 
@@ -63,3 +73,15 @@ add equipmentgroup
 add equipment entry "GRN_Grenade_OilFlask_A"
 add equipmentgroup 
 add equipment entry "CONT_Backpack_A_SourceHunter"
+
+new equipment "Class_LLMIME_Mime_Act2"
+add equipmentgroup 
+add equipment entry "ARM_UNIQUE_LLMIME_Mime_Mask_A"
+add equipmentgroup 
+add equipment entry "ARM_LLMIME_Mime_Light_UpperBody"
+add equipmentgroup 
+add equipment entry "ARM_LLMIME_Mime_Light_LowerBody"
+add equipmentgroup 
+add equipment entry "ARM_LLMIME_Mime_Light_Boots"
+add equipmentgroup 
+add equipment entry "ARM_LLMIME_Mime_Light_Gloves"

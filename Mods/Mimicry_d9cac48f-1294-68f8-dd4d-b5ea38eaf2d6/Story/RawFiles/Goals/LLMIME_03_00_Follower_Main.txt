@@ -1102,19 +1102,6 @@ AND
 CharacterHasSkill(_Mime, "Shout_LLMIME_SourceMimicking_Follower", 0)
 THEN
 CharacterAddSkill(_Mime, "Shout_LLMIME_SourceMimicking_Follower");
-
-IF
-CharacterJoinedParty(_Mime)
-AND
-IsTagged(_Mime, "LLMIME_MimeFollower", 1)
-AND
-NOT DB_CurrentGameMode("Campaign")
-AND
-DB_LeaderLib_PartyFollower(_Owner, _Mime)
-AND
-CharacterGetMaxSourcePoints(_Owner, _Amount)
-THEN
-CharacterOverrideMaxSourcePoints(_Mime, _Amount);
 //END_REGION
 
 //REGION GHOST_SPAWN

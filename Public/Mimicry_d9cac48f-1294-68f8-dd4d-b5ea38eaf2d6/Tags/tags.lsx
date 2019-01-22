@@ -15,10 +15,10 @@
                                     <attribute id="Name" value="Code" type="23" />
                                 </node>
                                 <node id="Category">
-                                    <attribute id="Name" value="Origin" type="23" />
+                                    <attribute id="Name" value="Dialog" type="23" />
                                 </node>
                                 <node id="Category">
-                                    <attribute id="Name" value="Dialog" type="23" />
+                                    <attribute id="Name" value="Story" type="23" />
                                 </node>
                             </children>
                         </node>

@@ -282,6 +282,16 @@ LLMIME_Brawler_ApplyStance(_Mime);
 //END_REGION
 
 //REGION BRAWLER_STANCE_REMOVAL
+/*
+IF
+ItemTemplateUnEquipped("WPN_LLMIME_BrawlerFist_e1bda904-93c2-4f6f-8136-1a547279fd1f", _Mime)
+AND
+GetItemForItemTemplateInInventory(_Mime, "WPN_LLMIME_BrawlerFist_e1bda904-93c2-4f6f-8136-1a547279fd1f", _Item)
+THEN
+ItemRemove(_Item);
+LLMIME_Brawler_RemoveStance(_Mime);
+*/
+/*
 IF
 ItemUnEquipped(_Item, _Mime)
 AND
@@ -296,6 +306,7 @@ AND
 IsTagged(_Item, "LLMIME_BrawlerFist", 1)
 THEN
 ItemRemove(_Item);
+*/
 
 IF
 CharacterStatusRemoved(_Mime, "LLMIME_BRAWLER", _)

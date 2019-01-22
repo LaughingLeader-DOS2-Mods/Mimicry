@@ -1,10 +1,21 @@
 Version 1
 SubGoalCombiner SGC_AND
 INITSECTION
-DB_Origins((CHARACTERGUID)S_LLMIME_Elves_Hero_Male_Mime_191f180c-6270-4cd1-a44a-e02454bd846f);
+LLMIME_Internal_RegisterOnce();
 LLMIME_Internal_CompleteIfStarted(); // Existing saves
 
 KBSECTION
+PROC
+LLMIME_Internal_RegisterOnce()
+AND
+NOT DB_Origins((CHARACTERGUID)S_LLMIME_Elves_Hero_Male_Mime_191f180c-6270-4cd1-a44a-e02454bd846f)
+THEN
+DB_Origins((CHARACTERGUID)S_LLMIME_Elves_Hero_Male_Mime_191f180c-6270-4cd1-a44a-e02454bd846f);
+DB_Origins_OriginTag((CHARACTERGUID)S_LLMIME_Elves_Hero_Male_Mime_191f180c-6270-4cd1-a44a-e02454bd846f,"GENERIC");
+DB_OriginProfessionTags((CHARACTERGUID)S_LLMIME_Elves_Hero_Male_Mime_191f180c-6270-4cd1-a44a-e02454bd846f,"SOLDIER");
+DB_OriginProfessionTags((CHARACTERGUID)S_LLMIME_Elves_Hero_Male_Mime_191f180c-6270-4cd1-a44a-e02454bd846f,"JESTER");
+DB_OriginIntroductions("LLMIME_MaleMime", "Insane_01_Loop", "Undead_Presentation_Music", "Undead_Presentation_SFX");
+
 PROC
 LLMIME_Internal_Start()
 THEN

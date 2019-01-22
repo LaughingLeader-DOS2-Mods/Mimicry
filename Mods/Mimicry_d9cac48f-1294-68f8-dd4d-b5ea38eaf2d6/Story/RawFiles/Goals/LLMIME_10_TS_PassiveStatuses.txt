@@ -90,6 +90,23 @@ AND
 HasActiveStatus(_Mime, _InfoStatus, 1)
 THEN
 RemoveStatus(_Mime, _InfoStatus);
+
+//REGION RESET_EVENTS
+IF
+ObjectLeftCombat((CHARACTERGUID)_Mime, _CombatID)
+AND
+LLMIME_QRY_CharacterIsAMime(_Mime)
+THEN
+SetStoryEvent(_Mime, "Mimicry_ResetMimeCombatData");
+
+IF
+CharacterDied(_Mime)
+AND
+LLMIME_QRY_CharacterIsAMime(_Mime)
+THEN
+SetStoryEvent(_Mime, "Mimicry_ResetMimeCombatData");
+//END_REGION
+
 EXITSECTION
 
 ENDEXITSECTION

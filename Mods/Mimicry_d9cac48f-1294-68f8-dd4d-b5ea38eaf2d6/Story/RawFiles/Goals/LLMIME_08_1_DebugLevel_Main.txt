@@ -142,8 +142,8 @@ RegionEnded("TestLevel_LL_Mimicry")
 THEN
 NOT DB_LLMIME_Debug_GameStarted(1);
 NOT DB_LLMIME_Debug_IteratingPlayers(1);
-GoalCompleted;
 SysActivateGoal("LLMIME_8_0_DebugLevel");
+GoalCompleted;
 
 IF
 TimerFinished("LLMIME_Debug_Start")
@@ -186,6 +186,22 @@ CharacterAddSkill(_Player, "Shout_LLMIME_TimelyRetreat");
 CharacterAddSkill(_Player, "Jump_LLMIME_Debug_Textkeys");
 //END_REGION
 
+//REGION TAG_TRACES
+IF
+ObjectWasTagged(_Character, "Mimicry_Mime")
+AND
+String(_Character, _CharacterStr)
+THEN
+LeaderLog_Log("DEBUG", "[Mimicry:ObjectWasTagged(Mimicry_Mime)] Character [",_CharacterStr,"] was tagged.");
+
+IF
+ObjectLostTag(_Character, "Mimicry_Mime")
+AND
+String(_Character, _CharacterStr)
+THEN
+LeaderLog_Log("DEBUG", "[Mimicry:ObjectLostTag(Mimicry_Mime)] Removing mime tag and clearing statuses for [",_CharacterStr,"]");
+//END_REGION
+
 IF
 ObjectFlagSet("LLMIME_IsCompanion", (CHARACTERGUID)_Character, _Instance)
 THEN
@@ -216,6 +232,14 @@ THEN
 CharacterRecruitCharacter(_Character, _Player);
 CharacterStopFollow(_Character);
 */
+
+IF
+RegionEnded(_)
+AND
+SysIsActive("LLMIME_12_OriginCharacters")
+THEN
+SysCompleteGoal("LLMIME_12_OriginCharacters");
+SysActivateGoal("LLMIME_20_Init");
 
 IF
 StoryEvent(CHARACTERGUID_S_LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9, "LLMIME_Events_Debug_IterateCharacters")
@@ -273,6 +297,7 @@ NOT DB_LLMIME_Debug_IteratingPlayers(1);
 //TimerLaunch("LLMINE_Events_UnequipDummy", 300);
 IterateParties("LLMIME_Events_Debug_AddPlayers");
 
+/*
 IF
 TimerFinished("LLMINE_Events_UnequipDummy")
 AND
@@ -280,9 +305,15 @@ DB_LLMIME_Debug_HostPlayer(_Player)
 THEN
 DB_LLMIME_Debug_UnequipInSlot(_Player, "Weapon");
 DB_LLMIME_Debug_UnequipInSlot(_Player, "Helmet");
+*/
 
 IF
-DB_LLMIME_Debug_UnequipInSlot((CHARACTERGUID)_Player, (STRING)_Slot)
+DB_LLMIME_Origin_MaskEquipped(_Mime, _Mask)
+THEN
+ItemLockUnEquip(_Mask, 0);
+
+PROC
+LLMIME_Debug_UnequipInSlot((CHARACTERGUID)_Player, (STRING)_Slot)
 AND
 CharacterGetEquippedItem(_Player, _Slot, (ITEMGUID)_Item)
 THEN
@@ -312,6 +343,7 @@ CharacterIsPlayer(_Character, 1)
 THEN
 CharacterResetCooldowns(_Character);
 
+//REGION LEVERS
 IF
 CharacterUsedItem(_Character, ITEMGUID_LLMIME_TestLevel_Lever_ToggleGlobalFlags_32ee1fc8-3a1f-4293-85eb-45c59dc25d83)
 AND
@@ -373,6 +405,7 @@ CharacterGetLevel(_Character, _Level)
 THEN
 CharacterLevelUpTo(CHARACTERGUID_S_LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9, _Level);
 */
+//END_REGION
 
 //REGION TEXT_EVENTS
 /*
@@ -446,6 +479,7 @@ DebugBreak(_Message);
 GlobalSetFlag(_Flag);
 //END_REGION
 
+//REGION LEAVE_COMBAT
 IF
 DB_LLMIME_Debug_HostPlayer(_Player)
 THEN
@@ -466,6 +500,22 @@ IF
 CharacterTeleportToFleeWaypoint(_Player, _)
 THEN
 LeaveCombat(_Player);
+//END_REGION
+
+//REGION FOLLOWER_SOURCE_POINTS
+IF
+CharacterJoinedParty(_Mime)
+AND
+IsTagged(_Mime, "LLMIME_MimeFollower", 1)
+AND
+NOT DB_CurrentGameMode("Campaign")
+AND
+DB_LeaderLib_PartyFollower(_Owner, _Mime)
+AND
+CharacterGetMaxSourcePoints(_Owner, _Amount)
+THEN
+CharacterOverrideMaxSourcePoints(_Mime, _Amount);
+//END_REGION
 
 //REGION FOLLOWER_GHOST_SPAWN
 IF

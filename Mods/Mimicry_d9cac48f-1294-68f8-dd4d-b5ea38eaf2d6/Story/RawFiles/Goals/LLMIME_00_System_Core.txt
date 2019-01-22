@@ -449,29 +449,7 @@ DB_NOOP(1);
 //END_REGION
 
 //REGION UNARMED_FLAG_EVENTS
-IF
-ItemEquipped(_Item, _Mime)
-AND
-IsTagged(_Mime, "LLMIME_MimeFollower", 0)
-AND
-LLMIME_QRY_CharacterIsAMime(_Mime)
-AND
-LLMIME_QRY_ItemIsWeapon(_Mime, _Item)
-THEN
-LLMIME_System_FlagForUnarmed(_Mime);
-
-IF
-ItemUnEquipped(_Item, _Mime)
-AND
-IsTagged(_Mime, "LLMIME_MimeFollower", 0)
-AND
-LLMIME_QRY_CharacterIsAMime(_Mime)
-AND
-ObjectGetFlag(_Mime, "Mimicry_MimeIsUnarmed", 0)
-AND
-LLMIME_QRY_NoWeaponsEquipped(_Mime)
-THEN
-LLMIME_System_FlagForUnarmed(_Mime);
+//Item equip/unequip events moved to LLMIME_20_01_General
 
 IF
 CharacterStatusApplied(_Mime, "LLMIME_BRAWLER", _)
@@ -640,31 +618,39 @@ ApplyStatus(_Mime, _InfoStatus, -1.0, 1, _Mime);
 //END_REGION
 
 //REGION CONDITION_QUERIES
-QRY
-LLMIME_QRY_CharacterIsADummy((CHARACTERGUID)_Character)
-AND
-IsTagged(_Character, "LLMIME_Dummy", 1)
-THEN
-DB_NOOP(1);
 /*
 QRY
 LLMIME_QRY_CharacterIsADummy((CHARACTERGUID)_Character)
 AND
-ObjectGetFlag(_Character, "LLMIME_Decoy", 1)
+IsTagged(_Character, "LLMIME_Dummy", _IsDummy)
+AND
+IsTagged(_Character, "LLMIME_Decoy", _IsDummy2)
+AND
+IsTagged(_Character, "LeaderLib_Dummy", _IsDummy3)
+AND
+IsTagged(_Character, "ANIMAL", _IsDummy4)
+AND
+IntegerSum(_IsDummy, _IsDummy2, _Total1)
+AND
+IntegerSum(_Total1, _IsDummy3, _Total2)
+AND
+IntegerSum(_Total2, _IsDummy4, _Total3)
+AND
+_Total3 > 0
 THEN
 DB_NOOP(1);
 */
-QRY
-LLMIME_QRY_CharacterIsADummy((CHARACTERGUID)_Character)
-AND
-IsTagged(_Character, "LLMIME_Decoy", 1)
-THEN
-DB_NOOP(1);
 
 QRY
-LLMIME_QRY_CharacterIsADummy((CHARACTERGUID)_Character)
+LLMIME_QRY_NotADummy((CHARACTERGUID)_Character)
 AND
-LeaderLib_Helper_QRY_HasStatus(_Character, "LLMIME_DECOY_LIFETIME")
+NOT IsTagged(_Character, "LLMIME_Dummy", 1)
+AND
+NOT IsTagged(_Character, "LLMIME_Decoy", 1)
+AND
+NOT IsTagged(_Character, "LeaderLib_Dummy", 1)
+AND
+NOT IsTagged(_Character, "ANIMAL", 1)
 THEN
 DB_NOOP(1);
 
@@ -673,7 +659,7 @@ LLMIME_QRY_CharacterIsAMime((CHARACTERGUID)_Character)
 AND
 IsTagged(_Character, "Mimicry_Mime", 1)
 AND
-NOT LLMIME_QRY_CharacterIsADummy(_Character)
+LLMIME_QRY_NotADummy(_Character)
 THEN
 DB_NOOP(1);
 
@@ -682,7 +668,7 @@ LLMIME_QRY_CharacterIsAMime((CHARACTERGUID)_Character)
 AND
 HasActiveStatus(_Character, "LLMIME_MIME", 1)
 AND
-NOT LLMIME_QRY_CharacterIsADummy(_Character)
+LLMIME_QRY_NotADummy(_Character)
 THEN
 DB_NOOP(1);
 
@@ -691,7 +677,7 @@ LLMIME_QRY_CharacterIsAMime((CHARACTERGUID)_Character)
 AND
 IsTagged(_Character, "Mimicry_EnemyMime", 1)
 AND
-NOT LLMIME_QRY_CharacterIsADummy(_Character)
+LLMIME_QRY_NotADummy(_Character)
 THEN
 DB_NOOP(1);
 
@@ -700,7 +686,7 @@ LLMIME_QRY_CharacterIsAMime((CHARACTERGUID)_Character)
 AND
 DB_LLMIME_Mimicking_MimicNextAction(_Character)
 AND
-NOT LLMIME_QRY_CharacterIsADummy(_Character)
+LLMIME_QRY_NotADummy(_Character)
 THEN
 DB_NOOP(1);
 
@@ -767,21 +753,6 @@ THEN
 DB_NOOP(1);
 //END_REGION
 
-//REGION RESET_EVENTS
-IF
-ObjectLeftCombat((CHARACTERGUID)_Mime, _CombatID)
-AND
-LLMIME_QRY_CharacterIsAMime(_Mime)
-THEN
-SetStoryEvent(_Mime, "Mimicry_ResetMimeCombatData");
-
-IF
-CharacterDied(_Mime)
-AND
-LLMIME_QRY_CharacterIsAMime(_Mime)
-THEN
-SetStoryEvent(_Mime, "Mimicry_ResetMimeCombatData");
-//END_REGION
 EXITSECTION
 
 ENDEXITSECTION

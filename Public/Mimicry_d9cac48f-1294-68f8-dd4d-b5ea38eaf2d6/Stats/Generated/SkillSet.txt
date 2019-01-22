@@ -6,6 +6,15 @@ add skill "Rush_BatteringRam"
 add skill "Target_CripplingBlow"
 add skill "MultiStrike_LLMIME_MimeVault"
 
+new skillset "Class_LLMIME_Mime_Act2"
+add skill "Rush_BatteringRam"
+add skill "Target_CripplingBlow"
+add skill "MultiStrike_LLMIME_MimeVault"
+add skill "Target_LLMIME_DisarmingBlow"
+add skill "Shout_LLMIME_QuakeSlam"
+add skill "Shout_LLMIME_EvasiveManeuver"
+add skill "Target_Bless
+
 new skillset "Class_LLMIME_Mime_StarterSkills"
 add skill "Shout_LLMIME_BrawlerStance"
 add skill "Shout_LLMIME_DisableMimicking"

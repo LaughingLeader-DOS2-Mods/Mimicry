@@ -25,7 +25,7 @@ ON
 ACTIONS
 IF "!c1|(c1&c2)"
 	ListGetSize(%LLMIME_PassiveStatuses, _ListSize)
-	IsLessThen(_ListSize, 1)
+	IsLessThen(_ListSize, 4)
 THEN
 	ListClear(%LLMIME_PassiveStatuses)
 	ListAdd(%LLMIME_PassiveStatuses, LLMIME_MIME)
@@ -78,7 +78,7 @@ ACTIONS
 IF "!c1"
 	IsTagged(_Mime, "Mimicry_Mime")
 THEN
-	SetVar(_Mime, "LeaderLog_Message", STRING:"[LLMIME:LLMIME_Main:Mime_Setup] Setting mime tag and statuses.")
+	SetVar(_Mime, "LeaderLog_Message", STRING:"[Mimicry:LLMIME_Main:MimeSetup] Setting mime tag and statuses.")
 	CharacterEvent(_Mime, "LeaderLog_Commands_Log")
 	SetTag(_Mime, "Mimicry_Mime")
 ENDIF
@@ -145,19 +145,13 @@ THEN
 	ENDWHILE
 ENDIF
 
-EVENT LLMIME_Mime_Remove
+EVENT LLMIME_MimeRemoval
 VARS
 	CHARACTER:_Mime
 ON
 	OnCharacterEvent(_Mime, "Mimicry_RemoveMimeJob")
 ACTIONS
-IF "c1"
-	IsTagged(_Mime, "Mimicry_Mime")
-THEN
-	SetVar(_Mime, "LeaderLib_LogMessage", STRING:"[LLMIME:LLMIME_Main:Mime_Remove] Remove mime tag and clearing status influences.")
-	CharacterEvent(_Mime, "LeaderLib_DebugLog")
 	ClearTag(_Mime, "Mimicry_Mime")
-ENDIF
 	//CharacterEvent(_Mime, "Mimicry_RemoveMimeStatusInfluences")
 	CharacterEvent(_Mime, "Mimicry_ClearMimeBonuses")
 	CharacterEvent(_Mime, "Mimicry_MimeJobRemoved")
