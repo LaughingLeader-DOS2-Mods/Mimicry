@@ -36,8 +36,8 @@ ProcObjectTimer(_Mime, "LLMIME_Timers_Origin_EquipMask", 250);
 PROC
 LLMIME_Origin_Debug_SetupMime((CHARACTERGUID)_Mime)
 THEN
-LeaderLog_Log("DEBUG", "[Mimicry:Origin:Debug:SetupMime] Applying henchman preset to mime.");
-CharacterApplyHenchmanPreset(_Mime, "LLMIME_Mime");
+LeaderLog_Log("DEBUG", "[Mimicry:Debug:Origin:SetupMime] Applying henchman preset to mime.");
+CharacterApplyHenchmanPreset(_Mime, "LLMIME_MimeOrigin");
 CharacterAddSkill(_Mime, "Target_LLMIME_PerfectDoppelganger", 0);
 CharacterAddSkill(_Mime, "Shout_FleshSacrifice", 0);
 

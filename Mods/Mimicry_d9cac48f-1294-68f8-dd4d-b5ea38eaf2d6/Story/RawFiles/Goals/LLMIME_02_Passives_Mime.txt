@@ -306,6 +306,12 @@ CharacterLeveledUp(_Mime)
 AND
 LLMIME_QRY_CharacterIsAMime(_Mime)
 THEN
+ProcObjectTimerCancel(_Mime, "LLMIME_Timers_MimeLeveledUp");
+ProcObjectTimer(_Mime, "LLMIME_Timers_MimeLeveledUp", 250);
+
+PROC
+ProcObjectTimerFinished((CHARACTERGUID)_Mime, "LLMIME_Timers_MimeLeveledUp")
+THEN
 SetStoryEvent(_Mime, "Mimicry_MimeLeveledUp");
 
 IF
@@ -313,11 +319,42 @@ StoryEvent((CHARACTERGUID)_Mime, "Mimicry_MimeLeveledUp")
 AND
 IsTagged(_Mime, "LLMIME_MimeFollower", 0)
 AND
+ObjectGetFlag(_Mime, "LLMIME_NewSkillbooksAvailable", 0)
+AND
+NOT DB_LLMIME_Mime_Temp_LastNotified(_Mime, _)
+AND
 CharacterGetLevel(_Mime, _Level)
 AND
-DB_LLMIME_Mime_NewSkillbookLevels(_Level)
+DB_LLMIME_Mime_NewSkillbookLevels(_SkillLevel)
+AND
+_Level >= _SkillLevel
+AND
+NOT DB_LLMIME_Mime_Temp_LastNotified(_Mime, _)
 THEN
+DB_LLMIME_Mime_Temp_LastNotified(_Mime, _Level);
 ObjectSetFlag(_Mime, "LLMIME_NewSkillbooksAvailable");
+
+//Only notify again if the stored _SkillLevel is higher than our last notified level
+IF
+StoryEvent((CHARACTERGUID)_Mime, "Mimicry_MimeLeveledUp")
+AND
+IsTagged(_Mime, "LLMIME_MimeFollower", 0)
+AND
+ObjectGetFlag(_Mime, "LLMIME_NewSkillbooksAvailable", 0)
+AND
+CharacterGetLevel(_Mime, _Level)
+AND
+DB_LLMIME_Mime_NewSkillbookLevels(_SkillLevel)
+AND
+DB_LLMIME_Mime_Temp_LastNotified(_Mime, _LastSkillLevel)
+AND
+_Level >= _SkillLevel
+AND
+_SkillLevel > _LastSkillLevel
+THEN
+NOT DB_LLMIME_Mime_Temp_LastNotified(_Mime, _LastSkillLevel);
+DB_LLMIME_Mime_Temp_LastNotified(_Mime, _Level);
+ObjectSetFlag(_Mime, "LLMIME_NewSkillbooksAvailable", 0);
 
 IF
 TextEventSet("llmime_newskillbookstest")

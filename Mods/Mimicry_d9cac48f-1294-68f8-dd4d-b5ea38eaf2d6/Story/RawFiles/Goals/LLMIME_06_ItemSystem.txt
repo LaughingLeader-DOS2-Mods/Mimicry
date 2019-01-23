@@ -20,13 +20,15 @@ LeaderLib_Growth_Items_Register_DeltaMod("Mimicry.Brawler.Fist", 16, "Boost_LLMI
 LeaderLib_Growth_Items_Register_DeltaMod("Mimicry.Brawler.Fist", 18, "Boost_LLMIME_BrawlerFist_DamageBoostMedium", "Tag", "LLMIME_BrawlerFist");
 
 LeaderLib_Growth_Items_Clear_ByEntriesID("Mimicry.MimeEquipment.Mask");
-LeaderLib_Growth_Items_Register_DeltaMod("Mimicry.MimeEquipment.Mask", 2, "Boost_Armor_Helmet_Primary_Memory_PrimaryAsLarge", "Template", "EQ_Armor_LLMIME_Mime_Mask_A_8e66ce79-8c8e-4c22-a8ea-5a99977f4ea8");
-LeaderLib_Growth_Items_Register_DeltaMod("Mimicry.MimeEquipment.Mask", 7, "Boost_Armor_Helmet_Primary_Wits", "Template", "EQ_Armor_LLMIME_Mime_Mask_A_8e66ce79-8c8e-4c22-a8ea-5a99977f4ea8");
-LeaderLib_Growth_Items_Register_DeltaMod("Mimicry.MimeEquipment.Mask", 8, "Boost_Armor_Helmet_Armour_Physical_Large", "Template", "EQ_Armor_LLMIME_Mime_Mask_A_8e66ce79-8c8e-4c22-a8ea-5a99977f4ea8");
-LeaderLib_Growth_Items_Register_DeltaMod("Mimicry.MimeEquipment.Mask", 10, "Boost_Armor_Helmet_Armour_Magical_Large_PlateHelmet", "Template", "EQ_Armor_LLMIME_Mime_Mask_A_8e66ce79-8c8e-4c22-a8ea-5a99977f4ea8");
-LeaderLib_Growth_Items_Register_DeltaMod("Mimicry.MimeEquipment.Pants", 11, "Boost_Armor_Helmet_Resistance_Air_Medium", "Template", "EQ_Armor_LLMIME_Mime_LowerBody_A_134cbd6d-c5f5-4e7c-a7ff-a0f17644baab");
-LeaderLib_Growth_Items_Register_DeltaMod("Mimicry.MimeEquipment.Mask", 13, "Boost_Armor_Helmet_Resistance_Fire_Medium", "Template", "EQ_Armor_LLMIME_Mime_Mask_A_8e66ce79-8c8e-4c22-a8ea-5a99977f4ea8");
-LeaderLib_Growth_Items_Register_DeltaMod("Mimicry.MimeEquipment.Mask", 16, "Boost_Armor_Helmet_Ability_Warfare", "Template", "EQ_Armor_LLMIME_Mime_Mask_A_8e66ce79-8c8e-4c22-a8ea-5a99977f4ea8");
+LeaderLib_Growth_Items_Register_Template("Mimicry.Mask.A", "EQ_Armor_LLMIME_Mime_Mask_A_8e66ce79-8c8e-4c22-a8ea-5a99977f4ea8");
+LeaderLib_Growth_Items_Register_Template("Mimicry.Mask.A", "EQ_UNIQUE_Armor_LLMIME_Mime_Mask_Origin_A_4afe8cd3-eb9f-4760-9ba4-a0b4433a4c06");
+LeaderLib_Growth_Items_Register_DeltaMod("Mimicry.MimeEquipment.Mask", 2, "Boost_Armor_Helmet_Primary_Memory_PrimaryAsLarge", "ID", "Mimicry.Mask.A");
+LeaderLib_Growth_Items_Register_DeltaMod("Mimicry.MimeEquipment.Mask", 7, "Boost_Armor_Helmet_Primary_Wits", "ID", "Mimicry.Mask.A");
+LeaderLib_Growth_Items_Register_DeltaMod("Mimicry.MimeEquipment.Mask", 8, "Boost_Armor_Helmet_Armour_Physical_Large", "ID", "Mimicry.Mask.A");
+LeaderLib_Growth_Items_Register_DeltaMod("Mimicry.MimeEquipment.Mask", 10, "Boost_Armor_Helmet_Armour_Magical_Large_PlateHelmet", "ID", "Mimicry.Mask.A");
+LeaderLib_Growth_Items_Register_DeltaMod("Mimicry.MimeEquipment.Pants", 11, "Boost_Armor_Helmet_Resistance_Air_Medium", "ID", "Mimicry.Mask.A");
+LeaderLib_Growth_Items_Register_DeltaMod("Mimicry.MimeEquipment.Mask", 13, "Boost_Armor_Helmet_Resistance_Fire_Medium", "ID", "Mimicry.Mask.A");
+LeaderLib_Growth_Items_Register_DeltaMod("Mimicry.MimeEquipment.Mask", 16, "Boost_Armor_Helmet_Ability_Warfare", "ID", "Mimicry.Mask.A");
 
 LeaderLib_Growth_Items_Clear_ByEntriesID("Mimicry.MimeEquipment.Torso");
 LeaderLib_Growth_Items_Register_DeltaMod("Mimicry.MimeEquipment.Torso", 3, "Boost_Armor_Upperbody_Ability_Warfare", "Template", "EQ_Armor_LLMIME_Mime_UpperBody_A_002d96a6-02c1-4e82-9890-67b86ea01531");

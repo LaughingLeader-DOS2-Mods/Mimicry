@@ -8,6 +8,7 @@ Proc_LLMIME_IterateGameAlreadyStarted();
 GlobalSetFlag("LeaderLog_Trace_Enabled");
 
 ProcTriggerRegisterForPlayers((TRIGGERGUID)TRIGGERGUID_MusicVolumeTrigger_LLMIME_Debug_MusicTest_80649d71-e657-4c35-be19-708559c0c60c);
+
 KBSECTION
 //REGION INIT
 
@@ -216,7 +217,9 @@ LLMIME_Origin_Setup(S_Player_LLMIME_MimeF_45299363-87bb-4e78-ad0d-787dacc2659b);
 
 //Reloads
 IF
-RegionStarted(_)
+GameStarted(_, 1)
+AND
+NOT DB_GlobalFlag("LLMIME_Debug_DebugLevelInitialized")
 AND
 DB_IsPlayer(S_Player_LLMIME_Mime_191f180c-6270-4cd1-a44a-e02454bd846f)
 THEN
@@ -225,13 +228,22 @@ LLMIME_Origin_Debug_SetupMime(S_Player_LLMIME_Mime_191f180c-6270-4cd1-a44a-e0245
 LLMIME_Origin_Setup(S_Player_LLMIME_Mime_191f180c-6270-4cd1-a44a-e02454bd846f);
 
 IF
-RegionStarted(_)
+GameStarted(_, 1)
+AND
+NOT DB_GlobalFlag("LLMIME_Debug_DebugLevelInitialized")
 AND
 DB_IsPlayer(S_Player_LLMIME_MimeF_45299363-87bb-4e78-ad0d-787dacc2659b)
 THEN
 LeaderLog_Log("DEBUG", "[Mimicry:Debug:RegionStarted] Setting up female origin mime.");
 LLMIME_Origin_Debug_SetupMime(S_Player_LLMIME_MimeF_45299363-87bb-4e78-ad0d-787dacc2659b);
 LLMIME_Origin_Setup(S_Player_LLMIME_MimeF_45299363-87bb-4e78-ad0d-787dacc2659b);
+
+IF
+GameStarted(_, 1)
+AND
+NOT DB_GlobalFlag("LLMIME_Debug_DebugLevelInitialized")
+THEN
+GlobalSetFlag("LLMIME_Debug_DebugLevelInitialized");
 //END_REGION
 
 IF

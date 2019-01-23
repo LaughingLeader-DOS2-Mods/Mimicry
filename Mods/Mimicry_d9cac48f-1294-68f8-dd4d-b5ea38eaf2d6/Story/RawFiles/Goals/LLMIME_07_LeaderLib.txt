@@ -26,6 +26,7 @@ THEN
 DB_LeaderLib_EngineStatus("LLMIME_UNARMED_HIT");
 DB_LeaderLib_EngineStatus("LLMIME_BEASTMASTER_TYPECHECK");
 LeaderLib_Register_ModMenu("LaughingLeader.Mimicry", "[Mimicry] Mime Menu", "LLMIME_SettingsMenu", "Mimicry", "LaughingLeader");
+LeaderLib_ToggleScripts_EnableScript("LeaderLib_TS_GrowthEvents_Item_Enabled", "Mimicry");
 
 LeaderLib_Trader_Register_Position("LeaderLib.LeaderTrader", "TestLevel_LL_Mimicry", 12.0, 0.0, 8.0);
 LeaderLib_Trader_Register_StartingGold("LeaderLib.LeaderTrader", "TestLevel_LL_Mimicry", 9999);

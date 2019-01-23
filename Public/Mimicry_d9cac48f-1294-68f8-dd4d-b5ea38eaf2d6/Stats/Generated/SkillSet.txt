@@ -13,7 +13,7 @@ add skill "MultiStrike_LLMIME_MimeVault"
 add skill "Target_LLMIME_DisarmingBlow"
 add skill "Shout_LLMIME_QuakeSlam"
 add skill "Shout_LLMIME_EvasiveManeuver"
-add skill "Target_Bless
+add skill "Target_Bless"
 
 new skillset "Class_LLMIME_Mime_StarterSkills"
 add skill "Shout_LLMIME_BrawlerStance"

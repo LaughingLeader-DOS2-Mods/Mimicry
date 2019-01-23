@@ -85,3 +85,13 @@ add equipmentgroup
 add equipment entry "ARM_LLMIME_Mime_Light_Boots"
 add equipmentgroup 
 add equipment entry "ARM_LLMIME_Mime_Light_Gloves"
+
+new equipment "Class_LLMIME_Mime_Origin_Act2"
+add equipmentgroup 
+add equipment entry "ARM_LLMIME_Mime_Light_UpperBody"
+add equipmentgroup 
+add equipment entry "ARM_LLMIME_Mime_Light_LowerBody"
+add equipmentgroup 
+add equipment entry "ARM_LLMIME_Mime_Light_Boots"
+add equipmentgroup 
+add equipment entry "ARM_LLMIME_Mime_Light_Gloves"
