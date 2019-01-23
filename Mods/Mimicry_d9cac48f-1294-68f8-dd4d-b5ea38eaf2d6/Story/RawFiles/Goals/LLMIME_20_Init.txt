@@ -3,6 +3,13 @@ SubGoalCombiner SGC_AND
 INITSECTION
 
 KBSECTION
+
+IF
+GameModeStarted("Campaign", 0)
+THEN
+//Needs to be able to catch initial user events
+SysActivateGoal("LLMIME_21_CC_CCActive");
+
 /*
 PROC
 Proc_GameModeStarted("Campaign", (INTEGER)_IsEditorMode)

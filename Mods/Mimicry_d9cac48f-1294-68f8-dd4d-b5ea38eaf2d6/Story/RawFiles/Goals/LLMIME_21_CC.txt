@@ -1,0 +1,82 @@
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+SetOnStage(CHARACTERGUID_LLMIME_Debug_Elves_Male_PortraitHelper_8c3a78ac-cfad-4ff9-8d3f-59ec93148cdd, 0);
+SetOnStage(ITEMGUID_S_LLMIME_Debug_Mask_Elves_Male_Portrait_1_22bef3dc-6271-414c-9734-1d89ffa65e5a, 0);
+SetOnStage(ITEMGUID_S_LLMIME_Debug_Mask_Elves_Male_Portrait_2_d0bbd137-7c23-4ffb-98dc-97866a372f5b, 0);
+LLMIME_CC_InitSettings();
+
+KBSECTION
+PROC
+LLMIME_CC_InitSettings()
+THEN
+DB_LLMIME_CC_PortraitTriggers(1, "Elf", 0, (TRIGGERGUID)TRIGGERGUID_Icon_Elf_Male_1_c7cd3724-a597-45e8-89ab-78005b3f0d7b);
+DB_LLMIME_CC_PortraitTriggers(2, "Elf", 0, TRIGGERGUID_Icon_Elf_Male_2_4f7b4564-5e49-4076-9d04-a9eee6cbc148);
+
+//DB_LLMIME_CC_PortraitMasks(_Index, _Race, _IsFemale, _Mask)
+DB_LLMIME_CC_PortraitMasks(1, "Elf", 0, (ITEMGUID)ITEMGUID_S_LLMIME_Debug_Mask_Elves_Male_Portrait_1_22bef3dc-6271-414c-9734-1d89ffa65e5a);
+DB_LLMIME_CC_PortraitMasks(2, "Elf", 0, (ITEMGUID)ITEMGUID_S_LLMIME_Debug_Mask_Elves_Male_Portrait_2_d0bbd137-7c23-4ffb-98dc-97866a372f5b);
+/*
+Portrait Mask Offsets (CC Level):
+Trigger 1 Pos: 9.44; 0; -66
+Trigger 1 Mask Pos: 9.452; -0.043; -66.135
+
+Offset: 0.012, -0.043, -0.155
+
+Z might need to be a little bit further to support other faces: -0.155 (further away from face) vs -0.135 (closer)
+*/
+
+//REGION RESPEC_MIRROR
+IF
+DB_Illusionist(_Player, _Mirror)
+THEN
+ProcObjectTimer(_Player, "LLMIME_Timers_Respec_DisplayPortraitMask", 250);
+
+PROC
+ProcObjectTimerFinished((CHARACTERGUID)_Player, "LLMIME_Timers_Respec_DisplayPortraitMask")
+AND
+CharacterGetRace(_Player, 0, _Race)
+AND
+CharacterIsFemale(_Player, _IsFemale)
+AND
+DB_LLMIME_CC_PortraitTriggers(1, _Race, _IsFemale, _Trigger)
+AND
+DB_LLMIME_CC_PortraitMasks(1, _Race, _IsFemale, _Mask)
+AND
+GetPosition(_Trigger, _x, _y, _z)
+AND
+RealSum(_x, 0.012, _tx)
+AND
+RealSum(_y, -0.043, _ty)
+AND
+RealSum(_z, -0.155, _tz)
+THEN
+TeleportToPosition(_Mask, _tx, _ty, _tz, "", 0, 1);
+SetOnStage(_Mask, 1);
+DB_LLMIME_CC_Temp_ActivePortraitMask(_Player, _Mask, _Trigger);
+
+//Respec done
+PROC
+Proc_HomesteadTeleportAfterMirror((CHARACTERGUID)_Player,(ITEMGUID)_Mirror,(TRIGGERGUID)_TargetTrigger)
+AND
+DB_LLMIME_CC_Temp_ActivePortraitMask(_Player, _Mask, _Trigger)
+THEN
+NOT DB_LLMIME_CC_Temp_ActivePortraitMask(_Player, _Mask, _Trigger);
+SetOnStage(_Mask, 0);
+//END_REGION
+
+/*
+IF
+RegionStarted(_Level)
+AND
+IsCharacterCreationLevel(_Level, 1)
+THEN
+SetOnStage(CHARACTERGUID_LLMIME_Debug_Elves_Male_PortraitHelper_8c3a78ac-cfad-4ff9-8d3f-59ec93148cdd, 0);
+SetOnStage(ITEMGUID_S_LLMIME_Debug_Mask_Elves_Male_Portrait_1_22bef3dc-6271-414c-9734-1d89ffa65e5a, 0);
+SetOnStage(ITEMGUID_S_LLMIME_Debug_Mask_Elves_Male_Portrait_2_d0bbd137-7c23-4ffb-98dc-97866a372f5b, 0);
+*/
+
+EXITSECTION
+
+ENDEXITSECTION
+ParentTargetEdge "LaughingLeader_Mimicry"

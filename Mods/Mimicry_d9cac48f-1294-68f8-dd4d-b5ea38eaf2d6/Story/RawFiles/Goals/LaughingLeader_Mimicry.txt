@@ -16,6 +16,8 @@ DB_OriginProfessionTags((CHARACTERGUID)S_LLMIME_Elves_Hero_Male_Mime_191f180c-62
 DB_OriginProfessionTags((CHARACTERGUID)S_LLMIME_Elves_Hero_Male_Mime_191f180c-6270-4cd1-a44a-e02454bd846f,"JESTER");
 DB_OriginIntroductions("LLMIME_MaleMime", "Insane_01_Loop", "Undead_Presentation_Music", "Undead_Presentation_SFX");
 
+LLMIME_CC_InitSettings();
+
 PROC
 LLMIME_Internal_Start()
 THEN

@@ -1,0 +1,207 @@
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+//ApplyStatus(S_LLMIME_Elves_Hero_Male_Mime_191f180c-6270-4cd1-a44a-e02454bd846f, "LLMIME_CC_MASK_EFFECT", -1.0, 1, S_LLMIME_Elves_Hero_Male_Mime_191f180c-6270-4cd1-a44a-e02454bd846f);
+
+
+
+KBSECTION
+
+//REGION USER_EVENTS
+IF
+DB_AssignedDummyForUser(_UserName, _Dummy)
+AND
+CharacterGetReservedUserID(_Dummy, _UserID)
+THEN
+LLMIME_CC_SetCCIndex(_UserID, _UserName, _Dummy);
+
+IF
+UserConnected(_UserID, _UserName, _UserProfileID)
+AND
+DB_AssignedDummyForUser(_UserName, _Dummy)
+THEN
+LLMIME_CC_SetCCIndex(_UserID, _UserName, _Dummy);
+
+//After a user is disconnected / a dummy is made available
+IF
+DB_AvailableDummy(_Dummy)
+THEN
+LLMIME_CC_Internal_ClearUserID(_Dummy);
+//END_REGION
+
+//REGION CC_USER_INDEX
+QRY
+LLMIME_CC_Internal_QRY_ClearUserID((CHARACTERGUID)_Dummy)
+THEN
+LLMIME_CC_Internal_ClearUserID(_Dummy);
+
+PROC
+LLMIME_CC_Internal_ClearUserID((CHARACTERGUID)_Dummy)
+AND
+DB_LLMIME_CC_Temp_Index(_Dummy, _UserID, _Index)
+THEN
+NOT DB_LLMIME_CC_Temp_Index(_Dummy, _UserID, _Index);
+
+PROC
+LLMIME_CC_SetCCIndex((INTEGER)_UserID, (STRING)_UserName, (CHARACTERGUID)_Dummy)
+AND
+_Dummy == S_GLO_CharacterCreationDummy_001_da072fe7-fdd5-42ae-9139-8bd4b9fca406
+AND
+LLMIME_CC_Internal_QRY_ClearUserID(_Dummy)
+THEN
+DB_LLMIME_CC_Temp_Index(_Dummy, _UserID, 1);
+
+PROC
+LLMIME_CC_SetCCIndex((INTEGER)_UserID, (STRING)_UserName, (CHARACTERGUID)_Dummy)
+AND
+_Dummy == S_GLO_CharacterCreationDummy_002_361dacdc-4135-4d3f-a9a2-3cad46ca246a
+AND
+LLMIME_CC_Internal_QRY_ClearUserID(_Dummy)
+THEN
+DB_LLMIME_CC_Temp_Index(_Dummy, _UserID, 2);
+
+PROC
+LLMIME_CC_SetCCIndex((INTEGER)_UserID, (STRING)_UserName, (CHARACTERGUID)_Dummy)
+AND
+_Dummy == S_GLO_CharacterCreationDummy_003_dded8c22-b28e-45c1-a074-eb0954602c8a
+AND
+LLMIME_CC_Internal_QRY_ClearUserID(_Dummy)
+THEN
+DB_LLMIME_CC_Temp_Index(_Dummy, _UserID, 3);
+
+PROC
+LLMIME_CC_SetCCIndex((INTEGER)_UserID, (STRING)_UserName, (CHARACTERGUID)_Dummy)
+AND
+_Dummy == S_GLO_CharacterCreationDummy_004_5f93cae7-6c10-4da1-b9a5-0efafc168c8e
+THEN
+DB_LLMIME_CC_Temp_Index(_Dummy, _UserID, 4);
+//END_REGION
+
+//REGION PORTRAIT_MAS
+PROC
+LLMIME_CC_PositionPortraitMask((CHARACTERGUID)_Character, (ITEMGUID)_Mask, (TRIGGERGUID)_Trigger)
+AND
+GetPosition(_Trigger, _x, _y, _z)
+AND
+RealSum(_x, 0.012, _tx)
+AND
+RealSum(_y, -0.043, _ty)
+AND
+RealSum(_z, -0.135, _tz)
+THEN
+TeleportToPosition(_Mask, _tx, _ty, _tz, "", 0, 1);
+SetOnStage(_Mask, 1);
+DB_LLMIME_CC_Temp_ActivePortraitMask(_Character, _Mask, _Trigger);
+
+PROC
+LLMIME_CC_HidePortraitMask((CHARACTERGUID)_Character)
+AND
+DB_LLMIME_CC_Temp_ActivePortraitMask(_Character, _Mask, _Trigger)
+THEN
+NOT DB_LLMIME_CC_Temp_ActivePortraitMask(_Character, _Mask, _Trigger);
+SetOnStage(_Mask, 0);
+
+//Mime Origin Activated
+IF
+SkillAdded(_Character, "Target_LLMIME_PerfectDoppelganger", _)
+AND
+CharacterGetReservedUserID(_Character, _UserID)
+AND
+DB_LLMIME_CC_Temp_Index(_Dummy, _UserID, _Index)
+AND
+_Index <= 1
+AND
+CharacterGetRace(_Character, 1, _Race)
+AND
+CharacterIsFemale(_Character, _IsFemale)
+AND
+DB_LLMIME_CC_PortraitTriggers(1, _Race, _IsFemale, _Trigger)
+AND
+DB_LLMIME_CC_PortraitMasks(1, _Race, _IsFemale, _Mask)
+THEN
+LLMIME_CC_PositionPortraitMask(_Character, _Mask, _Trigger);
+
+IF
+SkillAdded(_Character, "Target_LLMIME_PerfectDoppelganger", _)
+AND
+CharacterGetReservedUserID(_Character, _UserID)
+AND
+DB_LLMIME_CC_Temp_Index(_Dummy, _UserID, _Index)
+AND
+_Index > 1
+AND
+CharacterGetRace(_Character, 1, _Race)
+AND
+CharacterIsFemale(_Character, _IsFemale)
+AND
+DB_LLMIME_CC_PortraitTriggers(2, _Race, _IsFemale, _Trigger)
+AND
+DB_LLMIME_CC_PortraitMasks(2, _Race, _IsFemale, _Mask)
+THEN
+LLMIME_CC_PositionPortraitMask(_Character, _Mask, _Trigger);
+//END_REGION
+
+IF
+SkillAdded(_Character, "Target_LLMIME_PerfectDoppelganger", _)
+THEN
+LLMIME_CC_Internal_PlayMaskEffect(_Character);
+
+IF
+SkillDeactivated(_Character, "Target_LLMIME_PerfectDoppelganger")
+THEN
+LLMIME_CC_Internal_StopMaskEffect(_Character);
+LLMIME_CC_HidePortraitMask(_Character);
+
+PROC
+LLMIME_CC_Internal_PlayMaskEffect((CHARACTERGUID)_Character)
+AND
+NOT DB_LLMIME_CC_Temp_MaskFXHandle(_Character, _)
+AND
+PlayLoopEffect(_Character, "LLMIME_FX_Status_CC_Mask_Elf_Male_01", "c_lip_upper_Bone", _Handle)
+THEN
+DB_LLMIME_CC_Temp_MaskFXHandle(_Character, _Handle);
+
+/*
+PROC
+LLMIME_CC_Internal_PlayMaskEffect((CHARACTERGUID)_Character)
+AND
+NOT DB_LLMIME_CC_Temp_MaskFXHandle(S_LLMIME_Elves_Hero_Male_Mime_191f180c-6270-4cd1-a44a-e02454bd846f, _)
+AND
+PlayLoopEffect(S_LLMIME_Elves_Hero_Male_Mime_191f180c-6270-4cd1-a44a-e02454bd846f, "LLMIME_FX_Status_CC_Mask_Elf_Male_01", "c_lip_upper_Bone", _Handle)
+THEN
+DB_LLMIME_CC_Temp_MaskFXHandle(S_LLMIME_Elves_Hero_Male_Mime_191f180c-6270-4cd1-a44a-e02454bd846f, _Handle);
+*/
+
+PROC
+LLMIME_CC_Internal_StopMaskEffect((CHARACTERGUID)_Character)
+AND
+DB_LLMIME_CC_Temp_MaskFXHandle(_Character, _Handle)
+THEN
+StopLoopEffect(_Handle);
+NOT DB_LLMIME_CC_Temp_MaskFXHandle(_Character, _Handle);
+
+IF
+TimerFinished("LeaderLib_Timers_PostCC_Finished")
+AND
+DB_LLMIME_CC_Temp_MaskFXHandle(_Mime, _Handle)
+THEN
+StopLoopEffect(_Handle);
+NOT DB_LLMIME_CC_Temp_MaskFXHandle(_Mime, _Handle);
+
+IF
+TimerFinished("LeaderLib_Timers_PostCC_Finished")
+THEN
+LLMIME_CC_ClearData();
+GoalCompleted;
+
+PROC
+LLMIME_CC_ClearData()
+THEN
+SysClear("DB_LLMIME_CC_Temp_MaskFXHandle", 2);
+SysClear("DB_LLMIME_CC_Temp_ActivePortraitMask", 3);
+SysClear("DB_LLMIME_CC_Temp_Index", 3);
+
+EXITSECTION
+
+ENDEXITSECTION
+ParentTargetEdge "LLMIME_21_CC"
