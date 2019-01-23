@@ -1,7 +1,7 @@
 Version 1
 SubGoalCombiner SGC_AND
 INITSECTION
-//ApplyStatus(S_LLMIME_Elves_Hero_Male_Mime_191f180c-6270-4cd1-a44a-e02454bd846f, "LLMIME_CC_MASK_EFFECT", -1.0, 1, S_LLMIME_Elves_Hero_Male_Mime_191f180c-6270-4cd1-a44a-e02454bd846f);
+//ApplyStatus(S_Player_LLMIME_Mime_191f180c-6270-4cd1-a44a-e02454bd846f, "LLMIME_CC_MASK_EFFECT", -1.0, 1, S_Player_LLMIME_Mime_191f180c-6270-4cd1-a44a-e02454bd846f);
 
 
 
@@ -83,11 +83,13 @@ LLMIME_CC_PositionPortraitMask((CHARACTERGUID)_Character, (ITEMGUID)_Mask, (TRIG
 AND
 GetPosition(_Trigger, _x, _y, _z)
 AND
-RealSum(_x, 0.012, _tx)
+DB_LLMIME_CC_PortraitMaskOffset(_Mask, _ox, _oy, _oz)
 AND
-RealSum(_y, -0.043, _ty)
+RealSum(_x, _ox, _tx)
 AND
-RealSum(_z, -0.135, _tz)
+RealSum(_y, _oy, _ty)
+AND
+RealSum(_z, _oz, _tz)
 THEN
 TeleportToPosition(_Mask, _tx, _ty, _tz, "", 0, 1);
 SetOnStage(_Mask, 1);
@@ -165,11 +167,11 @@ DB_LLMIME_CC_Temp_MaskFXHandle(_Character, _Handle);
 PROC
 LLMIME_CC_Internal_PlayMaskEffect((CHARACTERGUID)_Character)
 AND
-NOT DB_LLMIME_CC_Temp_MaskFXHandle(S_LLMIME_Elves_Hero_Male_Mime_191f180c-6270-4cd1-a44a-e02454bd846f, _)
+NOT DB_LLMIME_CC_Temp_MaskFXHandle(S_Player_LLMIME_Mime_191f180c-6270-4cd1-a44a-e02454bd846f, _)
 AND
-PlayLoopEffect(S_LLMIME_Elves_Hero_Male_Mime_191f180c-6270-4cd1-a44a-e02454bd846f, "LLMIME_FX_Status_CC_Mask_Elf_Male_01", "c_lip_upper_Bone", _Handle)
+PlayLoopEffect(S_Player_LLMIME_Mime_191f180c-6270-4cd1-a44a-e02454bd846f, "LLMIME_FX_Status_CC_Mask_Elf_Male_01", "c_lip_upper_Bone", _Handle)
 THEN
-DB_LLMIME_CC_Temp_MaskFXHandle(S_LLMIME_Elves_Hero_Male_Mime_191f180c-6270-4cd1-a44a-e02454bd846f, _Handle);
+DB_LLMIME_CC_Temp_MaskFXHandle(S_Player_LLMIME_Mime_191f180c-6270-4cd1-a44a-e02454bd846f, _Handle);
 */
 
 PROC

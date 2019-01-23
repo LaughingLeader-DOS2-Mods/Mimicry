@@ -1,4 +1,4 @@
-new skillset "Avatar_LLMIME_Mime_Male"
+new skillset "Avatar_LLMIME_Mime"
 add skill "Target_LLMIME_PerfectDoppelganger"
 
 new skillset "Class_LLMIME_Mime"
