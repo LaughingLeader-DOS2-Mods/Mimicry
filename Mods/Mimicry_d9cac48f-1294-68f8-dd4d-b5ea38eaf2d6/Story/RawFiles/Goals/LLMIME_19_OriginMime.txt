@@ -2,11 +2,26 @@ Version 1
 SubGoalCombiner SGC_AND
 INITSECTION
 DB_LeaderLib_OriginSkills("Mimicry_MimeOrigin", "Target_LLMIME_PerfectDoppleganger");
-LLMIME_Origin_Setup(S_Player_LLMIME_Mime_191f180c-6270-4cd1-a44a-e02454bd846f);
-LLMIME_Origin_Setup(S_Player_LLMIME_MimeF_45299363-87bb-4e78-ad0d-787dacc2659b);
-
 
 KBSECTION
+
+PROC
+PROC_Shared_CharacterCreationFinished()
+AND
+NOT DB_GlobalFlag("LeaderLib_IsEditorMode")
+AND
+DB_IsPlayer(S_Player_LLMIME_Mime_191f180c-6270-4cd1-a44a-e02454bd846f)
+THEN
+LLMIME_Origin_Setup(S_Player_LLMIME_Mime_191f180c-6270-4cd1-a44a-e02454bd846f);
+
+PROC
+PROC_Shared_CharacterCreationFinished()
+AND
+NOT DB_GlobalFlag("LeaderLib_IsEditorMode")
+AND
+DB_IsPlayer(S_Player_LLMIME_MimeF_45299363-87bb-4e78-ad0d-787dacc2659b)
+THEN
+LLMIME_Origin_Setup(S_Player_LLMIME_MimeF_45299363-87bb-4e78-ad0d-787dacc2659b);
 
 PROC
 LLMIME_Origin_Setup((CHARACTERGUID)_Mime)
@@ -15,15 +30,13 @@ ObjectExists(_Mime, 1)
 THEN
 SetTag(_Mime,"GENERIC");
 SetTag(_Mime,"REALLY_GENERIC");
-LLMIME_Origin_Debug_SetupMime(_Mime);
 LLMIME_Origin_CreateMimeMask(_Mime);
 ProcObjectTimer(_Mime, "LLMIME_Timers_Origin_EquipMask", 250);
 
 PROC
 LLMIME_Origin_Debug_SetupMime((CHARACTERGUID)_Mime)
-AND
-DB_GlobalFlag("LeaderLib_IsEditorMode")
 THEN
+LeaderLog_Log("DEBUG", "[Mimicry:Origin:Debug:SetupMime] Applying henchman preset to mime.");
 CharacterApplyHenchmanPreset(_Mime, "LLMIME_Mime");
 CharacterAddSkill(_Mime, "Target_LLMIME_PerfectDoppelganger", 0);
 CharacterAddSkill(_Mime, "Shout_FleshSacrifice", 0);
@@ -31,7 +44,7 @@ CharacterAddSkill(_Mime, "Shout_FleshSacrifice", 0);
 QRY
 LLMIME_Origin_MaskIsInInventory((CHARACTERGUID)_Mime)
 AND
-ItemTemplateIsInCharacterInventory(_Mime, "EQ_Armor_LLMIME_Mime_Mask_A_8e66ce79-8c8e-4c22-a8ea-5a99977f4ea8", _Count)
+ItemTemplateIsInCharacterInventory(_Mime, "EQ_UNIQUE_Armor_LLMIME_Mime_Mask_Origin_A_4afe8cd3-eb9f-4760-9ba4-a0b4433a4c06", _Count)
 AND
 _Count > 1
 THEN
@@ -41,7 +54,7 @@ DB_NOOP(1);
 QRY
 LLMIME_Origin_MaskExists((CHARACTERGUID)_Mime)
 AND
-GetItemForItemTemplateInInventory(_Mime, "EQ_Armor_LLMIME_Mime_Mask_A_8e66ce79-8c8e-4c22-a8ea-5a99977f4ea8", _Mask)
+GetItemForItemTemplateInInventory(_Mime, "EQ_UNIQUE_Armor_LLMIME_Mime_Mask_Origin_A_4afe8cd3-eb9f-4760-9ba4-a0b4433a4c06", _Mask)
 AND
 ObjectExists(_Mask, 1)
 THEN
@@ -50,12 +63,22 @@ DB_NOOP(1);
 PROC
 LLMIME_Origin_Debug_DeleteNonExistentMask((CHARACTERGUID)_Mime)
 AND
-GetItemForItemTemplateInInventory(_Mime, "EQ_Armor_LLMIME_Mime_Mask_A_8e66ce79-8c8e-4c22-a8ea-5a99977f4ea8", _Mask)
+GetItemForItemTemplateInInventory(_Mime, "EQ_UNIQUE_Armor_LLMIME_Mime_Mask_Origin_A_4afe8cd3-eb9f-4760-9ba4-a0b4433a4c06", _Mask)
 AND
 ObjectExists(_Mask, 0)
 THEN
 ItemRemove(_Mask);
 LeaderLog_Log("DEBUG", "[Mimicry:Origin:Debug:DeleteNonExistentMask] Deleted a non-existing mask.");
+
+PROC
+LLMIME_Origin_Debug_RemovePresetMasks((CHARACTERGUID)_Mime)
+AND
+ItemTemplateIsInCharacterInventory(_Mime, "EQ_Armor_LLMIME_Mime_Mask_A_8e66ce79-8c8e-4c22-a8ea-5a99977f4ea8", _Count)
+AND
+_Count > 0
+THEN
+LeaderLog_Log("DEBUG", "[Mimicry:Origin:Debug:RemovePresetMasks] Removed Mime preset masks from origin character.");
+ItemTemplateRemoveFrom("EQ_Armor_LLMIME_Mime_Mask_A_8e66ce79-8c8e-4c22-a8ea-5a99977f4ea8", _Mime, _Count);
 
 PROC
 LLMIME_Origin_CreateMimeMask((CHARACTERGUID)_Mime)
@@ -64,18 +87,19 @@ NOT DB_GlobalFlag("LeaderLib_IsEditorMode")
 AND
 NOT LLMIME_Origin_MaskIsInInventory(_Mime)
 THEN
-ItemTemplateAddTo("EQ_Armor_LLMIME_Mime_Mask_A_8e66ce79-8c8e-4c22-a8ea-5a99977f4ea8", _Mime, 1, 0);
+ItemTemplateAddTo("EQ_UNIQUE_Armor_LLMIME_Mime_Mask_Origin_A_4afe8cd3-eb9f-4760-9ba4-a0b4433a4c06", _Mime, 1, 0);
 LeaderLog_Log("DEBUG", "[Mimicry:Origin:CreateMimeMask] Adding mask to the inventory of Mime.");
 
 PROC
 ProcObjectTimerFinished((CHARACTERGUID)_Mime, "LLMIME_Timers_Origin_EquipMask")
 THEN
+LLMIME_Origin_Debug_RemovePresetMasks(_Mime);
 LLMIME_Origin_EquipMimeMask(_Mime);
 
 PROC
 LLMIME_Origin_EquipMimeMask((CHARACTERGUID)_Mime)
 AND
-GetItemForItemTemplateInInventory(_Mime, "EQ_Armor_LLMIME_Mime_Mask_A_8e66ce79-8c8e-4c22-a8ea-5a99977f4ea8", _Mask)
+GetItemForItemTemplateInInventory(_Mime, "EQ_UNIQUE_Armor_LLMIME_Mime_Mask_Origin_A_4afe8cd3-eb9f-4760-9ba4-a0b4433a4c06", _Mask)
 AND
 ObjectExists(_Mask, 1)
 THEN
@@ -93,7 +117,7 @@ NOT LLMIME_Origin_MaskExists(_Mime)
 AND
 GetPosition(_Mime, _x, _y, _z)
 AND
-CreateItemTemplateAtPosition("EQ_Armor_LLMIME_Mime_Mask_A_8e66ce79-8c8e-4c22-a8ea-5a99977f4ea8", _x, _y, _z, _Mask)
+CreateItemTemplateAtPosition("EQ_UNIQUE_Armor_LLMIME_Mime_Mask_Origin_A_4afe8cd3-eb9f-4760-9ba4-a0b4433a4c06", _x, _y, _z, _Mask)
 THEN
 LLMIME_Origin_Debug_DeleteNonExistentMask(_Mime);
 CharacterEquipItem(_Mime, _Mask);
@@ -109,13 +133,19 @@ THEN
 LeaderLog_Log("DEBUG", "[Mimicry:Origin:EquipMimeMask] [ERROR] Mask was not equipped!");
 
 IF
-ItemUnEquipFailed(_Mask, S_Player_LLMIME_Mime_191f180c-6270-4cd1-a44a-e02454bd846f)
+DB_LLMIME_Origin_MaskEquipped(_Mime, _Mask)
+THEN
+SetStoryEvent(_Mime, "Mimicry_Events_Mime_MaskEquipped");
+
+IF
+ItemUnEquipFailed(_Mask, _Mime)
 AND
 IsTagged(_Mask, "LLMIME_MimeMask", 1)
 THEN
-Proc_StartDialog(1, "LLMIME_AD_MaskWontComeOff", S_Player_LLMIME_Mime_191f180c-6270-4cd1-a44a-e02454bd846f);
+Proc_StartDialog(1, "LLMIME_AD_MaskWontComeOff", _Mime);
+PlayEffect(_Mime, "LLMIME_FX_Mask_Locked_01");
 
 EXITSECTION
 
 ENDEXITSECTION
-ParentTargetEdge "LLMIME_20_Init"
+ParentTargetEdge "LaughingLeader_Mimicry"

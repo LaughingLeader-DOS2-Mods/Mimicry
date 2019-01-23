@@ -202,6 +202,38 @@ THEN
 LeaderLog_Log("DEBUG", "[Mimicry:ObjectLostTag(Mimicry_Mime)] Removing mime tag and clearing statuses for [",_CharacterStr,"]");
 //END_REGION
 
+//REGION MIME_HENCHMAN_PRESET
+PROC
+PROC_Shared_CharacterCreationFinished()
+AND
+DB_GlobalFlag("LeaderLib_IsEditorMode")
+THEN
+LeaderLog_Log("DEBUG", "[Mimicry:Debug:PROC_Shared_CharacterCreationFinished] Setting up mimes.");
+LLMIME_Origin_Debug_SetupMime(S_Player_LLMIME_Mime_191f180c-6270-4cd1-a44a-e02454bd846f);
+LLMIME_Origin_Debug_SetupMime(S_Player_LLMIME_MimeF_45299363-87bb-4e78-ad0d-787dacc2659b);
+LLMIME_Origin_Setup(S_Player_LLMIME_Mime_191f180c-6270-4cd1-a44a-e02454bd846f);
+LLMIME_Origin_Setup(S_Player_LLMIME_MimeF_45299363-87bb-4e78-ad0d-787dacc2659b);
+
+//Reloads
+IF
+RegionStarted(_)
+AND
+DB_IsPlayer(S_Player_LLMIME_Mime_191f180c-6270-4cd1-a44a-e02454bd846f)
+THEN
+LeaderLog_Log("DEBUG", "[Mimicry:Debug:RegionStarted] Setting up male origin mime.");
+LLMIME_Origin_Debug_SetupMime(S_Player_LLMIME_Mime_191f180c-6270-4cd1-a44a-e02454bd846f);
+LLMIME_Origin_Setup(S_Player_LLMIME_Mime_191f180c-6270-4cd1-a44a-e02454bd846f);
+
+IF
+RegionStarted(_)
+AND
+DB_IsPlayer(S_Player_LLMIME_MimeF_45299363-87bb-4e78-ad0d-787dacc2659b)
+THEN
+LeaderLog_Log("DEBUG", "[Mimicry:Debug:RegionStarted] Setting up female origin mime.");
+LLMIME_Origin_Debug_SetupMime(S_Player_LLMIME_MimeF_45299363-87bb-4e78-ad0d-787dacc2659b);
+LLMIME_Origin_Setup(S_Player_LLMIME_MimeF_45299363-87bb-4e78-ad0d-787dacc2659b);
+//END_REGION
+
 IF
 ObjectFlagSet("LLMIME_IsCompanion", (CHARACTERGUID)_Character, _Instance)
 THEN
@@ -308,10 +340,18 @@ DB_LLMIME_Debug_UnequipInSlot(_Player, "Helmet");
 */
 
 IF
+TextEventSet("llmime_freemask")
+AND
 DB_LLMIME_Origin_MaskEquipped(_Mime, _Mask)
 THEN
 ItemLockUnEquip(_Mask, 0);
 
+/*
+IF
+DB_LLMIME_Origin_MaskEquipped(_Mime, _Mask)
+THEN
+ItemLockUnEquip(_Mask, 0);
+*/
 PROC
 LLMIME_Debug_UnequipInSlot((CHARACTERGUID)_Player, (STRING)_Slot)
 AND

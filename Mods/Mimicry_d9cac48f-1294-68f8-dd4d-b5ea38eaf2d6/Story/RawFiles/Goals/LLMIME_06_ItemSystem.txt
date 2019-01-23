@@ -141,8 +141,8 @@ DB_CustomUseItemResponse(_Character, _Item, 0);
 //REGION MASK_EQUIPPING
 PROC
 ProcBlockUseOfItem(_Character, _Item)
-AND
-LLMIME_Mime_QRY_IsMimeItem(_Item)
+//AND
+//LLMIME_Mime_QRY_IsMimeItem(_Item)
 AND
 GetTemplate(_Item, _Template)
 AND
@@ -171,16 +171,14 @@ DB_CustomUseItemResponse(_Character, _Item, 0);
 
 //REGION MIME_FOLLOWER
 PROC
-ProcBlockUseOfItem(_Mime, _Item)
+ProcBlockUseOfItem((CHARACTERGUID)S_LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9, _Item)
 AND
 IsTagged(_Item, "BOOK", 1)
-AND
-IsTagged(_Mime, "LLMIME_MimeFollower", 1)
 THEN
-CharacterStatusText(_Mime, "LLMIME_StatusText_SkillbookBlockedForFollower");
-DB_CustomUseItemResponse(_Mime, _Item, 0);
+CharacterStatusText(S_LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9, "LLMIME_StatusText_SkillbookBlockedForFollower");
+DB_CustomUseItemResponse(S_LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9, _Item, 0);
 
-//Prevent general item useage with the Mime follower
+/*
 PROC
 ProcBlockUseOfItem(_Mime, _Item)
 AND
@@ -197,6 +195,21 @@ AND
 NOT GetInventoryOwner(_Item, _Mime)
 THEN
 DB_CustomUseItemResponse(_Mime, _Item, 0);
+*/
+
+//Prevent general item useage with the Mime follower
+PROC
+ProcBlockUseOfItem((CHARACTERGUID)S_LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9, _Item)
+AND
+NOT DB_CustomUseItemResponse(S_LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9, _Item, _)
+AND
+NOT LLMIME_Mimicking_QRY_IsMimicking(S_LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9)
+AND
+ItemIsInInventory(_Item, 1)
+AND
+NOT GetInventoryOwner(_Item, S_LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9)
+THEN
+DB_CustomUseItemResponse(S_LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9, _Item, 0);
 //END_REGION
 
 //REGION MUSIC_BOX_USAGE

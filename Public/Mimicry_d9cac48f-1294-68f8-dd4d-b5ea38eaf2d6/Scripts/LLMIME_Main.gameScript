@@ -145,6 +145,31 @@ THEN
 	ENDWHILE
 ENDIF
 
+EVENT LLMIME_RemoveMimeStatuses
+VARS
+	CHARACTER:_Mime
+	INT:_Size
+	INT:_Index
+	STATUS:_Status
+ON
+	OnCharacterEvent(_Mime, "Mimicry_RemoveMimeStatuses")
+ACTIONS
+	Set(_Index, 1)
+IF "c1"
+	ListGetSize(%LLMIME_PassiveStatuses, _Size)
+THEN
+	WHILE "!c1"
+		IsGreaterThen(_Index,_Size)
+	DO
+		IF "c1"
+			ListGet(%LLMIME_PassiveStatuses,_Index,_Status)
+		THEN
+			CharacterRemoveStatus(_Mime, _Status, null, 0)
+		ENDIF
+	Add(_Index, 1)
+	ENDWHILE
+ENDIF
+
 EVENT LLMIME_MimeRemoval
 VARS
 	CHARACTER:_Mime

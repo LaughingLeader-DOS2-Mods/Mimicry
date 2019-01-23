@@ -95,34 +95,21 @@ DB_NOOP(1);
 //END_REGION
 
 //REGION EQUIP_EVENTS
-/*
-IF
-ItemUnEquipped(_Mask, _Mime)
-AND
-IsTagged(_Mask, "LLMIME_ACTIVATE_MIME", 1)
-AND
-LLMIME_QRY_NotADummy(_Mime)
-THEN
-SetStoryEvent(_Mime, "Mimicry_RemoveMimeJob");
-*/
-IF
-ItemTemplateEquipped("EQ_Armor_LLMIME_Mime_Mask_A_8e66ce79-8c8e-4c22-a8ea-5a99977f4ea8", _Mime)
-AND
-LLMIME_QRY_NotADummy(_Mime)
+PROC
+LLMIME_OnMaskEquipped((CHARACTERGUID)_Mime)
 THEN
 SetStoryEvent(_Mime, "Mimicry_InitMimeJob");
 SetTag(_Mime, "Mimicry_Mime");
 
-IF
-ItemTemplateUnEquipped("EQ_Armor_LLMIME_Mime_Mask_A_8e66ce79-8c8e-4c22-a8ea-5a99977f4ea8", _Mime)
-AND
-LLMIME_QRY_NotADummy(_Mime)
+PROC
+LLMIME_OnMaskUnEquipped((CHARACTERGUID)_Mime)
 THEN
 SetStoryEvent(_Mime, "Mimicry_RemoveMimeJob");
 ClearTag(_Mime, "Mimicry_Mime");
 //END_REGION
 
 //REGION MIME_INIT
+/*
 IF
 CharacterStatusApplied(_Mime, "LLMIME_MIMICRY_MASK", _)
 AND
@@ -133,6 +120,7 @@ AND
 NOT LLMIME_QRY_CharacterIsAMime(_Mime)
 THEN
 SetStoryEvent(_Mime, "Mimicry_InitMimeJob");
+*/
 
 IF
 CharacterStatusApplied(_Mime, "LLMIME_MIMICRY_MASK", _)
@@ -290,8 +278,9 @@ ApplyStatus(_Mime, "LLMIME_MIMICRY_MASK_INFO_FOLLOWER", -1.0, 1, _Mime);
 //END_REGION
 
 //REGION EFFECTS
+//Equipping FX
 PROC
-ProcProcessUseOfItem((CHARACTERGUID)_Character,(ITEMGUID)_Item,(INTEGER)_RequestID)
+ProcProcessUseOfItem((CHARACTERGUID)_Character, (ITEMGUID)_Item, (INTEGER)_RequestID)
 AND
 NOT DB_CustomUseItemResponse(_Character, _Item, 0)
 AND
@@ -306,7 +295,7 @@ ItemUnEquipped(_Item, _Character)
 AND
 GetTemplate(_Item, _Template)
 AND
-LLMIME_QRY_IsMaskTemplate(_Template)
+DB_LLMIME_Templates("Mask_A", _Template)
 THEN
 SetStoryEvent(_Character, "Mimicry_Events_Mime_MaskUnEquipped");
 //END_REGION
