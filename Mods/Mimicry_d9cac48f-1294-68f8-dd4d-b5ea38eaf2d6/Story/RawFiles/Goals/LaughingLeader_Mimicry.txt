@@ -5,22 +5,26 @@ LLMIME_Internal_RegisterOnce();
 LLMIME_Internal_CompleteIfStarted(); // Existing saves
 
 KBSECTION
+
 PROC
 LLMIME_Internal_RegisterOnce()
 AND
-NOT DB_Origins((CHARACTERGUID)S_Player_LLMIME_Mime_191f180c-6270-4cd1-a44a-e02454bd846f)
+DB_StoryStarted(_)
 THEN
 DB_Origins((CHARACTERGUID)S_Player_LLMIME_Mime_191f180c-6270-4cd1-a44a-e02454bd846f);
-DB_Origins_OriginTag((CHARACTERGUID)S_Player_LLMIME_Mime_191f180c-6270-4cd1-a44a-e02454bd846f, "GENERIC");
-DB_OriginProfessionTags((CHARACTERGUID)S_Player_LLMIME_Mime_191f180c-6270-4cd1-a44a-e02454bd846f,"SOLDIER");
-DB_OriginProfessionTags((CHARACTERGUID)S_Player_LLMIME_Mime_191f180c-6270-4cd1-a44a-e02454bd846f,"JESTER");
-DB_OriginIntroductions("LLMIME_Mime", "Insane_01_Loop", "Undead_Presentation_Music", "Undead_Presentation_SFX");
 
+PROC
+LLMIME_Internal_RegisterOnce()
+AND
+NOT DB_Origins_OriginTag((CHARACTERGUID)S_Player_LLMIME_Mime_191f180c-6270-4cd1-a44a-e02454bd846f, "GENERIC")
+THEN
+//DB_Origins((CHARACTERGUID)S_Player_LLMIME_Mime_191f180c-6270-4cd1-a44a-e02454bd846f);
+//DB_GenericOrigins((CHARACTERGUID)S_Player_LLMIME_Mime_191f180c-6270-4cd1-a44a-e02454bd846f);
+DB_Origins_OriginTag((CHARACTERGUID)S_Player_LLMIME_Mime_191f180c-6270-4cd1-a44a-e02454bd846f, "GENERIC");
+DB_OriginIntroductions("LLMIME_Mime", "Insane_01_Loop", "Undead_Presentation_Music", "Undead_Presentation_SFX");
 
 //DB_Origins((CHARACTERGUID)S_Player_LLMIME_MimeF_45299363-87bb-4e78-ad0d-787dacc2659b);
 DB_Origins_OriginTag((CHARACTERGUID)S_Player_LLMIME_MimeF_45299363-87bb-4e78-ad0d-787dacc2659b,"GENERIC");
-DB_OriginProfessionTags((CHARACTERGUID)S_Player_LLMIME_MimeF_45299363-87bb-4e78-ad0d-787dacc2659b,"SOLDIER");
-DB_OriginProfessionTags((CHARACTERGUID)S_Player_LLMIME_MimeF_45299363-87bb-4e78-ad0d-787dacc2659b,"JESTER");
 
 LLMIME_CC_InitSettings();
 

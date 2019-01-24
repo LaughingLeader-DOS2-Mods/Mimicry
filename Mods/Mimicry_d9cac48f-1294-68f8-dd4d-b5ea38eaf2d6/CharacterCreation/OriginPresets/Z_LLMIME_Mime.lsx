@@ -14,8 +14,6 @@
                     <attribute id="UserCanAlterTags" value="0" type="19" />
                     <attribute id="SkillSet" value="Avatar_LLMIME_Mime" type="22" />
                     <attribute id="PreviewEquipmentSet" value="Origin_LLMIME_Mime_Preview" type="22" />
-                    <attribute id="CharacterVoice" value="1" type="22" />
-                    <attribute id="OverrideVoice" value="1" type="22" />
 
                     <children>
                         <node id="SupportedGenders">

@@ -203,6 +203,16 @@ THEN
 LeaderLog_Log("DEBUG", "[Mimicry:ObjectLostTag(Mimicry_Mime)] Removing mime tag and clearing statuses for [",_CharacterStr,"]");
 //END_REGION
 
+IF
+StoryEvent((CHARACTERGUID)_Char, "MyMod_Debug_Test")
+THEN
+ProcObjectTimer(_Char, "MyMod_Timers_DebugTimer", 1000);
+
+PROC
+ProcObjectTimerFinished((CHARACTERGUID)_Char, "MyMod_Timers_DebugTimer")
+THEN
+DB_NOOP(1);
+
 //REGION MIME_HENCHMAN_PRESET
 PROC
 PROC_Shared_CharacterCreationFinished()

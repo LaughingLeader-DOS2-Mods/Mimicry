@@ -3,7 +3,19 @@ SubGoalCombiner SGC_AND
 INITSECTION
 DB_LeaderLib_OriginSkills("Mimicry_MimeOrigin", "Target_LLMIME_PerfectDoppleganger");
 
+//When these DB entries are added, the tags are immediately applied to the character, so register once the game has started
+DB_OriginProfessionTags((CHARACTERGUID)S_Player_LLMIME_Mime_191f180c-6270-4cd1-a44a-e02454bd846f,"SOLDIER");
+DB_OriginProfessionTags((CHARACTERGUID)S_Player_LLMIME_Mime_191f180c-6270-4cd1-a44a-e02454bd846f,"JESTER");
+DB_OriginProfessionTags((CHARACTERGUID)S_Player_LLMIME_MimeF_45299363-87bb-4e78-ad0d-787dacc2659b,"SOLDIER");
+DB_OriginProfessionTags((CHARACTERGUID)S_Player_LLMIME_MimeF_45299363-87bb-4e78-ad0d-787dacc2659b,"JESTER");
+
 KBSECTION
+
+//Origins is done registering
+IF
+DB_Origins((CHARACTERGUID)S_Player_GenericOrigin_7b6c1f26-fe4e-40bd-a5d0-e6ff58cef4fe)
+THEN
+DB_Origins((CHARACTERGUID)S_Player_LLMIME_Mime_191f180c-6270-4cd1-a44a-e02454bd846f);
 
 PROC
 PROC_Shared_CharacterCreationFinished()

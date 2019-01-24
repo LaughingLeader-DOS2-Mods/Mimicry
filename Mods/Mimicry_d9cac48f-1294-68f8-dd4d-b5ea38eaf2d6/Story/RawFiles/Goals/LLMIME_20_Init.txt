@@ -5,6 +5,11 @@ INITSECTION
 KBSECTION
 
 IF
+GameModeStarted("Campaign", 1)
+THEN
+DB_Origins((CHARACTERGUID)S_Player_LLMIME_Mime_191f180c-6270-4cd1-a44a-e02454bd846f);
+
+IF
 GameModeStarted("Campaign", 0)
 THEN
 //Needs to be able to catch initial user events
