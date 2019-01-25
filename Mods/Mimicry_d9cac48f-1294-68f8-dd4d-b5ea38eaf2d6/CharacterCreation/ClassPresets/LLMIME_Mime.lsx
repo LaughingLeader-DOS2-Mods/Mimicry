@@ -61,16 +61,6 @@
                             <attribute id="PreviewEquipmentSet" value="Class_LLMIME_Mime_Preview" type="22" />
                             <attribute id="StartingEquipmentSet" value="Class_LLMIME_Mime_Start_Undead" type="22" />
                         </node>
-						<node id="EquipmentProperty">
-                            <attribute id="RaceName" value="Unknown" type="22" />
-                            <attribute id="PreviewEquipmentSet" value="Class_LLMIME_Mime_Preview" type="22" />
-                            <attribute id="StartingEquipmentSet" value="Class_LLMIME_Mime_Start" type="22" />
-                        </node>
-						<node id="EquipmentProperty">
-                            <attribute id="RaceName" value="" type="22" />
-                            <attribute id="PreviewEquipmentSet" value="Class_LLMIME_Mime_Preview" type="22" />
-                            <attribute id="StartingEquipmentSet" value="Class_LLMIME_Mime_Start" type="22" />
-                        </node>
                     </children>
                 </node>
                 <node id="AbilityChanges">

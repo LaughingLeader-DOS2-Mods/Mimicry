@@ -11,7 +11,7 @@
                     <attribute id="OriginDescription" value="Your identity has long been erased. All that remains is The Mask. Yet, something stirs beneath the surface, a faint whisper of something thought to be long gone..." handle="h586beea9g9a8dg4d95gaf12g7f5c45d89b62" type="28" />
                     <attribute id="OriginLongDescription" value="" handle="h586beea9g9a8dg4d95gaf12g7f5c45d89b62" type="28" />
                     <attribute id="CharacterUUID" value="191f180c-6270-4cd1-a44a-e02454bd846f" type="22" />
-                    <attribute id="UserCanAlterTags" value="0" type="19" />
+                    <attribute id="UserCanAlterTags" value="1" type="19" />
                     <attribute id="SkillSet" value="Avatar_LLMIME_Mime" type="22" />
                     <attribute id="PreviewEquipmentSet" value="Origin_LLMIME_Mime_Preview" type="22" />
 

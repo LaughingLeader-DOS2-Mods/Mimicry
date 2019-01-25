@@ -328,8 +328,9 @@ VARS
 ON
 	OnEnteredCombat(_Mime, _)
 ACTIONS
-IF "c1"
+IF "c1&!c2"
 	IsTagged(_Mime, "Mimicry_Mime")
+	HasFlag(_Mime, "Mimicry_CombatMuteDisabled")
 THEN
 	CharacterApplyStatus(_Mime, LLMIME_COMBAT_MUTED, -1, 1)
 ENDIF
@@ -340,7 +341,8 @@ VARS
 ON
 	OnCharacterStatusRemoved(_Mime, RESURRECT)
 ACTIONS
-IF "c1&!c2&c3"
+IF "!c1&c2&!c3&c4"
+	HasFlag(_Mime, "Mimicry_CombatMuteDisabled")
 	IsTagged(_Mime, "Mimicry_Mime")
 	CharacterHasStatus(_Mime, LLMIME_COMBAT_MUTED)
 	IsInCombat(_Mime)
@@ -354,8 +356,9 @@ VARS
 ON
 	OnLeftCombat(_Mime, _)
 ACTIONS
-IF "c1"
-	IsTagged(_Mime, "Mimicry_Mime")
+IF "c1|c2"
+	CharacterHasStatus(_Mime, LLMIME_COMBAT_MUTED)
+	CharacterHasHadStatus(_Mime, LLMIME_COMBAT_MUTED)
 THEN
 	//Make it "cool down" instead of removing it immediately, for fleeing situations
 	CharacterApplyStatus(_Mime, LLMIME_COMBAT_MUTED, 1, 1)
