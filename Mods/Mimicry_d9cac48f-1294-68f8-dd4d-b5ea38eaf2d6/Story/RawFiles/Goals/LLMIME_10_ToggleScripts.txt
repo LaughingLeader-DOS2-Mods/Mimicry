@@ -25,6 +25,8 @@ LeaderLib_ToggleScripts_Register_Script("LLMIME_10_TS_Mimicking_05_Items", "LLMI
 //Mime follower script
 LeaderLib_ToggleScripts_Register_Script("LLMIME_10_TS_Follower_01_Recruited", "LLMIME_TS_MimeFollowerInParty");
 
+LeaderLib_ToggleScripts_Register_Script("LLMIME_10_TS_OriginMimeActive", "LLMIME_TS_OriginMimeActive");
+
 //REGION SCRIPT_TOGGLING
 PROC
 LLMIME_Mimicking_OnMimickingEnabled((CHARACTERGUID)_Mime)

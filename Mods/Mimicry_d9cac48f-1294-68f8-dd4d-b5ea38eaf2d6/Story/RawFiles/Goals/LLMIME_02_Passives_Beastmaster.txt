@@ -141,11 +141,6 @@ LLMIME_Beastmaster_AddMonsterSkill(_Summon);
 LLMIME_Beastmaster_AddMonsterStatus(_Summon);
 LLMIME_Beastmaster_OnMonsterSkillApplied(_Summon);
 
-IF
-CharacterStatusRemoved(_Summon, "LLMIME_BEASTMASTER_MONSTERSKILL", _)
-THEN
-LLMIME_Beastmaster_RemoveBeastmasterBonus(_Summon);
-
 PROC
 LLMIME_Beastmaster_RemoveBeastmasterBonus((CHARACTERGUID)_Summon)
 THEN
@@ -156,9 +151,33 @@ LLMIME_Beastmaster_OnMonsterSkillRemoved(_Summon);
 
 //REGION REMOVAL_EVENTS
 IF
+CharacterStatusRemoved(_Summon, "LLMIME_BEASTMASTER_MONSTERSKILL", _)
+THEN
+LLMIME_Beastmaster_RemoveBeastmasterBonus(_Summon);
+LLMIME_MonsterSkill_ClearTemporaryDatabases(_Summon);
+
+QRY
+LLMIME_Beastermaster_QRY_Applied((CHARACTERGUID)_Summon)
+AND
+ObjectGetFlag(_Summon, "LLMIME_MonsterSkill_StatusApplied", 1)
+THEN
+DB_NOOP(1);
+
+QRY
+LLMIME_Beastermaster_QRY_Applied((CHARACTERGUID)_Summon)
+AND
+ObjectGetFlag(_Summon, "LLMIME_MonsterSkill_SkillAdded", 1)
+THEN
+DB_NOOP(1);
+
+/*
+IF
 CharacterDied(_Summon)
+AND
+LLMIME_Beastermaster_QRY_Applied(_Summon)
 THEN
 LLMIME_MonsterSkill_ClearTemporaryDatabases(_Summon);
+*/
 
 PROC
 LLMIME_MonsterSkill_ClearTemporaryDatabases((CHARACTERGUID)_Summon)
@@ -193,7 +212,7 @@ AND
 CharacterHasSkill(_Summon, _Skill, 0)
 THEN
 LeaderLog_Log("DEBUG", "[LLMIME:Beastmaster:AddMonsterSkill] Adding skill [",_Skill,"] to summon via Template [",_Template,"]");
-ObjectSetFlag(_Summon, "LLMIME_MONSTERSKILL_SKILLADDED");
+ObjectSetFlag(_Summon, "LLMIME_MonsterSkill_SkillAdded");
 CharacterAddSkill(_Summon, _Skill);
 DB_LLMIME_MonsterSkill_Temp_AddedSkill(_Summon, _Skill);
 
@@ -207,7 +226,7 @@ AND
 CharacterHasSkill(_Summon, _Skill, 0)
 THEN
 LeaderLog_Log("DEBUG", "[LLMIME:Beastmaster:AddMonsterSkill] Adding skill [",_Skill,"] to summon via Tag [",_Tag,"]");
-ObjectSetFlag(_Summon, "LLMIME_MONSTERSKILL_SKILLADDED");
+ObjectSetFlag(_Summon, "LLMIME_MonsterSkill_SkillAdded");
 CharacterAddSkill(_Summon, _Skill);
 DB_LLMIME_MonsterSkill_Temp_AddedSkill(_Summon, _Skill);
 
@@ -221,7 +240,7 @@ AND
 CharacterHasSkill(_Summon, _Skill, 0)
 THEN
 LeaderLog_Log("DEBUG", "[LLMIME:Beastmaster:AddMonsterSkill] Adding skill [",_Skill,"] to summon via Status [",_Status,"]");
-ObjectSetFlag(_Summon, "LLMIME_MONSTERSKILL_SKILLADDED");
+ObjectSetFlag(_Summon, "LLMIME_MonsterSkill_SkillAdded");
 CharacterAddSkill(_Summon, _Skill);
 DB_LLMIME_MonsterSkill_Temp_AddedSkill(_Summon, _Skill);
 
@@ -229,13 +248,13 @@ DB_LLMIME_MonsterSkill_Temp_AddedSkill(_Summon, _Skill);
 PROC
 LLMIME_Beastmaster_AddMonsterSkill((CHARACTERGUID)_Summon)
 AND
-ObjectGetFlag(_Summon, "LLMIME_MONSTERSKILL_SKILLADDED", 0)
+ObjectGetFlag(_Summon, "LLMIME_MonsterSkill_SkillAdded", 0)
 AND
 DB_LLMIME_MonsterSkill_Default(_Skill)
 AND
 CharacterHasSkill(_Summon, _Skill, 0)
 THEN
-ObjectSetFlag(_Summon, "LLMIME_MONSTERSKILL_SKILLADDED");
+ObjectSetFlag(_Summon, "LLMIME_MonsterSkill_SkillAdded");
 CharacterAddSkill(_Summon, _Skill);
 DB_LLMIME_MonsterSkill_Temp_AddedSkill(_Summon, _Skill);
 
@@ -250,9 +269,9 @@ NOT DB_LLMIME_MonsterSkill_Temp_AddedSkill(_Summon, _Skill);
 PROC
 LLMIME_Beastmaster_RemoveMonsterSkill((CHARACTERGUID)_Summon)
 AND
-ObjectGetFlag(_Summon, "LLMIME_MONSTERSKILL_SKILLADDED", 1)
+ObjectGetFlag(_Summon, "LLMIME_MonsterSkill_SkillAdded", 1)
 THEN
-ObjectClearFlag(_Summon, "LLMIME_MONSTERSKILL_SKILLADDED");
+ObjectClearFlag(_Summon, "LLMIME_MonsterSkill_SkillAdded");
 //END_REGION
 
 //REGION MONSTER_STATUS
@@ -267,7 +286,7 @@ HasActiveStatus(_Summon, _Status, 0)
 THEN
 ApplyStatus(_Summon, _Status, -1.0, 1, _Summon);
 DB_LLMIME_MonsterSkill_Temp_AddedStatus(_Summon, _Status);
-ObjectSetFlag(_Summon, "LLMIME_MONSTERSKILL_STATUSAPPLIED");
+ObjectSetFlag(_Summon, "LLMIME_MonsterSkill_StatusApplied");
 
 PROC
 LLMIME_Beastmaster_AddMonsterStatus((CHARACTERGUID)_Summon)
@@ -280,7 +299,7 @@ HasActiveStatus(_Summon, _Status, 0)
 THEN
 ApplyStatus(_Summon, _Status, -1.0, 1, _Summon);
 DB_LLMIME_MonsterSkill_Temp_AddedStatus(_Summon, _Status);
-ObjectSetFlag(_Summon, "LLMIME_MONSTERSKILL_STATUSAPPLIED");
+ObjectSetFlag(_Summon, "LLMIME_MonsterSkill_StatusApplied");
 
 PROC
 LLMIME_Beastmaster_AddMonsterStatus((CHARACTERGUID)_Summon)
@@ -293,7 +312,7 @@ HasActiveStatus(_Summon, _ApplyStatus, 0)
 THEN
 ApplyStatus(_Summon, _ApplyStatus, -1.0, 1, _Summon);
 DB_LLMIME_MonsterSkill_Temp_AddedStatus(_Summon, _ApplyStatus);
-ObjectSetFlag(_Summon, "LLMIME_MONSTERSKILL_STATUSAPPLIED");
+ObjectSetFlag(_Summon, "LLMIME_MonsterSkill_StatusApplied");
 
 PROC
 LLMIME_Beastmaster_RemoveMonsterStatus((CHARACTERGUID)_Summon)
@@ -306,9 +325,9 @@ NOT DB_LLMIME_MonsterSkill_Temp_AddedStatus(_Summon, _Status);
 PROC
 LLMIME_Beastmaster_RemoveMonsterStatus((CHARACTERGUID)_Summon)
 AND
-ObjectGetFlag(_Summon, "LLMIME_MONSTERSKILL_STATUSAPPLIED", 1)
+ObjectGetFlag(_Summon, "LLMIME_MonsterSkill_StatusApplied", 1)
 THEN
-ObjectClearFlag(_Summon, "LLMIME_MONSTERSKILL_STATUSAPPLIED");
+ObjectClearFlag(_Summon, "LLMIME_MonsterSkill_StatusApplied");
 //END_REGION
 
 //REGION RENAMING
@@ -447,7 +466,7 @@ LLMIME_Beastmaster_QRY_NoIncarnateElement(_Summon)
 AND
 CharacterHasSkill(_Summon, "Shout_EnemyOverthrow", 0)
 THEN
-ObjectSetFlag(_Summon, "LLMIME_MONSTERSKILL_SKILLADDED");
+ObjectSetFlag(_Summon, "LLMIME_MonsterSkill_SkillAdded");
 CharacterAddSkill(_Summon, "Shout_EnemyOverthrow");
 DB_LLMIME_MonsterSkill_Temp_AddedSkill(_Summon, "Shout_EnemyOverthrow");
 

@@ -1,0 +1,202 @@
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+
+KBSECTION
+//REGION ITEM_TRACKING
+
+QRY
+LLMIME_Mimicking_QRY_ItemIsSafeForRace((CHARACTERGUID)_Caster, (CHARACTERGUID)_Mime, (ITEMGUID)_Item, (STRING)_Template)
+AND
+ObjectGetFlag(_Mime, "Mimicry_ItemMimickingSafetyDisabled", 1)
+THEN
+LeaderLog_Log("TRACE", "[Mimicry:Mimicking:Items:ItemIsSafeForRace] Flag [Mimicry_ItemMimickingSafetyDisabled] is set on mime. Skipping self-preservation.");
+DB_LLMIME_Mimicking_Items_Temp_ItemAllowed(_Caster, _Mime, _Item);
+
+//Mimic if both races aren't undead
+QRY
+LLMIME_Mimicking_QRY_ItemIsSafeForRace((CHARACTERGUID)_Caster, (CHARACTERGUID)_Mime, (ITEMGUID)_Item, (STRING)_Template)
+AND
+NOT DB_LLMIME_Mimicking_Items_Temp_ItemAllowed(_Caster, _Mime, _Item)
+AND
+NOT QRY_IsTrueUndead(_Mime)
+AND
+NOT QRY_IsTrueUndead(_Caster)
+THEN
+LeaderLog_Log("TRACE", "[Mimicry:Mimicking:Items:ItemIsSafeForRace] Both mime and caster are not undead. Item [",_Template,"] is allowed.");
+DB_LLMIME_Mimicking_Items_Temp_ItemAllowed(_Caster, _Mime, _Item);
+
+//Mimic if both races are undead
+QRY
+LLMIME_Mimicking_QRY_ItemIsSafeForRace((CHARACTERGUID)_Caster, (CHARACTERGUID)_Mime, (ITEMGUID)_Item, (STRING)_Template)
+AND
+NOT DB_LLMIME_Mimicking_Items_Temp_ItemAllowed(_Caster, _Mime, _Item)
+AND
+QRY_IsTrueUndead(_Mime)
+AND
+QRY_IsTrueUndead(_Caster)
+THEN
+LeaderLog_Log("TRACE", "[Mimicry:Mimicking:Items:ItemIsSafeForRace] Both mime and caster are undead. Item [",_Template,"] is allowed.");
+DB_LLMIME_Mimicking_Items_Temp_ItemAllowed(_Caster, _Mime, _Item);
+
+//Mimic if an undead drinks a regular potion
+QRY
+LLMIME_Mimicking_QRY_ItemIsSafeForRace((CHARACTERGUID)_Caster, (CHARACTERGUID)_Mime, (ITEMGUID)_Item, (STRING)_Template)
+AND
+NOT DB_LLMIME_Mimicking_Items_Temp_ItemAllowed(_Caster, _Mime, _Item)
+AND
+NOT QRY_IsTrueUndead(_Mime)
+AND
+QRY_IsTrueUndead(_Caster)
+AND
+NOT LeaderLib_Helper_QRY_ItemIsPoisoned(_Item)
+THEN
+LeaderLog_Log("TRACE", "[Mimicry:Mimicking:Items:ItemIsSafeForRace] Item [",_Template,"] is unsafe for undead, but the caster is undead and the mime is not.");
+DB_LLMIME_Mimicking_Items_Temp_ItemAllowed(_Caster, _Mime, _Item);
+
+//Mimic if the item is safe for undead
+QRY
+LLMIME_Mimicking_QRY_ItemIsSafeForRace((CHARACTERGUID)_Caster, (CHARACTERGUID)_Mime, (ITEMGUID)_Item, (STRING)_Template)
+AND
+NOT DB_LLMIME_Mimicking_Items_Temp_ItemAllowed(_Caster, _Mime, _Item)
+AND
+QRY_IsTrueUndead(_Mime)
+AND
+NOT QRY_IsTrueUndead(_Caster)
+AND
+LeaderLib_Helper_QRY_ItemIsPoisoned(_Item)
+THEN
+LeaderLog_Log("TRACE", "[Mimicry:Mimicking:Items:ItemIsSafeForRace] Item [",_Template,"] is safe for undead.");
+DB_LLMIME_Mimicking_Items_Temp_ItemAllowed(_Caster, _Mime, _Item);
+
+//This DB is used to skip other query calls
+QRY
+LLMIME_Mimicking_QRY_ItemIsSafeForRace((CHARACTERGUID)_Caster, (CHARACTERGUID)_Mime, (ITEMGUID)_Item, (STRING)_Template)
+AND
+DB_LLMIME_Mimicking_Items_Temp_ItemAllowed(_Caster, _Mime, _Item)
+THEN
+NOT DB_LLMIME_Mimicking_Items_Temp_ItemAllowed(_Caster, _Mime, _Item);
+
+PROC
+LLMIME_Mimicking_StartItemTimer((CHARACTERGUID)_Caster, (ITEMGUID)_Item)
+AND
+NOT DB_LLMIME_Mimicking_Items_DelayTimer(_, _Caster, _Item, _)
+AND
+GetTemplate(_Item, _Template)
+AND
+GetUUID(_Caster, _ID)
+AND
+StringConcatenate(_Template, _ID, _Str)
+AND
+StringConcatenate("LLMIME_Timers_MimicItemDelayTimer_", _Str, _TimerName)
+THEN
+DB_LLMIME_Mimicking_Items_DelayTimer(_TimerName, _Caster, _Item, _Template);
+TimerLaunch(_TimerName, 500);
+
+IF
+TimerFinished(_TimerName)
+AND
+DB_LLMIME_Mimicking_Items_DelayTimer(_TimerName, _Caster, _Item, _Template)
+THEN
+NOT DB_LLMIME_Mimicking_Items_DelayTimer(_TimerName, _Caster, _Item, _Template);
+LLMIME_Mimicking_StartNextMimic(_Caster, _Template, "Item");
+//END_REGION
+
+//REGION ITEM_MIMIC
+PROC
+LLMIME_Mimicking_MimicAction((CHARACTERGUID)_Caster, (STRING)_Template, "Item")
+AND
+DB_LLMIME_Mimicking_MimicQueue_Self(_Mime, _Caster, _Template, "Item")
+AND
+GetPosition(_Mime, _x, _y, _z)
+AND
+CreateItemTemplateAtPosition(_Template, _x, _y, _z, _Item)
+THEN
+ObjectSetFlag(_Mime, "Mimicry_IsMimicking");
+DB_LLMIME_Mimicking_Items_DestroyNext(_Mime, _Item, _Template, _Caster);
+//ItemToInventory(_Item, _Mime, 1, 0, 1);
+SetVisible(_Item, 0);
+CharacterUseItem(_Mime, _Item, "Mimicry_Events_MimeUsedMimickedItem");
+ProcObjectTimer(_Item, "Mimicry_Events_RemoveMimickedItem", 500);
+NOT DB_LLMIME_Mimicking_MimicQueue_Self(_Mime, _Caster, _Template, "Item");
+
+PROC
+ProcObjectTimerFinished((ITEMGUID)_Item, "Mimicry_Events_RemoveMimickedItem")
+AND
+ObjectExists(_Item, 1)
+AND
+DB_LLMIME_Mimicking_Items_DestroyNext(_Mime, _Item, _Template, _Caster)
+THEN
+ItemDestroy(_Item);
+LLMIME_Mimicking_OnMimicFailed(_Mime, _Caster, _Template, "Item");
+NOT DB_LLMIME_Mimicking_Items_DestroyNext(_Mime, _Item, _Template, _Caster);
+
+PROC
+LLMIME_Mimicking_MimicActionOnTarget((CHARACTERGUID)_Mime, (CHARACTERGUID)_Caster, (GUIDSTRING)_Target, (STRING)_Template, "Item")
+AND
+DB_LLMIME_Mimicking_Temp_ResetDummyAfterMimicAction(_Mime, _Target, _Template, "Item")
+THEN
+NOT DB_LLMIME_Mimicking_Temp_ResetDummyAfterMimicAction(_Mime, _Target, _Template, "Item");
+LLMIME_Dummy_ResetDummy((GUIDSTRING)_Target);
+//END_REGION
+
+//REGION CLEAR_QUEUE_ITEM_DESTROY
+//Destroy mimicked items in case the use events never triggered
+PROC
+LLMIME_Mimicking_ClearQueue((CHARACTERGUID)_Mime, (CHARACTERGUID)_Caster, (STRING)_Action, (STRING)_ActionType)
+AND
+DB_LLMIME_Mimicking_Items_DestroyNext(_Mime, _Item, _Action, _Caster)
+AND
+ItemIsDestroyed(_Item, 0)
+THEN
+ItemDestroy(_Item);
+SetOnStage(_Item, 0);
+
+PROC
+LLMIME_Mimicking_ClearQueue((CHARACTERGUID)_Mime, (CHARACTERGUID)_Caster, (STRING)_Action, (STRING)_ActionType)
+AND
+DB_LLMIME_Mimicking_Items_DestroyNext(_Mime, _Item, _Action, _Caster)
+THEN
+NOT DB_LLMIME_Mimicking_Items_DestroyNext(_Mime, _Item, _Action, _Caster);
+//END_REGION
+
+//REGION CLEAR_MIME
+IF
+StoryEvent((CHARACTERGUID)_Mime, "Mimicry_ClearMimeBonuses")
+THEN
+LLMIME_Mimicking_Items_ClearAllDataForMime(_Mime);
+
+PROC
+LLMIME_Mimicking_Items_ClearAllDataForMime((CHARACTERGUID)_Mime)
+AND
+DB_LLMIME_Mimicking_Items_DestroyNext(_Mime, _Item, _Action, _Caster)
+AND
+ItemIsDestroyed(_Item, 0)
+THEN
+ItemRemove(_Item);
+NOT DB_LLMIME_Mimicking_Items_DestroyNext(_Mime, _Item, _Action, _Caster);
+//END_REGION
+
+//REGION SCRIPT_DISABLED
+PROC
+LLMIME_Mimicking_OnScriptsCompleting()
+AND
+DB_LLMIME_Mimicking_Items_DestroyNext(_Mime, _Item, _Action, _Caster)
+AND
+ItemIsDestroyed(_Item, 0)
+THEN
+ItemRemove(_Item);
+NOT DB_LLMIME_Mimicking_Items_DestroyNext(_Mime, _Item, _Action, _Caster);
+
+PROC
+LLMIME_Mimicking_OnScriptsCompleting()
+THEN
+SysClear("DB_LLMIME_Mimicking_Items_Temp_ItemAllowed", 3);
+SysClear("DB_LLMIME_Mimicking_Items_DelayTimer", 4);
+SysClear("DB_LLMIME_Mimicking_Items_DestroyNext", 4);
+//END_REGION
+
+EXITSECTION
+
+ENDEXITSECTION
+ParentTargetEdge "LaughingLeader_Mimicry"

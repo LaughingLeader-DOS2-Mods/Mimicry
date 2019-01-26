@@ -4,6 +4,7 @@ INITSECTION
 DB_LeaderLib_OriginSkills("Mimicry_MimeOrigin", "Target_LLMIME_PerfectDoppleganger");
 KBSECTION
 
+
 IF
 GameModeStarted("Campaign", _IsEditorMode)
 THEN
@@ -13,11 +14,17 @@ DB_OriginProfessionTags((CHARACTERGUID)S_Player_LLMIME_Mime_191f180c-6270-4cd1-a
 DB_OriginProfessionTags((CHARACTERGUID)S_Player_LLMIME_MimeF_45299363-87bb-4e78-ad0d-787dacc2659b,"SOLDIER");
 DB_OriginProfessionTags((CHARACTERGUID)S_Player_LLMIME_MimeF_45299363-87bb-4e78-ad0d-787dacc2659b,"JESTER");
 
+//Impportant so this character can be turned into an NPC again
+DB_OriginNPCAlignment((CHARACTERGUID)S_Player_LLMIME_Mime_191f180c-6270-4cd1-a44a-e02454bd846f, "Good NPC");
+DB_OriginNPCAlignment((CHARACTERGUID)S_Player_LLMIME_MimeF_45299363-87bb-4e78-ad0d-787dacc2659b, "Good NPC");
+
 //Origins is done registering
+
 IF
 DB_Origins((CHARACTERGUID)S_Player_GenericOrigin_7b6c1f26-fe4e-40bd-a5d0-e6ff58cef4fe)
 THEN
 DB_Origins((CHARACTERGUID)S_Player_LLMIME_Mime_191f180c-6270-4cd1-a44a-e02454bd846f);
+
 
 PROC
 PROC_Shared_CharacterCreationFinished()
@@ -42,9 +49,11 @@ LLMIME_Origin_Setup((CHARACTERGUID)_Mime)
 AND
 ObjectExists(_Mime, 1)
 THEN
+LeaderLib_ToggleScripts_EnableScript("LLMIME_TS_OriginMimeActive", "Mimicry");
 SetTag(_Mime,"GENERIC");
 SetTag(_Mime,"REALLY_GENERIC");
 LLMIME_Origin_CreateMimeMask(_Mime);
+ProcObjectTimerCancel(_Mime, "LLMIME_Timers_Origin_EquipMask");
 ProcObjectTimer(_Mime, "LLMIME_Timers_Origin_EquipMask", 250);
 
 PROC
@@ -150,14 +159,6 @@ IF
 DB_LLMIME_Origin_MaskEquipped(_Mime, _Mask)
 THEN
 SetStoryEvent(_Mime, "Mimicry_Events_Mime_MaskEquipped");
-
-IF
-ItemUnEquipFailed(_Mask, _Mime)
-AND
-IsTagged(_Mask, "LLMIME_MimeMask", 1)
-THEN
-Proc_StartDialog(1, "LLMIME_AD_MaskWontComeOff", _Mime);
-PlayEffect(_Mime, "LLMIME_FX_Mask_Locked_01");
 
 EXITSECTION
 

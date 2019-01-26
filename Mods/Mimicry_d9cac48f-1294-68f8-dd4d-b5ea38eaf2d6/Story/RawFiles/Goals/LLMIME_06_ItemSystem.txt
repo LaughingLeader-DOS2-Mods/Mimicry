@@ -404,16 +404,6 @@ DB_GLO_Attribute_Check_AgainstLevel("LLMIME_MusicBox_Resurrection", 1, "Intellig
 */
 //END_REGION
 
-//REGION EQUIP_BLOCKING
-IF
-ItemEquipped(_Item, _Character)
-AND
-DB_LLMIME_Items_Temp_BlockedItem(_Character, _Item)
-THEN
-NOT DB_LLMIME_Items_Temp_BlockedItem(_Character, _Item);
-CharacterUnequipItem(_Character, _Item);
-//END_REGION
-
 //REGION DEBUG
 /*
 IF

@@ -1,1 +1,3 @@
 DB_TUT_LowerDeck_WindegoKnockedDownAttempt 1
+DB_TUT_LowerDeck_WindegoKnockedDown 1
+DB_Mimicry_BlockWeaponMimicking 1

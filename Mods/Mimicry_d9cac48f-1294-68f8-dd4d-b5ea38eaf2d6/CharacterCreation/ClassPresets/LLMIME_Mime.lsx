@@ -9,7 +9,7 @@
             <attribute id="ClassName" value="Mime" handle="h8f468b6bg27bcg4388gbf3fgd074a28e6777" type="28" />
             <attribute id="ClassType" value="LLMIME_Mime" type="22" />
             <attribute id="SkillSet" value="Class_LLMIME_Mime" type="22" />
-            <attribute id="Voice" value="20" type="5" />
+            <attribute id="Voice" value="0" type="5" />
 			<attribute id="Icon" value="7" type="5" />
 
             <attribute id="NumStartingCombatAbilityPoints" value="2" type="4" />
