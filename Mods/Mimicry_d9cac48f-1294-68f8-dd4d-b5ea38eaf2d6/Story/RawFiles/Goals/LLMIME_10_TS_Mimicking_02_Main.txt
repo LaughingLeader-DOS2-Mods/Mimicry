@@ -40,7 +40,7 @@ GetPosition(_Caster, _x,_,_z)
 AND
 GetRotation(_Caster, _, _CastRotation, _)
 THEN
-DB_LLMIME_Mimicking_ActionPosition(_Caster, _Skill, "Skill", _x,_CastRotation,_z);
+LLMIME_Mimicking_AddActionPosition(_Caster, _Skill, "Skill", _x,_CastRotation,_z);
 
 IF
 CharacterUsedSkillAtPosition(_Caster, _,_,_, _Skill, _SkillType, _SkillElement)
@@ -55,7 +55,7 @@ GetPosition(_Caster, _x,_,_z)
 AND
 GetRotation(_Caster, _, _CastRotation, _)
 THEN
-DB_LLMIME_Mimicking_ActionPosition(_Caster, _Skill, "Skill", _x,_CastRotation,_z);
+LLMIME_Mimicking_AddActionPosition(_Caster, _Skill, "Skill", _x,_CastRotation,_z);
 
 IF
 CharacterUsedSkillOnTarget(_Caster, _, _Skill, _SkillType, _SkillElement)
@@ -70,7 +70,7 @@ GetPosition(_Caster, _x,_,_z)
 AND
 GetRotation(_Caster, _, _CastRotation, _)
 THEN
-DB_LLMIME_Mimicking_ActionPosition(_Caster, _Skill, "Skill", _x,_CastRotation,_z);
+LLMIME_Mimicking_AddActionPosition(_Caster, _Skill, "Skill", _x,_CastRotation,_z);
 //END_REGION
 
 //REGION WEAPON_RESET

@@ -32,8 +32,13 @@ ObjectSetFlag(_Mime, "LLMIME_MimickingAutoDisabled");
 //END_REGION
 
 //REGION ACTION_POSITION
-IF
-DB_LLMIME_Mimicking_ActionPosition(_Caster, _Action, _ActionType, _CastX, _CastRotation, _CastZ)
+PROC
+LLMIME_Mimicking_AddActionPosition((CHARACTERGUID)_Caster, (STRING)_Action, (STRING)_ActionType, (REAL)_CastX, (REAL)_CastRotation, (REAL)_CastZ)
+THEN
+DB_LLMIME_Mimicking_ActionPosition(_Caster, _Action, _ActionType, _CastX, _CastRotation, _CastZ);
+
+PROC
+LLMIME_Mimicking_AddActionPosition((CHARACTERGUID)_Caster, (STRING)_Action, (STRING)_ActionType, (REAL)_CastX, (REAL)_CastRotation, (REAL)_CastZ)
 AND
 NOT DB_LLMIME_Mimicking_ResetActionPositionTimer(_, _Caster, _Action, _ActionType, _CastX, _CastRotation, _CastZ)
 AND

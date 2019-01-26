@@ -206,6 +206,7 @@ THEN
 DB_BlockThreatenedDialog(_Mime);
 DB_NoLowAttitudeDialog(_Mime);
 ObjectSetFlag(_Mime, "Mimicry_IsMimeFollower");
+LLMIME_OnMaskEquipped(_Mime);
 
 /*
 IF
