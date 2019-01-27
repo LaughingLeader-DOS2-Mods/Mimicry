@@ -1,10 +1,17 @@
 Version 1
 SubGoalCombiner SGC_AND
 INITSECTION
-
+LLMIME_Follower_Origins_InitMime();
 KBSECTION
 
-//REGION UPDATES
+//REGION INIT
+PROC
+LLMIME_Follower_Origins_InitMime()
+AND
+DB_LLMIME_Follower_Mime(_Mime)
+THEN
+LLMIME_OnMaskEquipped(_Mime);
+
 PROC
 LeaderUpdater_ModUpdated("Mimicry", "LaughingLeader", (STRING)_OldVersion, (STRING)_NewVersion)
 AND

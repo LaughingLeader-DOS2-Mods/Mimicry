@@ -249,18 +249,21 @@ NOT DB_LLMIME_Settings_MimeVendor(_)
 THEN
 LLMIME_Settings_Internal_InitMimeVendor();
 
+//Increase attitude with the whole party for easy vendoring
 PROC
 LLMIME_Settings_Internal_PrepareMimeVendor((CHARACTERGUID)_Mime)
 AND
 LLMIME_QRY_CharacterIsAMime(_Mime)
 AND
+DB_IsPlayer(_Player)
+AND
 DB_LLMIME_Settings_MimeVendor(_MimeVendor)
 AND
-CharacterGetAttitudeTowardsPlayer(_MimeVendor, _Mime, _Attitude)
+CharacterGetAttitudeTowardsPlayer(_MimeVendor, _Player, _Attitude)
 AND
 _Attitude != 100
 THEN
-CharacterAddAttitudeTowardsPlayer(_MimeVendor, _Mime, 200);
+CharacterAddAttitudeTowardsPlayer(_MimeVendor, _Player, 200);
 
 PROC
 LLMIME_Settings_Internal_PrepareMimeVendor((CHARACTERGUID)_Mime)
