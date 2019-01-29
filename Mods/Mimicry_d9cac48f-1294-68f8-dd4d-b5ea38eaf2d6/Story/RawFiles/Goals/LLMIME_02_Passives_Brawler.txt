@@ -446,15 +446,6 @@ Random(99999, _Seed)
 THEN
 SetStoryEvent(_Target, "Mimicry_Events_HitByUnarmedBonusDamage");
 LLMIME_Brawler_ApplyBonusDamageDebuffs(_Target, _Seed, _Mime);
-RemoveStatus(_Target, "LLMIME_UNARMED_BONUS_DAMAGE");
-
-IF
-CharacterStatusRemoved(_Target, "LLMIME_UNARMED_BONUS_DAMAGE", _)
-AND
-GetVarObject(_Target, "LLMIME_UnarmedBonusDamageSource", (CHARACTERGUID)_Mime)
-THEN
-ObjectClearFlag(_Mime, "Mimicry_ApplyingUnarmedDamage");
-ClearVarObject(_Target, "LLMIME_UnarmedBonusDamageSource");
 
 PROC
 LLMIME_Brawler_ApplyBonusDamageDebuffs((CHARACTERGUID)_Target, (INTEGER)_Seed, (CHARACTERGUID)_Mime)

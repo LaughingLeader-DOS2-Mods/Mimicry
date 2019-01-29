@@ -4,6 +4,18 @@ INITSECTION
 
 KBSECTION
 
+//Fix for CharacterHeal sending vitality over the max
+IF
+CharacterVitalityChanged(_Target, _Percentage)
+AND
+ObjectGetFlag(_Target, "Mimicry_Wish_CheckHealthResult", 1)
+AND
+LeaderLib_Helper_QRY_ClearObjectFlag(_Target, "Mimicry_Wish_CheckHealthResult")
+AND
+_Percentage > 100
+THEN
+CharacterSetHitpointsPercentage(_Target, 100.0);
+
 //REGION FINAL_WISH
 IF
 CharacterResurrected(_Target)

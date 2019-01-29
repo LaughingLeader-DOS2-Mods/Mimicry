@@ -169,18 +169,6 @@ DB_LLMIME_Skills_WishDelayTimer(_Caster, _Target, _TimerName)
 THEN
 NOT DB_LLMIME_Skills_WishDelayTimer(_Caster, _Target, _TimerName);
 CharacterCharacterSetEvent(_Caster, _Target, "Mimicry_Events_HealWishTarget");
-
-//Fix for CharacterHeal sending vitality over the max
-IF
-CharacterVitalityChanged(_Target, _Percentage)
-AND
-ObjectGetFlag(_Target, "Mimicry_Wish_CheckHealthResult", 1)
-AND
-LeaderLib_Helper_QRY_ClearObjectFlag(_Target, "Mimicry_Wish_CheckHealthResult")
-AND
-_Percentage > 100
-THEN
-CharacterSetHitpointsPercentage(_Target, 100.0);
 //END_REGION
 
 //REGION MUGGING
