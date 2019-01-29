@@ -27,6 +27,9 @@ LeaderLib_ToggleScripts_Register_Script("LLMIME_10_TS_Follower_01_Recruited", "L
 
 LeaderLib_ToggleScripts_Register_Script("LLMIME_10_TS_OriginMimeActive", "LLMIME_TS_OriginMimeActive");
 
+//Misc
+LeaderLib_ToggleScripts_Register_Script("LLMIME_10_TS_Skills_02_CounterThrow", "LLMIME_TS_CounterThrowActive");
+
 //REGION SCRIPT_TOGGLING
 PROC
 LLMIME_Mimicking_OnMimickingEnabled((CHARACTERGUID)_Mime)
