@@ -1,0 +1,52 @@
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+
+KBSECTION
+
+//RemoveHarmfulStatuses removes everything, so re-apply if we're still a Mime
+PROC
+LLMIME_PassiveStatuses_OnPassiveRemoved((CHARACTERGUID)_Mime, (STRING)_Status, (STRING)_BonusStatus, (STRING)_InfoStatus, (STRING)_DisableFlag)
+THEN
+ApplyStatus(_Mime, _Status, -1.0, 1, _Mime);
+
+//Run check for unarmed bonuses again
+PROC
+LLMIME_PassiveStatuses_OnPassiveRemoved((CHARACTERGUID)_Mime, "LLMIME_BRAWLER", (STRING)_BonusStatus, (STRING)_InfoStatus, (STRING)_DisableFlag)
+AND
+IsTagged(_Mime, "LLMIME_MimeFollower", 0)
+THEN
+LLMIME_System_FlagForUnarmed(_Mime);
+
+PROC
+LLMIME_PassiveStatuses_OnPassiveRemoved((CHARACTERGUID)_Mime, (STRING)_Status, (STRING)_BonusStatus, (STRING)_InfoStatus, (STRING)_DisableFlag)
+AND
+NOT LeaderLib_Helper_QRY_HasStatus(_Mime, _BonusStatus)
+THEN
+ApplyStatus(_Mime, _BonusStatus, -1.0, 1, _Mime);
+
+PROC
+LLMIME_PassiveStatuses_OnPassiveRemoved((CHARACTERGUID)_Mime, (STRING)_Status, (STRING)_BonusStatus, (STRING)_InfoStatus, (STRING)_DisableFlag)
+AND
+NOT ObjectGetFlag(_Mime, _DisableFlag, 1)
+AND
+NOT LeaderLib_Helper_QRY_HasStatus(_Mime, _InfoStatus)
+THEN
+ApplyStatus(_Mime, _InfoStatus, -1.0, 1, _Mime);
+
+PROC
+LLMIME_PassiveStatuses_ApplyInfoStatuses((CHARACTERGUID)_Mime)
+AND
+DB_LLMIME_PassiveData(_Status, _BonusStatus, _InfoStatus, _DisableFlag)
+AND
+HasActiveStatus(_Mime, _BonusStatus, 1)
+AND
+NOT ObjectGetFlag(_Mime, _DisableFlag, 1)
+AND
+NOT LeaderLib_Helper_QRY_HasStatus(_Mime, _InfoStatus)
+THEN
+ApplyStatus(_Mime, _InfoStatus, -1.0, 1, _Mime);
+EXITSECTION
+
+ENDEXITSECTION
+ParentTargetEdge "LaughingLeader_Mimicry"

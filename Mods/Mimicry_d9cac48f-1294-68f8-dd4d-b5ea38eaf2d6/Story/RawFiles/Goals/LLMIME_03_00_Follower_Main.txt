@@ -206,7 +206,12 @@ THEN
 DB_BlockThreatenedDialog(_Mime);
 DB_NoLowAttitudeDialog(_Mime);
 ObjectSetFlag(_Mime, "Mimicry_IsMimeFollower");
-LLMIME_OnMaskEquipped(_Mime);
+SetTag(_Mime, "Mimicry_WearingMask");
+
+IF
+StoryEvent(CHARACTERGUID_S_LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9, "Mimicry_MimeInitialized")
+THEN
+LLMIME_PassiveStatuses_ApplyInfoStatuses(CHARACTERGUID_S_LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9);
 
 /*
 IF

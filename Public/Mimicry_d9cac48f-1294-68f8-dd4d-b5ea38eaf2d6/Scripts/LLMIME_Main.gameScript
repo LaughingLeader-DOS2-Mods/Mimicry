@@ -82,7 +82,6 @@ THEN
 	CharacterEvent(_Mime, "LeaderLog_Commands_Log")
 	SetTag(_Mime, "Mimicry_Mime")
 ENDIF
-	CharacterEvent(_Mime, "Mimicry_ApplySourceRegen")
 	Set(_Index, 1)
 IF "c1"
 	ListGetSize(%LLMIME_PassiveStatuses, _Size)
@@ -308,9 +307,10 @@ VARS
 	CHARACTER:_Mime
 	FLOAT:_Level
 ON
-	OnCharacterStatusRemoved(_Mime, LLMIME_SOURCE_REGENERATION_HIDDEN)
+	//OnCharacterStatusRemoved(_Mime, LLMIME_SOURCE_REGENERATION_HIDDEN)
 	OnCharacterEvent(_Mime, "Mimicry_MimeLeveledUp")
 	OnCharacterEvent(_Mime, "Mimicry_ApplySourceRegen")
+	OnCharacterEvent(_Mime, "Mimicry_MimeInitialized")
 ACTIONS
 IF "c1&!c2&c3&(c4|c5)"
 	IsTagged(_Mime, "Mimicry_Mime")

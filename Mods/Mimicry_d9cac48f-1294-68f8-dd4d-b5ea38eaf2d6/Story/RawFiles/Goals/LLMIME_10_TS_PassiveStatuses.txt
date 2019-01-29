@@ -12,36 +12,6 @@ LLMIME_QRY_CharacterIsAMime(_Mime)
 THEN
 LLMIME_PassiveStatuses_OnPassiveRemoved(_Mime, _Status, _BonusStatus, _InfoStatus, _DisableFlag);
 
-//RemoveHarmfulStatuses removes everything, so re-apply if we're still a Mime
-PROC
-LLMIME_PassiveStatuses_OnPassiveRemoved((CHARACTERGUID)_Mime, (STRING)_Status, (STRING)_BonusStatus, (STRING)_InfoStatus, (STRING)_DisableFlag)
-THEN
-ApplyStatus(_Mime, _Status, -1.0, 1, _Mime);
-
-//Run check for unarmed bonuses again
-PROC
-LLMIME_PassiveStatuses_OnPassiveRemoved((CHARACTERGUID)_Mime, "LLMIME_BRAWLER", (STRING)_BonusStatus, (STRING)_InfoStatus, (STRING)_DisableFlag)
-AND
-IsTagged(_Mime, "LLMIME_MimeFollower", 0)
-THEN
-LLMIME_System_FlagForUnarmed(_Mime);
-
-PROC
-LLMIME_PassiveStatuses_OnPassiveRemoved((CHARACTERGUID)_Mime, (STRING)_Status, (STRING)_BonusStatus, (STRING)_InfoStatus, (STRING)_DisableFlag)
-AND
-NOT LeaderLib_Helper_QRY_HasStatus(_Mime, _BonusStatus)
-THEN
-ApplyStatus(_Mime, _BonusStatus, -1.0, 1, _Mime);
-
-PROC
-LLMIME_PassiveStatuses_OnPassiveRemoved((CHARACTERGUID)_Mime, (STRING)_Status, (STRING)_BonusStatus, (STRING)_InfoStatus, (STRING)_DisableFlag)
-AND
-NOT ObjectGetFlag(_Mime, _DisableFlag, 1)
-AND
-NOT LeaderLib_Helper_QRY_HasStatus(_Mime, _InfoStatus)
-THEN
-ApplyStatus(_Mime, _InfoStatus, -1.0, 1, _Mime);
-
 /*
 PROC
 LLMIME_PassiveStatuses_OnPassiveRemoved((CHARACTERGUID)_Mime, (STRING)_Status, (STRING)_BonusStatus, (STRING)_InfoStatus, (STRING)_DisableFlag)
