@@ -775,6 +775,24 @@ AND
 DB_LLMIME_Templates("Mask_A_NoVisual", _Template)
 THEN
 DB_NOOP(1);
+
+QRY
+LLMIME_QRY_HasMusicBox((CHARACTERGUID)_Char)
+AND
+CharacterFindTaggedItem(_Char, "LLMIME_MimeSummonTool", _MusicBox)
+THEN
+DB_NOOP(1);
+
+QRY
+LLMIME_QRY_HasMimeMask((CHARACTERGUID)_Char)
+AND
+DB_LLMIME_Templates("Mask_A", _Template)
+AND
+ItemTemplateIsInUserInventory(_Char, _Template, 0, _Count)
+AND
+_Count > 0
+THEN
+DB_NOOP(1);
 //END_REGION
 
 EXITSECTION

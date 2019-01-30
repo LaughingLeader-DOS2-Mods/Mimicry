@@ -57,8 +57,6 @@ new subtable "-1"
 object category "I_SKILLBOOK_LLMIME_Fatality",1,0,0,0,0,0,0,0
 
 new treasuretable "LLMIME_Mime_Equipment"
-MinLevel "-19"
-MaxLevel "19"
 IgnoreLevelDiff 1
 new subtable "-1"
 object category "I_ARM_LLMIME_Mime_Light_UpperBody",1,1,0,0,0,0,0,0
