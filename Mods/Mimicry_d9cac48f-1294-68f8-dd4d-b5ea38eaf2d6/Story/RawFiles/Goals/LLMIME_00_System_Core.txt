@@ -670,6 +670,34 @@ DB_NOOP(1);
 */
 
 QRY
+LLMIME_QRY_IsUndead((CHARACTERGUID)_Character)
+AND
+CharacterHasTalent(_Character, "Zombie", 1)
+THEN
+//DB_LLMIME_Temp_UndeadCheckResolved(_Character);
+DB_NOOP(1);
+
+/*
+QRY
+LLMIME_QRY_IsUndead((CHARACTERGUID)_Character)
+AND
+NOT DB_LLMIME_Temp_UndeadCheckResolved(_Character)
+AND
+CharacterIsPlayer(_Character, 0)
+AND
+IsTagged(_Character, "UNDEAD", 1)
+THEN
+DB_LLMIME_Temp_UndeadCheckResolved(_Character);
+
+QRY
+LLMIME_QRY_IsUndead((CHARACTERGUID)_Character)
+AND
+DB_LLMIME_Temp_UndeadCheckResolved(_Character)
+THEN
+NOT DB_LLMIME_Temp_UndeadCheckResolved(_Character);
+*/
+
+QRY
 LLMIME_QRY_NotADummy((CHARACTERGUID)_Character)
 AND
 NOT IsTagged(_Character, "LLMIME_Dummy", 1)

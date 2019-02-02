@@ -25,6 +25,7 @@ VARS
 	CHARACTER:_Mime
 	CHARACTER:_TargetCharacter
 	ITEM:_TargetItem
+	STATUS:_BonusStatus
 ON
 	OnCharacterCharacterEvent(_Mime, _TargetCharacter, "Mimicry_ApplyUnarmedBonusDamage")
 	OnCharacterItemEvent(_Mime, _TargetItem, "Mimicry_ApplyUnarmedBonusDamage")
@@ -34,6 +35,12 @@ IF "!c1&!c2"
 	CharacterIsDead(_TargetCharacter)
 THEN
 	CharacterApplyStatus(_TargetCharacter, LLMIME_UNARMED_BONUS_DAMAGE, 0, 0, _Mime)
+	GetWeightedRandom(_BonusStatus, LLMIME_PHYSICAL_SILENCED, INT:2, LLMIME_SLOWED_ARMOR_BYPASS, INT:5, LLMIME_WEAK_ARMOR_BYPASS, INT:1, NULL, INT:8)
+	IF "!c1"
+		IsEqual(_BonusStatus, NULL)
+	THEN
+		CharacterApplyStatus(_TargetCharacter, _BonusStatus, 1, 0, _Mime)
+	ENDIF
 ENDIF
 IF "!c1"
 	IsEqual(_TargetItem, null)
@@ -56,7 +63,6 @@ THEN
 	ShootLocalProjectileAt(Projectile_LLMIME_Status_CounterAttack, _Mime, {0.0;2.0;0.0}, _Target, -1, _Mime)
 	//ShootLocalProjectile(Projectile_LLMIME_Status_CounterAttack, _Mime, {0.0;0.0;0.0}, _Pos, -1, _Mime)
 ENDIF
-//REGION DOUBLE_STRIKE
 
 EVENT LLMIME_Brawler_OnCriticalHit
 VARS
@@ -129,9 +135,9 @@ IF "!c1"
 THEN
 	ItemApplyStatus(_TargetItem, LLMIME_DOUBLE_STRIKE, 1, 0, _Mime)
 ENDIF
-//END_REGION
 
-//REGION VANILLA_STATUS_BYPASS
+
+
 EVENT LLMIME_Statuses_BlindBypass
 VARS
 	CHARACTER:_Target
@@ -140,10 +146,16 @@ VARS
 ON
 	OnCharacterStatusApplied(_Target, LLMIME_BLIND_ARMOR_BYPASS)
 ACTIONS
-IF "!c1&!c2&c3&c4"
+IF "(c1&c2)|!c1"
+	CharacterGetStatusSourceCharacter(_Target, LLMIME_BLIND_ARMOR_BYPASS, _Source)
+	IsEqual(_Source, null)
+THEN
+	Set(_Source, _Target)
+ENDIF
+
+IF "!c1&!c2&c3"
 	CharacterIsDead(_Target)
 	CharacterHasStatus(_Target, BLIND)
-	CharacterGetStatusSourceCharacter(_Target, LLMIME_BLIND_ARMOR_BYPASS, _Source)
 	GetStatusTurns(_Target, LLMIME_BLIND_ARMOR_BYPASS, _Turns)
 THEN
 	Clamp(_Turns, 0, _Turns) // Permanent Blinded prevention
@@ -159,10 +171,16 @@ VARS
 ON
 	OnCharacterStatusApplied(_Target, LLMIME_SLOWED_ARMOR_BYPASS)
 ACTIONS
-IF "!c1&!c2&c3&c4"
+IF "(c1&c2)|!c1"
+	CharacterGetStatusSourceCharacter(_Target, LLMIME_BLIND_ARMOR_BYPASS, _Source)
+	IsEqual(_Source, null)
+THEN
+	Set(_Source, _Target)
+ENDIF
+
+IF "!c1&!c2&c3"
 	CharacterIsDead(_Target)
 	CharacterHasStatus(_Target, SLOWED)
-	CharacterGetStatusSourceCharacter(_Target, LLMIME_SLOWED_ARMOR_BYPASS, _Source)
 	GetStatusTurns(_Target, LLMIME_SLOWED_ARMOR_BYPASS, _Turns)
 THEN
 	Clamp(_Turns, 0, _Turns) // Permanent Slowed prevention
@@ -178,10 +196,16 @@ VARS
 ON
 	OnCharacterStatusApplied(_Target, LLMIME_WEAK_ARMOR_BYPASS)
 ACTIONS
-IF "!c1&!c2&c3&c4"
+IF "(c1&c2)|!c1"
+	CharacterGetStatusSourceCharacter(_Target, LLMIME_BLIND_ARMOR_BYPASS, _Source)
+	IsEqual(_Source, null)
+THEN
+	Set(_Source, _Target)
+ENDIF
+
+IF "!c1&!c2&c3"
 	CharacterIsDead(_Target)
 	CharacterHasStatus(_Target, WEAK)
-	CharacterGetStatusSourceCharacter(_Target, LLMIME_WEAK_ARMOR_BYPASS, _Source)
 	GetStatusTurns(_Target, LLMIME_WEAK_ARMOR_BYPASS, _Turns)
 THEN
 	Clamp(_Turns, 0, _Turns) // Permanent Weak prevention
@@ -197,14 +221,20 @@ VARS
 ON
 	OnCharacterStatusApplied(_Target, LLMIME_PHYSICAL_SILENCED)
 ACTIONS
-IF "!c1&!c2&c3&c4"
+IF "(c1&c2)|!c1"
+	CharacterGetStatusSourceCharacter(_Target, LLMIME_BLIND_ARMOR_BYPASS, _Source)
+	IsEqual(_Source, null)
+THEN
+	Set(_Source, _Target)
+ENDIF
+
+IF "!c1&!c2&c3"
 	CharacterIsDead(_Target)
 	CharacterHasStatus(_Target, MUTED)
-	CharacterGetStatusSourceCharacter(_Target, LLMIME_PHYSICAL_SILENCED, _Source)
 	GetStatusTurns(_Target, LLMIME_PHYSICAL_SILENCED, _Turns)
 THEN
 	Clamp(_Turns, 0, _Turns) // Permanent Weak prevention
 	CharacterApplyStatus(_Target, MUTED, _Turns, 1, _Source)
 ENDIF
 	CharacterRemoveStatus(_Target, LLMIME_PHYSICAL_SILENCED)
-//END_REGION
+

@@ -19,9 +19,9 @@ LLMIME_Mimicking_QRY_ItemIsSafeForRace((CHARACTERGUID)_Caster, (CHARACTERGUID)_M
 AND
 NOT DB_LLMIME_Mimicking_Items_Temp_ItemAllowed(_Caster, _Mime, _Item)
 AND
-NOT QRY_IsTrueUndead(_Mime)
+NOT LLMIME_QRY_IsUndead(_Mime)
 AND
-NOT QRY_IsTrueUndead(_Caster)
+NOT LLMIME_QRY_IsUndead(_Caster)
 THEN
 LeaderLog_Log("TRACE", "[Mimicry:Mimicking:Items:ItemIsSafeForRace] Both mime and caster are not undead. Item [",_Template,"] is allowed.");
 DB_LLMIME_Mimicking_Items_Temp_ItemAllowed(_Caster, _Mime, _Item);
@@ -32,9 +32,9 @@ LLMIME_Mimicking_QRY_ItemIsSafeForRace((CHARACTERGUID)_Caster, (CHARACTERGUID)_M
 AND
 NOT DB_LLMIME_Mimicking_Items_Temp_ItemAllowed(_Caster, _Mime, _Item)
 AND
-QRY_IsTrueUndead(_Mime)
+LLMIME_QRY_IsUndead(_Mime)
 AND
-QRY_IsTrueUndead(_Caster)
+LLMIME_QRY_IsUndead(_Caster)
 THEN
 LeaderLog_Log("TRACE", "[Mimicry:Mimicking:Items:ItemIsSafeForRace] Both mime and caster are undead. Item [",_Template,"] is allowed.");
 DB_LLMIME_Mimicking_Items_Temp_ItemAllowed(_Caster, _Mime, _Item);
@@ -45,9 +45,9 @@ LLMIME_Mimicking_QRY_ItemIsSafeForRace((CHARACTERGUID)_Caster, (CHARACTERGUID)_M
 AND
 NOT DB_LLMIME_Mimicking_Items_Temp_ItemAllowed(_Caster, _Mime, _Item)
 AND
-NOT QRY_IsTrueUndead(_Mime)
+NOT LLMIME_QRY_IsUndead(_Mime)
 AND
-QRY_IsTrueUndead(_Caster)
+LLMIME_QRY_IsUndead(_Caster)
 AND
 NOT LeaderLib_Helper_QRY_ItemIsPoisoned(_Item)
 THEN
@@ -60,9 +60,9 @@ LLMIME_Mimicking_QRY_ItemIsSafeForRace((CHARACTERGUID)_Caster, (CHARACTERGUID)_M
 AND
 NOT DB_LLMIME_Mimicking_Items_Temp_ItemAllowed(_Caster, _Mime, _Item)
 AND
-QRY_IsTrueUndead(_Mime)
+LLMIME_QRY_IsUndead(_Mime)
 AND
-NOT QRY_IsTrueUndead(_Caster)
+NOT LLMIME_QRY_IsUndead(_Caster)
 AND
 LeaderLib_Helper_QRY_ItemIsPoisoned(_Item)
 THEN

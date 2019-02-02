@@ -15,9 +15,9 @@ DB_NOOP(1);
 QRY
 LLMIME_Mimicking_QRY_SkillIsSafeForRace((CHARACTERGUID)_Caster, (CHARACTERGUID)_Mime, (STRING)_Skill)
 AND
-NOT QRY_IsTrueUndead(_Mime)
+NOT LLMIME_QRY_IsUndead(_Mime)
 AND
-NOT QRY_IsTrueUndead(_Caster)
+NOT LLMIME_QRY_IsUndead(_Caster)
 THEN
 DB_NOOP(1);
 
@@ -25,9 +25,9 @@ DB_NOOP(1);
 QRY
 LLMIME_Mimicking_QRY_SkillIsSafeForRace((CHARACTERGUID)_Caster, (CHARACTERGUID)_Mime, (STRING)_Skill)
 AND
-QRY_IsTrueUndead(_Mime)
+LLMIME_QRY_IsUndead(_Mime)
 AND
-QRY_IsTrueUndead(_Caster)
+LLMIME_QRY_IsUndead(_Caster)
 THEN
 DB_NOOP(1);
 
@@ -35,9 +35,9 @@ DB_NOOP(1);
 QRY
 LLMIME_Mimicking_QRY_SkillIsSafeForRace((CHARACTERGUID)_Caster, (CHARACTERGUID)_Mime, (STRING)_Skill)
 AND
-NOT QRY_IsTrueUndead(_Mime)
+NOT LLMIME_QRY_IsUndead(_Mime)
 AND
-QRY_IsTrueUndead(_Caster)
+LLMIME_QRY_IsUndead(_Caster)
 AND
 DB_LLMIME_Mimicking_HarmfulHealingSkills(_Skill)
 THEN
@@ -47,9 +47,9 @@ DB_NOOP(1);
 QRY
 LLMIME_Mimicking_QRY_SkillIsSafeForRace((CHARACTERGUID)_Caster, (CHARACTERGUID)_Mime, (STRING)_Skill)
 AND
-QRY_IsTrueUndead(_Mime)
+LLMIME_QRY_IsUndead(_Mime)
 AND
-NOT QRY_IsTrueUndead(_Caster)
+NOT LLMIME_QRY_IsUndead(_Caster)
 AND
 NOT DB_LLMIME_Mimicking_HarmfulHealingSkills(_Skill)
 THEN
