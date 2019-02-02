@@ -488,7 +488,7 @@ AND
 IsTagged(_Mime, "LLMIME_MimeFollower", 0)
 THEN
 LLMIME_System_FlagForUnarmed(_Mime);
-//LeaderLib_StartObjectTimer(_Mime, 200, "LLMIME_Timers_CheckUnarmed_", "Mimicry_CheckUnarmed");
+//LeaderLib_Timers_StartObjectTimer(_Mime, 200, "LLMIME_Timers_CheckUnarmed_", "Mimicry_CheckUnarmed");
 
 IF
 StoryEvent((CHARACTERGUID)_Mime, "Mimicry_CheckUnarmed")

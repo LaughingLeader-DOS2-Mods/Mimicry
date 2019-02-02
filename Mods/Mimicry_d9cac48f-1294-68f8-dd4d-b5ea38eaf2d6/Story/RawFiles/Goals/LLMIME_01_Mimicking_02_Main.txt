@@ -937,14 +937,14 @@ LeaderLog_Log("DEBUG", "[LLMIME:Mimicking:EquipWeaponsForAction] Duplicating cas
 CharacterSetDetached(_Dummy, 1);
 CharacterTransformFromCharacter(_Dummy, _Caster, 0, 0, 0, 1, 0, 0, 1);
 DB_LLMIME_Mimicking_Temp_WaitForEquipped(_Mime, _Dummy, _Caster, _Target, _Action, _ActionType);
-LeaderLib_StartCharacterCharacterTimer(_Mime, _Dummy, 200, "LLMIME_Timers_IterateDummyEquipment", "LLMIME_WeaponMimicking_IterateDummyInventory");
+LeaderLib_Timers_StartCharacterCharacterTimer(_Mime, _Dummy, 200, "LLMIME_Timers_IterateDummyEquipment", "LLMIME_WeaponMimicking_IterateDummyInventory");
 
 IF
 CharacterCharacterEvent(_Mime, _Dummy, "LLMIME_WeaponMimicking_IterateDummyInventory")
 THEN
 MoveAllItemsTo(_Dummy, _Dummy, 1, 1, 0);
 InventoryLaunchIterator(_Dummy, "Mimicry_Iterator_MarkWeapons", "");
-LeaderLib_StartCharacterCharacterTimer(_Mime, _Dummy, 200, "LLMIME_Timers_TakeDummyMimickedWeapons_", "LLMIME_Mimicking_TakeDummyMimickedWeapons");
+LeaderLib_Timers_StartCharacterCharacterTimer(_Mime, _Dummy, 200, "LLMIME_Timers_TakeDummyMimickedWeapons_", "LLMIME_Mimicking_TakeDummyMimickedWeapons");
 
 IF
 StoryEvent((ITEMGUID)_Item, "Mimicry_Iterator_MarkWeapons")

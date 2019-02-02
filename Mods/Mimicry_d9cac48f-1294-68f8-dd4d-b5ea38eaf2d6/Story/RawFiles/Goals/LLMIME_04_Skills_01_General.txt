@@ -364,7 +364,7 @@ PlayEffect(_Summon, "LLMIME_FX_Status_ForcedEvolution_Disappear_01");
 IF
 SkillCast(_Summon, "Shout_LLMIME_ForcedEvolution", _SkillType, _SkillElement)
 THEN
-LeaderLib_StartObjectTimer(_Summon, 1200, "LLMIME_Timers_ForcedEvolution_PostTransform", "Mimicry_ForcedEvolution_TransformDone");
+LeaderLib_Timers_StartObjectTimer(_Summon, 1200, "LLMIME_Timers_ForcedEvolution_PostTransform", "Mimicry_ForcedEvolution_TransformDone");
 
 IF
 StoryEvent((CHARACTERGUID)_Summon, "Mimicry_ForcedEvolution_TransformDone")
@@ -422,7 +422,7 @@ SetTag(_Summon, "INCARNATE_G");
 LLMIME_Skills_EvolveIncarnateBuffs(_Owner, _Summon);
 PlayScaledEffectAtPosition("RS3_FX_Elven_Pillar_Explosion", 0.5, _x, _y, _z);
 SetStoryEvent(_Summon, "Mimicry_SummonEvolved");
-LeaderLib_StartCharacterCharacterTimer(_Summon, _Mime, 150, "LLMIME_Timers_ReapplyBeastmaster_", "LLMIME_ForcedEvolution_ReapplyBeastmaster");
+LeaderLib_Timers_StartCharacterCharacterTimer(_Summon, _Mime, 150, "LLMIME_Timers_ReapplyBeastmaster_", "LLMIME_ForcedEvolution_ReapplyBeastmaster");
 
 IF
 CharacterCharacterEvent(_Summon, _Mime, "LLMIME_ForcedEvolution_ReapplyBeastmaster")

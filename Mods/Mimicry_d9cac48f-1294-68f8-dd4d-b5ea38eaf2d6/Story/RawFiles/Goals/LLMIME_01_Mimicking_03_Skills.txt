@@ -385,7 +385,7 @@ AND
 ObjectIsCharacter(_Target, 1)
 THEN
 DB_LLMIME_Mimicking_Skills_Temp_RushLineOfSightCheck(_Mime, _Caster, (GUIDSTRING)_Target, _Skill);
-LeaderLib_StartCharacterCharacterTimer(_Mime, (CHARACTERGUID)_Target, 25, "LLMIME_Timers_Skills_CheckRushLineOfSight_", "LLMIME_Internal_CheckRushLineOfSight");
+LeaderLib_Timers_StartCharacterCharacterTimer(_Mime, (CHARACTERGUID)_Target, 25, "LLMIME_Timers_Skills_CheckRushLineOfSight_", "LLMIME_Internal_CheckRushLineOfSight");
 CharacterMoveTo((CHARACTERGUID)_Target, _Mime, 0, "LLMIME_Mimicking_SkillDummyArrived", 0);
 
 IF
@@ -418,7 +418,7 @@ AND
 GetPosition(_Mime, _x, _y, _z)
 THEN
 DB_LLMIME_Mimicking_Skills_Temp_RushLineOfSightCheck(_Mime, _Caster, (GUIDSTRING)_Target, _Skill);
-LeaderLib_StartCharacterItemTimer(_Mime, (ITEMGUID)_Target, 25, "LLMIME_Timers_Skills_CheckRushLineOfSight_", "LLMIME_Internal_CheckRushLineOfSight");
+LeaderLib_Timers_StartCharacterItemTimer(_Mime, (ITEMGUID)_Target, 25, "LLMIME_Timers_Skills_CheckRushLineOfSight_", "LLMIME_Internal_CheckRushLineOfSight");
 ItemMoveToPosition((ITEMGUID)_Target, _x, _y, _z, 6.0, 0.0, "LLMIME_Mimicking_SkillDummyArrived", 0);
 
 IF
@@ -444,7 +444,7 @@ HasLineOfSight(_Mime, _Target, 0)
 AND
 DB_LLMIME_Mimicking_Skills_Temp_RushLineOfSightCheck(_Mime, _Caster, _Target, _Skill)
 THEN
-LeaderLib_StartCharacterItemTimer(_Mime, _Target, 25, "LLMIME_Timers_Skills_CheckRushLineOfSight_", "LLMIME_Internal_CheckRushLineOfSight");
+LeaderLib_Timers_StartCharacterItemTimer(_Mime, _Target, 25, "LLMIME_Timers_Skills_CheckRushLineOfSight_", "LLMIME_Internal_CheckRushLineOfSight");
 
 IF
 StoryEvent(_Target, "LLMIME_Mimicking_SkillDummyArrived")

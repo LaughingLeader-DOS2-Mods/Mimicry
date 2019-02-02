@@ -24,7 +24,7 @@ THEN
 //CharacterLevelUp(_Mime);
 LeaderLog_Log("DEBUG", "[LLMIME:Follower_Recruited_Toggled:CharacterLeveledUp] Owner leveled up. Leveling up mime follower.");
 CharacterRemoveFromPlayerCharacter(_Mime, _Owner);
-LeaderLib_StartCharacterCharacterTimer(_Owner, _Mime, 100, "Mimicry_Timers_Follower_LevelUpDelay_", "Mimicry_Follower_LevelUpAndAttachFollower");
+LeaderLib_Timers_StartCharacterCharacterTimer(_Owner, _Mime, 100, "Mimicry_Timers_Follower_LevelUpDelay_", "Mimicry_Follower_LevelUpAndAttachFollower");
 
 //REGION GHOST_SPAWNING_START
 IF

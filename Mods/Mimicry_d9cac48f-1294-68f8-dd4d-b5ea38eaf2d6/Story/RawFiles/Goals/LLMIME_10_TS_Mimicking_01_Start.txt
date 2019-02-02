@@ -18,7 +18,7 @@ IsTagged(_Mime, "Mimicry_Mime", 1)
 AND
 CharacterIsInCombat(_Mime, 1)
 THEN
-LeaderLib_StartObjectTimer(_Mime, 500, "LLMIME_Timers_AfterTurn_ApplyMimicking_", "LLMIME_Events_RequestMimicking");
+LeaderLib_Timers_StartObjectTimer(_Mime, 500, "LLMIME_Timers_AfterTurn_ApplyMimicking_", "LLMIME_Events_RequestMimicking");
 
 IF
 ObjectTurnStarted((CHARACTERGUID)_Mime)

@@ -179,9 +179,9 @@ LLMIME_Skills_OnSkillUsed(_Character, "FinalWish");
 PROC
 LLMIME_Skills_OnSkillUsed((CHARACTERGUID)_Character, "FinalWish")
 THEN
-LeaderLib_StartObjectTimer(_Character, 3000, "Mimicry_Timers_FinalWish_DieEvent", "Mimicry_Events_FinalWish_Die");
-LeaderLib_StartObjectTimer(_Character, 1000, "Mimicry_Timers_FinalWish_UsedEvent_", "Mimicry_Events_FinalWish_SkillUsed");
-LeaderLib_StartObjectTimer(_Character, 2600, "Mimicry_Timers_FinalWish_DeathEffect", "Mimicry_Events_FinalWish_PlayDeathEffect");
+LeaderLib_Timers_StartObjectTimer(_Character, 3000, "Mimicry_Timers_FinalWish_DieEvent", "Mimicry_Events_FinalWish_Die");
+LeaderLib_Timers_StartObjectTimer(_Character, 1000, "Mimicry_Timers_FinalWish_UsedEvent_", "Mimicry_Events_FinalWish_SkillUsed");
+LeaderLib_Timers_StartObjectTimer(_Character, 2600, "Mimicry_Timers_FinalWish_DeathEffect", "Mimicry_Events_FinalWish_PlayDeathEffect");
 
 IF
 SkillCast(_Character, "Projectile_LLMIME_FinalWish", _, _)
@@ -196,8 +196,8 @@ LLMIME_Skills_OnSkillCast(_Character, "FinalWish");
 PROC
 LLMIME_Skills_OnSkillCast((CHARACTERGUID)_Character, "FinalWish")
 THEN
-LeaderLib_CancelObjectTimerByEvent(_Character, "Mimicry_Events_FinalWish_Die");
-LeaderLib_StartObjectTimer(_Character, 1000, "Mimicry_Timers_FinalWish_", "Mimicry_Events_FinalWish_Die");
+LeaderLib_Timers_CancelObjectTimerByEvent(_Character, "Mimicry_Events_FinalWish_Die");
+LeaderLib_Timers_StartObjectTimer(_Character, 1000, "Mimicry_Timers_FinalWish_", "Mimicry_Events_FinalWish_Die");
 
 IF
 StoryEvent((CHARACTERGUID)_Character, "Mimicry_Events_FinalWish_Die")
@@ -233,8 +233,8 @@ AND
 GetPosition(_Character, _x, _y, _z)
 THEN
 DB_LLMIME_Skills_Temp_DecoyPosition(_Character, _x, _y, _z);
-LeaderLib_StartObjectTimer(_Character, 450, "LLMIME_Timers_Skills_Internal_Decoy_SmokeEffect_", "Mimicry_Events_Skills_Internal_PlayDecoySmokeEffect");
-LeaderLib_StartObjectTimer(_Character, 500, "LLMIME_Timers_Skills_Internal_StartDecoySetup_", "Mimicry_Events_Skills_Internal_StartDecoySetup");
+LeaderLib_Timers_StartObjectTimer(_Character, 450, "LLMIME_Timers_Skills_Internal_Decoy_SmokeEffect_", "Mimicry_Events_Skills_Internal_PlayDecoySmokeEffect");
+LeaderLib_Timers_StartObjectTimer(_Character, 500, "LLMIME_Timers_Skills_Internal_StartDecoySetup_", "Mimicry_Events_Skills_Internal_StartDecoySetup");
 //SetStoryEvent(_Character, "Mimicry_Events_Skills_Internal_StartDecoySetup");
 
 IF
@@ -273,7 +273,7 @@ CharacterLevelUpTo(_Decoy, _Level);
 SetTag(_Decoy, "LLMIME_Decoy");
 SetTag(_Decoy, "LeaderLib_Dummy");
 SetTag(_Decoy, "AI_PREFERRED_TARGET");
-LeaderLib_StartObjectTimer(_Decoy, 50, "LLMIME_Timers_Skills_Internal_SetupDecoy_", "Mimicry_Events_Skills_Internal_SetupDecoy");
+LeaderLib_Timers_StartObjectTimer(_Decoy, 50, "LLMIME_Timers_Skills_Internal_SetupDecoy_", "Mimicry_Events_Skills_Internal_SetupDecoy");
 TeleportToPosition(_Decoy, _x, _y, _z, "Mimicry_Events_Skills_Internal_DecoyTeleported", 0);
 LeaderLog_Log("DEBUG", "[LLMIME:Skills:SkillCast(Decoy)] Spawned decoy at saved position.");
 
@@ -372,9 +372,9 @@ LLMIME_Skills_Internal_RemoveDecoyStatus((CHARACTERGUID)_Character)
 AND
 NOT DB_LLMIME_Skills_Temp_Decoy(_Character, _)
 AND
-NOT LeaderLib_QRY_ObjectTimerStarted(_Character, "LLMIME_Timers_Skills_RemoveDecoyActiveStatus_")
+NOT LeaderLib_Timers_QRY_ObjectTimerStarted(_Character, "LLMIME_Timers_Skills_RemoveDecoyActiveStatus_")
 THEN
-LeaderLib_StartObjectTimer(_Character, 250, "LLMIME_Timers_Skills_RemoveDecoyActiveStatus_", "Mimicry_Events_Skills_Internal_RemoveDecoyActiveStatus");
+LeaderLib_Timers_StartObjectTimer(_Character, 250, "LLMIME_Timers_Skills_RemoveDecoyActiveStatus_", "Mimicry_Events_Skills_Internal_RemoveDecoyActiveStatus");
 //END_REGION
 
 //REGION VITAL_INFLUENCE
@@ -489,7 +489,7 @@ ObjectClearFlag(_Target, "LLMIME_FlankingApplied", 1);
 SetVarObject(_Mime, "LLMIME_SwapTarget", _Target);
 PlayEffect(_Target, "RS3_FX_Skills_Void_Netherswap_Disappear_Overlay_01");
 PlayEffect(_Mime, "RS3_FX_Skills_Void_Netherswap_Disappear_Overlay_01");
-LeaderLib_StartCharacterCharacterTimer(_Mime, _Target, 500, "Mimicry_Timers_StartSwapping_", "Mimicry_FlankAndSwap_StartSwapping");
+LeaderLib_Timers_StartCharacterCharacterTimer(_Mime, _Target, 500, "Mimicry_Timers_StartSwapping_", "Mimicry_FlankAndSwap_StartSwapping");
 
 IF
 CharacterCharacterEvent(_Mime, _Target, "Mimicry_FlankAndSwap_StartSwapping")

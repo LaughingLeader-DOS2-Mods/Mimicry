@@ -304,8 +304,8 @@ SetStoryEvent(_Character, "Mimicry_Events_Mime_MaskUnEquipped");
 IF
 CharacterStatusRemoved(_Mime, "LLMIME_SOURCE_REGENERATION_HIDDEN", _)
 THEN
-LeaderLib_CancelObjectTimer(_Mime, "LLMIME_Timers_ReApplySourceRegen");
-LeaderLib_StartObjectTimer(_Mime, 500, "LLMIME_Timers_ReApplySourceRegen", "Mimicry_ApplySourceRegen");
+LeaderLib_Timers_CancelObjectTimer(_Mime, "LLMIME_Timers_ReApplySourceRegen");
+LeaderLib_Timers_StartObjectTimer(_Mime, 500, "LLMIME_Timers_ReApplySourceRegen", "Mimicry_ApplySourceRegen");
 //END_REGION
 
 //REGION LEVELING

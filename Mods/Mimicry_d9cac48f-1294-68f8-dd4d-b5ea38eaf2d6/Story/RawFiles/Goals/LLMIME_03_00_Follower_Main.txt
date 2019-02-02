@@ -530,7 +530,7 @@ LLMIME_Follower_QRY_IsInitialized(_Mime)
 THEN
 LeaderLog_Log("DEBUG", "[LLMIME:Follower:StartSummoning] Teleporting mime to summoner after timer.");
 SetStoryEvent(_Mime, "Mimicry_Events_Follower_SummoningTeleportStarted");
-LeaderLib_StartCharacterItemTimer(_Char, _Item, 100, "LLMIME_Timers_FollowerSummonTimer_", "LLMIME_StartSummoningFollower");
+LeaderLib_Timers_StartCharacterItemTimer(_Char, _Item, 100, "LLMIME_Timers_FollowerSummonTimer_", "LLMIME_StartSummoningFollower");
 
 PROC
 LLMIME_Follower_StartSummoning((CHARACTERGUID)_Char, (ITEMGUID)_Item)
@@ -690,7 +690,7 @@ LLMIME_Follower_RemoveBlankSkills(_Mime);
 LLMIME_Brawler_RemoveStance(_Mime);
 LLMIME_Brawler_ApplyStance(_Mime);
 CharacterRemoveFromPlayerCharacter(_Mime, _Owner);
-LeaderLib_StartCharacterCharacterTimer(_Owner, _Mime, 100, "Mimicry_Timers_Follower_LevelUpDelay_", "Mimicry_Follower_LevelUpAndAttachFollower");
+LeaderLib_Timers_StartCharacterCharacterTimer(_Owner, _Mime, 100, "Mimicry_Timers_Follower_LevelUpDelay_", "Mimicry_Follower_LevelUpAndAttachFollower");
 
 IF
 CharacterCharacterEvent((CHARACTERGUID)_Owner, (CHARACTERGUID)_Mime, "LeaderLib_Events_FollowerRecruited")
@@ -993,7 +993,7 @@ DisplayText(_Owner, "LLMIME_StatusText_MimeFollowerRecallFailed");
 IF
 SkillCast(_Follower, "Shout_LLMIME_ReturnToOwner", _, _)
 THEN
-LeaderLib_StartObjectTimer(_Follower, 250, "Mimicry_Timers_ReturnToOwner_ReturnDelay_", "Mimicry_Events_Follower_ReturnToOwner_StartTeleport");
+LeaderLib_Timers_StartObjectTimer(_Follower, 250, "Mimicry_Timers_ReturnToOwner_ReturnDelay_", "Mimicry_Events_Follower_ReturnToOwner_StartTeleport");
 
 IF
 StoryEvent((CHARACTERGUID)_Follower, "Mimicry_Events_Follower_ReturnToOwner_StartTeleport")
@@ -1005,7 +1005,7 @@ TeleportTo(_Follower, _Owner, "Mimicry_Events_Follower_ReturnToOwner_Teleported"
 IF
 StoryEvent((CHARACTERGUID)_Follower, "Mimicry_Events_Follower_ReturnToOwner_Teleported")
 THEN
-LeaderLib_StartObjectTimer(_Follower, 500, "Mimicry_Timers_ReturnToOwner_ReturnEffectDelay_", "Mimicry_Events_Follower_OnTeleported");
+LeaderLib_Timers_StartObjectTimer(_Follower, 500, "Mimicry_Timers_ReturnToOwner_ReturnEffectDelay_", "Mimicry_Events_Follower_OnTeleported");
 //END_REGION
 
 //REGION LEVEL_UP
@@ -1246,13 +1246,13 @@ GetPosition(_Mime, _x, _y, _z)
 AND
 CreateItemTemplateAtPosition("LOOT_LeaderLib_BackPack_Invisible_98fa7688-0810-4113-ba94-9a8c8463f830", _x, _y, _z, _Backpack)
 THEN
-LeaderLib_StartCharacterCharacterTimer(_Mime, _Player, 750, "LLMIME_Timers_TreasureEffectsTimer", "Mimicry_Events_MimeFollowerLootSpawned");
+LeaderLib_Timers_StartCharacterCharacterTimer(_Mime, _Player, 750, "LLMIME_Timers_TreasureEffectsTimer", "Mimicry_Events_MimeFollowerLootSpawned");
 ObjectSetFlag(_Mime, "Mimicry_MimeFollowerMaskTaken", 0);
 SetTag(_Mime, "LLMIME_MimeFollower_TagTreasure");
 GenerateTreasure(_Backpack, "LLMIME_MimeFollower_Treasure", -1, _Player);
 MoveAllItemsTo(_Backpack, _Mime, 1, 1, 1);
-LeaderLib_StartObjectTimer(_Backpack, 250, "LLMIME_Timers_RemoveMimeTreasureBackpack", "LeaderLib_Commands_RemoveItem");
-LeaderLib_StartObjectTimer(_Mime, 500, "LLMIME_Timers_StopTaggingMimeFollowerTreasure_", "LLMIME_Events_StopTaggingMimeFollowerTreasure");
+LeaderLib_Timers_StartObjectTimer(_Backpack, 250, "LLMIME_Timers_RemoveMimeTreasureBackpack", "LeaderLib_Commands_RemoveItem");
+LeaderLib_Timers_StartObjectTimer(_Mime, 500, "LLMIME_Timers_StopTaggingMimeFollowerTreasure_", "LLMIME_Events_StopTaggingMimeFollowerTreasure");
 LeaderLog_Log("DEBUG", "[LLMIME:Follower:Mimicry_MaskTakenFromFollower] Generated mime follower treasure and moved to corpse.");
 
 IF
@@ -1355,7 +1355,7 @@ ObjectClearFlag(_Mime, "Mimicry_MimeFollowerMaskTaken");
 SetOnStage(_Mime, 1);
 CharacterResurrectCustom(_Mime, "resurrect");
 ObjectSetFlag(_Mime, "Mimicry_WasResurrectedByMask");
-LeaderLib_StartCharacterItemTimer(_Player, _MusicBox, 2500, "LLMIME_Timers_FollowerrTimer_", "Mimicry_MimeFollowerResurrected");
+LeaderLib_Timers_StartCharacterItemTimer(_Player, _MusicBox, 2500, "LLMIME_Timers_FollowerrTimer_", "Mimicry_MimeFollowerResurrected");
 DB_LLMIME_Follower_RevivedBy(_Player);
 
 IF
@@ -1422,7 +1422,7 @@ CharacterStatusText(_Player, "LLMIME_StatusText_MimeFollowerTreasureRemoved");
 LeaderLog_SetOneshotTarget(_Player);
 LeaderLog_Log("COMBAT", "LLMIME_StatusText_MimeFollowerTreasureRemoved");
 DB_LLMIME_Follower_Temp_RemoveMessageDisplayed(_Player);
-LeaderLib_StartObjectTimer(_Player, 1000, "LLMIME_Timers_ResetFollowerMessageRemovedDB_", "LLMIME_Events_Internal_RemoveMessageDisplayed");
+LeaderLib_Timers_StartObjectTimer(_Player, 1000, "LLMIME_Timers_ResetFollowerMessageRemovedDB_", "LLMIME_Events_Internal_RemoveMessageDisplayed");
 
 IF
 StoryEvent((CHARACTERGUID)_Player, "LLMIME_Events_Internal_RemoveMessageDisplayed")

@@ -215,7 +215,7 @@ ObjectClearFlag(_Mime, "LLMIME_FTJ_MimeIsInvisible");
 //PlayEffectAtPosition("RS3_FX_Skills_Rogue_CloakDagger_Cast_01", _x, _y, _z);
 //PlayEffect(_Mime, "LLMIME_FX_Scripted_Follower_Summon_TeleportOverlay_01");
 SetStoryEvent(_Mime, "Mimicry_Events_Follower_SummoningTeleportStarted");
-LeaderLib_StartObjectTimer(_Mime, 500, "LLMIME_Timers_FTJ_MimeAppearTimer_", "Mimicry_Origins_FTJ_MimeFollowerAppearedOnBeach");
+LeaderLib_Timers_StartObjectTimer(_Mime, 500, "LLMIME_Timers_FTJ_MimeAppearTimer_", "Mimicry_Origins_FTJ_MimeFollowerAppearedOnBeach");
 CharacterLookAt(_Mime, _Player);
 
 IF

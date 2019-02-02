@@ -591,7 +591,7 @@ NOT ObjectGetFlag(_Mime, "Mimicry_MimeFollowerMaskTaken", 1)
 AND
 NOT LLMIME_Follower_QRY_GhostExists()
 THEN
-LeaderLib_StartObjectTimer(_Mime, 500, "Mimicry_Timers_Follower_SpawnGhost_", "Mimicry_Follower_SpawnGhost");
+LeaderLib_Timers_StartObjectTimer(_Mime, 500, "Mimicry_Timers_Follower_SpawnGhost_", "Mimicry_Follower_SpawnGhost");
 
 IF
 CharacterSawCharacter(_Player, _Mime)
@@ -604,7 +604,7 @@ NOT ObjectGetFlag(_Mime, "Mimicry_MimeFollowerMaskTaken", 1)
 AND
 NOT LLMIME_Follower_QRY_GhostExists()
 THEN
-LeaderLib_StartObjectTimer(_Mime, 500, "Mimicry_Timers_Follower_SpawnGhost_", "Mimicry_Follower_SpawnGhost");
+LeaderLib_Timers_StartObjectTimer(_Mime, 500, "Mimicry_Timers_Follower_SpawnGhost_", "Mimicry_Follower_SpawnGhost");
 
 IF
 StoryEvent((CHARACTERGUID)_Mime, "Mimicry_Follower_SpawnGhost")
@@ -757,7 +757,7 @@ CreateItemTemplateAtPosition("S_LeaderLib_Platform_Large_81d0b457-3569-4c6b-bfbc
 THEN
 DB_LLMIME_Debug_FlyPosition(_Caster, _Target, _Pillar, _x, _ty, _z);
 CharacterSetAnimationOverride(_Target, "knockdown_loop");
-LeaderLib_StartCharacterCharacterTimer(_Caster, _Target, 10, "LLMIME_Timers_Debug_FlyTimer_", "LLMIME_Debug_FlyTargetToPosition");
+LeaderLib_Timers_StartCharacterCharacterTimer(_Caster, _Target, 10, "LLMIME_Timers_Debug_FlyTimer_", "LLMIME_Debug_FlyTargetToPosition");
 
 IF
 CharacterCharacterEvent(_Caster, _Target, "LLMIME_Debug_FlyTargetToPosition")
@@ -790,7 +790,7 @@ StoryEvent((CHARACTERGUID)_Target, "LLMIME_Debug_KeepFlying")
 AND
 DB_LLMIME_Debug_FlyPosition(_Caster, _Target, _Pillar, _x, _ty, _z)
 THEN
-LeaderLib_StartCharacterCharacterTimer(_Caster, _Target, 10, "LLMIME_Timers_Debug_FlyTimer_", "LLMIME_Debug_FlyTargetToPosition");
+LeaderLib_Timers_StartCharacterCharacterTimer(_Caster, _Target, 10, "LLMIME_Timers_Debug_FlyTimer_", "LLMIME_Debug_FlyTargetToPosition");
 */
 
 /*
@@ -822,7 +822,7 @@ LeaderLib_Helper_QRY_HasStatus(_Target, "KNOCKED_DOWN")
 THEN
 RemoveStatus(_Target, "KNOCKED_DOWN");
 CharacterSetAnimationOverride(_Target, "knockdown_loop");
-LeaderLib_StartCharacterCharacterTimer(_Caster, _Target, 2450, "LLMIME_Timers_Debug_StartLaunchingDelay_", "LLMIME_Debug_LaunchTargetAfterDelay");
+LeaderLib_Timers_StartCharacterCharacterTimer(_Caster, _Target, 2450, "LLMIME_Timers_Debug_StartLaunchingDelay_", "LLMIME_Debug_LaunchTargetAfterDelay");
 
 IF
 CharacterCharacterEvent(_Caster, _Target, "LLMIME_Debug_LaunchTargetAfterDelay")
