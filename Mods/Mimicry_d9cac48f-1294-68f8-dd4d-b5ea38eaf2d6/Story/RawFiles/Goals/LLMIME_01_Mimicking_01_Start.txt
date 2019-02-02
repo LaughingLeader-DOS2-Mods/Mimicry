@@ -73,19 +73,21 @@ NOT DB_LLMIME_Mimicking_MimicNextAction(_Mime)
 AND
 IsTagged(_Mime, "LLMIME_MimeFollower", _IsFollower)
 THEN
-LLMIME_Mimicking_Internal_AddToNextAction(_Mime, _IsFollower);
+LeaderLog_LogInt("DEBUG", "[LLMIME_01_Mimicking_01_Start:OnMimickingApplied] Adding mime to [DB_LLMIME_Mimicking_MimicNextAction]. IsFollower[",_IsFollower,"]");
+DB_LLMIME_Mimicking_MimicNextAction(_Mime);
+//LLMIME_Mimicking_Internal_AddToNextAction(_Mime, _IsFollower);
 
 PROC
 LLMIME_Mimicking_Internal_AddToNextAction((CHARACTERGUID)_Mime, 0)
-AND
-LLMIME_Mimicking_QRY_MimeShouldBeMimicking(_Mime)
+//AND
+//LLMIME_Mimicking_QRY_MimeShouldBeMimicking(_Mime)
 THEN
 DB_LLMIME_Mimicking_MimicNextAction(_Mime);
 
 PROC
 LLMIME_Mimicking_Internal_AddToNextAction((CHARACTERGUID)_Mime, 1)
-AND
-LLMIME_Mimicking_QRY_FollowerShouldBeMimicking(_Mime)
+//AND
+//LLMIME_Mimicking_QRY_FollowerShouldBeMimicking(_Mime)
 THEN
 DB_LLMIME_Mimicking_MimicNextAction(_Mime);
 

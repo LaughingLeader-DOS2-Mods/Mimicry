@@ -119,20 +119,20 @@ LLMIME_Follower_Internal_CreateMimeIfNeeded((CHARACTERGUID)_Summoner)
 AND
 NOT DB_LLMIME_Follower_Mime(_)
 AND
-ObjectExists(CHARACTERGUID_S_LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9, 1)
+ObjectExists(S_LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9, 1)
 THEN
-DB_LLMIME_Follower_Mime((CHARACTERGUID)CHARACTERGUID_S_LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9);
+DB_LLMIME_Follower_Mime((CHARACTERGUID)S_LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9);
 LeaderLog_Log("DEBUG", "[LLMIME:Follower:CreateMimeIfNeeded] Set DB_LLMIME_Follower_Mime to global mime follower.");
 
 /*
 IF
-DB_LLMIME_Follower_Mime(CHARACTERGUID_S_LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9)
+DB_LLMIME_Follower_Mime(S_LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9)
 AND
-ObjectIsOnStage(CHARACTERGUID_S_LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9, 0)
+ObjectIsOnStage(S_LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9, 0)
 THEN
 LeaderLog_Log("DEBUG", "[LLMIME:Follower:CreateMimeIfNeeded] Setting global mime follower on stage.");
-ApplyStatus(CHARACTERGUID_S_LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9, "INVISIBLE", 18.0, 1);
-SetOnStage(CHARACTERGUID_S_LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9, 1);
+ApplyStatus(S_LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9, "INVISIBLE", 18.0, 1);
+SetOnStage(S_LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9, 1);
 */
 
 PROC
@@ -140,7 +140,7 @@ LLMIME_Follower_Internal_CreateMimeIfNeeded((CHARACTERGUID)_Summoner)
 AND
 NOT DB_LLMIME_Follower_Mime(_)
 AND
-ObjectExists(CHARACTERGUID_S_LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9, 0)
+ObjectExists(S_LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9, 0)
 AND
 NOT GlobalGetFlag("Mimicry_MusicBoxShattered", 1)
 AND
@@ -182,16 +182,16 @@ LLMIME_Follower_RegisterMime()
 AND
 NOT DB_LLMIME_Follower_Mime(_)
 AND
-ObjectExists(CHARACTERGUID_S_LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9, 1)
+ObjectExists(S_LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9, 1)
 THEN
-LLMIME_Follower_Internal_SetMime((CHARACTERGUID)CHARACTERGUID_S_LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9);
+LLMIME_Follower_Internal_SetMime((CHARACTERGUID)S_LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9);
 
 PROC
 LLMIME_Follower_RegisterMime()
 AND
 NOT DB_LLMIME_Follower_Mime(_)
 AND
-ObjectExists(CHARACTERGUID_S_LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9, 0)
+ObjectExists(S_LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9, 0)
 AND
 CharacterGetHostCharacter(_Player)
 AND
@@ -209,9 +209,9 @@ ObjectSetFlag(_Mime, "Mimicry_IsMimeFollower");
 SetTag(_Mime, "Mimicry_WearingMask");
 
 IF
-StoryEvent(CHARACTERGUID_S_LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9, "Mimicry_MimeInitialized")
+StoryEvent(S_LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9, "Mimicry_MimeInitialized")
 THEN
-LLMIME_PassiveStatuses_ApplyInfoStatuses(CHARACTERGUID_S_LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9);
+LLMIME_PassiveStatuses_ApplyInfoStatuses(S_LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9);
 
 /*
 IF
@@ -1447,6 +1447,14 @@ DB_LLMIME_BlankSkills(_Skill)
 THEN
 CharacterRemoveSkill(_Mime, _Skill);
 //END_REGION
+
+//Mimes can't recruit the mime follower
+PROC
+LeaderLib_Follower_BlockAttachToPartyMember(S_LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9, (CHARACTERGUID)_PartyMember, (CHARACTERGUID)_FormerOwner)
+AND
+LLMIME_QRY_CharacterIsAMime(_PartyMember)
+THEN
+DB_LeaderLib_Follower_BlockRecruitment(S_LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9);
 
 EXITSECTION
 

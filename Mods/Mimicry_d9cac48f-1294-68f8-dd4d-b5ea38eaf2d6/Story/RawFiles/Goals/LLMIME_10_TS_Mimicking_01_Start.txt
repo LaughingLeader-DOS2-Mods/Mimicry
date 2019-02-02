@@ -7,18 +7,18 @@ KBSECTION
 IF
 ObjectEnteredCombat((CHARACTERGUID)_Mime, _CombatID)
 AND
-IsTagged(_Mime, "Mimicry_Mime", 1)
+LLMIME_QRY_CharacterIsAMime(_Mime)
 THEN
 LLMIME_Mimicking_ApplyMimicking(_Mime);
 
 IF
 ObjectTurnEnded((CHARACTERGUID)_Mime)
 AND
-IsTagged(_Mime, "Mimicry_Mime", 1)
+LLMIME_QRY_CharacterIsAMime(_Mime)
 AND
 CharacterIsInCombat(_Mime, 1)
 THEN
-LeaderLib_Timers_StartObjectTimer(_Mime, 500, "LLMIME_Timers_AfterTurn_ApplyMimicking_", "LLMIME_Events_RequestMimicking");
+LeaderLib_Timers_StartObjectTimer(_Mime, 250, "LLMIME_Timers_AfterTurn_ApplyMimicking_", "LLMIME_Events_RequestMimicking");
 
 IF
 ObjectTurnStarted((CHARACTERGUID)_Mime)

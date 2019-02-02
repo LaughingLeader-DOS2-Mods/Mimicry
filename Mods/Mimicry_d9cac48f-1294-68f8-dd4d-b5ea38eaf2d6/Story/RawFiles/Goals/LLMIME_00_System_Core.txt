@@ -17,6 +17,10 @@ DB_LLMIME_PassiveData("LLMIME_BRAWLER", "LLMIME_BRAWLER_BONUS", "LLMIME_BRAWLER_
 DB_LLMIME_PassiveData("LLMIME_BEASTMASTER", "LLMIME_BEASTMASTER", "LLMIME_BEASTMASTER_INFO", "Mimicry_HideMimePassives");
 DB_LLMIME_PassiveData("LLMIME_CONCENTRATION", "LLMIME_CONCENTRATION_BONUS", "LLMIME_CONCENTRATION_INFO", "Mimicry_HideMimePassives");
 
+DB_LLMIME_MimeTags("Mimicry_Mime");
+DB_LLMIME_MimeTags("Mimicry_EnemyMime");
+DB_LLMIME_MimeTags("LLMIME_MimeFollower");
+
 LLMIME_System_InitTemplates();
 LLMIME_System_InitEffectFlags();
 
@@ -688,54 +692,24 @@ THEN
 DB_NOOP(1);
 
 QRY
-LLMIME_QRY_CharacterIsAMime((CHARACTERGUID)_Character)
-AND
-HasActiveStatus(_Character, "LLMIME_MIME", 1)
-AND
-LLMIME_QRY_NotADummy(_Character)
-THEN
-DB_NOOP(1);
-
-QRY
-LLMIME_QRY_CharacterIsAMime((CHARACTERGUID)_Character)
-AND
-IsTagged(_Character, "Mimicry_EnemyMime", 1)
-AND
-LLMIME_QRY_NotADummy(_Character)
-THEN
-DB_NOOP(1);
-
-QRY
-LLMIME_QRY_CharacterIsAMime((CHARACTERGUID)_Character)
-AND
-DB_LLMIME_Mimicking_MimicNextAction(_Character)
-AND
-LLMIME_QRY_NotADummy(_Character)
-THEN
-DB_NOOP(1);
-
-QRY
-LLMIME_QRY_MimeIsSolo((CHARACTERGUID)_Mime)
-AND
-GlobalGetFlag("GEN_SoloPlayer", 1)
-THEN
-DB_NOOP(1);
-
-QRY
 LLMIME_QRY_MimeIsSolo((CHARACTERGUID)_Mime)
 AND
 GetVarInteger(_Mime, "LeaderLib_PartyCount", _Count)
 AND
 _Count <= 1
 THEN
-DB_NOOP(1);
+LeaderLog_Log("DEBUG", "[LLMIME_00_System_Core:QRY_MimeIsSolo] Mime is solo.");
 
 QRY
 LLMIME_QRY_MimeIsSolo((CHARACTERGUID)_Mime)
 AND
-NOT GetVarInteger(_Mime, "LeaderLib_PartyCount", _)
+LLMIME_QRY_Internal_PartyCountNotSet(_Mime)
+AND
+SysCount("DB_IsPlayer", 1, _Players)
+AND
+_Players <= 1
 THEN
-DB_NOOP(1);
+LeaderLog_Log("DEBUG", "[LLMIME_00_System_Core:QRY_MimeIsSolo] Mime is solo (DB_IsPlayer <= 1).");
 
 QRY
 LLMIME_QRY_Internal_PartyCountNotSet((CHARACTERGUID)_Character)

@@ -350,20 +350,20 @@ NOT DB_LLMIME_Mimicking_Temp_WeaponCopyMatch(_Skill);
 QRY
 LLMIME_Mimicking_QRY_MimeShouldBeMimicking((CHARACTERGUID)_Mime)
 AND
-LLMIME_QRY_CharacterIsAMime(_Mime)
+DB_GlobalFlag("Mimicry_Mimic_CombatOnlyDisabled")
 AND
 HasActiveStatus(_Mime, "LLMIME_MIMICKING_DISABLED", 0)
 AND
-CharacterIsInCombat(_Mime, 0)
+NOT LLMIME_QRY_MimeIsSolo(_Mime)
 AND
-GlobalGetFlag("Mimicry_Mimic_CombatOnlyDisabled", 1)
+NOT LeaderLib_Combat_QRY_IsActiveTurn(_Mime)
 THEN
 DB_NOOP(1);
 
 QRY
 LLMIME_Mimicking_QRY_MimeShouldBeMimicking((CHARACTERGUID)_Mime)
 AND
-LLMIME_QRY_CharacterIsAMime(_Mime)
+NOT DB_GlobalFlag("Mimicry_Mimic_CombatOnlyDisabled")
 AND
 HasActiveStatus(_Mime, "LLMIME_MIMICKING_DISABLED", 0)
 AND
@@ -378,7 +378,7 @@ DB_NOOP(1);
 QRY
 LLMIME_Mimicking_QRY_FollowerShouldBeMimicking((CHARACTERGUID)_Mime)
 AND
-IsTagged(_Mime, "LLMIME_MimeFollower", 1)
+NOT DB_GlobalFlag("Mimicry_Mimic_CombatOnlyDisabled")
 AND
 HasActiveStatus(_Mime, "LLMIME_MIMICKING_DISABLED", 0)
 AND
@@ -391,13 +391,11 @@ DB_NOOP(1);
 QRY
 LLMIME_Mimicking_QRY_FollowerShouldBeMimicking((CHARACTERGUID)_Mime)
 AND
-IsTagged(_Mime, "LLMIME_MimeFollower", 1)
+DB_GlobalFlag("Mimicry_Mimic_CombatOnlyDisabled")
 AND
 HasActiveStatus(_Mime, "LLMIME_MIMICKING_DISABLED", 0)
 AND
-CharacterIsInCombat(_Mime, 0)
-AND
-GlobalGetFlag("Mimicry_Mimic_CombatOnlyDisabled", 1)
+NOT LeaderLib_Combat_QRY_IsActiveTurn(_Mime)
 THEN
 DB_NOOP(1);
 

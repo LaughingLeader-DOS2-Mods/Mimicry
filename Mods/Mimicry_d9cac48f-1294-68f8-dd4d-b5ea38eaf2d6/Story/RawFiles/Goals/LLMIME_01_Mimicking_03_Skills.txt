@@ -65,7 +65,7 @@ AND
 DB_LLMIME_Mimicking_SkillSwap(_Skill, _ResultSkill, _ResultSkillType, _ResultSkillElement)
 THEN
 DB_LLMIME_Skills_Temp_SkillSwapped(_Caster, _Skill, _ResultSkill);
-LeaderLog_Log("DEBUG", "[LLMIME:Mimicking:Skills:OnSkillUsedOnTarget] Swapped skill [",_Skill,"][",_SkillType,"][",_SkillElement,"] for [",_ResultSkill,"][",_ResultSkillType,"][",_ResultSkillElement,"].");
+LeaderLog_Log("DEBUG", "[Mimicry:Mimicking:Skills:OnSkillUsedOnTarget] Swapped skill [",_Skill,"][",_SkillType,"][",_SkillElement,"] for [",_ResultSkill,"][",_ResultSkillType,"][",_ResultSkillElement,"].");
 LLMIME_Mimicking_OnSkillCastOnTarget(_Caster, _Target, _ResultSkill, _ResultSkillType, _ResultSkillElement);
 DB_LLMIME_Skills_Temp_SkillResolved(_Caster, _Target, _Skill);
 
@@ -105,7 +105,7 @@ LLMIME_Mimicking_QRY_CanMimicCharacter(_Caster, _Mime, _Skill, _SkillType)
 AND
 GetPosition(_Target, _TargetX, _TargetY, _TargetZ)
 THEN
-LeaderLog_Log("DEBUG", "[LLMIME:Mime:CharacterUsedSkillOnTarget] Queueing up next mimic skill [",_Skill,"] on target.");
+LeaderLog_Log("DEBUG", "[Mimicry:Mimicking:CharacterUsedSkillOnTarget] Queueing up next mimic skill [",_Skill,"] on target.");
 LLMIME_Mimicking_QueueNextAction(_Mime, _Caster, _Skill, "Skill", _TargetX, _TargetY, _TargetZ, _TargetPriority, 1);
 
 PROC
@@ -125,7 +125,7 @@ LLMIME_Mimicking_QRY_CanMimicCharacter(_Caster, _Mime, _Skill, _SkillType)
 AND
 LLMIME_Mimicking_QRY_SkillIsSafeForRace(_Caster, _Mime, _Skill)
 THEN
-LeaderLog_Log("DEBUG", "[LLMIME:Mime:CharacterUsedSkillOnTarget] Queueing up next mimic self-target skill [",_Skill,"].");
+LeaderLog_Log("DEBUG", "[Mimicry:Mimicking:CharacterUsedSkillOnTarget] Queueing up next mimic self-target skill [",_Skill,"].");
 LLMIME_Mimicking_QueueNextSelfAction(_Mime, _Caster, _Skill, "Skill");
 
 PROC
@@ -136,7 +136,7 @@ AND
 DB_LLMIME_Mimicking_SkillSwap(_Skill, _ResultSkill, _ResultSkillType, _ResultSkillElement)
 THEN
 DB_LLMIME_Skills_Temp_SkillSwapped(_Caster, _Skill, _ResultSkill);
-LeaderLog_Log("DEBUG", "[LLMIME:Mimicking:Skills:OnSkillUsedAtPosition] Swapped skill [",_Skill,"][",_SkillType,"][",_SkillElement,"] for [",_ResultSkill,"][",_ResultSkillType,"][",_ResultSkillElement,"].");
+LeaderLog_Log("DEBUG", "[Mimicry:Mimicking:Skills:OnSkillUsedAtPosition] Swapped skill [",_Skill,"][",_SkillType,"][",_SkillElement,"] for [",_ResultSkill,"][",_ResultSkillType,"][",_ResultSkillElement,"].");
 LLMIME_Mimicking_StartOnSkillCastAtPosition(_Caster, _TargetX, _TargetY, _TargetZ, _ResultSkill, _ResultSkillType, _ResultSkillElement);
 DB_LLMIME_Skills_Temp_SkillResolved(_Caster, _TargetX, _TargetY, _TargetZ, _Skill);
 
@@ -203,7 +203,7 @@ LLMIME_Mimicking_QRY_CanMimicSourceSkill(_Skill, _Mime)
 AND
 LLMIME_Mimicking_QRY_CanMimicCharacter(_Caster, _Mime, _Skill, "shout")
 THEN
-LeaderLog_Log("DEBUG", "[LLMIME:Mime:OnSkillCastAtPosition] Queuing up next mimic shout skill [",_Skill,"].");
+LeaderLog_Log("DEBUG", "[Mimicry:Mimicking:OnSkillCastAtPosition] Queuing up next mimic shout skill [",_Skill,"].");
 LLMIME_Mimicking_QueueNextSelfAction(_Mime, _Caster, _Skill, "Skill");
 
 PROC
@@ -217,12 +217,14 @@ LLMIME_Mimicking_QRY_CanMimicSourceSkill(_Skill, _Mime)
 AND
 LLMIME_Mimicking_QRY_CanMimicCharacter(_Caster, _Mime, _Skill, _SkillType)
 THEN
-LeaderLog_Log("DEBUG", "[LLMIME:Mime:CharacterUsedSkillAtPosition] Queuing up next mimic positional skill [",_Skill,"].");
+LeaderLog_Log("DEBUG", "[Mimicry:Mimicking:CharacterUsedSkillAtPosition] Queuing up next mimic positional skill [",_Skill,"].");
 LLMIME_Mimicking_QueueNextAction(_Mime, _Caster, _Skill, "Skill", _TargetX, _TargetY, _TargetZ, -1);
 
 //Some skills may not fire a "cast" event if the animation doesn't have a textkey for it
 PROC
 LLMIME_Mimicking_QueueNextAction((CHARACTERGUID)_Mime, (CHARACTERGUID)_Caster, (STRING)_Skill, "Skill", (REAL)_TargetX, (REAL)_TargetY, (REAL)_TargetZ, (INTEGER)_TargetPriority, (INTEGER)_IsTarget)
+AND
+NOT DB_LLMIME_Mimicking_CastFallbackTimer(_, _Caster, _Skill)
 AND
 GetUUID(_Caster, _ID)
 AND
@@ -231,6 +233,7 @@ AND
 StringConcatenate("LLMIME_Timers_CastFailTimer_", _Str, _TimerName)
 THEN
 DB_LLMIME_Mimicking_CastFallbackTimer(_TimerName, _Caster, _Skill);
+TimerCancel(_TimerName);
 TimerLaunch(_TimerName, 2000);
 
 IF
@@ -287,7 +290,7 @@ AND
 LLMIME_Mimicking_Skills_QRY_SkipWeaponMimicking(_Mime, _Caster, _Skill, "Skill")
 THEN
 NOT DB_LLMIME_Mimicking_MimicQueue_Self(_Mime, _Caster, _Skill, "Skill");
-LeaderLog_Log("DEBUG", "[LLMIME:Mimicking:MimicAction] Skipping weapon mimicking for self-targeting skill [",_Skill,"].");
+LeaderLog_Log("DEBUG", "[Mimicry:Mimicking:MimicAction] Skipping weapon mimicking for self-targeting skill [",_Skill,"].");
 ObjectSetFlag(_Mime, "Mimicry_IsMimicking");
 LLMIME_Mimicking_ResetFailTimer(_Mime, _Caster, _Skill, "Skill", 2500);
 DB_LLMIME_Mimicking_Skills_Temp_ListenForSuccess(_Mime, _Caster, _Skill);
@@ -303,7 +306,7 @@ AND
 NOT LLMIME_Mimicking_Skills_QRY_SkipWeaponMimicking(_Mime, _Caster, _Skill, "Skill")
 THEN
 NOT DB_LLMIME_Mimicking_MimicQueue_Self(_Mime, _Caster, _Skill, "Skill");
-LeaderLog_Log("DEBUG", "[LLMIME:Mimicking:MimicAction] Mimicking weapons for self-targeting skill [",_Skill,"].");
+LeaderLog_Log("DEBUG", "[Mimicry:Mimicking:MimicAction] Mimicking weapons for self-targeting skill [",_Skill,"].");
 ObjectSetFlag(_Mime, "Mimicry_IsMimicking");
 DB_LLMIME_Mimicking_Temp_CastSelfSkill(_Mime, _Caster, _Skill);
 LLMIME_Mimicking_Internal_StartWeaponMimicking(_Mime, _Caster, _Skill, "Skill");
@@ -462,7 +465,7 @@ AND
 DB_LLMIME_Mimicking_Skills_Temp_ListenForSuccess(_Mime, _Caster, _Skill)
 THEN
 NOT DB_LLMIME_Mimicking_Skills_Temp_ListenForSuccess(_Mime, _Caster, _Skill);
-LeaderLog_Log("DEBUG", "[LLMIME:Mimicking:Skills:ProcObjectTimerFinished(LLMIME_Timers_CastFailTimer)] Mimicked skill [",_Skill,"] never fired the SkillCast event. Completing.");
+LeaderLog_Log("DEBUG", "[Mimicry:Mimicking:Skills:ProcObjectTimerFinished(LLMIME_Timers_CastFailTimer)] Mimicked skill [",_Skill,"] never fired the SkillCast event. Completing.");
 LLMIME_Mimicking_OnMimicSuccess(_Mime, _Caster, _Skill, "Skill");
 //END_REGION
 

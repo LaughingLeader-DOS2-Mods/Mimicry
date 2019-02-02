@@ -154,7 +154,7 @@ PROC
 LLMIME_Mimicking_QueueNextAction((CHARACTERGUID)_Mime, (CHARACTERGUID)_Caster, (STRING)_Action, (STRING)_ActionType, (REAL)_TargetX, (REAL)_TargetY, (REAL)_TargetZ, (INTEGER)_TargetPriority, (INTEGER)_IsTarget)
 AND
 //NOT LLMIME_Mimicking_QRY_ActionIsQueued(_Mime, _Caster, _Action, _ActionType)
-NOT LLMIME_Mimicking_QRY_PositionActionIsQueued(_Caster, _Action, _ActionType, _TargetX, _TargetY, _TargetZ)
+NOT LLMIME_Mimicking_QRY_PositionActionIsQueuedForMime(_Mime, _Caster, _Action, _ActionType, _TargetX, _TargetY, _TargetZ)
 AND
 DB_LLMIME_Mimicking_ActionPosition(_Caster, _Action, _ActionType, _CastX, _CastRotation, _CastZ)
 THEN
@@ -165,7 +165,7 @@ PROC
 LLMIME_Mimicking_QueueNextAction((CHARACTERGUID)_Mime, (CHARACTERGUID)_Caster, (STRING)_Action, (STRING)_ActionType, (REAL)_TargetX, (REAL)_TargetY, (REAL)_TargetZ, (INTEGER)_TargetPriority, (INTEGER)_IsTarget)
 AND
 //NOT LLMIME_Mimicking_QRY_ActionIsQueued(_Mime, _Caster, _Action, _ActionType)
-NOT LLMIME_Mimicking_QRY_PositionActionIsQueued(_Caster, _Action, _ActionType, _TargetX, _TargetY, _TargetZ)
+NOT LLMIME_Mimicking_QRY_PositionActionIsQueuedForMime(_Mime, _Caster, _Action, _ActionType, _TargetX, _TargetY, _TargetZ)
 AND
 NOT DB_LLMIME_Mimicking_ActionPosition(_Caster, _Action, _ActionType, _, _, _)
 AND
@@ -284,6 +284,20 @@ THEN
 DB_NOOP(1);
 
 QRY
+LLMIME_Mimicking_QRY_PositionActionIsQueuedForMime((CHARACTERGUID)_Mime, (CHARACTERGUID)_Caster, (STRING)_Action, (STRING)_ActionType, (REAL)_TargetX, (REAL)_TargetY, (REAL)_TargetZ)
+AND
+DB_LLMIME_Mimicking_MimicQueue(_Mime, _Caster, _Action, _ActionType, _CastX, _CastRotation, _CastZ, _, _, _, _TargetPriority, _IsTarget)
+THEN
+DB_NOOP(1);
+
+QRY
+LLMIME_Mimicking_QRY_PositionActionIsQueuedForMime((CHARACTERGUID)_Mime, (CHARACTERGUID)_Caster, (STRING)_Action, (STRING)_ActionType, (REAL)_TargetX, (REAL)_TargetY, (REAL)_TargetZ, (INTEGER)_IsTarget)
+AND
+DB_LLMIME_Mimicking_MimicQueue(_Mime, _Caster, _Action, _ActionType, _CastX, _CastRotation, _CastZ, _, _, _, _TargetPriority, _IsTarget)
+THEN
+DB_NOOP(1);
+
+QRY
 LLMIME_Mimicking_QRY_MimeHasActionQueued((CHARACTERGUID)_Mime)
 AND
 DB_LLMIME_Mimicking_MimicQueue(_Mime, _Caster, _Action, _ActionType, _CastX, _CastRotation, _CastZ, _TargetX, _TargetY, _TargetZ, _TargetPriority, _IsTarget)
@@ -372,10 +386,11 @@ NOT DB_LLMIME_Mimicking_MimicActionTimer(_Caster, _Action, _ActionType);
 LLMIME_Mimicking_MimicAction(_Caster, _Action, _ActionType);
 //END_REGION
 
-
 //REGION MIMIC_ACTION_START
 QRY
 LLMIME_Mimicking_QRY_CanStartMimic((CHARACTERGUID)_Mime)
+AND
+NOT DB_GlobalFlag("Mimicry_Mimic_CombatOnlyDisabled")
 AND
 CharacterIsDeadOrFeign(_Mime, 0) // Skip if Play Dead is active
 AND
@@ -386,11 +401,9 @@ DB_NOOP(1);
 QRY
 LLMIME_Mimicking_QRY_CanStartMimic((CHARACTERGUID)_Mime)
 AND
+DB_GlobalFlag("Mimicry_Mimic_CombatOnlyDisabled")
+AND
 CharacterIsDeadOrFeign(_Mime, 0)
-AND
-NOT LeaderLib_Combat_QRY_HasAliveEnemies(_Mime)
-AND
-GlobalGetFlag("Mimicry_Mimic_CombatOnlyDisabled", 1)
 THEN
 DB_NOOP(1);
 

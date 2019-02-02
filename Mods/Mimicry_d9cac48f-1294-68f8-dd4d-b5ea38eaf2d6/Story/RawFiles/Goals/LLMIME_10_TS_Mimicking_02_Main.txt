@@ -1,28 +1,6 @@
 Version 1
 SubGoalCombiner SGC_AND
 INITSECTION
-/*
-//QUEUE
-DB_LLMIME_Mimicking_MimicNextAction(_Mime)
-DB_LLMIME_Mimicking_ActionPosition(_Caster, _Action, _ActionType, _CastX, _CastY, _CastZ)
-DB_LLMIME_Mimicking_MimicQueue_Self(_Mime, _Caster, _Action, _ActionType)
-DB_LLMIME_Mimicking_MimicQueue(_Mime, _Caster, _Action, _ActionType, _CastX, _CastRotation, _CastZ, _TargetX, _TargetY, _TargetZ, _TargetPriority, _IsTarget)
-DB_LLMIME_Mimicking_FinalMimicQueue(_Mime, _Caster, _Action, _ActionType, _CastX, _CastRotation, _CastZ, _TargetX, _TargetY, _TargetZ, _TargetPriority, _IsTarget)
-//TIMERS
-DB_LLMIME_Mimicking_ResetActionPositionTimer(_TimerName, _Caster, _Action, _ActionType, _CastX, _CastY, _CastZ)
-DB_LLMIME_Mimicking_CastFallbackTimer(_TimerName, _Caster, _Action)
-DB_LLMIME_Mimicking_MimicActionTimer(_TimerName, _Caster, _Action, _ActionType)
-DB_LLMIME_Mimicking_MimicFailTimer(_TimerName, _Mime, _Caster, _Action, _ActionType)
-DB_LLMIME_Mimicking_DeleteOneTimeUseWeaponsTimer(_TimerName, _Mime, _Action, _ActionType)
-DB_LLMIME_Mimicking_MimicCleanupTimer(_TimerName, _Mime)
-//TEMP
-DB_LLMIME_Mimicking_Temp_ResetDummyAfterMimicAction(_Mime, _Target, _Action, _ActionType)
-DB_LLMIME_Mimicking_Temp_TargetPriority(_Caster, _Target, _TargetPriority)
-//WEAPON_COPY
-DB_LLMIME_Mimicking_Temp_CasterWeapons(_Caster, _MainHand, _Offhand)
-DB_LLMIME_Mimicking_LastEquipped(_Mime, _Slot, _Item)
-DB_LLMIME_Mimicking_Temp_MimickedWeapon(_Mime, _Caster, _Weapon, _Action, _ActionType)
-*/
 KBSECTION
 
 //This is used to calculate the correct target position. Important to catch this before the player is moved by an animation.
