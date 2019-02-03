@@ -383,34 +383,36 @@ AND
 DB_LLMIME_Brawler_TotalHits(_Mime, _Target, _TotalHits)
 AND
 _TotalHits >= 3
+AND
+ObjectIsCharacter(_Target, _IsCharacter)
 THEN
 NOT DB_LLMIME_Brawler_TotalHits(_Mime, _Target, _TotalHits);
 LeaderLog_Log("TRACE", "[Mimicry:Brawler:IncrementHits] Applying unarmed bonus damage.");
-LLMIME_Brawler_ApplyUnarmedBonusDamage(_Mime, _Target);
+LLMIME_Brawler_ApplyUnarmedBonusDamage(_Mime, _Target, _IsCharacter);
 
 PROC
-LLMIME_Brawler_ApplyUnarmedBonusDamage((CHARACTERGUID)_Mime, (GUIDSTRING)_Target)
+LLMIME_Brawler_ApplyUnarmedBonusDamage((CHARACTERGUID)_Mime, (GUIDSTRING)_Target, 1)
 AND
 ObjectExists(_Target, 1)
 AND
+HasAppliedStatus(_Target, "LLMIME_UNARMED_BONUS_DAMAGE", 0)
+AND
 CharacterIsDead(_Mime, 0)
 AND
-ObjectIsCharacter((CHARACTERGUID)_Target, 1)
-AND
-CharacterIsDead(_Target, 0)
+CharacterIsDead((CHARACTERGUID)_Target, 0)
 THEN
 CharacterCharacterSetEvent(_Mime, _Target, "Mimicry_ApplyUnarmedBonusDamage");
 
 PROC
-LLMIME_Brawler_ApplyUnarmedBonusDamage((CHARACTERGUID)_Mime, (GUIDSTRING)_Target)
+LLMIME_Brawler_ApplyUnarmedBonusDamage((CHARACTERGUID)_Mime, (GUIDSTRING)_Target, 0)
 AND
 ObjectExists(_Target, 1)
 AND
+HasAppliedStatus(_Target, "LLMIME_UNARMED_BONUS_DAMAGE", 0)
+AND
 CharacterIsDead(_Mime, 0)
 AND
-ObjectIsItem((ITEMGUID)_Target, 1)
-AND
-ItemIsDestroyed(_Target, 0)
+ItemIsDestroyed((ITEMGUID)_Target, 0)
 THEN
 CharacterItemSetEvent(_Mime, _Target, "Mimicry_ApplyUnarmedBonusDamage");
 

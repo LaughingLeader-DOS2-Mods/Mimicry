@@ -20,32 +20,40 @@ ENDIF
 	CharacterRemoveStatus(_Target, HASTED)
 */
 
-EVENT LLMIME_Statuses_UnarmedBonusDamage
+EVENT LLMIME_Statuses_UnarmedBonusDamage_Character
 VARS
 	CHARACTER:_Mime
-	CHARACTER:_TargetCharacter
-	ITEM:_TargetItem
+	CHARACTER:_Target
 	STATUS:_BonusStatus
 ON
-	OnCharacterCharacterEvent(_Mime, _TargetCharacter, "Mimicry_ApplyUnarmedBonusDamage")
-	OnCharacterItemEvent(_Mime, _TargetItem, "Mimicry_ApplyUnarmedBonusDamage")
+	OnCharacterCharacterEvent(_Mime, _Target, "Mimicry_ApplyUnarmedBonusDamage")
 ACTIONS
 IF "!c1&!c2"
-	IsEqual(_TargetCharacter, null)
-	CharacterIsDead(_TargetCharacter)
+	IsEqual(_Target, null)
+	CharacterHasStatus(_Target, LLMIME_UNARMED_BONUS_DAMAGE)
 THEN
-	CharacterApplyStatus(_TargetCharacter, LLMIME_UNARMED_BONUS_DAMAGE, 0, 0, _Mime)
+	CharacterApplyStatus(_Target, LLMIME_UNARMED_BONUS_DAMAGE, 0, 0, _Mime)
 	GetWeightedRandom(_BonusStatus, LLMIME_PHYSICAL_SILENCED, INT:2, LLMIME_SLOWED_ARMOR_BYPASS, INT:5, LLMIME_WEAK_ARMOR_BYPASS, INT:1, NULL, INT:8)
 	IF "!c1"
 		IsEqual(_BonusStatus, NULL)
 	THEN
-		CharacterApplyStatus(_TargetCharacter, _BonusStatus, 1, 0, _Mime)
+		CharacterApplyStatus(_Target, _BonusStatus, 1, 0, _Mime)
 	ENDIF
 ENDIF
-IF "!c1"
-	IsEqual(_TargetItem, null)
+
+EVENT LLMIME_Statuses_UnarmedBonusDamage_Item
+VARS
+	CHARACTER:_Mime
+	ITEM:_Target
+	STATUS:_BonusStatus
+ON
+	OnCharacterItemEvent(_Mime, _Target, "Mimicry_ApplyUnarmedBonusDamage")
+ACTIONS
+IF "!c1&!c2"
+	IsEqual(_Target, null)
+	ItemHasStatus(_Target, LLMIME_UNARMED_BONUS_DAMAGE)
 THEN
-	ItemApplyStatus(_TargetItem, LLMIME_UNARMED_BONUS_DAMAGE, 0, 0, _Mime)
+	ItemApplyStatus(_Target, LLMIME_UNARMED_BONUS_DAMAGE, 0, 0, _Mime)
 ENDIF
 
 EVENT LLMIME_Statuses_CounterThrow_CounterAttack
@@ -81,7 +89,7 @@ IF "!c1&!c2&c3&c4&c5"
 	HasFlag(_Mime, "Mimicry_IsMimicking")
 	HasFlag(_Mime, "Mimicry_DoubleAttackDisabled")
 	HasFlag(_Mime, "Mimicry_MimeIsUnarmed")
-	CharacterHasStatus(_Mime, "LLMIME_BRAWLER_BONUS")
+	CharacterHasStatus(_Mime, LLMIME_BRAWLER_BONUS)
 	CharacterGetWeaponRange(_MinRange, _MaxRange, _Mime)
 THEN
 	Multiply(_MaxRange, 2.0)
