@@ -484,6 +484,21 @@ CharacterStatusText(_Target, "LLMIME_StatusText_SwappedFailed");
 
 IF
 CharacterStatusApplied(_Target, "LLMIME_SWAPPING", (CHARACTERGUID)_Mime)
+AND
+DB_LLMIME_Skills_FlankAndAwap_PreserveStatuses(_Status)
+AND
+HasActiveStatus(_Target, _Status, 1)
+AND
+GetStatusTurns(_Target, _Status, _Turns)
+AND
+Real(_Turns, _TurnsR)
+AND
+RealProduct(_TurnsR, 6.0, _Duration)
+THEN
+DB_LLMIME_Skills_Temp_DisabledStatusTurns(_Target, _Mime, _Status, _Duration);
+
+IF
+CharacterStatusApplied(_Target, "LLMIME_SWAPPING", (CHARACTERGUID)_Mime)
 THEN
 ObjectClearFlag(_Target, "LLMIME_FlankingApplied", 1);
 SetVarObject(_Mime, "LLMIME_SwapTarget", _Target);
@@ -502,8 +517,26 @@ PlayEffectAtPosition("RS3_FX_Skills_Void_Netherswap_Disappear_Root_01", _tx, _ty
 PlayEffectAtPosition("RS3_FX_Skills_Void_Netherswap_Disappear_Root_01", _mx, _my, _mz);
 CharacterSetDetached(_Target, 1);
 CharacterSetDetached(_Mime, 1);
-TeleportToPosition(_Target, _mx, _my, _mz, "", 0, 1);
+TeleportToPosition(_Target, _mx, _my, _mz, "Mimicry_FlankAndSwap_TargetSwappedPlaces", 0, 1);
 TeleportToPosition(_Mime, _tx, _ty, _tz, "Mimicry_FlankAndSwap_MimeSwappedPlaces", 0, 1);
+
+//KNOCKED_DOWN gets removed by teleporting for some reason
+IF
+StoryEvent((CHARACTERGUID)_Target, "Mimicry_FlankAndSwap_TargetSwappedPlaces")
+AND
+DB_LLMIME_Skills_Temp_DisabledStatusTurns(_Target, _Mime, _Status, _Duration)
+AND
+HasActiveStatus(_Target, _Status, 0)
+THEN
+NOT DB_LLMIME_Skills_Temp_DisabledStatusTurns(_Target, _Mime, _Status, _Duration);
+ApplyStatus(_Target, _Status, _Duration, 0, _Mime);
+
+IF
+StoryEvent((CHARACTERGUID)_Target, "Mimicry_FlankAndSwap_TargetSwappedPlaces")
+AND
+DB_LLMIME_Skills_Temp_DisabledStatusTurns(_Target, _Mime, _Status, _Duration)
+THEN
+NOT DB_LLMIME_Skills_Temp_DisabledStatusTurns(_Target, _Mime, _Status, _Duration);
 
 IF
 //SkillCast(_Mime, "Teleportation_MimeVault_Swap", _, _)
@@ -525,7 +558,7 @@ PlayEffectAtPosition("RS3_FX_Skills_Void_Netherswap_Reappear_01", _mx, _my, _mz)
 CharacterStatusText(_Target, "LLMIME_StatusText_Swapped");
 
 IF
-CharacterStatusRemoved(_Target, "LLMIME_SWAPPING", _Mime)
+CharacterStatusRemoved(_Target, "LLMIME_SWAPPING", _)
 AND
 LeaderLib_Helper_QRY_HasStatus(_Target, "LLMIME_FLANKING")
 THEN

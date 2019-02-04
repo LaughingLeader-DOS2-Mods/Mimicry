@@ -107,13 +107,13 @@ LeaderLib_Helper_BlockEquipmentFromCopying((CHARACTERGUID)_Dummy, (ITEMGUID)_Ite
 THEN
 //DB_LeaderLib_Helper_Temp_ItemBlacklisted(_Item);
 Transform(_Item, "EQ_Armor_LLMIME_Mime_Mask_Preview_36348beb-6126-42f5-ba26-05acf6b65bae");
-DB_LeaderLib_Helper_Temp_EquipmentCopy(_Dummy, _Item);
+DB_LeaderLib_Helper_Temp_EquipmentCopy(_Dummy, _Item, "Helmet");
 
 PROC
 LeaderLib_Helper_BlockEquipmentFromCopying((CHARACTERGUID)_Dummy, (ITEMGUID)_Item, "EQ_UNIQUE_Armor_LLMIME_Mime_Mask_Origin_A_4afe8cd3-eb9f-4760-9ba4-a0b4433a4c06")
 THEN
 Transform(_Item, "EQ_Armor_LLMIME_Mime_Mask_Preview_36348beb-6126-42f5-ba26-05acf6b65bae");
-DB_LeaderLib_Helper_Temp_EquipmentCopy(_Dummy, _Item);
+DB_LeaderLib_Helper_Temp_EquipmentCopy(_Dummy, _Item, "Helmet");
 //END_REGION
 EXITSECTION
 

@@ -18,6 +18,22 @@ AND
 ObjectGetFlag(_Player, "LLWEAPONEX_Kevin_IgnoreEnergy", 1)
 THEN
 ObjectClearFlag(_Player, "LLWEAPONEX_Kevin_IgnoreEnergy");
+
+//Weapon Expansion Mime Revenant
+PROC
+LLWEAPONEX_Statuses_OnRevenantCreated((CHARACTERGUID)_Revenant, (CHARACTERGUID)_Target, (CHARACTERGUID)_Source, "LLWEAPONEX_TORMENTED_GHOST")
+AND
+DB_IsPlayer(_Target)
+AND
+IsTagged(_Target, "Mimicry_Mime", 1)
+AND
+DB_LLMIME_Brawler_StanceStatuses(_Status, _SettingsFlag, _InfoStatus, _DisableInfoFlag, _DialogVar)
+AND
+ObjectGetFlag(_Target, _SettingsFlag, 1)
+THEN
+ApplyStatus(_Revenant, _Status, -1.0, 1, _Revenant);
+ObjectSetFlag(_Revenant, "Mimicry_BrawlerStatusActive");
+CharacterRemoveSkill(_Revenant, "Shout_LLMIME_BrawlerStance");
 EXITSECTION
 
 ENDEXITSECTION

@@ -50,20 +50,17 @@ DB_LLMIME_Skills_IncarnateInfusions("INF_RANGED", "INF_RANGED");
 DB_LLMIME_Skills_IncarnateInfusions("INF_SHADOW", "INF_SHADOW");
 DB_LLMIME_Skills_IncarnateInfusions("INF_WARP", "INF_WARP");
 DB_LLMIME_Skills_IncarnateInfusions("INF_WATER", "INF_WATER_G");
+
+DB_LLMIME_Skills_FlankAndAwap_PreserveStatuses("KNOCKED_DOWN");
+DB_LLMIME_Skills_FlankAndAwap_PreserveStatuses("FROZEN");
+DB_LLMIME_Skills_FlankAndAwap_PreserveStatuses("PETRIFIED");
 //END_REGION
 
 //REGION UPDATING
-QRY
-LLMIME_Skills_Internal_QRY_VersionNeedsUpdating((STRING)_PastVersion, (STRING)_NewVersion)
-AND
-_NewVersion == "0.9.7.2"
-THEN
-DB_NOOP(1);
-
 PROC
 LeaderUpdater_ModUpdated("Mimicry", "LaughingLeader", (STRING)_PastVersion, (STRING)_NewVersion)
 AND
-LLMIME_Skills_Internal_QRY_VersionNeedsUpdating(_PastVersion, _NewVersion)
+LeaderLib_StringExt_QRY_VersionIsLessThan(_PastVersion, 0,9,9,29)
 THEN
 LeaderLog_Log("DEBUG", "[LLMIME:Skills] Updating settings from version [",_PastVersion,"]");
 LLMIME_Skills_InitSettings();

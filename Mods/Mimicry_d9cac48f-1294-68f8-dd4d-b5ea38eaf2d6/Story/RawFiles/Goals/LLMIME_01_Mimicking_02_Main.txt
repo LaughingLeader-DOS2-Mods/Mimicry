@@ -390,6 +390,8 @@ LLMIME_Mimicking_MimicAction(_Caster, _Action, _ActionType);
 QRY
 LLMIME_Mimicking_QRY_CanStartMimic((CHARACTERGUID)_Mime)
 AND
+NOT LeaderLib_Helper_QRY_HasStatus(_Mime, "LLMIME_MIMICKING_DISABLED")
+AND
 NOT DB_GlobalFlag("Mimicry_Mimic_CombatOnlyDisabled")
 AND
 CharacterIsDeadOrFeign(_Mime, 0) // Skip if Play Dead is active
@@ -400,6 +402,8 @@ DB_NOOP(1);
 
 QRY
 LLMIME_Mimicking_QRY_CanStartMimic((CHARACTERGUID)_Mime)
+AND
+NOT LeaderLib_Helper_QRY_HasStatus(_Mime, "LLMIME_MIMICKING_DISABLED")
 AND
 DB_GlobalFlag("Mimicry_Mimic_CombatOnlyDisabled")
 AND

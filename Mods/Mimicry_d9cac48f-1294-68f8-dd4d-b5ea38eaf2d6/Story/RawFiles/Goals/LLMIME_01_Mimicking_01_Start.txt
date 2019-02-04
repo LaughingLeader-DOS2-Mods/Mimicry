@@ -111,6 +111,11 @@ THEN
 ObjectSetFlag(_Mime, "Mimicry_MimickingWasRemoved");
 RemoveStatus(_Mime, _Status);
 
+PROC
+LLMIME_Mimicking_RemoveMimicking((CHARACTERGUID)_Mime)
+THEN
+LLMIME_Mimicking_ClearMimicDataForMime(_Mime);
+
 /*
 PROC
 LLMIME_Mimicking_RemoveMimicking((CHARACTERGUID)_Mime)
