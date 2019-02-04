@@ -125,7 +125,7 @@ LLMIME_Mimicking_RemoveMimicking(_Mime);
 //ApplyStatus(_Follower, "INVISIBLE", 9.0, 1);
 //CharacterUseSkill(_Follower, "Shout_LLMIME_ReturnToOwner", _Follower, 1, 1);
 //LeaveCombat(_Mime);
-TeleportTo(_Mime, _Owner, "Mimicry_Events_Follower_ReturnToOwner_Teleported", 1, 0, 1);
+TeleportTo(_Mime, _Owner, "Mimicry_Events_Follower_ReturnToOwner_Teleported", 1, 0, 0);
 
 IF
 CharacterTeleportToWaypoint(_Owner, _)
@@ -136,7 +136,7 @@ DB_LLMIME_Follower_Mime(_Mime)
 AND
 LLMIME_Follower_QRY_FollowerShouldTeleport(_Owner, _Mime)
 THEN
-TeleportTo(_Mime, _Owner, "", 1, 0, 1);
+TeleportTo(_Mime, _Owner, "", 1, 0, 0);
 
 IF
 CharacterTeleported(_Owner, _Cause, _OldX, _OldY, _OldZ, _NewX, _NewY, _NewZ, _Skill)
@@ -147,7 +147,7 @@ DB_LLMIME_Follower_Mime(_Mime)
 AND
 LLMIME_Follower_QRY_FollowerShouldTeleport(_Owner, _Mime)
 THEN
-TeleportTo(_Mime, _Owner, "", 1, 0, 1);
+TeleportTo(_Mime, _Owner, "", 1, 0, 0);
 //END_REGION
 
 //REGION ARENA_TELEPORT_EVENTS
