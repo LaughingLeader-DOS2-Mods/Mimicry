@@ -34,6 +34,16 @@ NOT GlobalGetFlag("Mimicry_Mimic_CombatOnlyDisabled", 1)
 THEN
 LLMIME_Mimicking_RemoveMimicking(_Mime);
 
+//Remove mimicked weapons when turn starts
+IF
+ObjectTurnStarted((CHARACTERGUID)_Mime)
+AND
+DB_LLMIME_Mimicking_DeleteOneTimeUseWeaponsTimer(_Mime, _Action, _ActionType)
+AND
+NOT DB_LLMIME_Mimicking_Skills_Temp_ListenForSuccess(_Mime, _, _)
+THEN
+ProcObjectTimerCancel(_Mime, "LLMIME_Timers_DeleteMimickedWeapons");
+ProcObjectTimerFinished(_Mime, "LLMIME_Timers_DeleteMimickedWeapons");
 EXITSECTION
 
 ENDEXITSECTION
