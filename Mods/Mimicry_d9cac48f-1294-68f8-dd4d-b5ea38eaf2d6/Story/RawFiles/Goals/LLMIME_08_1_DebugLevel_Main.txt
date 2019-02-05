@@ -405,6 +405,32 @@ CharacterIsPlayer(_Character, 1)
 THEN
 CharacterResetCooldowns(_Character);
 
+IF
+TextEventSet("llmime_Tagtest")
+AND
+CharacterGetHostCharacter(_Host)
+AND
+GetPosition(_Host, _x, _y, _z)
+AND
+TemporaryCharacterCreateAtPosition(_x, _y, _z, "LLMIME_Dummy_Character_e2f3f6f7-c069-4928-830e-f1d46e2c898c", 0, _Dummy)
+AND
+IsTagged(_Dummy, "LeaderLib_Dummy", _IsDummy)
+THEN
+LeaderLog_LogInt("DEBUG", "[LLMIME_08_1_DebugLevel_Main:TagTest] Before transforming, dummy tag is [", _IsDummy, "].");
+ObjectSetFlag(_Dummy, "LEADERLIB_IGNORE", 0);
+CharacterTransformFromCharacter(_Dummy, _Host, 0, 0, 0, 1, 0, 0, 1);
+ProcObjectTimer(_Dummy, "LLMIME_Timers_Debug_TagTest", 250);
+
+PROC
+ProcObjectTimerFinished((CHARACTERGUID)_Dummy, "LLMIME_Timers_Debug_TagTest")
+AND
+IsTagged(_Dummy, "LeaderLib_Dummy", _IsDummy)
+AND
+ObjectGetFlag(_Dummy, "LEADERLIB_IGNORE", _Ignored)
+THEN
+LeaderLog_LogInt("DEBUG", "[LLMIME_08_1_DebugLevel_Main:TagTest] After transforming, dummy tag is [", _IsDummy, "], and flag [LEADERLIB_IGNORE] is [",_Ignored,"].");
+RemoveTemporaryCharacter(_Dummy);
+
 //REGION LEVERS
 IF
 CharacterUsedItem(_Character, ITEMGUID_LLMIME_TestLevel_Lever_ToggleGlobalFlags_32ee1fc8-3a1f-4293-85eb-45c59dc25d83)

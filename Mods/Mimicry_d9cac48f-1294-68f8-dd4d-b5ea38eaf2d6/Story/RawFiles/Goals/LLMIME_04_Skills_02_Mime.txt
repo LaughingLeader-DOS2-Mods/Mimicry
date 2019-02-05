@@ -268,6 +268,7 @@ PlayEffect(_Decoy, "LLMIME_FX_Skills_Decoy_Overlay_FadeIn_01");
 PlayEffectAtPosition("RS3_FX_GP_ScriptedEvent_Ambushers_Smoke_01", _x, _y, _z);
 SetVarObject(_Decoy, "LLMIME_Decoy_Caster", _Character);
 SetScriptframe(_Decoy, "LLMIME_Decoy_CopyRotation");
+ObjectSetFlag(_Decoy, "LEADERLIB_IGNORE", 0);
 LLMIME_Skills_Internal_TransformDecoy(_Character, _Decoy);
 CharacterLevelUpTo(_Decoy, _Level);
 SetTag(_Decoy, "LLMIME_Decoy");

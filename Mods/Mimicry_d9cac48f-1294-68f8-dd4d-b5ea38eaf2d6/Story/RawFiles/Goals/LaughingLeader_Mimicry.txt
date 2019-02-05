@@ -9,12 +9,14 @@ KBSECTION
 PROC
 LLMIME_Internal_RegisterOnce()
 AND
-DB_StoryStarted(_)
+GlobalGetFlag("LeaderLib_IsEditorMode", 1)
 THEN
 DB_Origins((CHARACTERGUID)S_Player_LLMIME_Mime_191f180c-6270-4cd1-a44a-e02454bd846f);
 
 PROC
 LLMIME_Internal_RegisterOnce()
+AND
+GlobalGetFlag("LeaderLib_IsEditorMode", 1)
 AND
 NOT DB_Origins_OriginTag((CHARACTERGUID)S_Player_LLMIME_Mime_191f180c-6270-4cd1-a44a-e02454bd846f, "GENERIC")
 THEN

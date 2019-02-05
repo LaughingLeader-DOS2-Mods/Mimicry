@@ -948,11 +948,17 @@ _ActionType != "Item"
 AND
 GetPosition(_Mime, _x, _y, _z)
 AND
-TemporaryCharacterCreateAtPosition(_x, _y, _z, "LLMIME_Dummy_Character_e2f3f6f7-c069-4928-830e-f1d46e2c898c", 0, _Dummy)
+TemporaryCharacterCreateAtPosition(_x, _y, _z, "LeaderLib_SkillDummy_94668062-11ea-4ecf-807c-4cc225cbb236", 0, _Dummy)
 THEN
 LeaderLog_Log("DEBUG", "[LLMIME:Mimicking:EquipWeaponsForAction] Duplicating caster's weapons via [CharacterTransformFromCharacter].");
 CharacterSetDetached(_Dummy, 1);
+ObjectSetFlag(_Dummy, "LEADERLIB_IGNORE", 0);
 CharacterTransformFromCharacter(_Dummy, _Caster, 0, 0, 0, 1, 0, 0, 1);
+SetStoryNpc(_Dummy, 1);
+SetCanJoinCombat(_Dummy, 0);
+SetCanFight(_Dummy, 0);
+SetFaction(_Dummy, "Good NPC");
+SetTag(_Dummy, "LeaderLib_Dummy");
 DB_LLMIME_Mimicking_Temp_WaitForEquipped(_Mime, _Dummy, _Caster, _Target, _Action, _ActionType);
 LeaderLib_Timers_StartCharacterCharacterTimer(_Mime, _Dummy, 200, "LLMIME_Timers_IterateDummyEquipment", "LLMIME_WeaponMimicking_IterateDummyInventory");
 
@@ -976,6 +982,8 @@ DB_NOOP(1);
 
 IF
 StoryEvent((ITEMGUID)_Item, "Mimicry_Iterator_MarkWeapons")
+AND
+NOT LeaderLib_Helper_QRY_IgnoreItem(_Item)
 AND
 NOT DB_Mimicry_BlockWeaponMimicking(_Item)
 AND
