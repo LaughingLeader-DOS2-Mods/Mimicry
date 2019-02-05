@@ -13,6 +13,15 @@ DB_LLMIME_RegisteredLeaderLibSettings(1);
 PROC
 LeaderUpdater_ModUpdated("Mimicry", "LaughingLeader", (STRING)_PastVersion, (STRING)_NewVersion)
 AND
+LeaderLib_StringExt_QRY_VersionIsLessThan(_PastVersion, 0, 9, 9, 31)
+THEN
+//LeaderLib_Helper_Register_IgnoreTag_Character("Mimicry", "LLMIME_Dummy");
+LeaderLib_Helper_Register_IgnoreTag_Item("Mimicry", "LLMIME_MIMICKED_WEAPON");
+LeaderLog_Log("DEBUG", "[LLMIME:LeaderLib] Updated settings from version [",_PastVersion,"].");
+
+PROC
+LeaderUpdater_ModUpdated("Mimicry", "LaughingLeader", (STRING)_PastVersion, (STRING)_NewVersion)
+AND
 LeaderLib_StringExt_QRY_VersionIsLessThan(_PastVersion, 0, 9, 9, 15)
 THEN
 GlobalSetFlag("Mimicry_MusicBoxSpawned");
