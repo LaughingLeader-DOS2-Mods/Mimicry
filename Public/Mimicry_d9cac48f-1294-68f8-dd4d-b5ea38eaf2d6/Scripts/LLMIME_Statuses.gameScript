@@ -182,8 +182,9 @@ IF "(c1&c2)|!c1"
 THEN
 	Set(_Source, _Target)
 ENDIF
-IF "!c1"
+IF "!c1|c2"
 	GetStatusTurns(_Target, LLMIME_BLIND_ARMOR_BYPASS, _Turns)
+	IsEqual(_Turns, null)
 THEN
 	Set(_Turns, 1)
 ELSE
@@ -211,8 +212,9 @@ IF "(c1&c2)|!c1"
 THEN
 	Set(_Source, _Target)
 ENDIF
-IF "!c1"
+IF "!c1|c2"
 	GetStatusTurns(_Target, LLMIME_SLOWED_ARMOR_BYPASS, _Turns)
+	IsEqual(_Turns, null)
 THEN
 	Set(_Turns, 1)
 ELSE
@@ -240,8 +242,9 @@ IF "(c1&c2)|!c1"
 THEN
 	Set(_Source, _Target)
 ENDIF
-IF "!c1"
+IF "!c1|c2"
 	GetStatusTurns(_Target, LLMIME_WEAK_ARMOR_BYPASS, _Turns)
+	IsEqual(_Turns, null)
 THEN
 	Set(_Turns, 1)
 ELSE
@@ -269,8 +272,9 @@ IF "(c1&c2)|!c1"
 THEN
 	Set(_Source, _Target)
 ENDIF
-IF "!c1"
+IF "!c1|c2"
 	GetStatusTurns(_Target, LLMIME_PHYSICAL_SILENCED, _Turns)
+	IsEqual(_Turns, null)
 THEN
 	Set(_Turns, 1)
 ELSE
