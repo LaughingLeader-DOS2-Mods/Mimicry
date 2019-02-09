@@ -110,6 +110,7 @@ THEN
 MoveAllItemsTo(_Mime, _Owner, 0, 0, 1);
 //END_REGION
 
+/*
 //REGION TELEPORT_EVENTS
 
 IF
@@ -149,8 +150,10 @@ LLMIME_Follower_QRY_FollowerShouldTeleport(_Owner, _Mime)
 THEN
 TeleportTo(_Mime, _Owner, "", 1, 0, 0);
 //END_REGION
+*/
 
 //REGION ARENA_TELEPORT_EVENTS
+/*
 PROC
 Proc_Arena_Initiate((INTEGER)_Inst)
 AND
@@ -172,7 +175,7 @@ DB_Arena_CharIsAlive(_Team,_Mime);
 TeleportTo(_Mime,_Trig,"",0);
 SetInArena(_Mime,1);
 SetFaction(_Mime,_Team); 
-
+*/
 /*
 IF
 StoryEvent((CHARACTERGUID)_Player, "Arena_CharacterTeleportedOutOfArena")
@@ -184,7 +187,6 @@ THEN
 TeleportTo(_Mime, _Player, "", 1, 0, 1);
 */
 //END_REGION
-
 EXITSECTION
 
 ENDEXITSECTION
