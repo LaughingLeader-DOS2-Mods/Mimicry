@@ -101,6 +101,8 @@ DB_LLMIME_Mimicking_Blacklist_SkillPrefixes("Mimicry", "_Quest_");
 //Prefixes (i.e. mod skills)
 DB_LLMIME_Mimicking_Blacklist_SkillPrefixes("Mimicry", "_LLCIVIL_");
 DB_LLMIME_Mimicking_Blacklist_SkillPrefixes("Mimicry", "_LLEQSET_");
+
+DB_LLMIME_Mimicking_Blacklist_SkillPrefixes("Mimicry", "_PolymorphInto_");
 //Special skills
 DB_LLMIME_Mimicking_Whitelist_Skills("Mimicry", "Shout_RecoverArmour");
 DB_LLMIME_Mimicking_Whitelist_Skills("Mimicry", "Shout_EnemyOverthrow");
@@ -142,7 +144,15 @@ DB_LLMIME_Mimicking_Blacklist_Skills("Umbra", "Shout_SHADEShadowstep");
 PROC
 LeaderUpdater_ModUpdated("Mimicry", "LaughingLeader", (STRING)_PastVersion, (STRING)_NewVersion)
 AND
-_NewVersion == "0.9.9.4"
+DB_LeaderLib_StringExt_VersionIsLessThan(_PastVersion, 0, 9, 9, 33)
+THEN
+LeaderLog_Log("DEBUG", "[LLMIME:Mimicking:System] Updating settings from version [",_PastVersion,"]");
+DB_LLMIME_Mimicking_Blacklist_SkillPrefixes("Mimicry", "_PolymorphInto_");
+
+PROC
+LeaderUpdater_ModUpdated("Mimicry", "LaughingLeader", (STRING)_PastVersion, (STRING)_NewVersion)
+AND
+DB_LeaderLib_StringExt_VersionIsLessThan(_PastVersion, 0, 9, 9, 4)
 THEN
 LeaderLog_Log("DEBUG", "[LLMIME:Mimicking:System] Updating settings from version [",_PastVersion,"]");
 SysClear("DB_LLMIME_Mimicking_Blacklist_Skills", 1);
