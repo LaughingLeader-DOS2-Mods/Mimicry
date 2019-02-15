@@ -681,6 +681,28 @@ DB_LLMIME_Skills_Temp_HiddenApproachPosition(_Mime, _x, _y, _z)
 THEN
 NOT DB_LLMIME_Skills_Temp_HiddenApproachPosition(_Mime, _x, _y, _z);
 //END_REGION
+
+//REGION UNHOLY_DARKNESS
+//Delayed Smoke
+IF
+CharacterUsedSkillAtPosition(_Mime, _x, _y, _z, "Target_LLMIME_Mask_Unholy", _, _)
+THEN
+DB_LLMIME_Skills_Temp_DarknessPosition(_Mime, _x, _y, _z);
+
+IF
+SkillCast(_Mime, "Target_LLMIME_Mask_Unholy", _, _)
+THEN
+ProcObjectTimer(_Mime, "LLMIME_Timers_Skills_UnholyDarknessSmoke", 900);
+
+PROC
+ProcObjectTimerFinished((CHARACTERGUID)_Mime, "LLMIME_Timers_Skills_UnholyDarknessSmoke")
+AND
+DB_LLMIME_Skills_Temp_DarknessPosition(_Mime, _x, _y, _z)
+THEN
+NOT DB_LLMIME_Skills_Temp_DarknessPosition(_Mime, _x, _y, _z);
+CreateSurfaceAtPosition(_x, _y, _z, "SurfaceSmokeCloud", 3.0, 12.0);
+
+//END_REGION
 EXITSECTION
 
 ENDEXITSECTION
