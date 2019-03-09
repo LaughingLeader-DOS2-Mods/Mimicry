@@ -176,25 +176,25 @@ VARS
 ON
 	OnCharacterStatusApplied(_Target, LLMIME_BLIND_ARMOR_BYPASS)
 ACTIONS
-IF "(c1&c2)|!c1"
-	CharacterGetStatusSourceCharacter(_Target, LLMIME_BLIND_ARMOR_BYPASS, _Source)
-	IsEqual(_Source, null)
-THEN
-	Set(_Source, _Target)
-ENDIF
-IF "!c1|c2"
-	GetStatusTurns(_Target, LLMIME_BLIND_ARMOR_BYPASS, _Turns)
-	IsEqual(_Turns, null)
-THEN
-	Set(_Turns, 1)
-ELSE
-	Clamp(_Turns, 0, _Turns)
-ENDIF
 IF "!c1&!c2"
 	CharacterIsDead(_Target)
 	CharacterHasStatus(_Target, BLIND)
 THEN
-	CharacterApplyStatus(_Target, BLIND, _Turns, 1, _Source)
+	IF "(c1&c2)|!c1"
+		CharacterGetStatusSourceCharacter(_Target, LLMIME_BLIND_ARMOR_BYPASS, _Source)
+		IsEqual(_Source, null)
+	THEN
+		Set(_Source, _Target)
+	ENDIF
+	IF "!c1|c2"
+		GetStatusTurns(_Target, LLMIME_BLIND_ARMOR_BYPASS, _Turns)
+		IsEqual(_Turns, null)
+	THEN
+		Set(_Turns, 1)
+	ELSE
+		Clamp(_Turns, 0, _Turns)
+	ENDIF
+		CharacterApplyStatus(_Target, BLIND, _Turns, 1, _Source)
 ENDIF
 	CharacterRemoveStatus(_Target, LLMIME_BLIND_ARMOR_BYPASS)
 
@@ -206,24 +206,24 @@ VARS
 ON
 	OnCharacterStatusApplied(_Target, LLMIME_SLOWED_ARMOR_BYPASS)
 ACTIONS
-IF "(c1&c2)|!c1"
-	CharacterGetStatusSourceCharacter(_Target, LLMIME_SLOWED_ARMOR_BYPASS, _Source)
-	IsEqual(_Source, null)
-THEN
-	Set(_Source, _Target)
-ENDIF
-IF "!c1|c2"
-	GetStatusTurns(_Target, LLMIME_SLOWED_ARMOR_BYPASS, _Turns)
-	IsEqual(_Turns, null)
-THEN
-	Set(_Turns, 1)
-ELSE
-	Clamp(_Turns, 0, _Turns)
-ENDIF
 IF "!c1&!c2"
 	CharacterIsDead(_Target)
 	CharacterHasStatus(_Target, SLOWED)
 THEN
+	IF "(c1&c2)|!c1"
+		CharacterGetStatusSourceCharacter(_Target, LLMIME_SLOWED_ARMOR_BYPASS, _Source)
+		IsEqual(_Source, null)
+	THEN
+		Set(_Source, _Target)
+	ENDIF
+	IF "!c1|c2"
+		GetStatusTurns(_Target, LLMIME_SLOWED_ARMOR_BYPASS, _Turns)
+		IsEqual(_Turns, null)
+	THEN
+		Set(_Turns, 1)
+	ELSE
+		Clamp(_Turns, 0, _Turns)
+	ENDIF
 	CharacterApplyStatus(_Target, SLOWED, _Turns, 1, _Source)
 ENDIF
 	CharacterRemoveStatus(_Target, LLMIME_SLOWED_ARMOR_BYPASS)
@@ -236,24 +236,24 @@ VARS
 ON
 	OnCharacterStatusApplied(_Target, LLMIME_WEAK_ARMOR_BYPASS)
 ACTIONS
-IF "(c1&c2)|!c1"
-	CharacterGetStatusSourceCharacter(_Target, LLMIME_WEAK_ARMOR_BYPASS, _Source)
-	IsEqual(_Source, null)
-THEN
-	Set(_Source, _Target)
-ENDIF
-IF "!c1|c2"
-	GetStatusTurns(_Target, LLMIME_WEAK_ARMOR_BYPASS, _Turns)
-	IsEqual(_Turns, null)
-THEN
-	Set(_Turns, 1)
-ELSE
-	Clamp(_Turns, 0, _Turns)
-ENDIF
 IF "!c1&!c2"
 	CharacterIsDead(_Target)
 	CharacterHasStatus(_Target, WEAK)
 THEN
+	IF "(c1&c2)|!c1"
+		CharacterGetStatusSourceCharacter(_Target, LLMIME_WEAK_ARMOR_BYPASS, _Source)
+		IsEqual(_Source, null)
+	THEN
+		Set(_Source, _Target)
+	ENDIF
+	IF "!c1|c2"
+		GetStatusTurns(_Target, LLMIME_WEAK_ARMOR_BYPASS, _Turns)
+		IsEqual(_Turns, null)
+	THEN
+		Set(_Turns, 1)
+	ELSE
+		Clamp(_Turns, 0, _Turns)
+	ENDIF
 	CharacterApplyStatus(_Target, WEAK, _Turns, 1, _Source)
 ENDIF
 	CharacterRemoveStatus(_Target, LLMIME_WEAK_ARMOR_BYPASS)
@@ -266,24 +266,24 @@ VARS
 ON
 	OnCharacterStatusApplied(_Target, LLMIME_PHYSICAL_SILENCED)
 ACTIONS
-IF "(c1&c2)|!c1"
-	CharacterGetStatusSourceCharacter(_Target, LLMIME_PHYSICAL_SILENCED, _Source)
-	IsEqual(_Source, null)
-THEN
-	Set(_Source, _Target)
-ENDIF
-IF "!c1|c2"
-	GetStatusTurns(_Target, LLMIME_PHYSICAL_SILENCED, _Turns)
-	IsEqual(_Turns, null)
-THEN
-	Set(_Turns, 1)
-ELSE
-	Clamp(_Turns, 0, _Turns)
-ENDIF
 IF "!c1&!c2"
 	CharacterIsDead(_Target)
 	CharacterHasStatus(_Target, MUTED)
 THEN
+	IF "(c1&c2)|!c1"
+		CharacterGetStatusSourceCharacter(_Target, LLMIME_PHYSICAL_SILENCED, _Source)
+		IsEqual(_Source, null)
+	THEN
+		Set(_Source, _Target)
+	ENDIF
+	IF "!c1|c2"
+		GetStatusTurns(_Target, LLMIME_PHYSICAL_SILENCED, _Turns)
+		IsEqual(_Turns, null)
+	THEN
+		Set(_Turns, 1)
+	ELSE
+		Clamp(_Turns, 0, _Turns)
+	ENDIF
 	CharacterApplyStatus(_Target, MUTED, _Turns, 1, _Source)
 ENDIF
 	CharacterRemoveStatus(_Target, LLMIME_PHYSICAL_SILENCED)

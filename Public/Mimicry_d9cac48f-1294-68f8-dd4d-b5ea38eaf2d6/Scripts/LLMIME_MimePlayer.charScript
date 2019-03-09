@@ -3,6 +3,7 @@ INIT
 	//FLOAT3:%LLMIME_Skills_FacingDirection_LookAt = null
 EVENTS
 
+/*
 EVENT LLMIME_Debug_Rotation
 VARS
 	FLOAT3:_Rot
@@ -39,7 +40,7 @@ THEN
 	SetVar(__Me, "LeaderLog_Message", _Str)
 	CharacterEvent(__Me, "LeaderLog_Commands_Log")
 ENDIF
-
+*/
 BEHAVIOUR
 
 /*
