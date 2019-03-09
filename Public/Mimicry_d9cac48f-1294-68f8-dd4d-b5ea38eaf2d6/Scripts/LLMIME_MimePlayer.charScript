@@ -1,7 +1,54 @@
 INIT
 	CHARACTER:__Me
-
+	//FLOAT3:%LLMIME_Skills_FacingDirection_LookAt = null
 EVENTS
 
+EVENT LLMIME_Debug_Rotation
+VARS
+	FLOAT3:_Rot
+	STRING:_Str
+ON
+	OnSkillCast(__Me, _)
+ACTIONS
+	GetRotation(__Me, _Rot)
+	Print(_Str, "[Mimicry:Debug:Behavior:SkillCast] Rotation is [1]", _Rot)
+	SetVar(__Me, "LeaderLog_Message", _Str)
+	CharacterEvent(__Me, "LeaderLog_Commands_Log")
+	
+EVENT LLMIME_Debug_Direction
+VARS
+	FLOAT3:_Forward
+	FLOAT3:_Rot
+	FLOAT3:_Pos
+	FLOAT3:_Dir
+	FLOAT3:_Target
+	FLOAT:_Dist
+	STRING:_Str
+ON
+	OnCharacterEvent(__Me, "LLMIME_Debug_TraceDirection")
+ACTIONS
+IF "c1&!c2&c3"
+	GetVar(_Target, __Me, "LLMIME_Debug_SkillTarget")
+	IsEqual(_Target, null)
+	GetPosition(__Me, _Pos)
+THEN
+	GetForwardDirection(__Me, _Forward) 
+	GetDirection(__Me, _Target, _Dir, _Dist)
+	GetRotation(__Me, _Rot)
+	Print(_Str, "[Mimicry:Debug:Behavior:LLMIME_Debug_TraceDirection] Pos [1] | Target [2] | Direction [3] | Distance [4] | Rotation [5] | ForwardDir [6]", _Pos, _Target, _Dir, _Dist, _Rot, _Forward)
+	SetVar(__Me, "LeaderLog_Message", _Str)
+	CharacterEvent(__Me, "LeaderLog_Commands_Log")
+ENDIF
 
 BEHAVIOUR
+
+/*
+REACTION LLMIME_Player_LookAt,9999
+USAGE ALL
+CHECK "!c1"
+	IsEqual(%LLMIME_Skills_FacingDirection_LookAt, null)
+ACTIONS
+	CharacterLookAt(%LLMIME_Skills_FacingDirection_LookAt, 0, 0)
+	Set(%LLMIME_Skills_FacingDirection_LookAt, FLOAT3:null)
+	StatusText(__Me, "Looked?")
+*/

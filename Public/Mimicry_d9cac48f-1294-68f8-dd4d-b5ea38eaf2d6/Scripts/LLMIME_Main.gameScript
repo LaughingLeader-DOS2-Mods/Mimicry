@@ -2,6 +2,7 @@
 #INCLUDE LLMIME_Skills
 #INCLUDE LLMIME_Statuses
 #INCLUDE LLMIME_Mime_Passives
+#INCLUDE LLMIME_Mimicking
 
 INIT
 	LIST<STATUS>:%LLMIME_PassiveStatuses
@@ -14,6 +15,7 @@ INIT
 	USING LLMIME_Skills
 	USING LLMIME_Statuses
 	USING LLMIME_Mime_Passives
+	USING LLMIME_Mimicking
 EVENTS
 
 EVENT LLMIME_InitStatusList

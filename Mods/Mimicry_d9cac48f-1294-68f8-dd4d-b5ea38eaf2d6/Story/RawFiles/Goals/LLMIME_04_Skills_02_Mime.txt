@@ -3,6 +3,56 @@ SubGoalCombiner SGC_AND
 INITSECTION
 
 KBSECTION
+//REGION FACING
+IF
+CharacterUsedSkillOnTarget(_Mime, _Target, "Target_LLMIME_SetFacingDirection", _, _)
+AND
+ObjectGetFlag(_Mime, "LLMIME_FacingDirectionSet", 0)
+AND
+GetPosition(_Target, _x, _y, _z)
+THEN
+SetVarFloat3(_Mime, "LLMIME_Skills_FacingDirection_Target", _x, _y, _z);
+SetStoryEvent(_Mime, "LLMIME_Skills_SetFacingDirection");
+ObjectSetFlag(_Mime, "LLMIME_FacingDirectionSet", 0);
+
+IF
+CharacterUsedSkillAtPosition(_Mime, _x, _y, _z, "Target_LLMIME_SetFacingDirection", _, _)
+AND
+ObjectGetFlag(_Mime, "LLMIME_FacingDirectionSet", 0)
+THEN
+SetVarFloat3(_Mime, "LLMIME_Skills_FacingDirection_Target", _x, _y, _z);
+SetStoryEvent(_Mime, "LLMIME_Skills_SetFacingDirection");
+ObjectSetFlag(_Mime, "LLMIME_FacingDirectionSet", 0);
+
+IF
+SkillCast(_Mime, "Target_LLMIME_SetFacingDirection", _, _)
+THEN
+CharacterStatusText(_Mime, "LLMIME_StatusText_FacingDirectionSaved");
+
+//Turn ended, still in combat
+IF
+StoryEvent((CHARACTERGUID)_Mime, "LLMIME_Events_RequestMimicking")
+AND
+CharacterIsDeadOrFeign(_Mime, 0)
+AND
+ObjectGetFlag(_Mime, "LLMIME_FacingDirectionSet", 1)
+THEN
+SetStoryEvent(_Mime, "LLMIME_Skills_CalculateFacingDirection");
+
+IF
+StoryEvent((CHARACTERGUID)_Mime, "LLMIME_Events_RequestMimicking")
+THEN
+ObjectClearFlag(_Mime, "LLMIME_FacingDirectionSet", 0);
+
+IF
+StoryEvent((CHARACTERGUID)_Mime, "LLMIME_Skills_ApplyFacingDirection")
+AND
+GetVarFloat3(_Mime, "LLMIME_Skills_FacingDirection_LookAt", _x, _y, _z)
+THEN
+CharacterUseSkillAtPosition(_Mime, "Target_LLMIME_ApplyFacingDirection", _x, _y, _z, 0, 1);
+CharacterStatusText(_Mime, "Looked at target?");
+//END_REGION
+
 //REGION QUAKE_SLAM
 IF
 ItemStatusAttempt(_Target, "LLMIME_LAUNCHED", (CHARACTERGUID)_Caster)
@@ -683,16 +733,34 @@ NOT DB_LLMIME_Skills_Temp_HiddenApproachPosition(_Mime, _x, _y, _z);
 //END_REGION
 
 //REGION UNHOLY_DARKNESS
-//Delayed Smoke
 IF
-CharacterUsedSkillAtPosition(_Mime, _x, _y, _z, "Target_LLMIME_Mask_Unholy", _, _)
+CharacterStatusAttempt(_Target, "LLMIME_UNHOLY_HIT", (CHARACTERGUID)_Mime)
+AND
+NOT LeaderLib_Helper_QRY_HasStatus(_Target, "DYING")
+THEN
+DB_LLMIME_Skills_Temp_UnholyDarknessTarget(_Mime, _Target);
+
+IF
+CharacterStatusAttempt(_Target, "LLMIME_UNHOLY_HIT", (CHARACTERGUID)_Mime)
+AND
+LeaderLib_Helper_QRY_HasStatus(_Target, "DYING")
+THEN
+NOT DB_LLMIME_Skills_Temp_UnholyDarknessTarget(_Mime, _Target);
+CharacterCharacterSetEvent(_Mime, _Target, "LLMIME_Skills_Unholy_DeathExplosion");
+LeaderLog_Log("DEBUG", "[LLMIME_10_TS_Skills_01_MimeSkills:CharacterPrecogDying] Creating Unholy Darkness death explosion.");
+
+IF
+CharacterUsedSkillAtPosition(_Mime, _x, _y, _z, "ProjectileStrike_LLMIME_Mask_Unholy", _, _)
 THEN
 DB_LLMIME_Skills_Temp_DarknessPosition(_Mime, _x, _y, _z);
 
 IF
-SkillCast(_Mime, "Target_LLMIME_Mask_Unholy", _, _)
+SkillCast(_Mime, "ProjectileStrike_LLMIME_Mask_Unholy", _, _)
+AND
+DB_LLMIME_Skills_Temp_DarknessPosition(_Mime, _x, _y, _z)
 THEN
-ProcObjectTimer(_Mime, "LLMIME_Timers_Skills_UnholyDarknessSmoke", 900);
+PlayEffectAtPosition("LLMIME_FX_Skills_Unholy_Impact_Root_01", _x, _y, _z);
+ProcObjectTimer(_Mime, "LLMIME_Timers_Skills_UnholyDarknessSmoke", 800);
 
 PROC
 ProcObjectTimerFinished((CHARACTERGUID)_Mime, "LLMIME_Timers_Skills_UnholyDarknessSmoke")
@@ -700,8 +768,17 @@ AND
 DB_LLMIME_Skills_Temp_DarknessPosition(_Mime, _x, _y, _z)
 THEN
 NOT DB_LLMIME_Skills_Temp_DarknessPosition(_Mime, _x, _y, _z);
-CreateSurfaceAtPosition(_x, _y, _z, "SurfaceSmokeCloud", 3.0, 12.0);
+//CreateSurfaceAtPosition(_x, _y, _z, "SurfaceSmokeCloud", 2.8, 12.0);
+SetVarFloat3(_Mime, "LLMIME_Skills_UnholyTargetPosition", _x, _y, _z);
+SetStoryEvent(_Mime, "LLMIME_Skills_Unholy_CloudDamage");
+ProcObjectTimer(_Mime, "LLMIME_Timers_Skills_UnholyDarkness_ClearTargets", 1000);
 
+PROC
+ProcObjectTimerFinished((CHARACTERGUID)_Mime, "LLMIME_Timers_Skills_UnholyDarkness_ClearTargets")
+AND
+DB_LLMIME_Skills_Temp_UnholyDarknessTarget(_Mime, _Target)
+THEN
+NOT DB_LLMIME_Skills_Temp_UnholyDarknessTarget(_Mime, _Target);
 //END_REGION
 EXITSECTION
 

@@ -110,6 +110,14 @@ THEN
 NOT DB_LLMIME_Skills_Temp_DisabledCharacter(_Character, _Status);
 //END_REGION
 
+IF
+CharacterStatusAttempt(_Target, "DYING", _)
+AND
+DB_LLMIME_Skills_Temp_UnholyDarknessTarget(_Mime, _Target)
+THEN
+NOT DB_LLMIME_Skills_Temp_UnholyDarknessTarget(_Mime, _Target);
+CharacterCharacterSetEvent(_Mime, _Target, "LLMIME_Skills_Unholy_DeathExplosion");
+LeaderLog_Log("DEBUG", "[LLMIME_10_TS_Skills_01_MimeSkills:CharacterPrecogDying] Creating Unholy Darkness death explosion.");
 EXITSECTION
 
 ENDEXITSECTION

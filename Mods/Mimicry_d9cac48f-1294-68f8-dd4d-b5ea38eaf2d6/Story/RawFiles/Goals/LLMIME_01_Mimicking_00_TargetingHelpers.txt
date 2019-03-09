@@ -26,6 +26,7 @@ DB_LLMIME_Mimic_Temp_MimicTarget(_Caster, _Mime, _Target);
 //END_REGION
 
 //REGION CALCULATE_TARGET_NORMAL
+/*
 PROC
 LLMIME_Mimic_CalculateTarget((CHARACTERGUID)_Mime, (CHARACTERGUID)_Caster, (REAL)_StartX, (REAL)_StartZ, (REAL)_TargetX, (REAL)_TargetY, (REAL)_TargetZ, (INTEGER)_TargetPriority, (STRING)_Action, (STRING)_ActionType)
 AND
@@ -38,17 +39,41 @@ AND
 RealSum(_MimeX, _xdiff, _MimeTargetX)
 AND
 RealSum(_MimeZ, _zdiff, _MimeTargetZ)
-/*
-AND
-LLMIME_Mimic_QRY_ValidatePosition(_Caster, _Mime, _MimeTargetX, _MimeTargetZ, _TargetX, _TargetY, _TargetZ, _MimeX, _MimeZ, _Action, _ActionType)
-AND
-DB_LLMIME_Mimic_Temp_ValidPosition(_Caster, _Mime, _ValidX, _ValidY, _ValidZ, _Action, _ActionType)
-*/
+//AND
+//LLMIME_Mimic_QRY_ValidatePosition(_Caster, _Mime, _MimeTargetX, _MimeTargetZ, _TargetX, _TargetY, _TargetZ, _MimeX, _MimeZ, _Action, _ActionType)
+//AND
+//DB_LLMIME_Mimic_Temp_ValidPosition(_Caster, _Mime, _ValidX, _ValidY, _ValidZ, _Action, _ActionType)
 THEN
 //NOT DB_LLMIME_Mimic_Temp_ValidPosition(_Caster, _Mime, _ValidX, _ValidY, _ValidZ, _Action, _ActionType);
 //LLMIME_Mimic_GetTargetNearPosition(_Caster, _Mime, _ValidX, _ValidY, _ValidZ, _TargetPriority, _Action, _ActionType);
 LLMIME_Mimic_GetTargetNearPosition(_Caster, _Mime, _MimeTargetX, _TargetY, _MimeTargetZ, _TargetPriority, _Action, _ActionType);
 //LLMINE_Debug_TracePositions(_StartX, _StartY, _StartZ, _TargetX, _Rotation, _TargetZ, _MimeX, _MimeY, _MimeZ, _MimeTargetX, _MimeTargetY, _MimeTargetZ);
+*/
+
+/*Behavior scripting has functions for getting direction vectors, so we offload the work there.*/
+PROC
+LLMIME_Mimic_CalculateTarget((CHARACTERGUID)_Mime, (CHARACTERGUID)_Caster, (REAL)_StartX, (REAL)_StartZ, (REAL)_TargetX, (REAL)_TargetY, (REAL)_TargetZ, (INTEGER)_TargetPriority, (STRING)_Action, (STRING)_ActionType)
+THEN
+SetVarFloat3(_Mime, "LLMIME_Mimicking_CasterTarget", _TargetX, _TargetY, _TargetZ);
+DB_LLMIME_Mimicking_Temp_TargetGet(_Caster, _Mime, _TargetPriority, _Action, _ActionType);
+CharacterCharacterSetEvent(_Caster, _Mime, "LLMIME_Mimicking_DetermineTarget");
+
+IF
+CharacterCharacterEvent(_Caster, _Mime, "LLMIME_Mimicking_TargetSet")
+AND
+GetVarFloat3(_Mime, "LLMIME_Mimicking_MimeTarget", _x, _y, _z)
+AND
+DB_LLMIME_Mimicking_Temp_TargetGet(_Caster, _Mime, _TargetPriority, _Action, _ActionType)
+THEN
+NOT DB_LLMIME_Mimicking_Temp_TargetGet(_Caster, _Mime, _TargetPriority, _Action, _ActionType);
+LLMIME_Mimic_GetTargetNearPosition(_Caster, _Mime, _x, _y, _z, _TargetPriority, _Action, _ActionType);
+
+IF
+CharacterCharacterEvent(_Caster, _Mime, "LLMIME_Mimicking_TargetSet")
+AND
+DB_LLMIME_Mimicking_Temp_TargetGet(_Caster, _Mime, _TargetPriority, _Action, _ActionType)
+THEN
+NOT DB_LLMIME_Mimicking_Temp_TargetGet(_Caster, _Mime, _TargetPriority, _Action, _ActionType);
 
 /*
 QRY

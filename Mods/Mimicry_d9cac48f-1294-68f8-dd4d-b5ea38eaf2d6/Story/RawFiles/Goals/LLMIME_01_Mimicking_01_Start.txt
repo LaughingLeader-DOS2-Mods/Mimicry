@@ -34,6 +34,8 @@ LLMIME_Mimicking_ApplyMimicking(_Mime);
 PROC
 LLMIME_Mimicking_ApplyMimicking((CHARACTERGUID)_Mime)
 AND
+CharacterIsDeadOrFeign(_Mime, 0)
+AND
 IsTagged(_Mime, "LLMIME_MimeFollower", 0)
 AND
 IsTagged(_Mime, "Mimicry_EnemyMime", 0)
@@ -47,6 +49,8 @@ ApplyStatus(_Mime, "LLMIME_MIMICKING", -1.0, 1, _Mime);
 PROC
 LLMIME_Mimicking_ApplyMimicking((CHARACTERGUID)_Mime)
 AND
+CharacterIsDeadOrFeign(_Mime, 0)
+AND
 IsTagged(_Mime, "LLMIME_MimeFollower", 1)
 AND
 NOT LeaderLib_Helper_QRY_HasStatus(_Mime, "LLMIME_MIMICKING_FOLLOWER")
@@ -57,6 +61,8 @@ ApplyStatus(_Mime, "LLMIME_MIMICKING_FOLLOWER", -1.0, 1, _Mime);
 
 PROC
 LLMIME_Mimicking_ApplyMimicking((CHARACTERGUID)_Mime)
+AND
+CharacterIsDeadOrFeign(_Mime, 0)
 AND
 IsTagged(_Mime, "Mimicry_EnemyMime", 1)
 AND

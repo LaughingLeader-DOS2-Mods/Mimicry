@@ -6,5 +6,6 @@
 	<content contentuid="hbd3b39e4g138eg4edag9b8cgfdbfc4736839" Target="ClassDescription">A warrior who mimics the actions of allies in battle</content>
 	<content contentuid="h6ea8d9fag5afeg47fagb4d3gc2948b34fa7b" Target="ClassLongDescription">A warrior who mimics the actions of allies in battle. Mimes are also proficient with unarmed combat, and provide additional skills and bonuses to nearby summoned creatures.</content>
 	<content contentuid="h256557fbg1d49g45d9g8690gb86b39d2a135" OT="rot damage">Shadow Damage</content>
+	<content contentuid="h168f52b6g342ag42e0g99d0g47d94b7363c8" OT="rot">Shadow</content>
 	<content contentuid="hf4632a8fg42a7g4d53gbe26gd203f28e3d5e" OT="Rot">Shadow</content>
 </contentList>

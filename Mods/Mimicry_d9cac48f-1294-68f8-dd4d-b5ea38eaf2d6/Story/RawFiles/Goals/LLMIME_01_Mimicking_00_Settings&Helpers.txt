@@ -67,7 +67,15 @@ DB_LLMIME_Mimicking_Blacklist_SkillTypes("teleportation", "", 0);
 //Special type shout skills, typically used for toggle abilities in mods
 DB_LLMIME_Mimicking_Blacklist_SkillElements("shout", "");
 //Special Mime Skills
+DB_LLMIME_Mimicking_Blacklist_Skills("Mimicry", "Target_LLMIME_SetFacingDirection");
+DB_LLMIME_Mimicking_Blacklist_Skills("Mimicry", "Target_LLMIME_ApplyFacingDirection");
 DB_LLMIME_Mimicking_Blacklist_Skills("Mimicry", "Target_LLMIME_MimicAttack");
+DB_LLMIME_Mimicking_Blacklist_Skills("Mimicry", "Target_LLMIME_MimicAttack_Ally");
+DB_LLMIME_Mimicking_Blacklist_Skills("Mimicry", "Projectile_LLMIME_MimicBowAttack");
+DB_LLMIME_Mimicking_Blacklist_Skills("Mimicry", "Projectile_LLMIME_MimicCrossbowAttack");
+DB_LLMIME_Mimicking_Blacklist_Skills("Mimicry", "Projectile_LLMIME_MimicWandAttack");
+DB_LLMIME_Mimicking_Blacklist_Skills("Mimicry", "Projectile_LLMIME_MimicDualWandAttack");
+
 DB_LLMIME_Mimicking_Blacklist_Skills("Mimicry", "Shout_LLMIME_ReturnToOwner");
 DB_LLMIME_Mimicking_Blacklist_Skills("Mimicry", "Shout_LLMIME_BrawlerStance");
 //Specific Source Skills
