@@ -10,11 +10,21 @@ GlobalSetFlag("LeaderLog_Trace_Enabled");
 ProcTriggerRegisterForPlayers((TRIGGERGUID)TRIGGERGUID_MusicVolumeTrigger_LLMIME_Debug_MusicTest_80649d71-e657-4c35-be19-708559c0c60c);
 
 KBSECTION
+IF
+TextEventSet("llmime_addskills")
+AND
+DB_LLMIME_Mime_LearnableSkills(_Skill)
+AND
+DB_IsPlayer(_Player)
+THEN
+CharacterAddSkill(_Player, _Skill, 1);
+
 //REGION INIT
 
 IF
 GameStarted("TestLevel_LL_Mimicry", 1)
 THEN
+DB_IsPlayer((CHARACTERGUID)S_Player_LLMIME_Mime_191f180c-6270-4cd1-a44a-e02454bd846f);
 DB_LLMIME_Debug_GameStarted(1);
 TimerLaunch("LLMIME_Debug_Start", 500);
 TimerLaunch("LLMIME_Debug_Test", 1000);
@@ -717,7 +727,7 @@ HasActiveStatus(_Mime, "LLMIME_COUNTER_THROW", 1)
 AND
 NOT DB_GlobalFlag("WeaponExpansion_IsActive")
 AND
-LeaderLib_Roll_QRY(60)
+LeaderLib_Roll_QRY(599)
 THEN
 CharacterUseSkill(_Mime, "Projectile_ThrowingKnife", _Attacker, 0, 1, 1);
 */

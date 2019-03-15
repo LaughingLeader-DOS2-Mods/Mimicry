@@ -502,7 +502,7 @@ CharacterIsDead(_Mime, 0)
 AND
 CharacterIsDead(_Target, 0)
 AND
-LeaderLib_Roll_QRY(250, 999)
+LeaderLib_Roll_QRY(250)
 THEN
 LLMIME_Brawler_StartDoubleAttack(_Mime, _Target);
 
@@ -513,7 +513,7 @@ CharacterIsDead(_Mime, 0)
 AND
 ItemIsDestroyed(_Target, 0)
 AND
-LeaderLib_Roll_QRY(250, 999)
+LeaderLib_Roll_QRY(250)
 THEN
 LLMIME_Brawler_StartDoubleAttack(_Mime, _Target);
 

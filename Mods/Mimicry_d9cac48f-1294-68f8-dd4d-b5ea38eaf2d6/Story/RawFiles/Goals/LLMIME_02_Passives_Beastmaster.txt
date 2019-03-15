@@ -51,7 +51,7 @@ SysClear("DB_LLMIME_MonsterSkill_Default", 1);
 DB_LLMIME_MonsterSkill_Default("Target_LLMIME_Wish");
 
 SysClear("DB_LLMIME_MonsterSkill_BadBreathStatus", 4);
-DB_LLMIME_MonsterSkill_BadBreathStatus("SLOWED", 800, 999, 9.0);
+DB_LLMIME_MonsterSkill_BadBreathStatus("SLOWED", 500, 999, 9.0);
 DB_LLMIME_MonsterSkill_BadBreathStatus("POISONED", 600, 799, 9.0);
 DB_LLMIME_MonsterSkill_BadBreathStatus("BLIND", 400, 599, 9.0);
 DB_LLMIME_MonsterSkill_BadBreathStatus("SLEEP", 251, 399, 9.0);
@@ -510,11 +510,11 @@ LLMIME_MonsterSkill_RollBadBreath(_Character, _Source);
 PROC
 LLMIME_MonsterSkill_RollBadBreath((CHARACTERGUID)_Character, (GUIDSTRING)_Source)
 AND
+DB_LLMIME_MonsterSkill_BadBreathStatus(_Status, _StartRange, _EndRange, _Turns)
+AND
 LeaderLib_Random_QRY(0,999)
 AND
 DB_LeaderLib_Random(_Roll)
-AND
-DB_LLMIME_MonsterSkill_BadBreathStatus(_Status, _StartRange, _EndRange, _Turns)
 AND
 _Roll >= _StartRange
 AND
