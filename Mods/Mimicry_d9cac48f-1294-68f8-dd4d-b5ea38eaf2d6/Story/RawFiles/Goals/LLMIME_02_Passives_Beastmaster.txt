@@ -41,25 +41,25 @@ LLMIME_MonsterSkill_RegisterToTag("TOTEM", "LLMIME_TOTEMRAGE", "Status");
 //Giant Incarnate
 SysClear("DB_LLMIME_MonsterSkill_Statuses", 3);
 LLMIME_MonsterSkill_RegisterToStatus("INF_FIRE_G", 		"Shout_LLMIME_Explosion", "Skill");
-LLMIME_MonsterSkill_RegisterToStatus("INF_WATER_G", 	"Cone_Enemy_WaterSpit", "Skill");
+LLMIME_MonsterSkill_RegisterToStatus("INF_WATER_G", 	"Cone_LLMIME_WaterSpit", "Skill");
 LLMIME_MonsterSkill_RegisterToStatus("INF_BLOOD_G", 	"Target_EnemyInfect", "Skill");
 LLMIME_MonsterSkill_RegisterToStatus("INF_ELECTRIC_G", 	"Storm_LLMIME_IncarnateLightning", "Skill");
-LLMIME_MonsterSkill_RegisterToStatus("INF_POISON_G", 	"Projectile_EnemyBeetleDart_Poison", "Skill");
+LLMIME_MonsterSkill_RegisterToStatus("INF_POISON_G", 	"Cone_LLMIME_BadBreath_Incarnate", "Skill");
 LLMIME_MonsterSkill_RegisterToStatus("INF_OIL_G", 		"Quake_EnemyEarthquake", "Skill");
 
 SysClear("DB_LLMIME_MonsterSkill_Default", 1);
 DB_LLMIME_MonsterSkill_Default("Target_LLMIME_Wish");
 
-SysClear("DB_LLMIME_MonsterSkill_BadBreathStatus", 3);
-DB_LLMIME_MonsterSkill_BadBreathStatus("SLOWED", 90, 9.0);
-DB_LLMIME_MonsterSkill_BadBreathStatus("POISONED", 80, 9.0);
-DB_LLMIME_MonsterSkill_BadBreathStatus("BLIND", 75, 9.0);
-DB_LLMIME_MonsterSkill_BadBreathStatus("SLEEP", 30, 9.0);
-DB_LLMIME_MonsterSkill_BadBreathStatus("DISARMED", 25, 9.0);
-DB_LLMIME_MonsterSkill_BadBreathStatus("MUTED", 20, 9.0);
-DB_LLMIME_MonsterSkill_BadBreathStatus("LLMIME_FROG", 10, 12.0);
+SysClear("DB_LLMIME_MonsterSkill_BadBreathStatus", 4);
+DB_LLMIME_MonsterSkill_BadBreathStatus("SLOWED", 800, 999, 9.0);
+DB_LLMIME_MonsterSkill_BadBreathStatus("POISONED", 600, 799, 9.0);
+DB_LLMIME_MonsterSkill_BadBreathStatus("BLIND", 400, 599, 9.0);
+DB_LLMIME_MonsterSkill_BadBreathStatus("SLEEP", 251, 399, 9.0);
+DB_LLMIME_MonsterSkill_BadBreathStatus("DISARMED", 200, 250, 9.0);
+DB_LLMIME_MonsterSkill_BadBreathStatus("MUTED", 101, 199, 9.0);
+DB_LLMIME_MonsterSkill_BadBreathStatus("LLMIME_FROG", 0, 100, 12.0);
 
-SysClear("DB_LLMIME_MonsterSkill_BadBreathStatus", 6);
+SysClear("DB_LLMIME_MonsterSkill_SummonRename", 6);
 DB_LLMIME_MonsterSkill_SummonRename("Template", "Summons_Plant_e63a712f-fc87-4469-8848-fd8941043afd", "Malboro", "#00FF00", "24", "Full");
 DB_LLMIME_MonsterSkill_SummonRename("Tag", "TOTEM", "Rage Totem", "#DC143C", "24", "Full");
 //Giant Incarnate
@@ -72,19 +72,13 @@ DB_LLMIME_MonsterSkill_SummonRename("Status", "INF_OIL_G", 			"Titan", 		"#7f3d0
 //END_REGION
 
 //REGION UPDATING
-QRY
-LLMIME_Beastmaster_Internal_QRY_VersionNeedsUpdating((STRING)_Version)
-AND
-_Version == "-1"
-THEN
-DB_NOOP(1);
-
 PROC
 LeaderUpdater_ModUpdated("Mimicry", "LaughingLeader", (STRING)_PastVersion, (STRING)_NewVersion)
 AND
-LLMIME_Beastmaster_Internal_QRY_VersionNeedsUpdating(_PastVersion)
+LeaderLib_StringExt_QRY_VersionIsLessThan(_PastVersion, 0,9,9,36)
 THEN
 LeaderLog_Log("DEBUG", "[LLMIME:Beastmaster] Updating settings from version [",_PastVersion,"]");
+SysClear("DB_LLMIME_MonsterSkill_BadBreathStatus", 3);
 LLMIME_Beastmaster_InitSettings();
 //END_REGION
 
@@ -509,38 +503,24 @@ DB_LLMIME_MonsterSkill_OriginalName(_Summon, _Name, "Elite Giant Incarnate");
 
 //REGION BAD_BREATH
 IF
-CharacterStatusApplied(_Character, "LLMIME_BAD_BREATH", _Enemy)
+CharacterStatusApplied(_Character, "LLMIME_BAD_BREATH", _Source)
 THEN
-LLMIME_MonsterSkill_RollBadBreath(_Character, _Enemy);
+LLMIME_MonsterSkill_RollBadBreath(_Character, _Source);
 
 PROC
-LLMIME_MonsterSkill_RollBadBreath((CHARACTERGUID)_Character, (GUIDSTRING)_Enemy)
+LLMIME_MonsterSkill_RollBadBreath((CHARACTERGUID)_Character, (GUIDSTRING)_Source)
 AND
-Random(99999, _Seed)
+LeaderLib_Random_QRY(0,999)
 AND
-Random(_Seed, _Ran)
+DB_LeaderLib_Random(_Roll)
 AND
-IntegerModulo(_Ran, 99, _Roll)
+DB_LLMIME_MonsterSkill_BadBreathStatus(_Status, _StartRange, _EndRange, _Turns)
 AND
-IntegertoString(_Roll, _RollStr)
+_Roll >= _StartRange
 AND
-LLMIME_QRY_Debug(_RollStr)
-AND
-DB_LLMIME_MonsterSkill_BadBreathStatus(_Status, _Chance, _Turns)
-AND
-_Roll <= _Chance
-AND
-StringConcatenate("Bad Breath: ", _Status, _Str)
+_Roll <= _EndRange
 THEN
-ApplyStatus(_Character, _Status, _Turns, 0, _Enemy);
-DebugBreak(_Str);
-
-QRY
-LLMIME_QRY_Debug((STRING)_RollStr)
-AND
-StringConcatenate("Bad Breath roll: ", _RollStr, _Str)
-THEN
-DebugBreak(_Str);
+ApplyStatus(_Character, _Status, _Turns, 0, _Source);
 //END_REGION
 EXITSECTION
 
