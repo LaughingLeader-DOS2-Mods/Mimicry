@@ -4,3 +4,5 @@ DB_Mimicry_BlockWeaponMimicking 1
 DB_LLMIME_MimeTags 1
 DB_LeaderLib_Follower_BlockRecruitment 1
 DB_LeaderLib_Helper_Temp_EquipmentCopy 3
+DB_LLMIME_CC_Temp_MaskFXHandle 2
+DB_LLMIME_CC_PortraitMaskEffect 4

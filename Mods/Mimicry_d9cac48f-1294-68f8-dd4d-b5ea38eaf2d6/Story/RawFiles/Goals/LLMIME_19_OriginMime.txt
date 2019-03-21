@@ -31,6 +31,16 @@ THEN
 DB_Origins((CHARACTERGUID)S_Player_LLMIME_Mime_191f180c-6270-4cd1-a44a-e02454bd846f);
 */
 
+QRY
+LLMIME_Origin_IsOriginMime(S_Player_LLMIME_Mime_191f180c-6270-4cd1-a44a-e02454bd846f)
+THEN
+DB_NOOP(1);
+
+QRY
+LLMIME_Origin_IsOriginMime(S_Player_LLMIME_MimeF_45299363-87bb-4e78-ad0d-787dacc2659b)
+THEN
+DB_NOOP(1);
+
 PROC
 PROC_Shared_CharacterCreationFinished()
 AND

@@ -1195,7 +1195,7 @@ data "ForGameMaster" "No"
 data "InitiateCombat" "No"
 data "DisplayName" " "
 data "Items" "ARM_LLMIME_Mime_Mask_Horns"
-data "Icon" "unknown"
+data "Icon" ""
 data "StackId" "Stack_LLMIME_FX_CC_Mask"
 
 new entry "LLMIME_UNHOLY_HIT"

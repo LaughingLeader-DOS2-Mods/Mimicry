@@ -47,24 +47,18 @@ DB_LLMIME_Brawler_UnarmedDOS2Skills("Target_Flurry");
 //END_REGION
 
 //REGION UPDATING
-//Disabled for now
-QRY
-LLMIME_Brawler_Internal_QRY_VersionNeedsUpdating((STRING)_Version)
+PROC
+LeaderUpdater_ModUpdated("Mimicry", "LaughingLeader", (STRING)_PastVersion, (STRING)_NewVersion)
 AND
-_Version == "-1"
+LeaderLib_StringExt_QRY_VersionIsLessThan(_PastVersion, 0, 9, 9, 3)
 THEN
-DB_NOOP(1);
+LeaderLog_Log("DEBUG", "[LLMIME:Brawler] Updating settings from version [",_PastVersion,"] to [",_NewVersion,"].");
+LLMIME_Brawler_InitSettings();
 
 PROC
 LeaderUpdater_ModUpdated("Mimicry", "LaughingLeader", (STRING)_PastVersion, (STRING)_NewVersion)
 AND
-LLMIME_Brawler_Internal_QRY_VersionNeedsUpdating(_PastVersion)
-THEN
-LeaderLog_Log("DEBUG", "[LLMIME:Brawler] Updating settings from version [",_PastVersion,"]");
-LLMIME_Brawler_InitSettings();
-
-PROC
-LeaderUpdater_ModUpdated("Mimicry", "LaughingLeader", (STRING)_PastVersion, "0.9.9.3")
+LeaderLib_StringExt_QRY_VersionIsLessThan(_PastVersion, 0, 9, 9, 3)
 AND
 DB_LLMIME_Follower_Mime(_Mime)
 AND
@@ -75,7 +69,9 @@ THEN
 RemoveStatus(_Mime, _Status);
 
 PROC
-LeaderUpdater_ModUpdated("Mimicry", "LaughingLeader", (STRING)_PastVersion, "0.9.9.3")
+LeaderUpdater_ModUpdated("Mimicry", "LaughingLeader", (STRING)_PastVersion, (STRING)_NewVersion)
+AND
+LeaderLib_StringExt_QRY_VersionIsLessThan(_PastVersion, 0, 9, 9, 3)
 AND
 DB_LLMIME_Follower_Mime(_Mime)
 THEN
@@ -204,7 +200,30 @@ ObjectSetFlag(_Mime, _SettingsFlag); // Default
 //Post-CC Auto-Stance
 PROC
 LeaderLib_CC_PresetSaved((CHARACTERGUID)_Player, "LLMIME_Mime")
+AND
+NOT DB_GLO_FirstLevelAfterCharacterCreation("TUT_Tutorial_A")
 THEN
+LLMIME_Brawler_ApplyStance(_Player);
+
+PROC
+LeaderLib_CC_PresetSaved((CHARACTERGUID)_Player, "LLMIME_Mime")
+AND
+DB_GLO_FirstLevelAfterCharacterCreation("TUT_Tutorial_A")
+THEN
+DB_LLMIME_Brawler_Temp_ApplyInTutorial(_Player);
+
+PROC
+PROC_TUT_InitLoseWeapons()
+THEN
+TimerCancel("LLMIME_Timers_Tutorial_ApplyBrawlerStance");
+TimerLaunch("LLMIME_Timers_Tutorial_ApplyBrawlerStance", 250);
+
+IF
+TimerFinished("LLMIME_Timers_Tutorial_ApplyBrawlerStance")
+AND
+DB_LLMIME_Brawler_Temp_ApplyInTutorial(_Player)
+THEN
+NOT DB_LLMIME_Brawler_Temp_ApplyInTutorial(_Player);
 LLMIME_Brawler_ApplyStance(_Player);
 
 PROC

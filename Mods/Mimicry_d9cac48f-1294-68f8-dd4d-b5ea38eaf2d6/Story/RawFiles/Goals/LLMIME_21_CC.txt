@@ -1,18 +1,23 @@
 Version 1
 SubGoalCombiner SGC_AND
 INITSECTION
-SetOnStage(CHARACTERGUID_LLMIME_Debug_Elves_Male_PortraitHelper_8c3a78ac-cfad-4ff9-8d3f-59ec93148cdd, 0);
-SetOnStage(CHARACTERGUID_LLMIME_Debug_Elves_Female_PortraitHelper_6716920e-8ce4-4f1d-af52-b4e211049a52, 0);
-SetOnStage(ITEMGUID_S_LLMIME_Debug_Mask_Elves_Male_Portrait_1_22bef3dc-6271-414c-9734-1d89ffa65e5a, 0);
-SetOnStage(ITEMGUID_S_LLMIME_Debug_Mask_Elves_Male_Portrait_2_d0bbd137-7c23-4ffb-98dc-97866a372f5b, 0);
-SetOnStage(ITEMGUID_S_LLMIME_Debug_Mask_Elves_Female_Portrait_1_4c0fad65-6d81-4e79-88ce-59b94dffa745, 0);
-SetOnStage(ITEMGUID_S_LLMIME_Debug_Mask_Elves_Female_Portrait_2_fa76829d-00c3-43b3-be91-236cf92424e3, 0);
 LLMIME_CC_InitSettings();
 
 KBSECTION
 PROC
 LLMIME_CC_InitSettings()
 THEN
+DB_NOOP(1);
+
+PROC
+LeaderUpdater_ModUpdated("Mimicry", "LaughingLeader", (STRING)_OldVersion, (STRING)_NewVersion)
+AND
+LeaderLib_StringExt_QRY_VersionIsLessThan(_OldVersion, 0, 9, 9, 37)
+THEN
+SysClear("DB_LLMIME_CC_PortraitMasks", 4);
+SysClear("DB_LLMIME_CC_PortraitMaskOffset", 4);
+SysClear("DB_LLMIME_CC_PortraitMaskEffect", 4);
+
 /*
 DB_LLMIME_CC_PortraitProxy((CHARACTERGUID)CHARACTERGUID_S_LLMIME_Dummy_PortraitProxy_2_ce7cf2e3-c6d0-417c-a913-15f5ddf1e7a7);
 DB_LLMIME_CC_PortraitProxy(CHARACTERGUID_S_LLMIME_Dummy_PortraitProxy_1_2e277bfc-277b-4ebb-9c1c-1cd85d7dbdde);
@@ -20,7 +25,7 @@ DB_LLMIME_CC_PortraitProxy(CHARACTERGUID_S_LLMIME_Dummy_PortraitProxy_3_8cbfe8ec
 DB_LLMIME_CC_PortraitProxy(CHARACTERGUID_S_LLMIME_Dummy_PortraitProxy_4_e7d79fe7-eae3-45b3-80f0-7c9262ca5ef6);
 */
 
-DB_LLMIME_CC_PortraitMaskEffect("Elf", 0, "LLMIME_FX_Status_CC_Mask_Elf_Male_01", "c_lip_upper_Bone");
+//DB_LLMIME_CC_PortraitMaskEffect("Elf", 0, "LLMIME_FX_Status_CC_Mask_Elf_Male_01", "c_lip_upper_Bone");
 /*
 //DB_LLMIME_CC_PortraitMasks(_Index, _Race, _IsFemale, _Mask)
 DB_LLMIME_CC_PortraitMasks(1, "Elf", 0, (ITEMGUID)ITEMGUID_S_LLMIME_Debug_Mask_Elves_Male_Portrait_1_22bef3dc-6271-414c-9734-1d89ffa65e5a);
@@ -56,121 +61,66 @@ IF
 DB_Illusionist(_Player, _Mirror)
 AND
 LLMIME_QRY_CharacterIsAMime(_Player)
+AND
+ObjectGetFlag(_Player, "Mimicry_ShowMaskInPortrait", 1)
 THEN
 ProcObjectTimer(_Player, "LLMIME_Timers_Respec_DisplayPortraitMask", 250);
 
 PROC
 ProcObjectTimerFinished((CHARACTERGUID)_Player, "LLMIME_Timers_Respec_DisplayPortraitMask")
-AND
-CharacterGetRace(_Player, 0, _Race)
-AND
-CharacterIsFemale(_Player, _IsFemale)
-AND
-IsTagged(_Player, "UNDEAD", _IsUndead)
-AND
-DB_LeaderLib_CC_PortraitTriggers(1, _Race, _IsFemale, _IsUndead, _Trigger)
 THEN
-//LLMIME_CC_SetPortraitProxy(_Player, _Trigger);
-ApplyStatus(_Player, "LLMIME_FX_CC_MASK", 1.0, 1, _Player);
+LLMIME_CC_Internal_PlayMaskEffect(_Player, -1.0);
 
 PROC
-Proc_HomesteadTeleportAfterMirror((CHARACTERGUID)_Player,(ITEMGUID)_Mirror,(TRIGGERGUID)_TargetTrigger)
+Proc_HomesteadTeleportAfterMirror((CHARACTERGUID)_Player, (ITEMGUID)_Mirror, (TRIGGERGUID)_TargetTrigger)
 AND
-DB_LLMIME_CC_Temp_ProxySet(_Player, _Proxy)
+LLMIME_QRY_CharacterIsAMime(_Player)
 THEN
-//LLMIME_CC_HidePortraitProxy(_Player, _Proxy);
-RemoveStatus(_Player, "LLMIME_FX_CC_MASK");
-/*
-PROC
-ProcObjectTimerFinished((CHARACTERGUID)_Player, "LLMIME_Timers_Respec_DisplayPortraitMask")
-AND
-CharacterGetRace(_Player, 0, _Race)
-AND
-CharacterIsFemale(_Player, _IsFemale)
-AND
-IsTagged(_Player, "UNDEAD", _IsUndead)
-AND
-DB_LeaderLib_CC_PortraitTriggers(1, _Race, _IsFemale, _IsUndead, _Trigger)
-AND
-DB_LLMIME_CC_PortraitMasks(1, _Race, _IsFemale, _Mask)
-AND
-GetPosition(_Trigger, _x, _y, _z)
-AND
-DB_LLMIME_CC_PortraitMaskOffset(_Mask, _ox, _oy, _oz)
-AND
-RealSum(_x, _ox, _tx)
-AND
-RealSum(_y, _oy, _ty)
-AND
-RealSum(_z, _oz, _tz)
-THEN
-TeleportToPosition(_Mask, _tx, _ty, _tz, "", 0, 1);
-SetOnStage(_Mask, 1);
-DB_LLMIME_CC_Temp_ActivePortraitMask(_Player, _Mask, _Trigger);
-*/
-
-//Respec done
-/*
-PROC
-Proc_HomesteadTeleportAfterMirror((CHARACTERGUID)_Player,(ITEMGUID)_Mirror,(TRIGGERGUID)_TargetTrigger)
-AND
-DB_LLMIME_CC_Temp_ActivePortraitMask(_Player, _Mask, _Trigger)
-THEN
-NOT DB_LLMIME_CC_Temp_ActivePortraitMask(_Player, _Mask, _Trigger);
-SetOnStage(_Mask, 0);
-*/
+LLMIME_CC_Internal_StopMaskEffect(_Player);
 //END_REGION
 
 //REGION PORTRAIT_MASK
 PROC
-LLMIME_CC_SetPortraitProxy((CHARACTERGUID)_Player, (TRIGGERGUID)_Trigger)
-AND
-DB_LLMIME_CC_Temp_ProxySet(_Player, _Proxy)
+LLMIME_CC_Internal_PlayMaskEffect((CHARACTERGUID)_Player, (REAL)_Duration)
 THEN
-LLMIME_CC_Internal_UpdateProxy(_Player, _Proxy, _Trigger);
+ApplyStatus(_Player, "LLMIME_FX_CC_MASK", _Duration, 1, _Player);
 
 PROC
-LLMIME_CC_SetPortraitProxy((CHARACTERGUID)_Player, (TRIGGERGUID)_Trigger)
-AND
-NOT DB_LLMIME_CC_Temp_ProxySet(_Player, _)
-AND
-DB_LLMIME_CC_PortraitProxy(_Proxy)
-AND
-NOT DB_LLMIME_CC_Temp_ProxySet(_, _Proxy)
-AND
-NOT DB_LLMIME_CC_Temp_ProxySet(_Player, _)
+LLMIME_CC_Internal_StopMaskEffect((CHARACTERGUID)_Player)
 THEN
-LLMIME_CC_Internal_UpdateProxy(_Player, _Proxy, _Trigger);
+LeaderLib_Statuses_RemoveIfActive(_Player, "LLMIME_FX_CC_MASK");
+
+/*
+PROC
+LLMIME_CC_Internal_PlayMaskEffect((CHARACTERGUID)_Character)
+AND
+NOT DB_LLMIME_CC_Temp_MaskFXHandle(_Character, _)
+AND
+CharacterGetRace(_Character, 1, _Race)
+AND
+CharacterIsFemale(_Character, _IsFemale)
+AND
+DB_LLMIME_CC_PortraitMaskEffect(_Race, _IsFemale, (STRING)_Effect, (STRING)_Bone)
+AND
+PlayLoopEffect(_Character, _Effect, _Bone, _Handle)
+THEN
+DB_LLMIME_CC_Temp_MaskFXHandle(_Character, _Handle);
 
 PROC
-LLMIME_CC_Internal_UpdateProxy((CHARACTERGUID)_Player, (CHARACTERGUID)_Proxy, (TRIGGERGUID)_Trigger)
+LLMIME_CC_Internal_StopMaskEffects()
 AND
-GetPosition(_Trigger, _x, _y, _z)
-AND
-RealSum(_z, -0.043, _tz)
+DB_IsPlayer(_Player)
 THEN
-DB_LLMIME_CC_Temp_ProxySet(_Player, _Proxy);
-CharacterTransformFromCharacter(_Proxy, _Player, 0, 1, 0, 0, 0, 1, 0);
-TeleportToPosition(_Proxy, _x, _tz, _z, "", 0, 1);
-SetOnStage(_Proxy, 1);
-ApplyStatus(_Player, "LLMIME_FX_CC_MASK", -1.0, 1, _Proxy);
-//ApplyStatus(_Proxy, "LEADERLIB_HIDE_BODY", -1.0, 1, _Proxy);
-//TeleportToPosition(ITEMGUID_S_LLMIME_Debug_Mask_Elves_Male_Portrait_1_22bef3dc-6271-414c-9734-1d89ffa65e5a, _x, _y, _z, "", 0, 1);
-//SetOnStage(ITEMGUID_S_LLMIME_Debug_Mask_Elves_Male_Portrait_1_22bef3dc-6271-414c-9734-1d89ffa65e5a, 1);
+LLMIME_CC_Internal_StopMaskEffect(_Player);
 
 PROC
-LLMIME_CC_HidePortraitProxy((CHARACTERGUID)_Player)
+LLMIME_CC_Internal_StopMaskEffect((CHARACTERGUID)_Player)
 AND
-DB_LLMIME_CC_Temp_ProxySet(_Player, _Proxy)
+DB_LLMIME_CC_Temp_MaskFXHandle((CHARACTERGUID)_Player, (INT64)_Handle)
 THEN
-LLMIME_CC_HidePortraitProxy(_Player, _Proxy);
-
-PROC
-LLMIME_CC_HidePortraitProxy((CHARACTERGUID)_Player, (CHARACTERGUID)_Proxy)
-THEN
-NOT DB_LLMIME_CC_Temp_ProxySet(_Player, _Proxy);
-RemoveStatus(_Proxy, "LLMIME_FX_CC_MASK");
-SetOnStage(_Proxy, 0);
+StopLoopEffect(_Handle);
+NOT DB_LLMIME_CC_Temp_MaskFXHandle(_Player, _Handle);
+*/
 //END_REGION
 
 /*
