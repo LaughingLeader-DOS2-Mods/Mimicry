@@ -200,6 +200,19 @@ THEN
 ObjectSetFlag(_Mime, _SettingsFlag); // Default
 //END_REGION
 
+//REGION STANCE_FIRST_AUTO_STANCE
+//Post-CC Auto-Stance
+PROC
+LeaderLib_CC_PresetSaved((CHARACTERGUID)_Player, "LLMIME_Mime")
+THEN
+LLMIME_Brawler_ApplyStance(_Player);
+
+PROC
+LeaderLib_PresetApplied((CHARACTERGUID)_Player, "LLMIME_Mime", (INTEGER)_IsRace)
+THEN
+LLMIME_Brawler_ApplyStance(_Player);
+//END_REGION
+
 //REGION BRAWLER_STANCE_TOGGLE
 IF
 CharacterUsedSkill(_Mime, "Shout_LLMIME_BrawlerStance", _, _)

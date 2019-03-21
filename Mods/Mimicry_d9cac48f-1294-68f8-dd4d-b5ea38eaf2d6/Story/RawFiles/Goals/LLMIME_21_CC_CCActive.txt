@@ -77,7 +77,8 @@ THEN
 DB_LLMIME_CC_Temp_Index(_Dummy, _UserID, 4);
 //END_REGION
 
-//REGION PORTRAIT_MAS
+//REGION PORTRAIT_MASK
+/*
 PROC
 LLMIME_CC_PositionPortraitMask((CHARACTERGUID)_Character, (ITEMGUID)_Mask, (TRIGGERGUID)_Trigger)
 AND
@@ -102,10 +103,16 @@ DB_LLMIME_CC_Temp_ActivePortraitMask(_Character, _Mask, _Trigger)
 THEN
 NOT DB_LLMIME_CC_Temp_ActivePortraitMask(_Character, _Mask, _Trigger);
 SetOnStage(_Mask, 0);
+*/
 
-//Mime Origin Activated
-IF
-SkillAdded(_Character, "Target_LLMIME_PerfectDoppelganger", _)
+//Mime Origin/Preset Activated
+//IF
+//SkillAdded(_Character, "Target_LLMIME_PerfectDoppelganger", _)
+//SkillAdded(_Character, "MultiStrike_LLMIME_MimeVault", _)
+
+/*
+PROC
+LLMIME_CC_OnMimePresetSet((CHARACTERGUID)_Character)
 AND
 CharacterGetReservedUserID(_Character, _UserID)
 AND
@@ -117,14 +124,14 @@ CharacterGetRace(_Character, 1, _Race)
 AND
 CharacterIsFemale(_Character, _IsFemale)
 AND
-DB_LLMIME_CC_PortraitTriggers(1, _Race, _IsFemale, _Trigger)
+DB_LeaderLib_CC_PortraitTriggers(1, _Race, _IsFemale, _IsUndead, _Trigger)
 AND
 DB_LLMIME_CC_PortraitMasks(1, _Race, _IsFemale, _Mask)
 THEN
 LLMIME_CC_PositionPortraitMask(_Character, _Mask, _Trigger);
 
-IF
-SkillAdded(_Character, "Target_LLMIME_PerfectDoppelganger", _)
+PROC
+LLMIME_CC_OnMimePresetSet((CHARACTERGUID)_Character)
 AND
 CharacterGetReservedUserID(_Character, _UserID)
 AND
@@ -136,30 +143,37 @@ CharacterGetRace(_Character, 1, _Race)
 AND
 CharacterIsFemale(_Character, _IsFemale)
 AND
-DB_LLMIME_CC_PortraitTriggers(2, _Race, _IsFemale, _Trigger)
+DB_LeaderLib_CC_PortraitTriggers(2, _Race, _IsFemale, _IsUndead, _Trigger)
 AND
 DB_LLMIME_CC_PortraitMasks(2, _Race, _IsFemale, _Mask)
 THEN
 LLMIME_CC_PositionPortraitMask(_Character, _Mask, _Trigger);
+*/
 //END_REGION
 
-IF
-SkillAdded(_Character, "Target_LLMIME_PerfectDoppelganger", _)
+PROC
+LeaderLib_CC_OnPresetChanged((CHARACTERGUID)_Player, (STRING)_LastPreset, "LLMIME_Mime")
 THEN
-LLMIME_CC_Internal_PlayMaskEffect(_Character);
+LLMIME_CC_OnMimePresetSet(_Player);
 
-IF
-SkillDeactivated(_Character, "Target_LLMIME_PerfectDoppelganger")
+PROC
+LLMIME_CC_OnMimePresetSet((CHARACTERGUID)_Player)
 THEN
-LLMIME_CC_Internal_StopMaskEffect(_Character);
-LLMIME_CC_HidePortraitMask(_Character);
+LLMIME_CC_Internal_PlayMaskEffect(_Player);
+ApplyStatus(_Player, "LLMIME_FX_CC_MASK", 1.0, 1, _Player); // Long enough for portraits?
 
 PROC
 LLMIME_CC_Internal_PlayMaskEffect((CHARACTERGUID)_Character)
 AND
 NOT DB_LLMIME_CC_Temp_MaskFXHandle(_Character, _)
 AND
-PlayLoopEffect(_Character, "LLMIME_FX_Status_CC_Mask_Elf_Male_01", "c_lip_upper_Bone", _Handle)
+CharacterGetRace(_Character, 1, _Race)
+AND
+CharacterIsFemale(_Character, _IsFemale)
+AND
+DB_LLMIME_CC_PortraitMaskEffect(_Race, _IsFemale, _Effect, _Bone)
+AND
+PlayLoopEffect(_Character, _Effect, _Bone, _Handle)
 THEN
 DB_LLMIME_CC_Temp_MaskFXHandle(_Character, _Handle);
 
@@ -173,6 +187,60 @@ PlayLoopEffect(S_Player_LLMIME_Mime_191f180c-6270-4cd1-a44a-e02454bd846f, "LLMIM
 THEN
 DB_LLMIME_CC_Temp_MaskFXHandle(S_Player_LLMIME_Mime_191f180c-6270-4cd1-a44a-e02454bd846f, _Handle);
 */
+
+/*
+PROC
+LLMIME_CC_OnMimePresetSet((CHARACTERGUID)_Character)
+AND
+CharacterGetReservedUserID(_Character, _UserID)
+AND
+DB_LLMIME_CC_Temp_Index(_Dummy, _UserID, _Index)
+AND
+_Index <= 1
+AND
+CharacterGetRace(_Character, 1, _Race)
+AND
+CharacterIsFemale(_Character, _IsFemale)
+AND
+DB_LeaderLib_CC_PortraitTriggers(1, _Race, _IsFemale, _IsUndead, _Trigger)
+THEN
+LLMIME_CC_SetPortraitProxy(_Character, _Trigger);
+
+PROC
+LLMIME_CC_OnMimePresetSet((CHARACTERGUID)_Character)
+AND
+CharacterGetReservedUserID(_Character, _UserID)
+AND
+DB_LLMIME_CC_Temp_Index(_Dummy, _UserID, _Index)
+AND
+_Index > 1
+AND
+CharacterGetRace(_Character, 1, _Race)
+AND
+CharacterIsFemale(_Character, _IsFemale)
+AND
+DB_LeaderLib_CC_PortraitTriggers(2, _Race, _IsFemale, _IsUndead, _Trigger)
+THEN
+LLMIME_CC_SetPortraitProxy(_Character, _Trigger);
+*/
+
+//IF
+//SkillDeactivated(_Character, "Target_LLMIME_PerfectDoppelganger")
+//SkillDeactivated(_Character, "MultiStrike_LLMIME_MimeVault")
+PROC
+LeaderLib_CC_OnPresetChanged((CHARACTERGUID)_Player, "LLMIME_Mime", (STRING)_NextPreset)
+AND
+_NextPreset != "LLMIME_Mime"
+THEN
+LLMIME_CC_OnMimePresetRemoved(_Player);
+
+PROC
+LLMIME_CC_OnMimePresetRemoved((CHARACTERGUID)_Player)
+THEN
+LLMIME_CC_Internal_StopMaskEffect(_Player);
+//LLMIME_CC_HidePortraitMask(_Character);
+//LLMIME_CC_HidePortraitProxy(_Character);
+RemoveStatus(_Player, "LLMIME_FX_CC_MASK");
 
 PROC
 LLMIME_CC_Internal_StopMaskEffect((CHARACTERGUID)_Character)

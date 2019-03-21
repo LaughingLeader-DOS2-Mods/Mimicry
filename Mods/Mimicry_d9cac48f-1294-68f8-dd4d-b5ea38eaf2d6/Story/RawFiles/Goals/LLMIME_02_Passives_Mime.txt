@@ -210,7 +210,7 @@ THEN
 ApplyStatus(_Mime, "LLMIME_MIMICRY_MASK_INFO", -1.0, 1, _Mime);
 
 IF
-CharacterStatusRemoved(_Mime, "LLMIME_MIMICRY_MASK", _)
+CharacterStatusRemoved(_Mime, "LLMIME_MIME", _)
 AND
 IsTagged(_Mime, "LLMIME_MimeFollower", 1)
 AND
@@ -230,7 +230,7 @@ THEN
 ApplyStatus(_Mime, "LLMIME_MIMICRY_MASK_INFO", -1.0, 1, _Mime);
 
 IF
-CharacterStatusApplied(_Mime, "LLMIME_MIMICRY_MASK", _)
+CharacterStatusApplied(_Mime, "LLMIME_MIME", _)
 AND
 IsTagged(_Mime, "LLMIME_MimeFollower", 1)
 AND
