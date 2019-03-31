@@ -220,6 +220,36 @@ LLMIME_Mimicking_Attack_UseAttackSkill(_Mime, _Caster, _Target, _Action);
 
 PROC
 LLMIME_Mimicking_Attack_UseAttackSkill((CHARACTERGUID)_Mime, (CHARACTERGUID)_Caster, (GUIDSTRING)_Target, (STRING)_Action)
+THEN
+Mimicry_SetBasicAttackMimickingSkill(_Mime, _Caster, _Target, _Action);
+
+//Set DB_LLMIME_Mimicking_Temp_UseModSkill(_Mime, _Caster, _Target, _Action, _Skill)
+PROC
+Mimicry_SetBasicAttackMimickingSkill((CHARACTERGUID)_Mime, (CHARACTERGUID)_Caster, (GUIDSTRING)_Target, (STRING)_Action)
+THEN
+DB_NOOP(1);
+
+PROC
+LLMIME_Mimicking_Attack_UseAttackSkill((CHARACTERGUID)_Mime, (CHARACTERGUID)_Caster, (GUIDSTRING)_Target, (STRING)_Action)
+AND
+DB_Mimicry_Mimicking_UseModAttackSkill(_Mime, _Caster, _Target, _Action, (STRING)_Skill)
+AND
+NOT DB_LLMIME_Mimicking_Temp_JustAttacked(_Mime)
+THEN
+NOT DB_Mimicry_Mimicking_UseModAttackSkill(_Mime, _Caster, _Target, _Action, _Skill);
+DB_LLMIME_Mimicking_Temp_JustAttacked(_Mime);
+CharacterUseSkill(_Mime, _Skill, _Target, 1, 1, 1);
+LLMIME_Mimicking_Attack_StartSuccessTimer(_Mime, _Caster, _Target, _Action, _Skill);
+
+PROC
+LLMIME_Mimicking_Attack_UseAttackSkill((CHARACTERGUID)_Mime, (CHARACTERGUID)_Caster, (GUIDSTRING)_Target, (STRING)_Action)
+AND
+DB_Mimicry_Mimicking_UseModAttackSkill(_Mime, _Caster, _Target, _Action, _Skill)
+THEN
+NOT DB_Mimicry_Mimicking_UseModAttackSkill(_Mime, _Caster, _Target, _Action, _Skill);
+
+PROC
+LLMIME_Mimicking_Attack_UseAttackSkill((CHARACTERGUID)_Mime, (CHARACTERGUID)_Caster, (GUIDSTRING)_Target, (STRING)_Action)
 AND
 NOT DB_LLMIME_Mimicking_Temp_JustAttacked(_Mime)
 AND
@@ -227,18 +257,6 @@ LLMIME_Mimicking_QRY_HasEquippedWeaponType(_Mime, "Crossbow")
 THEN
 CharacterUseSkill(_Mime, "Projectile_LLMIME_MimicCrossbowAttack", _Target, 1, 1, 1);
 LLMIME_Mimicking_Attack_StartSuccessTimer(_Mime, _Caster, _Target, _Action, "Projectile_LLMIME_MimicCrossbowAttack");
-DB_LLMIME_Mimicking_Temp_JustAttacked(_Mime);
-
-//Weapon Expansion support
-PROC
-LLMIME_Mimicking_Attack_UseAttackSkill((CHARACTERGUID)_Mime, (CHARACTERGUID)_Caster, (GUIDSTRING)_Target, (STRING)_Action)
-AND
-NOT DB_LLMIME_Mimicking_Temp_JustAttacked(_Mime)
-AND
-LLMIME_Mimicking_QRY_HasTaggedWeapon(_Mime, "LLWEAPONEX_Greatbow")
-THEN
-CharacterUseSkill(_Mime, "Projectile_LLMIME_MimicGreatBowAttack", _Target, 1, 1, 1);
-LLMIME_Mimicking_Attack_StartSuccessTimer(_Mime, _Caster, _Target, _Action, "Projectile_LLMIME_MimicGreatBowAttack");
 DB_LLMIME_Mimicking_Temp_JustAttacked(_Mime);
 
 PROC

@@ -1002,12 +1002,14 @@ DB_LeaderLib_PartyFollower(_Owner, _Follower)
 THEN
 TeleportTo(_Follower, _Owner, "Mimicry_Events_Follower_ReturnToOwner_Teleported", 1);
 
+/*
 IF
 StoryEvent((CHARACTERGUID)_Mime, "LeaderLib_Events_Follower_FollowerTeleportedToOwner")
 AND
 DB_LLMIME_Follower_Mime(_Mime)
 THEN
 LeaderLib_Timers_StartObjectTimer(_Mime, 500, "Mimicry_Timers_ReturnToOwner_ReturnEffectDelay_", "Mimicry_Events_Follower_OnTeleported");
+*/
 
 IF
 StoryEvent((CHARACTERGUID)_Follower, "Mimicry_Events_Follower_ReturnToOwner_Teleported")
