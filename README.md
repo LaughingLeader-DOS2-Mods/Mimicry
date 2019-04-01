@@ -6,7 +6,7 @@ Mimicry, inspired by the Mime job from Final Fantasy Tactics, adds a new "class"
 Check out the release pages for more info.
 
 # Releases
-* [Steam Workshop]() 
+* [Steam Workshop](https://steamcommunity.com/sharedfiles/filedetails/?id=1515000128) 
 * [Nexus]()
 
 # Support
