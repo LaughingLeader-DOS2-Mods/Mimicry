@@ -72,6 +72,7 @@ DB_LLMIME_MonsterSkill_SummonRename("Status", "INF_OIL_G", 			"Titan", 		"#7f3d0
 //END_REGION
 
 //REGION UPDATING
+/* 
 PROC
 LeaderUpdater_ModUpdated("Mimicry", "LaughingLeader", (STRING)_PastVersion, (STRING)_NewVersion)
 AND
@@ -80,6 +81,7 @@ THEN
 LeaderLog_Log("DEBUG", "[LLMIME:Beastmaster] Updating settings from version [",_PastVersion,"]");
 SysClear("DB_LLMIME_MonsterSkill_BadBreathStatus", 3);
 LLMIME_Beastmaster_InitSettings();
+ */
 //END_REGION
 
 //REGION REGISTER

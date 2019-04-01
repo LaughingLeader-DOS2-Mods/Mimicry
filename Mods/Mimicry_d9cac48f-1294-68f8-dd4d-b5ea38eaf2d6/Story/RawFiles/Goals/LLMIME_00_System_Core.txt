@@ -149,6 +149,7 @@ DB_LLMIME_Templates("Decoy", "S_LLMIME_Skill_Decoy_30a42871-15cc-4c97-bad6-4a813
 //END_REGION
 
 //REGION UPDATING
+/*
 PROC
 LeaderUpdater_ModUpdated("Mimicry", "LaughingLeader", (STRING)_OldVersion, (STRING)_NewVersion)
 AND
@@ -156,6 +157,7 @@ LeaderLib_StringExt_QRY_VersionIsLessThan(_OldVersion, 0, 9, 9, 1)
 THEN
 LeaderLog_Log("DEBUG", "[LLMIME:System] Updating settings from version [",_OldVersion,"] to [",_NewVersion,"]");
 LLMIME_System_InitSettings();
+*/
 //END_REGION
 
 //REGION QUERIES_MISC

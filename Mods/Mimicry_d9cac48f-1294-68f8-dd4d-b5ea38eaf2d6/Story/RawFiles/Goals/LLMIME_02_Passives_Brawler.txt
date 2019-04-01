@@ -47,6 +47,7 @@ DB_LLMIME_Brawler_UnarmedDOS2Skills("Target_Flurry");
 //END_REGION
 
 //REGION UPDATING
+/* 
 PROC
 LeaderUpdater_ModUpdated("Mimicry", "LaughingLeader", (STRING)_PastVersion, (STRING)_NewVersion)
 AND
@@ -76,6 +77,7 @@ AND
 DB_LLMIME_Follower_Mime(_Mime)
 THEN
 LLMIME_Brawler_ApplyStance(_Mime);
+ */
 //END_REGION
 
 //REGION SETTINGS_DIALOG_VARS

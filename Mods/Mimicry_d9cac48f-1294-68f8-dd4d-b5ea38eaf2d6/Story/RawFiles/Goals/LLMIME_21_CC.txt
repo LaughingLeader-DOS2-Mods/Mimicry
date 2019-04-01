@@ -8,7 +8,7 @@ PROC
 LLMIME_CC_InitSettings()
 THEN
 DB_NOOP(1);
-
+/* 
 PROC
 LeaderUpdater_ModUpdated("Mimicry", "LaughingLeader", (STRING)_OldVersion, (STRING)_NewVersion)
 AND
@@ -17,7 +17,7 @@ THEN
 SysClear("DB_LLMIME_CC_PortraitMasks", 4);
 SysClear("DB_LLMIME_CC_PortraitMaskOffset", 4);
 SysClear("DB_LLMIME_CC_PortraitMaskEffect", 4);
-
+ */
 /*
 DB_LLMIME_CC_PortraitProxy((CHARACTERGUID)CHARACTERGUID_S_LLMIME_Dummy_PortraitProxy_2_ce7cf2e3-c6d0-417c-a913-15f5ddf1e7a7);
 DB_LLMIME_CC_PortraitProxy(CHARACTERGUID_S_LLMIME_Dummy_PortraitProxy_1_2e277bfc-277b-4ebb-9c1c-1cd85d7dbdde);

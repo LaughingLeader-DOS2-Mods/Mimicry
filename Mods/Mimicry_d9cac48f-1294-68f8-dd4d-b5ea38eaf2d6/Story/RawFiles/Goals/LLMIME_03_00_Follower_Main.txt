@@ -79,6 +79,7 @@ DB_LLMIME_Follower_RandomAnimation(_Index, _Animation);
 //END_REGION
 
 //REGION UPDATTES
+/* 
 PROC
 LeaderUpdater_ModUpdated("Mimicry", "LaughingLeader", "0.9.9.1", (STRING)_NewVersion)
 THEN
@@ -106,6 +107,7 @@ DB_LLMIME_Follower_Mime(_Mime)
 THEN
 LeaderLib_Growth_Characters_Register_Skill("Mimicry.MimeFollower", 4, "Jump_LLMIME_HiddenApproach", "Tag", "LLMIME_MimeFollower");
 LeaderLib_Growth_Characters_AddSkills(_Mime);
+ */
 //END_REGION
 
 //REGION CHARACTER_SETUP

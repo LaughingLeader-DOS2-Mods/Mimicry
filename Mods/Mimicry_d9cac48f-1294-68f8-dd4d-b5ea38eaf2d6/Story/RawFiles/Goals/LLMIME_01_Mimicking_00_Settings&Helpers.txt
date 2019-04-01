@@ -149,6 +149,7 @@ DB_LLMIME_Mimicking_Blacklist_Skills("Umbra", "Shout_SHADEShadowstep");
 //END_REGION
 
 //REGION UPDATING
+/* 
 PROC
 LeaderUpdater_ModUpdated("Mimicry", "LaughingLeader", (STRING)_PastVersion, (STRING)_NewVersion)
 AND
@@ -167,6 +168,7 @@ SysClear("DB_LLMIME_Mimicking_Blacklist_Skills", 1);
 SysClear("DB_LLMIME_Mimicking_Blacklist_SkillPrefixes", 1);
 SysClear("DB_LLMIME_Mimicking_Whitelist_Skills", 1);
 LLMIME_Mimicking_InitSettings();
+*/
 //END_REGION
 
 //REGION COPY_ATTRIBUTES

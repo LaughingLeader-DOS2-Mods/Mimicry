@@ -57,6 +57,7 @@ DB_LLMIME_Skills_FlankAndAwap_PreserveStatuses("PETRIFIED");
 //END_REGION
 
 //REGION UPDATING
+/* 
 PROC
 LeaderUpdater_ModUpdated("Mimicry", "LaughingLeader", (STRING)_PastVersion, (STRING)_NewVersion)
 AND
@@ -64,6 +65,7 @@ LeaderLib_StringExt_QRY_VersionIsLessThan(_PastVersion, 0,9,9,29)
 THEN
 LeaderLog_Log("DEBUG", "[LLMIME:Skills] Updating settings from version [",_PastVersion,"]");
 LLMIME_Skills_InitSettings();
+ */
 //END_REGION
 
 //REGION QUERIES
