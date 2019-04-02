@@ -35,21 +35,17 @@ DB_NOOP(1);
 QRY
 LLMIME_Mimicking_QRY_SkillIsSafeForRace((CHARACTERGUID)_Caster, (CHARACTERGUID)_Mime, (STRING)_Skill)
 AND
+DB_LLMIME_Mimicking_HarmfulHealingSkills(_Skill)
+AND
 NOT LLMIME_QRY_IsUndead(_Mime)
 AND
 LLMIME_QRY_IsUndead(_Caster)
-AND
-DB_LLMIME_Mimicking_HarmfulHealingSkills(_Skill)
 THEN
 DB_NOOP(1);
 
 //Mimic if the skill is safe for undead
 QRY
 LLMIME_Mimicking_QRY_SkillIsSafeForRace((CHARACTERGUID)_Caster, (CHARACTERGUID)_Mime, (STRING)_Skill)
-AND
-LLMIME_QRY_IsUndead(_Mime)
-AND
-NOT LLMIME_QRY_IsUndead(_Caster)
 AND
 NOT DB_LLMIME_Mimicking_HarmfulHealingSkills(_Skill)
 THEN

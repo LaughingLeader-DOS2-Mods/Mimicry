@@ -494,7 +494,7 @@ ObjectGetFlag(_Mime, "Mimicry_WasResurrectedByMask", 0)
 THEN
 LLMIME_Follower_TeleportIfOffStage(_Mime, _Char);
 LeaderLog_Log("DEBUG", "[LLMIME:Follower:StartSummoning] Mime follower is within range of talking. Running [ProcCharacterMoveToAndTalk].");
-ProcCharacterMoveToAndTalk(_Mime, _Char, "LLMIME_MimeCompanion_Default", 0, "", 1, 5000.0, 0, 0);
+ProcCharacterMoveToAndTalk(_Mime, _Char, "LLMIME_MimeCompanion_Default", 0, "LLMIME_Follower_MovingToTalk", 1, 5000.0, 0, 0);
 
 PROC
 LLMIME_Follower_StartSummoning((CHARACTERGUID)_Char, (ITEMGUID)_Item)
@@ -508,7 +508,16 @@ THEN
 LLMIME_Follower_TeleportIfOffStage(_Mime, _Char);
 LeaderLog_Log("DEBUG", "[LLMIME:Follower:StartSummoning] Mime follower was just resurrected, and is within range of talking.");
 ObjectClearFlag(_Mime, "Mimicry_MimeFollowerJustSummoned");
-ProcCharacterMoveToAndTalk(_Mime, _Char, "LLMIME_MimeCompanion_Resurrected", 0, "", 1, 5000.0, 0, 0);
+ProcCharacterMoveToAndTalk(_Mime, _Char, "LLMIME_MimeCompanion_Resurrected", 0, "LLMIME_Follower_MovingToTalk", 1, 5000.0, 0, 0);
+
+IF
+CharacterMoveToAndTalkFailed(_Mime, (CHARACTERGUID)_Char, "LLMIME_Follower_MovingToTalk")
+THEN
+LeaderLog_Log("DEBUG", "[LLMIME:Follower:StartSummoning] Mime follower failed to move and talk. Teleporting to summoner directly.");
+LLMIME_Follower_Internal_RefreshIfNeeded(_Mime);
+TeleportTo(_Mime, _Char, "Mimicry_Events_Follower_OnTeleported", 0);
+SetOnStage(_Mime, 1);
+CharacterCharacterSetEvent(_Char, _Mime, "Mimicry_MimeSummoned");
 
 QRY
 LLMIME_Follower_QRY_IsInitialized((CHARACTERGUID)_Mime)
