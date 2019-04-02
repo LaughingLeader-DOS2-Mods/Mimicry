@@ -715,7 +715,28 @@ AND
 NOT LLMIME_Mimicking_QRY_MimeHasActionQueued(_Mime)
 THEN
 RemoveStatus(_Mime, "LLMIME_MIMIC_WEAPON_REQUIREMENTS");
+//END_REGION
 
+//REGION BRAWLER_STANCE_REAPPLY
+//Re-applying Brawler Stance
+PROC
+LLMIME_Mimicking_MimicDone((CHARACTERGUID)_Mime, (CHARACTERGUID)_Caster, (STRING)_Action, (STRING)_ActionType)
+AND
+ObjectGetFlag(_Mime, "LLMIME_BrawlerStanceWasActive", 1)
+AND
+NOT LLMIME_Mimicking_QRY_MimeHasActionQueued(_Mime)
+THEN
+ObjectClearFlag(_Mime, "LLMIME_BrawlerStanceWasActive");
+LLMIME_Brawler_ApplyStance(_Mime);
+
+//Called when a mime leaves combat
+IF
+StoryEvent((CHARACTERGUID)_Mime, "Mimicry_ResetMimeCombatData")
+AND
+ObjectGetFlag(_Mime, "LLMIME_BrawlerStanceWasActive", 1)
+THEN
+ObjectClearFlag(_Mime, "LLMIME_BrawlerStanceWasActive");
+LLMIME_Brawler_ApplyStance(_Mime);
 //END_REGION
 
 //REGION NEXT_QUEUE
@@ -1268,18 +1289,6 @@ AND
 DB_LLMIME_Mimicking_LastEquipped(_Mime, _Slot, _Item)
 THEN
 NOT DB_LLMIME_Mimicking_LastEquipped(_Mime, _Slot, _Item);
-
-
-//Re-applying Brawler Stance
-PROC
-LLMIME_Mimicking_EquipLastItems((CHARACTERGUID)_Mime, (STRING)_Action, (STRING)_ActionType)
-AND
-NOT LLMIME_Mimicking_QRY_MimeHasActionQueued(_Mime)
-AND
-ObjectGetFlag(_Mime, "LLMIME_BrawlerStanceWasActive", 1)
-THEN
-ObjectClearFlag(_Mime, "LLMIME_BrawlerStanceWasActive");
-LLMIME_Brawler_ApplyStance(_Mime);
 
 PROC
 LLMIME_Mimicking_DeleteMimickedItems((CHARACTERGUID)_Mime)
