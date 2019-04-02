@@ -179,6 +179,13 @@ LLMIME_Mimicking_ActionQueued(_Mime, _Caster, _Action, _ActionType);
 
 //REGION QUEUE_QUERIES
 QRY
+LLMIME_Mimicking_QRY_ActionIsSaved((CHARACTERGUID)_Caster, (STRING)_Action, (STRING)_ActionType)
+AND
+DB_LLMIME_Mimicking_ActionPosition(_Caster, _Action, _ActionType, _CastX, _CastRotation, _CastZ)
+THEN
+DB_NOOP(1);
+
+QRY
 LLMIME_Mimicking_QRY_ActionIsQueued((CHARACTERGUID)_Caster, (STRING)_Action, (STRING)_ActionType)
 AND
 DB_LLMIME_Mimicking_MimicQueue(_Mime, _Caster, _Action, _ActionType, _CastX, _CastRotation, _CastZ, _TargetX, _TargetY, _TargetZ, _TargetPriority, _IsTarget)

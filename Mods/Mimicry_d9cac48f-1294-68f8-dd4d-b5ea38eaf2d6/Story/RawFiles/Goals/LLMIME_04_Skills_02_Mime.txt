@@ -5,6 +5,12 @@ INITSECTION
 KBSECTION
 //REGION FACING
 IF
+CharacterUsedSkill(_Mime, "Target_LLMIME_SetFacingDirection", _, _)
+THEN
+CharacterStatusText(_Mime, "LLMIME_StatusText_FacingDirectionSaved");
+ObjectClearFlag(_Mime, "LLMIME_FacingDirectionCalculated", 0);
+
+IF
 CharacterUsedSkillOnTarget(_Mime, _Target, "Target_LLMIME_SetFacingDirection", _, _)
 AND
 GetPosition(_Target, _x, _y, _z)
@@ -19,12 +25,6 @@ THEN
 SetVarFloat3(_Mime, "LLMIME_Skills_FacingDirection_Target", _x, _y, _z);
 SetStoryEvent(_Mime, "LLMIME_Skills_SetFacingDirection");
 ObjectSetFlag(_Mime, "LLMIME_FacingDirectionSet", 0);
-
-IF
-SkillCast(_Mime, "Target_LLMIME_SetFacingDirection", _, _)
-THEN
-CharacterStatusText(_Mime, "LLMIME_StatusText_FacingDirectionSaved");
-ObjectClearFlag(_Mime, "LLMIME_FacingDirectionCalculated", 0);
 
 //Turn ended, still in combat
 IF

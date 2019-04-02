@@ -275,34 +275,16 @@ THEN
 DB_NOOP(1);
 
 QRY
-LLMIME_Mimicking_QRY_CanMimicSkill((STRING)_Skill, (STRING)_SkillType, (STRING)_SkillElement)
-//AND
-//LLMIME_Mimicking_QRY_CanMimicSourceSkill(_Skill)
-AND
-LLMIME_Mimicking_QRY_SkillIsAllowed(_Skill, _SkillType, _SkillElement)
-THEN
-DB_NOOP(1);
-
-QRY
 LLMIME_Mimicking_QRY_SkillIsAllowed((STRING)_Skill, (STRING)_SkillType, (STRING)_SkillElement)
 AND
 DB_LLMIME_Mimicking_Whitelist_Skills(_Group, _Skill)
 THEN
 DB_NOOP(1);
 
-/*
-QRY
-LLMIME_Mimicking_QRY_SkillIsAllowed((STRING)_Skill)
-AND
-NOT DB_LLMIME_Mimicking_Blacklist_Skills(_Skill)
-AND
-NOT DB_LLMIME_SkillData(_Skill, _, _)
-THEN
-DB_NOOP(1);
-*/
-
 QRY
 LLMIME_Mimicking_QRY_SkillIsAllowed((STRING)_Skill, (STRING)_SkillType, (STRING)_SkillElement)
+AND
+NOT DB_LLMIME_Mimicking_Whitelist_Skills(_, _Skill)
 AND
 NOT DB_LLMIME_Mimicking_Blacklist_Skills(_, _Skill)
 AND
@@ -441,6 +423,26 @@ DB_NOOP(1);
 //END_REGION
 
 //REGION CHECK_QUERIES
+QRY
+LLMIME_Mimicking_QRY_CharacterIsMimickable((CHARACTERGUID)_Character)
+AND
+DB_IsPlayer(_Character)
+THEN
+DB_NOOP(1);
+
+QRY
+LLMIME_Mimicking_QRY_CharacterIsMimickable((CHARACTERGUID)_Character)
+AND
+NOT DB_IsPlayer(_Character)
+AND
+CharacterIsPlayer(_Character, 1)
+AND
+CharacterIsSummon(_Character, 1)
+AND
+GlobalGetFlag("Mimicry_Mimic_CopySummonedCreatureSkills_Enabled", 1)
+THEN
+DB_NOOP(1);
+
 QRY
 LLMIME_Mimicking_QRY_CanMimicCharacter((CHARACTERGUID)_Character, (CHARACTERGUID)_Mime)
 AND

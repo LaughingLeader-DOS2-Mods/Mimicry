@@ -8,13 +8,11 @@ KBSECTION
 IF
 CharacterUsedSkill(_Caster, _Skill, _SkillElement, _SkillType)
 AND
-NOT LLMIME_Skills_QRY_IgnoreSkill(_Skill, _SkillType, _SkillElement)
-AND
-CharacterIsPlayer(_Caster, 1)
-AND
-LLMIME_Mimicking_QRY_MimesAvailable()
+LLMIME_Mimicking_QRY_CharacterIsMimickable(_Caster)
 AND
 NOT DB_LLMIME_Mimicking_ActionPosition(_Caster, _Skill, "Skill", _,_,_)
+AND
+LLMIME_Mimicking_QRY_SkillIsAllowed(_Skill, _SkillType, _SkillElement)
 AND
 GetPosition(_Caster, _x,_,_z)
 AND
@@ -25,13 +23,11 @@ LLMIME_Mimicking_AddActionPosition(_Caster, _Skill, "Skill", _x,_CastRotation,_z
 IF
 CharacterUsedSkillAtPosition(_Caster, _,_,_, _Skill, _SkillType, _SkillElement)
 AND
-NOT LLMIME_Skills_QRY_IgnoreSkill(_Skill, _SkillType, _SkillElement)
-AND
-CharacterIsPlayer(_Caster, 1)
-AND
-LLMIME_Mimicking_QRY_MimesAvailable()
+LLMIME_Mimicking_QRY_CharacterIsMimickable(_Caster)
 AND
 NOT DB_LLMIME_Mimicking_ActionPosition(_Caster, _Skill, "Skill", _,_,_)
+AND
+LLMIME_Mimicking_QRY_SkillIsAllowed(_Skill, _SkillType, _SkillElement)
 AND
 GetPosition(_Caster, _x,_,_z)
 AND
@@ -42,19 +38,24 @@ LLMIME_Mimicking_AddActionPosition(_Caster, _Skill, "Skill", _x,_CastRotation,_z
 IF
 CharacterUsedSkillOnTarget(_Caster, _, _Skill, _SkillType, _SkillElement)
 AND
-NOT LLMIME_Skills_QRY_IgnoreSkill(_Skill, _SkillType, _SkillElement)
-AND
-CharacterIsPlayer(_Caster, 1)
-AND
-LLMIME_Mimicking_QRY_MimesAvailable()
+LLMIME_Mimicking_QRY_CharacterIsMimickable(_Caster)
 AND
 NOT DB_LLMIME_Mimicking_ActionPosition(_Caster, _Skill, "Skill", _,_,_)
+AND
+LLMIME_Mimicking_QRY_SkillIsAllowed(_Skill, _SkillType, _SkillElement)
 AND
 GetPosition(_Caster, _x,_,_z)
 AND
 GetRotation(_Caster, _, _CastRotation, _)
 THEN
 LLMIME_Mimicking_AddActionPosition(_Caster, _Skill, "Skill", _x,_CastRotation,_z);
+
+IF
+CharacterUsedSkillOnTarget(_Caster, _Target, _Skill, _SkillType, _SkillElement)
+AND
+DB_LLMIME_Mimicking_Temp_TargetPriority(_Caster, _Target, _TargetPriority)
+THEN
+NOT DB_LLMIME_Mimicking_Temp_TargetPriority(_Caster, _Target, _TargetPriority);
 //END_REGION
 
 //REGION WEAPON_RESET

@@ -2,6 +2,7 @@ Version 1
 SubGoalCombiner SGC_AND
 INITSECTION
 LLMIME_Follower_InitSettings();
+SetOnStage(S_LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9, 0);
 //DB_LLMIME_Follower_RandomAnimation(_Index, _Animation)
 //DB_LLMIME_Follower_ResetPositionTimer(_Mime, _TimerName, _Stage)
 //DB_LLMIME_Follower_Mime(_Mime)

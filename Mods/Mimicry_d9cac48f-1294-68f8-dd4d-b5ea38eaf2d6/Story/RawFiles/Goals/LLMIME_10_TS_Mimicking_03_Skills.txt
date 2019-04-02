@@ -7,27 +7,10 @@ INITSECTION
 KBSECTION
 
 //REGION SKILL_TRACKING
-QRY
-LLMIME_Skills_QRY_IgnoreSkill((STRING)_Skill, "rush", (STRING)_SkillElement)
-THEN
-DB_NOOP(1);
-
-QRY
-LLMIME_Skills_QRY_IgnoreSkill((STRING)_Skill, "jump", (STRING)_SkillElement)
-THEN
-DB_NOOP(1);
-
 IF
 CharacterUsedSkillOnTarget(_Caster, _Target, _Skill, _SkillType, _SkillElement)
 AND
-DB_LLMIME_Mimicking_Temp_TargetPriority(_Caster, _Target, _TargetPriority)
-THEN
-NOT DB_LLMIME_Mimicking_Temp_TargetPriority(_Caster, _Target, _TargetPriority);
-
-IF
-CharacterUsedSkillOnTarget(_Caster, _Target, _Skill, _SkillType, _SkillElement)
-AND
-NOT LLMIME_Skills_QRY_IgnoreSkill(_Skill, _SkillType, _SkillElement)
+LLMIME_Mimicking_QRY_ActionIsSaved(_Caster, _Skill, "Skill")
 AND
 LLMIME_Mimicking_QRY_MimesAvailable()
 AND
@@ -38,7 +21,7 @@ LLMIME_Mimicking_OnSkillUsedOnTarget(_Caster, _Target, _Skill, _SkillType, _Skil
 IF
 CharacterUsedSkillAtPosition(_Caster, _TargetX, _TargetY, _TargetZ, _Skill, _SkillType, _SkillElement)
 AND
-NOT LLMIME_Skills_QRY_IgnoreSkill(_Skill, _SkillType, _SkillElement)
+LLMIME_Mimicking_QRY_ActionIsSaved(_Caster, _Skill, "Skill")
 AND
 LLMIME_Mimicking_QRY_MimesAvailable()
 AND
@@ -49,7 +32,7 @@ LLMIME_Mimicking_OnSkillUsedAtPosition(_Caster, _TargetX, _TargetY, _TargetZ, _S
 IF
 SkillCast(_Caster, _Skill, _SkillType, _SkillElement)
 AND
-NOT LLMIME_Skills_QRY_IgnoreSkill(_Skill, _SkillType, _SkillElement)
+LLMIME_Mimicking_QRY_ActionIsSaved(_Caster, _Skill, "Skill")
 THEN
 LLMIME_Mimicking_Skills_OnSkillCast(_Caster, _Skill);
 //END_REGION

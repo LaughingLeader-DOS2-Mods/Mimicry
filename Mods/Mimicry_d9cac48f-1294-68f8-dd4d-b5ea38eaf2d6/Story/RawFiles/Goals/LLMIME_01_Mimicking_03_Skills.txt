@@ -87,7 +87,7 @@ LLMIME_Mimicking_QRY_CharacterIsMimickable(_Caster)
 AND
 _Caster != _Target
 AND
-LLMIME_Mimicking_QRY_CanMimicSkill(_Skill, _SkillType, _SkillElement)
+LLMIME_Mimicking_QRY_SkillIsAllowed(_Skill, _SkillType, _SkillElement)
 AND
 LLMIME_Mimicking_QRY_GetTargetPriority(_Caster, _Target)
 AND
@@ -111,7 +111,7 @@ LLMIME_Mimicking_QRY_CharacterIsMimickable(_Caster)
 AND
 _Caster == _Target
 AND
-LLMIME_Mimicking_QRY_CanMimicSkill(_Skill, _SkillType, _SkillElement)
+LLMIME_Mimicking_QRY_SkillIsAllowed(_Skill, _SkillType, _SkillElement)
 AND
 DB_LLMIME_Mimicking_MimicNextAction(_Mime)
 AND
@@ -155,7 +155,7 @@ NOT DB_LLMIME_Skills_Temp_SkillResolved(_Caster, _TargetX, _TargetY, _TargetZ, _
 PROC
 LLMIME_Mimicking_StartOnSkillCastAtPosition((CHARACTERGUID)_Caster, (REAL)_TargetX, (REAL)_TargetY, (REAL)_TargetZ, (STRING)_Skill, (STRING)_SkillType, (STRING)_SkillElement)
 AND
-LLMIME_Mimicking_QRY_CanMimicSkill(_Skill, _SkillType, _SkillElement)
+LLMIME_Mimicking_QRY_SkillIsAllowed(_Skill, _SkillType, _SkillElement)
 AND
 DB_LLMIME_Mimicking_MimicNextAction(_Mime)
 AND

@@ -8,7 +8,7 @@ Proc_LLMIME_IterateGameAlreadyStarted();
 GlobalSetFlag("LeaderLog_Trace_Enabled");
 
 ProcTriggerRegisterForPlayers((TRIGGERGUID)TRIGGERGUID_MusicVolumeTrigger_LLMIME_Debug_MusicTest_80649d71-e657-4c35-be19-708559c0c60c);
-
+SetOnStage(S_LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9, 1);
 KBSECTION
 IF
 TextEventSet("llmime_addskills")
