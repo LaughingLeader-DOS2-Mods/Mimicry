@@ -41,24 +41,16 @@ VARS
 	CHARACTER:_Target
 	STATUS:_BonusStatus
 ON
-	OnCharacterStatusApplied(_Target, LLMIME_UNARMED_BONUS_DAMAGE)
+	//OnCharacterStatusApplied(_Target, LLMIME_UNARMED_BONUS_DAMAGE)
+	OnCharacterCharacterEvent(_Target, _Source, "Mimicry_Events_HitByUnarmedBonusDamage")
 ACTIONS
-IF "!c1"
-	CharacterIsDead(_Target)
-THEN
-	IF "(c1&c2)|!c1"
-		CharacterGetStatusSourceCharacter(_Target, LLMIME_UNARMED_BONUS_DAMAGE, _Source)
-		IsEqual(_Source, null)
-	THEN
-		Set(_Source, _Target)
-	ENDIF
-	GetWeightedRandom(_BonusStatus, LLMIME_PHYSICAL_SILENCED, INT:2, LLMIME_SLOWED_ARMOR_BYPASS, INT:5, LLMIME_WEAK_ARMOR_BYPASS, INT:1, null, INT:8)
+	//GetWeightedRandom(_BonusStatus, LLMIME_PHYSICAL_SILENCED, INT:2, LLMIME_SLOWED_ARMOR_BYPASS, INT:5, LLMIME_WEAK_ARMOR_BYPASS, INT:1, null, INT:8)
+	GetWeightedRandom(_BonusStatus, CRIPPLED, INT:2, BLEEDING, INT:4, MARKED, INT:1, NULL, INT:15)
 	IF "!c1"
-		IsEqual(_BonusStatus, null)
+		IsEqual(_BonusStatus, NULL)
 	THEN
 		CharacterApplyStatus(_Target, _BonusStatus, 1, 0, _Source)
 	ENDIF
-ENDIF
 
 EVENT LLMIME_Statuses_UnarmedBonusDamage_Item
 VARS
@@ -104,23 +96,23 @@ VARS
 ON
 	OnCriticalHit(_Mime, _, _TargetCharacter, _)
 ACTIONS
-IF "!c1&!c2"
-	CharacterHasStatus(_Mime, LLMIME_MIMICKING)
-	CharacterHasStatus(_Mime, LLMIME_MIMICKING_FOLLOWER)
+IF "!c1&c2&!c3"
+	IsEqual(_TargetCharacter, null)
+	CharacterHasStatus(_Mime, LLMIME_BRAWLER_BONUS)
+	HasFlag(_Mime, "Mimicry_IsMimicking")
 THEN
-	IF "!c1&c2&c3&c4"
+	IF "!c1&c2&c3"
 		HasFlag(_Mime, "Mimicry_DoubleAttackDisabled")
 		HasFlag(_Mime, "Mimicry_MimeIsUnarmed")
-		CharacterHasStatus(_Mime, LLMIME_BRAWLER_BONUS)
 		CharacterGetWeaponRange(_MinRange, _MaxRange, _Mime)
 	THEN
 		Multiply(_MaxRange, 2.0)
-		IF "!c1&!c2&!c3&!c4&c5"
-			IsEqual(_TargetCharacter, null)
+		IF "!c1&!c2&!c3&c4&!c5"
 			CharacterIsDead(_TargetCharacter)
 			CharacterHasStatus(_TargetCharacter, LLMIME_DOUBLE_STRIKE)
 			CharacterHasStatus(_TargetCharacter, LLMIME_UNARMED_BONUS_DAMAGE)
 			GetInnerDistance(_Dist, _Mime, _TargetCharacter)
+			IsEqual(_Dist, null)
 		THEN
 			//Print(_Str, "Range(Min: [1] Max: [2]) | Dist: [3]", _MinRange, _MaxRange, _Dist)
 			//Cast(_StrF, _Str)

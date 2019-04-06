@@ -1059,8 +1059,11 @@ THEN
 NOT DB_LLMIME_Mimicking_Temp_DuplicatedWeapon(_Dummy, _Weapon);
 SetTag(_Weapon, "LLMIME_MIMICKED_WEAPON");
 //ItemLevelUpTo(_Weapon, _Level);
-ItemSetOwner(_Weapon, _Mime);
+//ItemClearOwner(_Weapon);
+ItemSetOriginalOwner(_Weapon, _Mime);
 CharacterEquipItem(_Mime, _Weapon);
+ItemSetCanInteract(_Weapon, 0);
+ItemSetOnlyOwnerCanUse(_Weapon, 1);
 //LLMIME_Mimicking_MarkItemForOneTimeUse(_Mime, _Weapon, _Action, _ActionType);
 DB_LLMIME_Mimicking_Temp_MimickedWeapon(_Mime, _Caster, _Weapon, _Action, _ActionType);
 
@@ -1208,7 +1211,8 @@ LLMIME_Mimicking_StartDeleteOneTimeUseWeaponsTimer((CHARACTERGUID)_Mime, (STRING
 THEN
 DB_LLMIME_Mimicking_DeleteOneTimeUseWeaponsTimer(_Mime, _Action, _ActionType);
 ProcObjectTimerCancel(_Mime, "LLMIME_Timers_DeleteMimickedWeapons");
-ProcObjectTimer(_Mime, "LLMIME_Timers_DeleteMimickedWeapons", 999);
+//ProcObjectTimer(_Mime, "LLMIME_Timers_DeleteMimickedWeapons", 999);
+ProcObjectTimer(_Mime, "LLMIME_Timers_DeleteMimickedWeapons", 1325);
 
 PROC
 ProcObjectTimerFinished((CHARACTERGUID)_Mime, "LLMIME_Timers_DeleteMimickedWeapons")

@@ -427,6 +427,8 @@ LLMIME_Brawler_Internal_ApplyUnarmedBonusDamage_Start(_Mime, _Target, _IsCharact
 PROC
 LLMIME_Brawler_Internal_ApplyUnarmedBonusDamage_Start((CHARACTERGUID)_Mime, (GUIDSTRING)_Target, (INTEGER)_IsCharacter)
 AND
+_Target != NULL_00000000-0000-0000-0000-000000000000
+AND
 ObjectExists(_Target, 1)
 AND
 ObjectExists(_Mime, 1)
@@ -450,34 +452,18 @@ THEN
 CharacterItemSetEvent(_Mime, _Target, "Mimicry_ApplyUnarmedBonusDamage");
 
 IF
-CharacterDied(_Mime)
-AND
-IsTagged(_Mime, "Mimicry_Mime", 1)
+StoryEvent((CHARACTERGUID)_Mime, "Mimicry_ResetMimeCombatData")
 THEN
-LLMIME_Brawler_ClearMimeData(_Mime);
-
-IF
-CharacterDied(_Target)
-AND
-DB_LLMIME_Brawler_TotalHits(_Mime, (GUIDSTRING)_Target, _TotalHits)
-THEN
-NOT DB_LLMIME_Brawler_TotalHits(_Mime, _Target, _TotalHits);
-LLMIME_Brawler_ClearMimeData(_Mime);
-
-IF
-ItemDestroyed(_Target)
-AND
-DB_LLMIME_Brawler_TotalHits(_Mime, (GUIDSTRING)_Target, _TotalHits)
-THEN
-NOT DB_LLMIME_Brawler_TotalHits(_Mime, _Target, _TotalHits);
 LLMIME_Brawler_ClearMimeData(_Mime);
 //END_REGION
 
 //REGION UNARMED_BONUS_DAMAGE_DEBUFFS
 IF
 CharacterStatusApplied(_Target, "LLMIME_UNARMED_BONUS_DAMAGE", (CHARACTERGUID)_Mime)
+AND
+CharacterIsDead(_Target, 0)
 THEN
-SetStoryEvent(_Target, "Mimicry_Events_HitByUnarmedBonusDamage");
+CharacterCharacterSetEvent(_Target, _Mime, "Mimicry_Events_HitByUnarmedBonusDamage");
 
 /*
 IF

@@ -9,6 +9,8 @@ CharacterUsedItem(_Caster, _Item)
 AND
 CharacterIsPartyMember(_Caster, 1)
 AND
+LLMIME_Mimicking_QRY_CharacterIsMimickable(_Caster)
+AND
 LLMIME_Mimicking_QRY_MimesAvailable()
 AND
 LLMIME_Mimicking_QRY_ItemIsAllowed(_Item)

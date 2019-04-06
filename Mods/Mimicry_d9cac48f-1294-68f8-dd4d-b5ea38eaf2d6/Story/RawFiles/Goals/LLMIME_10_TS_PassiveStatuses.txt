@@ -77,6 +77,24 @@ THEN
 SetStoryEvent(_Mime, "Mimicry_ResetMimeCombatData");
 //END_REGION
 
+//REGION BRAWLER_BONUS_DAMAGE
+IF
+CharacterDied(_Target)
+AND
+DB_LLMIME_Brawler_TotalHits(_Mime, (GUIDSTRING)_Target, _TotalHits)
+THEN
+NOT DB_LLMIME_Brawler_TotalHits(_Mime, _Target, _TotalHits);
+LLMIME_Brawler_ClearMimeData(_Mime);
+
+IF
+ItemDestroyed(_Target)
+AND
+DB_LLMIME_Brawler_TotalHits(_Mime, (GUIDSTRING)_Target, _TotalHits)
+THEN
+NOT DB_LLMIME_Brawler_TotalHits(_Mime, _Target, _TotalHits);
+LLMIME_Brawler_ClearMimeData(_Mime);
+//END_REGION
+
 EXITSECTION
 
 ENDEXITSECTION

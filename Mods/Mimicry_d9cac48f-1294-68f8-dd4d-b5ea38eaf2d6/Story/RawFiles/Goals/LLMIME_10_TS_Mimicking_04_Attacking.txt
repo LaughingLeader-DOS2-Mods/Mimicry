@@ -11,11 +11,13 @@ KBSECTION
 IF
 CharacterStartAttackObject(_Target, _Owner, _Caster)
 AND
+_Caster != _Target
+AND
 NOT LLMIME_Mimicking_Attack_QRY_IsAttackOfOpportunity(_Caster)
 AND
-LLMIME_Mimicking_QRY_CharacterIsMimickable(_Caster)
+LLMIME_Mimicking_QRY_MimesAvailable()
 AND
-_Caster != _Target
+LLMIME_Mimicking_QRY_CharacterIsMimickable(_Caster)
 AND
 LLMIME_Mimicking_QRY_GetTargetPriority(_Caster, _Target, 2)
 AND
@@ -23,7 +25,7 @@ DB_LLMIME_Mimicking_Temp_TargetPriority(_Caster, _Target, _TargetPriority)
 AND
 DB_LLMIME_Mimicking_MimicNextAction(_Mime)
 AND
-LLMIME_Mimicking_QRY_CanMimicCharacter(_Caster, _Mime, "", "")
+LLMIME_Mimicking_QRY_CanMimicCharacter(_Caster, _Mime)
 AND
 GetPosition(_Target, _TargetX, _TargetY, _TargetZ)
 AND
@@ -52,9 +54,9 @@ NOT LLMIME_Mimicking_Attack_QRY_IsAttackOfOpportunity(_Caster)
 AND
 NOT DB_LLMIME_Timers_AttackAtPositionTimer(_Caster, _TargetX, _TargetY, _TargetZ)
 AND
-LLMIME_Mimicking_QRY_CharacterIsMimickable(_Caster)
-AND
 LLMIME_Mimicking_QRY_MimesAvailable()
+AND
+LLMIME_Mimicking_QRY_CharacterIsMimickable(_Caster)
 THEN
 DB_LLMIME_Timers_AttackAtPositionTimer(_Caster, _TargetX, _TargetY, _TargetZ);
 ProcObjectTimer(_Caster, "Mimicry_Timers_StartAttackPositionDelay", 5);
