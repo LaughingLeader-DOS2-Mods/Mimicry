@@ -7,7 +7,7 @@ Check out the release pages for more info.
 
 # Releases
 * [Steam Workshop](https://steamcommunity.com/sharedfiles/filedetails/?id=1515000128) 
-* [Nexus]()
+* [Nexus](https://www.nexusmods.com/divinityoriginalsin2definitiveedition/mods/162/)
 
 # Support
 If you're feeling generous, an easy way to show support is by tipping me a coffee:
