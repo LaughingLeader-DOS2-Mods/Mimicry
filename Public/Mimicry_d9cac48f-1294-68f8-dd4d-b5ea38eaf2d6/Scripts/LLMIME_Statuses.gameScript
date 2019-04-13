@@ -8,14 +8,11 @@ VARS
 	CHARACTER:_Target
 	STATUS:_BonusStatus
 ON
-	//OnCharacterStatusApplied(_Target, LLMIME_UNARMED_BONUS_DAMAGE)
 	OnCharacterCharacterEvent(_Target, _Source, "Mimicry_Events_HitByUnarmedBonusDamage")
 ACTIONS
-	//GetWeightedRandom(_BonusStatus, LLMIME_PHYSICAL_SILENCED, INT:2, LLMIME_SLOWED_ARMOR_BYPASS, INT:5, LLMIME_WEAK_ARMOR_BYPASS, INT:1, null, INT:8)
 	GetWeightedRandom(_BonusStatus, CRIPPLED, INT:2, BLEEDING, INT:4, MARKED, INT:1, NULL, INT:15)
-	IF "!c1&!c2"
+	IF "!c1"
 		IsEqual(_BonusStatus, NULL)
-		IsEqual(_BonusStatus, null)
 	THEN
 		CharacterApplyStatus(_Target, _BonusStatus, 1, 0, _Source)
 	ENDIF

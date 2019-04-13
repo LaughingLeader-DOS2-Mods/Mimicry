@@ -436,7 +436,7 @@ data "DamageTorches" "No"
 data "PermanentOnTorch" "No"
 data "SpawnBlood" "No"
 data "ForceOverhead" "No"
-data "ApplyEffect" "LLMIME_FX_Status_UnarmedBonusDamage_Impact_01:Dummy_BodyFX"
+data "ApplyEffect" "LLMIME_FX_Status_UnarmedBonusDamage_Impact_01"
 
 new entry "Damage_LLMIME_UnarmedBonusDamage"
 type "Weapon"

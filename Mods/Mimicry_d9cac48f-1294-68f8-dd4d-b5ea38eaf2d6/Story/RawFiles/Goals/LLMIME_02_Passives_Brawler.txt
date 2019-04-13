@@ -442,7 +442,6 @@ LLMIME_Brawler_ApplyUnarmedBonusDamage((CHARACTERGUID)_Mime, (GUIDSTRING)_Target
 AND
 CharacterIsDead((CHARACTERGUID)_Target, 0)
 THEN
-//CharacterCharacterSetEvent(_Mime, _Target, "Mimicry_ApplyUnarmedBonusDamage");
 ApplyStatus(_Target, "LLMIME_UNARMED_BONUS_DAMAGE", 0.0, 0, _Mime);
 
 PROC
@@ -450,7 +449,6 @@ LLMIME_Brawler_ApplyUnarmedBonusDamage((CHARACTERGUID)_Mime, (GUIDSTRING)_Target
 AND
 ItemIsDestroyed((ITEMGUID)_Target, 0)
 THEN
-//CharacterItemSetEvent(_Mime, _Target, "Mimicry_ApplyUnarmedBonusDamage");
 ApplyStatus(_Target, "LLMIME_UNARMED_BONUS_DAMAGE", 0.0, 0, _Mime);
 
 IF
