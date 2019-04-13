@@ -442,14 +442,16 @@ LLMIME_Brawler_ApplyUnarmedBonusDamage((CHARACTERGUID)_Mime, (GUIDSTRING)_Target
 AND
 CharacterIsDead((CHARACTERGUID)_Target, 0)
 THEN
-CharacterCharacterSetEvent(_Mime, _Target, "Mimicry_ApplyUnarmedBonusDamage");
+//CharacterCharacterSetEvent(_Mime, _Target, "Mimicry_ApplyUnarmedBonusDamage");
+ApplyStatus(_Target, "LLMIME_UNARMED_BONUS_DAMAGE", 0.0, 0, _Mime);
 
 PROC
 LLMIME_Brawler_ApplyUnarmedBonusDamage((CHARACTERGUID)_Mime, (GUIDSTRING)_Target, 0)
 AND
 ItemIsDestroyed((ITEMGUID)_Target, 0)
 THEN
-CharacterItemSetEvent(_Mime, _Target, "Mimicry_ApplyUnarmedBonusDamage");
+//CharacterItemSetEvent(_Mime, _Target, "Mimicry_ApplyUnarmedBonusDamage");
+ApplyStatus(_Target, "LLMIME_UNARMED_BONUS_DAMAGE", 0.0, 0, _Mime);
 
 IF
 StoryEvent((CHARACTERGUID)_Mime, "Mimicry_ResetMimeCombatData")
@@ -617,7 +619,8 @@ AND
 DB_LLMIME_Brawler_DoubleStrikeData(_Mime, (GUIDSTRING)_Target, _Dummy)
 THEN
 NOT DB_LLMIME_Brawler_DoubleStrikeData(_Mime, _Target, _Dummy);
-CharacterCharacterSetEvent(_Mime, (CHARACTERGUID)_Target, "Mimicry_ApplyDoubleStrike");
+//CharacterCharacterSetEvent(_Mime, (CHARACTERGUID)_Target, "Mimicry_ApplyDoubleStrike");
+ApplyStatus(_Target, "LLMIME_DOUBLE_STRIKE", 6.0, 0, _Mime);
 LeaderLib_Skills_ResetDummy(_Dummy);
 
 IF
@@ -626,7 +629,8 @@ AND
 DB_LLMIME_Brawler_DoubleStrikeData(_Mime, (GUIDSTRING)_Target, _Dummy)
 THEN
 NOT DB_LLMIME_Brawler_DoubleStrikeData(_Mime, _Target, _Dummy);
-CharacterItemSetEvent(_Mime, (ITEMGUID)_Target, "Mimicry_ApplyDoubleStrike");
+//CharacterItemSetEvent(_Mime, (ITEMGUID)_Target, "Mimicry_ApplyDoubleStrike");
+ApplyStatus(_Target, "LLMIME_DOUBLE_STRIKE", 6.0, 0, _Mime);
 LeaderLib_Skills_ResetDummy(_Dummy);
 
 //Prevent double strikes from double strike crits
