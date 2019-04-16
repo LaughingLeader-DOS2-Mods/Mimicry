@@ -54,3 +54,5 @@ Target_LLMIME_SetFacingDirection_DisplayName	<font color='#a1f398'>Set Facing</f
 Target_LLMIME_SetFacingDirection_Description	Set the direction to look when your turn ends.<br><font color='#eb64ff'>Tip: Mimicking factors in the mime's look direction, so facing the right way is important for setting up mimicked actions.</font><br><font color='#ff3838'>Cleared when your turn starts.</font>
 Cone_LLMIME_WaterSpit_DisplayName	Salty Water
 Cone_LLMIME_WaterSpit_Description	Spray targets in a cone with water, dealing [1], setting Wet, and dousing surfaces.
+Target_LLMIME_Fatality_DisplayName	<font color='#a22aff'>Deathblow</font>
+Target_LLMIME_Fatality_Description	Strike a target with a deathblow, dealing [1].<br><font color='#ff2e73'>Damage is doubled if the target is disabled.</font><br><font color='#2effd0'>If this skill kills the target, the cooldown is reset.</font>

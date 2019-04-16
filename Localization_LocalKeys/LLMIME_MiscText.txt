@@ -23,3 +23,4 @@ LLMIME_StatusText_UnarmedBonusDamage	<font color='#DC143C' size='20'>Unarmed Com
 LLMIME_StatusText_VitalityCheck_Failed	<font color='#FF0000'>Constitution Too Low</font>
 LLMIME_StatusText_WishFailed	<font color='#FF0000'>Wish Failed - Health too low!</font>
 LLMIME_StatusText_FacingDirectionSaved	<font color='#FF7F50'>Facing Direction Saved</font>
+LLMIME_StatusText_FatalityCooldownReset	<font color='#a22aff'>Deathblow</font> <font color='#2effd0'>Refreshed</font>

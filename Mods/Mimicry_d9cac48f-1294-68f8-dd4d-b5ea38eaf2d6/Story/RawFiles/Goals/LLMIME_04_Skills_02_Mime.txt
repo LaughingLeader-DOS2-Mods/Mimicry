@@ -3,6 +3,22 @@ SubGoalCombiner SGC_AND
 INITSECTION
 
 KBSECTION
+PROC
+LLMIME_Skills_ResetCooldown((CHARACTERGUID)_Mime, (STRING)_Skill, (STRING)_FollowerSkill)
+AND
+NOT DB_LLMIME_Follower_Mime(_Mime)
+THEN
+CharacterRemoveSkill(_Mime, _Skill);
+CharacterAddSkill(_Mime, _Skill, 0);
+
+PROC
+LLMIME_Skills_ResetCooldown((CHARACTERGUID)_Mime, (STRING)_Skill, (STRING)_FollowerSkill)
+AND
+DB_LLMIME_Follower_Mime(_Mime)
+THEN
+CharacterRemoveSkill(_Mime, _FollowerSkill);
+CharacterAddSkill(_Mime, _FollowerSkill, 0);
+
 //REGION FACING
 IF
 CharacterUsedSkill(_Mime, "Target_LLMIME_SetFacingDirection", _, _)
@@ -801,6 +817,56 @@ AND
 DB_LLMIME_Skills_Temp_UnholyDarknessTarget(_Mime, _Target)
 THEN
 NOT DB_LLMIME_Skills_Temp_UnholyDarknessTarget(_Mime, _Target);
+//END_REGION
+
+//REGION FATALITY
+IF
+CharacterUsedSkillOnTarget(_Mime, _Target, "Target_LLMIME_Fatality", _, _)
+THEN
+LLMIME_Skills_OnSkillUsedOnTarget(_Mime, _Target, "Fatality");
+
+IF
+CharacterUsedSkillOnTarget(_Mime, _Target, "Target_LLMIME_Fatality_Follower", _, _)
+THEN
+LLMIME_Skills_OnSkillUsedOnTarget(_Mime, _Target, "Fatality");
+
+PROC
+LLMIME_Skills_OnSkillUsedOnTarget((CHARACTERGUID)_Mime, (GUIDSTRING)_Target, "Fatality")
+THEN
+DB_LLMIME_Skills_Fatality_ListenForDeath(_Mime, _Target);
+LeaderLib_Timers_StartObjectTimer(_Mime, 3000, "LLMIME_Timers_Skills_ClearFatalityDeathCheck", "LLMIME_Skills_ClearFatalityDeathCheck");
+
+IF
+SkillCast(_Mime, "Target_LLMIME_Fatality", _, _)
+THEN
+LeaderLib_Timers_RestartObjectTimer(_Mime, "LLMIME_Timers_Skills_ClearFatalityDeathCheck", 1200);
+
+IF
+SkillCast(_Mime, "Target_LLMIME_Fatality_Follower", _, _)
+THEN
+LeaderLib_Timers_RestartObjectTimer(_Mime, "LLMIME_Timers_Skills_ClearFatalityDeathCheck", 1200);
+
+IF
+StoryEvent((CHARACTERGUID)_Mime, "LLMIME_Skills_ClearFatalityDeathCheck")
+AND
+DB_LLMIME_Skills_Fatality_ListenForDeath(_Mime, _Target)
+THEN
+NOT DB_LLMIME_Skills_Fatality_ListenForDeath(_Mime, _Target);
+LeaderLog_Log("DEBUG", "[LLMIME_04_Skills_02_Mime:StoryEvent(LLMIME_Skills_ClearFatalityDeathCheck)] Target did not die from Deathblow. Clearing.");
+
+IF
+CharacterStatusApplied(_Target, "LLMIME_FATALITY_START", (CHARACTERGUID)_Mime)
+AND
+LLMIME_Skills_QRY_CharacterIsDisabled(_Target)
+THEN
+CharacterCharacterSetEvent(_Mime, _Target, "LLMIME_Skills_Fatality_DealDoubleDamage");
+
+IF
+StoryEvent((CHARACTERGUID)_Mime, "LLMIME_Skills_ResetFatalityCooldown")
+THEN
+LLMIME_Skills_ResetCooldown(_Mime, "Target_LLMIME_Fatality", "Target_LLMIME_Fatality_Follower");
+CharacterStatusText(_Mime, "LLMIME_StatusText_FatalityCooldownReset");
+PlayEffect(_Mime, "LLMIME_FX_DeathblowRefreshed_01");
 //END_REGION
 EXITSECTION
 

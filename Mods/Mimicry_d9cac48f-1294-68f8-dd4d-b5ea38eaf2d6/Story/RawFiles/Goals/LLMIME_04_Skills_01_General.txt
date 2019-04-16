@@ -171,6 +171,13 @@ CharacterCharacterSetEvent(_Caster, _Target, "Mimicry_Events_HealWishTarget");
 //END_REGION
 
 //REGION MUGGING
+QRY
+LLMIME_Skills_QRY_CharacterIsDisabled((CHARACTERGUID)_Character)
+AND
+DB_LLMIME_Skills_Temp_DisabledCharacter(_Character, _)
+THEN
+DB_NOOP(1);
+
 IF
 CharacterStatusApplied(_Target, "LLMIME_MUGGED", (CHARACTERGUID)_Mime)
 AND

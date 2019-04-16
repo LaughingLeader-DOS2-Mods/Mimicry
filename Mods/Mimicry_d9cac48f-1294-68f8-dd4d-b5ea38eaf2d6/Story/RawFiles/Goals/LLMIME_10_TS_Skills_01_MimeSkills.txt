@@ -133,6 +133,18 @@ LLMIME_Mimicking_QRY_IsMimicking(_Mime)
 THEN
 LeaderLib_Timers_StartObjectTimer(_Mime, 1000, "LLMIME_Timers_ReApplyFacingDirection", "LLMIME_Mime_ReApplyFacingDirection");
 //END_REGION
+
+//REGION FATALITY
+IF
+CharacterDying(_Target)
+AND
+DB_LLMIME_Skills_Fatality_ListenForDeath(_Mime, _Target)
+THEN
+NOT DB_LLMIME_Skills_Fatality_ListenForDeath(_Mime, _Target);
+LeaderLib_Timers_StartObjectTimer(_Mime, 1000, "LLMIME_Timers_Skills_ResetFatalityCooldown", "LLMIME_Skills_ResetFatalityCooldown");
+LeaderLog_Log("DEBUG", "[LLMIME_10_TS_Skills_01_MimeSkills:CharacterDied] Target of Deathblow died. Resetting cooldown.");
+//END_REGION
+
 EXITSECTION
 
 ENDEXITSECTION

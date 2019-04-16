@@ -316,3 +316,19 @@ THEN
 	Cast(_Level, _LevelF)
 	ExplodeAt(_Target, Projectile_LLMIME_Mask_Unholy_DeathBonus, _Level, _Mime)
 ENDIF
+
+EVENT LLMIME_Skills_Fatality_SecondHit
+VARS
+	CHARACTER:_Mime
+	CHARACTER:_Target
+	FLOAT:_LevelF
+	INT:_Level
+ON
+	OnCharacterCharacterEvent(_Mime, _Target, "Projectile_LLMIME_Fatality_SecondHit")
+ACTIONS
+IF "c1"
+	CharacterGetStat(_LevelF, _Mime, Level)
+THEN
+	Cast(_Level, _LevelF)
+	ExplodeAt(_Target, Projectile_LLMIME_Fatality_SecondHit, _Level, _Mime)
+ENDIF
