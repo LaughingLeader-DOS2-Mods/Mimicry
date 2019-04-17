@@ -9,6 +9,7 @@ AND
 NOT DB_LLMIME_RegisteredLeaderLibSettings(_)
 THEN
 DB_LLMIME_RegisteredLeaderLibSettings(1);
+LLMIME_LeaderLib_RegisterSettings();
 
 PROC
 LeaderUpdater_ModUpdated("Mimicry", "LaughingLeader", (STRING)_PastVersion, (STRING)_NewVersion)
@@ -32,8 +33,8 @@ ItemTemplateAddTo("UNIQUE_LLMIME_MusicBox_fd03b00c-5366-40e2-a8af-1d9f6a904ecb",
 LeaderLib_Treasure_Clear_AllDataForTreasure("LLMIME.LeaderTrader.MusicBox");
 LeaderLog_Log("DEBUG", "[LLMIME:LeaderLib] Updated settings from version [",_PastVersion,"].");
  */
-IF
-DB_LLMIME_RegisteredLeaderLibSettings(1)
+PROC
+LLMIME_LeaderLib_RegisterSettings()
 THEN
 DB_LeaderLib_EngineStatus("LLMIME_UNARMED_HIT");
 DB_LeaderLib_EngineStatus("LLMIME_BEASTMASTER_TYPECHECK");
