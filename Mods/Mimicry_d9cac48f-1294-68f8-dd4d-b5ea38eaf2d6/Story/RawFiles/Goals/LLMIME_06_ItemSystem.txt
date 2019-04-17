@@ -101,32 +101,6 @@ DB_IsPlayer(_Player)
 THEN
 LeaderLib_Growth_Items_CheckEquipmentForMissingDeltamods(_Player);
 
-QRY
-LLMIME_ItemSystem_QRY_RemoveRunes((CHARACTERGUID)_Player, (ITEMGUID)_Item)
-THEN
-LLMIME_ItemSystem_RemoveRunes(_Player, _Item);
-
-PROC
-LLMIME_ItemSystem_RemoveRunes((CHARACTERGUID)_Player, (ITEMGUID)_Item)
-AND
-ItemRemoveRune(_Player, _Item, 0, _Rune)
-THEN
-DB_NOOP(1);
-
-PROC
-LLMIME_ItemSystem_RemoveRunes((CHARACTERGUID)_Player, (ITEMGUID)_Item)
-AND
-ItemRemoveRune(_Player, _Item, 1, _Rune)
-THEN
-DB_NOOP(1);
-
-PROC
-LLMIME_ItemSystem_RemoveRunes((CHARACTERGUID)_Player, (ITEMGUID)_Item)
-AND
-ItemRemoveRune(_Player, _Item, 2, _Rune)
-THEN
-DB_NOOP(1);
-
 PROC
 LLMIME_ItemSystem_ResetMimeEquipment()
 AND
@@ -140,11 +114,11 @@ CharacterGetEquippedItem(_Player, _Slot, (ITEMGUID)_Item)
 AND
 GetTemplate(_Item, _Template)
 AND
-LLMIME_ItemSystem_QRY_RemoveRunes(_Player, _Item)
+LeaderLib_Helper_QRY_RemoveRunes(_Player, _Item)
 AND
 CreateItemTemplateAtPosition(_Template, _x, _y, _z, _NewItem)
 THEN
-ItemRemove(_Item);
+ProcObjectTimer(_Item, "LeaderLib_Commands_RemoveItem", 50);
 CharacterEquipItem(_Player, _NewItem);
 
 PROC
@@ -160,11 +134,11 @@ GetItemForItemTemplateInInventory(_Player, _Template, _Item)
 AND
 NOT CharacterGetEquippedItem(_Player, _Slot, (ITEMGUID)_Item)
 AND
-LLMIME_ItemSystem_QRY_RemoveRunes(_Player, _Item)
+LeaderLib_Helper_QRY_RemoveRunes(_Player, _Item)
 AND
 CreateItemTemplateAtPosition(_Template, _x, _y, _z, _NewItem)
 THEN
-ItemRemove(_Item);
+ProcObjectTimer(_Item, "LeaderLib_Commands_RemoveItem", 50);
 ItemToInventory(_NewItem, _Player, 1, 0);
 //END_REGION
 
