@@ -923,6 +923,7 @@ NOT DB_LLMIME_Debug_ObjectPosition(_Target, _Caster, _Object, _x, _y, _z);
 //END_REGION
 
 //REGION TRACING
+/*
 IF
 CharacterLeveledUp(_Character)
 AND
@@ -1093,6 +1094,7 @@ AND
 CharacterGetDisplayName(_Character, _, _Name)
 THEN
 LeaderLog_Log("DEBUG", "[LLMIME:Debug:CharacterStatusRemoved] Status [",_Status,"](",_Type,") removed from [",_Name,"] via [",_Cause,"].");
+*/
 //END_REGION
 
 //REGION BEHAVIOR_ROT_DIR_TRACE
