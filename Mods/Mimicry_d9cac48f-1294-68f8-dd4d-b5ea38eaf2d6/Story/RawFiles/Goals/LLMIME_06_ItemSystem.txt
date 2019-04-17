@@ -59,9 +59,9 @@ LeaderLib_Growth_Items_Register_DeltaMod("Mimicry.MimeEquipment.Gloves", 15, "Bo
 LeaderLib_Growth_Items_Register_DeltaMod("Mimicry.MimeEquipment.Gloves", 19, "Boost_Armor_Gloves_Immunity_Slow_And_Sleeping", "Template", "EQ_Armor_LLMIME_Mime_Arms_A_719c05ec-03d1-4910-b709-1ced217cd136");
 
 LeaderLib_Growth_Items_Clear_ByEntriesID("Mimicry.MimeEquipment.Boots");
-LeaderLib_Growth_Items_Register_DeltaMod("Mimicry.MimeEquipment.Boots", 3, "Boost_LLMIME_Armor_Boots_JumpSkill", "Template", "EQ_Armor_LLMIME_Mime_Legs_A_5b2a8469-a1a2-41cf-a861-8b997330f522");
+LeaderLib_Growth_Items_Register_DeltaMod("Mimicry.MimeEquipment.Boots", 3, "Boost_LLMIME_Armor_Boots_Tier1", "Template", "EQ_Armor_LLMIME_Mime_Legs_A_5b2a8469-a1a2-41cf-a861-8b997330f522");
 LeaderLib_Growth_Items_Register_DeltaMod("Mimicry.MimeEquipment.Boots", 6, "Boost_Armor_Boots_Secondary_Dodge_Large", "Template", "EQ_Armor_LLMIME_Mime_Legs_A_5b2a8469-a1a2-41cf-a861-8b997330f522");
-LeaderLib_Growth_Items_Register_DeltaMod("Mimicry.MimeEquipment.Boots", 9, "Boost_LLMIME_Skill_EvasiveManeuver_Mime", "Template", "EQ_Armor_LLMIME_Mime_Legs_A_5b2a8469-a1a2-41cf-a861-8b997330f522");
+LeaderLib_Growth_Items_Register_DeltaMod("Mimicry.MimeEquipment.Boots", 9, "Boost_LLMIME_Armor_Boots_Tier2", "Template", "EQ_Armor_LLMIME_Mime_Legs_A_5b2a8469-a1a2-41cf-a861-8b997330f522");
 LeaderLib_Growth_Items_Register_DeltaMod("Mimicry.MimeEquipment.Boots", 11, "Boost_LLMIME_Armor_Boots_EmptyRuneSlot", "Template", "EQ_Armor_LLMIME_Mime_Legs_A_5b2a8469-a1a2-41cf-a861-8b997330f522");
 LeaderLib_Growth_Items_Register_DeltaMod("Mimicry.MimeEquipment.Boots", 13, "Boost_Armor_Boots_Secondary_MovementSpeed_Large", "Template", "EQ_Armor_LLMIME_Mime_Legs_A_5b2a8469-a1a2-41cf-a861-8b997330f522");
 LeaderLib_Growth_Items_Register_DeltaMod("Mimicry.MimeEquipment.Boots", 15, "Boost_Armor_Boots_Crafting_Special_Ataraxian", "Template", "EQ_Armor_LLMIME_Mime_Legs_A_5b2a8469-a1a2-41cf-a861-8b997330f522");
@@ -79,16 +79,16 @@ DB_LLMIME_ItemSystem_MimeEquipment("Boots", "EQ_Armor_LLMIME_Mime_Legs_A_5b2a846
 //END_REGION
 
 //REGION UPDATING
-/* 
+
 PROC
 LeaderUpdater_ModUpdated("Mimicry", "LaughingLeader", (STRING)_PastVersion, (STRING)_NewVersion)
 AND
-LeaderLib_StringExt_QRY_VersionIsLessThan(_PastVersion, 0, 9, 7, 0)
+LeaderLib_StringExt_QRY_VersionIsLessThan(_PastVersion, 1,0,4,0)
 THEN
 LeaderLog_Log("DEBUG", "[LLMIME:ItemSystem] Updating settings from version [",_PastVersion,"]");
 LLMIME_ItemSystem_InitSettings();
 LLMIME_ItemSystem_ResetMimeEquipment();
- */
+
 IF
 TimerFinished("LLMIME_Timers_UpdateMimeEquipmentGrowth")
 AND
@@ -113,6 +113,24 @@ CreateItemTemplateAtPosition(_Template, _x, _y, _z, _NewItem)
 THEN
 ItemRemove(_Item);
 CharacterEquipItem(_Player, _NewItem);
+
+PROC
+LLMIME_ItemSystem_ResetMimeEquipment()
+AND
+DB_IsPlayer(_Player)
+AND
+GetPosition(_Player, _x, _y, _z)
+AND
+DB_LLMIME_ItemSystem_MimeEquipment(_Slot, _Template)
+AND
+GetItemForItemTemplateInInventory(_Player, _Template, _Item)
+AND
+NOT CharacterGetEquippedItem(_Player, _Slot, (ITEMGUID)_Item)
+AND
+CreateItemTemplateAtPosition(_Template, _x, _y, _z, _NewItem)
+THEN
+ItemRemove(_Item);
+ItemToInventory(_NewItem, _Player, 1, 0);
 //END_REGION
 
 //REGION FIST_EQUIPPING

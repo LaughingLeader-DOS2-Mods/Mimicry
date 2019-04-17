@@ -65,12 +65,19 @@ param "ModifierType" "Armor"
 param "SlotType" "Boots"
 new boost "_Boost_LLMIME_Armor_Skill_EvasiveManeuver_Mime",1
 
-new deltamod "Boost_LLMIME_Armor_Boots_JumpSkill"
+new deltamod "Boost_LLMIME_Armor_Boots_Tier1"
 param "BoostType" "ItemCombo"
 param "Frequency" "1"
 param "ModifierType" "Armor"
 param "SlotType" "Boots"
-new boost "_Boost_LLMIME_Armor_Skill_JumpSkill_Mime",1
+new boost "_Boost_LLMIME_Armor_Boots_Tier1",1
+
+new deltamod "Boost_LLMIME_Armor_Boots_Tier2"
+param "BoostType" "ItemCombo"
+param "Frequency" "1"
+param "ModifierType" "Armor"
+param "SlotType" "Boots"
+new boost "_Boost_LLMIME_Armor_Boots_Tier2",1
 
 new deltamod "Boost_LLMIME_Armor_LowerBody_EmptyRuneSlot"
 param "BoostType" "RuneEmpty"

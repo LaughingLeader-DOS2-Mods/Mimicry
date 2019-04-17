@@ -9,16 +9,19 @@ AND
 NOT DB_LLMIME_RegisteredLeaderLibSettings(_)
 THEN
 DB_LLMIME_RegisteredLeaderLibSettings(1);
-/* 
+
 PROC
 LeaderUpdater_ModUpdated("Mimicry", "LaughingLeader", (STRING)_PastVersion, (STRING)_NewVersion)
 AND
-LeaderLib_StringExt_QRY_VersionIsLessThan(_PastVersion, 0, 9, 9, 31)
+LeaderLib_StringExt_QRY_VersionIsLessThan(_PastVersion, 1,0,4,0)
 THEN
-//LeaderLib_Helper_Register_IgnoreTag_Character("Mimicry", "LLMIME_Dummy");
-LeaderLib_Helper_Register_IgnoreTag_Item("Mimicry", "LLMIME_MIMICKED_WEAPON");
-LeaderLog_Log("DEBUG", "[LLMIME:LeaderLib] Updated settings from version [",_PastVersion,"].");
+NOT DB_LeaderLib_PresetMenu_RegisteredPreset("LLMIME_Mime", "Mimicry_IsActive");
+NOT DB_LeaderLib_PresetMenu_RegisteredPreset("Mimicry_IsActive", "LLMIME_Mime", "Mimicry_IsActive");
+LeaderLib_DynamicMenu_Remove_Entry("LeaderLib.Settings.PresetMenu", "LLMIME_Mime");
+LeaderLib_PresetMenu_RegisterPreset("Mimicry", "LLMIME_Mime", "Mime [Mimicry]", "Mimicry_IsActive");
+LeaderLog_Log("DEBUG", "[LLMIME_07_LeaderLib:LeaderUpdater_ModUpdated] Updated settings from version [",_PastVersion,"].");
 
+/*
 PROC
 LeaderUpdater_ModUpdated("Mimicry", "LaughingLeader", (STRING)_PastVersion, (STRING)_NewVersion)
 AND
@@ -46,7 +49,7 @@ LeaderLib_Treasure_Configure_DefaultGenerationType("Mimicry.LeaderTrader.General
 LeaderLib_Treasure_Register_UniqueItemTemplate("Mimicry.LeaderTrader.General", "UNIQUE_LLMIME_MusicBox_fd03b00c-5366-40e2-a8af-1d9f6a904ecb");
 */
 
-LeaderLib_PresetMenu_RegisterPreset("LLMIME_Mime", "Mime [Mimicry]", "Mimicry_IsActive");
+LeaderLib_PresetMenu_RegisterPreset("Mimicry", "LLMIME_Mime", "Mime [Mimicry]", "Mimicry_IsActive");
 
 /*
 LeaderLib_Requirements_Add_PartyLevelRequirement("LLMIME_Requirements_MimeStarter", 2, -1, 0);

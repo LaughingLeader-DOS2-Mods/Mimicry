@@ -108,6 +108,8 @@ LLMIME_Mimicking_MimicAction((CHARACTERGUID)_Caster, (STRING)_Template, "Item")
 AND
 DB_LLMIME_Mimicking_MimicQueue_Self(_Mime, _Caster, _Template, "Item")
 AND
+LLMIME_Mimicking_QRY_StartNextMimic(_Mime, _Caster, _Template, "Item")
+AND
 GetPosition(_Mime, _x, _y, _z)
 AND
 CreateItemTemplateAtPosition(_Template, _x, _y, _z, _Item)

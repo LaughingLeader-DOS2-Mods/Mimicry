@@ -58,15 +58,6 @@ LLMIME_Mimicking_StartNextMimic(_Caster, _Action, "Attack", 1000);
 //END_REGION
 
 //REGION ATTACK_MIMIC
-PROC
-LLMIME_Mimicking_MimicAction((CHARACTERGUID)_Caster, (STRING)_Action, "Attack")
-AND
-DB_LLMIME_Mimicking_MimicQueue_Self(_Mime, _Caster, _Action, "Attack")
-THEN
-//CharacterAttack(_Mime, _Mime);
-PlayAnimation(_Mime, "attack1");
-NOT DB_LLMIME_Mimicking_MimicQueue_Self(_Mime, _Caster, _Action, "Attack");
-
 QRY
 LLMIME_Mimicking_QRY_HasEquippedWeaponType((CHARACTERGUID)_Mime, (STRING)_Type)
 AND
@@ -164,9 +155,23 @@ THEN
 DB_NOOP(1);
 
 PROC
+LLMIME_Mimicking_MimicAction((CHARACTERGUID)_Caster, (STRING)_Action, "Attack")
+AND
+DB_LLMIME_Mimicking_MimicQueue_Self(_Mime, _Caster, _Action, "Attack")
+AND
+LLMIME_Mimicking_QRY_StartNextMimic(_Mime, _Caster, _Action, "Attack")
+THEN
+NOT DB_LLMIME_Mimicking_MimicQueue_Self(_Mime, _Caster, _Action, "Attack");
+CharacterAttack(_Mime, _Mime);
+LLMIME_Mimicking_Attack_StartSuccessTimer(_Mime, _Caster, _Mime, _Action);
+//PlayAnimation(_Mime, "attack1", "LLMIME_Mimicking_Attack_AttackDone");
+
+PROC
 LLMIME_Mimicking_MimicActionOnTarget((CHARACTERGUID)_Mime, (CHARACTERGUID)_Caster, (GUIDSTRING)_Target, (STRING)_Action, "Attack")
 AND
 ObjectIsCharacter(_Target, 1)
+AND
+LLMIME_Mimicking_QRY_StartNextMimic(_Mime, _Caster, _Action, "Attack")
 THEN
 ObjectSetFlag(_Mime, "Mimicry_IsMimicking");
 DB_LLMIME_Mimicking_Attacking_Temp_MimicData(_Mime, _Caster, _Target, _Action);
@@ -177,6 +182,8 @@ PROC
 LLMIME_Mimicking_MimicActionOnTarget((CHARACTERGUID)_Mime, (CHARACTERGUID)_Caster, (GUIDSTRING)_Target, (STRING)_Action, "Attack")
 AND
 ObjectIsItem(_Target, 1)
+AND
+LLMIME_Mimicking_QRY_StartNextMimic(_Mime, _Caster, _Action, "Attack")
 THEN
 ObjectSetFlag(_Mime, "Mimicry_IsMimicking");
 DB_LLMIME_Mimicking_Attacking_Temp_MimicData(_Mime, _Caster, _Target, _Action);
@@ -186,6 +193,8 @@ IF
 CharacterCharacterEvent(_Mime, _Target, "LLMIME_Events_Mimicking_UseBasicAttackOnTarget")
 AND
 DB_LLMIME_Mimicking_Attacking_Temp_MimicData(_Mime, _Caster, (GUIDSTRING)_Target, _Action)
+AND
+LLMIME_Mimicking_QRY_StartNextMimic(_Mime, _Caster, _Action, "Attack")
 THEN
 NOT DB_LLMIME_Mimicking_Attacking_Temp_MimicData(_Mime, _Caster, _Target, _Action);
 //CharacterAddActionPoints(_Mime, 2);
@@ -196,6 +205,8 @@ IF
 CharacterItemEvent(_Mime, _Target, "LLMIME_Events_Mimicking_UseBasicAttackOnTarget")
 AND
 DB_LLMIME_Mimicking_Attacking_Temp_MimicData(_Mime, _Caster, (GUIDSTRING)_Target, _Action)
+AND
+LLMIME_Mimicking_QRY_StartNextMimic(_Mime, _Caster, _Action, "Attack")
 THEN
 NOT DB_LLMIME_Mimicking_Attacking_Temp_MimicData(_Mime, _Caster, _Target, _Action);
 //CharacterAddActionPoints(_Mime, 2);
@@ -206,6 +217,8 @@ IF
 CharacterCharacterEvent(_Mime, _Target, "LLMIME_Events_Mimicking_UseBasicAttackSkillOnTarget")
 AND
 DB_LLMIME_Mimicking_Attacking_Temp_MimicData(_Mime, _Caster, (GUIDSTRING)_Target, _Action)
+AND
+LLMIME_Mimicking_QRY_StartNextMimic(_Mime, _Caster, _Action, "Attack")
 THEN
 NOT DB_LLMIME_Mimicking_Attacking_Temp_MimicData(_Mime, _Caster, _Target, _Action);
 LLMIME_Mimicking_Attack_UseAttackSkill(_Mime, _Caster, _Target, _Action);
@@ -214,6 +227,8 @@ IF
 CharacterItemEvent(_Mime, _Target, "LLMIME_Events_Mimicking_UseBasicAttackSkillOnTarget")
 AND
 DB_LLMIME_Mimicking_Attacking_Temp_MimicData(_Mime, _Caster, (GUIDSTRING)_Target, _Action)
+AND
+LLMIME_Mimicking_QRY_StartNextMimic(_Mime, _Caster, _Action, "Attack")
 THEN
 NOT DB_LLMIME_Mimicking_Attacking_Temp_MimicData(_Mime, _Caster, _Target, _Action);
 LLMIME_Mimicking_Attack_UseAttackSkill(_Mime, _Caster, _Target, _Action);

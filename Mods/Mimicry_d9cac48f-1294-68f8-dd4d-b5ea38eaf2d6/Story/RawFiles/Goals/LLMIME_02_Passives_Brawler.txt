@@ -653,8 +653,8 @@ RemoveStatus(_Target, "LLMIME_DOUBLE_STRIKE");
 //END_REGION
 
 //REGION WEAPON_MIMICKING_STANCE_SAVING
-IF
-StoryEvent((CHARACTERGUID)_Mime, "Mimicry_WeaponMimickingStarted")
+PROC
+LLMIME_Mimicking_WeaponMimickingStarted((CHARACTERGUID)_Mime, (CHARACTERGUID)_Caster, (STRING)_Action, (STRING)_ActionType)
 AND
 LLMIME_Brawler_QRY_StanceIsActive(_Mime)
 THEN

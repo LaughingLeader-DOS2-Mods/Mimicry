@@ -38,12 +38,12 @@ LLMIME_Mimicking_RemoveMimicking(_Mime);
 IF
 ObjectTurnStarted((CHARACTERGUID)_Mime)
 AND
-DB_LLMIME_Mimicking_DeleteOneTimeUseWeaponsTimer(_Mime, _Action, _ActionType)
+DB_LLMIME_Mimicking_DeleteOneTimeUseWeaponsTimer(_Mime, _Caster, _Action, _ActionType, _TimerName)
 AND
 NOT DB_LLMIME_Mimicking_Skills_Temp_ListenForSuccess(_Mime, _, _)
 THEN
-ProcObjectTimerCancel(_Mime, "LLMIME_Timers_DeleteMimickedWeapons");
-ProcObjectTimerFinished(_Mime, "LLMIME_Timers_DeleteMimickedWeapons");
+TimerCancel(_TimerName);
+TimerLaunch(_TimerName, 25);
 EXITSECTION
 
 ENDEXITSECTION
