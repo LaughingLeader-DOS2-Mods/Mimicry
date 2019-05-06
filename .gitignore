@@ -51,6 +51,7 @@ story.debugInfo
 *.lsefx
 #*.lsx
 *.lsmg
+*.wav
 
 # Logs               #
 ######################
