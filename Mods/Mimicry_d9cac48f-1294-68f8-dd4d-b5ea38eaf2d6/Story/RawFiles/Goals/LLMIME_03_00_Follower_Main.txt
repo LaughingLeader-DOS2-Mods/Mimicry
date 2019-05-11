@@ -878,85 +878,77 @@ LeaderLog_Log("DEBUG", "[LLMIME:Follower] Poofed the Mime follower.");
 
 //REGION NON_RECRUITED_COMBAT
 IF
-AttackedByObject((CHARACTERGUID)_Mime, (CHARACTERGUID)_Owner, _Attacker, _, _)
-AND
-IsTagged(_Mime, "LLMIME_MimeFollower", 1)
+AttackedByObject(S_LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9, (CHARACTERGUID)_Owner, _Attacker, _, _)
 AND
 CharacterIsPlayer(_Owner, 1)
 AND
-IsTagged(_Mime, "LeaderLib_IsFollower", 0)
+IsTagged(S_LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9, "LeaderLib_IsFollower", 0)
 THEN
-CharacterEnableAllCrimes(_Mime);
-SetCanJoinCombat(_Mime, 1);
+CharacterEnableAllCrimes(S_LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9);
+SetCanJoinCombat(S_LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9, 1);
 
+/*
 IF
-AttackedByObject((CHARACTERGUID)_Mime, (CHARACTERGUID)_Owner, _Attacker, _, _)
+AttackedByObject(S_LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9, (CHARACTERGUID)_Owner, _Attacker, _, _)
 AND
-IsTagged(_Mime, "LLMIME_MimeFollower", 1)
+IsTagged(S_LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9, "LeaderLib_IsFollower", 0)
 AND
-IsTagged(_Mime, "LeaderLib_IsFollower", 0)
-AND
-CharacterGetHitpointsPercentage(_Mime, _Percentage)
+CharacterGetHitpointsPercentage(S_LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9, _Percentage)
 AND
 Integer(_Percentage, _PercInt)
 AND
 IntegertoString(_PercInt, _HpStr)
 THEN
 LeaderLog_Log("DEBUG", "[LLMIME:Follower:Debug] Mime follower's health is: [",_HpStr,"%]");
+*/
 
 IF
-AttackedByObject((CHARACTERGUID)_Mime, (CHARACTERGUID)_Owner, _Attacker, _, _)
-AND
-IsTagged(_Mime, "LLMIME_MimeFollower", 1)
+AttackedByObject(S_LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9, (CHARACTERGUID)_Owner, _Attacker, _, _)
 AND
 CharacterIsPlayer(_Owner, 1)
 AND
-IsTagged(_Mime, "LeaderLib_IsFollower", 0)
+IsTagged(S_LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9, "LeaderLib_IsFollower", 0)
 AND
-CharacterGetHitpointsPercentage(_Mime, _Percentage)
+CharacterGetHitpointsPercentage(S_LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9, _Percentage)
 AND
 _Percentage <= 75.0
 THEN
-CharacterAddAttitudeTowardsPlayer(_Mime, _Owner, -5);
+CharacterAddAttitudeTowardsPlayer(S_LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9, _Owner, -5);
 
 IF
-AttackedByObject((CHARACTERGUID)_Mime, (CHARACTERGUID)_Owner, _Attacker, _, _)
-AND
-IsTagged(_Mime, "LLMIME_MimeFollower", 1)
+AttackedByObject(S_LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9, (CHARACTERGUID)_Owner, _Attacker, _, _)
 AND
 CharacterIsPlayer(_Owner, 1)
 AND
-IsTagged(_Mime, "LeaderLib_IsFollower", 0)
+IsTagged(S_LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9, "LeaderLib_IsFollower", 0)
 AND
-CharacterGetHitpointsPercentage(_Mime, _Percentage)
+CharacterGetHitpointsPercentage(S_LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9, _Percentage)
 AND
 _Percentage <= 40.0
+AND
+CharacterIsInCombat(S_LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9, 0)
 THEN
-EnterCombat(_Mime, _Owner);
+EnterCombat(S_LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9, _Owner);
 
 IF
-AttackedByObject((CHARACTERGUID)_Mime, (CHARACTERGUID)_Owner, _Attacker, _, _)
+AttackedByObject(S_LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9, (CHARACTERGUID)_Owner, _Attacker, _, _)
 AND
-IsTagged(_Mime, "LLMIME_MimeFollower", 1)
+CharacterIsInCombat(S_LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9, 0)
 AND
-CharacterIsInCombat(_Mime, 0)
+CharacterIsPlayer(S_LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9, 0)
 AND
-CharacterIsPlayer(_Owner, 0)
-AND
-IsTagged(_Mime, "LeaderLib_IsFollower", 0)
+IsTagged(S_LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9, "LeaderLib_IsFollower", 0)
 THEN
-ApplyStatus(_Mime, "INVISIBLE", 90.0, 1, _Mime);
+ApplyStatus(S_LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9, "INVISIBLE", 90.0, 1, S_LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9);
 
 IF
-ObjectEnteredCombat((CHARACTERGUID)_Mime, _CombatID)
+ObjectEnteredCombat(S_LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9, _CombatID)
 AND
-IsTagged(_Mime, "LLMIME_MimeFollower", 1)
+IsTagged(S_LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9, "LeaderLib_IsFollower", 0)
 AND
-IsTagged(_Mime, "LeaderLib_IsFollower", 0)
-AND
-NOT LLMIME_Brawler_QRY_StanceIsActive(_Mime)
+NOT LLMIME_Brawler_QRY_StanceIsActive(S_LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9)
 THEN
-CharacterUseSkill(_Mime, "Shout_LLMIME_BrawlerStance", _Mime, 1, 1);
+CharacterUseSkill(S_LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9, "Shout_LLMIME_BrawlerStance", S_LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9, 1, 1);
 //END_REGION
 
 //REGION RETURN_SKILL
