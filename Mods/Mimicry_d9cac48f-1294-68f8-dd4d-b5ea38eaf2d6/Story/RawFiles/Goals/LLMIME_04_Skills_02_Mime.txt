@@ -204,7 +204,7 @@ NOT DB_LLMIME_Skills_Temp_QuakeSlamTarget(_Target, _Caster, _FallDamageInt);
 RemoveStatus(_Target, "LLMIME_LAUNCHED");
 RemoveStatus(_Target, "LLMIME_LAUNCHED_DISABLE");
 LLMIME_Skills_QuakeSlam_ApplyFallDamage(_Target, _Caster, _FallDamage);
-PlaySoundResource(_Target, SOUNDRESOURCEGUID_LLMIME_SFX_FallDamage_A_00b7b73d-ab3a-484d-98c9-360c19c6c329);
+PlaySoundResource(_Target, LLMIME_SFX_FallDamage_A_00b7b73d-ab3a-484d-98c9-360c19c6c329);
 
 IF
 CharacterStatusRemoved(_Target, "LLMIME_LAUNCHED", _)
