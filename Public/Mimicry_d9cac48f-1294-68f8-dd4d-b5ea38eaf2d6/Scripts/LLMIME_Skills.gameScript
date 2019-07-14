@@ -317,6 +317,7 @@ THEN
 	ExplodeAt(_Target, Projectile_LLMIME_Mask_Unholy_DeathBonus, _Level, _Mime)
 ENDIF
 
+/*
 EVENT LLMIME_Skills_Fatality_SecondHit
 VARS
 	CHARACTER:_Mime
@@ -332,3 +333,4 @@ THEN
 	Cast(_Level, _LevelF)
 	ExplodeAt(_Target, Projectile_LLMIME_Fatality_SecondHit, _Level, _Mime)
 ENDIF
+*/

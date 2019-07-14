@@ -67,3 +67,4 @@ LLMIME_VITAL_DEBUFF_Description	Character's maximum vitality is reduced. Deals [
 LLMIME_VITAL_DEBUFF_DisplayName	Weakened Vitals
 LLMIME_DOPPELGANGER_Description	Character is a perfect copy of another.
 LLMIME_DOPPELGANGER_DisplayName	Doppelganger
+LLMIME_DEATHBLOW_START_DisplayName	Double Damage to Disabled Targets

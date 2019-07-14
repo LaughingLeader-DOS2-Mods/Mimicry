@@ -855,11 +855,11 @@ NOT DB_LLMIME_Skills_Fatality_ListenForDeath(_Mime, _Target);
 LeaderLog_Log("DEBUG", "[LLMIME_04_Skills_02_Mime:StoryEvent(LLMIME_Skills_ClearFatalityDeathCheck)] Target did not die from Deathblow. Clearing.");
 
 IF
-CharacterStatusApplied(_Target, "LLMIME_FATALITY_START", (CHARACTERGUID)_Mime)
+CharacterStatusApplied(_Target, "LLMIME_DEATHBLOW_START", (CHARACTERGUID)_Mime)
 AND
 LLMIME_Skills_QRY_CharacterIsDisabled(_Target)
 THEN
-CharacterCharacterSetEvent(_Mime, _Target, "LLMIME_Skills_Fatality_DealDoubleDamage");
+ApplyStatus(_Target, "LLMIME_DEATHBLOW_SECONDHIT", 0.0, 1, _Mime);
 
 IF
 StoryEvent((CHARACTERGUID)_Mime, "LLMIME_Skills_ResetFatalityCooldown")
