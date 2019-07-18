@@ -343,6 +343,11 @@ LLMIME_Mimicking_ActionQueued(_Mime, _Caster, _Action, _ActionType);
 //REGION FAIL_TIMER
 PROC
 LLMIME_Mimicking_StartFailTimer((CHARACTERGUID)_Mime, (CHARACTERGUID)_Caster, (STRING)_Action, (STRING)_ActionType)
+THEN
+LLMIME_Mimicking_StartFailTimer(_Mime, _Caster, _Action, _ActionType, 2000);
+
+PROC
+LLMIME_Mimicking_StartFailTimer((CHARACTERGUID)_Mime, (CHARACTERGUID)_Caster, (STRING)_Action, (STRING)_ActionType, (INTEGER)_Delay)
 AND
 NOT DB_LLMIME_Mimicking_MimicFailTimer(_, _Mime, _Caster, _Action, _ActionType)
 AND
@@ -359,7 +364,7 @@ AND
 StringConcatenate("LLMIME_Timers_MimicFailTimer_", _TimerID, _TimerName)
 THEN
 DB_LLMIME_Mimicking_MimicFailTimer(_TimerName, _Mime, _Caster, _Action, _ActionType);
-TimerLaunch(_TimerName, 2000);
+TimerLaunch(_TimerName, _Delay);
 
 IF
 TimerFinished(_TimerName)
@@ -446,13 +451,23 @@ THEN
 DB_NOOP(1);
 
 QRY
-LLMIME_Mimicking_QRY_StartNextMimic((CHARACTERGUID)_Mime, (CHARACTERGUID)_Caster, (STRING)_Action, (STRING)_ActionType)
+LLMIME_Mimicking_QRY_SetCurrentlyMimicking((CHARACTERGUID)_Mime, (CHARACTERGUID)_Caster, (STRING)_Action, (STRING)_ActionType)
 AND
 NOT DB_LLMIME_Mimicking_Temp_CurrentlyMimicking(_Mime, _, _, _)
 THEN
 DB_LLMIME_Mimicking_Temp_CurrentlyMimicking(_Mime, _Caster, _Action, _ActionType);
+LeaderLog_Log("DEBUG", "[LLMIME_01_Mimicking_02_Main:QRY_StartNextMimic] Mime is now mimicking [",_Action,"][",_ActionType,"].");
+
+PROC
+LLMIME_Mimicking_MimickingStarting((CHARACTERGUID)_Mime, (CHARACTERGUID)_Caster, (STRING)_Action, (STRING)_ActionType)
+THEN
+LLMIME_Mimicking_MimickingStarting(_Mime, _Caster, _Action, _ActionType, 2000);
+
+PROC
+LLMIME_Mimicking_MimickingStarting((CHARACTERGUID)_Mime, (CHARACTERGUID)_Caster, (STRING)_Action, (STRING)_ActionType, (INTEGER)_ResetTime)
+THEN
 LLMIME_Mimicking_ClearAllFailTimers(_Mime);
-LLMIME_Mimicking_StartFailTimer(_Mime, _Caster, _Action, _ActionType);
+LLMIME_Mimicking_StartFailTimer(_Mime, _Caster, _Action, _ActionType, _ResetTime);
 LLMIME_Mimicking_StopDeleteOneTimeUseWeaponsTimer(_Mime, _Caster);
 
 //REGION MIMIC_ACTION_START
@@ -485,7 +500,7 @@ LLMIME_Mimicking_MimicAction((CHARACTERGUID)_Caster, (STRING)_Action, (STRING)_A
 AND
 DB_LLMIME_Mimicking_MimicQueue(_Mime, _Caster, _Action, _ActionType, _CastX, _CastRotation, _CastZ, _TargetX, _TargetY, _TargetZ, _TargetPriority, _IsTarget)
 AND
-LLMIME_Mimicking_QRY_StartNextMimic(_Mime, _Caster, _Action, _ActionType)
+LLMIME_Mimicking_QRY_SetCurrentlyMimicking(_Mime, _Caster, _Action, _ActionType)
 THEN
 NOT DB_LLMIME_Mimicking_MimicQueue(_Mime, _Caster, _Action, _ActionType, _CastX, _CastRotation, _CastZ, _TargetX, _TargetY, _TargetZ, _TargetPriority, _IsTarget);
 LLMIME_Mimicking_Internal_ProcessMimicQueue(_Mime, _Caster, _Action, _ActionType, _CastX, _CastRotation, _CastZ, _TargetX, _TargetY, _TargetZ, _TargetPriority, _IsTarget);
@@ -505,7 +520,6 @@ LLMIME_Mimicking_QRY_CanStartMimic(_Mime)
 AND
 IntegertoString(_TargetPriority, _PriorityStr)
 THEN
-DB_LLMIME_Mimicking_Temp_CurrentlyMimicking(_Mime, _Caster, _Action, _ActionType);
 LeaderLog_Log("DEBUG", "[LLMIME_01_Mimicking_02_Main:ProcessMimicQueue] Starting target calculation for [",_ActionType,"][",_Action,"] with TargetPriority [",_PriorityStr,"].");
 ObjectSetFlag(_Mime, "Mimicry_IsMimicking");
 LLMIME_Mimicking_Internal_StartWeaponMimicking(_Mime, _Caster, _Action, _ActionType);
@@ -538,9 +552,8 @@ LLMIME_Mimicking_Internal_MimicWeapons(_Mime, _Caster, _Target, _Action, _Action
 
 PROC
 LLMIME_Mimicking_WeaponMimickingDone((CHARACTERGUID)_Mime, (CHARACTERGUID)_Caster, (GUIDSTRING)_Target, (STRING)_Action, (STRING)_ActionType)
-AND
-_Mime != _Target
 THEN
+LeaderLog_Log("DEBUG", "[LLMIME_01_Mimicking_02_Main:WeaponMimickingDone] Calling [LLMIME_Mimicking_MimicActionOnTarget] for [",_Action,"][",_ActionType,"] on mime.");
 LLMIME_Mimicking_MimicActionOnTarget(_Mime, _Caster, _Target, _Action, _ActionType);
 //END_REGION
 

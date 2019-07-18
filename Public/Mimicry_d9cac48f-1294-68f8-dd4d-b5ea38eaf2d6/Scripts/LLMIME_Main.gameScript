@@ -230,52 +230,6 @@ THEN
 	CharacterEvent(_Mime, "LLMIME_Events_RemoveMimicking")
 ENDIF
 
-EVENT LLMIME_CanSeeAttackTarget_Character
-VARS
-	CHARACTER:_Mime
-	CHARACTER:_Target
-ON
-	OnCharacterCharacterEvent(_Mime, _Target, "LLMIME_Events_Mimicking_CheckAttackTarget")
-ACTIONS
-	CharacterCharacterEvent(_Mime, _Target, "LLMIME_Events_Mimicking_UseBasicAttackSkillOnTarget")
-/*
-IF "(c1&c2)|(!c3&c4)"
-	CharacterHasRangedWeapon(_Mime)
-	CharacterCanHitTargetWithRangedWeapon(_Mime, _Target)
-	CharacterHasRangedWeapon(_Mime)
-	CharacterInWeaponRange(_Mime, _Target)
-THEN
-	CharacterCharacterEvent(_Mime, _Target, "LLMIME_Events_Mimicking_UseBasicAttackOnTarget")
-ELSE
-	CharacterCharacterEvent(_Mime, _Target, "LLMIME_Events_Mimicking_UseBasicAttackSkillOnTarget")
-ENDIF
-*/
-EVENT LLMIME_CanSeeAttackTarget_Item
-VARS
-	CHARACTER:_Mime
-	ITEM:_Target
-	FLOAT:_MaxRange
-	FLOAT:_Dist
-ON
-	OnCharacterItemEvent(_Mime, _Target, "LLMIME_Events_Mimicking_CheckAttackTarget")
-ACTIONS
-	CharacterItemEvent(_Mime, _Target, "LLMIME_Events_Mimicking_UseBasicAttackSkillOnTarget")
-/*
-IF "(c1&c2)|(!c3&c4&c5&(c6|c7))"
-	CharacterHasRangedWeapon(_Mime)
-	CharacterCanHitTargetWithRangedWeapon(_Mime, _Target)
-	CharacterHasRangedWeapon(_Mime)
-	CharacterGetWeaponRange(_, _MaxRange, _Mime)
-	GetInnerDistance(_Dist, _Mime, _Target)
-	IsLessThen(_Dist, _MaxRange)
-	IsEqual(_Dist, _MaxRange)
-THEN
-	CharacterItemEvent(_Mime, _Target, "LLMIME_Events_Mimicking_UseBasicAttackOnTarget")
-ELSE
-	CharacterItemEvent(_Mime, _Target, "LLMIME_Events_Mimicking_UseBasicAttackSkillOnTarget")
-ENDIF
-*/
-
 EVENT LLMIME_Dummy_Iterate_NearbyItems
 VARS
 	CHARACTER:_Dummy

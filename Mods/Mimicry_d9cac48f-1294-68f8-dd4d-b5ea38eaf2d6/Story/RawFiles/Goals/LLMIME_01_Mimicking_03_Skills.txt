@@ -285,7 +285,7 @@ DB_LLMIME_Mimicking_MimicQueue_Self(_Mime, _Caster, _Skill, "Skill")
 AND
 LLMIME_Mimicking_Skills_QRY_SkipWeaponMimicking(_Mime, _Caster, _Skill, "Skill")
 AND
-LLMIME_Mimicking_QRY_StartNextMimic(_Mime, _Caster, _Skill, "Skill")
+LLMIME_Mimicking_QRY_SetCurrentlyMimicking(_Mime, _Caster, _Skill, "Skill")
 THEN
 NOT DB_LLMIME_Mimicking_MimicQueue_Self(_Mime, _Caster, _Skill, "Skill");
 LeaderLog_Log("DEBUG", "[LLMIME_01_Mimicking_03_Skills:LLMIME_Mimicking_MimicAction] Skipping weapon mimicking for self-targeting skill [",_Skill,"].");
@@ -301,7 +301,7 @@ DB_LLMIME_Mimicking_MimicQueue_Self(_Mime, _Caster, _Skill, "Skill")
 AND
 NOT LLMIME_Mimicking_Skills_QRY_SkipWeaponMimicking(_Mime, _Caster, _Skill, "Skill")
 AND
-LLMIME_Mimicking_QRY_StartNextMimic(_Mime, _Caster, _Skill, "Skill")
+LLMIME_Mimicking_QRY_SetCurrentlyMimicking(_Mime, _Caster, _Skill, "Skill")
 THEN
 NOT DB_LLMIME_Mimicking_MimicQueue_Self(_Mime, _Caster, _Skill, "Skill");
 LeaderLog_Log("DEBUG", "[LLMIME_01_Mimicking_03_Skills:LLMIME_Mimicking_MimicAction] Mimicking weapons for self-targeting skill [",_Skill,"].");
@@ -318,22 +318,13 @@ NOT DB_LLMIME_Mimicking_Temp_CastSelfSkill(_Mime, _Caster, _Action);
 LLMIME_Mimicking_Internal_MimicWeapons(_Mime, _Caster, _Mime, _Action, _ActionType);
 
 PROC
-LLMIME_Mimicking_WeaponMimickingDone((CHARACTERGUID)_Mime, (CHARACTERGUID)_Caster, (GUIDSTRING)_Target, (STRING)_Skill, (STRING)_ActionType)
-AND
-_Target == _Mime
-THEN
-LLMIME_Mimicking_ResetFailTimer(_Mime, _Caster, _Skill, "Skill", 2500);
-DB_LLMIME_Mimicking_Skills_Temp_ListenForSuccess(_Mime, _Caster, _Skill);
-CharacterUseSkill(_Mime, _Skill, _Mime, 1, 1, 1);
-
-PROC
 LLMIME_Mimicking_MimicActionOnTarget((CHARACTERGUID)_Mime, (CHARACTERGUID)_Caster, (GUIDSTRING)_Target, (STRING)_Skill, "Skill")
 AND
 NOT DB_LLMIME_Mimicking_Skills_Temp_ListenForSuccess(_Mime, _Caster, _Skill)
 THEN
-ObjectSetFlag(_Mime, "Mimicry_IsMimicking");
-LLMIME_Mimicking_ResetFailTimer(_Mime, _Caster, _Skill, "Skill", 2500);
 DB_LLMIME_Mimicking_Skills_Temp_ListenForSuccess(_Mime, _Caster, _Skill);
+ObjectSetFlag(_Mime, "Mimicry_IsMimicking");
+LLMIME_Mimicking_MimickingStarting(_Mime, _Caster, _Skill, "Skill", 2500);
 CharacterUseSkill(_Mime, _Skill, _Target, 1, 1, 1);
 
 /*
