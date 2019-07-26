@@ -724,24 +724,56 @@ THEN
 DB_NOOP(1);
 
 QRY
-LLMIME_QRY_MimeIsSolo((CHARACTERGUID)_Mime)
+LLMIME_QRY_PartyHasSummon()
+AND
+NOT SysCount("DB_LLIME_System_Temp_ActiveSummons", 2, 0)
+THEN
+DB_NOOP(1);
+
+QRY
+LLMIME_QRY_MimeHasParty((CHARACTERGUID)_Mime)
+AND
+NOT DB_LLMIME_System_Temp_MimePartyCheck(_Mime)
 AND
 GetVarInteger(_Mime, "LeaderLib_PartyCount", _Count)
 AND
-_Count <= 1
+_Count > 1
 THEN
-LeaderLog_Log("DEBUG", "[LLMIME_00_System_Core:QRY_MimeIsSolo] Mime is solo.");
+LeaderLog_Log("DEBUG", "[LLMIME_00_System_Core:QRY_MimeIsSolo] Mime has a party (LeaderLib_PartyCount > 1).");
+DB_LLMIME_System_Temp_MimePartyCheck(_Mime);
 
 QRY
-LLMIME_QRY_MimeIsSolo((CHARACTERGUID)_Mime)
+LLMIME_QRY_MimeHasParty((CHARACTERGUID)_Mime)
+AND
+NOT DB_LLMIME_System_Temp_MimePartyCheck(_Mime)
 AND
 LLMIME_QRY_Internal_PartyCountNotSet(_Mime)
 AND
 SysCount("DB_IsPlayer", 1, _Players)
 AND
-_Players <= 1
+_Players > 1
 THEN
-LeaderLog_Log("DEBUG", "[LLMIME_00_System_Core:QRY_MimeIsSolo] Mime is solo (DB_IsPlayer <= 1).");
+LeaderLog_Log("DEBUG", "[LLMIME_00_System_Core:QRY_MimeIsSolo] Mime has a party (DB_IsPlayer > 1).");
+DB_LLMIME_System_Temp_MimePartyCheck(_Mime);
+
+QRY
+LLMIME_QRY_MimeHasParty((CHARACTERGUID)_Mime)
+AND
+NOT DB_LLMIME_System_Temp_MimePartyCheck(_Mime)
+AND
+DB_GlobalFlag("Mimicry_Mimic_CopySummonedCreatureSkills_Enabled")
+AND
+LLMIME_QRY_PartyHasSummon()
+THEN
+LeaderLog_Log("DEBUG", "[LLMIME_00_System_Core:QRY_MimeIsSolo] Mime has a party (Has Summons).");
+DB_LLMIME_System_Temp_MimePartyCheck(_Mime);
+
+QRY
+LLMIME_QRY_MimeHasParty((CHARACTERGUID)_Mime)
+AND
+DB_LLMIME_System_Temp_MimePartyCheck(_Mime)
+THEN
+NOT DB_LLMIME_System_Temp_MimePartyCheck(_Mime);
 
 QRY
 LLMIME_QRY_Internal_PartyCountNotSet((CHARACTERGUID)_Character)

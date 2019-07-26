@@ -1,0 +1,49 @@
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+LLMIME_TS_SummonTracker_InitialCheck();
+
+KBSECTION
+PROC
+LLMIME_TS_SummonTracker_InitialCheck()
+THEN
+LeaderLog_Log("DEBUG", "[LLMIME_10_TS_SummonTracker:InitialCheck] Looking for existing summons.");
+CharacterLaunchOsirisOnlyIterator("LLMIME_SummonTracker_TrackSummons");
+
+IF
+StoryEvent((CHARACTERGUID)_Summon, "LLMIME_SummonTracker_TrackSummons")
+AND
+CharacterIsSummon(_Summon, 1)
+AND
+NOT DB_LLIME_System_Temp_ActiveSummons(_, _Summon)
+AND
+CharacterGetOwner(_Summon, _Owner)
+AND
+DB_IsPlayer(_Owner)
+THEN
+LeaderLog_Log("DEBUG", "[LLMIME_10_TS_SummonTracker:InitialCheck] Found a party summon.");
+DB_LLIME_System_Temp_ActiveSummons(_Owner, _Summon);
+LLMIME_Mimicking_OnSummonSpawned(_Owner, _Summon);
+
+IF
+CharacterStatusApplied(_Summon, "SUMMONING", _)
+AND
+CharacterGetOwner(_Summon, _Owner)
+AND
+DB_IsPlayer(_Owner)
+THEN
+DB_LLIME_System_Temp_ActiveSummons(_Owner, _Summon);
+LLMIME_Mimicking_OnSummonSpawned(_Owner, _Summon);
+
+IF
+CharacterPrecogDying(_Summon)
+AND
+DB_LLIME_System_Temp_ActiveSummons(_Owner, _Summon)
+THEN
+NOT DB_LLIME_System_Temp_ActiveSummons(_Owner, _Summon);
+LLMIME_Mimicking_OnSummonDied(_Owner, _Summon);
+
+EXITSECTION
+SysClear("DB_LLIME_System_Temp_ActiveSummons", 2);
+ENDEXITSECTION
+ParentTargetEdge "LLMIME_10_ToggleScripts"

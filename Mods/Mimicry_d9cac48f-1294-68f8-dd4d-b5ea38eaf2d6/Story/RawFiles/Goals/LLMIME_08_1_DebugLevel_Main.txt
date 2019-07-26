@@ -1061,6 +1061,7 @@ AND
 CharacterGetDisplayName(_Char, _, _Name)
 THEN
 LeaderLog_Log("DEBUG", "[LLMIME:Debug:Mimicry_MimeIsUnarmed] [",_Name,"] is not unarmed.");
+*/
 
 IF
 CharacterStatusAttempt(_Character, _Status, _Causee)
@@ -1094,7 +1095,6 @@ AND
 CharacterGetDisplayName(_Character, _, _Name)
 THEN
 LeaderLog_Log("DEBUG", "[LLMIME:Debug:CharacterStatusRemoved] Status [",_Status,"](",_Type,") removed from [",_Name,"] via [",_Cause,"].");
-*/
 //END_REGION
 
 //REGION BEHAVIOR_ROT_DIR_TRACE
