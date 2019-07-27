@@ -34,6 +34,8 @@ LLMIME_Mimicking_ApplyMimicking(_Mime);
 PROC
 LLMIME_Mimicking_ApplyMimicking((CHARACTERGUID)_Mime)
 AND
+NOT LeaderLib_Helper_QRY_HasStatus(_Mime, "LLMIME_MIMICKING")
+AND
 CharacterIsDeadOrFeign(_Mime, 0)
 AND
 IsTagged(_Mime, "LLMIME_MimeFollower", 0)
@@ -41,8 +43,6 @@ AND
 IsTagged(_Mime, "Mimicry_EnemyMime", 0)
 AND
 LLMIME_Mimicking_QRY_MimeShouldBeMimicking(_Mime)
-AND
-NOT LeaderLib_Helper_QRY_HasStatus(_Mime, "LLMIME_MIMICKING")
 THEN
 ApplyStatus(_Mime, "LLMIME_MIMICKING", -1.0, 1, _Mime);
 
@@ -295,7 +295,35 @@ RemoveStatus(_Mime, "LLMIME_MIMICKING_DISABLED");
 SetStoryEvent(_Mime, "LLMIME_Events_RequestMimicking");
 //END_REGION
 
+//REGION SUMMON_MIMICKING
+PROC
+LLMIME_Mimicking_OnSummonSpawned((CHARACTERGUID)_Owner, (CHARACTERGUID)_Summon)
+AND
+DB_GlobalFlag("Mimicry_Mimic_CopySummonedCreatureSkills_Enabled")
+AND
+DB_LLMIME_ActiveMimes(_Mime)
+AND
+NOT LLMIME_Mimicking_QRY_IsMimicking(_Mime)
+THEN
+LeaderLog_Log("DEBUG", "[LLMIME_10_TS_Mimicking_01_Start:OnSummonSpawned] Applying mimicking to mime.");
+LLMIME_Mimicking_ApplyMimicking(_Mime);
 
+PROC
+LLMIME_Mimicking_OnSummonDied((CHARACTERGUID)_Owner, (CHARACTERGUID)_Summon)
+AND
+DB_GlobalFlag("Mimicry_Mimic_CopySummonedCreatureSkills_Enabled")
+AND
+NOT LLMIME_QRY_PartyHasSummon()
+AND
+DB_IsPlayer(_Player)
+AND
+LLMIME_Mimicking_QRY_IsMimicking(_Player)
+AND
+NOT LLMIME_Mimicking_QRY_MimeShouldBeMimicking(_Player)
+THEN
+LeaderLog_Log("DEBUG", "[LLMIME_10_TS_Mimicking_01_Start:OnSummonDied] No more summons/party members left. Removing mimicking.");
+LLMIME_Mimicking_RemoveMimicking(_Player);
+//END_REGION
 
 EXITSECTION
 

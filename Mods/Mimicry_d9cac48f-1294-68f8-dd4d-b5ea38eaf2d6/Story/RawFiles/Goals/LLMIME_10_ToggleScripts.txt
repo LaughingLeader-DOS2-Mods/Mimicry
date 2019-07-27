@@ -36,10 +36,24 @@ LeaderLib_ToggleScripts_Register_Script("LLMIME_10_TS_SummonTracker", "Mimicry_M
 PROC
 LeaderUpdater_ModUpdated("Mimicry", "LaughingLeader", (STRING)_PastVersion, (STRING)_NewVersion)
 AND
-DB_LeaderLib_StringExt_VersionIsLessThan(_PastVersion, 1,0,7,0)
+DB_LeaderLib_StringExt_VersionIsLessThan(_PastVersion, 1,0,7,1)
 THEN
 LeaderLog_Log("DEBUG", "[LLMIME:Mimicking:ToggleScripts] Updating settings from version [",_PastVersion,"]");
 LeaderLib_ToggleScripts_Register_Script("LLMIME_10_TS_SummonTracker", "Mimicry_Mimic_CopySummonedCreatureSkills_Enabled");
+LLMIME_ToggleScripts_UpdateExisting();
+
+PROC
+LLMIME_ToggleScripts_UpdateExisting()
+AND
+DB_GlobalFlag("Mimicry_Mimic_CopySummonedCreatureSkills_Enabled")
+AND
+DB_LLMIME_ActiveMimes(_Mime)
+AND
+CharacterIsInCombat(_Mime, 1)
+AND
+NOT LLMIME_Mimicking_QRY_IsMimicking(_Mime)
+THEN
+LeaderLib_Timers_StartObjectTimer(_Mime, 500, "LLMIME_Timers_TS_RequestMimicking", "LLMIME_Events_RequestMimicking");
 //END_REGION
 
 //REGION SCRIPT_TOGGLING
