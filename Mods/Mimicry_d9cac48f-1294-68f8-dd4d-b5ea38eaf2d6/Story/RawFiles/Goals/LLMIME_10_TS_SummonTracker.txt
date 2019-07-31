@@ -19,7 +19,7 @@ NOT DB_LLIME_System_Temp_ActiveSummons(_, _Summon)
 AND
 CharacterGetOwner(_Summon, _Owner)
 AND
-DB_IsPlayer(_Owner)
+CharacterIsPlayer(_Owner, 1)
 THEN
 LeaderLog_Log("DEBUG", "[LLMIME_10_TS_SummonTracker:InitialCheck] Found a party summon.");
 DB_LLIME_System_Temp_ActiveSummons(_Owner, _Summon);
@@ -30,7 +30,7 @@ CharacterStatusApplied(_Summon, "SUMMONING", _)
 AND
 CharacterGetOwner(_Summon, _Owner)
 AND
-DB_IsPlayer(_Owner)
+CharacterIsPlayer(_Owner, 1)
 THEN
 DB_LLIME_System_Temp_ActiveSummons(_Owner, _Summon);
 LLMIME_Mimicking_OnSummonSpawned(_Owner, _Summon);

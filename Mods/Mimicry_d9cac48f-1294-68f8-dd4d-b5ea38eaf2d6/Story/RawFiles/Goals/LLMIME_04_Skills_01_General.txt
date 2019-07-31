@@ -242,7 +242,7 @@ CharacterAddGold(_Mime, _Gold);
 PROC
 LLMIME_Skills_MugCharacter((CHARACTERGUID)_Mime, (CHARACTERGUID)_Target)
 AND
-DB_IsPlayer(_Target)
+CharacterIsPlayer(_Target, 1)
 AND
 CharacterGetGold(_Target, _Gold)
 AND
