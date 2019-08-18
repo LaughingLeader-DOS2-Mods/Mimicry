@@ -76,6 +76,8 @@ DB_LLMIME_MimeStatuses("LLMIME_SOURCE_REGENERATION_HIDDEN");
 DB_LLMIME_DebuffStatuses("Mimicry_MimickingDamageDebuff1_Enabled", "LLMIME_MIMICKING_DEBUFF1");
 DB_LLMIME_DebuffStatuses("Mimicry_MimickingDamageDebuff2_Enabled", "LLMIME_MIMICKING_DEBUFF2");
 DB_LLMIME_DebuffStatuses("Mimicry_MimickingDamageDebuff3_Enabled", "LLMIME_MIMICKING_DEBUFF3");
+DB_LLMIME_DebuffStatuses("Mimicry_MimickingDamageDebuff4_Enabled", "LLMIME_MIMICKING_DEBUFF4");
+DB_LLMIME_DebuffStatuses("Mimicry_MimickingDamageDebuff5_Enabled", "LLMIME_MIMICKING_DEBUFF5");
 
 DB_LLMIME_BlankSkills("Shout_LLMIME_Blank1");
 DB_LLMIME_BlankSkills("Shout_LLMIME_Blank2");
@@ -149,15 +151,14 @@ DB_LLMIME_Templates("Decoy", "S_LLMIME_Skill_Decoy_30a42871-15cc-4c97-bad6-4a813
 //END_REGION
 
 //REGION UPDATING
-/*
 PROC
 LeaderUpdater_ModUpdated("Mimicry", "LaughingLeader", (STRING)_OldVersion, (STRING)_NewVersion)
 AND
-LeaderLib_StringExt_QRY_VersionIsLessThan(_OldVersion, 0, 9, 9, 1)
+LeaderLib_StringExt_QRY_VersionIsLessThan(_OldVersion, 1,0,9,0)
 THEN
-LeaderLog_Log("DEBUG", "[LLMIME:System] Updating settings from version [",_OldVersion,"] to [",_NewVersion,"]");
-LLMIME_System_InitSettings();
-*/
+LeaderLog_Log("DEBUG", "[LLMIME:System:Core] Updating settings from version [",_OldVersion,"] to [",_NewVersion,"]");
+DB_LLMIME_DebuffStatuses("Mimicry_MimickingDamageDebuff4_Enabled", "LLMIME_MIMICKING_DEBUFF4");
+DB_LLMIME_DebuffStatuses("Mimicry_MimickingDamageDebuff5_Enabled", "LLMIME_MIMICKING_DEBUFF5");
 //END_REGION
 
 //REGION QUERIES_MISC

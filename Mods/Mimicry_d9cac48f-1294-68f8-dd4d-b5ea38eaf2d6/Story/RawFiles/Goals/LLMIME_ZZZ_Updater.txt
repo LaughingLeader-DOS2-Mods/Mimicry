@@ -1,16 +1,16 @@
 Version 1
 SubGoalCombiner SGC_AND
 INITSECTION
-LeaderUpdater_Register_Mod("Mimicry", "LaughingLeader", "1.0.8.0");
+LeaderUpdater_Register_Mod("Mimicry", "LaughingLeader", "1.0.9.0");
 LeaderUpdater_Register_ActiveGoal("Mimicry", "LaughingLeader", "LLMIME_ZZZ_Updater");
 LeaderUpdater_Register_Dependency("Mimicry", "LaughingLeader", "AnimationsPlus", "LaughingLeader", 1);
 KBSECTION
 IF
 GameStarted(_,_)
 AND
-LeaderUpdater_QRY_ModUpdateNeeded("Mimicry", "LaughingLeader", "1.0.8.0")
+LeaderUpdater_QRY_ModUpdateNeeded("Mimicry", "LaughingLeader", "1.0.9.0")
 THEN
-LeaderUpdater_Register_Mod("Mimicry", "LaughingLeader", "1.0.8.0");
+LeaderUpdater_Register_Mod("Mimicry", "LaughingLeader", "1.0.9.0");
 
 /*
 PROC
