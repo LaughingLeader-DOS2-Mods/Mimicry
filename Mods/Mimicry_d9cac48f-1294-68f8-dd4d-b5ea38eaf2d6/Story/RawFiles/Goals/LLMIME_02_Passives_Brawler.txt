@@ -669,18 +669,83 @@ ObjectClearFlag(_Mime, "Mimicry_BrawlerStanceWasActive");
 LLMIME_Brawler_ApplyStance(_Mime);
 //END_REGION
 
-//REGION INFOSTATUSES
+//REGION BRAWLER_STATUS_EVENTS
 IF
-CharacterStatusRemoved(_Mime, _Status, _)
-AND
-DB_LLMIME_Brawler_StanceStatuses(_Status, _SettingsFlag, _InfoStatus, _DisableInfoFlag, _DialogVar)
-AND
-ObjectGetFlag(_Mime, "Mimicry_IsMimicking", 0)
+CharacterStatusApplied(_Mime, "LLMIME_BRAWLER_STANCE_CON", _)
 THEN
-RemoveStatus(_Mime, _InfoStatus);
+LLMIME_Brawler_OnStatusApplied(_Mime, "LLMIME_BRAWLER_STANCE_CON");
 
 IF
-CharacterStatusApplied(_Mime, _Status, _)
+CharacterStatusRemoved(_Mime, "LLMIME_BRAWLER_STANCE_CON", _)
+THEN
+LLMIME_Brawler_OnStatusRemoved(_Mime, "LLMIME_BRAWLER_STANCE_CON");
+
+IF
+CharacterStatusApplied(_Mime, "LLMIME_BRAWLER_STANCE_FIN", _)
+THEN
+LLMIME_Brawler_OnStatusApplied(_Mime, "LLMIME_BRAWLER_STANCE_FIN");
+
+IF
+CharacterStatusRemoved(_Mime, "LLMIME_BRAWLER_STANCE_FIN", _)
+THEN
+LLMIME_Brawler_OnStatusRemoved(_Mime, "LLMIME_BRAWLER_STANCE_FIN");
+
+IF
+CharacterStatusApplied(_Mime, "LLMIME_BRAWLER_STANCE_STR", _)
+THEN
+LLMIME_Brawler_OnStatusApplied(_Mime, "LLMIME_BRAWLER_STANCE_STR");
+
+IF
+CharacterStatusRemoved(_Mime, "LLMIME_BRAWLER_STANCE_STR", _)
+THEN
+LLMIME_Brawler_OnStatusRemoved(_Mime, "LLMIME_BRAWLER_STANCE_STR");
+
+IF
+CharacterStatusApplied(_Mime, "LLMIME_BRAWLER_STANCE_CON_FOLLOWER", _)
+THEN
+LLMIME_Brawler_OnStatusApplied(_Mime, "LLMIME_BRAWLER_STANCE_CON_FOLLOWER");
+
+IF
+CharacterStatusRemoved(_Mime, "LLMIME_BRAWLER_STANCE_CON_FOLLOWER", _)
+THEN
+LLMIME_Brawler_OnStatusRemoved(_Mime, "LLMIME_BRAWLER_STANCE_CON_FOLLOWER");
+
+/*
+IF
+CharacterStatusApplied(_Mime, "LLMIME_BRAWLER_STANCE_CON_INFO", _)
+THEN
+LLMIME_Brawler_OnStatusApplied(_Mime, "LLMIME_BRAWLER_STANCE_CON_INFO");
+
+IF
+CharacterStatusRemoved(_Mime, "LLMIME_BRAWLER_STANCE_CON_INFO", _)
+THEN
+LLMIME_Brawler_OnStatusRemoved(_Mime, "LLMIME_BRAWLER_STANCE_CON_INFO");
+
+IF
+CharacterStatusApplied(_Mime, "LLMIME_BRAWLER_STANCE_FIN_INFO", _)
+THEN
+LLMIME_Brawler_OnStatusApplied(_Mime, "LLMIME_BRAWLER_STANCE_FIN_INFO");
+
+IF
+CharacterStatusRemoved(_Mime, "LLMIME_BRAWLER_STANCE_FIN_INFO", _)
+THEN
+LLMIME_Brawler_OnStatusRemoved(_Mime, "LLMIME_BRAWLER_STANCE_FIN_INFO");
+
+IF
+CharacterStatusApplied(_Mime, "LLMIME_BRAWLER_STANCE_STR_INFO", _)
+THEN
+LLMIME_Brawler_OnStatusApplied(_Mime, "LLMIME_BRAWLER_STANCE_STR_INFO");
+
+IF
+CharacterStatusRemoved(_Mime, "LLMIME_BRAWLER_STANCE_STR_INFO", _)
+THEN
+LLMIME_Brawler_OnStatusRemoved(_Mime, "LLMIME_BRAWLER_STANCE_STR_INFO");
+*/
+//END_REGION
+
+//REGION INFOSTATUSES
+PROC
+LLMIME_Brawler_OnStatusApplied((CHARACTERGUID)_Mime, (STRING)_Status)
 AND
 DB_LLMIME_Brawler_StanceStatuses(_Status, _SettingsFlag, _InfoStatus, _DisableInfoFlag, _DialogVar)
 AND
@@ -690,15 +755,26 @@ HasActiveStatus(_Mime, _InfoStatus, 0)
 THEN
 ApplyStatus(_Mime, _InfoStatus, -1.0, 1, _Mime);
 
+PROC
+LLMIME_Brawler_OnStatusRemoved((CHARACTERGUID)_Mime, (STRING)_Status)
+AND
+DB_LLMIME_Brawler_StanceStatuses(_Status, _SettingsFlag, _InfoStatus, _DisableInfoFlag, _DialogVar)
+AND
+ObjectGetFlag(_Mime, "Mimicry_IsMimicking", 0)
+THEN
+RemoveStatus(_Mime, _InfoStatus);
+//END_REGION
+
+//REGION INFO_STATUS_FLAGS
 IF
-ObjectFlagSet(_DisableInfoFlag, (CHARACTERGUID)_Mime, _Instance)
+ObjectFlagSet("Mimicry_HideBrawlerStance", (CHARACTERGUID)_Mime, _Instance)
 AND
 DB_LLMIME_Brawler_StanceStatuses(_Status, _SettingsFlag, _InfoStatus, _DisableInfoFlag, _DialogVar)
 THEN
 RemoveStatus(_Mime, _InfoStatus);
 
 IF
-ObjectFlagCleared(_DisableInfoFlag, (CHARACTERGUID)_Mime, _Instance)
+ObjectFlagCleared("Mimicry_HideBrawlerStance", (CHARACTERGUID)_Mime, _Instance)
 AND
 DB_LLMIME_Brawler_StanceStatuses(_Status, _SettingsFlag, _InfoStatus, _DisableInfoFlag, _DialogVar)
 AND

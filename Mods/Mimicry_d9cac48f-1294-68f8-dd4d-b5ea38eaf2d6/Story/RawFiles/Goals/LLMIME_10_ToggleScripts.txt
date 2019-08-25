@@ -174,7 +174,8 @@ NOT DB_GlobalFlag("LLMIME_TS_GameHasActiveMime")
 THEN
 LeaderLog_Log("SYSTEM", "[Mimicry:ScriptToggler] Activating mime scripts via global flag [LLMIME_TS_GameHasActiveMime].");
 LeaderLib_ToggleScripts_EnableScript("LeaderLib_StatusEvents_DisableScriptEnabled", "Mimicry");
-GlobalSetFlag("LLMIME_TS_GameHasActiveMime");
+LeaderLib_ToggleScripts_EnableScript("LLMIME_TS_GameHasActiveMime", "Mimicry");
+//GlobalSetFlag("LLMIME_TS_GameHasActiveMime");
 
 PROC
 LLMIME_ScriptToggler_RemoveActiveMime((CHARACTERGUID)_Mime)
@@ -216,7 +217,8 @@ AND
 NOT DB_LLMIME_ActiveMimes(_)
 THEN
 LeaderLog_Log("SYSTEM", "[Mimicry:ScriptToggler:LLMIME_Timers_DisableMimeScripts] Clearing global flag [LLMIME_TS_GameHasActiveMime].");
-GlobalClearFlag("LLMIME_TS_GameHasActiveMime");
+//GlobalClearFlag("LLMIME_TS_GameHasActiveMime");
+LeaderLib_ToggleScripts_DisableScript("LLMIME_TS_GameHasActiveMime", "Mimicry");
 LeaderLib_ToggleScripts_DisableAllStatusEvents("Mimicry");
 //END_REGION
 

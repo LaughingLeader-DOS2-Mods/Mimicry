@@ -46,6 +46,109 @@ AND
 NOT LeaderLib_Helper_QRY_HasStatus(_Mime, _InfoStatus)
 THEN
 ApplyStatus(_Mime, _InfoStatus, -1.0, 1, _Mime);
+
+//REGION STATUS_EVENTS
+IF
+CharacterStatusApplied(_Mime, "LLMIME_BRAWLER", _)
+THEN
+LLMIME_PassiveStatuses_OnStatusApplied(_Mime, "LLMIME_BRAWLER");
+
+IF
+CharacterStatusRemoved(_Mime, "LLMIME_BRAWLER", _)
+THEN
+LLMIME_PassiveStatuses_OnStatusRemoved(_Mime, "LLMIME_BRAWLER");
+
+IF
+CharacterStatusApplied(_Mime, "LLMIME_BRAWLER_BONUS", _)
+THEN
+LLMIME_PassiveStatuses_OnStatusApplied(_Mime, "LLMIME_BRAWLER_BONUS");
+
+IF
+CharacterStatusRemoved(_Mime, "LLMIME_BRAWLER_BONUS", _)
+THEN
+LLMIME_PassiveStatuses_OnStatusRemoved(_Mime, "LLMIME_BRAWLER_BONUS");
+
+IF
+CharacterStatusApplied(_Mime, "LLMIME_BEASTMASTER", _)
+THEN
+LLMIME_PassiveStatuses_OnStatusApplied(_Mime, "LLMIME_BEASTMASTER");
+
+IF
+CharacterStatusRemoved(_Mime, "LLMIME_BEASTMASTER", _)
+THEN
+LLMIME_PassiveStatuses_OnStatusRemoved(_Mime, "LLMIME_BEASTMASTER");
+
+IF
+CharacterStatusApplied(_Mime, "LLMIME_CONCENTRATION", _)
+THEN
+LLMIME_PassiveStatuses_OnStatusApplied(_Mime, "LLMIME_CONCENTRATION");
+
+IF
+CharacterStatusRemoved(_Mime, "LLMIME_CONCENTRATION", _)
+THEN
+LLMIME_PassiveStatuses_OnStatusRemoved(_Mime, "LLMIME_CONCENTRATION");
+
+IF
+CharacterStatusApplied(_Mime, "LLMIME_CONCENTRATION_BONUS", _)
+THEN
+LLMIME_PassiveStatuses_OnStatusApplied(_Mime, "LLMIME_CONCENTRATION_BONUS");
+
+IF
+CharacterStatusRemoved(_Mime, "LLMIME_CONCENTRATION_BONUS", _)
+THEN
+LLMIME_PassiveStatuses_OnStatusRemoved(_Mime, "LLMIME_CONCENTRATION_BONUS");
+
+PROC
+LLMIME_PassiveStatuses_OnStatusApplied((CHARACTERGUID)_Mime, (STRING)_BonusStatus)
+AND
+DB_LLMIME_PassiveData(_Status, _BonusStatus, _InfoStatus, _DisableFlag)
+AND
+NOT ObjectGetFlag(_Mime, _DisableFlag, 1)
+AND
+NOT LeaderLib_Helper_QRY_HasStatus(_Mime, _InfoStatus)
+THEN
+ApplyStatus(_Mime, _InfoStatus, -1.0, 1, _Mime);
+
+PROC
+LLMIME_PassiveStatuses_OnStatusRemoved((CHARACTERGUID)_Mime, (STRING)_Status)
+AND
+DB_LLMIME_PassiveData(_Status, _BonusStatus, _InfoStatus, _DisableFlag)
+THEN
+LLMIME_PassiveStatuses_OnPassiveRemoved(_Mime, _Status, _BonusStatus, _InfoStatus, _DisableFlag);
+
+PROC
+LLMIME_PassiveStatuses_OnStatusRemoved((CHARACTERGUID)_Mime, (STRING)_BonusStatus)
+AND
+DB_LLMIME_PassiveData(_Status, _BonusStatus, _InfoStatus, _DisableFlag)
+AND
+HasActiveStatus(_Mime, _InfoStatus, 1)
+THEN
+RemoveStatus(_Mime, _InfoStatus);
+//END_REGION
+
+//REGION FLAG_EVENTS
+IF
+ObjectFlagCleared("Mimicry_HideMimePassives", _Mime, _)
+AND
+DB_LLMIME_PassiveData(_Status, _BonusStatus, _InfoStatus, "Mimicry_HideMimePassives")
+AND
+HasActiveStatus(_Mime, _Status, 1)
+AND
+HasActiveStatus(_Mime, _BonusStatus, 1)
+AND
+HasActiveStatus(_Mime, _InfoStatus, 0)
+THEN
+ApplyStatus(_Mime, _InfoStatus, -1.0, 1, _Mime);
+
+IF
+ObjectFlagSet("Mimicry_HideMimePassives", _Mime, _)
+AND
+DB_LLMIME_PassiveData(_Status, _BonusStatus, _InfoStatus, "Mimicry_HideMimePassives")
+AND
+HasActiveStatus(_Mime, _InfoStatus, 1)
+THEN
+RemoveStatus(_Mime, _InfoStatus);
+//END_REGION
 EXITSECTION
 
 ENDEXITSECTION

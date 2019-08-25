@@ -1461,6 +1461,29 @@ THEN
 CharacterRemoveSkill(_Mime, _Skill);
 //END_REGION
 
+//REGION BRAWLER_FIST_SAFEGUARD
+/*Mod Conflict? Some players reported the fist not staying equipped. */
+IF
+StoryEvent((CHARACTERGUID)_Follower, "LLMIME_MimeFollower_CheckEquippedFist")
+AND
+CharacterGetEquippedItem(_Follower, "Weapon", (ITEMGUID)_Weapon)
+AND
+NOT GetTemplate(_Weapon, "WPN_LLMIME_BrawlerFist_e1bda904-93c2-4f6f-8136-1a547279fd1f")
+THEN
+CharacterUnequipItem(_Follower, _Weapon);
+ItemDrop(_Weapon);
+
+IF
+StoryEvent((CHARACTERGUID)_Follower, "LLMIME_MimeFollower_CheckEquippedFist")
+AND
+CharacterGetEquippedItem(_Follower, "Shield", (ITEMGUID)_Weapon)
+AND
+NOT GetTemplate(_Weapon, "WPN_LLMIME_BrawlerFist_e1bda904-93c2-4f6f-8136-1a547279fd1f")
+THEN
+CharacterUnequipItem(_Follower, _Weapon);
+ItemDrop(_Weapon);
+//END_REGION
+
 //Mimes can't recruit the mime follower
 PROC
 LeaderLib_Follower_BlockAttachToPartyMember(S_LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9, (CHARACTERGUID)_PartyMember, (CHARACTERGUID)_FormerOwner)

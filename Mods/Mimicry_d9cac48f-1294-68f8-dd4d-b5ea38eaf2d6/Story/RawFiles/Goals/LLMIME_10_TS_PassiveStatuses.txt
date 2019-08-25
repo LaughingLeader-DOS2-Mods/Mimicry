@@ -3,63 +3,16 @@ SubGoalCombiner SGC_AND
 INITSECTION
 
 KBSECTION
+
+//REGION DISABLED_STATUSES
 IF
 CharacterStatusRemoved(_Mime, _Status, _)
 AND
-DB_LLMIME_PassiveData(_Status, _BonusStatus, _InfoStatus, _DisableFlag)
-AND
-LLMIME_QRY_CharacterIsAMime(_Mime)
+DB_LLMIME_Mimicking_Temp_DisablingStatus(_Mime, _Status)
 THEN
-LLMIME_PassiveStatuses_OnPassiveRemoved(_Mime, _Status, _BonusStatus, _InfoStatus, _DisableFlag);
-
-/*
-PROC
-LLMIME_PassiveStatuses_OnPassiveRemoved((CHARACTERGUID)_Mime, (STRING)_Status, (STRING)_BonusStatus, (STRING)_InfoStatus, (STRING)_DisableFlag)
-THEN
-RemoveStatus(_Mime, _BonusStatus);
-RemoveStatus(_Mime, _InfoStatus);
-*/
-IF
-CharacterStatusApplied(_Mime, _BonusStatus, _)
-AND
-DB_LLMIME_PassiveData(_Status, _BonusStatus, _InfoStatus, _DisableFlag)
-AND
-NOT ObjectGetFlag(_Mime, _DisableFlag, 1)
-AND
-NOT LeaderLib_Helper_QRY_HasStatus(_Mime, _InfoStatus)
-THEN
-ApplyStatus(_Mime, _InfoStatus, -1.0, 1, _Mime);
-
-IF
-CharacterStatusRemoved(_Mime, _BonusStatus, _)
-AND
-DB_LLMIME_PassiveData(_Status, _BonusStatus, _InfoStatus, _DisableFlag)
-AND
-HasActiveStatus(_Mime, _InfoStatus, 1)
-THEN
-RemoveStatus(_Mime, _InfoStatus);
-
-IF
-ObjectFlagCleared(_DisableFlag, _Mime, _)
-AND
-DB_LLMIME_PassiveData(_Status, _BonusStatus, _InfoStatus, _DisableFlag)
-AND
-HasActiveStatus(_Mime, _Status, 1)
-AND
-HasActiveStatus(_Mime, _BonusStatus, 1)
-AND
-HasActiveStatus(_Mime, _InfoStatus, 0)
-THEN
-ApplyStatus(_Mime, _InfoStatus, -1.0, 1, _Mime);
-
-IF
-ObjectFlagSet(_DisableFlag, _Mime, _)
-AND
-DB_LLMIME_PassiveData(_Status, _BonusStatus, _InfoStatus, _DisableFlag)
-AND
-HasActiveStatus(_Mime, _InfoStatus, 1)
-THEN
-RemoveStatus(_Mime, _InfoStatus);
+NOT DB_LLMIME_Mimicking_Temp_DisablingStatus(_Mime, _Status);
+LLMIME_Mimicking_OnDisablingStatusRemoved(_Mime);
+//END_REGION
 
 //REGION RESET_EVENTS
 IF

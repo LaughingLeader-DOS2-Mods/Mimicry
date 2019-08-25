@@ -266,14 +266,6 @@ ObjectGetFlag(_Mime, "LLMIME_MimickingAutoDisabled", 1)
 THEN
 ObjectClearFlag(_Mime, "LLMIME_MimickingAutoDisabled");
 
-IF
-CharacterStatusRemoved(_Mime, _Status, _)
-AND
-DB_LLMIME_Mimicking_Temp_DisablingStatus(_Mime, _Status)
-THEN
-NOT DB_LLMIME_Mimicking_Temp_DisablingStatus(_Mime, _Status);
-LLMIME_Mimicking_OnDisablingStatusRemoved(_Mime);
-
 QRY
 LLMIME_Mimicking_QRY_HasDisablingStatus((CHARACTERGUID)_Mime)
 AND

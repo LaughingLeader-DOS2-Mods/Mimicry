@@ -3,7 +3,6 @@ SubGoalCombiner SGC_AND
 INITSECTION
 
 KBSECTION
-
 IF
 ObjectEnteredCombat((CHARACTERGUID)_Mime, _CombatID)
 AND

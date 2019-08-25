@@ -41,7 +41,7 @@ THEN
 	//SetVar(__Me, "LeaderLib_LogMessage", STRING:"[LLMIME:LLMIME_Mime.charScript:Init_Register] Activated.")
 	//CharacterEvent(__Me, "LeaderLib_DebugLog")
 	Set(%LLMIME_Follower_Initialized, 1)
-	CharacterApplyStatus(__Me, LLMIME_BRAWLER_STANCE_CON, -1, 1)
+	CharacterApplyStatus(__Me, LLMIME_BRAWLER_STANCE_CON_FOLLOWER, -1, 1)
 ENDIF
 
 EVENT LLMIME_MimeFollower_Refresh_Timer
@@ -171,6 +171,25 @@ IF "c1"
 THEN
 	CharacterEvent(__Me, "LLMIME_Events_RequestMimicking")
 ENDIF
+
+/*
+EVENT LLMIME_MimeFollower_BrawlerFistSafeguard_Start
+ON
+	OnCharacterStatusApplied(__Me, LLMIME_BRAWLER_STANCE_CON_FOLLOWER)
+ACTIONS
+	StartTimer("LLMIME_Timers_Follower_CheckEquippedWeapon", 0.5, 0)
+
+EVENT LLMIME_MimeFollower_BrawlerFistSafeguard_OnTimer
+ON
+	OnTimer("LLMIME_Timers_Follower_CheckEquippedWeapon")
+ACTIONS
+//WPN_LLMIME_BrawlerFist_e1bda904-93c2-4f6f-8136-1a547279fd1f
+IF "c1"
+	CharacterHasStatus(__Me, LLMIME_BRAWLER_STANCE_CON_FOLLOWER)
+THEN
+	CharacterEvent(__Me, "LLMIME_MimeFollower_CheckEquippedFist")
+ENDIF
+*/
 
 /*
 BEHAVIOUR
