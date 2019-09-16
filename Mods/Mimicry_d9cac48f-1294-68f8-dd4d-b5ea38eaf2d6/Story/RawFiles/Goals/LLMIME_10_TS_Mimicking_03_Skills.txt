@@ -65,6 +65,7 @@ DB_LLMIME_Mimicking_Temp_ResetDummyAfterMimicAction(_Mime, _Target, _Skill, "Ski
 THEN
 NOT DB_LLMIME_Mimicking_Temp_ResetDummyAfterMimicAction(_Mime, _Target, _Skill, "Skill");
 LLMIME_Dummy_ResetDummyAfterDelay((GUIDSTRING)_Target, 2000);
+LLMIME_Dummy_MarkForDeletion(_Target, 30000);
 
 IF
 SkillCast(_Mime, _Skill, _SkillType, _SkillElement)

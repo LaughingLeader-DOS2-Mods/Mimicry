@@ -84,16 +84,14 @@ THEN
 SetVarString(_Dummy, "LLMIME_UUID", _DummyID);
 LeaderLog_Log("DEBUG", "[LLMIME:Mimic:Dummy:SpawnDummy(Character)] Spawned dummy and set ID to [",_ID,"].");
 SetTag(_Dummy, "LLMIME_Dummy");
+ObjectSetFlag(_Dummy, "LLMIME_TemporaryCharacter", 0);
 LLMIME_Dummy_SetDummyID(_Dummy, _ID);
-//SetInvulnerable_UseProcSetInvulnerable(_Dummy, 1);
-//CharacterSetImmortal(_Dummy, 1);
-CharacterSetDetached(_Dummy, 1);
-SetStoryNpc(_Dummy, 1);
+LeaderLib_Helper_SetupDummy(_Dummy);
 CharacterDisableAllCrimes(_Dummy);
 DB_LLMIME_Dummy_CharacterDummies(_Dummy);
 DB_LLMIME_Dummy_NextCharacterDummy(_ID, _Dummy);
 GlobalClearFlag("LLMIME_CreatingDummy");
-TeleportToPosition(_Dummy, _x, _y, _z, _ID, 0);
+TeleportToPosition(_Dummy, _x, _y, _z, _ID, 0, 1);
 //END_REGION
 
 //REGION DELETE
@@ -106,52 +104,54 @@ PROC
 LLMIME_Dummy_MarkForDeletion((GUIDSTRING)_Dummy, (INTEGER)_Delay)
 AND
 IsTagged(_Dummy, "LLMIME_Dummy", 1)
-AND
-GetUUID(_Dummy, _ID)
-AND
-StringConcatenate("LLMIME_Timers_DeleteDummy_", _ID, _TimerName)
 THEN
-//CharacterSetForceSynch(_Dummy, 0);
-DB_LLMIME_DeleteDummyTimer(_TimerName, _Dummy);
-TimerLaunch(_TimerName, _Delay);
+ProcObjectTimerCancel(_Dummy, "LLMIME_Timers_DeleteDummy");
+ProcObjectTimer(_Dummy, "LLMIME_Timers_DeleteDummy", _Delay);
 
-IF
-TimerFinished(_TimerName)
-AND
-DB_LLMIME_DeleteDummyTimer(_TimerName, _Dummy)
+PROC
+ProcObjectTimerFinished(_Dummy, "LLMIME_Timers_DeleteDummy")
+THEN
+LLMIME_Dummy_DeleteDummy(_Dummy);
+
+PROC
+LLMIME_Dummy_DeleteDummy((GUIDSTRING)_Dummy)
 AND
 ObjectIsItem((ITEMGUID)_Dummy, 1)
 THEN
 SetInvulnerable_UseProcSetInvulnerable(_Dummy, 0);
 ItemDestroy(_Dummy);
+LLMIME_Dummy_Internal_DeleteDummyFromDatabases(_Dummy);
 
-IF
-TimerFinished(_TimerName)
-AND
-DB_LLMIME_DeleteDummyTimer(_TimerName, _Dummy)
+PROC
+LLMIME_Dummy_DeleteDummy((GUIDSTRING)_Dummy)
 AND
 ObjectIsCharacter((CHARACTERGUID)_Dummy, 1)
-THEN
-CharacterSetImmortal(_Dummy, 0);
-CharacterDieImmediate(_Dummy, 0, "");
-
-IF
-TimerFinished(_TimerName)
 AND
-DB_LLMIME_DeleteDummyTimer(_TimerName, _Dummy)
+ObjectGetFlag(_Dummy, "LLMIME_TemporaryCharacter", 1)
 THEN
-NOT DB_LLMIME_DeleteDummyTimer(_TimerName, _Dummy);
-LLMIME_Dummy_Internal_DeleteDummyFromDatabases(_Dummy);
 SetOnStage(_Dummy, 0);
-LeaderLog_Log("DEBUG", "[LLMIME:Mimic:Dummy:DeleteDummy] Dummy deleted after timer [",_TimerName,"] finished.");
+RemoveTemporaryCharacter(_Dummy);
+LLMIME_Dummy_Internal_DeleteDummyFromDatabases(_Dummy);
+
+PROC
+LLMIME_Dummy_DeleteDummy((GUIDSTRING)_Dummy)
+AND
+ObjectIsCharacter((CHARACTERGUID)_Dummy, 1)
+AND
+ObjectGetFlag(_Dummy, "LLMIME_TemporaryCharacter", 0)
+THEN
+SetOnStage(_Dummy, 0);
+LLMIME_Dummy_Internal_DeleteDummyFromDatabases(_Dummy);
 
 PROC
 LLMIME_Dummy_StopDeletion((GUIDSTRING)_Dummy)
-AND
-DB_LLMIME_DeleteDummyTimer(_TimerName, _Dummy)
 THEN
-NOT DB_LLMIME_DeleteDummyTimer(_TimerName, _Dummy);
-TimerCancel(_TimerName);
+ProcObjectTimerCancel(_Dummy, "LLMIME_Timers_DeleteDummy");
+
+PROC
+LLMIME_Dummy_Internal_DeleteDummyFromDatabases((GUIDSTRING)_Dummy)
+THEN
+LeaderLog_Log("ACTIVITY", "[LLMIME:Mimic:Dummy:DeleteDummy] Dummy deleted from database.");
 
 PROC
 LLMIME_Dummy_Internal_DeleteDummyFromDatabases((GUIDSTRING)_Dummy)
@@ -170,16 +170,17 @@ NOT DB_LLMIME_Dummy_CharacterDummies(_Dummy);
 PROC
 LLMIME_Dummy_Internal_DeleteDummyFromDatabases((GUIDSTRING)_Dummy)
 AND
-DB_LLMIME_Dummy_NextItemDummy(_ID, (ITEMGUID)_Dummy)
+DB_LLMIME_Dummy_ItemDummies((ITEMGUID)_Dummy)
 THEN
-NOT DB_LLMIME_Dummy_NextItemDummy(_ID, _Dummy);
+NOT DB_LLMIME_Dummy_ItemDummies(_Dummy);
 
 PROC
 LLMIME_Dummy_Internal_DeleteDummyFromDatabases((GUIDSTRING)_Dummy)
 AND
-DB_LLMIME_Dummy_ItemDummies((ITEMGUID)_Dummy)
+DB_LLMIME_Dummy_NextItemDummy(_ID, (ITEMGUID)_Dummy)
 THEN
-NOT DB_LLMIME_Dummy_ItemDummies(_Dummy);
+NOT DB_LLMIME_Dummy_NextItemDummy(_ID, _Dummy);
+
 //END_REGION
 
 //REGION RESET
@@ -410,7 +411,8 @@ SetFaction(_Dummy, "Neutral");
 LeaderLog_Log("DEBUG", "[LLMIME:Mimic:Dummy:CreateOrFindDummy(Character)] Found existing dummy. Setting ID to [",_ID,"] and moving to target position.");
 LLMIME_Dummy_SetDummyID(_Dummy, _ID);
 DB_LLMIME_Dummy_NextCharacterDummy(_ID, (CHARACTERGUID)_Dummy);
-TeleportToPosition(_Dummy, _x, _y, _z, _ID, 0);
+LeaderLib_Helper_SetupDummy((CHARACTERGUID)_Dummy);
+TeleportToPosition(_Dummy, _x, _y, _z, _ID, 0, 1);
 SetOnStage(_Dummy, 1);
 
 PROC
@@ -444,7 +446,7 @@ THEN
 LeaderLog_Log("DEBUG", "[LLMIME:Mimic:Dummy:CreateOrFindDummy(Item)] Found existing dummy. Setting ID to [",_ID,"] and moving to target position.");
 LLMIME_Dummy_SetDummyID(_Dummy, _ID);
 DB_LLMIME_Dummy_NextItemDummy(_ID, (ITEMGUID)_Dummy);
-TeleportToPosition(_Dummy, _x, _y, _z, _ID, 0);
+TeleportToPosition(_Dummy, _x, _y, _z, _ID, 0, 1);
 SetOnStage(_Dummy, 1);
 
 PROC
@@ -454,6 +456,52 @@ NOT DB_LLMIME_Dummy_NextItemDummy(_ID, _)
 THEN
 LLMIME_Dummy_Internal_SpawnItemDummy(_ID, _x, _y, _z);
 //END_REGION
+
+//REGION DELETE_ALL_DUMMIES
+IF
+CombatEnded(_)
+THEN
+TimerLaunch("LLMIME_Timers_Dummies_DeleteAllDummies", 2500);
+
+IF
+TimerFinished("LLMIME_Timers_Dummies_DeleteAllDummies")
+AND
+NOT DB_LeaderLib_Combat_ActiveCombat(_)
+THEN
+LLMIME_Dummy_RemoveAllDummies();
+
+IF
+RegionEnded(_)
+THEN
+LLMIME_Dummy_RemoveAllDummies();
+
+PROC
+LLMIME_Dummy_RemoveAllDummies()
+AND
+DB_LLMIME_Dummy_CharacterDummies(_Dummy)
+THEN
+LLMIME_Dummy_DeleteDummy((GUIDSTRING)_Dummy);
+
+PROC
+LLMIME_Dummy_RemoveAllDummies()
+AND
+DB_LLMIME_Dummy_ItemDummies(_Dummy)
+THEN
+LLMIME_Dummy_DeleteDummy((GUIDSTRING)_Dummy);
+//END_REGION
+
+//REGION UPDATING
+PROC
+LeaderUpdater_ModUpdated("Mimicry", "LaughingLeader", (STRING)_PastVersion, (STRING)_NewVersion)
+AND
+LeaderLib_StringExt_QRY_VersionIsLessThan(_PastVersion, 1,0,11,0)
+AND
+NOT DB_LeaderLib_Combat_ActiveCombat(_)
+THEN
+LeaderLog_Log("DEBUG", "[LLMIME:Skills] Deleting dummies from [",_PastVersion,"].");
+LLMIME_Dummy_RemoveAllDummies();
+//END_REGION
+
 EXITSECTION
 
 ENDEXITSECTION

@@ -140,6 +140,7 @@ DB_LLMIME_Mimicking_Temp_ResetDummyAfterMimicAction(_Mime, _Target, _Template, "
 THEN
 NOT DB_LLMIME_Mimicking_Temp_ResetDummyAfterMimicAction(_Mime, _Target, _Template, "Item");
 LLMIME_Dummy_ResetDummy((GUIDSTRING)_Target);
+LLMIME_Dummy_MarkForDeletion(_Target, 30000);
 //END_REGION
 
 //REGION CLEAR_QUEUE_ITEM_DESTROY

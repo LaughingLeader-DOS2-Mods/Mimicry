@@ -1292,6 +1292,30 @@ THEN
 LeaderLog_Log("DEBUG", "[LLMIME:Mime:CharacterReceivedDamage] Mime did [",_DamageStr,"]% damage. Whatever that means.");
 //END_REGION
 
+//REGION CAMERA_FIX_TEST
+/* Scrapped, as this is just the zoom distance.
+IF
+ObjectFlagSet("Mimicry_IsMimicking", (CHARACTERGUID)_Mime, _)
+AND
+CharacterIsInCombat(_Mime, 1)
+AND
+GetMaxCameraDistance(_LastMax)
+AND
+_LastMax != 1.0
+THEN
+DB_LLMIME_Temp_LastCameraDistance(_LastMax);
+SetCameraDistanceOverride(1.0);
+//CameraActivate((CHARACTERGUID)_Character, (STRING)_Name, (REAL)_Time, (INTEGER)_HideUI, (INTEGER)_Smooth, (INTEGER)_HideShroud);
+
+IF
+ObjectFlagCleared("Mimicry_IsMimicking", (CHARACTERGUID)_Mime, _)
+AND
+DB_LLMIME_Temp_LastCameraDistance(_LastMax)
+THEN
+SetCameraDistanceOverride(_LastMax);
+NOT DB_LLMIME_Temp_LastCameraDistance(_LastMax);
+*/
+//END_REGION
 EXITSECTION
 
 ENDEXITSECTION

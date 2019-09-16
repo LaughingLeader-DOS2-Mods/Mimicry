@@ -15,23 +15,23 @@ DB_LLMIME_Skills_DecoyTags("IGNORESEENCOMBAT");
 DB_LLMIME_Skills_DecoyTags("IGNOREVANDALISE");
 
 SysClear("DB_LLMIME_Skills_StealWeapon", 2);
-DB_LLMIME_Skills_StealWeapon("Axe_1H", "WPN_LLWEAPONEX_Throwing_Axe1H_50a05d6a-90c5-44b7-aeae-c8329550e283");
-DB_LLMIME_Skills_StealWeapon("Axe_2H", "WPN_LLWEAPONEX_Throwing_Axe2H_5f83d71c-d529-4363-bd8b-33eb433c81c8");
-DB_LLMIME_Skills_StealWeapon("_Bow_", "WPN_LLWEAPONEX_Throwing_Bow_2473fceb-8232-4265-80e8-8e1b3d13c193");
-DB_LLMIME_Skills_StealWeapon("_Crossbow_", "WPN_LLWEAPONEX_Throwing_Crossbow_c40ef0c4-74a8-47f4-a31b-73ea3b56ae8c");
-DB_LLMIME_Skills_StealWeapon("_Dagger_", "WPN_LLWEAPONEX_Throwing_Dagger_63896c15-2c42-40c6-a032-5415039ea03e");
-DB_LLMIME_Skills_StealWeapon("Mace_1H", "WPN_LLWEAPONEX_Throwing_Mace1H_68f7e90e-ac76-40b9-8fdf-fa82e8b058f8");
-DB_LLMIME_Skills_StealWeapon("Mace_2H", "WPN_LLWEAPONEX_Throwing_Mace2H_4327c16c-e992-4445-8e16-e38ebb2bfd34");
-DB_LLMIME_Skills_StealWeapon("_Scythe_", "WPN_LLWEAPONEX_Throwing_Scythe_7a4acd18-b18a-46e9-ae80-2deca72f110e");
-DB_LLMIME_Skills_StealWeapon("_Shield_", "WPN_LLWEAPONEX_Throwing_Shield_8916a325-b0b4-4bb0-a0bb-d3c8740832c4");
-DB_LLMIME_Skills_StealWeapon("_Sickle_", "WPN_LLWEAPONEX_Throwing_Sickle_a64ebf8f-66c3-4bef-924c-ae8ecffe96ba");
-DB_LLMIME_Skills_StealWeapon("_Spear_", "WPN_LLWEAPONEX_Throwing_Spear_46d7a5f4-dd51-498f-a2e5-7fc3d2c97b6a");
-DB_LLMIME_Skills_StealWeapon("_Staff_", "WPN_LLWEAPONEX_Throwing_Staff_9a7d3a8d-f55e-4bd0-8073-cda53953a102");
-DB_LLMIME_Skills_StealWeapon("Sword_1H", "WPN_LLWEAPONEX_Throwing_Sword1H_34fc51f7-87d1-4d36-ac49-6df9d1d32155");
-DB_LLMIME_Skills_StealWeapon("Sword_2H", "WPN_LLWEAPONEX_Throwing_Sword2H_56e4cc0d-1f96-4930-a33f-93ca33a28018");
-DB_LLMIME_Skills_StealWeapon("_Wand_", "WPN_LLWEAPONEX_Throwing_Wand_97f3844d-100e-49a0-8814-eed74c040bb1");
-DB_LLMIME_Skills_StealWeapon("Chair", "WPN_LLWEAPONEX_Throwing_Chair_01_ef9f3937-a609-45cb-999c-9178a02eb7ca");
-DB_LLMIME_Skills_StealWeapon("Rock", "WPN_LLWEAPONEX_Throwing_Rock_eb7b3d1f-43f8-43c3-b529-2713eba49000");
+DB_LLMIME_Skills_StealWeapon("Axe_1H", "THR_LLWEAPONEX_Throwing_Axe1H_50a05d6a-90c5-44b7-aeae-c8329550e283");
+DB_LLMIME_Skills_StealWeapon("Axe_2H", "THR_LLWEAPONEX_Throwing_Axe2H_5f83d71c-d529-4363-bd8b-33eb433c81c8");
+DB_LLMIME_Skills_StealWeapon("_Bow_", "THR_LLWEAPONEX_Throwing_Bow_2473fceb-8232-4265-80e8-8e1b3d13c193");
+DB_LLMIME_Skills_StealWeapon("_Crossbow_", "THR_LLWEAPONEX_Throwing_Crossbow_c40ef0c4-74a8-47f4-a31b-73ea3b56ae8c");
+DB_LLMIME_Skills_StealWeapon("_Dagger_", "THR_LLWEAPONEX_Throwing_Dagger_63896c15-2c42-40c6-a032-5415039ea03e");
+DB_LLMIME_Skills_StealWeapon("Mace_1H", "THR_LLWEAPONEX_Throwing_Mace1H_68f7e90e-ac76-40b9-8fdf-fa82e8b058f8");
+DB_LLMIME_Skills_StealWeapon("Mace_2H", "THR_LLWEAPONEX_Throwing_Mace2H_4327c16c-e992-4445-8e16-e38ebb2bfd34");
+DB_LLMIME_Skills_StealWeapon("_Scythe_", "THR_LLWEAPONEX_Throwing_Scythe_7a4acd18-b18a-46e9-ae80-2deca72f110e");
+DB_LLMIME_Skills_StealWeapon("_Shield_", "THR_LLWEAPONEX_Throwing_Shield_8916a325-b0b4-4bb0-a0bb-d3c8740832c4");
+DB_LLMIME_Skills_StealWeapon("_Sickle_", "THR_LLWEAPONEX_Throwing_Sickle_a64ebf8f-66c3-4bef-924c-ae8ecffe96ba");
+DB_LLMIME_Skills_StealWeapon("_Spear_", "THR_LLWEAPONEX_Throwing_Spear_46d7a5f4-dd51-498f-a2e5-7fc3d2c97b6a");
+DB_LLMIME_Skills_StealWeapon("_Staff_", "THR_LLWEAPONEX_Throwing_Staff_9a7d3a8d-f55e-4bd0-8073-cda53953a102");
+DB_LLMIME_Skills_StealWeapon("Sword_1H", "THR_LLWEAPONEX_Throwing_Sword1H_34fc51f7-87d1-4d36-ac49-6df9d1d32155");
+DB_LLMIME_Skills_StealWeapon("Sword_2H", "THR_LLWEAPONEX_Throwing_Sword2H_56e4cc0d-1f96-4930-a33f-93ca33a28018");
+DB_LLMIME_Skills_StealWeapon("_Wand_", "THR_LLWEAPONEX_Throwing_Wand_97f3844d-100e-49a0-8814-eed74c040bb1");
+DB_LLMIME_Skills_StealWeapon("Chair", "THR_LLWEAPONEX_Throwing_Chair_01_ef9f3937-a609-45cb-999c-9178a02eb7ca");
+DB_LLMIME_Skills_StealWeapon("Rock", "THR_LLWEAPONEX_Throwing_Rock_eb7b3d1f-43f8-43c3-b529-2713eba49000");
 //DB_LLMIME_Skills_Temp_NextWish(_Caster, _Target)
 //DB_LLMIME_Skills_Temp_FailedWish(_Caster)
 
@@ -57,15 +57,13 @@ DB_LLMIME_Skills_FlankAndAwap_PreserveStatuses("PETRIFIED");
 //END_REGION
 
 //REGION UPDATING
-/* 
 PROC
 LeaderUpdater_ModUpdated("Mimicry", "LaughingLeader", (STRING)_PastVersion, (STRING)_NewVersion)
 AND
-LeaderLib_StringExt_QRY_VersionIsLessThan(_PastVersion, 0,9,9,29)
+LeaderLib_StringExt_QRY_VersionIsLessThan(_PastVersion, 1,0,11,0)
 THEN
 LeaderLog_Log("DEBUG", "[LLMIME:Skills] Updating settings from version [",_PastVersion,"]");
 LLMIME_Skills_InitSettings();
- */
 //END_REGION
 
 //REGION QUERIES

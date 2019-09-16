@@ -379,6 +379,7 @@ DB_LLMIME_Mimicking_Temp_ResetDummyAfterMimicAction(_Mime, _Target, _Action, "At
 THEN
 NOT DB_LLMIME_Mimicking_Temp_ResetDummyAfterMimicAction(_Mime, _Target, _Action, "Attack");
 LLMIME_Dummy_ResetDummyAfterDelay((GUIDSTRING)_Target, 1000);
+LLMIME_Dummy_MarkForDeletion(_Target, 30000);
 //END_REGION
 
 //REGION CLEAR_MIME

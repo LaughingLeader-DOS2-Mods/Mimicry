@@ -759,6 +759,7 @@ DB_LLMIME_Mimicking_Temp_ResetDummyAfterMimicAction(_Mime, _Target, _Action, _Ac
 THEN
 NOT DB_LLMIME_Mimicking_Temp_ResetDummyAfterMimicAction(_Mime, _Target, _Action, _ActionType);
 LLMIME_Dummy_ResetDummyAfterDelay((GUIDSTRING)_Target, 500);
+LLMIME_Dummy_MarkForDeletion(_Target, 30000);
 //END_REGION
 
 //REGION MIMIC_SUCCESS

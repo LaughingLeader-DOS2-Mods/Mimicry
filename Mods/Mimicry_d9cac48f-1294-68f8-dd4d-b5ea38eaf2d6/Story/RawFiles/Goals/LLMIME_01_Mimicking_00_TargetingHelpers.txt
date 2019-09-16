@@ -798,6 +798,7 @@ AND
 _Target != _Dummy
 THEN
 LLMIME_Dummy_ResetDummy(_Dummy);
+LLMIME_Dummy_MarkForDeletion(_Dummy, 30000);
 
 PROC
 LLMIME_Mimicking_TargetSystem_SetFinalTarget((CHARACTERGUID)_Caster, (CHARACTERGUID)_Mime, (CHARACTERGUID)_Dummy, (STRING)_Action, (STRING)_ActionType, (GUIDSTRING)_Target, (INTEGER)_TargetPriority)
@@ -845,6 +846,7 @@ NOT DB_LeaderLog_Temp_CombinedString(_EventTimerName);
 DB_LLMIME_Mimicking_Temp_FinalMimicTarget(_Mime, _Caster, _Target, _Action, _ActionType, _EventTimerName);
 TimerLaunch(_EventTimerName, 5); // Frames for the dummy's position to update
 LLMIME_Dummy_ResetDummyAfterDelay((GUIDSTRING)_Dummy, 8000); // Fallback
+LLMIME_Dummy_MarkForDeletion(_Dummy, 30000);
 
 IF
 TimerFinished(_EventTimerName)
