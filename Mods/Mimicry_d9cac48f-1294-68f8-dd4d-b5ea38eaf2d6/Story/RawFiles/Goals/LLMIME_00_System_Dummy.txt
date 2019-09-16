@@ -116,14 +116,17 @@ LLMIME_Dummy_DeleteDummy(_Dummy);
 PROC
 LLMIME_Dummy_DeleteDummy((GUIDSTRING)_Dummy)
 AND
+ObjectExists(_Dummy, 1)
+AND
 ObjectIsItem((ITEMGUID)_Dummy, 1)
 THEN
 SetInvulnerable_UseProcSetInvulnerable(_Dummy, 0);
 ItemDestroy(_Dummy);
-LLMIME_Dummy_Internal_DeleteDummyFromDatabases(_Dummy);
 
 PROC
 LLMIME_Dummy_DeleteDummy((GUIDSTRING)_Dummy)
+AND
+ObjectExists(_Dummy, 1)
 AND
 ObjectIsCharacter((CHARACTERGUID)_Dummy, 1)
 AND
@@ -131,16 +134,21 @@ ObjectGetFlag(_Dummy, "LLMIME_TemporaryCharacter", 1)
 THEN
 SetOnStage(_Dummy, 0);
 RemoveTemporaryCharacter(_Dummy);
-LLMIME_Dummy_Internal_DeleteDummyFromDatabases(_Dummy);
 
 PROC
 LLMIME_Dummy_DeleteDummy((GUIDSTRING)_Dummy)
+AND
+ObjectExists(_Dummy, 1)
 AND
 ObjectIsCharacter((CHARACTERGUID)_Dummy, 1)
 AND
 ObjectGetFlag(_Dummy, "LLMIME_TemporaryCharacter", 0)
 THEN
 SetOnStage(_Dummy, 0);
+
+PROC
+LLMIME_Dummy_DeleteDummy((GUIDSTRING)_Dummy)
+THEN
 LLMIME_Dummy_Internal_DeleteDummyFromDatabases(_Dummy);
 
 PROC
@@ -486,6 +494,30 @@ PROC
 LLMIME_Dummy_RemoveAllDummies()
 AND
 DB_LLMIME_Dummy_ItemDummies(_Dummy)
+THEN
+LLMIME_Dummy_DeleteDummy((GUIDSTRING)_Dummy);
+
+//Temp characters may not persist through save/load
+IF
+SavegameLoaded(_,_,_,_)
+THEN
+LLMIME_Dummy_RemoveAllMissingDummies();
+
+PROC
+LLMIME_Dummy_RemoveAllMissingDummies()
+AND
+DB_LLMIME_Dummy_CharacterDummies(_Dummy)
+AND
+ObjectExists(_Dummy, 0)
+THEN
+LLMIME_Dummy_DeleteDummy((GUIDSTRING)_Dummy);
+
+PROC
+LLMIME_Dummy_RemoveAllMissingDummies()
+AND
+DB_LLMIME_Dummy_ItemDummies(_Dummy)
+AND
+ObjectExists(_Dummy, 0)
 THEN
 LLMIME_Dummy_DeleteDummy((GUIDSTRING)_Dummy);
 //END_REGION
