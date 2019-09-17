@@ -415,7 +415,8 @@ NOT DB_LLMIME_Dummy_NextCharacterDummy(_ID, _)
 AND
 LLMIME_Dummy_QRY_IsDefaultOrMatchesDummyID((GUIDSTRING)_Dummy, _ID)
 THEN
-SetFaction(_Dummy, "Neutral");
+SetFaction(_Dummy, "Neutral NPC");
+LLMIME_Dummy_StopDeletion(_Dummy);
 LeaderLog_Log("DEBUG", "[LLMIME:Mimic:Dummy:CreateOrFindDummy(Character)] Found existing dummy. Setting ID to [",_ID,"] and moving to target position.");
 LLMIME_Dummy_SetDummyID(_Dummy, _ID);
 DB_LLMIME_Dummy_NextCharacterDummy(_ID, (CHARACTERGUID)_Dummy);
@@ -452,6 +453,7 @@ AND
 LLMIME_Dummy_QRY_IsDefaultOrMatchesDummyID((GUIDSTRING)_Dummy, _ID)
 THEN
 LeaderLog_Log("DEBUG", "[LLMIME:Mimic:Dummy:CreateOrFindDummy(Item)] Found existing dummy. Setting ID to [",_ID,"] and moving to target position.");
+LLMIME_Dummy_StopDeletion(_Dummy);
 LLMIME_Dummy_SetDummyID(_Dummy, _ID);
 DB_LLMIME_Dummy_NextItemDummy(_ID, (ITEMGUID)_Dummy);
 TeleportToPosition(_Dummy, _x, _y, _z, _ID, 0, 1);
