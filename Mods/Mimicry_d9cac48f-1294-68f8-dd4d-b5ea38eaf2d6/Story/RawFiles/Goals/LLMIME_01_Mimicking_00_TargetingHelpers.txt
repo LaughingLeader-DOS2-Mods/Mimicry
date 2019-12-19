@@ -443,6 +443,23 @@ AND
 DB_LLMIME_Mimic_Temp_TargetIterator(_Caster, _Mime, _Dummy, _TargetX, _TargetY, _TargetZ, _EventName, _TargetPriority, _Action, _ActionType)
 AND
 _CheckChar != NULL_00000000-0000-0000-0000-000000000000
+AND
+_TargetPriority != -2
+AND
+CharacterIsDead(_CheckChar, 0)
+THEN
+//LeaderLog_Log("TRACE", "[LLMIME:Mime:Targeting] Checking characters around dummy for [",_Action, _ActionType,"].");
+LLMIME_Mimic_Target_CheckCharacter(_CheckChar, _EventName);
+
+//Target priority is for dead characters
+IF
+StoryEvent((CHARACTERGUID)_CheckChar, _EventName)
+AND
+DB_LLMIME_Mimic_Temp_TargetIterator(_Caster, _Mime, _Dummy, _TargetX, _TargetY, _TargetZ, _EventName, -2, _Action, _ActionType)
+AND
+_CheckChar != NULL_00000000-0000-0000-0000-000000000000
+AND
+CharacterIsDead(_CheckChar, 1)
 THEN
 //LeaderLog_Log("TRACE", "[LLMIME:Mime:Targeting] Checking characters around dummy for [",_Action, _ActionType,"].");
 LLMIME_Mimic_Target_CheckCharacter(_CheckChar, _EventName);
@@ -799,6 +816,15 @@ _Target != _Dummy
 THEN
 LLMIME_Dummy_ResetDummy(_Dummy);
 LLMIME_Dummy_MarkForDeletion(_Dummy, 30000);
+
+PROC
+LLMIME_Mimicking_TargetSystem_SetFinalTarget((CHARACTERGUID)_Caster, (CHARACTERGUID)_Mime, (CHARACTERGUID)_Dummy, (STRING)_Action, (STRING)_ActionType, (GUIDSTRING)_Target, (INTEGER)_TargetPriority)
+AND
+_TargetPriority == -2
+AND
+CharacterIsDead((CHARACTERGUID)_Target, 1)
+THEN
+LeaderLog_Log("TRACE", "[LLMIME:Mime:Targeting] Targeting a corpse for [",_Action, _ActionType,"].");
 
 PROC
 LLMIME_Mimicking_TargetSystem_SetFinalTarget((CHARACTERGUID)_Caster, (CHARACTERGUID)_Mime, (CHARACTERGUID)_Dummy, (STRING)_Action, (STRING)_ActionType, (GUIDSTRING)_Target, (INTEGER)_TargetPriority)
