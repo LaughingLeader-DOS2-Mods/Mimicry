@@ -65,8 +65,8 @@ THEN
 ObjectSetFlag(_Mime, "LLMIME_FacingDirectionCalculated", 0);
 CharacterUseSkillAtPosition(_Mime, "Target_LLMIME_ApplyFacingDirection", _x, _y, _z, 0, 1);
 
-IF
-StoryEvent((CHARACTERGUID)_Mime, "LLMIME_Events_MimickingDone")
+PROC
+LLMIME_Mimicking_MimicDone((CHARACTERGUID)_Mime, (CHARACTERGUID)_Caster, (STRING)_Action, (STRING)_ActionType)
 THEN
 LLMIME_Skills_ApplyFacingDirection(_Mime);
 

@@ -745,7 +745,6 @@ THEN
 LLMIME_Mimicking_ClearQueue(_Mime, _Caster, _Action, _ActionType);
 CharacterStatusText(_Mime, "LLMIME_StatusText_MimickingFailed");
 PlayAnimation(_Mime, "emotion_angry");
-SetStoryEvent(_Mime, "LLMIME_Events_MimickingDone");
 LLMIME_Mimicking_MimicDone(_Mime, _Caster, _Action, _ActionType);
 
 PROC
@@ -770,7 +769,6 @@ PROC
 LLMIME_Mimicking_OnMimicSuccess((CHARACTERGUID)_Mime, (CHARACTERGUID)_Caster, (STRING)_Action, (STRING)_ActionType)
 THEN
 LeaderLog_Log("DEBUG", "[LLMIME_01_Mimicking_02_Main:OnMimicSuccess] Mime successfully mimicked [",_ActionType,"][",_Action,"].");
-SetStoryEvent(_Mime, "LLMIME_Events_MimickingDone");
 LLMIME_Mimicking_MimicDone(_Mime, _Caster, _Action, _ActionType);
 
 PROC
