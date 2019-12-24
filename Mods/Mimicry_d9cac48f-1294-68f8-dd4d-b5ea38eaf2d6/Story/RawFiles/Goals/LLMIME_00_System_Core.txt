@@ -791,6 +791,31 @@ THEN
 DB_NOOP(1);
 
 QRY
+LLMIME_QRY_Internal_PartyCountNotSet((CHARACTERGUID)_Character)
+AND
+GetVarInteger(_Character, "LeaderLib_PartyCount", -1163005939)
+THEN
+DB_NOOP(1);
+
+QRY
+LLMIME_QRY_Internal_PartyCountFallback((CHARACTERGUID)_Character)
+AND
+LLMIME_QRY_Internal_PartyCountNotSet(_Character)
+AND
+GlobalGetFlag("GEN_SoloPlayer", 0)
+THEN
+DB_NOOP(1);
+
+QRY
+LLMIME_QRY_Internal_PartyCountFallback((CHARACTERGUID)_Character)
+AND
+GetVarInteger(_Character, "LeaderLib_PartyCount", 1)
+AND
+GlobalGetFlag("GEN_SoloPlayer", 0)
+THEN
+DB_NOOP(1);
+
+QRY
 LLMIME_QRY_HasMaskEquipped((CHARACTERGUID)_Mime)
 AND
 CharacterGetEquippedItem(_Mime, "Helmet", _Mask)
