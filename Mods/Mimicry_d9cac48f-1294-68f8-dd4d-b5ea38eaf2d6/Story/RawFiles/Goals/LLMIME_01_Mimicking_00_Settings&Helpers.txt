@@ -381,6 +381,22 @@ NOT LeaderLib_Combat_QRY_IsActiveTurn(_Mime)
 THEN
 DB_LLMIME_Mimicking_Temp_CanApplyPassed(_Mime);
 
+//Fallback if party counting is wonky
+QRY
+LLMIME_Mimicking_QRY_MimeShouldBeMimicking((CHARACTERGUID)_Mime)
+AND
+NOT DB_LLMIME_Mimicking_Temp_CanApplyPassed(_Mime)
+AND
+DB_GlobalFlag("Mimicry_Mimic_CombatOnlyDisabled")
+AND
+HasActiveStatus(_Mime, "LLMIME_MIMICKING_DISABLED", 0)
+AND
+LLMIME_QRY_Internal_PartyCountFallback(_Mime)
+AND
+NOT LeaderLib_Combat_QRY_IsActiveTurn(_Mime)
+THEN
+DB_LLMIME_Mimicking_Temp_CanApplyPassed(_Mime);
+
 QRY
 LLMIME_Mimicking_QRY_MimeShouldBeMimicking((CHARACTERGUID)_Mime)
 AND
@@ -448,11 +464,24 @@ LLMIME_Mimicking_QRY_CharacterIsMimickable((CHARACTERGUID)_Character)
 AND
 NOT DB_IsPlayer(_Character)
 AND
-CharacterIsPlayer(_Character, 1)
+CharacterIsPartyFollower(_Character, 1)
+AND
+NOT LLMIME_QRY_CharacterIsAMime(_Character)
+THEN
+DB_NOOP(1);
+
+QRY
+LLMIME_Mimicking_QRY_CharacterIsMimickable((CHARACTERGUID)_Character)
+AND
+NOT DB_IsPlayer(_Character)
 AND
 CharacterIsSummon(_Character, 1)
 AND
 GlobalGetFlag("Mimicry_Mimic_CopySummonedCreatureSkills_Enabled", 1)
+AND
+CharacterGetOwner(_Character, _Player)
+AND
+DB_IsPlayer(_Player)
 THEN
 DB_NOOP(1);
 

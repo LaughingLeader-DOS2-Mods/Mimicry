@@ -463,13 +463,32 @@ CharacterRemoveSkill(_Mime, _Skill);
 
 //REGION MIME_STATUS_ATTEMPTS
 IF
-CharacterStatusAttempt(_Character, _Status, _)
-AND
-DB_LLMIME_MimickingStatuses(_Status)
+CharacterStatusAttempt(_Character, "LLMIME_MIMICKING", _)
 AND
 NOT LLMIME_QRY_CharacterIsAMime(_Character)
 THEN
-RemoveStatus(_Character, _Status);
+RemoveStatus(_Character, "LLMIME_MIMICKING");
+
+IF
+CharacterStatusAttempt(_Character, "LLMIME_MIMICKING_FOLLOWER", _)
+AND
+NOT LLMIME_QRY_CharacterIsAMime(_Character)
+THEN
+RemoveStatus(_Character, "LLMIME_MIMICKING_FOLLOWER");
+
+IF
+CharacterStatusAttempt(_Character, "LLMIME_MIMICKING_SOURCE", _)
+AND
+NOT LLMIME_QRY_CharacterIsAMime(_Character)
+THEN
+RemoveStatus(_Character, "LLMIME_MIMICKING_SOURCE");
+
+IF
+CharacterStatusAttempt(_Character, "LLMIME_MIMICKING_ENEMY", _)
+AND
+NOT LLMIME_QRY_CharacterIsAMime(_Character)
+THEN
+RemoveStatus(_Character, "LLMIME_MIMICKING_ENEMY");
 //END_REGION
 
 //REGION MIMICKED_SKILL_LEARNING
