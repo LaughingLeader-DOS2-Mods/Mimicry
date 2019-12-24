@@ -599,6 +599,10 @@ QRY
 LLMIME_Mimicking_QRY_CombatConditionsMet((CHARACTERGUID)_Character, (CHARACTERGUID)_Mime)
 AND
 GlobalGetFlag("Mimicry_Mimic_CombatOnlyDisabled", 1)
+AND
+GetDistanceTo(_Character, _Mime, _Dist)
+AND
+_Dist <= 20.0
 THEN
 DB_NOOP(1);
 
