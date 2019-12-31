@@ -288,10 +288,6 @@ NOT DB_LLMIME_Mimicking_Whitelist_Skills(_, _Skill)
 AND
 NOT DB_LLMIME_Mimicking_Blacklist_Skills(_, _Skill)
 AND
-//LeaderLog_QRY_Log("DEBUG", "[LLMIME:QRY_SkillIsAllowed] Checking skill: Name[",_Skill,"] Type[",_SkillType,"] Element[",_SkillElement,"]")
-//AND
-LLMIME_Mimicking_QRY_Internal_BlockedSkillTypeIsEnabled(_SkillType)
-AND
 NOT DB_LLMIME_Mimicking_Blacklist_SkillElements(_SkillType, _SkillElement)
 AND
 NOT LLMIME_Mimicking_QRY_Internal_SkillNameMatchesBlocked(_Skill)

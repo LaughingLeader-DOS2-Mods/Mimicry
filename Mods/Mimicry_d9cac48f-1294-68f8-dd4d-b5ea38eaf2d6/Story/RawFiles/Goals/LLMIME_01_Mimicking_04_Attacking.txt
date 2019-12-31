@@ -18,9 +18,6 @@ ProcObjectTimerFinished((CHARACTERGUID)_Caster, "Mimicry_Timers_StartAttackPosit
 AND
 DB_LLMIME_Timers_AttackAtPositionTimer(_Caster, _TargetX, _TargetY, _TargetZ)
 AND
-LeaderLog_QRY_Log("DEBUG", "[LLMIME:Mimicking:Mimicry_Timers_StartAttackPositionDelay] Checking if action is already queued")
-AND
-//NOT LLMIME_Mimicking_QRY_ActionTypeIsQueued(_Caster, "Attack")
 NOT LLMIME_Mimicking_QRY_PositionActionTypeIsQueued(_Caster, "Attack", _TargetX, _TargetY, _TargetZ)
 THEN
 LLMIME_Mimicking_OnAttackAtPosition(_Caster, _TargetX, _TargetY, _TargetZ);

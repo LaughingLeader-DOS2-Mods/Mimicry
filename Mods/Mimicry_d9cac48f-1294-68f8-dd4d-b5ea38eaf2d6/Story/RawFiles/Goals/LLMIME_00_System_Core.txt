@@ -620,10 +620,6 @@ RemoveStatus(_Mime, "LLMIME_CONCENTRATION_BONUS");
 IF
 StoryEvent((CHARACTERGUID)_Mime, "Mimicry_ClearMimeBonuses")
 AND
-CharacterGetDisplayName(_Mime, _, _Name)
-AND
-LeaderLog_QRY_Log("DEBUG", "[LLMIME:Mimicry_ClearMimeBonuses] Clearing mime bonuses for [",_Name,"].")
-AND
 DB_LLMIME_PassiveData(_Status, _BonusStatus, _InfoStatus, _DisableFlag)
 THEN
 RemoveStatus(_Mime, _Status);
