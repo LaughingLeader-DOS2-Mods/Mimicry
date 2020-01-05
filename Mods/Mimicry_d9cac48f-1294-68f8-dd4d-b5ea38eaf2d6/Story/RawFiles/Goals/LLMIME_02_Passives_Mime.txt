@@ -359,17 +359,26 @@ THEN
 DB_LLMIME_Mime_Temp_LastNotified(_Mime, _Level);
 ObjectSetFlag(_Mime, "LLMIME_NewSkillbooksAvailable");
 
-//Becoming a mime after you've leveled past a skillbook level
+/* Becoming a mime after you've leveled past a skillbook level may display the message when you've already bought books otherwise */
 IF
 StoryEvent((CHARACTERGUID)_Mime, "Mimicry_MimeInitialized")
 AND
 IsTagged(_Mime, "LLMIME_MimeFollower", 0)
 AND
+DB_IsPlayer(_Mime)
+AND
 NOT DB_LLMIME_Mime_Temp_LastNotified(_Mime, _)
 AND
 CharacterGetLevel(_Mime, _Level)
+AND
+DB_LLMIME_Mime_NewSkillbookLevels(_SkillLevel)
+AND
+_Level >= _SkillLevel
+AND
+NOT DB_LLMIME_Mime_Temp_LastNotified(_Mime, _)
 THEN
 DB_LLMIME_Mime_Temp_LastNotified(_Mime, _Level);
+ObjectSetFlag(_Mime, "LLMIME_NewSkillbooksAvailable");
 
 IF
 TextEventSet("llmime_newskillbookstest")
