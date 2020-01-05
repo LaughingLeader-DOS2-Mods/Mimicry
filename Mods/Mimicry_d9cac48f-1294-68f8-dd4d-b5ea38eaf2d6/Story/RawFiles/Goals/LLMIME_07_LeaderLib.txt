@@ -14,13 +14,32 @@ LLMIME_LeaderLib_RegisterSettings();
 PROC
 LeaderUpdater_ModUpdated("Mimicry", "LaughingLeader", (STRING)_PastVersion, (STRING)_NewVersion)
 AND
-LeaderLib_StringExt_QRY_VersionIsLessThan(_PastVersion, 1,0,4,0)
+LeaderLib_StringExt_QRY_VersionIsLessThan(_PastVersion, 1,0,14,0)
+AND
+DB_LeaderLib_PresetMenu_RegisteredPreset("LLMIME_MimeClass", (STRING)_EnabledGlobalFlag)
 THEN
-NOT DB_LeaderLib_PresetMenu_RegisteredPreset("LLMIME_Mime", "Mimicry_IsActive");
-NOT DB_LeaderLib_PresetMenu_RegisteredPreset("Mimicry_IsActive", "LLMIME_Mime", "Mimicry_IsActive");
-LeaderLib_DynamicMenu_Remove_Entry("LeaderLib.Settings.PresetMenu", "LLMIME_Mime");
+NOT DB_LeaderLib_PresetMenu_RegisteredPreset("LLMIME_MimeClass", _EnabledGlobalFlag);
+LeaderLib_DynamicMenu_Remove_Entry("LeaderLib.Settings.PresetMenu", "LLMIME_MimeClass");
+LeaderLog_Log("DEBUG", "[LLMIME_07_LeaderLib:LeaderUpdater_ModUpdated] Updated settings from version [",_PastVersion,"]. Remove LLMIME_MimeClass from preset menu.");
+
+PROC
+LeaderUpdater_ModUpdated("Mimicry", "LaughingLeader", (STRING)_PastVersion, (STRING)_NewVersion)
+AND
+LeaderLib_StringExt_QRY_VersionIsLessThan(_PastVersion, 1,0,14,0)
+AND
+DB_LeaderLib_PresetMenu_RegisteredPreset(_Group, "LLMIME_MimeClass", _Flag)
+THEN
+NOT DB_LeaderLib_PresetMenu_RegisteredPreset(_Group, "LLMIME_MimeClass", _Flag);
+LeaderLib_DynamicMenu_Remove_Entry("LeaderLib.Settings.PresetMenu", "LLMIME_MimeClass");
+
+PROC
+LeaderUpdater_ModUpdated("Mimicry", "LaughingLeader", (STRING)_PastVersion, (STRING)_NewVersion)
+AND
+LeaderLib_StringExt_QRY_VersionIsLessThan(_PastVersion, 1,0,14,0)
+AND
+NOT DB_LeaderLib_PresetMenu_RegisteredPreset(_, "LLMIME_Mime", _)
+THEN
 LeaderLib_PresetMenu_RegisterPreset("Mimicry", "LLMIME_Mime", "Mime [Mimicry]", "Mimicry_IsActive");
-LeaderLog_Log("DEBUG", "[LLMIME_07_LeaderLib:LeaderUpdater_ModUpdated] Updated settings from version [",_PastVersion,"].");
 
 /*
 PROC
