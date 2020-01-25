@@ -319,22 +319,22 @@ DB_NOOP(1);
 // [END_NO_OSITOOLS]
 
 /* [OSITOOLS_ONLY]
-//If a skill is 0 AP 0 CD and special/shout, assume it's a toggle skill
+//If a skill is 0 AP 0 CD and it's a shout, assume it's a toggle or menu skill
 QRY
-LLMIME_Mimicking_QRY_SpecialShoutIsAllowed((STRING)_Skill, "shout", "")
+LLMIME_Mimicking_QRY_ShoutIsAllowed((STRING)_Skill, "shout", (STRING)_SkillElement)
 AND
 NRD_StatGetInt(_Skill, "Cooldown", _CD)
 AND
-_CD > 0
-AND
 NRD_StatGetInt(_Skill, "ActionPoints", _AP)
 AND
-_AP > 0
+IntegerSum(_CD, _AP, _Check)
+AND
+_Check > 0
 THEN
 DB_NOOP(1);
 
 QRY
-LLMIME_Mimicking_QRY_SpecialShoutIsAllowed((STRING)_Skill, (STRING)_SkillType, (STRING)_SkillElement)
+LLMIME_Mimicking_QRY_ShoutIsAllowed((STRING)_Skill, (STRING)_SkillType, (STRING)_SkillElement)
 AND
 _SkillType != "shout"
 THEN
@@ -349,7 +349,7 @@ NOT DB_LLMIME_Mimicking_Blacklist_Skills(_, _Skill)
 AND
 NOT DB_LLMIME_Mimicking_Blacklist_SkillElements(_SkillType, _SkillElement)
 AND
-LLMIME_Mimicking_QRY_SpecialShoutIsAllowed(_Skill, _SkillType, _SkillElement)
+LLMIME_Mimicking_QRY_ShoutIsAllowed(_Skill, _SkillType, _SkillElement)
 AND
 LLMIME_Mimicking_QRY_Internal_BlockedSkillTypeIsEnabled(_SkillType)
 AND
