@@ -121,6 +121,8 @@
 	<content contentuid="h97a99495g79c0g4dfdgae15g2901dcb289fb" Source="LLMIME_MimeVendor.lsj">*Stop communicating with the mask.*</content>
 	<content contentuid="ha2e63daag5f65g49e0g8cb5g9569ea4fcb98" Source="LLMIME_MiscText.lsb" Key="LLMIME_Beastmaster_SummonRename_Plant">Malboro</content>
 	<content contentuid="h09591a99g03c6g4b21g8292g10f6b2dfda27" Source="LLMIME_MiscText.lsb" Key="LLMIME_Beastmaster_SummonRename_Totem">Rage Totem</content>
+	<content contentuid="hcb023662ga0a8g4535g8e1ag8f45f98a6a64" Source="LLMIME_MiscText.lsb" Key="LLMIME_Meta_DescriptionName">Adds a new &quot;class&quot; called the Mime. Mimes can mimic the actions of allies in battle, utilize Mime-only skills, take advantage of Mime-only passives, and pummel enemies with scaled unarmed damage.</content>
+	<content contentuid="heaf6e6f9ga163g41e7g9912g78a4de6e41bf" Source="LLMIME_MiscText.lsb" Key="LLMIME_Meta_DisplayName">Mimicry</content>
 	<content contentuid="h679ae8b6gc84fg4fadgba3cg59109e83f174" Source="LLMIME_MiscText.lsb" Key="LLMIME_StatusText_BrawlerFistBlocked">&lt;font color=&apos;#FF0000&apos;&gt;*You try to fight like a brawler, but it is futile.*&lt;/font&gt;</content>
 	<content contentuid="h2b67ae14g6631g4351gb0c0g4ffc9510bad2" Source="LLMIME_MiscText.lsb" Key="LLMIME_StatusText_DoubleStrikeMulti">&lt;font color=&apos;#8A2BE2&apos; size=&apos;24&apos;&gt;Double Strike x[1]!&lt;/font&gt;</content>
 	<content contentuid="h37ce8d6eg96b8g48a8ga191ge5ec5f30d734" Source="LLMIME_MiscText.lsb" Key="LLMIME_StatusText_DoubleStrikeSingle">&lt;font color=&apos;#8A2BE2&apos; size=&apos;24&apos;&gt;Double Strike!&lt;/font&gt;</content>
