@@ -67,7 +67,7 @@ THEN
 			//Print(_Str, "Range(Min: [1] Max: [2]) | Dist: [3]", _MinRange, _MaxRange, _Dist)
 			//Cast(_StrF, _Str)
 			//DisplayCombatInfoText(_Mime, _StrF, 3.0)
-			
+	
 			IF "(c1|c2)&(c3|c4)"
 				IsGreaterThen(_Dist, _MinRange)
 				IsEqual(_Dist, _MinRange)

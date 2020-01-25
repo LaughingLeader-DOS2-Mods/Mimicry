@@ -96,7 +96,7 @@ THEN
 		THEN
 			//RemoveStatusInfluence(_Mime, _Status, %LLMIME_StatusStrengthRemoval, "", 0)
 			//AddStatusInfluence(_Mime, _Status, %LLMIME_StatusStrength, "", 0, 1)
-			
+	
 			IF "!c1|(c2&!c3)"
 				CharacterHasStatus(_Mime, _Status)
 				GetStatusTurns(_Mime, _Status, _Turns)
@@ -104,7 +104,7 @@ THEN
 			THEN
 				CharacterApplyStatus(_Mime, _Status, -1, 1)
 			ENDIF
-			
+	
 		ENDIF
 	Add(_Index, 1)
 	ENDWHILE
