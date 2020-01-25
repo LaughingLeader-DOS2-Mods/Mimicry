@@ -15,9 +15,9 @@ _Caster != _Target
 AND
 NOT LLMIME_Mimicking_Attack_QRY_IsAttackOfOpportunity(_Caster)
 AND
-LLMIME_Mimicking_QRY_MimesAvailable()
-AND
 LLMIME_Mimicking_QRY_CharacterIsMimickable(_Caster)
+AND
+LLMIME_Mimicking_QRY_MimesAvailable()
 AND
 LLMIME_Mimicking_QRY_GetTargetPriority(_Caster, _Target, 2)
 AND
