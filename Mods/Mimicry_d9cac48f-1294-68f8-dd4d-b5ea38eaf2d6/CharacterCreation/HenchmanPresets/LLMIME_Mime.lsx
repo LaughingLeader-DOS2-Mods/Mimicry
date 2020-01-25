@@ -14,7 +14,7 @@
 			<attribute id="Price" value="666" type="4" />
 			<attribute id="AreStatsWeighted" value="1" type="19" />
 			<attribute id="SkillSet" value="Class_LLMIME_Mime_Act2" type="22" />
-			
+	
             <children>
             <node id="EquipmentProperties">
                     <children>
