@@ -699,6 +699,7 @@ ObjectGetFlag(_Mime, "LLMIME_Follower_RemovedBlankSkills", 0)
 THEN
 ObjectSetFlag(_Mime, "LLMIME_Follower_RemovedBlankSkills");
 LLMIME_Follower_RemoveBlankSkills(_Mime);
+//ProcObjectTimer(_Mime, "Mimicry_Timers_Follower_RemoveBlankSkills", 500);
 LLMIME_Brawler_RemoveStance(_Mime);
 LLMIME_Brawler_ApplyStance(_Mime);
 CharacterRemoveFromPlayerCharacter(_Mime, _Owner);
@@ -1453,12 +1454,37 @@ DB_LLMIME_Follower_Mime(_Mime)
 THEN
 LLMIME_Follower_RemoveBlankSkills(_Mime);
 
+// [BEGIN_NO_OSITOOLS]
 PROC
 LLMIME_Follower_RemoveBlankSkills((CHARACTERGUID)_Mime)
 AND
 DB_LLMIME_BlankSkills(_Skill)
 THEN
 CharacterRemoveSkill(_Mime, _Skill);
+// [END_NO_OSITOOLS]
+
+/* [OSITOOLS_ONLY]
+PROC
+LLMIME_Follower_RemoveBlankSkills((CHARACTERGUID)_Mime)
+AND
+DB_LLMIME_BlankSkills(_Skill)
+AND
+NRD_SkillBarFindSkill(_Mime, _Skill, _Slot)
+THEN
+NRD_SkillBarClear(_Mime, _Slot);
+CharacterRemoveSkill(_Mime, _Skill);
+*/
+
+// Remove blank skills from slots when unmemorized skills remain
+PROC
+LeaderUpdater_ModUpdated("Mimicry", "LaughingLeader", (STRING)_PastVersion, (STRING)_NewVersion)
+AND
+LeaderLib_QRY_ExtenderIsActive()
+AND
+DB_LLMIME_Follower_Mime(_Mime)
+THEN
+LLMIME_Follower_RemoveBlankSkills(_Mime);
+
 //END_REGION
 
 //REGION BRAWLER_FIST_SAFEGUARD
