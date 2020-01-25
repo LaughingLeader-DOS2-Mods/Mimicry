@@ -1302,6 +1302,13 @@ CharacterEquipItem(_Mime, _Clone);
 ItemSetCanInteract(_Clone, 0);
 ItemSetOnlyOwnerCanUse(_Clone, 1);
 DB_LLMIME_Mimicking_Temp_MimickedWeapon(_Mime, _Caster, _Clone, _Action, _ActionType);
+
+PROC
+LLMIME_Mimicking_EquipWeaponsForAction((CHARACTERGUID)_Mime, (CHARACTERGUID)_Caster, (GUIDSTRING)_Target, (STRING)_Action, (STRING)_ActionType)
+AND
+_ActionType != "Item"
+THEN
+LLMIME_Mimicking_WeaponMimickingDone(_Mime, _Caster, _Target, _Action, _ActionType);
 */
 //END_REGION
 
@@ -1431,6 +1438,24 @@ AND
 DB_LLMIME_Mimicking_Temp_MimickedWeapon(_Mime, _Caster, _Weapon, _Action, _ActionType)
 THEN
 NOT DB_LLMIME_Mimicking_Temp_MimickedWeapon(_Mime, _Caster, _Weapon, _Action, _ActionType);
+LLMIME_Mimicking_Internal_RemoveMimickedWeapon(_Mime, _Weapon);
+
+PROC
+LLMIME_Mimicking_DeleteOneTimeUseWeapons((CHARACTERGUID)_Mime, (STRING)_Action, (STRING)_ActionType)
+AND
+CharacterGetEquippedItem(_Mime, "Weapon", (ITEMGUID)_Weapon)
+AND
+IsTagged(_Weapon, "LLMIME_MIMICKED_WEAPON", 1)
+THEN
+LLMIME_Mimicking_Internal_RemoveMimickedWeapon(_Mime, _Weapon);
+
+PROC
+LLMIME_Mimicking_DeleteOneTimeUseWeapons((CHARACTERGUID)_Mime, (STRING)_Action, (STRING)_ActionType)
+AND
+CharacterGetEquippedItem(_Mime, "Shield", (ITEMGUID)_Weapon)
+AND
+IsTagged(_Weapon, "LLMIME_MIMICKED_WEAPON", 1)
+THEN
 LLMIME_Mimicking_Internal_RemoveMimickedWeapon(_Mime, _Weapon);
 
 PROC
