@@ -27,3 +27,5 @@ LLMIME_StatusText_NewSkillbooksAvailable	<font color='#FF69B4' size='20'>*You fe
 LLMIME_StatusText_FacingDirectionSaved	<font color='#FF7F50'>Facing Direction Saved</font>
 LLMIME_StatusText_FatalityCooldownReset	<font color='#a22aff'>Deathblow</font> <font color='#2effd0'>Refreshed</font>
 LLMIME_StatusText_Wish	<font color='#73f6ff' size='20'>Wish</font>
+LLMIME_Meta_DisplayName	Mimicry
+LLMIME_Meta_DescriptionName	Adds a new "class" called the Mime. Mimes can mimic the actions of allies in battle, utilize Mime-only skills, take advantage of Mime-only passives, and pummel enemies with scaled unarmed damage.

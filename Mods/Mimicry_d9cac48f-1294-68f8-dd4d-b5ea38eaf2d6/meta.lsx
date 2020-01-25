@@ -27,8 +27,8 @@
                     <attribute id="Author" value="LaughingLeader" type="30" />
                     <attribute id="CharacterCreationLevelName" value="" type="22" />
                     <attribute id="Description" value="Adds a new &quot;class&quot; called the Mime. Mimes can mimic the actions of allies in battle, utilize Mime-only skills, take advantage of Mime-only passives, and pummel enemies with scaled unarmed damage." type="30" />
-                    <attribute id="DescriptionName" value="" handle="ls::TranslatedStringRepository::s_HandleUnknown" type="28" />
-                    <attribute id="DisplayName" value="" handle="ls::TranslatedStringRepository::s_HandleUnknown" type="28" />
+                    <attribute id="DescriptionName" value="LLMIME_Meta_DescriptionName" handle="hcb023662ga0a8g4535g8e1ag8f45f98a6a64" type="28" />
+                    <attribute id="DisplayName" value="LLMIME_Meta_DisplayName" handle="heaf6e6f9ga163g41e7g9912g78a4de6e41bf" type="28" />
                     <attribute id="Folder" value="Mimicry_d9cac48f-1294-68f8-dd4d-b5ea38eaf2d6" type="30" />
                     <attribute id="GMTemplate" value="" type="22" />
                     <attribute id="LobbyLevelName" value="" type="22" />
@@ -36,7 +36,7 @@
                     <attribute id="MenuLevelName" value="" type="22" />
                     <attribute id="Name" value="Mimicry" type="22" />
                     <attribute id="NumPlayers" value="2" type="1" />
-                    <attribute id="PhotoBooth" value="SYS_LLMIME_Portrait" type="22" />
+                    <attribute id="PhotoBooth" value="" type="22" />
                     <attribute id="StartupLevelName" value="" type="22" />
                     <attribute id="Tags" value="" type="30" />
                     <attribute id="Type" value="Add-on" type="22" />
