@@ -23,6 +23,7 @@ SysClear("DB_LLMIME_Mimicking_Whitelist_WeaponCopy_SkillTypes", 1);
 SysClear("DB_LLMIME_Mimicking_Whitelist_WeaponCopy_Skills", 1);
 SysClear("DB_LLMIME_Mimicking_Blacklist_WeaponCopy_IgnoreSkillsWith", 1);
 SysClear("DB_LLMIME_Mimicking_HarmfulHealingSkills", 1);
+LLMIME_Mimicking_InitSettings();
 
 PROC
 LLMIME_Mimicking_Internal_ClearMimicryBlacklist()
@@ -56,13 +57,13 @@ DB_LLMIME_Mimicking_SkillSwap("Teleportation_StoryModeFreeResurrect", "Target_LL
 //DB_LLMIME_Mimicking_Blacklist_SkillTypes("path", "Mimicry_Mimic_SkillType_Path_Enabled", 1);
 DB_LLMIME_Mimicking_Blacklist_SkillTypes("summon", "Mimicry_Mimic_SkillType_Summons_Enabled", 1);
 //New: Blacklisting Rush & Jump skills, mainly because they have a habit of moving mimes through walls or up to strange areas of the map
-DB_LLMIME_Mimicking_Blacklist_SkillTypes("rush", "", 0);
-DB_LLMIME_Mimicking_Blacklist_SkillTypes("jump", "", 0);
+DB_LLMIME_Mimicking_Blacklist_SkillTypes("rush", "", -1);
+DB_LLMIME_Mimicking_Blacklist_SkillTypes("jump", "", -1);
 /*
 Teleportation requires 2 targets for most spells, which is impossible with story scripting.
 Character scripts can specify 2 targets, but that would require overriding Base.charScript or similar.
 */
-DB_LLMIME_Mimicking_Blacklist_SkillTypes("teleportation", "", 0);
+DB_LLMIME_Mimicking_Blacklist_SkillTypes("teleportation", "", -1);
 
 //Special type shout skills, typically used for toggle abilities in mods
 DB_LLMIME_Mimicking_Blacklist_SkillElements("shout", "");
@@ -290,6 +291,8 @@ NOT DB_LLMIME_Mimicking_Blacklist_Skills(_, _Skill)
 AND
 NOT DB_LLMIME_Mimicking_Blacklist_SkillElements(_SkillType, _SkillElement)
 AND
+LLMIME_Mimicking_QRY_Internal_BlockedSkillTypeIsEnabled(_SkillType)
+AND
 NOT LLMIME_Mimicking_QRY_Internal_SkillNameMatchesBlocked(_Skill)
 THEN
 DB_NOOP(1);
@@ -449,29 +452,41 @@ DB_NOOP(1);
 QRY
 LLMIME_Mimicking_QRY_CharacterIsMimickable((CHARACTERGUID)_Character)
 AND
+NOT LLMIME_QRY_CharacterIsAMime(_Character)
+AND
+CharacterIsPartyFollower(_Character, _IsFollower)
+AND
+CharacterIsSummon(_Character, _IsSummon)
+AND
+LLMIME_Mimicking_QRY_Internal_ProcessCharacterIsMimickable(_Character, _IsFollower, _IsSummon)
+THEN
+DB_NOOP(1);
+
+/*
+QRY
+LLMIME_Mimicking_QRY_Internal_ProcessCharacterIsMimickable((CHARACTERGUID)_Character, (INTEGER)_IsFollower, (INTEGER)_IsSummon)
+THEN
+DB_NOOP(1);
+*/
+
+//Not a follower or summon
+QRY
+LLMIME_Mimicking_QRY_Internal_ProcessCharacterIsMimickable((CHARACTERGUID)_Character, 0, 0)
+AND
 DB_IsPlayer(_Character)
+THEN
+DB_NOOP(1);
+
+//Is Follower
+QRY
+LLMIME_Mimicking_QRY_Internal_ProcessCharacterIsMimickable((CHARACTERGUID)_Character, 1, 0)
 AND
-NOT LLMIME_QRY_CharacterIsAMime(_Character)
+GlobalGetFlag("Mimicry_Mimic_CopyFollowerSkills_Disabled", 0)
 THEN
 DB_NOOP(1);
 
 QRY
-LLMIME_Mimicking_QRY_CharacterIsMimickable((CHARACTERGUID)_Character)
-AND
-NOT DB_IsPlayer(_Character)
-AND
-CharacterIsPartyFollower(_Character, 1)
-AND
-NOT LLMIME_QRY_CharacterIsAMime(_Character)
-THEN
-DB_NOOP(1);
-
-QRY
-LLMIME_Mimicking_QRY_CharacterIsMimickable((CHARACTERGUID)_Character)
-AND
-NOT DB_IsPlayer(_Character)
-AND
-CharacterIsSummon(_Character, 1)
+LLMIME_Mimicking_QRY_Internal_ProcessCharacterIsMimickable((CHARACTERGUID)_Character, 0, 1)
 AND
 GlobalGetFlag("Mimicry_Mimic_CopySummonedCreatureSkills_Enabled", 1)
 AND
@@ -495,9 +510,16 @@ _Character != _Mime
 AND
 CharacterIsDeadOrFeign(_Mime, 0)
 AND
-IsTagged(_Mime, "Mimicry_EnemyMime", 0)
-AND
 QRY_CharacterIsNotDisabled(_Mime)
+AND
+IsTagged(_Mime, "Mimicry_EnemyMime", _IsEnemyMime)
+AND
+LLMIME_Mimicking_QRY_Internal_CanMimicCharacter(_Character, _Mime, _Action, _ActionType, _IsEnemyMime)
+THEN
+DB_NOOP(1);
+
+QRY
+LLMIME_Mimicking_QRY_Internal_CanMimicCharacter((CHARACTERGUID)_Character, (CHARACTERGUID)_Mime, (STRING)_Action, (STRING)_ActionType, 0)
 AND
 LLMIME_Mimicking_QRY_FollowerOwnerMatch(_Character, _Mime)
 AND
@@ -511,17 +533,11 @@ DB_NOOP(1);
 
 //Enemy Mime skill mimicking
 QRY
-LLMIME_Mimicking_QRY_CanMimicCharacter((CHARACTERGUID)_Character, (CHARACTERGUID)_Mime, (STRING)_Skill, (STRING)_SkillType)
+LLMIME_Mimicking_QRY_CanMimicCharacter((CHARACTERGUID)_Character, (CHARACTERGUID)_Mime, (STRING)_Skill, (STRING)_SkillType, 1)
 AND
 _SkillType == "shout"
 AND
-IsTagged(_Mime, "Mimicry_EnemyMime", 1)
-//AND
-//NOT LLMIME_Mimicking_QRY_MimeIsCurrentlyMimicking(_Mime)
-AND
 _Character != _Mime
-AND
-QRY_CharacterIsNotDisabled(_Mime)
 AND
 CharacterIsSummon(_Character, 0)
 AND
@@ -655,28 +671,6 @@ THEN
 DB_NOOP(1);
 
 QRY
-LLMIME_Mimicking_QRY_CharacterIsMimickable((CHARACTERGUID)_Character)
-AND
-CharacterIsPlayer(_Character, 1)
-THEN
-DB_NOOP(1);
-
-QRY
-LLMIME_Mimicking_QRY_CharacterIsMimickable((CHARACTERGUID)_Character)
-AND
-CharacterIsPlayer(_Character, 0)
-AND
-CharacterIsSummon(_Character, 1)
-AND
-GlobalGetFlag("Mimicry_Mimic_CopySummonedCreatureSkills_Enabled", 1)
-AND
-CharacterGetOwner(_Character, _Owner)
-AND
-CharacterIsPlayer(_Owner, 1)
-THEN
-DB_NOOP(1);
-
-QRY
 LLMIME_Mimicking_QRY_MimesAvailable()
 AND
 DB_LLMIME_Mimicking_MimicNextAction(_Mime)
@@ -696,34 +690,6 @@ QRY
 LLMIME_Mimicking_QRY_CasterAndTargetMatch((CHARACTERGUID)_Character, (GUIDSTRING)_Target, (STRING)_SkillType)
 AND
 (GUIDSTRING)_Character == _Target
-THEN
-DB_NOOP(1);
-
-QRY
-LLMIME_Mimicking_QRY_IsMimicking((CHARACTERGUID)_Mime)
-AND
-ObjectGetFlag(_Mime, "Mimicry_IsMimicking", 1)
-THEN
-DB_NOOP(1);
-
-QRY
-LLMIME_Mimicking_QRY_IsMimicking((CHARACTERGUID)_Mime)
-AND
-HasActiveStatus(_Mime, "LLMIME_MIMICKING", 1)
-THEN
-DB_NOOP(1);
-
-QRY
-LLMIME_Mimicking_QRY_IsMimicking((CHARACTERGUID)_Mime)
-AND
-HasActiveStatus(_Mime, "LLMIME_MIMICKING_FOLLOWER", 1)
-THEN
-DB_NOOP(1);
-
-QRY
-LLMIME_Mimicking_QRY_IsMimicking((CHARACTERGUID)_Mime)
-AND
-HasActiveStatus(_Mime, "LLMIME_MIMICKING_ENEMY", 1)
 THEN
 DB_NOOP(1);
 //END_REGION
