@@ -1424,6 +1424,24 @@ DB_LLMIME_Mimicking_Temp_MimickedWeapon(_Mime, _Caster, _Weapon, _Action, _Actio
 THEN
 DB_NOOP(1);
 
+QRY
+LLMIME_Mimicking_QRY_HasMimickedItems((CHARACTERGUID)_Mime)
+AND
+CharacterGetEquippedItem(_Mime, "Weapon", (ITEMGUID)_Weapon)
+AND
+IsTagged(_Weapon, "LLMIME_MIMICKED_WEAPON", 1)
+THEN
+DB_NOOP(1);
+
+QRY
+LLMIME_Mimicking_QRY_HasMimickedItems((CHARACTERGUID)_Mime)
+AND
+CharacterGetEquippedItem(_Mime, "Shield", (ITEMGUID)_Weapon)
+AND
+IsTagged(_Weapon, "LLMIME_MIMICKED_WEAPON", 1)
+THEN
+DB_NOOP(1);
+
 PROC
 LLMIME_Mimicking_DeleteOneTimeUseWeapons((CHARACTERGUID)_Mime)
 AND
@@ -1550,6 +1568,8 @@ RemoveTemporaryCharacter(_Dummy);
 
 PROC
 LLMIME_Mimicking_ClearMimicDataForMime((CHARACTERGUID)_Mime)
+AND
+NOT DB_LLMIME_Mimicking_DeleteOneTimeUseWeaponsTimer(_Mime, _, _, _, _)
 AND
 LLMIME_Mimicking_QRY_HasMimickedItems(_Mime)
 THEN
