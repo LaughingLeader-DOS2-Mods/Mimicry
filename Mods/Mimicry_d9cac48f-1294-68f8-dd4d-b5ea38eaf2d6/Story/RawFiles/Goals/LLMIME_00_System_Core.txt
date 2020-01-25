@@ -647,35 +647,11 @@ ApplyStatus(_Mime, _InfoStatus, -1.0, 1, _Mime);
 //END_REGION
 
 //REGION CONDITION_QUERIES
-/*
-QRY
-LLMIME_QRY_CharacterIsADummy((CHARACTERGUID)_Character)
-AND
-IsTagged(_Character, "LLMIME_Dummy", _IsDummy)
-AND
-IsTagged(_Character, "LLMIME_Decoy", _IsDummy2)
-AND
-IsTagged(_Character, "LeaderLib_Dummy", _IsDummy3)
-AND
-IsTagged(_Character, "ANIMAL", _IsDummy4)
-AND
-IntegerSum(_IsDummy, _IsDummy2, _Total1)
-AND
-IntegerSum(_Total1, _IsDummy3, _Total2)
-AND
-IntegerSum(_Total2, _IsDummy4, _Total3)
-AND
-_Total3 > 0
-THEN
-DB_NOOP(1);
-*/
-
 QRY
 LLMIME_QRY_IsUndead((CHARACTERGUID)_Character)
 AND
 CharacterHasTalent(_Character, "Zombie", 1)
 THEN
-//DB_LLMIME_Temp_UndeadCheckResolved(_Character);
 DB_NOOP(1);
 
 /*
@@ -708,15 +684,6 @@ AND
 NOT IsTagged(_Character, "LeaderLib_Dummy", 1)
 AND
 NOT IsTagged(_Character, "ANIMAL", 1)
-THEN
-DB_NOOP(1);
-
-QRY
-LLMIME_QRY_CharacterIsAMime((CHARACTERGUID)_Character)
-AND
-IsTagged(_Character, "Mimicry_Mime", 1)
-AND
-LLMIME_QRY_NotADummy(_Character)
 THEN
 DB_NOOP(1);
 
@@ -869,6 +836,61 @@ THEN
 DB_NOOP(1);
 //END_REGION
 
+//REGION MIME_QUERIES
+QRY
+LLMIME_Mimicking_QRY_IsMimicking((CHARACTERGUID)_Mime)
+AND
+ObjectGetFlag(_Mime, "Mimicry_IsMimicking", _a)
+AND
+HasActiveStatus(_Mime, "LLMIME_MIMICKING_ENEMY", _b)
+AND
+HasActiveStatus(_Mime, "LLMIME_MIMICKING", _c)
+AND
+HasActiveStatus(_Mime, "LLMIME_MIMICKING_FOLLOWER", _d)
+AND
+//LeaderLib_Math_QRY_IsEqualToAny(1, _a, _b, _c, _d)
+IntegerSum(_a, _b, _final1)
+AND
+IntegerSum(_c, _d, _final2)
+AND
+IntegerSum(_final1, _final2, _final)
+AND
+_final > 0
+THEN
+DB_NOOP(1);
+
+QRY
+LLMIME_QRY_CharacterIsAMime((CHARACTERGUID)_Character)
+AND
+LLMIME_QRY_NotADummy(_Character)
+AND
+IsTagged(_Character, "Mimicry_Mime", _IsMime)
+AND
+LLMIME_QRY_Internal_ProcessCharacterIsAMime(_Character, _IsMime)
+THEN
+DB_NOOP(1);
+
+QRY
+LLMIME_QRY_Internal_ProcessCharacterIsAMime((CHARACTERGUID)_Character, 1)
+THEN
+DB_NOOP(1);
+
+QRY
+LLMIME_QRY_Internal_ProcessCharacterIsAMime((CHARACTERGUID)_Character, 0)
+AND
+DB_LLMIME_ActiveMimes(_Character)
+THEN
+DB_NOOP(1);
+
+QRY
+LLMIME_QRY_Internal_ProcessCharacterIsAMime((CHARACTERGUID)_Character, 0)
+AND
+NOT DB_LLMIME_ActiveMimes(_Character)
+AND
+LLMIME_Mimicking_QRY_IsMimicking(_Character)
+THEN
+DB_NOOP(1);
+//END_REGION
 EXITSECTION
 
 ENDEXITSECTION
