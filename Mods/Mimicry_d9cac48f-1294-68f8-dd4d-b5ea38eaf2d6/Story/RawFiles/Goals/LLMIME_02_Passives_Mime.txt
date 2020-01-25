@@ -91,16 +91,16 @@ DB_NOOP(1);
 
 //REGION EQUIP_EVENTS
 PROC
-LLMIME_OnMaskEquipped((CHARACTERGUID)_Mime)
-THEN
-SetStoryEvent(_Mime, "Mimicry_InitMimeJob");
-SetTag(_Mime, "Mimicry_Mime");
-
-PROC
 LLMIME_OnMaskUnEquipped((CHARACTERGUID)_Mime)
 THEN
 SetStoryEvent(_Mime, "Mimicry_RemoveMimeJob");
-ClearTag(_Mime, "Mimicry_Mime");
+LeaderLib_Tags_ClearPreservedTag(_Mime, "Mimicry_Mime");
+
+PROC
+LLMIME_OnMaskEquipped((CHARACTERGUID)_Mime)
+THEN
+SetStoryEvent(_Mime, "Mimicry_InitMimeJob");
+LeaderLib_Tags_PreserveTag(_Mime, "Mimicry_Mime");
 //END_REGION
 
 //REGION MIME_INIT
