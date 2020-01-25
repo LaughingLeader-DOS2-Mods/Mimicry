@@ -61,17 +61,23 @@ IF
 TimerFinished(_TimerName)
 AND
 DB_LLMIME_Mimicking_ResetActionPositionTimer(_TimerName, _Caster, _Action, _ActionType, _CastX, _CastRotation, _CastZ)
+THEN
+LLMIME_Mimicking_ClearActionPosition(_Caster, _Action, _ActionType, _CastX, _CastRotation, _CastZ);
+
+PROC
+LLMIME_Mimicking_ClearActionPosition((CHARACTERGUID)_Caster, (STRING)_Action, (STRING)_ActionType, (REAL)_CastX, (REAL)_CastRotation, (REAL)_CastZ)
 AND
 DB_LLMIME_Mimicking_ActionPosition(_Caster, _Action, _ActionType, _CastX, _CastRotation, _CastZ)
 THEN
 NOT DB_LLMIME_Mimicking_ActionPosition(_Caster, _Action, _ActionType, _CastX, _CastRotation, _CastZ);
 
-IF
-TimerFinished(_TimerName)
+PROC
+LLMIME_Mimicking_ClearActionPosition((CHARACTERGUID)_Caster, (STRING)_Action, (STRING)_ActionType, (REAL)_CastX, (REAL)_CastRotation, (REAL)_CastZ)
 AND
 DB_LLMIME_Mimicking_ResetActionPositionTimer(_TimerName, _Caster, _Action, _ActionType, _CastX, _CastRotation, _CastZ)
 THEN
 NOT DB_LLMIME_Mimicking_ResetActionPositionTimer(_TimerName, _Caster, _Action, _ActionType, _CastX, _CastRotation, _CastZ);
+TimerCancel(_TimerName);
 
 PROC
 LLMIME_Mimicking_MimicDone((STRING)_Action, (STRING)_ActionType)
@@ -332,6 +338,7 @@ NOT LLMIME_Mimicking_QRY_PositionActionIsQueuedForMime(_Mime, _Caster, _Action, 
 AND
 DB_LLMIME_Mimicking_ActionPosition(_Caster, _Action, _ActionType, _CastX, _CastRotation, _CastZ)
 THEN
+LeaderLog_Log("DEBUG", "[LLMIME_01_Mimicking_02_Main:QueueNextAction] Queued (",_Action,")(",_ActionType,") for mime.");
 DB_LLMIME_Mimicking_MimicQueue(_Mime, _Caster, _Action, _ActionType, _CastX, _CastRotation, _CastZ, _TargetX, _TargetY, _TargetZ, _TargetPriority, _IsTarget);
 LLMIME_Mimicking_ActionQueued(_Mime, _Caster, _Action, _ActionType);
 
