@@ -557,14 +557,8 @@ AND
 DB_LLMIME_Brawler_TotalDoubleStrikes(_Mime, _Total)
 AND
 _Total > 1
-AND
-IntegertoString(_Total, _TotalStr)
-AND
-StringConcatenate("<font color='#8A2BE2' size='24'>Double Strike x", _TotalStr, _Str1)
-AND
-StringConcatenate(_Str1, "!</font>", _StatusText)
 THEN
-CharacterStatusText(_Mime, _StatusText);
+CharacterDisplayTextWithParam(_Mime, "LLMIME_StatusText_DoubleStrikeMulti", _Total);
 NOT DB_LLMIME_Brawler_TotalDoubleStrikes(_Mime, _Total);
 
 PROC
@@ -574,7 +568,7 @@ DB_LLMIME_Brawler_TotalDoubleStrikes(_Mime, _Total)
 AND
 _Total <= 1
 THEN
-CharacterStatusText(_Mime, "LLMIME_StatusText_DoubleStrike");
+CharacterStatusText(_Mime, "LLMIME_StatusText_DoubleStrikeSingle");
 NOT DB_LLMIME_Brawler_TotalDoubleStrikes(_Mime, _Total);
 
 PROC
