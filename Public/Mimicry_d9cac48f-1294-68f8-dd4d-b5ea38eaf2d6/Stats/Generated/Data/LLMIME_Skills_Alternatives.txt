@@ -40,11 +40,6 @@ data "IgnoreSilence" "Yes"
 data "OverrideMinAP" "Yes"
 data "CycleConditions" "Enemy;!Dead"
 
-new entry "Target_LLMIME_EyeGouge-1"
-type "SkillData"
-using "Target_LLMIME_EyeGouge"
-data "Level" "-1"
-
 new entry "Shout_LLMIME_EvasiveManeuver"
 type "SkillData"
 data "SkillType" "Shout"
@@ -77,11 +72,6 @@ data "CastTextEvent" "cast"
 data "CastEffect" "RS3_FX_Skills_Air_Cast_Aoe_Divine_UncannyEvasion_Hand_01:Dummy_L_HandFX:cast;RS3_FX_Skills_Air_Cast_Aoe_Divine_UncannyEvasion_Sfx_01:Dummy_Root:sfx;RS3_FX_Skills_Air_Cast_Aoe_Divine_UncannyEvasion_Target_01:root:cast"
 data "HitEffect" ""
 data "IgnoreSilence" "Yes"
-
-new entry "Shout_LLMIME_EvasiveManeuver-1"
-type "SkillData"
-using "Shout_LLMIME_EvasiveManeuver"
-data "Level" "-1"
 
 new entry "MultiStrike_LLMIME_MimeVault"
 type "SkillData"
@@ -126,11 +116,6 @@ data "OverrideMinAP" "Yes"
 data "CycleConditions" "Enemy"
 data "IgnoreSilence" "Yes"
 
-new entry "MultiStrike_LLMIME_MimeVault-1"
-type "SkillData"
-using "MultiStrike_LLMIME_MimeVault"
-data "Level" "-1"
-
 new entry "Jump_LLMIME_HiddenApproach"
 type "SkillData"
 data "SkillType" "Jump"
@@ -163,11 +148,6 @@ data "Requirements" "!Immobile"
 data "MemorizationRequirements" ""
 data "Stealth" "Yes"
 data "IgnoreSilence" "Yes"
-
-new entry "Jump_LLMIME_HiddenApproach-1"
-type "SkillData"
-using "Jump_LLMIME_HiddenApproach"
-data "Level" "-1"
 
 new entry "Shout_LLMIME_TimelyRetreat"
 type "SkillData"
@@ -240,11 +220,6 @@ data "Magic Cost" "0"
 data "MemorizationRequirements" ""
 data "IgnoreSilence" "Yes"
 
-new entry "Target_LLMIME_SilencingStare-1"
-type "SkillData"
-using "Target_LLMIME_SilencingStare"
-data "Level" "-1"
-
 new entry "Target_LLMIME_KneeBreaker"
 type "SkillData"
 data "SkillType" "Target"
@@ -287,11 +262,6 @@ data "TargetEffect" "RS3_FX_Skills_Voodoo_KneeBreaker_TargetEffect_01:Dummy_Body
 data "CycleConditions" "Enemy;!Dead"
 data "IgnoreSilence" "Yes"
 
-new entry "Target_LLMIME_KneeBreaker-1"
-type "SkillData"
-using "Target_LLMIME_KneeBreaker"
-data "Level" "-1"
-
 new entry "Target_LLMIME_DisarmingBlow"
 type "SkillData"
 data "SkillType" "Target"
@@ -333,11 +303,6 @@ data "CastEffect" "LLMIME_FX_Skills_DisarmingBlow_Cast_Hand_01:Dummy_L_HandFX,Du
 data "TargetEffect" "RS3_FX_Skills_Voodoo_SleepingArms_HandImpact_01:Dummy_L_HandFX,Dummy_R_HandFX:cast;RS3_FX_Skills_Voodoo_SleepingArms_HandImpact_01:Dummy_BodyFX:cast"
 data "IgnoreSilence" "Yes"
 data "CycleConditions" "Enemy;!Dead"
-
-new entry "Target_LLMIME_DisarmingBlow-1"
-type "SkillData"
-using "Target_LLMIME_DisarmingBlow"
-data "Level" "-1"
 
 new entry "Target_LLMIME_SealEvil"
 type "SkillData"
@@ -385,11 +350,6 @@ data "MemorizationRequirements" "WarriorLore 2; Polymorph 1"
 data "IgnoreSilence" "Yes"
 data "CycleConditions" "Enemy;!Dead"
 
-new entry "Target_LLMIME_SealEvil-1"
-type "SkillData"
-using "Target_LLMIME_SealEvil"
-data "Level" "-1"
-
 new entry "Target_LLMIME_Fatality"
 type "SkillData"
 data "SkillType" "Target"
@@ -433,11 +393,6 @@ data "CastEffect" "RS3_FX_Skills_Void_Cast_Power Attack_Root_01;RS3_FX_Skills_Vo
 data "TargetEffect" "RS3_FX_Skills_Void_Power_Attack_Impact_01,FaceSource:Dummy_BodyFX:cast"
 data "TargetGroundEffect" "RS3_FX_Skills_Void_Power_Attack_Impact_01,FaceSource:Dummy_BodyFX:cast"
 data "CycleConditions" "Enemy;!Dead"
-
-new entry "Target_LLMIME_Fatality-1"
-type "SkillData"
-using "Target_LLMIME_Fatality"
-data "Level" "-1"
 
 new entry "Projectile_LLMIME_Fatality_SecondHit"
 type "SkillData"
