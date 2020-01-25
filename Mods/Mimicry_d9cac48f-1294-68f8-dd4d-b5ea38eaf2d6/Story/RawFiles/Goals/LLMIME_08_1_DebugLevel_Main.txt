@@ -193,7 +193,7 @@ DB_LLMIME_Debug_HostPlayer(_Player);
 //CharacterAddSkill(_Player, "Target_Debug_KillCommand");
 //CharacterAddSkill(_Player, "Target_EnemyResurrect");
 CharacterAddSkill(_Player, "Jump_LLMIME_HiddenApproach");
-CharacterAddSkill(_Player, "Shout_LLMIME_TimelyRetreat");
+//CharacterAddSkill(_Player, "Shout_LLMIME_TimelyRetreat");
 CharacterAddSkill(_Player, "Jump_LLMIME_Debug_Textkeys");
 //END_REGION
 

@@ -746,7 +746,7 @@ ProcObjectTimer(_Mime, "LLMIME_Timers_TimelyRetreat_TeleportIn", 550);
 PROC
 ProcObjectTimerFinished((CHARACTERGUID)_Mime, "LLMIME_Timers_TimelyRetreat_TeleportIn")
 THEN
-CharacterPurgeQueue(_Mime);
+LeaderLib_Helper_ClearActionQueue(_Mime);
 PlayAnimation(_Mime, "skill_cast_self_teleport_in_01_cast");
 
 IF

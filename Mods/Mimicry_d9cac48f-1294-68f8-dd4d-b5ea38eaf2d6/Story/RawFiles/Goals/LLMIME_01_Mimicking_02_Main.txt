@@ -1080,9 +1080,10 @@ THEN
 NOT DB_LLMIME_Mimicking_DeleteOneTimeUseWeaponsTimer(_Mime, _Caster, _Action, _ActionType, _TimerName);
 TimerCancel(_TimerName);
 
-// [BEGIN_NO_OSITOOLS]
 PROC
 LLMIME_Mimicking_EquipWeaponsForAction((CHARACTERGUID)_Mime, (CHARACTERGUID)_Caster, (GUIDSTRING)_Target, (STRING)_Action, (STRING)_ActionType)
+AND
+NOT LeaderLib_QRY_ExtenderIsActive()
 AND
 _ActionType != "Item"
 AND
@@ -1101,7 +1102,6 @@ SetFaction(_Dummy, "Good NPC");
 SetTag(_Dummy, "LeaderLib_Dummy");
 DB_LLMIME_Mimicking_Temp_WaitForEquipped(_Mime, _Dummy, _Caster, _Target, _Action, _ActionType);
 LeaderLib_Timers_StartCharacterCharacterTimer(_Mime, _Dummy, 200, "LLMIME_Timers_IterateDummyEquipment", "LLMIME_WeaponMimicking_IterateDummyInventory");
-// [END_NO_OSITOOLS]
 
 IF
 CharacterCharacterEvent(_Mime, _Dummy, "LLMIME_WeaponMimicking_IterateDummyInventory")
