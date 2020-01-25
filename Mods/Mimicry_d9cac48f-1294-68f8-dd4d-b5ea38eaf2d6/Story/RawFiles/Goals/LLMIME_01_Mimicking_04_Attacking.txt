@@ -58,9 +58,7 @@ LLMIME_Mimicking_StartNextMimic(_Caster, _Action, "Attack", 1000);
 QRY
 LLMIME_Mimicking_QRY_HasEquippedWeaponType((CHARACTERGUID)_Mime, (STRING)_Type)
 AND
-LLMIME_Mimicking_QRY_Debug_EquippedWeaponType(_Mime, _Type)
-AND
-CharacterGetEquippedItem(_Mime, "Weapon", _Weapon)
+CharacterGetEquippedItem(_Mime, "Weapon", (ITEMGUID)_Weapon)
 AND
 LLMIME_Mimicking_QRY_Internal_WeaponStringMatch(_Weapon, _Type)
 THEN
@@ -69,7 +67,7 @@ DB_NOOP(1);
 QRY
 LLMIME_Mimicking_QRY_HasEquippedWeaponType((CHARACTERGUID)_Mime, (STRING)_Type)
 AND
-CharacterGetEquippedItem(_Mime, "Shield", _Weapon)
+CharacterGetEquippedItem(_Mime, "Shield", (ITEMGUID)_Weapon)
 AND
 LLMIME_Mimicking_QRY_Internal_WeaponStringMatch(_Weapon, _Type)
 THEN
@@ -93,8 +91,9 @@ IsTagged(_Weapon, _Tag, 1)
 THEN
 DB_NOOP(1);
 
+// [BEGIN_NO_OSITOOLS]
 QRY
-LLMIME_Mimicking_QRY_Internal_WeaponStringMatch((GUIDSTRING)_Weapon, (STRING)_Type)
+LLMIME_Mimicking_QRY_Internal_WeaponStringMatch((ITEMGUID)_Weapon, (STRING)_Type)
 AND
 GetStatString(_Weapon, _Stat)
 AND
@@ -103,18 +102,30 @@ THEN
 DB_NOOP(1);
 
 QRY
-LLMIME_Mimicking_QRY_Internal_WeaponStringMatch((GUIDSTRING)_Weapon, (STRING)_Type)
+LLMIME_Mimicking_QRY_Internal_WeaponStringMatch((ITEMGUID)_Weapon, (STRING)_Type)
 AND
 GetTemplate(_Weapon, _Template)
 AND
 StringContains(_Template, _Type, 1)
 THEN
 DB_NOOP(1);
+// [END_NO_OSITOOLS]
+
+/* [OSITOOLS_ONLY]
+QRY
+LLMIME_Mimicking_QRY_Internal_WeaponStringMatch((ITEMGUID)_Weapon, (STRING)_Type)
+AND
+NRD_ItemGetStatsId(_Weapon, _Stat)
+AND
+NRD_StatGetString(_Stat, "WeaponType", _Type)
+THEN
+DB_NOOP(1);
+*/
 
 QRY
 LLMIME_Mimicking_QRY_HasOffhandWand((CHARACTERGUID)_Mime)
 AND
-CharacterGetEquippedItem(_Mime, "Shield", _Weapon)
+CharacterGetEquippedItem(_Mime, "Shield", (ITEMGUID)_Weapon)
 AND
 LLMIME_Mimicking_QRY_Internal_WeaponStringMatch(_Weapon, "Wand")
 THEN
@@ -135,7 +146,7 @@ LeaderLog_Log("DEBUG", "[LLMIME:HasEquippedWeaponType] Equipped weapon [",_ID,"]
 QRY
 LLMIME_Mimicking_QRY_Debug_EquippedWeaponType((CHARACTERGUID)_Mime, (STRING)_Type)
 AND
-CharacterGetEquippedItem(_Mime, "Weapon", _Weapon)
+CharacterGetEquippedItem(_Mime, "Weapon", (ITEMGUID)_Weapon)
 AND
 LLMIME_Mimicking_QRY_Internal_WeaponStringMatch(_Weapon, _Type)
 AND
@@ -245,6 +256,7 @@ NOT DB_LLMIME_Mimicking_Temp_JustAttacked(_Mime, _)
 THEN
 NOT DB_Mimicry_Mimicking_UseModAttackSkill(_Mime, _Caster, _Target, _Action, _Skill);
 DB_LLMIME_Mimicking_Temp_JustAttacked(_Mime, _Skill);
+LeaderLib_Helper_ClearActionQueue(_Mime);
 CharacterUseSkill(_Mime, _Skill, _Target, 1, 1, 1);
 LLMIME_Mimicking_Attack_StartSuccessTimer(_Mime, _Caster, _Target, _Action, _Skill);
 
@@ -262,6 +274,7 @@ NOT DB_LLMIME_Mimicking_Temp_JustAttacked(_Mime, _)
 AND
 LLMIME_Mimicking_QRY_HasEquippedWeaponType(_Mime, "Crossbow")
 THEN
+LeaderLib_Helper_ClearActionQueue(_Mime);
 CharacterUseSkill(_Mime, "Projectile_LLMIME_MimicCrossbowAttack", _Target, 1, 1, 1);
 LLMIME_Mimicking_Attack_StartSuccessTimer(_Mime, _Caster, _Target, _Action, "Projectile_LLMIME_MimicCrossbowAttack");
 DB_LLMIME_Mimicking_Temp_JustAttacked(_Mime, "Projectile_LLMIME_MimicCrossbowAttack");
@@ -273,6 +286,7 @@ NOT DB_LLMIME_Mimicking_Temp_JustAttacked(_Mime, _)
 AND
 LLMIME_Mimicking_QRY_HasEquippedWeaponType(_Mime, "Bow")
 THEN
+LeaderLib_Helper_ClearActionQueue(_Mime);
 CharacterUseSkill(_Mime, "Projectile_LLMIME_MimicBowAttack", _Target, 1, 1, 1);
 LLMIME_Mimicking_Attack_StartSuccessTimer(_Mime, _Caster, _Target, _Action, "Projectile_LLMIME_MimicBowAttack");
 DB_LLMIME_Mimicking_Temp_JustAttacked(_Mime, "Projectile_LLMIME_MimicBowAttack");
@@ -286,6 +300,7 @@ LLMIME_Mimicking_QRY_HasEquippedWeaponType(_Mime, "Wand")
 AND
 LLMIME_Mimicking_QRY_HasOffhandWand(_Mime)
 THEN
+LeaderLib_Helper_ClearActionQueue(_Mime);
 CharacterUseSkill(_Mime, "Projectile_LLMIME_MimicDualWandAttack", _Target, 1, 1, 1);
 LLMIME_Mimicking_Attack_StartSuccessTimer(_Mime, _Caster, _Target, _Action, "Projectile_LLMIME_MimicDualWandAttack");
 DB_LLMIME_Mimicking_Temp_JustAttacked(_Mime, "Projectile_LLMIME_MimicDualWandAttack");
@@ -299,6 +314,7 @@ LLMIME_Mimicking_QRY_HasEquippedWeaponType(_Mime, "Wand")
 AND
 NOT LLMIME_Mimicking_QRY_HasOffhandWand(_Mime)
 THEN
+LeaderLib_Helper_ClearActionQueue(_Mime);
 CharacterUseSkill(_Mime, "Projectile_LLMIME_MimicWandAttack", _Target, 1, 1, 1);
 LLMIME_Mimicking_Attack_StartSuccessTimer(_Mime, _Caster, _Target, _Action, "Projectile_LLMIME_MimicWandAttack");
 DB_LLMIME_Mimicking_Temp_JustAttacked(_Mime, "Projectile_LLMIME_MimicWandAttack");
@@ -308,6 +324,7 @@ LLMIME_Mimicking_Attack_UseAttackSkill((CHARACTERGUID)_Mime, (CHARACTERGUID)_Cas
 AND
 NOT DB_LLMIME_Mimicking_Temp_JustAttacked(_Mime, _)
 THEN
+LeaderLib_Helper_ClearActionQueue(_Mime);
 CharacterUseSkill(_Mime, "Target_LLMIME_MimicAttack", _Target, 1, 1, 1);
 LLMIME_Mimicking_Attack_StartSuccessTimer(_Mime, _Caster, _Target, _Action, "Target_LLMIME_MimicAttack");
 DB_LLMIME_Mimicking_Temp_JustAttacked(_Mime, "Target_LLMIME_MimicAttack");
