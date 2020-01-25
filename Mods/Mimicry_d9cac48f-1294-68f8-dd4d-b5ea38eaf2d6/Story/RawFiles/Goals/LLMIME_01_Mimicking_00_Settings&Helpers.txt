@@ -149,6 +149,25 @@ DB_LLMIME_Mimicking_HarmfulHealingSkills("Target_Restoration");
 DB_LLMIME_Mimicking_Blacklist_Skills("Umbra", "Shout_SHADEShadowstep");
 //END_REGION
 
+//REGION EXTENDER_BLACKLIST
+PROC
+LLMIME_Mimicking_InitSettings()
+AND
+LeaderLib_QRY_ExtenderIsActive()
+THEN
+NOT DB_LLMIME_Mimicking_Blacklist_SkillElements("shout", "");
+
+IF
+GlobalFlagSet("LeaderLib_ExtenderIsActive")
+THEN
+NOT DB_LLMIME_Mimicking_Blacklist_SkillElements("shout", "");
+
+IF
+GlobalFlagCleared("LeaderLib_ExtenderIsActive")
+THEN
+NOT DB_LLMIME_Mimicking_Blacklist_SkillElements("shout", "");
+//END_REGION
+
 //REGION UPDATING
 /* 
 PROC
@@ -282,6 +301,7 @@ DB_LLMIME_Mimicking_Whitelist_Skills(_Group, _Skill)
 THEN
 DB_NOOP(1);
 
+// [BEGIN_NO_OSITOOLS]
 QRY
 LLMIME_Mimicking_QRY_SkillIsAllowed((STRING)_Skill, (STRING)_SkillType, (STRING)_SkillElement)
 AND
@@ -296,6 +316,47 @@ AND
 NOT LLMIME_Mimicking_QRY_Internal_SkillNameMatchesBlocked(_Skill)
 THEN
 DB_NOOP(1);
+// [END_NO_OSITOOLS]
+
+/* [OSITOOLS_ONLY]
+//If a skill is 0 AP 0 CD and special/shout, assume it's a toggle skill
+QRY
+LLMIME_Mimicking_QRY_SpecialShoutIsAllowed((STRING)_Skill, "shout", "")
+AND
+NRD_StatGetInt(_Skill, "Cooldown", _CD)
+AND
+_CD > 0
+AND
+NRD_StatGetInt(_Skill, "ActionPoints", _AP)
+AND
+_AP > 0
+THEN
+DB_NOOP(1);
+
+QRY
+LLMIME_Mimicking_QRY_SpecialShoutIsAllowed((STRING)_Skill, (STRING)_SkillType, (STRING)_SkillElement)
+AND
+_SkillType != "shout"
+THEN
+DB_NOOP(1);
+
+QRY
+LLMIME_Mimicking_QRY_SkillIsAllowed((STRING)_Skill, (STRING)_SkillType, (STRING)_SkillElement)
+AND
+NOT DB_LLMIME_Mimicking_Whitelist_Skills(_, _Skill)
+AND
+NOT DB_LLMIME_Mimicking_Blacklist_Skills(_, _Skill)
+AND
+NOT DB_LLMIME_Mimicking_Blacklist_SkillElements(_SkillType, _SkillElement)
+AND
+LLMIME_Mimicking_QRY_SpecialShoutIsAllowed(_Skill, _SkillType, _SkillElement)
+AND
+LLMIME_Mimicking_QRY_Internal_BlockedSkillTypeIsEnabled(_SkillType)
+AND
+NOT LLMIME_Mimicking_QRY_Internal_SkillNameMatchesBlocked(_Skill)
+THEN
+DB_NOOP(1);
+*/
 //END_REGION
 
 //REGION WEAPON_SKILLTYPE
