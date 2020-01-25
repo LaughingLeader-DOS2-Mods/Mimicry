@@ -32,6 +32,9 @@ LLMIME_Mimicking_OnSkillUsedAtPosition(_Caster, _TargetX, _TargetY, _TargetZ, _S
 IF
 SkillCast(_Caster, _Skill, _SkillType, _SkillElement)
 AND
+ // Prevents skill spam from mimes using skills if an action position is saved
+LLMIME_Mimicking_QRY_CharacterIsMimickable(_Caster)
+AND
 LLMIME_Mimicking_QRY_ActionIsSaved(_Caster, _Skill, "Skill")
 THEN
 LLMIME_Mimicking_Skills_OnSkillCast(_Caster, _Skill);
