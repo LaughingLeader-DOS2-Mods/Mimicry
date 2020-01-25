@@ -5,7 +5,8 @@ LLMIME_StatusText_MusicBoxUsed	<font color='#EE82EE'>*As you turn the key, the m
 LLMIME_StatusText_MusicBoxBlocked	<font color='#FF0000'>*The music box key refuses to twist.*</font>
 LLMIME_StatusText_MusicBoxBlockedInCombat	<font color='#FFFFFF'>*It seems unwise to play with a music box while in combat...*</font>
 LLMIME_StatusText_MimeAmuletShatters	<font color='#FFC0CB'>*The mime's amulet shatters!*</font>
-LLMIME_StatusText_DoubleStrike	<font color='#8A2BE2' size='24'>Double Strike!</font>
+LLMIME_StatusText_DoubleStrikeSingle	<font color='#8A2BE2' size='24'>Double Strike!</font>
+LLMIME_StatusText_DoubleStrikeMulti	<font color='#8A2BE2' size='24'>Double Strike x[1]!</font>
 LLMIME_StatusText_MusicBoxShatters	<font color='#FF0000'>*The music box shatters to pieces!*</font>
 LLMIME_StatusText_WishFailed	<font color='#FF0000'>Wish Failed - Health too low!</font>
 LLMIME_StatusText_MimickingEnded	<font color='#FF7F50'>Mimicking Ended</font>
@@ -25,4 +26,4 @@ LLMIME_StatusText_UnarmedBonusDamage	<font color='#DC143C' size='20'>Unarmed Com
 LLMIME_StatusText_NewSkillbooksAvailable	<font color='#FF69B4' size='20'>*You feel the mask grow stronger. New power awaits...*</font>
 LLMIME_StatusText_FacingDirectionSaved	<font color='#FF7F50'>Facing Direction Saved</font>
 LLMIME_StatusText_FatalityCooldownReset	<font color='#a22aff'>Deathblow</font> <font color='#2effd0'>Refreshed</font>
-LLMIME_StatusText_FatalityCooldownReset	<font color='#8A2BE2' size='24'>Double Strike x[1]</font>
+LLMIME_StatusText_Wish	<font color='#73f6ff' size='20'>Wish</font>

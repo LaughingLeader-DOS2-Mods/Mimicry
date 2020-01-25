@@ -120,7 +120,7 @@ THEN
 		DisplayCombatInfoText(_Caster, _DisplayMessage, 0)
 		DisplayText(_Caster, "", 0)*/
 	ENDIF
-	StatusText(_Target, "<font color='#73f6ff' size='20'>Wish</font>")
+	StatusText(_Target, "LLMIME_StatusText_Wish")
 	//CharacterPlayEffect(_Target, "LLMIME_FX_Skills_Wish_Cast_Target_Root_01", "Dummy_Root")
 	
 ENDIF
