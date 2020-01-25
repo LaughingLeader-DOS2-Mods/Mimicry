@@ -1080,6 +1080,7 @@ THEN
 NOT DB_LLMIME_Mimicking_DeleteOneTimeUseWeaponsTimer(_Mime, _Caster, _Action, _ActionType, _TimerName);
 TimerCancel(_TimerName);
 
+// [BEGIN_NO_OSITOOLS]
 PROC
 LLMIME_Mimicking_EquipWeaponsForAction((CHARACTERGUID)_Mime, (CHARACTERGUID)_Caster, (GUIDSTRING)_Target, (STRING)_Action, (STRING)_ActionType)
 AND
@@ -1100,6 +1101,7 @@ SetFaction(_Dummy, "Good NPC");
 SetTag(_Dummy, "LeaderLib_Dummy");
 DB_LLMIME_Mimicking_Temp_WaitForEquipped(_Mime, _Dummy, _Caster, _Target, _Action, _ActionType);
 LeaderLib_Timers_StartCharacterCharacterTimer(_Mime, _Dummy, 200, "LLMIME_Timers_IterateDummyEquipment", "LLMIME_WeaponMimicking_IterateDummyInventory");
+// [END_NO_OSITOOLS]
 
 IF
 CharacterCharacterEvent(_Mime, _Dummy, "LLMIME_WeaponMimicking_IterateDummyInventory")
@@ -1246,6 +1248,60 @@ LLMIME_Mimicking_MarkItemForOneTimeUse(_Mime, _Weapon, _Action, _ActionType);
 SetTag(_Weapon, "LLMIME_MIMICKED_WEAPON");
 ItemLevelUpTo(_Weapon, _Level);
 CharacterEquipItem(_Mime, _Weapon);
+*/
+//END_REGION
+
+//REGION DUPLICATE_WEAPON_SCRIPT_EXTENDER
+/* [OSITOOLS_ONLY]
+PROC
+LLMIME_Mimicking_EquipWeaponsForAction((CHARACTERGUID)_Mime, (CHARACTERGUID)_Caster, (GUIDSTRING)_Target, (STRING)_Action, (STRING)_ActionType)
+AND
+_ActionType != "Item"
+AND
+CharacterGetEquippedItem(_Caster, "Weapon", (ITEMGUID)_Weapon)
+AND
+_Weapon != NULL_00000000-0000-0000-0000-000000000000
+THEN
+LeaderLog_Log("DEBUG", "[LLMIME_01_Mimicking_02_Main:EquipWeaponsForAction] Duplicating caster's mainhand via [NRD_ItemCloneBegin].");
+Mimicry_BlockMimickedWeapon(_Weapon);
+LLMIME_Mimicking_Internal_StartDuplication(_Mime, _Weapon, _Caster, _Action, _ActionType);
+LLMIME_Mimicking_Internal_CompleteDuplication(_Mime, _Weapon, _Caster, _Action, _ActionType);
+//NRD_LuaCall("LeaderLib_Ext_CloneItemForCharacter", _MimeStr, _WeaponStr, "LLMIME_Mimicking_WeaponDuplicated", "No");
+
+PROC
+LLMIME_Mimicking_EquipWeaponsForAction((CHARACTERGUID)_Mime, (CHARACTERGUID)_Caster, (GUIDSTRING)_Target, (STRING)_Action, (STRING)_ActionType)
+AND
+_ActionType != "Item"
+AND
+CharacterGetEquippedItem(_Caster, "Shield", (ITEMGUID)_Weapon)
+AND
+_Weapon != NULL_00000000-0000-0000-0000-000000000000
+THEN
+LeaderLog_Log("DEBUG", "[LLMIME_01_Mimicking_02_Main:EquipWeaponsForAction] Duplicating caster's offhand via [NRD_ItemCloneBegin].");
+Mimicry_BlockMimickedWeapon(_Weapon);
+LLMIME_Mimicking_Internal_StartDuplication(_Mime, _Weapon, _Caster, _Action, _ActionType);
+LLMIME_Mimicking_Internal_CompleteDuplication(_Mime, _Weapon, _Caster, _Action, _ActionType);
+
+PROC
+LLMIME_Mimicking_Internal_StartDuplication((CHARACTERGUID)_Mime, (ITEMGUID)_Weapon, (CHARACTERGUID)_Caster, (STRING)_Action, (STRING)_ActionType)
+AND
+NOT LeaderLib_Helper_QRY_IgnoreItem(_Weapon)
+AND
+NOT DB_Mimicry_BlockWeaponMimicking(_Weapon)
+THEN
+NRD_ItemCloneBegin(_Weapon);
+
+PROC
+LLMIME_Mimicking_Internal_CompleteDuplication((CHARACTERGUID)_Mime, (ITEMGUID)_Weapon, (CHARACTERGUID)_Caster, (STRING)_Action, (STRING)_ActionType)
+AND
+NRD_ItemClone(_Clone)
+THEN
+SetTag(_Clone, "LLMIME_MIMICKED_WEAPON");
+ItemSetOriginalOwner(_Clone, _Mime);
+CharacterEquipItem(_Mime, _Clone);
+ItemSetCanInteract(_Clone, 0);
+ItemSetOnlyOwnerCanUse(_Clone, 1);
+DB_LLMIME_Mimicking_Temp_MimickedWeapon(_Mime, _Caster, _Clone, _Action, _ActionType);
 */
 //END_REGION
 
