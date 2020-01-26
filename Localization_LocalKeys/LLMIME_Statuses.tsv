@@ -18,7 +18,8 @@ LLMIME_BROKEN_KNEE_Description	Character takes piercing damage when moving, and 
 LLMIME_BROKEN_KNEE_DisplayName	Broken Knee
 LLMIME_CONCENTRATION_INFO_Description	Character is highly focused, ensuring attacks will never miss.<br><font color='#00FF7F'>+[1]% accuracy while unarmed</font>
 LLMIME_CONCENTRATION_INFO_DisplayName	Concentration
-LLMIME_COUNTER_THROW_Description	Character is counter-attacking enemies when dodging.<br><font color='#FFD700'>Weapon Expansion</font><br><font color='#00FA9A'>When dodging an enemy, you have a 60% chance to counter-attack with a rock.</font>
+LLMIME_COUNTER_THROW_Description	Character is counter-attacking enemies when dodging.
+LLMIME_COUNTER_THROW_WeaponExpansion_Description	Character is counter-attacking enemies when dodging.<br><font color='#FFD700'>Weapon Expansion</font><br><font color='#00FA9A'>When dodging an enemy, you have a 60% chance to counter-attack with a rock.</font>
 LLMIME_COUNTER_THROW_DisplayName	Counter Throw
 LLMIME_DECOY_ACTIVE_Description	Character is invisible while their decoy is active. Removed by casting skills, attacking, water, or taking damage.
 LLMIME_DECOY_ACTIVE_DisplayName	Invisible (Decoy)

@@ -28,6 +28,18 @@ local skill_overrides = {
 	},
 }
 
+local weaponex_additions = {
+	Shout_LLMIME_EvasiveManeuver = {
+		Description = "Shout_LLMIME_EvasiveManeuver_WeaponExpansion_Description"
+	},
+	Target_LLMIME_DisarmingBlow = {
+		Description = "Target_LLMIME_DisarmingBlow_WeaponExpansion_Description"
+	},
+	LLMIME_COUNTER_THROW = {
+		Description = "LLMIME_COUNTER_THROW_WeaponExpansion_Description"
+	},
+}
+
 local function apply_overrides(stats)
     for statname,overrides in pairs(stats) do
 		for property,value in pairs(overrides) do
@@ -39,8 +51,13 @@ local function apply_overrides(stats)
 end
 
 local ModuleLoad = function ()
-	Ext.Print("[Mimicry:LLMIME_StatOverrides.lua] Module is loading. Applying stat overrides for IgnoreSilence.")
+	Ext.Print("[Mimicry:LLMIME_StatOverrides.lua] Module is loading. Applying stat overrides.")
 	apply_overrides(skill_overrides)
+
+	--WeaponExpansion_c60718c3-ba22-4702-9c5d-5ad92b41ba5f
+	if Ext.IsModLoaded("c60718c3-ba22-4702-9c5d-5ad92b41ba5f") then
+		apply_overrides(weaponex_additions)
+	end
 end
 
 --v36 and higher
