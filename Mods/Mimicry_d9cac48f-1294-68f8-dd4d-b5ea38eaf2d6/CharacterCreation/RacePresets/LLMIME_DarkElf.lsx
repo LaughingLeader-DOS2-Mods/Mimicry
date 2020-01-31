@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<save>
+    <header version="2" time="1387205254" />
+    <version major="1" minor="3" revision="0" build="0" />
+    <region id="CharacterCreationManager">
+        <node id="root">
+            <children>
+                <node id="RaceDesc">
+                    <attribute id="RaceDisplayName" value="Dark Elf" handle="hca5fae3ag9f65g4296gbf30ge906093d9023" type="28" />
+                    <attribute id="RaceName" value="LLMIME_DarkElf" type="22" />
+                    <attribute id="RaceDescription" value="A rare subset of elves imbued with dark energy. How they come to be is not known, yet the few who are aware of their presence surmise that the Dark Elves are a result of the influence of an alien being, or perhaps the Void itself." handle="h6772c1b6ge08fg4af0ga3f9gdeb6d9b17574" type="28" />
+                    <attribute id="SkillSet" value="Race_LLMIME_DarkElf" type="22" />
+                    <attribute id="FemaleDefaultHairColor" value="1" type="5" />
+                    <attribute id="FemaleDefaultSkinColor" value="1" type="5" />
+                    <attribute id="MaleDefaultHairColor" value="1" type="5" />
+                    <attribute id="MaleDefaultSkinColor" value="1" type="5" />
+                    <attribute id="AllowBald" value="1" type="19" />
+                    
+                    <children>
+                        <node id="SupportedGenders">
+                            <children>
+                                <node id="Gender">
+                                    <attribute id="Gender" value="Male" type="23" />
+                                </node>
+                            </children>
+                        </node>
+                        <node id="TagsAdded">
+                            <children>
+                                <node id="TagAdded">
+                                    <attribute id="Tag" value="UNDEAD" type="22" />
+                                </node>
+                                <node id="TagAdded">
+                                    <attribute id="Tag" value="ELF" type="22" />
+                                </node>
+                                <node id="TagAdded">
+                                    <attribute id="Tag" value="UNDEAD_ELF" type="22" />
+                                </node>
+                                <node id="TagAdded">
+                                    <attribute id="Tag" value="LLMIME_DARK_ELF" type="22" />
+                                </node>
+                            </children>
+                        </node>
+                        <node id="TalentsAdded">
+                            <children>
+                                <node id="TalentAdded">
+                                    <attribute id="Talent" value="Dwarf_Sturdy" type="23" />
+                                </node>
+                                <node id="TalentAdded">
+                                    <attribute id="Talent" value="Lizard_Resistance" type="23" />
+                                </node>
+                            </children>
+                        </node>
+                        <node id="MaleDefaultPlayerNames">
+                            <children>
+                                <node id="MaleDefaultPlayerNames">
+                                    <attribute id="Object" value="The Mime" handle="h610474f0gd7f5g49a4g9eabgf5fe6c0dcd4a" type="28" />
+                                </node>
+                            </children>
+                        </node>
+                        <node id="MaleIcons">
+                            <children>
+                                <node id="MaleIcons">
+                                    <attribute id="Object" value="PlayerPortrait_Elf_Male_B" type="22" />
+                                </node>
+                            </children>
+                        </node>
+                        <node id="MaleRootTemplateIDs">
+                            <children>
+                                <node id="MaleRootTemplateIDs">
+                                    <attribute id="Object" value="9eeaaafd-c47d-4650-9200-b00430d61e83" type="22" />
+                                </node>
+                            </children>
+                        </node>
+                        <node id="HenchManMaleIcons">
+                            <children>
+                                <node id="HenchManMaleIcons">
+                                    <attribute id="Object" value="Portrait_PL_M_Face_A_White_Hair_A_Black" type="22" />
+                                </node>
+                                <node id="HenchManMaleIcons">
+                                    <attribute id="Object" value="Portrait_PL_M_Face_A_White_Hair_B_Black" type="22" />
+                                </node>
+                                <node id="HenchManMaleIcons">
+                                    <attribute id="Object" value="Portrait_PL_M_Face_A_White_Hair_C_Black" type="22" />
+                                </node>
+                                <node id="HenchManMaleIcons">
+                                    <attribute id="Object" value="Portrait_PL_M_Face_A_White_Hair_D_Black" type="22" />
+                                </node>
+                                <node id="HenchManMaleIcons">
+                                    <attribute id="Object" value="Portrait_PL_M_Face_A_White_Hair_E_Black" type="22" />
+                                </node>
+                                <node id="HenchManMaleIcons">
+                                    <attribute id="Object" value="Portrait_PL_M_Face_A_White_Hair_F_Black" type="22" />
+                                </node>
+                                <node id="HenchManMaleIcons">
+                                    <attribute id="Object" value="Portrait_PL_M_Face_A_White_Hair_G_Black" type="22" />
+                                </node>
+                                <node id="HenchManMaleIcons">
+                                    <attribute id="Object" value="Portrait_PL_M_Face_B_White_Hair_B_Blond" type="22" />
+                                </node>
+                                <node id="HenchManMaleIcons">
+                                    <attribute id="Object" value="Portrait_PL_M_Face_B_White_Hair_D_Blond" type="22" />
+                                </node>
+                                <node id="HenchManMaleIcons">
+                                    <attribute id="Object" value="Portrait_PL_M_Face_E_Brown_Hair_C_Black" type="22" />
+                                </node>
+                                <node id="HenchManMaleIcons">
+                                    <attribute id="Object" value="Portrait_PL_M_Face_E_White_Hair_G_Blond" type="22" />
+                                </node>
+                                <node id="HenchManMaleIcons">
+                                    <attribute id="Object" value="Portrait_PL_M_Face_G_Black_Hair_B_Black" type="22" />
+                                </node>
+                                <node id="HenchManMaleIcons">
+                                    <attribute id="Object" value="Portrait_PL_M_Face_K_Brown_Hair_P" type="22" />
+                                </node>
+                                <node id="HenchManMaleIcons">
+                                    <attribute id="Object" value="Portrait_PL_M_Face_M_White_Hair_F_Blond" type="22" />
+                                </node>
+                                <node id="HenchManMaleIcons">
+                                    <attribute id="Object" value="Portrait_PL_M_Face_M_White_Hair_M_Blond" type="22" />
+                                </node>
+                                <node id="HenchManMaleIcons">
+                                    <attribute id="Object" value="Portrait_PL_M_Face_O_Black_Hair_G_Black" type="22" />
+                                </node>
+                                <node id="HenchManMaleIcons">
+                                    <attribute id="Object" value="Portrait_PL_M_Face_P_White_Hair_A_Blond" type="22" />
+                                </node>
+                                <node id="HenchManMaleIcons">
+                                    <attribute id="Object" value="Portrait_PL_M_Face_P_White_Hair_C_Blond" type="22" />
+                                </node>
+                                <node id="HenchManMaleIcons">
+                                    <attribute id="Object" value="Portrait_PL_M_Face_P_White_Hair_E_Blond" type="22" />
+                                </node>
+                                <node id="HenchManMaleIcons">
+                                    <attribute id="Object" value="Portrait_PL_M_Face_P_White_Hair_J_Blond" type="22" />
+                                </node>										
+                            </children>
+                        </node>
+                        <node id="HenchManMaleRootTemplateIDs">
+                            <children>
+                                <node id="HenchManMaleRootTemplateIDs">
+                                    <attribute id="Object" value="23f3af72-437c-4aff-91ca-914ef6e6ebb7" type="22" />
+                                </node>
+                            </children>
+                        </node>
+                        <node id="ClothColors">
+                            <children>
+                                <node id="ColorDesc">
+                                    <attribute id="ID" value="0" type="5" />
+                                    <attribute id="ColorName" value="Saddle Brown" handle="h186039efgdaa3g49afgb27dg44ea7248f24a" type="28" />
+                                    <attribute id="Value" value="4287317267" type="5" />
+                                </node>
+                            </children>
+                        </node>
+                        <node id="HairColors">
+                            <children>
+                                <node id="ColorDesc">
+                                    <attribute id="ID" value="0" type="5" />
+                                    <attribute id="ColorName" value="Ice bear" handle="hf86c8116g4b92g4f17g998cgf4c796ee9323" type="28" />
+                                    <attribute id="Value" value="0xffecdec7" type="5" />
+                                </node>				
+                            </children>
+                        </node>
+                        <node id="SkinColors">
+                            <children>
+                                <node id="ColorDesc">
+                                    <attribute id="ID" value="0" type="5" />
+                                    <attribute id="ColorName" value="Snow" handle="h2cce5e50g5c08g4658gb308g6faf783866c0" type="28" />
+                                    <attribute id="Value" value="0xffd2d2d2" type="5" />
+                                </node>					
+                            </children>
+                        </node>
+                    </children>
+                </node>
+            </children>
+        </node>
+    </region>
+</save>
