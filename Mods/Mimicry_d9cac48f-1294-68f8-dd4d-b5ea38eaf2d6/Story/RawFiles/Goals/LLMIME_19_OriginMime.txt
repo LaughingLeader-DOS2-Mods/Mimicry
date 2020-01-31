@@ -34,6 +34,13 @@ DB_Origins((CHARACTERGUID)S_Player_LLMIME_Mime_191f180c-6270-4cd1-a44a-e02454bd8
 QRY
 LLMIME_Origin_QRY_IsOriginMime((GUIDSTRING)_Character)
 AND
+IsTagged(_Character, "Mimicry_MimeOrigin", 1)
+THEN
+DB_NOOP(1);
+
+QRY
+LLMIME_Origin_QRY_IsOriginMime((GUIDSTRING)_Character)
+AND
 _Character == S_Player_LLMIME_Mime_191f180c-6270-4cd1-a44a-e02454bd846f
 THEN
 DB_NOOP(1);
