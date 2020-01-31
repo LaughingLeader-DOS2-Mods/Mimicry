@@ -5,7 +5,12 @@ LLMIME_Internal_RegisterOnce();
 LLMIME_Internal_CompleteIfStarted(); // Existing saves
 
 KBSECTION
+PROC
+LLMIME_Internal_RegisterOnce()
+THEN
+DB_NOOP(1);
 
+/*
 PROC
 LLMIME_Internal_RegisterOnce()
 AND
@@ -27,8 +32,8 @@ DB_OriginIntroductions("LLMIME_Mime", "Insane_01_Loop", "Undead_Presentation_Mus
 
 //DB_Origins((CHARACTERGUID)S_Player_LLMIME_MimeF_45299363-87bb-4e78-ad0d-787dacc2659b);
 DB_Origins_OriginTag((CHARACTERGUID)S_Player_LLMIME_MimeF_45299363-87bb-4e78-ad0d-787dacc2659b,"GENERIC");
-
 LLMIME_CC_InitSettings();
+*/
 
 PROC
 LLMIME_Internal_Start()
