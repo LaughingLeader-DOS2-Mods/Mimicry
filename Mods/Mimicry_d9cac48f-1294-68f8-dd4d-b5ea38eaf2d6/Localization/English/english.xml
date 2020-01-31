@@ -186,17 +186,24 @@
 	<content contentuid="hd163af0fg9e15g4ce6g9bdfg1fb10ff01612" Source="LLMIME_Potions.lsb" Key="Stats_LLMIME_MimickingDebuff3">Mimicking</content>
 	<content contentuid="hd5847679gda4eg4defga142gde39b07443d4" Source="LLMIME_Potions.lsb" Key="Stats_LLMIME_MimicWeaponRequirements">Mimicking</content>
 	<content contentuid="h963880b9g68c9g44f2g98c8g54a6fb6103df" Source="LLMIME_Potions.lsb" Key="Stats_LLMIME_Sealed">Sealed</content>
+	<content contentuid="h0088a120g006dg4135g8542gd4ffa4f847f3" Source="LLMIME_Potions.lsb" Key="Stats_LLMIME_ShadowForm">Shadow Form</content>
+	<content contentuid="h5af644e1gff57g47abgb45bg852a46f95b77" Source="LLMIME_Potions.lsb" Key="Stats_LLMIME_ShadowForm_DamageResistance">Shadow Veil</content>
 	<content contentuid="h576837b3g27b6g4896g84f0g007867f84298" Source="LLMIME_Potions.lsb" Key="Stats_LLMIME_SurfaceClear">Surface Clear</content>
 	<content contentuid="hc6789943g4375g43ddgb6d1gdecdb75ea112" Source="LLMIME_Potions.lsb" Key="Stats_LLMIME_ThrownWeapon_Wand">Flabbergasted</content>
 	<content contentuid="h7e08fe5egb91fg4fafga16bgbef8b36d2544" Source="LLMIME_Potions.lsb" Key="Stats_LLMIME_TotemRage">Totem Rage</content>
 	<content contentuid="haa7693bdg6f02g4673gbe6age233192257f5" Source="LLMIME_Potions.lsb" Key="Stats_LLMIME_UnarmedBonusDamage">Unarmed Bonus Damage</content>
 	<content contentuid="hff09fcf2g8aa1g4400gb5a6g16159ea45190" Source="LLMIME_Potions.lsb" Key="Stats_LLMIME_VitalBuff">Strengthened Vitals</content>
 	<content contentuid="ha1b79327gde91g4eb8gaaebgb67b9642a98e" Source="LLMIME_Potions.lsb" Key="Stats_LLMIME_VitalDebuff">Weakened Vitals</content>
+	<content contentuid="haffffb35g54e2g4689g9cedg709ac636c41b" Source="LLMIME_Presets.lsb" Key="LLMIME_DarkElf">Dark Elf</content>
 	<content contentuid="hbd3b39e4g138eg4edag9b8cgfdbfc4736839" Source="LLMIME_Presets.lsb" Key="LLMIME_Preset_Mime_Description">A warrior who mimics the actions of allies in battle</content>
 	<content contentuid="h8f468b6bg27bcg4388gbf3fgd074a28e6777" Source="LLMIME_Presets.lsb" Key="LLMIME_Preset_Mime_DisplayName">Mime</content>
 	<content contentuid="h6ea8d9fag5afeg47fagb4d3gc2948b34fa7b" Source="LLMIME_Presets.lsb" Key="LLMIME_Preset_Mime_LongDescription">A warrior who mimics the actions of allies in battle. Mimes are also proficient with unarmed combat, and provide additional skills and bonuses to nearby summoned creatures.</content>
 	<content contentuid="h586beea9g9a8dg4d95gaf12g7f5c45d89b62" Source="LLMIME_Presets.lsb" Key="LLMIME_Preset_Origin_Mime_Description">Your identity has long been erased. All that remains is The Mask. Yet, something stirs beneath the surface, a faint whisper of something thought to be long gone...</content>
 	<content contentuid="h610474f0gd7f5g49a4g9eabgf5fe6c0dcd4a" Source="LLMIME_Presets.lsb" Key="LLMIME_Preset_Origin_Mime_DisplayName">The Mime</content>
+	<content contentuid="h4224e937gf411g415agad3ag54f6203da782" Source="LLMIME_Presets.lsb" Key="LLMIME_Preset_Race_DarkElf_Color_Default">Default</content>
+	<content contentuid="h6772c1b6ge08fg4af0ga3f9gdeb6d9b17574" Source="LLMIME_Presets.lsb" Key="LLMIME_Preset_Race_DarkElf_Description">A rare subset of elves imbued with dark energy. How they come to be is not known, yet the few who are aware of their presence surmise that the Dark Elves are a result of the influence of an alien being, or perhaps the Void itself.</content>
+	<content contentuid="hca5fae3ag9f65g4296gbf30ge906093d9023" Source="LLMIME_Presets.lsb" Key="LLMIME_Preset_Race_DarkElf_DisplayName">Dark Elf</content>
+	<content contentuid="hf6f40e08gdda4g4464ga0a4gbc8bdffa8dd1" Source="LLMIME_Presets.lsb" Key="LLMIME_TheMime">The Mime</content>
 	<content contentuid="ha218112agbc20g453fgb94ag41c5c8bb918c" Source="LLMIME_SettingsMenu.lsj">*Hide all Mime passive statuses.*</content>
 	<content contentuid="hb1722125gc69cg468fg866eg6558027d6472" Source="LLMIME_SettingsMenu.lsj">[EXIT] *Stop focusing.*</content>
 	<content contentuid="h2148540eg8475g4deag9a74g53e7de7915bd" Source="LLMIME_SettingsMenu.lsj">Host Settings</content>
@@ -287,6 +294,8 @@
 	<content contentuid="hd5f5f690gd3c1g406fga4b8g27aa98b56de3" Source="LLMIME_Skills.lsb" Key="Shout_LLMIME_OpenMenu_DisplayName">Inner Identity</content>
 	<content contentuid="hb115f7c2g7baeg4a50g9ba2g752b901ef674" Source="LLMIME_Skills.lsb" Key="Shout_LLMIME_ReturnToOwner_Description">Use the Mask of Mimicry&apos;s power to return to your leader.</content>
 	<content contentuid="h7724dc51g93ceg47a6g9bd7g9e03007b9a53" Source="LLMIME_Skills.lsb" Key="Shout_LLMIME_ReturnToOwner_DisplayName">Return</content>
+	<content contentuid="hc2ee917cg954fg4b33gaca4g9629ab0e6e20" Source="LLMIME_Skills.lsb" Key="Shout_LLMIME_ShadowForm_Description">Let loose the &lt;font color=&apos;#995bff&quot;&gt;dark energy&lt;/font&gt; within your being, enveloping yourself in a protective veil.&lt;br&gt;While in the &lt;font color=&apos;#995bff&quot;&gt;Shadow Form&lt;/font&gt;, damage is reduced by [1] while in a smoke cloud, you gain [2] increased Dodge, and each attack has a chance to deal [3] &lt;font color=&apos;#995bff&quot;&gt;Shadow Damage&lt;/font&gt; to targets.&lt;br&gt;&lt;font color=&apos;#11D77A&apos; size=&apos;18&apos;&gt;Shadow Damage bypasses armor and cannot be resisted.&lt;/font&gt;</content>
+	<content contentuid="hdaa6b323g6e8eg4182g855eg47f64d381fab" Source="LLMIME_Skills.lsb" Key="Shout_LLMIME_ShadowForm_DisplayName">&lt;font color=&apos;#995bff&quot;&gt;Shadow Form&lt;/font&gt;</content>
 	<content contentuid="hc5a8b399g70d9g4b92g94dcg32c7bdadd08b" Source="LLMIME_Skills.lsb" Key="Shout_LLMIME_SourceMimicking_Description">Surpass your limits, mimicking the next source skill used by a party member.&lt;br&gt;&lt;font color=&apos;#00FF7F&apos;&gt;While this skill is learned:&lt;/font&gt;&lt;br&gt;&lt;font color=&apos;#73f6ff&apos;&gt;Regenerate [1] SP every 60 seconds outside of combat, or 10 turns within combat.&lt;/font&gt;</content>
 	<content contentuid="heb1a62dagfdccg49f4gb976gf9834f0015ed" Source="LLMIME_Skills.lsb" Key="Shout_LLMIME_SourceMimicking_DisplayName">Mimic Source</content>
 	<content contentuid="ha6e178d8gb4e0g4aa9g9c2ag5bf02c3c22ff" Source="LLMIME_Skills.lsb" Key="Shout_LLMIME_TimelyRetreat_Description">Return to your original position before jumping with &lt;font color=&apos;#a189ec&apos;&gt;Hidden Approach&lt;/font&gt;.</content>
@@ -340,7 +349,7 @@
 	<content contentuid="h05195251g6fa3g4ddagb93cg8bc93dd6a36a" Source="LLMIME_Statuses.lsb" Key="LLMIME_COUNTER_THROW_Description">Character is counter-attacking enemies when dodging.</content>
 	<content contentuid="ha2ca066fgf4f1g430ag80d9g6292e1ccb304" Source="LLMIME_Statuses.lsb" Key="LLMIME_COUNTER_THROW_DisplayName">Counter Throw</content>
 	<content contentuid="had01b2d8gabf9g4719g99d8g4f6973769d89" Source="LLMIME_Statuses.lsb" Key="LLMIME_COUNTER_THROW_WeaponExpansion_Description">Character is counter-attacking enemies when dodging.&lt;br&gt;&lt;font color=&apos;#FFD700&apos;&gt;Weapon Expansion&lt;/font&gt;&lt;br&gt;&lt;font color=&apos;#00FA9A&apos;&gt;When dodging an enemy, you have a 60% chance to counter-attack with a rock.&lt;/font&gt;</content>
-	<content contentuid="hed7688f6g46a9g4c56gbe9agb2a03d84d984" Source="LLMIME_Statuses.lsb" Key="LLMIME_DEATHBLOW_START">Double Damage to Disabled Targets</content>
+	<content contentuid="he97e0957gdd1bg4526g91d8ge1ae225273e9" Source="LLMIME_Statuses.lsb" Key="LLMIME_DEATHBLOW_START_DisplayName">Double Damage to Disabled Targets</content>
 	<content contentuid="he5da60a9g0c54g4447gae79ga84ac3da2922" Source="LLMIME_Statuses.lsb" Key="LLMIME_DECOY_ACTIVE_Description">Character is invisible while their decoy is active. Removed by casting skills, attacking, water, or taking damage.</content>
 	<content contentuid="h4f8f250ag64cbg44a8gb913g19c65cc81ba5" Source="LLMIME_Statuses.lsb" Key="LLMIME_DECOY_ACTIVE_DisplayName">Invisible (Decoy)</content>
 	<content contentuid="hf6f269dag533dg41fdg880eg6d961a94f909" Source="LLMIME_Statuses.lsb" Key="LLMIME_DECOY_Description">Character is a decoy.</content>
@@ -375,6 +384,10 @@
 	<content contentuid="h661d0e1ag592ag4875gbae4gd0269df25f0f" Source="LLMIME_Statuses.lsb" Key="LLMIME_SACRIFICED_DisplayName">Sacrificed</content>
 	<content contentuid="h3d142bacg375bg4108g85d4g07701e43f5be" Source="LLMIME_Statuses.lsb" Key="LLMIME_SEALED_Description">Character has been sealed, turning them to stone.</content>
 	<content contentuid="h4bf070f4g7816g4cf3gaaeeg284175f3b6e8" Source="LLMIME_Statuses.lsb" Key="LLMIME_SEALED_DisplayName">Sealed</content>
+	<content contentuid="h0435e886g9390g4f56g9502gfbf6e924b55d" Source="LLMIME_Statuses.lsb" Key="LLMIME_SHADOWFORM_DAMAGE_RESISTANCE_Description">Character&apos;s presence is slipping from reality, providing increased damage resistance.</content>
+	<content contentuid="h14d45c8agc85ag47a4ga7d8g1b4235e2a7e3" Source="LLMIME_Statuses.lsb" Key="LLMIME_SHADOWFORM_DAMAGE_RESISTANCE_DisplayName">Shadow Veil</content>
+	<content contentuid="hee1619deg88e7g4fb0gb9e1gd2c7ef040e07" Source="LLMIME_Statuses.lsb" Key="LLMIME_SHADOWFORM_Description">Character has been enveloped in dark energy.</content>
+	<content contentuid="ha8d9167fgd9f7g44e3g82a6gfb90c2ffe7f1" Source="LLMIME_Statuses.lsb" Key="LLMIME_SHADOWFORM_DisplayName">Shadow Form</content>
 	<content contentuid="h17b62e36g1f70g4a23g93ddg4f809eff9cc2" Source="LLMIME_Statuses.lsb" Key="LLMIME_SWAPPING_Description">Character is being flanked and repositioned!</content>
 	<content contentuid="hcd128848g9327g4857ga333g6a8a80b051c4" Source="LLMIME_Statuses.lsb" Key="LLMIME_SWAPPING_DisplayName">Flank &amp; Swap</content>
 	<content contentuid="h7c440584g5ef1g434dg9479g426620a46453" Source="LLMIME_Statuses.lsb" Key="LLMIME_TOTEMRAGE_Description">Totem is enraged.</content>
@@ -388,6 +401,7 @@
 	<content contentuid="h6baea7a3gdc8bg4345g93f5g11b3fb1c22b7" Source="LLMIME_Statuses.lsb" Key="LLMIME_VITAL_CHECK_DisplayName">Constitution Check</content>
 	<content contentuid="h68467a25g83cfg4751g8409gd89f410fef24" Source="LLMIME_Statuses.lsb" Key="LLMIME_VITAL_DEBUFF_Description">Character&apos;s maximum vitality is reduced. Deals [1] internally each turn.</content>
 	<content contentuid="h54f438bbg0784g4867g9db3ga7f342cb7d64" Source="LLMIME_Statuses.lsb" Key="LLMIME_VITAL_DEBUFF_DisplayName">Weakened Vitals</content>
+	<content contentuid="h1b0634feg9f56g4b55gae58gc74821a19773" Source="LLMIME_TagNames.lsb" Key="LLMIME_DARK_ELF">Dark Elf</content>
 	<content contentuid="hfccfd752gdff7g4a2eg9088ge3848f0349a1" Source="LLMIME_TagNames.lsb" Key="LLMIME_MimeFollower">Mime (Follower)</content>
 	<content contentuid="h83880151gb07dg4fc3g92bcg451f30e6a526" Source="LLMIME_TagNames.lsb" Key="Mimicry_Mime">Mime</content>
 	<content contentuid="he56f9842g5931g4012g8be8gf881fe45c172" Source="LLMIME_TagNames.lsb" Key="Mimicry_MimeOrigin">Fractured Memories</content>
