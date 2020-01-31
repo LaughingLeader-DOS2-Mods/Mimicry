@@ -69,4 +69,8 @@ LLMIME_FROG_DisplayName	Frog
 LLMIME_MIMICRY_MASK_INFO_FOLLOWER_Description	Character is a mime.<br><font color='#FF0000'>Cannot cast spells in combat</font><br><font color='#FF00FF'>Mimics the actions of their owner in combat</font>
 LLMIME_DOPPELGANGER_Description	Character is a perfect copy of another.
 LLMIME_DOPPELGANGER_DisplayName	Doppelganger
-LLMIME_DEATHBLOW_START	Double Damage to Disabled Targets
+LLMIME_DEATHBLOW_START_DisplayName	Double Damage to Disabled Targets
+LLMIME_SHADOWFORM_DisplayName	Shadow Form
+LLMIME_SHADOWFORM_Description	Character has been enveloped in dark energy.
+LLMIME_SHADOWFORM_DAMAGE_RESISTANCE_DisplayName	Shadow Veil
+LLMIME_SHADOWFORM_DAMAGE_RESISTANCE_Description	Character's presence is slipping from reality, providing increased damage resistance.

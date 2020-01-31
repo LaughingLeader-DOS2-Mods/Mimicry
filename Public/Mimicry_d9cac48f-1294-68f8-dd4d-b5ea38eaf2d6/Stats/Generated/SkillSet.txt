@@ -1,6 +1,9 @@
 new skillset "Avatar_LLMIME_Mime"
 add skill "Target_LLMIME_PerfectDoppelganger"
 
+new skillset "Race_LLMIME_DarkElf"
+add skill "Shout_LLMIME_ShadowForm"
+
 new skillset "Class_LLMIME_Mime"
 add skill "Rush_BatteringRam"
 add skill "Target_CripplingBlow"
