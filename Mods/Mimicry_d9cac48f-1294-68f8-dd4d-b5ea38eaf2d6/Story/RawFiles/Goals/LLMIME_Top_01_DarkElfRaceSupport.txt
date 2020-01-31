@@ -1,0 +1,52 @@
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+
+KBSECTION
+//REGION CHARACTER_CREATION_RACEDATA_REVERT
+PROC
+LLMIME_DarkElf_RespecMirror_Setup((CHARACTERGUID)_Player)
+AND
+IsTagged(_Player, "LLMIME_DarkElf", 1)
+AND
+NOT CharacterGetRace(_Player, 0, "LLMIME_DarkElf")
+THEN
+NRD_PlayerSetCustomDataString(_Player, "Race", "LLMIME_DarkElf");
+
+PROC
+LLMIME_DarkElf_RespecMirror_Done((CHARACTERGUID)_Player)
+AND
+IsTagged(_Player, "LLMIME_DarkElf", 1)
+AND
+CharacterGetRace(_Player, 0, "LLMIME_DarkElf")
+THEN
+NRD_PlayerSetCustomDataString(_Player, "Race", "Undead_Elf");
+//END_REGION
+
+IF
+DB_Illusionist(_Player,_Item)
+THEN
+LLMIME_DarkElf_RespecMirror_Setup(_Player);
+
+//Failed
+PROC
+PROC_HandleMagicMirrorResult((CHARACTERGUID)_Player,0)
+THEN
+LLMIME_DarkElf_RespecMirror_Done(_Player);
+
+//Finished respec
+PROC
+Proc_HomesteadTeleportAfterMirror((CHARACTERGUID)_Player,(ITEMGUID)_Mirror,(TRIGGERGUID)_Trigger)
+THEN
+LLMIME_DarkElf_RespecMirror_Done(_Player);
+
+QRY
+QRY_IsTrueRace((CHARACTERGUID)_Character, "Elf")
+AND
+IsTagged(_Character, "LLMIME_DarkElf", 1)
+THEN
+DB_NOOP(1);
+EXITSECTION
+
+ENDEXITSECTION
+ParentTargetEdge "__AAA_Z_LaughingLeader_LeaderLib_Top"

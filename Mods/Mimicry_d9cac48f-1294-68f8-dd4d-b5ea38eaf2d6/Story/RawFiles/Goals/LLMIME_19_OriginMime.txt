@@ -16,12 +16,12 @@ THEN
 //When these DB entries are added, the tags are immediately applied to the character, so register once the game has started
 DB_OriginProfessionTags((CHARACTERGUID)S_Player_LLMIME_Mime_191f180c-6270-4cd1-a44a-e02454bd846f,"SOLDIER");
 DB_OriginProfessionTags((CHARACTERGUID)S_Player_LLMIME_Mime_191f180c-6270-4cd1-a44a-e02454bd846f,"JESTER");
-DB_OriginProfessionTags((CHARACTERGUID)S_Player_LLMIME_MimeF_45299363-87bb-4e78-ad0d-787dacc2659b,"SOLDIER");
-DB_OriginProfessionTags((CHARACTERGUID)S_Player_LLMIME_MimeF_45299363-87bb-4e78-ad0d-787dacc2659b,"JESTER");
+//DB_OriginProfessionTags((CHARACTERGUID)S_Player_LLMIME_MimeF_45299363-87bb-4e78-ad0d-787dacc2659b,"SOLDIER");
+//DB_OriginProfessionTags((CHARACTERGUID)S_Player_LLMIME_MimeF_45299363-87bb-4e78-ad0d-787dacc2659b,"JESTER");
 
 //Impportant so this character can be turned into an NPC again
-DB_OriginNPCAlignment((CHARACTERGUID)S_Player_LLMIME_Mime_191f180c-6270-4cd1-a44a-e02454bd846f, "Good NPC");
-DB_OriginNPCAlignment((CHARACTERGUID)S_Player_LLMIME_MimeF_45299363-87bb-4e78-ad0d-787dacc2659b, "Good NPC");
+//DB_OriginNPCAlignment((CHARACTERGUID)S_Player_LLMIME_Mime_191f180c-6270-4cd1-a44a-e02454bd846f, "Good NPC");
+//DB_OriginNPCAlignment((CHARACTERGUID)S_Player_LLMIME_MimeF_45299363-87bb-4e78-ad0d-787dacc2659b, "Good NPC");
 
 /*
 //Origins is done registering
@@ -74,6 +74,17 @@ SetTag(_Mime,"REALLY_GENERIC");
 LLMIME_Origin_CreateMimeMask(_Mime);
 ProcObjectTimerCancel(_Mime, "LLMIME_Timers_Origin_EquipMask");
 ProcObjectTimer(_Mime, "LLMIME_Timers_Origin_EquipMask", 250);
+
+/* [OSITOOLS_ONLY]
+PROC
+LLMIME_Origin_Setup((CHARACTERGUID)_Mime)
+AND
+ObjectExists(_Mime, 1)
+AND
+CharacterGetRace(_Mime, 0, "LLMIME_DarkElf")
+THEN
+NRD_PlayerSetCustomDataString(_Mime, "Race", "Undead_Elf");
+*/
 
 PROC
 LLMIME_Origin_Debug_SetupMime((CHARACTERGUID)_Mime)
@@ -178,7 +189,6 @@ IF
 DB_LLMIME_Origin_MaskEquipped(_Mime, _Mask)
 THEN
 SetStoryEvent(_Mime, "Mimicry_Events_Mime_MaskEquipped");
-
 EXITSECTION
 
 ENDEXITSECTION
