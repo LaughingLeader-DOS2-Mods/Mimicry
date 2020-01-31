@@ -53,7 +53,7 @@
                         <node id="MaleDefaultPlayerNames">
                             <children>
                                 <node id="MaleDefaultPlayerNames">
-                                    <attribute id="Object" value="The Mime" handle="h610474f0gd7f5g49a4g9eabgf5fe6c0dcd4a" type="28" />
+                                    <attribute id="Object" value="Malus" handle="h3d94bd50g87f8g4240gaafagd9f7ab751c5f" type="28" />
                                 </node>
                             </children>
                         </node>
@@ -74,7 +74,7 @@
                         <node id="FemaleDefaultPlayerNames">
                             <children>
                                 <node id="FemaleDefaultPlayerNames">
-                                    <attribute id="Object" value="The Mime" handle="h610474f0gd7f5g49a4g9eabgf5fe6c0dcd4a" type="28" />
+                                    <attribute id="Object" value="Morathi" handle="hb830afeag93dfg499dga907ge9ca908ceb43" type="28" />
                                 </node>
                             </children>
                         </node>
@@ -92,74 +92,17 @@
                                 </node>
                             </children>
                         </node>
-                        <node id="HenchManMaleIcons">
-                            <children>
-                                <node id="HenchManMaleIcons">
-                                    <attribute id="Object" value="Portrait_PL_M_Face_A_White_Hair_A_Black" type="22" />
-                                </node>
-                                <node id="HenchManMaleIcons">
-                                    <attribute id="Object" value="Portrait_PL_M_Face_A_White_Hair_B_Black" type="22" />
-                                </node>
-                                <node id="HenchManMaleIcons">
-                                    <attribute id="Object" value="Portrait_PL_M_Face_A_White_Hair_C_Black" type="22" />
-                                </node>
-                                <node id="HenchManMaleIcons">
-                                    <attribute id="Object" value="Portrait_PL_M_Face_A_White_Hair_D_Black" type="22" />
-                                </node>
-                                <node id="HenchManMaleIcons">
-                                    <attribute id="Object" value="Portrait_PL_M_Face_A_White_Hair_E_Black" type="22" />
-                                </node>
-                                <node id="HenchManMaleIcons">
-                                    <attribute id="Object" value="Portrait_PL_M_Face_A_White_Hair_F_Black" type="22" />
-                                </node>
-                                <node id="HenchManMaleIcons">
-                                    <attribute id="Object" value="Portrait_PL_M_Face_A_White_Hair_G_Black" type="22" />
-                                </node>
-                                <node id="HenchManMaleIcons">
-                                    <attribute id="Object" value="Portrait_PL_M_Face_B_White_Hair_B_Blond" type="22" />
-                                </node>
-                                <node id="HenchManMaleIcons">
-                                    <attribute id="Object" value="Portrait_PL_M_Face_B_White_Hair_D_Blond" type="22" />
-                                </node>
-                                <node id="HenchManMaleIcons">
-                                    <attribute id="Object" value="Portrait_PL_M_Face_E_Brown_Hair_C_Black" type="22" />
-                                </node>
-                                <node id="HenchManMaleIcons">
-                                    <attribute id="Object" value="Portrait_PL_M_Face_E_White_Hair_G_Blond" type="22" />
-                                </node>
-                                <node id="HenchManMaleIcons">
-                                    <attribute id="Object" value="Portrait_PL_M_Face_G_Black_Hair_B_Black" type="22" />
-                                </node>
-                                <node id="HenchManMaleIcons">
-                                    <attribute id="Object" value="Portrait_PL_M_Face_K_Brown_Hair_P" type="22" />
-                                </node>
-                                <node id="HenchManMaleIcons">
-                                    <attribute id="Object" value="Portrait_PL_M_Face_M_White_Hair_F_Blond" type="22" />
-                                </node>
-                                <node id="HenchManMaleIcons">
-                                    <attribute id="Object" value="Portrait_PL_M_Face_M_White_Hair_M_Blond" type="22" />
-                                </node>
-                                <node id="HenchManMaleIcons">
-                                    <attribute id="Object" value="Portrait_PL_M_Face_O_Black_Hair_G_Black" type="22" />
-                                </node>
-                                <node id="HenchManMaleIcons">
-                                    <attribute id="Object" value="Portrait_PL_M_Face_P_White_Hair_A_Blond" type="22" />
-                                </node>
-                                <node id="HenchManMaleIcons">
-                                    <attribute id="Object" value="Portrait_PL_M_Face_P_White_Hair_C_Blond" type="22" />
-                                </node>
-                                <node id="HenchManMaleIcons">
-                                    <attribute id="Object" value="Portrait_PL_M_Face_P_White_Hair_E_Blond" type="22" />
-                                </node>
-                                <node id="HenchManMaleIcons">
-                                    <attribute id="Object" value="Portrait_PL_M_Face_P_White_Hair_J_Blond" type="22" />
-                                </node>										
-                            </children>
-                        </node>
                         <node id="HenchManMaleRootTemplateIDs">
                             <children>
                                 <node id="HenchManMaleRootTemplateIDs">
-                                    <attribute id="Object" value="23f3af72-437c-4aff-91ca-914ef6e6ebb7" type="22" />
+                                    <attribute id="Object" value="01acaf9e-866d-450e-9969-49dab771d973" type="22" />
+                                </node>
+                            </children>
+                        </node>
+                        <node id="HenchManFemaleRootTemplateIDs">
+                            <children>
+                                <node id="HenchManFemaleRootTemplateIDs">
+                                    <attribute id="Object" value="01acaf9e-866d-450e-9969-49dab771d973" type="22" />
                                 </node>
                             </children>
                         </node>

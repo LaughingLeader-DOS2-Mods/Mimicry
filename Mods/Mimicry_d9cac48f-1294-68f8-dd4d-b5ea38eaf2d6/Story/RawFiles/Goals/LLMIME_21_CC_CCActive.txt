@@ -92,8 +92,16 @@ AND
 CharacterGetRace(S_Player_LLMIME_Mime_191f180c-6270-4cd1-a44a-e02454bd846f, 0, "LLMIME_DarkElf")
 THEN
 NRD_PlayerSetCustomDataString(S_Player_LLMIME_Mime_191f180c-6270-4cd1-a44a-e02454bd846f, "Race", "Undead_Elf");
+
+PROC
+LeaderLib_CC_OnPresetChanged((CHARACTERGUID)_Player, (STRING)_LastPreset, (STRING)_NextPreset)
+AND
+CharacterGetRace(_Player, 0, "LLMIME_DarkElf")
+THEN
+NRD_PlayerSetCustomDataString(_Player, "Race", "Undead_Elf");
 */
 
+/*
 PROC
 LeaderLib_CC_OnPresetChanged((CHARACTERGUID)_Player, (STRING)_LastPreset, "LLMIME_Mime")
 AND
@@ -109,6 +117,7 @@ AND
 _NextPreset != "LLMIME_Mime"
 THEN
 LLMIME_CC_Internal_StopMaskEffect(_Player);
+*/
 
 IF
 TimerFinished("LeaderLib_Timers_PostCC_Finished")
