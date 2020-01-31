@@ -4,6 +4,19 @@ INITSECTION
 
 KBSECTION
 //REGION CHARACTER_CREATION_RACEDATA_REVERT
+// [BEGIN_NO_OSITOOLS]
+PROC
+LLMIME_DarkElf_RespecMirror_Setup((CHARACTERGUID)_Player)
+THEN
+DB_NOOP(1);
+
+PROC
+LLMIME_DarkElf_RespecMirror_Done((CHARACTERGUID)_Player)
+THEN
+DB_NOOP(1);
+// [END_NO_OSITOOLS]
+
+/* [OSITOOLS_ONLY]
 PROC
 LLMIME_DarkElf_RespecMirror_Setup((CHARACTERGUID)_Player)
 AND
@@ -21,6 +34,7 @@ AND
 CharacterGetRace(_Player, 0, "LLMIME_DarkElf")
 THEN
 NRD_PlayerSetCustomDataString(_Player, "Race", "Undead_Elf");
+*/
 //END_REGION
 
 IF
