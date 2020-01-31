@@ -78,6 +78,23 @@ DB_LLMIME_CC_Temp_Index(_Dummy, _UserID, 4);
 //END_REGION
 
 PROC
+PROC_SetupOriginCharacters((GUIDSTRING)_Dest)
+AND
+ObjectExists(S_Player_LLMIME_Mime_191f180c-6270-4cd1-a44a-e02454bd846f, 1)
+THEN
+TimerCancel("Timers_LLMIME_CC_SetCustomRaceData");
+TimerLaunch("Timers_LLMIME_CC_SetCustomRaceData", 25);
+
+/* [OSITOOLS_ONLY]
+IF
+TimerFinished("Timers_LLMIME_CC_SetCustomRaceData")
+AND
+CharacterGetRace(S_Player_LLMIME_Mime_191f180c-6270-4cd1-a44a-e02454bd846f, 0, "LLMIME_DarkElf")
+THEN
+NRD_PlayerSetCustomDataString(S_Player_LLMIME_Mime_191f180c-6270-4cd1-a44a-e02454bd846f, "Race", "Undead_Elf");
+*/
+
+PROC
 LeaderLib_CC_OnPresetChanged((CHARACTERGUID)_Player, (STRING)_LastPreset, "LLMIME_Mime")
 AND
 LLMIME_Origin_QRY_IsOriginMime(_Player)
