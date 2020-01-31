@@ -1,15 +1,29 @@
 Version 1
 SubGoalCombiner SGC_AND
 INITSECTION
-LLMIME_Internal_RegisterOnce();
+LLMIME_System_InitOrigin();
 LLMIME_Internal_CompleteIfStarted(); // Existing saves
 
 KBSECTION
-PROC
-LLMIME_Internal_RegisterOnce()
-THEN
-DB_NOOP(1);
 
+//REGION ORIGIN_SETUP
+PROC
+LLMIME_System_InitOrigin()
+THEN
+LeaderLib_Tags_PreserveTag(S_Player_LLMIME_Mime_191f180c-6270-4cd1-a44a-e02454bd846f, "LLMAJSKULLK_SKULLKNIGHT"); // Persist through shapeshifting
+
+LeaderLib_Origins_Register_Main(S_Player_LLMIME_Mime_191f180c-6270-4cd1-a44a-e02454bd846f, "Companion10", "Hero Henchman Shadowblade");
+LeaderLib_Origins_Register_Tags(S_Player_LLMIME_Mime_191f180c-6270-4cd1-a44a-e02454bd846f, "SOLDIER", "JESTER", "Mimicry_MimeOrigin");
+DB_OriginEquipmentSet((CHARACTERGUID)S_Player_LLMIME_Mime_191f180c-6270-4cd1-a44a-e02454bd846f,"Origin_LLMIME_Mime_Armor");
+DB_OriginIntroductions("LLMIME_Mime", "Insane_01_Loop", "Undead_Presentation_Music", "Undead_Presentation_SFX");
+//DB_OriginWarning1Dialog((CHARACTERGUID)S_Player_LLMIME_Mime_191f180c-6270-4cd1-a44a-e02454bd846f,"LLMAJSKULLK_TheSkullKnight_Warning1");
+//DB_OriginWarning2Dialog((CHARACTERGUID)S_Player_LLMIME_Mime_191f180c-6270-4cd1-a44a-e02454bd846f,"LLMAJSKULLK_TheSkullKnight__Warning2");
+//DB_OriginLeavingDialog((CHARACTERGUID)S_Player_LLMIME_Mime_191f180c-6270-4cd1-a44a-e02454bd846f,"LLMAJSKULLK_TheSkullKnight_Leaving");
+
+////Quest Updates for Permadeath on Companions
+//DB_FormerCompanionDeath_QuestUpdate((CHARACTERGUID)S_Player_LLMIME_Mime_191f180c-6270-4cd1-a44a-e02454bd846f,"QuestUpdate_FTJ_COM_LLMAJSKULLK_TheSkullKnight_Dead");
+//DB_Companion_FixatedFlag((CHARACTERGUID)S_Player_LLMIME_Mime_191f180c-6270-4cd1-a44a-e02454bd846f,"GLO_LLMAJSKULLK_TheSkullKnight_Avatar");
+//END_REGION
 /*
 PROC
 LLMIME_Internal_RegisterOnce()
@@ -32,7 +46,6 @@ DB_OriginIntroductions("LLMIME_Mime", "Insane_01_Loop", "Undead_Presentation_Mus
 
 //DB_Origins((CHARACTERGUID)S_Player_LLMIME_MimeF_45299363-87bb-4e78-ad0d-787dacc2659b);
 DB_Origins_OriginTag((CHARACTERGUID)S_Player_LLMIME_MimeF_45299363-87bb-4e78-ad0d-787dacc2659b,"GENERIC");
-LLMIME_CC_InitSettings();
 */
 
 PROC

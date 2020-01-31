@@ -8,3 +8,4 @@ DB_LLMIME_CC_Temp_MaskFXHandle 2
 DB_LLMIME_CC_PortraitMaskEffect 4
 DB_Mimicry_Mimicking_UseModAttackSkill 5
 DB_Illusionist 2
+DB_OriginEquipmentSet 2

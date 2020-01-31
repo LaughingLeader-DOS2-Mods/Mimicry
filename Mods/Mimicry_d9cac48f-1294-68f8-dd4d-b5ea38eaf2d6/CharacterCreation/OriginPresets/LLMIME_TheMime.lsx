@@ -14,7 +14,7 @@
                     <attribute id="UserCanAlterTags" value="1" type="19" />
                     <attribute id="SkillSet" value="Avatar_LLMIME_Mime" type="22" />
                     <attribute id="PreviewEquipmentSet" value="Origin_LLMIME_Mime_Preview" type="22" />
-                    <attribute id="RootTemplateOverride" value="191f180c-6270-4cd1-a44a-e02454bd846f" type="22" />
+                    <attribute id="RootTemplateOverride" value="01acaf9e-866d-450e-9969-49dab771d973" type="22" />
 
                     <children>
                         <node id="SupportedGenders">

@@ -192,3 +192,7 @@ data "Constitution" "10"
 data "Memory" "0"
 data "Wits" "0"
 data "ExtraProperties" ""
+
+new entry "LLMIME_DarkElfMaleHero"
+type "Character"
+using "ElfMaleHero"

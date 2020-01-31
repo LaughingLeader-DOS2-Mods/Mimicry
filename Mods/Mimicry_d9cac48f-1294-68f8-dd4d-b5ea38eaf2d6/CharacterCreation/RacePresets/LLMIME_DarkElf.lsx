@@ -67,7 +67,28 @@
                         <node id="MaleRootTemplateIDs">
                             <children>
                                 <node id="MaleRootTemplateIDs">
-                                    <attribute id="Object" value="9eeaaafd-c47d-4650-9200-b00430d61e83" type="22" />
+                                    <attribute id="Object" value="01acaf9e-866d-450e-9969-49dab771d973" type="22" />
+                                </node>
+                            </children>
+                        </node>
+                        <node id="FemaleDefaultPlayerNames">
+                            <children>
+                                <node id="FemaleDefaultPlayerNames">
+                                    <attribute id="Object" value="The Mime" handle="h610474f0gd7f5g49a4g9eabgf5fe6c0dcd4a" type="28" />
+                                </node>
+                            </children>
+                        </node>
+                        <node id="FemaleIcons">
+                            <children>
+                                <node id="MaleIcons">
+                                    <attribute id="Object" value="PlayerPortrait_Elf_Male_B" type="22" />
+                                </node>
+                            </children>
+                        </node>
+                        <node id="FemaleRootTemplateIDs">
+                            <children>
+                                <node id="MaleRootTemplateIDs">
+                                    <attribute id="Object" value="01acaf9e-866d-450e-9969-49dab771d973" type="22" />
                                 </node>
                             </children>
                         </node>
@@ -146,8 +167,8 @@
                             <children>
                                 <node id="ColorDesc">
                                     <attribute id="ID" value="0" type="5" />
-                                    <attribute id="ColorName" value="Saddle Brown" handle="h186039efgdaa3g49afgb27dg44ea7248f24a" type="28" />
-                                    <attribute id="Value" value="4287317267" type="5" />
+                                    <attribute id="ColorName" value="Default" handle="h4224e937gf411g415agad3ag54f6203da782" type="28" />
+                                    <attribute id="Value" value="0xffffffff" type="5" />
                                 </node>
                             </children>
                         </node>
@@ -155,8 +176,8 @@
                             <children>
                                 <node id="ColorDesc">
                                     <attribute id="ID" value="0" type="5" />
-                                    <attribute id="ColorName" value="Ice bear" handle="hf86c8116g4b92g4f17g998cgf4c796ee9323" type="28" />
-                                    <attribute id="Value" value="0xffecdec7" type="5" />
+                                    <attribute id="ColorName" value="Default" handle="h4224e937gf411g415agad3ag54f6203da782" type="28" />
+                                    <attribute id="Value" value="0xffffffff" type="5" />
                                 </node>				
                             </children>
                         </node>
@@ -164,8 +185,8 @@
                             <children>
                                 <node id="ColorDesc">
                                     <attribute id="ID" value="0" type="5" />
-                                    <attribute id="ColorName" value="Snow" handle="h2cce5e50g5c08g4658gb308g6faf783866c0" type="28" />
-                                    <attribute id="Value" value="0xffd2d2d2" type="5" />
+                                    <attribute id="ColorName" value="Default" handle="h4224e937gf411g415agad3ag54f6203da782" type="28" />
+                                    <attribute id="Value" value="0xffffffff" type="5" />
                                 </node>					
                             </children>
                         </node>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <save>
     <header version="2" />
-    <version major="3" minor="6" revision="1" build="0" />
+    <version major="3" minor="6" revision="6" build="0" />
     <region id="Tags">
         <node id="root">
             <children>
@@ -239,6 +239,19 @@
                                 </node>
                                 <node id="Category">
                                     <attribute id="Name" value="Origin" type="23" />
+                                </node>
+                            </children>
+                        </node>
+                    </children>
+                </node>
+                <node id="Tag">
+                    <attribute id="Description" value="The dark elf race." type="23" />
+                    <attribute id="Name" value="LLMIME_DarkElf" type="23" />
+                    <children>
+                        <node id="Categories">
+                            <children>
+                                <node id="Category">
+                                    <attribute id="Name" value="Race" type="23" />
                                 </node>
                             </children>
                         </node>
