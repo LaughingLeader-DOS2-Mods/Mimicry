@@ -2,7 +2,7 @@ new namegroup "ARM_UNIQUE_LLMIME_Mime_Mask_A"
 add name "Mask of Mimicry",""
 
 new namegroup "ARM_UNIQUE_LLMIME_Mime_Mask_Origin_A"
-add name "Mask of Mimicry",""
+add name "Ancient Mask of Mimicry",""
 
 new namegroup "LLMIME_BrawlerFist"
 add name "Brawler's Fist","The iron-hard fist of a Brawler. Strikes true."
@@ -18,3 +18,15 @@ add name "Mime's Boots","Sturdy boots worn by a mime. Steel-toed. As you gain ex
 
 new namegroup "LLMIME_Mime_Light_Gloves"
 add name "Mime's Gloves","Tough leather gloves worn by a mime. A solid punch is sure to sting. Seems to grow tougher over time."
+
+new namegroup "ARM_UNIQUE_LLMIME_Mime_ShadowArmor_Gloves"
+add name "ARM_UNIQUE_LLMIME_Mime_ShadowArmor_Gloves_DisplayName",""
+
+new namegroup "ARM_UNIQUE_LLMIME_Mime_ShadowArmor_UpperBody"
+add name "ARM_UNIQUE_LLMIME_Mime_ShadowArmor_UpperBody_DisplayName",""
+
+new namegroup "ARM_UNIQUE_LLMIME_Mime_ShadowArmor_LowerBody"
+add name "ARM_UNIQUE_LLMIME_Mime_ShadowArmor_LowerBody_DisplayName",""
+
+new namegroup "ARM_UNIQUE_LLMIME_Mime_ShadowArmor_Boots"
+add name "ARM_UNIQUE_LLMIME_Mime_ShadowArmor_Boots_DisplayName",""

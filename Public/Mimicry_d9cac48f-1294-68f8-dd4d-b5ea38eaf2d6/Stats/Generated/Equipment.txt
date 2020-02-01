@@ -1,24 +1,24 @@
 new equipment "Origin_LLMIME_Mime_Preview"
 add equipmentgroup 
-add equipment entry "ARM_LLMIME_Mime_Mask_Preview"
+add equipment entry "ARM_LLMIME_Mime_Mask_Origin_A_Preview"
 add equipmentgroup 
-add equipment entry "ARM_LLMIME_Mime_Light_UpperBody"
+add equipment entry "ARM_LLMIME_Mime_ShadowArmor_UpperBody_Preview"
 add equipmentgroup 
-add equipment entry "ARM_LLMIME_Mime_Light_LowerBody"
+add equipment entry "ARM_LLMIME_Mime_ShadowArmor_LowerBody_Preview"
 add equipmentgroup 
-add equipment entry "ARM_LLMIME_Mime_Light_Boots"
+add equipment entry "ARM_LLMIME_Mime_ShadowArmor_Boots_Preview"
 add equipmentgroup 
-add equipment entry "ARM_LLMIME_Mime_Light_Gloves"
+add equipment entry "ARM_LLMIME_Mime_ShadowArmor_Gloves_Preview"
 
 new equipment "Origin_LLMIME_Mime_Armor"
 add equipmentgroup 
-add equipment entry "ARM_LLMIME_Mime_Light_UpperBody"
+add equipment entry "ARM_LLMIME_Mime_ShadowArmor_UpperBody_Preview"
 add equipmentgroup 
-add equipment entry "ARM_LLMIME_Mime_Light_LowerBody"
+add equipment entry "ARM_LLMIME_Mime_ShadowArmor_LowerBody_Preview"
 add equipmentgroup 
-add equipment entry "ARM_LLMIME_Mime_Light_Boots"
+add equipment entry "ARM_LLMIME_Mime_ShadowArmor_Boots_Preview"
 add equipmentgroup 
-add equipment entry "ARM_LLMIME_Mime_Light_Gloves"
+add equipment entry "ARM_LLMIME_Mime_ShadowArmor_Gloves_Preview"
 
 new equipment "LLMIME_Equipment_FollowerMime"
 add equipmentgroup 
