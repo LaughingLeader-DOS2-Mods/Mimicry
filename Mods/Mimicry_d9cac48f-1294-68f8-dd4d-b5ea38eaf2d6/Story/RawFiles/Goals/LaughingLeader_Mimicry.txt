@@ -10,8 +10,7 @@ KBSECTION
 PROC
 LLMIME_System_InitOrigin()
 THEN
-LeaderLib_Tags_PreserveTag(S_Player_LLMIME_Mime_191f180c-6270-4cd1-a44a-e02454bd846f, "LLMAJSKULLK_SKULLKNIGHT"); // Persist through shapeshifting
-
+//LeaderLib_Tags_PreserveTag(S_Player_LLMIME_Mime_191f180c-6270-4cd1-a44a-e02454bd846f, "LLMIME_DARKELF"); // Persist through shapeshifting
 LeaderLib_Origins_Register_Main(S_Player_LLMIME_Mime_191f180c-6270-4cd1-a44a-e02454bd846f, "Companion10", "Hero Henchman Shadowblade");
 LeaderLib_Origins_Register_Tags(S_Player_LLMIME_Mime_191f180c-6270-4cd1-a44a-e02454bd846f, "SOLDIER", "JESTER", "Mimicry_MimeOrigin");
 DB_OriginEquipmentSet((CHARACTERGUID)S_Player_LLMIME_Mime_191f180c-6270-4cd1-a44a-e02454bd846f,"Origin_LLMIME_Mime_Armor");
