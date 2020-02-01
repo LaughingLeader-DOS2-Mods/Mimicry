@@ -20,7 +20,7 @@ DB_NOOP(1);
 PROC
 LLMIME_DarkElf_RespecMirror_Setup((CHARACTERGUID)_Player)
 AND
-IsTagged(_Player, "LLMIME_DarkElf", 1)
+IsTagged(_Player, "LLMIME_DARKELF", 1)
 AND
 NOT CharacterGetRace(_Player, 0, "LLMIME_DarkElf")
 THEN
@@ -29,7 +29,7 @@ NRD_PlayerSetCustomDataString(_Player, "Race", "LLMIME_DarkElf");
 PROC
 LLMIME_DarkElf_RespecMirror_Done((CHARACTERGUID)_Player)
 AND
-IsTagged(_Player, "LLMIME_DarkElf", 1)
+IsTagged(_Player, "LLMIME_DARKELF", 1)
 AND
 CharacterGetRace(_Player, 0, "LLMIME_DarkElf")
 THEN
@@ -57,7 +57,7 @@ LLMIME_DarkElf_RespecMirror_Done(_Player);
 QRY
 QRY_IsTrueRace((CHARACTERGUID)_Character, "Elf")
 AND
-IsTagged(_Character, "LLMIME_DarkElf", 1)
+IsTagged(_Character, "LLMIME_DARKELF", 1)
 THEN
 DB_NOOP(1);
 EXITSECTION

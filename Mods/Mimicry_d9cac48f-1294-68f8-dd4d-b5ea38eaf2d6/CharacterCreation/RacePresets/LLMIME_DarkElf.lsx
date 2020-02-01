@@ -30,7 +30,7 @@
                                     <attribute id="Tag" value="ELF" type="22" />
                                 </node>
                                 <node id="TagAdded">
-                                    <attribute id="Tag" value="LLMIME_DARK_ELF" type="22" />
+                                    <attribute id="Tag" value="LLMIME_DARKELF" type="22" />
                                 </node>
                             </children>
                         </node>

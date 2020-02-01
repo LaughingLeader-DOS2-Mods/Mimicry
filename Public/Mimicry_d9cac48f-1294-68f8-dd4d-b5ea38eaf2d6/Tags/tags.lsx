@@ -246,7 +246,7 @@
                 </node>
                 <node id="Tag">
                     <attribute id="Description" value="The dark elf race." type="23" />
-                    <attribute id="Name" value="LLMIME_DarkElf" type="23" />
+                    <attribute id="Name" value="LLMIME_DARKELF" type="23" />
                     <children>
                         <node id="Categories">
                             <children>
