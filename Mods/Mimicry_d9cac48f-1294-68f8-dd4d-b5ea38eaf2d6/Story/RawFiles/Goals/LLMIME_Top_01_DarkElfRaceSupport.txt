@@ -33,7 +33,7 @@ IsTagged(_Player, "LLMIME_DarkElf", 1)
 AND
 CharacterGetRace(_Player, 0, "LLMIME_DarkElf")
 THEN
-NRD_PlayerSetCustomDataString(_Player, "Race", "Undead_Elf");
+NRD_PlayerSetCustomDataString(_Player, "Race", "Elf");
 */
 //END_REGION
 

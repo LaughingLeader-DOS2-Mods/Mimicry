@@ -91,14 +91,14 @@ TimerFinished("Timers_LLMIME_CC_SetCustomRaceData")
 AND
 CharacterGetRace(S_Player_LLMIME_Mime_191f180c-6270-4cd1-a44a-e02454bd846f, 0, "LLMIME_DarkElf")
 THEN
-NRD_PlayerSetCustomDataString(S_Player_LLMIME_Mime_191f180c-6270-4cd1-a44a-e02454bd846f, "Race", "Undead_Elf");
+NRD_PlayerSetCustomDataString(S_Player_LLMIME_Mime_191f180c-6270-4cd1-a44a-e02454bd846f, "Race", "Elf");
 
 PROC
 LeaderLib_CC_OnPresetChanged((CHARACTERGUID)_Player, (STRING)_LastPreset, (STRING)_NextPreset)
 AND
 CharacterGetRace(_Player, 0, "LLMIME_DarkElf")
 THEN
-NRD_PlayerSetCustomDataString(_Player, "Race", "Undead_Elf");
+NRD_PlayerSetCustomDataString(_Player, "Race", "Elf");
 */
 
 /*

@@ -91,7 +91,7 @@ ObjectExists(_Mime, 1)
 AND
 CharacterGetRace(_Mime, 0, "LLMIME_DarkElf")
 THEN
-NRD_PlayerSetCustomDataString(_Mime, "Race", "Undead_Elf");
+NRD_PlayerSetCustomDataString(_Mime, "Race", "Elf");
 */
 
 PROC
