@@ -1,0 +1,29 @@
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+
+KBSECTION
+
+IF
+CharacterStatusApplied(_Char, "INSURFACE", _)
+AND
+HasActiveStatus(_Char, "LLMIME_SHADOWFORM", 1)
+AND
+HasActiveStatus(_Char, "LLMIME_SHADOWFORM_DAMAGE_RESISTANCE", 0)
+AND
+LLMIME_ShadowForm_IsInConcealedSurface(_Char)
+THEN
+ApplyStatus(_Char, "LLMIME_SHADOWFORM_DAMAGE_RESISTANCE", -1.0, 0, _Char);
+
+IF
+CharacterStatusRemoved(_Char, "INSURFACE", _)
+AND
+HasActiveStatus(_Char, "LLMIME_SHADOWFORM_DAMAGE_RESISTANCE", 0)
+AND
+NOT LLMIME_ShadowForm_IsInConcealedSurface(_Char)
+THEN
+RemoveStatus(_Char, "LLMIME_SHADOWFORM_DAMAGE_RESISTANCE");
+EXITSECTION
+
+ENDEXITSECTION
+ParentTargetEdge "LLMIME_10_ToggleScripts"

@@ -60,6 +60,18 @@ AND
 IsTagged(_Character, "LLMIME_DARKELF", 1)
 THEN
 DB_NOOP(1);
+
+//REGION SHADOWFORM
+IF
+CharacterStatusRemoved(_Char, "LLMIME_SHADOWFORM", _)
+THEN
+LeaderLib_ToggleScripts_DisableScriptForObjectAfterDelay(_Char, "LLMIME_TS_ShadowFormActive", "Mimicry", 500);
+
+IF
+CharacterStatusApplied(_Char, "LLMIME_SHADOWFORM", _)
+THEN
+LeaderLib_ToggleScripts_EnableScriptForObject(_Char, "LLMIME_TS_ShadowFormActive", "Mimicry");
+//END_REGION
 EXITSECTION
 
 ENDEXITSECTION

@@ -32,6 +32,8 @@ LeaderLib_ToggleScripts_Register_Script("LLMIME_10_TS_Skills_02_CounterThrow", "
 
 LeaderLib_ToggleScripts_Register_Script("LLMIME_10_TS_SummonTracker", "Mimicry_Mimic_CopySummonedCreatureSkills_Enabled");
 
+LeaderLib_ToggleScripts_Register_Script("LLMIME_10_TS_ShadowForm", "LLMIME_TS_ShadowFormActive");
+
 //REGION UPDATES
 PROC
 LeaderUpdater_ModUpdated("Mimicry", "LaughingLeader", (STRING)_PastVersion, (STRING)_NewVersion)

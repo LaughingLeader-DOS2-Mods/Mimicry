@@ -54,13 +54,32 @@ DB_LLMIME_Skills_IncarnateInfusions("INF_WATER", "INF_WATER_G");
 DB_LLMIME_Skills_FlankAndAwap_PreserveStatuses("KNOCKED_DOWN");
 DB_LLMIME_Skills_FlankAndAwap_PreserveStatuses("FROZEN");
 DB_LLMIME_Skills_FlankAndAwap_PreserveStatuses("PETRIFIED");
+
+PROC
+LLMIME_Skills_InitSettings()
+AND
+NOT DB_LLMIME_ShadowForm_SmokeSurfaces(_)
+THEN
+DB_LLMIME_ShadowForm_SmokeSurfaces("SurfaceSmokeCloud");
+DB_LLMIME_ShadowForm_SmokeSurfaces("SurfaceSmokeCloudBlessed");
+DB_LLMIME_ShadowForm_SmokeSurfaces("SurfaceSmokeCloudCursed");
+DB_LLMIME_ShadowForm_SmokeSurfaces("SurfaceSmokeCloudPurified");
+
+QRY
+LLMIME_ShadowForm_IsInConcealedSurface((CHARACTERGUID)_Char)
+AND
+DB_LLMIME_ShadowForm_SmokeSurfaces(_Surface)
+AND
+LeaderLib_Helper_QRY_IsInSurface(_Char, _Surface)
+THEN
+DB_NOOP(1);
 //END_REGION
 
 //REGION UPDATING
 PROC
 LeaderUpdater_ModUpdated("Mimicry", "LaughingLeader", (STRING)_PastVersion, (STRING)_NewVersion)
 AND
-LeaderLib_StringExt_QRY_VersionIsLessThan(_PastVersion, 1,0,11,0)
+LeaderLib_StringExt_QRY_VersionIsLessThan(_PastVersion, 1,2,0,0)
 THEN
 LeaderLog_Log("DEBUG", "[LLMIME:Skills] Updating settings from version [",_PastVersion,"]");
 LLMIME_Skills_InitSettings();
