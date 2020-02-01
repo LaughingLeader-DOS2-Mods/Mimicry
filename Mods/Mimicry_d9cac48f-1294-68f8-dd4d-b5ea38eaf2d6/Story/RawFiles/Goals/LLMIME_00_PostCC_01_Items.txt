@@ -1,0 +1,154 @@
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+KBSECTION
+//REGION FIST_EQUIPPING
+PROC
+ProcBlockUseOfItem(_Character, _Item)
+AND
+IsTagged(_Item, "LLMIME_BrawlerFist", 1)
+AND
+NOT LLMIME_QRY_CharacterIsAMime(_Character)
+THEN
+CharacterStatusText(_Character, "LLMIME_StatusText_BrawlerFistBlocked");
+DB_CustomUseItemResponse(_Character, _Item, 0);
+//DB_LLMIME_Items_Temp_BlockedItem(_Character, _Item);
+//END_REGION
+
+//REGION MASK_EQUIPPING
+PROC
+ProcBlockUseOfItem(_Character, _Item)
+//AND
+//LLMIME_Mime_QRY_IsMimeItem(_Item)
+AND
+GetTemplate(_Item, _Template)
+AND
+DB_LLMIME_Templates("Mask_A", _Template)
+AND
+NOT CharacterGetEquippedItem(_Character, "Helmet", _Item) // Mask not equipped
+AND
+CharacterIsInCombat(_Character, 1)
+THEN
+CharacterStatusText(_Character, "LLMIME_StatusText_MimeMaskBlocked");
+DB_CustomUseItemResponse(_Character, _Item, 0);
+//DB_LLMIME_Items_Temp_BlockedItem(_Character, _Item);
+//END_REGION
+
+//REGION MIME_SKILLBOOKS
+PROC
+ProcBlockUseOfItem(_Character, _Item)
+AND
+IsTagged(_Item, "LLMIME_MimeSkillbook", 1)
+AND
+NOT LLMIME_QRY_CharacterIsAMime(_Character)
+THEN
+CharacterStatusText(_Character, "LLMIME_StatusText_MimeSkillbookBlocked");
+DB_CustomUseItemResponse(_Character, _Item, 0);
+//END_REGION
+
+//REGION MIME_FOLLOWER
+PROC
+ProcBlockUseOfItem((CHARACTERGUID)S_LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9, _Item)
+AND
+IsTagged(_Item, "BOOK", 1)
+THEN
+CharacterStatusText(S_LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9, "LLMIME_StatusText_SkillbookBlockedForFollower");
+DB_CustomUseItemResponse(S_LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9, _Item, 0);
+
+/*
+PROC
+ProcBlockUseOfItem(_Mime, _Item)
+AND
+IsTagged(_Mime, "LLMIME_MimeFollower", 1)
+AND
+NOT DB_CustomUseItemResponse(_Mime, _Item, _)
+AND
+NOT LLMIME_Mimicking_QRY_IsMimicking(_Mime)
+AND
+ItemIsInInventory(_Item, 1)
+AND
+NOT LLMIME_Mimicking_QRY_IsMimicking(_Mime)
+AND
+NOT GetInventoryOwner(_Item, _Mime)
+THEN
+DB_CustomUseItemResponse(_Mime, _Item, 0);
+*/
+
+//Prevent general item useage with the Mime follower
+PROC
+ProcBlockUseOfItem((CHARACTERGUID)S_LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9, _Item)
+AND
+NOT DB_CustomUseItemResponse(S_LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9, _Item, _)
+AND
+NOT LLMIME_Mimicking_QRY_IsMimicking(S_LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9)
+AND
+ItemIsInInventory(_Item, 1)
+AND
+NOT GetInventoryOwner(_Item, S_LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9)
+THEN
+DB_CustomUseItemResponse(S_LLMIME_MimeCompanion_ElfMale_3f625a37-59d0-41b5-81df-695abd2975e9, _Item, 0);
+//END_REGION
+
+//REGION MUSIC_BOX
+PROC
+ProcBlockUseOfItem(_Char, _Item)
+AND
+IsTagged(_Item, "LLMIME_MimeSummonTool", 1)
+AND
+NOT GlobalGetFlag("Mimicry_MusicBoxShattered", 1)
+THEN
+LLMIME_Items_OnMusicBoxUsed(_Char, _Item);
+
+//Why do they still have this?
+PROC
+ProcBlockUseOfItem(_Char, _Item)
+AND
+IsTagged(_Item, "LLMIME_MimeSummonTool", 1)
+AND
+GlobalGetFlag("Mimicry_MusicBoxShattered", 1)
+THEN
+CharacterStatusText(_Char, "LLMIME_StatusText_MusicBoxBlocked");
+DB_CustomUseItemResponse(_Char, _Item, 0);
+
+IF
+DB_CustomUseItemResponse(_Char, _Item, 0)
+AND
+IsTagged(_Item, "LLMIME_MimeSummonTool", 1)
+AND
+DB_LLMIME_Follower_Mime(_Mime)
+AND
+CharacterIsDead(_Mime, 0)
+AND
+IsTagged(_Mime, "LeaderLib_IsFollower", 1)
+THEN
+LLMIME_Follower_ReturnIfNotInCombat(_Char, _Mime);
+
+PROC
+ProcBlockUseOfItem((CHARACTERGUID)_Char, (ITEMGUID)_Item)
+AND
+IsTagged(_Item, "LLMIME_MusicBoxShard", 1)
+AND
+DB_LLMIME_Follower_Mime(_Mime)
+AND
+NOT IsTagged(_Mime, "LeaderLib_IsFollower", 1)
+THEN
+DB_CustomUseItemResponse(_Char, _Item, 0);
+CharacterStatusText(_Char, "LLMIME_StatusText_MusicBoxShardBlocked");
+
+IF
+CharacterUsedItemTemplate(_Char, _Template, _Item)
+AND
+DB_LLMIME_Templates("MusicBox_Shard", _Template)
+AND
+DB_LLMIME_Follower_Mime(_Mime)
+AND
+CharacterIsDead(_Mime, 0)
+AND
+IsTagged(_Mime, "LeaderLib_IsFollower", 1)
+THEN
+LLMIME_Follower_ReturnIfNotInCombat(_Char, _Mime);
+//END_REGION
+EXITSECTION
+
+ENDEXITSECTION
+ParentTargetEdge "LLMIME_00_PostCC__Start"
