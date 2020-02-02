@@ -1,7 +1,7 @@
 Version 1
 SubGoalCombiner SGC_AND
 INITSECTION
-//LLMIME_ACTIVATE_MIME;LLMIME_MimeMask;LeaderLib_AutoLevel;Mimicry_MimeItem;
+//LLMIME_ACTIVATE_MIME;LLMIME_MimeMask;Mimicry_MimeItem;
 KBSECTION
 //REGION MASK_EQUIP
 IF

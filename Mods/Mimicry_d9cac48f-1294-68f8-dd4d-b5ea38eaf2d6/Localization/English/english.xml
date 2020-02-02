@@ -203,6 +203,8 @@
 	<content contentuid="h4224e937gf411g415agad3ag54f6203da782" Source="LLMIME_Presets.lsb" Key="LLMIME_Preset_Race_DarkElf_Color_Default">Default</content>
 	<content contentuid="h6772c1b6ge08fg4af0ga3f9gdeb6d9b17574" Source="LLMIME_Presets.lsb" Key="LLMIME_Preset_Race_DarkElf_Description">A rare subset of elves imbued with dark energy. Some surmise that the Dark Elves are a result of the influence of an alien being, or perhaps the Void itself.</content>
 	<content contentuid="hca5fae3ag9f65g4296gbf30ge906093d9023" Source="LLMIME_Presets.lsb" Key="LLMIME_Preset_Race_DarkElf_DisplayName">Dark Elf</content>
+	<content contentuid="hb830afeag93dfg499dga907ge9ca908ceb43" Source="LLMIME_Presets.lsb" Key="LLMIME_Preset_Race_DarkElf_Female_DefaultName_A">Morathi</content>
+	<content contentuid="h3d94bd50g87f8g4240gaafagd9f7ab751c5f" Source="LLMIME_Presets.lsb" Key="LLMIME_Preset_Race_DarkElf_Male_DefaultName_A">Malus</content>
 	<content contentuid="hf6f40e08gdda4g4464ga0a4gbc8bdffa8dd1" Source="LLMIME_Presets.lsb" Key="LLMIME_TheMime">The Mime</content>
 	<content contentuid="ha218112agbc20g453fgb94ag41c5c8bb918c" Source="LLMIME_SettingsMenu.lsj">*Hide all Mime passive statuses.*</content>
 	<content contentuid="hb1722125gc69cg468fg866eg6558027d6472" Source="LLMIME_SettingsMenu.lsj">[EXIT] *Stop focusing.*</content>
@@ -401,7 +403,7 @@
 	<content contentuid="h6baea7a3gdc8bg4345g93f5g11b3fb1c22b7" Source="LLMIME_Statuses.lsb" Key="LLMIME_VITAL_CHECK_DisplayName">Constitution Check</content>
 	<content contentuid="h68467a25g83cfg4751g8409gd89f410fef24" Source="LLMIME_Statuses.lsb" Key="LLMIME_VITAL_DEBUFF_Description">Character&apos;s maximum vitality is reduced. Deals [1] internally each turn.</content>
 	<content contentuid="h54f438bbg0784g4867g9db3ga7f342cb7d64" Source="LLMIME_Statuses.lsb" Key="LLMIME_VITAL_DEBUFF_DisplayName">Weakened Vitals</content>
-	<content contentuid="h1b0634feg9f56g4b55gae58gc74821a19773" Source="LLMIME_TagNames.lsb" Key="LLMIME_DARK_ELF">Dark Elf</content>
+	<content contentuid="h74d26665gb261g4138gb0e8gd2853a6eea26" Source="LLMIME_TagNames.lsb" Key="LLMIME_DARKELF">Dark Elf</content>
 	<content contentuid="hfccfd752gdff7g4a2eg9088ge3848f0349a1" Source="LLMIME_TagNames.lsb" Key="LLMIME_MimeFollower">Mime (Follower)</content>
 	<content contentuid="h83880151gb07dg4fc3g92bcg451f30e6a526" Source="LLMIME_TagNames.lsb" Key="Mimicry_Mime">Mime</content>
 	<content contentuid="he56f9842g5931g4012g8be8gf881fe45c172" Source="LLMIME_TagNames.lsb" Key="Mimicry_MimeOrigin">Fractured Memories</content>
@@ -410,6 +412,7 @@
 	<content contentuid="h115c902bg504bg401ag85fbgc8b828c10765" Source="LOOT_MagicAmulet_LLMIME_SourceBlastImmunity">Mime&apos;s Amulet</content>
 	<content contentuid="h1984c8e8gd074g4047g8e49gcd45ab8f2099" Source="S_LLMIME_Ghost_Mime">Phantom of the Mask</content>
 	<content contentuid="h40368a91gc4e3g43f1ga7b1gc523ac89976e" Source="S_LLMIME_Skill_Decoy">Decoy</content>
+	<content contentuid="h2daf12d7gdf76g498fga9fdg4a4b7ead4fb9" Source="Tags_Tooltips.lsb" Key="tagkey_LLMIME_DARKELF">A rare subset of elves imbued with dark energy. Some surmise that the Dark Elves are a result of the influence of an alien being, or perhaps the Void itself.</content>
 	<content contentuid="h7315fec0ge868g4f3bga05egf6ddb3126cc4" Source="Tags_Tooltips.lsb" Key="tagkey_LLMIME_MimeFollower">A mime who is following the party.</content>
 	<content contentuid="h593a0be5g43f9g402cg9865gc9bff0c96538" Source="Tags_Tooltips.lsb" Key="tagkey_Mimicry_Mime">A warrior who abandoned their identity, instead mimicking the actions of allies in battle. Mimes are also proficient with unarmed combat, and provide bonuses to summoned creatures.</content>
 	<content contentuid="h9fe23b2bg85abg4716gb851g08c448551ea6" Source="Tags_Tooltips.lsb" Key="tagkey_Mimicry_MimeOrigin">Your history before wearing the Mask of Mimicry appears to be completely lost. Who are you truly?</content>

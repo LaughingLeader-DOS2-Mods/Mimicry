@@ -14,7 +14,8 @@ THEN
 LeaderLib_Origins_Register_Main(S_Player_LLMIME_Mime_191f180c-6270-4cd1-a44a-e02454bd846f, "Companion10", "Hero Henchman Shadowblade");
 LeaderLib_Origins_Register_Tags(S_Player_LLMIME_Mime_191f180c-6270-4cd1-a44a-e02454bd846f, "SOLDIER", "JESTER", "Mimicry_MimeOrigin");
 DB_OriginEquipmentSet((CHARACTERGUID)S_Player_LLMIME_Mime_191f180c-6270-4cd1-a44a-e02454bd846f,"Origin_LLMIME_Mime_Armor");
-DB_OriginIntroductions("LLMIME_Mime", "Insane_01_Loop", "Undead_Presentation_Music", "Undead_Presentation_SFX");
+DB_OriginIntroductions("LLMIME_TheMime", "still", "Undead_Presentation_Music", "");
+//DB_OriginIntroductions("Mimicry_MimeOrigin", "still", "Undead_Presentation_Music", "Undead_Presentation_SFX");
 //DB_OriginWarning1Dialog((CHARACTERGUID)S_Player_LLMIME_Mime_191f180c-6270-4cd1-a44a-e02454bd846f,"LLMAJSKULLK_TheSkullKnight_Warning1");
 //DB_OriginWarning2Dialog((CHARACTERGUID)S_Player_LLMIME_Mime_191f180c-6270-4cd1-a44a-e02454bd846f,"LLMAJSKULLK_TheSkullKnight__Warning2");
 //DB_OriginLeavingDialog((CHARACTERGUID)S_Player_LLMIME_Mime_191f180c-6270-4cd1-a44a-e02454bd846f,"LLMAJSKULLK_TheSkullKnight_Leaving");
