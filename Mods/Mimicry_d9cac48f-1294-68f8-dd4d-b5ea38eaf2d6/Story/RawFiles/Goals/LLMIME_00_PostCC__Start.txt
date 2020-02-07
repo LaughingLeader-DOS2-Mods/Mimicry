@@ -3,6 +3,14 @@ SubGoalCombiner SGC_AND
 INITSECTION
 
 KBSECTION
+/*
+PROC
+ProcStartOriginIntroduction(_Character,_User,"LLMIME_TheMime")
+AND
+CharacterGetHostCharacter(_Host)
+THEN
+MoviePlay(_Host, "Mimicry_MusicBoxIntro");
+*/
 IF
 GameModeStarted(_, 1)
 THEN

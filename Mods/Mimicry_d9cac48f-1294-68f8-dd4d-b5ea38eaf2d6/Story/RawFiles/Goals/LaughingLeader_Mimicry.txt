@@ -1,7 +1,7 @@
 Version 1
 SubGoalCombiner SGC_AND
 INITSECTION
-LLMIME_System_InitOrigin();
+//LLMIME_System_InitOrigin();
 LLMIME_Internal_CompleteIfStarted(); // Existing saves
 
 KBSECTION
