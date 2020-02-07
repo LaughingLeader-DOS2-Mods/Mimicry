@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<save>
+    <header version="2" time="1387205254" />
+    <version major="1" minor="3" revision="0" build="0" />
+    <region id="CharacterCreationManager">
+        <node id="root">
+            <children>
+                <node id="RaceDesc">
+                    <attribute id="RaceDisplayName" value="Dark Elf" handle="hca5fae3ag9f65g4296gbf30ge906093d9023" type="28" />
+                    <attribute id="RaceName" value="LLMIME_DarkElf" type="22" />
+                    <attribute id="RaceDescription" value="A rare subset of elves imbued with dark energy. How they come to be is not known, yet the few who are aware of their presence surmise that the Dark Elves are a result of the influence of an alien being, or perhaps the Void itself." handle="h6772c1b6ge08fg4af0ga3f9gdeb6d9b17574" type="28" />
+                    <attribute id="SkillSet" value="Race_LLMIME_DarkElf" type="22" />
+                    <attribute id="FemaleDefaultHairColor" value="1" type="5" />
+                    <attribute id="FemaleDefaultSkinColor" value="1" type="5" />
+                    <attribute id="MaleDefaultHairColor" value="1" type="5" />
+                    <attribute id="MaleDefaultSkinColor" value="1" type="5" />
+                    <attribute id="AllowBald" value="1" type="19" />
+                    
+                    <children>
+                        <node id="SupportedGenders">
+                            <children>
+                                <node id="Gender">
+                                    <attribute id="Gender" value="Male" type="23" />
+                                </node>
+                            </children>
+                        </node>
+                        <node id="TagsAdded">
+                            <children>
+                                <node id="TagAdded">
+                                    <attribute id="Tag" value="ELF" type="22" />
+                                </node>
+                                <node id="TagAdded">
+                                    <attribute id="Tag" value="LLMIME_DARKELF" type="22" />
+                                </node>
+                            </children>
+                        </node>
+                        <node id="TalentsAdded">
+                            <children>
+                                <node id="TalentAdded">
+                                    <attribute id="Talent" value="Dwarf_Sturdy" type="23" />
+                                </node>
+                                <node id="TalentAdded">
+                                    <attribute id="Talent" value="Lizard_Resistance" type="23" />
+                                </node>
+                            </children>
+                        </node>
+                        <node id="MaleDefaultPlayerNames">
+                            <children>
+                                <node id="MaleDefaultPlayerNames">
+                                    <attribute id="Object" value="Malus" handle="h3d94bd50g87f8g4240gaafagd9f7ab751c5f" type="28" />
+                                </node>
+                            </children>
+                        </node>
+                        <node id="MaleIcons">
+                            <children>
+                                <node id="MaleIcons">
+                                    <attribute id="Object" value="PlayerPortrait_Elf_Male_B" type="22" />
+                                </node>
+                            </children>
+                        </node>
+                        <node id="MaleRootTemplateIDs">
+                            <children>
+                                <node id="MaleRootTemplateIDs">
+                                    <attribute id="Object" value="01acaf9e-866d-450e-9969-49dab771d973" type="22" />
+                                </node>
+                            </children>
+                        </node>
+                        <node id="FemaleDefaultPlayerNames">
+                            <children>
+                                <node id="FemaleDefaultPlayerNames">
+                                    <attribute id="Object" value="Morathi" handle="hb830afeag93dfg499dga907ge9ca908ceb43" type="28" />
+                                </node>
+                            </children>
+                        </node>
+                        <node id="FemaleIcons">
+                            <children>
+                                <node id="MaleIcons">
+                                    <attribute id="Object" value="PlayerPortrait_Elf_Male_B" type="22" />
+                                </node>
+                            </children>
+                        </node>
+                        <node id="FemaleRootTemplateIDs">
+                            <children>
+                                <node id="MaleRootTemplateIDs">
+                                    <attribute id="Object" value="01acaf9e-866d-450e-9969-49dab771d973" type="22" />
+                                </node>
+                            </children>
+                        </node>
+                        <node id="HenchManMaleRootTemplateIDs">
+                            <children>
+                                <node id="HenchManMaleRootTemplateIDs">
+                                    <attribute id="Object" value="01acaf9e-866d-450e-9969-49dab771d973" type="22" />
+                                </node>
+                            </children>
+                        </node>
+                        <node id="HenchManFemaleRootTemplateIDs">
+                            <children>
+                                <node id="HenchManFemaleRootTemplateIDs">
+                                    <attribute id="Object" value="01acaf9e-866d-450e-9969-49dab771d973" type="22" />
+                                </node>
+                            </children>
+                        </node>
+                        <node id="ClothColors">
+                            <children>
+                                <node id="ColorDesc">
+                                    <attribute id="ID" value="0" type="5" />
+                                    <attribute id="ColorName" value="Default" handle="h4224e937gf411g415agad3ag54f6203da782" type="28" />
+                                    <attribute id="Value" value="0xffffffff" type="5" />
+                                </node>
+                            </children>
+                        </node>
+                        <node id="HairColors">
+                            <children>
+                                <node id="ColorDesc">
+                                    <attribute id="ID" value="0" type="5" />
+                                    <attribute id="ColorName" value="Default" handle="h4224e937gf411g415agad3ag54f6203da782" type="28" />
+                                    <attribute id="Value" value="0xffffffff" type="5" />
+                                </node>				
+                            </children>
+                        </node>
+                        <node id="SkinColors">
+                            <children>
+                                <node id="ColorDesc">
+                                    <attribute id="ID" value="0" type="5" />
+                                    <attribute id="ColorName" value="Default" handle="h4224e937gf411g415agad3ag54f6203da782" type="28" />
+                                    <attribute id="Value" value="0xffffffff" type="5" />
+                                </node>					
+                            </children>
+                        </node>
+                    </children>
+                </node>
+            </children>
+        </node>
+    </region>
+</save>
