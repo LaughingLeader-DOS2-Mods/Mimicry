@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<save>
+    <header version="2" time="1387205254" />
+    <version major="1" minor="0" revision="0" build="0" />
+    <region id="CharacterCreationClass">
+        <node id="root">
+            <attribute id="ClassDescription" value="A warrior who mimics the actions of allies in battle." handle="hbd3b39e4g138eg4edag9b8cgfdbfc4736839" type="28" />
+			<attribute id="ClassLongDescription" value="A warrior who mimics the actions of allies in battle. Mimes are also proficient with unarmed combat, and provide additional skills and bonuses to nearby summoned creatures." handle="h6ea8d9fag5afeg47fagb4d3gc2948b34fa7b" type="28" />
+            <attribute id="ClassName" value="Mime" handle="h8f468b6bg27bcg4388gbf3fgd074a28e6777" type="28" />
+            <attribute id="ClassType" value="LLMIME_Mime" type="22" />
+            <attribute id="SkillSet" value="Class_LLMIME_Mime" type="22" />
+            <attribute id="Voice" value="0" type="5" />
+			<attribute id="Icon" value="7" type="5" />
+
+            <attribute id="NumStartingCombatAbilityPoints" value="2" type="4" />
+            <attribute id="NumStartingCivilAbilityPoints" value="1" type="4" />
+            <attribute id="NumStartingAttributePoints" value="3" type="4" />
+            <attribute id="NumStartingTalentPoints" value="1" type="4" />
+            
+			<attribute id="AreStatsWeighted" value="1" type="19" />
+            <children>
+            <node id="EquipmentProperties">
+                    <children>
+                        <node id="EquipmentProperty">
+                            <attribute id="RaceName" value="Human" type="22" />
+                            <attribute id="PreviewEquipmentSet" value="Class_LLMIME_Mime_Preview" type="22" />
+                            <attribute id="StartingEquipmentSet" value="Class_LLMIME_Mime_Start" type="22" />
+                        </node>
+                        <node id="EquipmentProperty">
+                            <attribute id="RaceName" value="Dwarf" type="22" />
+                            <attribute id="PreviewEquipmentSet" value="Class_LLMIME_Mime_Preview" type="22" />
+                            <attribute id="StartingEquipmentSet" value="Class_LLMIME_Mime_Start" type="22" />
+                        </node>
+                        <node id="EquipmentProperty">
+                            <attribute id="RaceName" value="Elf" type="22" />
+                            <attribute id="PreviewEquipmentSet" value="Class_LLMIME_Mime_Preview" type="22" />
+                            <attribute id="StartingEquipmentSet" value="Class_LLMIME_Mime_Start" type="22" />
+                        </node>
+                        <node id="EquipmentProperty">
+                            <attribute id="RaceName" value="Lizard" type="22" />
+                            <attribute id="PreviewEquipmentSet" value="Class_LLMIME_Mime_Preview" type="22" />
+                            <attribute id="StartingEquipmentSet" value="Class_LLMIME_Mime_Start" type="22" />
+                        </node>
+                        <node id="EquipmentProperty">
+                            <attribute id="RaceName" value="Undead_Human" type="22" />
+                            <attribute id="PreviewEquipmentSet" value="Class_LLMIME_Mime_Preview" type="22" />
+                            <attribute id="StartingEquipmentSet" value="Class_LLMIME_Mime_Start_Undead" type="22" />
+                        </node>
+                        <node id="EquipmentProperty">
+                            <attribute id="RaceName" value="Undead_Dwarf" type="22" />
+                            <attribute id="PreviewEquipmentSet" value="Class_LLMIME_Mime_Preview" type="22" />
+                            <attribute id="StartingEquipmentSet" value="Class_LLMIME_Mime_Start_Undead" type="22" />
+                        </node>
+                        <node id="EquipmentProperty">
+                            <attribute id="RaceName" value="Undead_Elf" type="22" />
+                            <attribute id="PreviewEquipmentSet" value="Class_LLMIME_Mime_Preview" type="22" />
+                            <attribute id="StartingEquipmentSet" value="Class_LLMIME_Mime_Start_Undead" type="22" />
+                        </node>
+                        <node id="EquipmentProperty">
+                            <attribute id="RaceName" value="Undead_Lizard" type="22" />
+                            <attribute id="PreviewEquipmentSet" value="Class_LLMIME_Mime_Preview" type="22" />
+                            <attribute id="StartingEquipmentSet" value="Class_LLMIME_Mime_Start_Undead" type="22" />
+                        </node>
+                        <node id="EquipmentProperty">
+                            <attribute id="RaceName" value="LLMIME_DarkElf" type="22" />
+                            <attribute id="PreviewEquipmentSet" value="Origin_LLMIME_Mime_Preview" type="22" />
+                            <attribute id="StartingEquipmentSet" value="Class_LLMIME_Mime_Start" type="22" />
+                        </node>
+                    </children>
+                </node>
+                <node id="AbilityChanges">
+                    <children>
+                        <node id="AbilityChange">
+                            <attribute id="Ability" value="WarriorLore" type="23" />
+                            <attribute id="AmountIncreased" value="1" type="4" />
+                        </node>
+						<node id="AbilityChange">
+                            <attribute id="Ability" value="RogueLore" type="23" />
+                            <attribute id="AmountIncreased" value="1" type="4" />
+                        </node>
+						<node id="AbilityChange">
+                            <attribute id="Ability" value="Thievery" type="23" />
+                            <attribute id="AmountIncreased" value="1" type="4" />
+                        </node>
+                    </children>
+                </node>
+                <node id="AttributeChanges">
+                    <children>
+                        <node id="AttributeChange">
+                            <attribute id="AmountIncreased" value="3" type="4" />
+                            <attribute id="Attribute" value="CON" type="23" />
+                        </node>
+                    </children>
+                </node>
+                <node id="TalentsAdded">
+                    <children>
+                        <node id="TalentAdded">
+                            <attribute id="Talent" value="QuickStep" type="23" />
+                        </node>
+                    </children>
+                </node>
+            </children>
+        </node>
+    </region>
+</save>
