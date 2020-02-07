@@ -403,7 +403,7 @@
 	<content contentuid="h6baea7a3gdc8bg4345g93f5g11b3fb1c22b7" Source="LLMIME_Statuses.lsb" Key="LLMIME_VITAL_CHECK_DisplayName">Constitution Check</content>
 	<content contentuid="h68467a25g83cfg4751g8409gd89f410fef24" Source="LLMIME_Statuses.lsb" Key="LLMIME_VITAL_DEBUFF_Description">Character&apos;s maximum vitality is reduced. Deals [1] internally each turn.</content>
 	<content contentuid="h54f438bbg0784g4867g9db3ga7f342cb7d64" Source="LLMIME_Statuses.lsb" Key="LLMIME_VITAL_DEBUFF_DisplayName">Weakened Vitals</content>
-	<content contentuid="h74d26665gb261g4138gb0e8gd2853a6eea26" Source="LLMIME_TagNames.lsb" Key="LLMIME_DARKELF">Dark Elf</content>
+	<content contentuid="ha59ead1cg96a0g4802gace3g2c77f97443cd" Source="LLMIME_TagNames.lsb" Key="LLMIME_DARKELF">Dark Elf</content>
 	<content contentuid="hfccfd752gdff7g4a2eg9088ge3848f0349a1" Source="LLMIME_TagNames.lsb" Key="LLMIME_MimeFollower">Mime (Follower)</content>
 	<content contentuid="h83880151gb07dg4fc3g92bcg451f30e6a526" Source="LLMIME_TagNames.lsb" Key="Mimicry_Mime">Mime</content>
 	<content contentuid="he56f9842g5931g4012g8be8gf881fe45c172" Source="LLMIME_TagNames.lsb" Key="Mimicry_MimeOrigin">Fractured Memories</content>
