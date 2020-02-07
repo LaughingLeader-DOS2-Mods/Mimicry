@@ -1467,6 +1467,8 @@ CharacterRemoveSkill(_Mime, _Skill);
 PROC
 LLMIME_Follower_RemoveBlankSkills((CHARACTERGUID)_Mime)
 AND
+CharacterIsPartyFollower(_Mime, 1)
+AND
 DB_LLMIME_BlankSkills(_Skill)
 AND
 NRD_SkillBarFindSkill(_Mime, _Skill, _Slot)
