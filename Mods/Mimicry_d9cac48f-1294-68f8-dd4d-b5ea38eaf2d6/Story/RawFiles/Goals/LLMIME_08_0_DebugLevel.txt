@@ -14,11 +14,13 @@ IF
 GameModeStarted(_,1)
 THEN
 SysActivateGoal("LLMIME_08_1_DebugLevel_Main");
+SysActivateGoal("LLMIME_02_Passives_TS_StatusEvents");
 
 IF
 GameStarted(_,1)
 THEN
 SysActivateGoal("LLMIME_08_1_DebugLevel_Main");
+SysActivateGoal("LLMIME_02_Passives_TS_StatusEvents");
 
 IF
 GameStarted("LeaderLib_GreenScreen",1)
