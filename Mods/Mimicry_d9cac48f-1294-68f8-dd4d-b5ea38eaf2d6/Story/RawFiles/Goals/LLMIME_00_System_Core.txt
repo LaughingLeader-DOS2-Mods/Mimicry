@@ -605,25 +605,6 @@ THEN
 RemoveStatus(_Mime, _Status);
 RemoveStatus(_Mime, _BonusStatus);
 RemoveStatus(_Mime, _InfoStatus);
-
-IF
-GameStarted(_Level,_)
-AND
-IsGameLevel(_Level, 1)
-AND
-DB_IsPlayer(_Mime)
-AND
-LLMIME_QRY_CharacterIsAMime(_Mime)
-AND
-DB_LLMIME_PassiveData(_Status, _BonusStatus, _InfoStatus, _DisableFlag)
-AND
-HasActiveStatus(_Mime, _BonusStatus, 1)
-AND
-HasActiveStatus(_Mime, _InfoStatus, 0)
-AND
-NOT ObjectGetFlag(_Mime, _DisableFlag, 1)
-THEN
-ApplyStatus(_Mime, _InfoStatus, -1.0, 1, _Mime);
 //END_REGION
 
 //REGION CONDITION_QUERIES
