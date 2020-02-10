@@ -70,7 +70,7 @@ LLMIME_ShadowForm_IsInConcealedSurface((CHARACTERGUID)_Char)
 AND
 DB_LLMIME_ShadowForm_SmokeSurfaces(_Surface)
 AND
-LeaderLib_Helper_QRY_IsInSurface(_Char, _Surface)
+LeaderLib_Helper_QRY_IsInSurface((GUIDSTRING)_Char, _Surface)
 THEN
 DB_NOOP(1);
 //END_REGION
