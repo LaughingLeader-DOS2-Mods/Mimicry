@@ -1380,7 +1380,7 @@ AND
 DB_LLMIME_Mimicking_DeleteOneTimeUseWeaponsTimer(_Mime, _Caster, _Action, _ActionType, _TimerName)
 THEN
 TimerCancel(_TimerName);
-TimerLaunch(_TimerName, 1325);
+TimerLaunch(_TimerName, 1875);
 
 IF
 TimerFinished(_TimerName)
@@ -1390,7 +1390,7 @@ AND
 LLMIME_Mimicking_QRY_SkipWeaponReset(_Mime, _Caster, _Action, _ActionType)
 THEN
 LeaderLog_Log("DEBUG", "[LLMIME_01_Mimicking_02_Main:LLMIME_Timers_DeleteMimickedWeapons] Skipping delete for [",_Action,"](",_ActionType,").");
-TimerLaunch(_TimerName, 1325);
+//TimerLaunch(_TimerName, 1675);
 
 IF
 TimerFinished(_TimerName)
