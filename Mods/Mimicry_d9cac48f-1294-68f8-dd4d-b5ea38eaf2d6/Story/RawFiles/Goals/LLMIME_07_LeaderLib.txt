@@ -98,7 +98,6 @@ LLMIME_LeaderLib_RegisterSettings();
 PROC
 LLMIME_LeaderLib_RegisterSettings()
 THEN
-LeaderUpdater_Register_UUID("Mimicry", "LaughingLeader", d9cac48f-1294-68f8-dd4d-b5ea38eaf2d6);
 DB_LeaderLib_OriginSkills("Mimicry_MimeOrigin", "Target_LLMIME_PerfectDoppelganger");
 DB_LeaderLib_RacialSkills("LLMIME_DARKELF", "Shout_LLMIME_ShadowForm");
 DB_LeaderLib_EngineStatus("LLMIME_UNARMED_HIT");

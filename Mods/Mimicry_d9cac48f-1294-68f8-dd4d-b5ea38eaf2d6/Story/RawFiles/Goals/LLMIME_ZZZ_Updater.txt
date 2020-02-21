@@ -15,7 +15,6 @@ THEN
 LeaderUpdater_Register_Mod("Mimicry", "LaughingLeader", 1,2,1,0);
 // [END_NO_OSITOOLS]
 
-
 // Fix for mimicking data not being cleared when failing
 PROC
 LeaderUpdater_ModUpdated("Mimicry", "LaughingLeader", (STRING)_PastVersion, (STRING)_NewVersion)
@@ -35,21 +34,12 @@ THEN
 LeaderLog_Log("DEBUG", "[LLMIME_ZZZ_Updater:ModUpdated] Updating from (",_PastVersion,"). Recounting parties to hopefully fix mimicking not applying.");
 LeaderLib_Party_CountParties();
 
-/*
 PROC
 LeaderUpdater_ModUpdated("Mimicry", "LaughingLeader", (STRING)_PastVersion, (STRING)_NewVersion)
 AND
-DB_LeaderLib_StringExt_VersionIsLessThan(_PastVersion, 0, 9, 9, 33)
+LeaderLib_StringExt_QRY_VersionIsLessThan(_PastVersion, 1,2,1,0)
 THEN
-LeaderLog_Log("DEBUG", "[LLMIME:Mimicking:System] Updating settings from version [",_PastVersion,"]");
-
-PROC
-LeaderUpdater_ModUpdated("Mimicry", "LaughingLeader", (STRING)_OldVersion, "0.9.9.0")
-AND
-NOT DB_LeaderUpdater_Dependency("Mimicry", "LaughingLeader", "AnimationsPlus", "LaughingLeader", _)
-THEN
-LeaderUpdater_Register_Dependency("Mimicry", "LaughingLeader", "AnimationsPlus", "LaughingLeader", 1);
-*/
+LeaderUpdater_Register_UUID("Mimicry", "LaughingLeader", d9cac48f-1294-68f8-dd4d-b5ea38eaf2d6);
 EXITSECTION
 
 ENDEXITSECTION
