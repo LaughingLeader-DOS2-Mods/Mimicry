@@ -43,6 +43,10 @@
 	<content contentuid="h604936f8ge570g45d1gbc73gb709d52491d9" Source="LLMIME_Dummy_Character">...Nothing?</content>
 	<content contentuid="h59eba5c7gb88cg4f61gaaf8g6ae4b8a390c3" Source="LLMIME_Dwarves_Male_Mime_Villain">The Hunter</content>
 	<content contentuid="hfa873767gb80dg420cgae03g848b93db4fe2" Source="LLMIME_Elves_Hero_Female_Mime">The Mime</content>
+	<content contentuid="h36771c92g77d1g4e6bgba1agcc3c7563efad" Source="LLMIME_ItemProgressionNames.lsb" Key="ARM_UNIQUE_LLMIME_Mime_ShadowArmor_Boots_DisplayName">Shadowstalker&apos;s Boots</content>
+	<content contentuid="hd12aba1ag3e96g47ccgad2aga7d3fc74dc74" Source="LLMIME_ItemProgressionNames.lsb" Key="ARM_UNIQUE_LLMIME_Mime_ShadowArmor_Gloves_DisplayName">Shadowstalker&apos;s Gauntlets</content>
+	<content contentuid="h046418c6g6510g4374g97f3g0b1921ea0f8d" Source="LLMIME_ItemProgressionNames.lsb" Key="ARM_UNIQUE_LLMIME_Mime_ShadowArmor_LowerBody_DisplayName">Shadowstalker&apos;s Pants</content>
+	<content contentuid="h373b5c3bg2223g41bbgb745gb2bca6178c0c" Source="LLMIME_ItemProgressionNames.lsb" Key="ARM_UNIQUE_LLMIME_Mime_ShadowArmor_UpperBody_DisplayName">Shadowstalker&apos;s Coat</content>
 	<content contentuid="h9c2b5e68g161dg4c63gb199g9e0a24cddf93" Source="LLMIME_MimeCompanion_Default.lsj">*The mime heeds your advice.*</content>
 	<content contentuid="h3c82f526g2659g4c33g950fg3a222f3fe08f" Source="LLMIME_MimeCompanion_Default.lsj">*As your fist connects with the mime&apos;s mask, you hear a soft gasp as he&apos;s propelled backwards.*</content>
 	<content contentuid="hf3758a8bgd99fg4774gb15dg6a601eee3145" Source="LLMIME_MimeCompanion_Default.lsj">*Tell the mime to reveal their innate abilities (Enable passive status visibility).* (Default)</content>
@@ -408,6 +412,9 @@
 	<content contentuid="h83880151gb07dg4fc3g92bcg451f30e6a526" Source="LLMIME_TagNames.lsb" Key="Mimicry_Mime">Mime</content>
 	<content contentuid="he56f9842g5931g4012g8be8gf881fe45c172" Source="LLMIME_TagNames.lsb" Key="Mimicry_MimeOrigin">Fractured Memories</content>
 	<content contentuid="h8f53f57agfe24g4982g8411g908e7668e268" Source="LLMIME_Waypoints.lsb" Key="WAYP_LLMIME_TestLevel">Mimicry Test Level</content>
+	<content contentuid="h419ce402g96adg49aaga7bag2030ec9a902c" Source="LOOT_LLMIME_Redeem_ShadowArmor">Redeems a full set of the unique Shadowstalker armor set for Dark Elves. Enjoy!</content>
+	<content contentuid="he2ec83ffgb683g488dg89b3gf358e92a5190" Source="LOOT_LLMIME_Redeem_ShadowArmor">Token of the Shadowstalker</content>
+	<content contentuid="h97a9b169ga956g4e10g957bg18b0f18a7f94" Source="LOOT_LLMIME_Redeem_ShadowArmor">Mimicry</content>
 	<content contentuid="h5d1ac8c3ga9f2g4fd0g8f58g89fa4646edea" Source="LOOT_MagicAmulet_LLMIME_SourceBlastImmunity">A vague sense of magic can be felt emanating from the amulet. It seems to provide some protection to source, but only for its original owner.</content>
 	<content contentuid="h115c902bg504bg401ag85fbgc8b828c10765" Source="LOOT_MagicAmulet_LLMIME_SourceBlastImmunity">Mime&apos;s Amulet</content>
 	<content contentuid="h1984c8e8gd074g4047g8e49gcd45ab8f2099" Source="S_LLMIME_Ghost_Mime">Phantom of the Mask</content>
@@ -424,4 +431,7 @@
 	<content contentuid="hb2115eaeg3c41g4bc4gbd78g00dd86488096" Source="UNIQUE_LLMIME_MusicBox_Shard">A small shard of a broken music box.</content>
 	<content contentuid="h10576a4eg44a0g4588gbe9cg4b0d9c9d6ba5" Source="UNIQUE_LLMIME_MusicBox_Shard">Shard of a Music Box</content>
 	<content contentuid="hac6c21feg9d47g443aga78fg7463e4f7cd05" Source="WPN_LLMIME_BrawlerFist">The iron-hard fist of a Brawler. Strikes true.</content>
+	<content contentuid="h256557fbg1d49g45d9g8690gb86b39d2a135" Source="LLMIME_EnglishOverrides_RotDamage">Shadow Damage</content>
+	<content contentuid="h168f52b6g342ag42e0g99d0g47d94b7363c8" Source="LLMIME_EnglishOverrides_RotDamage2">Shadow</content>
+	<content contentuid="hf4632a8fg42a7g4d53gbe26gd203f28e3d5e" Source="LLMIME_EnglishOverrides_RotDamage3">Shadow</content>
 </contentList>
