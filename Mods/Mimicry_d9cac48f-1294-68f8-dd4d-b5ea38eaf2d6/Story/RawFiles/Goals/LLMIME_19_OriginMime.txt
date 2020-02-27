@@ -76,9 +76,10 @@ LLMIME_Origin_Setup((CHARACTERGUID)_Mime)
 AND
 ObjectExists(_Mime, 1)
 THEN
+LeaderLib_Tags_PreserveTag(_Mime, "LLMIME_DARKELF");
 LeaderLib_ToggleScripts_EnableScript("LLMIME_TS_OriginMimeActive", "Mimicry");
-SetTag(_Mime,"GENERIC");
-SetTag(_Mime,"REALLY_GENERIC");
+//SetTag(_Mime,"GENERIC");
+//SetTag(_Mime,"REALLY_GENERIC");
 LLMIME_Origin_CreateMimeMask(_Mime);
 ProcObjectTimerCancel(_Mime, "LLMIME_Timers_Origin_EquipMask");
 ProcObjectTimer(_Mime, "LLMIME_Timers_Origin_EquipMask", 250);
@@ -92,6 +93,7 @@ AND
 CharacterGetRace(_Mime, 0, "LLMIME_DarkElf")
 THEN
 NRD_PlayerSetCustomDataString(_Mime, "Race", "Elf");
+ClearTag(_Mime, "ELF");
 */
 
 PROC
