@@ -74,6 +74,20 @@ add equipment entry "GRN_Grenade_OilFlask_A"
 add equipmentgroup 
 add equipment entry "CONT_Backpack_A_SourceHunter"
 
+new equipment "Class_LLMIME_Mime_Start_DarkElf"
+add equipmentgroup 
+add equipment entry "ARM_UNIQUE_LLMIME_Mime_Mask_A"
+add equipmentgroup 
+add equipment entry "LOOT_LLMIME_Redeem_ShadowArmor"
+add equipmentgroup 
+add equipment entry "SCROLL_Resurrect"
+add equipmentgroup
+add equipment entry "POTION_Minor_Healing_Potion"
+add equipmentgroup
+add equipment entry "GRN_Grenade_OilFlask_A"
+add equipmentgroup 
+add equipment entry "CONT_Backpack_A_SourceHunter"
+
 new equipment "Class_LLMIME_Mime_Act2"
 add equipmentgroup 
 add equipment entry "ARM_UNIQUE_LLMIME_Mime_Mask_A"
