@@ -27,9 +27,6 @@
                         <node id="TagsAdded">
                             <children>
                                 <node id="TagAdded">
-                                    <attribute id="Tag" value="ELF" type="22" />
-                                </node>
-                                <node id="TagAdded">
                                     <attribute id="Tag" value="LLMIME_DARKELF" type="22" />
                                 </node>
                             </children>
