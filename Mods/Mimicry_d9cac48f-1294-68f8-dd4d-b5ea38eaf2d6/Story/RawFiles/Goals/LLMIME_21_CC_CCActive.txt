@@ -142,12 +142,15 @@ CreateItemTemplateAtPosition(_Template, _x, _y, _z, _Armor)
 THEN
 CharacterEquipItem(_Player, _Armor);
 
+// Mime Mask
 PROC
 LLMIME_CC_Internal_EquipArmor((CHARACTERGUID)_Player)
 AND
+CharacterGetOrigin(_Player, 1, "LLMIME_TheMime")
+AND
 GetPosition(_Player, _x, _y, _z)
 AND
-CreateItemTemplateAtPosition("4afe8cd3-eb9f-4760-9ba4-a0b4433a4c06", _x, _y, _z, _Armor)
+CreateItemTemplateAtPosition("fe7d25d5-290e-4014-b446-b18437741bd5", _x, _y, _z, _Armor)
 THEN
 CharacterEquipItem(_Player, _Armor);
 
