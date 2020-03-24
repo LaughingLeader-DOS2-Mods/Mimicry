@@ -3,8 +3,6 @@ SubGoalCombiner SGC_AND
 INITSECTION
 //ApplyStatus(S_Player_LLMIME_Mime_191f180c-6270-4cd1-a44a-e02454bd846f, "LLMIME_CC_MASK_EFFECT", -1.0, 1, S_Player_LLMIME_Mime_191f180c-6270-4cd1-a44a-e02454bd846f);
 
-
-
 KBSECTION
 
 //REGION USER_EVENTS
@@ -100,6 +98,58 @@ CharacterGetRace(_Player, 0, "LLMIME_DarkElf")
 THEN
 NRD_PlayerSetCustomDataString(_Player, "Race", "Elf");
 */
+
+//Region initial selection
+IF
+ObjectTransformed((CHARACTERGUID)_Player, LLMIME_Elves_Hero_Male_Mime_01acaf9e-866d-450e-9969-49dab771d973)
+THEN
+SetTag(_Player, "LLMIME_DARKELF");
+LLMIME_CC_Internal_EquipArmor(_Player);
+
+IF
+SkillActivated(_Player, _Skill)
+AND
+GetTemplate(_Player, "LLMIME_Elves_Hero_Male_Mime_01acaf9e-866d-450e-9969-49dab771d973")
+AND
+NOT LeaderLib_Helper_QRY_HasItemTemplateInSlot(_Player, "Breast", "EQ_UNIQUE_Armor_LLMIME_Mime_ShadowArmor_UpperBody_A_ab189632-0769-4201-9e0e-afaa0e71172c")
+THEN
+SetTag(_Player, "LLMIME_DARKELF");
+LLMIME_CC_Internal_EquipArmor(_Player);
+
+/*
+PROC
+LeaderLib_CC_OnPresetChanged((CHARACTERGUID)_Player, (STRING)_LastPreset, (STRING)_NextPreset)
+AND
+_NextPreset != "LLMIME_Mime"
+AND
+//IsTagged(_Player, "LLMIME_MimeOrigin", 1)
+String(_Player, _PlayerStr)
+AND
+StringContains(_PlayerStr, "_Mime_", 1)
+THEN
+SetTag(_Player, "LLMIME_DARKELF");
+LLMIME_CC_Internal_EquipArmor(_Player);
+*/
+
+PROC
+LLMIME_CC_Internal_EquipArmor((CHARACTERGUID)_Player)
+AND
+GetPosition(_Player, _x, _y, _z)
+AND
+DB_LLMIME_DarkElf_ShadowArmor(_Slot, _Template)
+AND
+CreateItemTemplateAtPosition(_Template, _x, _y, _z, _Armor)
+THEN
+CharacterEquipItem(_Player, _Armor);
+
+PROC
+LLMIME_CC_Internal_EquipArmor((CHARACTERGUID)_Player)
+AND
+GetPosition(_Player, _x, _y, _z)
+AND
+CreateItemTemplateAtPosition("4afe8cd3-eb9f-4760-9ba4-a0b4433a4c06", _x, _y, _z, _Armor)
+THEN
+CharacterEquipItem(_Player, _Armor);
 
 /*
 PROC
