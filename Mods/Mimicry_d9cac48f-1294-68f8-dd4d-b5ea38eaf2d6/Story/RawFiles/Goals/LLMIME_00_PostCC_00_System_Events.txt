@@ -1,0 +1,30 @@
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+//LLMIME_ACTIVATE_MIME;LLMIME_MimeMask;Mimicry_MimeItem;
+KBSECTION
+//REGION MASK_EQUIP
+IF
+ItemTemplateUnEquipped("EQ_Armor_LLMIME_Mime_Mask_A_8e66ce79-8c8e-4c22-a8ea-5a99977f4ea8", _Mime)
+THEN
+LLMIME_OnMaskUnEquipped(_Mime);
+
+IF
+ItemTemplateUnEquipped("EQ_UNIQUE_Armor_LLMIME_Mime_Mask_Origin_A_4afe8cd3-eb9f-4760-9ba4-a0b4433a4c06", _Mime)
+THEN
+LLMIME_OnMaskUnEquipped(_Mime);
+
+IF
+ItemTemplateEquipped("EQ_UNIQUE_Armor_LLMIME_Mime_Mask_Origin_A_4afe8cd3-eb9f-4760-9ba4-a0b4433a4c06", _Mime)
+THEN
+LLMIME_OnMaskEquipped(_Mime);
+
+IF
+ItemTemplateEquipped("EQ_Armor_LLMIME_Mime_Mask_A_8e66ce79-8c8e-4c22-a8ea-5a99977f4ea8", _Mime)
+THEN
+LLMIME_OnMaskEquipped(_Mime);
+//END_REGION
+EXITSECTION
+
+ENDEXITSECTION
+ParentTargetEdge "LLMIME_00_PostCC__Start"

@@ -1,0 +1,65 @@
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+
+KBSECTION
+IF
+ObjectEnteredCombat((CHARACTERGUID)_Mime, _CombatID)
+AND
+LLMIME_QRY_CharacterIsAMime(_Mime)
+THEN
+LLMIME_Mimicking_ApplyMimicking(_Mime);
+
+/*
+IF
+GlobalFlagSet("Mimicry_Mimic_CombatOnlyDisabled")
+AND
+DB_GlobalFlag("Mimicry_Mimic_CopySummonedCreatureSkills_Enabled")
+AND
+DB_LLMIME_ActiveMimes(_Mime)
+AND
+NOT LLMIME_Mimicking_QRY_IsMimicking(_Mime)
+AND
+LLMIME_QRY_PartyHasSummon()
+THEN
+LeaderLog_Log("DEBUG", "[LLMIME_10_TS_Mimicking_01_Start:GlobalFlagSet] Applying mimicking to mime with an active summon.");
+LLMIME_Mimicking_ApplyMimicking(_Mime);
+*/
+
+IF
+ObjectTurnEnded((CHARACTERGUID)_Mime)
+AND
+LLMIME_QRY_CharacterIsAMime(_Mime)
+AND
+CharacterIsInCombat(_Mime, 1)
+THEN
+LeaderLib_Timers_StartObjectTimer(_Mime, 250, "LLMIME_Timers_AfterTurn_ApplyMimicking_", "LLMIME_Events_RequestMimicking");
+
+IF
+ObjectTurnStarted((CHARACTERGUID)_Mime)
+AND
+LLMIME_QRY_CharacterIsAMime(_Mime)
+THEN
+LLMIME_Mimicking_RemoveMimicking(_Mime);
+
+IF
+ObjectLeftCombat((CHARACTERGUID)_Mime, _CombatID)
+AND
+NOT GlobalGetFlag("Mimicry_Mimic_CombatOnlyDisabled", 1)
+THEN
+LLMIME_Mimicking_RemoveMimicking(_Mime);
+
+//Remove mimicked weapons when turn starts
+IF
+ObjectTurnStarted((CHARACTERGUID)_Mime)
+AND
+DB_LLMIME_Mimicking_DeleteOneTimeUseWeaponsTimer(_Mime, _Caster, _Action, _ActionType, _TimerName)
+AND
+NOT DB_LLMIME_Mimicking_Skills_Temp_ListenForSuccess(_Mime, _, _)
+THEN
+TimerCancel(_TimerName);
+TimerLaunch(_TimerName, 25);
+EXITSECTION
+
+ENDEXITSECTION
+ParentTargetEdge "LLMIME_10_ToggleScripts"

@@ -1,0 +1,9 @@
+{
+    "RequiredExtensionVersion": 43,
+    "ModTable":"Mimicry",
+    "FeatureFlags": [
+        "OsirisExtensions",
+        "Lua",
+        "Preprocessor"
+    ]
+}

@@ -1,0 +1,165 @@
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+
+KBSECTION
+
+//RemoveHarmfulStatuses removes everything, so re-apply if we're still a Mime
+PROC
+LLMIME_PassiveStatuses_OnPassiveRemoved((CHARACTERGUID)_Mime, (STRING)_Status, (STRING)_BonusStatus, (STRING)_InfoStatus, (STRING)_DisableFlag)
+THEN
+ApplyStatus(_Mime, _Status, -1.0, 1, _Mime);
+
+//Run check for unarmed bonuses again
+PROC
+LLMIME_PassiveStatuses_OnPassiveRemoved((CHARACTERGUID)_Mime, "LLMIME_BRAWLER", (STRING)_BonusStatus, (STRING)_InfoStatus, (STRING)_DisableFlag)
+AND
+IsTagged(_Mime, "LLMIME_MimeFollower", 0)
+THEN
+LLMIME_System_FlagForUnarmed(_Mime);
+
+PROC
+LLMIME_PassiveStatuses_OnPassiveRemoved((CHARACTERGUID)_Mime, (STRING)_Status, (STRING)_BonusStatus, (STRING)_InfoStatus, (STRING)_DisableFlag)
+AND
+NOT LeaderLib_Helper_QRY_HasStatus(_Mime, _BonusStatus)
+THEN
+ApplyStatus(_Mime, _BonusStatus, -1.0, 1, _Mime);
+
+PROC
+LLMIME_PassiveStatuses_OnPassiveRemoved((CHARACTERGUID)_Mime, (STRING)_Status, (STRING)_BonusStatus, (STRING)_InfoStatus, (STRING)_DisableFlag)
+AND
+NOT ObjectGetFlag(_Mime, _DisableFlag, 1)
+AND
+NOT LeaderLib_Helper_QRY_HasStatus(_Mime, _InfoStatus)
+THEN
+ApplyStatus(_Mime, _InfoStatus, -1.0, 1, _Mime);
+
+PROC
+LLMIME_PassiveStatuses_ApplyInfoStatuses((CHARACTERGUID)_Mime)
+AND
+DB_LLMIME_PassiveData(_Status, _BonusStatus, _InfoStatus, _DisableFlag)
+AND
+HasActiveStatus(_Mime, _BonusStatus, 1)
+AND
+NOT ObjectGetFlag(_Mime, _DisableFlag, 1)
+AND
+NOT LeaderLib_Helper_QRY_HasStatus(_Mime, _InfoStatus)
+THEN
+ApplyStatus(_Mime, _InfoStatus, -1.0, 1, _Mime);
+
+//REGION STATUS_EVENTS
+PROC
+LLMIME_PassiveStatuses_OnStatusApplied((CHARACTERGUID)_Mime, (STRING)_BonusStatus)
+AND
+DB_LLMIME_PassiveData(_Status, _BonusStatus, _InfoStatus, _DisableFlag)
+AND
+NOT ObjectGetFlag(_Mime, _DisableFlag, 1)
+AND
+NOT LeaderLib_Helper_QRY_HasStatus(_Mime, _InfoStatus)
+THEN
+ApplyStatus(_Mime, _InfoStatus, -1.0, 1, _Mime);
+
+PROC
+LLMIME_PassiveStatuses_OnStatusRemoved((CHARACTERGUID)_Mime, (STRING)_Status)
+AND
+DB_LLMIME_PassiveData(_Status, _BonusStatus, _InfoStatus, _DisableFlag)
+THEN
+LLMIME_PassiveStatuses_OnPassiveRemoved(_Mime, _Status, _BonusStatus, _InfoStatus, _DisableFlag);
+
+PROC
+LLMIME_PassiveStatuses_OnStatusRemoved((CHARACTERGUID)_Mime, (STRING)_BonusStatus)
+AND
+DB_LLMIME_PassiveData(_Status, _BonusStatus, _InfoStatus, _DisableFlag)
+AND
+HasActiveStatus(_Mime, _InfoStatus, 1)
+THEN
+RemoveStatus(_Mime, _InfoStatus);
+//END_REGION
+
+//REGION STATUS_EVENT_TOGGLE
+IF
+RegionEnded(_)
+AND
+SysIsActive("LLMIME_02_Passives_TS_StatusEvents")
+THEN
+SysCompleteGoal("LLMIME_02_Passives_TS_StatusEvents");
+
+IF
+GameStarted(_Region,_)
+AND
+IsGameLevel(_Region, 1)
+AND
+NOT SysIsActive("LLMIME_02_Passives_TS_StatusEvents")
+THEN
+SysActivateGoal("LLMIME_02_Passives_TS_StatusEvents");
+//END_REGION
+
+//REGION LEVEL_CHANGE
+IF
+RegionEnded(_Region)
+AND
+IsGameLevel(_Region, 1)
+THEN
+DB_LLMIME_Passives_Temp_CheckNextLevel(1);
+
+IF
+GameStarted(_Region,_)
+AND
+IsGameLevel(_Region, 1)
+AND
+DB_LLMIME_Passives_Temp_CheckNextLevel(1)
+THEN
+NOT DB_LLMIME_Passives_Temp_CheckNextLevel(1);
+LLMIME_PassiveStatuses_CheckMimes();
+
+PROC
+LLMIME_PassiveStatuses_CheckMimes()
+AND
+DB_LLMIME_ActiveMimes(_Mime)
+THEN
+SetStoryEvent(_Mime, "Mimicry_InitMimeJob");
+LeaderLib_Timers_StartObjectTimer(_Mime, 500, "Timers_LLMIME_PassiveStatuses_CheckInfo", "LLMIME_PassiveStatuses_CheckInfo");
+
+IF
+StoryEvent((CHARACTERGUID)_Mime, "LLMIME_PassiveStatuses_CheckInfo")
+AND
+LLMIME_QRY_CharacterIsAMime(_Mime)
+AND
+DB_LLMIME_PassiveData(_Status, _BonusStatus, _InfoStatus, _DisableFlag)
+AND
+HasActiveStatus(_Mime, _BonusStatus, 1)
+AND
+HasActiveStatus(_Mime, _InfoStatus, 0)
+AND
+NOT ObjectGetFlag(_Mime, _DisableFlag, 1)
+THEN
+ApplyStatus(_Mime, _InfoStatus, -1.0, 1, _Mime);
+//END_REGION
+
+//REGION FLAG_EVENTS
+IF
+ObjectFlagCleared("Mimicry_HideMimePassives", _Mime, _)
+AND
+DB_LLMIME_PassiveData(_Status, _BonusStatus, _InfoStatus, "Mimicry_HideMimePassives")
+AND
+HasActiveStatus(_Mime, _Status, 1)
+AND
+HasActiveStatus(_Mime, _BonusStatus, 1)
+AND
+HasActiveStatus(_Mime, _InfoStatus, 0)
+THEN
+ApplyStatus(_Mime, _InfoStatus, -1.0, 1, _Mime);
+
+IF
+ObjectFlagSet("Mimicry_HideMimePassives", _Mime, _)
+AND
+DB_LLMIME_PassiveData(_Status, _BonusStatus, _InfoStatus, "Mimicry_HideMimePassives")
+AND
+HasActiveStatus(_Mime, _InfoStatus, 1)
+THEN
+RemoveStatus(_Mime, _InfoStatus);
+//END_REGION
+EXITSECTION
+
+ENDEXITSECTION
+ParentTargetEdge "LaughingLeader_Mimicry"

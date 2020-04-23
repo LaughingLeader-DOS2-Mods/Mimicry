@@ -1,0 +1,874 @@
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+
+KBSECTION
+PROC
+LLMIME_Skills_ResetCooldown((CHARACTERGUID)_Mime, (STRING)_Skill, (STRING)_FollowerSkill)
+AND
+NOT DB_LLMIME_Follower_Mime(_Mime)
+THEN
+CharacterRemoveSkill(_Mime, _Skill);
+CharacterAddSkill(_Mime, _Skill, 0);
+
+PROC
+LLMIME_Skills_ResetCooldown((CHARACTERGUID)_Mime, (STRING)_Skill, (STRING)_FollowerSkill)
+AND
+DB_LLMIME_Follower_Mime(_Mime)
+THEN
+CharacterRemoveSkill(_Mime, _FollowerSkill);
+CharacterAddSkill(_Mime, _FollowerSkill, 0);
+
+//REGION FACING
+IF
+CharacterUsedSkill(_Mime, "Target_LLMIME_SetFacingDirection", _, _)
+THEN
+CharacterStatusText(_Mime, "LLMIME_StatusText_FacingDirectionSaved");
+ObjectClearFlag(_Mime, "LLMIME_FacingDirectionCalculated", 0);
+
+IF
+CharacterUsedSkillOnTarget(_Mime, _Target, "Target_LLMIME_SetFacingDirection", _, _)
+AND
+GetPosition(_Target, _x, _y, _z)
+THEN
+SetVarFloat3(_Mime, "LLMIME_Skills_FacingDirection_Target", _x, _y, _z);
+SetStoryEvent(_Mime, "LLMIME_Skills_SetFacingDirection");
+ObjectSetFlag(_Mime, "LLMIME_FacingDirectionSet", 0);
+
+IF
+CharacterUsedSkillAtPosition(_Mime, _x, _y, _z, "Target_LLMIME_SetFacingDirection", _, _)
+THEN
+SetVarFloat3(_Mime, "LLMIME_Skills_FacingDirection_Target", _x, _y, _z);
+SetStoryEvent(_Mime, "LLMIME_Skills_SetFacingDirection");
+ObjectSetFlag(_Mime, "LLMIME_FacingDirectionSet", 0);
+
+//Turn ended, still in combat
+IF
+StoryEvent((CHARACTERGUID)_Mime, "LLMIME_Events_RequestMimicking")
+AND
+CharacterIsDeadOrFeign(_Mime, 0)
+AND
+ObjectGetFlag(_Mime, "LLMIME_FacingDirectionSet", 1)
+THEN
+SetStoryEvent(_Mime, "LLMIME_Skills_CalculateFacingDirection");
+
+IF
+StoryEvent((CHARACTERGUID)_Mime, "LLMIME_Events_RequestMimicking")
+THEN
+ObjectClearFlag(_Mime, "LLMIME_FacingDirectionSet", 0);
+
+IF
+StoryEvent((CHARACTERGUID)_Mime, "LLMIME_Skills_ApplyFacingDirection")
+AND
+GetVarFloat3(_Mime, "LLMIME_Skills_FacingDirection_LookAt", _x, _y, _z)
+THEN
+ObjectSetFlag(_Mime, "LLMIME_FacingDirectionCalculated", 0);
+CharacterUseSkillAtPosition(_Mime, "Target_LLMIME_ApplyFacingDirection", _x, _y, _z, 0, 1);
+
+PROC
+LLMIME_Mimicking_MimicDone((CHARACTERGUID)_Mime, (CHARACTERGUID)_Caster, (STRING)_Action, (STRING)_ActionType)
+THEN
+LLMIME_Skills_ApplyFacingDirection(_Mime);
+
+IF
+StoryEvent((CHARACTERGUID)_Mime, "LLMIME_Mime_ReApplyFacingDirection")
+THEN
+LLMIME_Skills_ApplyFacingDirection(_Mime);
+
+PROC
+LLMIME_Skills_ApplyFacingDirection((CHARACTERGUID)_Mime)
+AND
+ObjectGetFlag(_Mime, "LLMIME_FacingDirectionCalculated", 1)
+AND
+CharacterIsDeadOrFeign(_Mime, 0)
+AND
+QRY_CharacterIsNotDisabled(_Mime)
+AND
+GetVarFloat3(_Mime, "LLMIME_Skills_FacingDirection_LookAt", _x, _y, _z)
+AND
+NOT LeaderLib_Combat_QRY_IsActiveTurn(_Mime)
+THEN
+CharacterUseSkillAtPosition(_Mime, "Target_LLMIME_ApplyFacingDirection", _x, _y, _z, 0, 1);
+//END_REGION
+
+//REGION QUAKE_SLAM
+IF
+ItemStatusAttempt(_Target, "LLMIME_LAUNCHED", (CHARACTERGUID)_Caster)
+AND
+GetPosition(_Target, _x, _y, _z)
+THEN
+LLMIME_Skills_SpawnSkillPlatform(_Target, _Caster);
+PlayEffectAtPosition("RS3_FX_SubEffects_Ground_Earthquake_01", _x, _y, _z);
+
+IF
+CharacterStatusApplied(_Target, "LLMIME_LAUNCHED", (CHARACTERGUID)_Caster)
+AND
+GetPosition(_Target, _x, _y, _z)
+THEN
+PlayEffectAtPosition("RS3_FX_SubEffects_Ground_Earthquake_01", _x, _y, _z);
+CharacterSetAnimationOverride(_Target, "knockdown_fall");
+LLMIME_Skills_SpawnSkillPlatform(_Target, _Caster);
+ProcObjectTimer(_Target, "LLMIME_Skills_QuakeSlam_PlayKnockdownLoop", 600);
+
+PROC
+ProcObjectTimerFinished((CHARACTERGUID)_Target, "LLMIME_Skills_QuakeSlam_PlayKnockdownLoop")
+THEN
+CharacterSetAnimationOverride(_Target, "knockdown_loop");
+
+IF
+CharacterCharacterEvent(_Target, _Caster, "LLMIME_Skills_QuakeSlam_StartLaunch")
+THEN
+LLMIME_Skills_SpawnSkillPlatform(_Target, _Caster);
+
+IF
+CharacterUsedSkill(_Character, "Shout_LLMIME_QuakeSlam", _, _)
+THEN
+LLMIME_Skills_OnSkillUsed(_Character, "QuakeSlam");
+
+IF
+CharacterUsedSkill(_Character, "Shout_LLMIME_QuakeSlam_Follower", _, _)
+THEN
+LLMIME_Skills_OnSkillUsed(_Character, "QuakeSlam");
+
+PROC
+LLMIME_Skills_OnSkillUsed((CHARACTERGUID)_Character, "QuakeSlam")
+AND
+GetPosition(_Character, _x, _y, _z)
+THEN
+PlayEffectAtPosition("LLMIME_FX_Skills_QuakeSlam_Cast_Root_01", _x, _y, _z);
+
+PROC
+LLMIME_Skills_SpawnSkillPlatform((GUIDSTRING)_Target, (CHARACTERGUID)_Caster)
+AND
+NOT DB_LLMIME_Skills_Temp_QuakeSlamTarget(_Target, _Caster, _)
+AND
+GetUUID(_Target, _UUID)
+AND
+LeaderLib_Random_QRY(250, 800)
+AND
+DB_LeaderLib_Random(_HeightInt)
+AND
+Real(_HeightInt, _HeightR)
+AND
+RealDivide(_HeightR, 100.0, _Height)
+AND
+Integer(_Height, _FallDamageInt)
+AND
+GetPosition(_Target, _x, _y, _z)
+THEN
+TimerCancel("LLMIME_Timers_RemoveLaunchedTags");
+SetTag(_Target, "LLMIME_Launched");
+ApplyStatus(_Target, "LLMIME_LAUNCHED_DISABLE", 18.0);
+DB_LLMIME_Skills_Temp_QuakeSlamTagged(_Target);
+DB_LLMIME_Skills_Temp_QuakeSlamTarget(_Target, _Caster, _FallDamageInt);
+LeaderLib_Platforms_Launch(_Target, "LLMIME_Skills_QuakeSlamDone", _Height);
+PlayScaledEffectAtPosition("LLMIME_FX_Status_Launched_Apply_Root_01", 0.25, _x, _y, _z);
+
+PROC
+LeaderLib_Platforms_OnLaunchFinished((GUIDSTRING)_Target, "LLMIME_Skills_QuakeSlamDone")
+AND
+ObjectIsCharacter((CHARACTERGUID)_Target, 1)
+THEN
+CharacterSetAnimationOverride(_Target, "");
+PlayAnimation(_Target,"knockdown_getup");
+
+PROC
+LeaderLib_Platforms_OnPreApexReached((GUIDSTRING)_Target, "LLMIME_Skills_QuakeSlamDone")
+AND
+DB_LLMIME_Skills_Temp_QuakeSlamTarget(_Target, _Caster, _FallDamageInt)
+AND
+ObjectIsCharacter((CHARACTERGUID)_Target, 1)
+THEN
+CharacterCharacterSetEvent(_Caster, _Target, "LLMIME_Skills_QuakeSlam_CreateSubQuake");
+//PlayEffectAtPosition("RS3_FX_SubEffects_Ground_Earthquake_01", _x, _y, _z);
+
+PROC
+LeaderLib_Platforms_OnPreApexReached((GUIDSTRING)_Target, "LLMIME_Skills_QuakeSlamDone")
+AND
+DB_LLMIME_Skills_Temp_QuakeSlamTarget(_Target, _Caster, _FallDamageInt)
+AND
+ObjectIsItem((ITEMGUID)_Target, 1)
+THEN
+CharacterItemSetEvent(_Caster, _Target, "LLMIME_Skills_QuakeSlam_CreateSubQuake");
+
+PROC
+LeaderLib_Platforms_OnLaunchFinished((GUIDSTRING)_Target, "LLMIME_Skills_QuakeSlamDone")
+AND
+GetPosition(_Target, _x, _y, _z)
+AND
+DB_LLMIME_Skills_Temp_QuakeSlamTarget(_Target, _Caster, _FallDamageInt)
+AND
+IntegerSubtract(_FallDamageInt, 1, _FallDamage)
+THEN
+NOT DB_LLMIME_Skills_Temp_QuakeSlamTarget(_Target, _Caster, _FallDamageInt);
+RemoveStatus(_Target, "LLMIME_LAUNCHED");
+RemoveStatus(_Target, "LLMIME_LAUNCHED_DISABLE");
+LLMIME_Skills_QuakeSlam_ApplyFallDamage(_Target, _Caster, _FallDamage);
+PlaySoundResource(_Target, LLMIME_SFX_FallDamage_A_00b7b73d-ab3a-484d-98c9-360c19c6c329);
+
+IF
+CharacterStatusRemoved(_Target, "LLMIME_LAUNCHED", _)
+THEN
+TimerCancel("LLMIME_Timers_RemoveLaunchedTags");
+TimerLaunch("LLMIME_Timers_RemoveLaunchedTags", 1500);
+
+IF
+ItemStatusRemoved(_Target, "LLMIME_LAUNCHED", _)
+THEN
+TimerCancel("LLMIME_Timers_RemoveLaunchedTags");
+TimerLaunch("LLMIME_Timers_RemoveLaunchedTags", 1500);
+
+IF
+TimerFinished("LLMIME_Timers_RemoveLaunchedTags")
+AND
+DB_LLMIME_Skills_Temp_QuakeSlamTagged(_Target)
+THEN
+NOT DB_LLMIME_Skills_Temp_QuakeSlamTagged(_Target);
+ClearTag(_Target, "LLMIME_Launched");
+
+PROC
+LLMIME_Skills_QuakeSlam_ApplyFallDamage((GUIDSTRING)_Target, (CHARACTERGUID)_Caster, (INTEGER)_FallDamage)
+AND
+_FallDamage > 0
+AND
+_FallDamage <= 7
+AND
+IntegertoString(_FallDamage, _FallDamageStr)
+AND
+StringConcatenate("LLMIME_LAUNCHED_FALLDAMAGE", _FallDamageStr, _Status)
+THEN
+ApplyStatus(_Target, _Status, 0.0, 0, _Caster);
+
+PROC
+LLMIME_Skills_QuakeSlam_ApplyFallDamage((GUIDSTRING)_Target, (CHARACTERGUID)_Caster, 0)
+THEN
+ApplyStatus(_Target, "LLMIME_LAUNCHED_FALLDAMAGE1", 0.0, 0, _Caster);
+
+PROC
+LLMIME_Skills_QuakeSlam_ApplyFallDamage((GUIDSTRING)_Target, (CHARACTERGUID)_Caster, (INTEGER)_FallDamage)
+AND
+_FallDamage > 7
+THEN
+ApplyStatus(_Target, "LLMIME_LAUNCHED_FALLDAMAGE7", 0.0, 0, _Caster);
+//END_REGION
+
+//REGION FINAL_WISH
+/*Delay actually dying so the animation can play out*/
+IF
+CharacterUsedSkill(_Character, "Projectile_LLMIME_FinalWish", _, _)
+THEN
+LLMIME_Skills_OnSkillUsed(_Character, "FinalWish");
+
+IF
+CharacterUsedSkill(_Character, "Projectile_LLMIME_FinalWish_Follower", _, _)
+THEN
+LLMIME_Skills_OnSkillUsed(_Character, "FinalWish");
+
+PROC
+LLMIME_Skills_OnSkillUsed((CHARACTERGUID)_Character, "FinalWish")
+THEN
+LeaderLib_Timers_StartObjectTimer(_Character, 3000, "Mimicry_Timers_FinalWish_DieEvent", "Mimicry_Events_FinalWish_Die");
+LeaderLib_Timers_StartObjectTimer(_Character, 1000, "Mimicry_Timers_FinalWish_UsedEvent_", "Mimicry_Events_FinalWish_SkillUsed");
+LeaderLib_Timers_StartObjectTimer(_Character, 2600, "Mimicry_Timers_FinalWish_DeathEffect", "Mimicry_Events_FinalWish_PlayDeathEffect");
+
+IF
+SkillCast(_Character, "Projectile_LLMIME_FinalWish", _, _)
+THEN
+LLMIME_Skills_OnSkillCast(_Character, "FinalWish");
+
+IF
+SkillCast(_Character, "Projectile_LLMIME_FinalWish_Follower", _, _)
+THEN
+LLMIME_Skills_OnSkillCast(_Character, "FinalWish");
+
+PROC
+LLMIME_Skills_OnSkillCast((CHARACTERGUID)_Character, "FinalWish")
+THEN
+LeaderLib_Timers_CancelObjectTimerByEvent(_Character, "Mimicry_Events_FinalWish_Die");
+LeaderLib_Timers_StartObjectTimer(_Character, 1000, "Mimicry_Timers_FinalWish_", "Mimicry_Events_FinalWish_Die");
+
+IF
+StoryEvent((CHARACTERGUID)_Character, "Mimicry_Events_FinalWish_Die")
+AND
+CharacterIsDead(_Character, 0)
+THEN
+CharacterDie(_Character, 1, "DoT");
+
+IF
+CharacterStatusAttempt(_Target, "LLMIME_FINAL_WISH_TARGET", (CHARACTERGUID)_Caster)
+AND
+NOT DB_LLMIME_Skills_FinalWish_Target(_Target, _Caster)
+//LeaderLib_Helper_QRY_HasStatus(_Caster, "LLMIME_SACRIFICED")
+THEN
+DB_LLMIME_Skills_FinalWish_Target(_Target, _Caster);
+LeaderLog_Log("DEBUG", "[Mimicry:Skills:CharacterStatusAttempt(LLMIME_FINAL_WISH_TARGET)] Final Wish target set.");
+//END_REGION
+
+//REGION DECOY
+IF
+CharacterUsedSkill(_Character, "Projectile_LLMIME_Decoy", _, _)
+THEN
+LLMIME_Skills_OnSkillUsed(_Character, "Decoy");
+
+IF
+CharacterUsedSkill(_Character, "Projectile_LLMIME_Decoy_Follower", _, _)
+THEN
+LLMIME_Skills_OnSkillUsed(_Character, "Decoy");
+
+PROC
+LLMIME_Skills_OnSkillUsed((CHARACTERGUID)_Character, "Decoy")
+AND
+GetPosition(_Character, _x, _y, _z)
+THEN
+DB_LLMIME_Skills_Temp_DecoyPosition(_Character, _x, _y, _z);
+LeaderLib_Timers_StartObjectTimer(_Character, 450, "LLMIME_Timers_Skills_Internal_Decoy_SmokeEffect_", "Mimicry_Events_Skills_Internal_PlayDecoySmokeEffect");
+LeaderLib_Timers_StartObjectTimer(_Character, 500, "LLMIME_Timers_Skills_Internal_StartDecoySetup_", "Mimicry_Events_Skills_Internal_StartDecoySetup");
+//SetStoryEvent(_Character, "Mimicry_Events_Skills_Internal_StartDecoySetup");
+
+IF
+StoryEvent((CHARACTERGUID)_Character, "Mimicry_Events_Skills_Internal_PlayDecoySmokeEffect")
+AND
+DB_LLMIME_Skills_Temp_DecoyPosition(_Character, _x, _y, _z)
+THEN
+PlayEffectAtPosition("LLMIME_FX_Skills_Decoy_Cast_Smoke_Root_01", _x, _y, _z);
+
+IF
+StoryEvent((CHARACTERGUID)_Character, "Mimicry_Events_Skills_Internal_StartDecoySetup")
+AND
+DB_LLMIME_Skills_Temp_DecoyPosition(_Character, _x, _y, _z)
+THEN
+NOT DB_LLMIME_Skills_Temp_DecoyPosition(_Character, _x, _y, _z);
+LLMIME_Skills_Internal_CreateDecoyAtPosition(_Character, _x, _y, _z);
+
+PROC
+LLMIME_Skills_Internal_CreateDecoyAtPosition((CHARACTERGUID)_Character, (REAL)_x, (REAL)_y, (REAL)_z)
+AND
+CharacterGetLevel(_Character, _Level)
+AND
+DB_LLMIME_Templates("Decoy", _DecoyTemplate)
+AND
+//TemporaryCharacterCreateOutOfSightToObject(_DecoyTemplate, _Character, _Character, 0, "", _Decoy)
+TemporaryCharacterCreateAtPosition(_x, _y, _z, _DecoyTemplate, 0, _Decoy)
+THEN
+DB_LLMIME_Skills_Temp_Decoy(_Character, _Decoy);
+SetVisible(_Decoy, 0);
+PlayEffect(_Decoy, "LLMIME_FX_Skills_Decoy_Overlay_FadeIn_01");
+PlayEffectAtPosition("RS3_FX_GP_ScriptedEvent_Ambushers_Smoke_01", _x, _y, _z);
+SetVarObject(_Decoy, "LLMIME_Decoy_Caster", _Character);
+SetScriptframe(_Decoy, "LLMIME_Decoy_CopyRotation");
+ObjectSetFlag(_Decoy, "LEADERLIB_IGNORE", 0);
+LLMIME_Skills_Internal_TransformDecoy(_Character, _Decoy);
+CharacterLevelUpTo(_Decoy, _Level);
+SetTag(_Decoy, "LLMIME_Decoy");
+SetTag(_Decoy, "LeaderLib_Dummy");
+SetTag(_Decoy, "AI_PREFERRED_TARGET");
+LeaderLib_Timers_StartObjectTimer(_Decoy, 50, "LLMIME_Timers_Skills_Internal_SetupDecoy_", "Mimicry_Events_Skills_Internal_SetupDecoy");
+TeleportToPosition(_Decoy, _x, _y, _z, "Mimicry_Events_Skills_Internal_DecoyTeleported", 0);
+LeaderLog_Log("DEBUG", "[LLMIME:Skills:SkillCast(Decoy)] Spawned decoy at saved position.");
+
+PROC
+LLMIME_Skills_Internal_TransformDecoy((CHARACTERGUID)_Character, (CHARACTERGUID)_Decoy)
+AND
+IsTagged(_Character, "LLMIME_MimeFollower", 0)
+THEN
+CharacterTransformAppearanceTo(_Decoy, _Character, 1, 1);
+
+PROC
+LLMIME_Skills_Internal_TransformDecoy((CHARACTERGUID)_Character, (CHARACTERGUID)_Decoy)
+AND
+IsTagged(_Character, "LLMIME_MimeFollower", 1)
+THEN
+CharacterTransform(_Decoy, "LLMIME_Elves_Male_Mime_NoMask_Decoy_d92862d5-5e75-4916-b8a9-de0c5f246cd5", 0, 1, 0, 0, 0, 1, 1);
+
+IF
+StoryEvent((CHARACTERGUID)_Decoy, "Mimicry_Events_Skills_Internal_SetupDecoy")
+AND
+CharacterGetEquippedItem(_Decoy, "Helmet", (ITEMGUID)_Mask)
+AND
+_Mask != NULL_00000000-0000-0000-0000-000000000000
+THEN
+CharacterUnequipItem(_Decoy, _Mask);
+ItemRemove(_Mask);
+
+IF
+StoryEvent((CHARACTERGUID)_Decoy, "Mimicry_Events_Skills_Internal_SetupDecoy")
+THEN
+SetHasDialog(_Decoy, 0);
+LLMIME_Skills_Internal_ApplyDecoyTags(_Decoy);
+SetOnStage(_Decoy, 1);
+LLMIME_Skills_SetupDecoy(_Decoy);
+SetVisible(_Decoy, 1);
+
+PROC
+LLMIME_Skills_Internal_ApplyDecoyTags((CHARACTERGUID)_Decoy)
+AND
+DB_LLMIME_Skills_DecoyTags(_Tag)
+AND
+IsTagged(_Decoy, _Tag, 0)
+THEN
+SetTag(_Decoy, _Tag);
+LeaderLog_Log("DEBUG", "[LLMIME:Skills:ApplyDecoyTags] Set tag [",_Tag,"] on decoy.");
+
+PROC
+LLMIME_Skills_SetupDecoy((CHARACTERGUID)_Decoy)
+AND
+DB_LLMIME_Skills_Temp_Decoy(_Character, _Decoy)
+AND
+GetFaction(_Character, _Faction)
+THEN
+LeaderLog_Log("DEBUG", "[LLMIME:Skills:SetupDecoy] Setting up decoy.");
+SetFaction(_Decoy, _Faction);
+CharacterDisableAllCrimes(_Decoy);
+CharacterSetCorpseLootable(_Decoy, 0);
+
+IF
+CharacterStatusRemoved(_Decoy, "LLMIME_DECOY_LIFETIME", _)
+AND
+HasAppliedStatus(_Decoy, "LLMIME_DECOY_LIFETIME", 0)
+THEN
+LLMIME_Skills_Internal_OnDecoyRemoved(_Decoy);
+
+
+PROC
+LLMIME_Skills_Internal_OnDecoyRemoved((CHARACTERGUID)_Decoy)
+AND
+ObjectIsOnStage(_Decoy, 1)
+AND
+GetPosition(_Decoy, _x, _y, _z)
+THEN
+//PlayEffectAtPosition("RS3_FX_GP_Combat_CorpseExplosion_Wood_01_Small", _x, _y, _z);
+//PlayEffectAtPosition("RS3_FX_Poof_Wood_01", _x, _y, _z);
+SetOnStage(_Decoy, 0);
+PlayEffectAtPosition("RS3_FX_GP_ScriptedEvent_Ambushers_Smoke_01", _x, _y, _z);
+PROC_StopLoopEffect(_Decoy, "Mimicry.FX.Decoy.Mask");
+ProcObjectTimer(_Decoy, "LLMIME_Timers_Skills_DeleteDecoy", 1000);
+
+PROC
+ProcObjectTimer((CHARACTERGUID)_Decoy, "LLMIME_Timers_Skills_DeleteDecoy")
+THEN
+RemoveTemporaryCharacter(_Decoy);
+
+PROC
+LLMIME_Skills_Internal_OnDecoyRemoved((CHARACTERGUID)_Decoy)
+AND
+DB_LLMIME_Skills_Temp_Decoy(_Character, _Decoy)
+THEN
+NOT DB_LLMIME_Skills_Temp_Decoy(_Character, _Decoy);
+LLMIME_Skills_Internal_RemoveDecoyStatus(_Character);
+
+PROC
+LLMIME_Skills_Internal_RemoveDecoyStatus((CHARACTERGUID)_Character)
+AND
+NOT DB_LLMIME_Skills_Temp_Decoy(_Character, _)
+AND
+NOT LeaderLib_Timers_QRY_ObjectTimerStarted(_Character, "LLMIME_Timers_Skills_RemoveDecoyActiveStatus_")
+THEN
+LeaderLib_Timers_StartObjectTimer(_Character, 250, "LLMIME_Timers_Skills_RemoveDecoyActiveStatus_", "Mimicry_Events_Skills_Internal_RemoveDecoyActiveStatus");
+//END_REGION
+
+//REGION VITAL_INFLUENCE
+IF
+CharacterUsedSkillOnTarget(_Character, _Target, "Target_LLMIME_VitalInfluence", _, _)
+THEN
+LLMIME_Skills_OnSkillUsed(_Character, _Target, "VitalInfluence");
+
+IF
+CharacterUsedSkillOnTarget(_Character, _Target, "Target_LLMIME_VitalInfluence_Follower", _, _)
+THEN
+LLMIME_Skills_OnSkillUsed(_Character, _Target, "VitalInfluence");
+
+PROC
+LLMIME_Skills_OnSkillUsed((CHARACTERGUID)_Character, (GUIDSTRING)_Target, "VitalInfluence")
+AND
+ObjectIsCharacter((CHARACTERGUID)_Target, 1)
+AND
+LeaderLib_Helper_QRY_AttributeIsGreater(_Character, _Target, "Constitution")
+THEN
+LeaderLog_Log("DEBUG", "[Mimicry:Skills:CharacterUsedSkillOnTarget] Prepared beam effects for [VitalInfluence].");
+DB_LLMIME_Skills_Temp_BeamEffect(_Target, _Character, "VitalInfluence", "LLMIME_FX_Skills_VitalInfluence_Beam_01", "Dummy_BodyFX", "Dummy_BodyFX");
+
+IF
+SkillCast(_Caster, "Target_LLMIME_VitalInfluence", _, _)
+THEN
+LLMIME_Skills_OnSkillCast(_Caster, "VitalInfluence");
+
+IF
+SkillCast(_Caster, "Target_LLMIME_VitalInfluence_Follower", _, _)
+THEN
+LLMIME_Skills_OnSkillCast(_Caster, "VitalInfluence");
+
+PROC
+LLMIME_Skills_OnSkillCast((CHARACTERGUID)_Character, "VitalInfluence")
+AND
+DB_LLMIME_Skills_Temp_BeamEffect(_Caster, _Target, "VitalInfluence", _Effect, _CasterBone, _TargetBone)
+THEN
+NOT DB_LLMIME_Skills_Temp_BeamEffect(_Caster, _Target, "VitalInfluence", _Effect, _CasterBone, _TargetBone);
+PlayBeamEffect(_Caster, _Target, _Effect, _CasterBone, _TargetBone);
+LeaderLog_Log("DEBUG", "[LLMIME:Skills:OnSkillCast] Played beam effect [",_Effect,"].");
+
+IF
+CharacterStatusAttempt(_Target, "LLMIME_VITAL_CHECK", (CHARACTERGUID)_Caster)
+AND
+LeaderLib_Helper_QRY_AttributeIsGreater(_Caster, _Target, "Constitution")
+THEN
+ApplyStatus(_Caster, "LLMIME_VITAL_BUFF", 12.0, 0, _Caster);
+ApplyStatus(_Target, "LLMIME_VITAL_DEBUFF", 12.0, 0, _Caster);
+RemoveStatus(_Target, "LLMIME_VITAL_CHECK");
+
+IF
+CharacterStatusAttempt(_Target, "LLMIME_VITAL_CHECK", (CHARACTERGUID)_Caster)
+AND
+NOT LeaderLib_Helper_QRY_HasStatus(_Target, "LLMIME_VITAL_DEBUFF")
+THEN
+CharacterStatusText(_Caster, "LLMIME_StatusText_VitalityCheck_Failed");
+//END_REGION
+
+//A.K.A. Mime Vault
+//REGION FLANK_AND_SWAP
+IF
+CharacterUsedSkillOnTarget(_Mime, _Target, "MultiStrike_LLMIME_MimeVault", _, _)
+THEN
+LLMIME_Skills_OnSkillUsedOnTarget(_Mime, _Target, "MimeVault");
+
+IF
+CharacterUsedSkillOnTarget(_Mime, _Target, "MultiStrike_LLMIME_MimeVault_Follower", _, _)
+THEN
+LLMIME_Skills_OnSkillUsedOnTarget(_Mime, _Target, "MimeVault");
+
+PROC
+LLMIME_Skills_OnSkillUsedOnTarget((CHARACTERGUID)_Mime, (GUIDSTRING)_Target, "MimeVault")
+THEN
+ApplyStatus(_Target, "LLMIME_FLANKING", 12.0, 0, _Mime);
+ObjectSetFlag(_Target, "LLMIME_FlankingApplied");
+ProcObjectTimer(_Target, "Mimicry_FlankAndSwap_FlankingFailSafe", 1500);
+DB_LLMIME_Skills_Temp_FlankingTarget(_Mime, _Target);
+
+IF
+SkillCast(_Mime, "MultiStrike_LLMIME_MimeVault", _, _)
+AND
+DB_LLMIME_Skills_Temp_FlankingTarget(_Mime, _Target)
+THEN
+NOT DB_LLMIME_Skills_Temp_FlankingTarget(_Mime, _Target);
+ProcObjectTimerCancel(_Target, "Mimicry_FlankAndSwap_FlankingFailSafe");
+ProcObjectTimer(_Target, "Mimicry_FlankAndSwap_FlankingFailSafe", 1500);
+
+IF
+SkillCast(_Mime, "MultiStrike_LLMIME_MimeVault_Follower", _, _)
+AND
+DB_LLMIME_Skills_Temp_FlankingTarget(_Mime, _Target)
+THEN
+NOT DB_LLMIME_Skills_Temp_FlankingTarget(_Mime, _Target);
+ProcObjectTimerCancel(_Target, "Mimicry_FlankAndSwap_FlankingFailSafe");
+ProcObjectTimer(_Target, "Mimicry_FlankAndSwap_FlankingFailSafe", 1500);
+
+//When the target is Grounded
+PROC
+ProcObjectTimerFinished((CHARACTERGUID)_Target, "Mimicry_FlankAndSwap_FlankingFailSafe")
+AND
+ObjectGetFlag(_Target, "LLMIME_FlankingApplied", 1)
+THEN
+ObjectClearFlag(_Target, "LLMIME_FlankingApplied", 1);
+RemoveStatus(_Target, "LLMIME_FLANKING");
+CharacterStatusText(_Target, "LLMIME_StatusText_SwappedFailed");
+
+IF
+CharacterStatusApplied(_Target, "LLMIME_SWAPPING", (CHARACTERGUID)_Mime)
+AND
+DB_LLMIME_Skills_FlankAndAwap_PreserveStatuses(_Status)
+AND
+HasActiveStatus(_Target, _Status, 1)
+AND
+GetStatusTurns(_Target, _Status, _Turns)
+AND
+Real(_Turns, _TurnsR)
+AND
+RealProduct(_TurnsR, 6.0, _Duration)
+THEN
+DB_LLMIME_Skills_Temp_DisabledStatusTurns(_Target, _Mime, _Status, _Duration);
+
+IF
+CharacterStatusApplied(_Target, "LLMIME_SWAPPING", (CHARACTERGUID)_Mime)
+THEN
+ObjectClearFlag(_Target, "LLMIME_FlankingApplied", 1);
+SetVarObject(_Mime, "LLMIME_SwapTarget", _Target);
+PlayEffect(_Target, "RS3_FX_Skills_Void_Netherswap_Disappear_Overlay_01");
+PlayEffect(_Mime, "RS3_FX_Skills_Void_Netherswap_Disappear_Overlay_01");
+LeaderLib_Timers_StartCharacterCharacterTimer(_Mime, _Target, 500, "Mimicry_Timers_StartSwapping_", "Mimicry_FlankAndSwap_StartSwapping");
+
+IF
+CharacterCharacterEvent(_Mime, _Target, "Mimicry_FlankAndSwap_StartSwapping")
+AND
+GetPosition(_Target, _tx, _ty, _tz)
+AND
+GetPosition(_Mime, _mx, _my, _mz)
+THEN
+PlayEffectAtPosition("RS3_FX_Skills_Void_Netherswap_Disappear_Root_01", _tx, _ty, _tz);
+PlayEffectAtPosition("RS3_FX_Skills_Void_Netherswap_Disappear_Root_01", _mx, _my, _mz);
+CharacterSetDetached(_Target, 1);
+CharacterSetDetached(_Mime, 1);
+TeleportToPosition(_Target, _mx, _my, _mz, "Mimicry_FlankAndSwap_TargetSwappedPlaces", 0, 1);
+TeleportToPosition(_Mime, _tx, _ty, _tz, "Mimicry_FlankAndSwap_MimeSwappedPlaces", 0, 1);
+
+//KNOCKED_DOWN gets removed by teleporting for some reason
+IF
+StoryEvent((CHARACTERGUID)_Target, "Mimicry_FlankAndSwap_TargetSwappedPlaces")
+AND
+DB_LLMIME_Skills_Temp_DisabledStatusTurns(_Target, _Mime, _Status, _Duration)
+AND
+HasActiveStatus(_Target, _Status, 0)
+THEN
+NOT DB_LLMIME_Skills_Temp_DisabledStatusTurns(_Target, _Mime, _Status, _Duration);
+ApplyStatus(_Target, _Status, _Duration, 0, _Mime);
+
+IF
+StoryEvent((CHARACTERGUID)_Target, "Mimicry_FlankAndSwap_TargetSwappedPlaces")
+AND
+DB_LLMIME_Skills_Temp_DisabledStatusTurns(_Target, _Mime, _Status, _Duration)
+THEN
+NOT DB_LLMIME_Skills_Temp_DisabledStatusTurns(_Target, _Mime, _Status, _Duration);
+
+IF
+//SkillCast(_Mime, "Teleportation_MimeVault_Swap", _, _)
+StoryEvent((CHARACTERGUID)_Mime, "Mimicry_FlankAndSwap_MimeSwappedPlaces")
+AND
+GetVarObject(_Mime, "LLMIME_SwapTarget", (CHARACTERGUID)_Target)
+AND
+GetPosition(_Target, _tx, _ty, _tz)
+AND
+GetPosition(_Mime, _mx, _my, _mz)
+THEN
+CharacterSetDetached(_Target, 0);
+CharacterSetDetached(_Mime, 0);
+CharacterLookAt(_Mime, _Target, 1);
+ClearVarObject(_Mime, "LLMIME_SwapTarget");
+RemoveStatus(_Target, "LLMIME_SWAPPING");
+PlayEffectAtPosition("RS3_FX_Skills_Void_Netherswap_Reappear_01", _tx, _ty, _tz);
+PlayEffectAtPosition("RS3_FX_Skills_Void_Netherswap_Reappear_01", _mx, _my, _mz);
+CharacterStatusText(_Target, "LLMIME_StatusText_Swapped");
+
+IF
+CharacterStatusRemoved(_Target, "LLMIME_SWAPPING", _)
+AND
+LeaderLib_Helper_QRY_HasStatus(_Target, "LLMIME_FLANKING")
+THEN
+RemoveStatus(_Target, "LLMIME_FLANKING");
+//END_REGION
+
+//REGION COUNTER_THROW
+IF
+CharacterStatusApplied(_Mime, "LLMIME_COUNTER_THROW", _)
+THEN
+DB_LLMIME_Skills_Temp_ActiveCounterThrow(_Mime);
+LeaderLib_ToggleScripts_EnableScript("LLMIME_TS_CounterThrowActive", "Mimicry");
+
+IF
+CharacterStatusRemoved(_Mime, "LLMIME_COUNTER_THROW", _)
+THEN
+NOT DB_LLMIME_Skills_Temp_ActiveCounterThrow(_Mime);
+
+IF
+CharacterStatusRemoved(_Mime, "LLMIME_COUNTER_THROW", _)
+AND
+NOT DB_LLMIME_Skills_Temp_ActiveCounterThrow(_)
+THEN
+LeaderLib_ToggleScripts_DisableScript("LLMIME_TS_CounterThrowActive", "Mimicry");
+
+IF
+DB_LLMIME_Skills_Temp_CounterThrow_Queue(_Mime, _Attacker)
+AND
+NOT DB_LLMIME_Skills_Temp_CounterThrow_Attacking(_Mime)
+THEN
+DB_LLMIME_Skills_Temp_CounterThrow_Attacking(_Mime);
+NOT DB_LLMIME_Skills_Temp_CounterThrow_Queue(_Mime, _Attacker);
+CharacterUseSkill(_Mime, "Projectile_LLWEAPONEX_Throw_Rock_Instant", _Attacker, 0, 1, 1);
+
+IF
+SkillCast(_Mime, "Projectile_LLWEAPONEX_Throw_Rock_Instant", _, _)
+AND
+DB_LLMIME_Skills_Temp_CounterThrow_Attacking(_Mime)
+THEN
+NOT DB_LLMIME_Skills_Temp_CounterThrow_Attacking(_Mime);
+ProcObjectTimer(_Mime, "LLMIME_Timers_CheckForNextCounterThrow", 500);
+
+PROC
+ProcObjectTimerFinished((CHARACTERGUID)_Mime, "LLMIME_Timers_CheckForNextCounterThrow")
+AND
+DB_LLMIME_Skills_Temp_CounterThrow_Queue(_Mime, _Attacker)
+AND
+NOT DB_LLMIME_Skills_Temp_CounterThrow_Attacking(_Mime)
+THEN
+DB_LLMIME_Skills_Temp_CounterThrow_Attacking(_Mime);
+NOT DB_LLMIME_Skills_Temp_CounterThrow_Queue(_Mime, _Attacker);
+CharacterUseSkill(_Mime, "Projectile_LLWEAPONEX_Throw_Rock_Instant", _Attacker, 0, 1, 1);
+
+IF
+CharacterStatusRemoved(_Mime, "EVADING", _)
+AND
+HasActiveStatus(_Mime, "LLMIME_COUNTER_THROW", 1)
+AND
+NOT LeaderLib_Helper_QRY_HasStatus(_Mime, "EVADING")
+THEN
+ApplyStatus(_Mime, "LLMIME_EVADING2", 6.0, 0, _Mime);
+
+IF
+CharacterStatusRemoved(_Mime, "LLMIME_EVADING2", _)
+AND
+NOT LeaderLib_Helper_QRY_HasStatus(_Mime, "EVADING")
+AND
+HasActiveStatus(_Mime, "LLMIME_COUNTER_THROW", 1)
+THEN
+ApplyStatus(_Mime, "LLMIME_EVADING3", 6.0, 0, _Mime);
+//END_REGION
+
+//REGION HIDDEN_APPROACH_TIMELY_RETREAT
+IF
+CharacterUsedSkill(_Mime, "Jump_LLMIME_HiddenApproach", _, _)
+AND
+GetPosition(_Mime, _x, _y, _z)
+THEN
+DB_LLMIME_Skills_Temp_HiddenApproachPosition(_Mime, _x, _y, _z);
+
+IF
+CharacterUsedSkill(_Mime, "Shout_LLMIME_TimelyRetreat", _, _)
+THEN
+ProcObjectTimer(_Mime, "LLMIME_Timers_TimelyRetreat_PlayOverlay", 500);
+
+PROC
+ProcObjectTimerFinished((CHARACTERGUID)_Mime, "LLMIME_Timers_TimelyRetreat_PlayOverlay")
+THEN
+PlayEffect(_Mime, "LLMIME_FX_Skills_TimelyRetreat_Cast_Overlay_01");
+
+IF
+SkillCast(_Mime, "Shout_LLMIME_TimelyRetreat", _, _)
+THEN
+ProcObjectTimer(_Mime, "LLMIME_Timers_TimelyRetreat_TeleportIn", 550);
+
+PROC
+ProcObjectTimerFinished((CHARACTERGUID)_Mime, "LLMIME_Timers_TimelyRetreat_TeleportIn")
+THEN
+LeaderLib_Helper_ClearActionQueue(_Mime);
+PlayAnimation(_Mime, "skill_cast_self_teleport_in_01_cast");
+
+IF
+SkillCast(_Mime, "Shout_LLMIME_TimelyRetreat", _, _)
+AND
+DB_LLMIME_Skills_Temp_HiddenApproachPosition(_Mime, _x, _y, _z)
+THEN
+NOT DB_LLMIME_Skills_Temp_HiddenApproachPosition(_Mime, _x, _y, _z);
+TeleportToPosition(_Mime, _x, _y, _z, "LLMIME_Skills_TimelyRetreat_TeleportedIn", 0, 0);
+
+IF
+StoryEvent((CHARACTERGUID)_Mime, "LLMIME_Skills_TimelyRetreat_TeleportedIn")
+THEN
+RemoveStatus(_Mime, "LLMIME_ADDSKILL_TIMELY_RETREAT");
+
+IF
+CharacterStatusRemoved(_Mime, "LLMIME_ADDSKILL_TIMELY_RETREAT", _)
+AND
+DB_LLMIME_Skills_Temp_HiddenApproachPosition(_Mime, _x, _y, _z)
+THEN
+NOT DB_LLMIME_Skills_Temp_HiddenApproachPosition(_Mime, _x, _y, _z);
+//END_REGION
+
+//REGION UNHOLY_DARKNESS
+IF
+CharacterStatusAttempt(_Target, "LLMIME_UNHOLY_HIT", (CHARACTERGUID)_Mime)
+AND
+NOT LeaderLib_Helper_QRY_HasStatus(_Target, "DYING")
+THEN
+DB_LLMIME_Skills_Temp_UnholyDarknessTarget(_Mime, _Target);
+
+IF
+CharacterStatusAttempt(_Target, "LLMIME_UNHOLY_HIT", (CHARACTERGUID)_Mime)
+AND
+LeaderLib_Helper_QRY_HasStatus(_Target, "DYING")
+THEN
+NOT DB_LLMIME_Skills_Temp_UnholyDarknessTarget(_Mime, _Target);
+CharacterCharacterSetEvent(_Mime, _Target, "LLMIME_Skills_Unholy_DeathExplosion");
+LeaderLog_Log("DEBUG", "[LLMIME_10_TS_Skills_01_MimeSkills:CharacterPrecogDying] Creating Unholy Darkness death explosion.");
+
+IF
+CharacterUsedSkillAtPosition(_Mime, _x, _y, _z, "ProjectileStrike_LLMIME_Mask_Unholy", _, _)
+THEN
+DB_LLMIME_Skills_Temp_DarknessPosition(_Mime, _x, _y, _z);
+
+IF
+SkillCast(_Mime, "ProjectileStrike_LLMIME_Mask_Unholy", _, _)
+AND
+DB_LLMIME_Skills_Temp_DarknessPosition(_Mime, _x, _y, _z)
+THEN
+PlayEffectAtPosition("LLMIME_FX_Skills_Unholy_Impact_Root_01", _x, _y, _z);
+ProcObjectTimer(_Mime, "LLMIME_Timers_Skills_UnholyDarknessSmoke", 800);
+
+PROC
+ProcObjectTimerFinished((CHARACTERGUID)_Mime, "LLMIME_Timers_Skills_UnholyDarknessSmoke")
+AND
+DB_LLMIME_Skills_Temp_DarknessPosition(_Mime, _x, _y, _z)
+THEN
+NOT DB_LLMIME_Skills_Temp_DarknessPosition(_Mime, _x, _y, _z);
+//CreateSurfaceAtPosition(_x, _y, _z, "SurfaceSmokeCloud", 2.8, 12.0);
+SetVarFloat3(_Mime, "LLMIME_Skills_UnholyTargetPosition", _x, _y, _z);
+SetStoryEvent(_Mime, "LLMIME_Skills_Unholy_CloudDamage");
+ProcObjectTimer(_Mime, "LLMIME_Timers_Skills_UnholyDarkness_ClearTargets", 1000);
+
+PROC
+ProcObjectTimerFinished((CHARACTERGUID)_Mime, "LLMIME_Timers_Skills_UnholyDarkness_ClearTargets")
+AND
+DB_LLMIME_Skills_Temp_UnholyDarknessTarget(_Mime, _Target)
+THEN
+NOT DB_LLMIME_Skills_Temp_UnholyDarknessTarget(_Mime, _Target);
+//END_REGION
+
+//REGION FATALITY
+IF
+CharacterUsedSkillOnTarget(_Mime, _Target, "Target_LLMIME_Fatality", _, _)
+THEN
+LLMIME_Skills_OnSkillUsedOnTarget(_Mime, _Target, "Fatality");
+
+IF
+CharacterUsedSkillOnTarget(_Mime, _Target, "Target_LLMIME_Fatality_Follower", _, _)
+THEN
+LLMIME_Skills_OnSkillUsedOnTarget(_Mime, _Target, "Fatality");
+
+PROC
+LLMIME_Skills_OnSkillUsedOnTarget((CHARACTERGUID)_Mime, (GUIDSTRING)_Target, "Fatality")
+THEN
+DB_LLMIME_Skills_Fatality_ListenForDeath(_Mime, _Target);
+LeaderLib_Timers_StartObjectTimer(_Mime, 3000, "LLMIME_Timers_Skills_ClearFatalityDeathCheck", "LLMIME_Skills_ClearFatalityDeathCheck");
+
+IF
+SkillCast(_Mime, "Target_LLMIME_Fatality", _, _)
+THEN
+LeaderLib_Timers_RestartObjectTimer(_Mime, "LLMIME_Timers_Skills_ClearFatalityDeathCheck", 1200);
+
+IF
+SkillCast(_Mime, "Target_LLMIME_Fatality_Follower", _, _)
+THEN
+LeaderLib_Timers_RestartObjectTimer(_Mime, "LLMIME_Timers_Skills_ClearFatalityDeathCheck", 1200);
+
+IF
+StoryEvent((CHARACTERGUID)_Mime, "LLMIME_Skills_ClearFatalityDeathCheck")
+AND
+DB_LLMIME_Skills_Fatality_ListenForDeath(_Mime, _Target)
+THEN
+NOT DB_LLMIME_Skills_Fatality_ListenForDeath(_Mime, _Target);
+LeaderLog_Log("DEBUG", "[LLMIME_04_Skills_02_Mime:StoryEvent(LLMIME_Skills_ClearFatalityDeathCheck)] Target did not die from Deathblow. Clearing.");
+
+IF
+CharacterStatusApplied(_Target, "LLMIME_DEATHBLOW_START", (CHARACTERGUID)_Mime)
+AND
+LLMIME_Skills_QRY_CharacterIsDisabled(_Target)
+THEN
+ApplyStatus(_Target, "LLMIME_DEATHBLOW_SECONDHIT", 0.0, 1, _Mime);
+
+IF
+StoryEvent((CHARACTERGUID)_Mime, "LLMIME_Skills_ResetFatalityCooldown")
+THEN
+LLMIME_Skills_ResetCooldown(_Mime, "Target_LLMIME_Fatality", "Target_LLMIME_Fatality_Follower");
+CharacterStatusText(_Mime, "LLMIME_StatusText_FatalityCooldownReset");
+PlayEffect(_Mime, "LLMIME_FX_DeathblowRefreshed_01");
+//END_REGION
+EXITSECTION
+
+ENDEXITSECTION
+ParentTargetEdge "LaughingLeader_Mimicry"

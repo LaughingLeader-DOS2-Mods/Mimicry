@@ -1,0 +1,38 @@
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+
+KBSECTION
+/* This script listens for missed attack events while Counter Throw is active.*/
+
+//Shoots a local projectile [Projectile_LLMIME_Status_CounterAttack] at the attacker.
+IF
+CharacterMissedBy(_Mime, _AttackerOwner, _Attacker)
+AND
+DB_LLMIME_Skills_Temp_ActiveCounterThrow(_Mime)
+AND
+CharacterIsEnemy(_Mime, _Attacker, 1)
+AND
+LeaderLib_Roll_QRY(899) // 899/999 ~90%
+THEN
+CharacterCharacterSetEvent(_Mime, _Attacker, "LLMIME_Events_Skills_CounterAttack");
+//PlayBeamEffect(_Mime, _Attacker, "LLMIME_FX_Projectiles_Status_CounterAttack_01", "Dummy_BodyFX", "Dummy_BodyFX");
+//PlayBeamEffect(_Mime, _Attacker, "LLMIME_FX_Status_CounterAttack_Beam_01", "Dummy_BodyFX", "Dummy_BodyFX");
+
+IF
+CharacterMissedBy(_Mime, _AttackerOwner, _Attacker)
+AND
+DB_LLMIME_Skills_Temp_ActiveCounterThrow(_Mime)
+AND
+CharacterIsEnemy(_Mime, _Attacker, 1)
+AND
+DB_GlobalFlag("WeaponExpansion_IsActive")
+AND
+LeaderLib_Roll_QRY(599)
+THEN
+DB_LLMIME_Skills_Temp_CounterThrow_Queue(_Mime, _Attacker);
+
+EXITSECTION
+
+ENDEXITSECTION
+ParentTargetEdge "LLMIME_10_ToggleScripts"

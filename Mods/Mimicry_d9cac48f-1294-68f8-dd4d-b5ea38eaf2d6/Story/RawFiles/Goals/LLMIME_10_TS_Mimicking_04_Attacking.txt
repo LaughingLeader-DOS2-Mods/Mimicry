@@ -1,0 +1,150 @@
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+/*
+DB_LLMIME_Timers_AttackAtPositionTimer(_TimerName, _Caster, _TargetX, _TargetY, _TargetZ)
+
+*/
+KBSECTION
+
+//REGION ATTACK_TRACKING
+IF
+CharacterStartAttackObject(_Target, _Owner, _Caster)
+AND
+_Caster != _Target
+AND
+NOT LLMIME_Mimicking_Attack_QRY_IsAttackOfOpportunity(_Caster)
+AND
+LLMIME_Mimicking_QRY_CharacterIsMimickable(_Caster)
+AND
+LLMIME_Mimicking_QRY_MimesAvailable()
+AND
+LLMIME_Mimicking_QRY_GetTargetPriority(_Caster, _Target, 2)
+AND
+DB_LLMIME_Mimicking_Temp_TargetPriority(_Caster, _Target, _TargetPriority)
+AND
+DB_LLMIME_Mimicking_MimicNextAction(_Mime)
+AND
+LLMIME_Mimicking_QRY_CanMimicCharacter(_Caster, _Mime)
+AND
+GetPosition(_Target, _TargetX, _TargetY, _TargetZ)
+AND
+GetUUID(_Caster, _CasterID)
+AND
+GetUUID(_Target, _TargetID)
+AND
+StringConcatenate(_CasterID, _TargetID, _Action)
+THEN
+LeaderLog_Log("DEBUG", "[LLMIME:Mime:CharacterStartAttackObject] Queueing up mimic weapon attack on target.");
+//ObjectSetFlag(_Mime, "LLMIME_MIMIC_PREFER_ITEM_TARGET"); // Prefer the item dummy, since all weapons can attack items
+LLMIME_Mimicking_QueueNextAction(_Mime, _Caster, _Action, "Attack", _TargetX, _TargetY, _TargetZ, _TargetPriority, 1);
+
+IF
+CharacterStartAttackObject(_Target, _Owner, _Caster)
+AND
+DB_LLMIME_Mimicking_Temp_TargetPriority(_Caster, _Target, _TargetPriority)
+THEN
+NOT DB_LLMIME_Mimicking_Temp_TargetPriority(_Caster, _Target, _TargetPriority);
+
+//Delay by a few frames so the target event sticks first, if possible
+IF
+CharacterStartAttackPosition(_TargetX, _TargetY, _TargetZ, _Owner, _Caster)
+AND
+NOT LLMIME_Mimicking_Attack_QRY_IsAttackOfOpportunity(_Caster)
+AND
+NOT DB_LLMIME_Timers_AttackAtPositionTimer(_Caster, _TargetX, _TargetY, _TargetZ)
+AND
+LLMIME_Mimicking_QRY_MimesAvailable()
+AND
+LLMIME_Mimicking_QRY_CharacterIsMimickable(_Caster)
+THEN
+DB_LLMIME_Timers_AttackAtPositionTimer(_Caster, _TargetX, _TargetY, _TargetZ);
+ProcObjectTimer(_Caster, "Mimicry_Timers_StartAttackPositionDelay", 5);
+
+IF
+CharacterStartAttackObject(_Target, _Owner, _Caster)
+AND
+LLMIME_Mimicking_QRY_ActionTypeIsQueued(_Caster, "Attack")
+AND
+GetUUID(_Caster, _CasterID)
+AND
+GetUUID(_Target, _TargetID)
+AND
+StringConcatenate(_CasterID, _TargetID, _Action)
+THEN
+LLMIME_Mimicking_StartNextMimic(_Caster, _Action, "Attack", 1000);
+//END_REGION
+
+//REGION DEBUG
+//query GetRotation([in](GUIDSTRING)_Target, [out](REAL)_X, [out](REAL)_Y, [out](REAL)_Z)
+/*
+IF
+CharacterStartAttackPosition(_txf, _tyf, _tzf, _Owner, _Caster)
+AND
+DB_GlobalFlag("LeaderLib_IsEditorMode")
+AND
+LeaderLog_QRY_RealToIntToString("MimicryAttackDebugTargetPosition", _txf, _tyf, _tzf)
+AND
+DB_LeaderLog_Temp_RealString("MimicryAttackDebugTargetPosition", _txstr, _tystr, _tzstr)
+AND
+GetPosition(_Caster, _px, _py, _pz)
+AND
+LeaderLog_QRY_RealToIntToString("MimicryAttackDebugAttackerPosition", _px, _py, _pz)
+AND
+DB_LeaderLog_Temp_RealString("MimicryAttackDebugAttackerPosition", _pxstr, _pystr, _pzstr)
+AND
+GetRotation(_Caster, _rx, _ry, _rz)
+AND
+LeaderLog_QRY_RealToIntToString("MimicryAttackDebugRotation", _rx, _ry, _rz)
+AND
+DB_LeaderLog_Temp_RealString("MimicryAttackDebugRotation", _rxstr, _rystr, _rzstr)
+AND
+CharacterGetDisplayName(_Caster, _, _Name)
+THEN
+NOT DB_LeaderLog_Temp_RealString("MimicryAttackDebugTargetPosition", _txstr, _tystr, _tzstr);
+NOT DB_LeaderLog_Temp_RealString("MimicryAttackDebugRotation", _rxstr, _rystr, _rzstr);
+NOT DB_LeaderLog_Temp_RealString("MimicryAttackDebugAttackerPosition", _pxstr, _pystr, _pzstr);
+LeaderLog_Log("DEBUG", "[LLMIME:AttackDebug:CharacterStartAttackPosition] **************************************");
+LeaderLog_Log("DEBUG", "[LLMIME:AttackDebug:CharacterStartAttackPosition] Character [",_Name,"] made an attack:");
+LeaderLog_Log("DEBUG", "[LLMIME:AttackDebug:CharacterStartAttackPosition] Position[",_pxstr,",",_pystr,",",_pzstr,"] | Target: [",_txstr,",",_tystr,",",_tzstr,"]");
+LeaderLog_Log("DEBUG", "[LLMIME:AttackDebug:CharacterStartAttackPosition] Rotation: [",_rxstr,",",_rystr,",",_rzstr,"]");
+LeaderLog_Log("DEBUG", "[LLMIME:AttackDebug:CharacterStartAttackPosition] **************************************");
+
+IF
+CharacterStartAttackObject(_Defender, _Owner, _Caster)
+AND
+GetPosition(_Defender, _txf, _tyf, _tzf)
+AND
+LeaderLog_QRY_RealToIntToString("MimicryAttackDebugTargetPosition", _txf, _tyf, _tzf)
+AND
+DB_LeaderLog_Temp_RealString("MimicryAttackDebugTargetPosition", _txstr, _tystr, _tzstr)
+AND
+GetPosition(_Caster, _px, _py, _pz)
+AND
+LeaderLog_QRY_RealToIntToString("MimicryAttackDebugAttackerPosition", _px, _py, _pz)
+AND
+DB_LeaderLog_Temp_RealString("MimicryAttackDebugAttackerPosition", _pxstr, _pystr, _pzstr)
+AND
+GetRotation(_Caster, _rx, _ry, _rz)
+AND
+LeaderLog_QRY_RealToIntToString("MimicryAttackDebugRotation", _rx, _ry, _rz)
+AND
+DB_LeaderLog_Temp_RealString("MimicryAttackDebugRotation", _rxstr, _rystr, _rzstr)
+AND
+CharacterGetDisplayName(_Caster, _, _Name)
+THEN
+NOT DB_LeaderLog_Temp_RealString("MimicryAttackDebugTargetPosition", _txstr, _tystr, _tzstr);
+NOT DB_LeaderLog_Temp_RealString("MimicryAttackDebugRotation", _rxstr, _rystr, _rzstr);
+NOT DB_LeaderLog_Temp_RealString("MimicryAttackDebugAttackerPosition", _pxstr, _pystr, _pzstr);
+LeaderLog_Log("DEBUG", "[LLMIME:AttackDebug:CharacterStartAttackObject] **************************************");
+LeaderLog_Log("DEBUG", "[LLMIME:AttackDebug:CharacterStartAttackObject] Character [",_Name,"] made an attack:");
+LeaderLog_Log("DEBUG", "[LLMIME:AttackDebug:CharacterStartAttackObject] Position[",_pxstr,",",_pystr,",",_pzstr,"] | Target: [",_txstr,",",_tystr,",",_tzstr,"]");
+LeaderLog_Log("DEBUG", "[LLMIME:AttackDebug:CharacterStartAttackObject] Rotation: [",_rxstr,",",_rystr,",",_rzstr,"]");
+LeaderLog_Log("DEBUG", "[LLMIME:AttackDebug:CharacterStartAttackObject] **************************************");
+*/
+//END_REGION
+
+EXITSECTION
+
+ENDEXITSECTION
+ParentTargetEdge "LLMIME_10_ToggleScripts"

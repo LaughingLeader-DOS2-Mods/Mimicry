@@ -1,0 +1,67 @@
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+//DB_LLMIME_Mimicking_Items_DestroyNext(_Mime, _Item, _Action, _Caster)
+//DB_LLMIME_Mimicking_Items_DelayTimer(_TimerName, _Caster, _Template)
+KBSECTION
+IF
+CharacterUsedItem(_Caster, _Item)
+AND
+CharacterIsPartyMember(_Caster, 1)
+AND
+LLMIME_Mimicking_QRY_CharacterIsMimickable(_Caster)
+AND
+LLMIME_Mimicking_QRY_MimesAvailable()
+AND
+LLMIME_Mimicking_QRY_ItemIsAllowed(_Item)
+AND
+GetTemplate(_Item, _Template)
+AND
+DB_LLMIME_Mimicking_MimicNextAction(_Mime)
+AND
+LLMIME_Mimicking_QRY_CanMimicCharacterWithItem(_Caster, _Mime, _Item)
+AND
+LLMIME_Mimicking_QRY_ItemIsSafeForRace(_Caster, _Mime, _Item, _Template)
+THEN
+LeaderLog_Log("DEBUG", "[Mimicry:Mimicking:Items:CharacterUsedItem] Queueing up next item mimic [",_Template,"] on mime.");
+LLMIME_Mimicking_QueueNextSelfAction(_Mime, _Caster, _Template, "Item");
+LLMIME_Mimicking_StartItemTimer(_Caster, _Item);
+
+IF
+DB_CustomUseItemResponse(_Char, _Item, 0)
+AND
+DB_LLMIME_Mimicking_Items_DestroyNext(_Mime, _Item, _Template, _Caster)
+THEN
+ItemDestroy(_Item);
+LLMIME_Mimicking_OnMimicFailed(_Mime, _Caster, _Template, "Item");
+NOT DB_LLMIME_Mimicking_Items_DestroyNext(_Mime, _Item, _Template, _Caster);
+
+IF
+CharacterUsedItemFailed(_Mime, _Item)
+AND
+DB_LLMIME_Mimicking_Items_DestroyNext(_Mime, _Item, _Template, _Caster)
+THEN
+ItemRemove(_Item);
+LLMIME_Mimicking_OnMimicFailed(_Mime, _Caster, _Template, "Item");
+NOT DB_LLMIME_Mimicking_Items_DestroyNext(_Mime, _Item, _Template, _Caster);
+
+IF
+CharacterUsedItem(_Mime, _Item)
+AND
+DB_LLMIME_Mimicking_Items_DestroyNext(_Mime, _Item, _Template, _Caster)
+AND
+ItemIsDestroyed(_Item, 0)
+THEN
+ItemRemove(_Item);
+
+IF
+CharacterUsedItem(_Mime, _Item)
+AND
+DB_LLMIME_Mimicking_Items_DestroyNext(_Mime, _Item, _Template, _Caster)
+THEN
+NOT DB_LLMIME_Mimicking_Items_DestroyNext(_Mime, _Item, _Template, _Caster);
+LLMIME_Mimicking_OnMimicSuccess(_Mime, _Caster, _Template, "Item");
+EXITSECTION
+
+ENDEXITSECTION
+ParentTargetEdge "LLMIME_10_ToggleScripts"

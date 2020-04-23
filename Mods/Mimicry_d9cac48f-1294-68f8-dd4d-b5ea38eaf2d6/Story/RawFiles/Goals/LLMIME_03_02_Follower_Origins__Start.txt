@@ -1,0 +1,30 @@
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+LLMIME_Follower_Internal_Origins_StartIfActive();
+KBSECTION
+PROC
+LLMIME_Follower_Internal_Origins_StartIfActive()
+AND
+DB_CurrentGameMode("Campaign")
+THEN
+LeaderLog_Log("DEBUG", "[LLMIME:Follower:Origins:__Start:StartIfActive] Starting Origins script.");
+GoalCompleted;
+
+IF
+DB_CurrentGameMode("Campaign")
+THEN
+LeaderLog_Log("DEBUG", "[LLMIME:Follower:Origins:__Start:DB_CurrentGameMode] Starting Origins script.");
+GoalCompleted;
+
+IF
+SavegameLoaded(_,_,_,_)
+AND
+DB_CurrentGameMode("Campaign")
+THEN
+LeaderLog_Log("DEBUG", "[LLMIME:Follower:Origins:__Start:SavegameLoaded] Starting Origins script.");
+GoalCompleted;
+EXITSECTION
+
+ENDEXITSECTION
+ParentTargetEdge "LaughingLeader_Mimicry"

@@ -1,0 +1,858 @@
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+LLMIME_System_InitSettings();
+//DB_LLMIME_SkillData(_Skill, _SkillType, _SkillElement)
+//DB_LLMIME_PassiveData(_Status, _BonusStatus, _InfoStatus, _DisableFlag)
+//DB_LLMIME_Templates(_Name, _Template)
+//DB_LLMIME_Statuses(_Status)
+//DB_LLMIME_MimeStatuses(_Status)
+KBSECTION
+//REGION SETTINGS
+PROC
+LLMIME_System_InitSettings()
+THEN
+SysClear("DB_LLMIME_PassiveData", 4);
+DB_LLMIME_PassiveData("LLMIME_BRAWLER", "LLMIME_BRAWLER_BONUS", "LLMIME_BRAWLER_INFO", "Mimicry_HideMimePassives");
+DB_LLMIME_PassiveData("LLMIME_BEASTMASTER", "LLMIME_BEASTMASTER", "LLMIME_BEASTMASTER_INFO", "Mimicry_HideMimePassives");
+DB_LLMIME_PassiveData("LLMIME_CONCENTRATION", "LLMIME_CONCENTRATION_BONUS", "LLMIME_CONCENTRATION_INFO", "Mimicry_HideMimePassives");
+
+DB_LLMIME_MimeTags("Mimicry_Mime");
+DB_LLMIME_MimeTags("Mimicry_EnemyMime");
+DB_LLMIME_MimeTags("LLMIME_MimeFollower");
+
+LLMIME_System_InitTemplates();
+LLMIME_System_InitEffectFlags();
+
+//SysClear("DB_LLMIME_DialogVars", 1);
+//DB_LLMIME_DialogVars("");
+
+SysClear("DB_LLMIME_Statuses", 1);
+DB_LLMIME_Statuses("LLMIME_UNARMED_BONUS_DAMAGE");
+DB_LLMIME_Statuses("LLMIME_TOTEMRAGE");
+DB_LLMIME_Statuses("LLMIME_BAD_BREATH");
+DB_LLMIME_Statuses("LLMIME_FROG");
+DB_LLMIME_Statuses("LLMIME_FORCED_EVOLUTION");
+DB_LLMIME_Statuses("LLMIME_BLIND_ARMOR_BYPASS");
+DB_LLMIME_Statuses("LLMIME_SLOWED_ARMOR_BYPASS");
+DB_LLMIME_Statuses("LLMIME_WEAK_ARMOR_BYPASS");
+DB_LLMIME_Statuses("LLMIME_SILENCED");
+DB_LLMIME_Statuses("LLMIME_SEAL_EVIL");
+DB_LLMIME_Statuses("LLMIME_SELF_SACRIFICE");
+
+SysClear("DB_LLMIME_MimickingStatuses", 1);
+DB_LLMIME_MimickingStatuses("LLMIME_MIMICKING");
+DB_LLMIME_MimickingStatuses("LLMIME_MIMICKING_FOLLOWER");
+DB_LLMIME_MimickingStatuses("LLMIME_MIMICKING_SOURCE");
+DB_LLMIME_MimickingStatuses("LLMIME_MIMICKING_ENEMY");
+
+SysClear("DB_LLMIME_MimeStatuses", 1);
+DB_LLMIME_MimeStatuses("LLMIME_MIMICKING_DISABLED");
+DB_LLMIME_MimeStatuses("LLMIME_COMBAT_MUTED");
+DB_LLMIME_MimeStatuses("LLMIME_MIMIC_WEAPON_REQUIREMENTS");
+DB_LLMIME_MimeStatuses("LLMIME_BRAWLER_STANCE_CON");
+DB_LLMIME_MimeStatuses("LLMIME_BRAWLER_STANCE_CON_INFO");
+DB_LLMIME_MimeStatuses("LLMIME_BRAWLER_STANCE_STR");
+DB_LLMIME_MimeStatuses("LLMIME_BRAWLER_STANCE_STR_INFO");
+DB_LLMIME_MimeStatuses("LLMIME_BRAWLER_STANCE_FIN");
+DB_LLMIME_MimeStatuses("LLMIME_BRAWLER_STANCE_FIN_INFO");
+//Passives
+DB_LLMIME_MimeStatuses("LLMIME_MIME");
+DB_LLMIME_MimeStatuses("LLMIME_MIMICRY_MASK");
+DB_LLMIME_MimeStatuses("LLMIME_MIMICRY_MASK_INFO");
+DB_LLMIME_MimeStatuses("LLMIME_MIMICRY_MASK_INFO_FOLLOWER");
+DB_LLMIME_MimeStatuses("LLMIME_BRAWLER");
+DB_LLMIME_MimeStatuses("LLMIME_BRAWLER_BONUS");
+DB_LLMIME_MimeStatuses("LLMIME_BRAWLER_INFO");
+DB_LLMIME_MimeStatuses("LLMIME_BEASTMASTER");
+DB_LLMIME_MimeStatuses("LLMIME_BEASTMASTER_INFO");
+DB_LLMIME_MimeStatuses("LLMIME_BEASTMASTER_TYPECHECK");
+DB_LLMIME_MimeStatuses("LLMIME_BEASTMASTER_MONSTERSKILL");
+DB_LLMIME_MimeStatuses("LLMIME_CONCENTRATION");
+DB_LLMIME_MimeStatuses("LLMIME_CONCENTRATION_BONUS");
+DB_LLMIME_MimeStatuses("LLMIME_CONCENTRATION_INFO");
+DB_LLMIME_MimeStatuses("LLMIME_SOURCE_REGENERATION_HIDDEN");
+
+DB_LLMIME_DebuffStatuses("Mimicry_MimickingDamageDebuff1_Enabled", "LLMIME_MIMICKING_DEBUFF1");
+DB_LLMIME_DebuffStatuses("Mimicry_MimickingDamageDebuff2_Enabled", "LLMIME_MIMICKING_DEBUFF2");
+DB_LLMIME_DebuffStatuses("Mimicry_MimickingDamageDebuff3_Enabled", "LLMIME_MIMICKING_DEBUFF3");
+DB_LLMIME_DebuffStatuses("Mimicry_MimickingDamageDebuff4_Enabled", "LLMIME_MIMICKING_DEBUFF4");
+DB_LLMIME_DebuffStatuses("Mimicry_MimickingDamageDebuff5_Enabled", "LLMIME_MIMICKING_DEBUFF5");
+
+DB_LLMIME_BlankSkills("Shout_LLMIME_Blank1");
+DB_LLMIME_BlankSkills("Shout_LLMIME_Blank2");
+DB_LLMIME_BlankSkills("Shout_LLMIME_Blank3");
+DB_LLMIME_BlankSkills("Shout_LLMIME_Blank4");
+DB_LLMIME_BlankSkills("Shout_LLMIME_Blank5");
+DB_LLMIME_BlankSkills("Shout_LLMIME_Blank6");
+DB_LLMIME_BlankSkills("Shout_LLMIME_Blank7");
+DB_LLMIME_BlankSkills("Shout_LLMIME_Blank8");
+DB_LLMIME_BlankSkills("Shout_LLMIME_Blank9");
+DB_LLMIME_BlankSkills("Shout_LLMIME_Blank10");
+DB_LLMIME_BlankSkills("Shout_LLMIME_Blank11");
+DB_LLMIME_BlankSkills("Shout_LLMIME_Blank12");
+DB_LLMIME_BlankSkills("Shout_LLMIME_Blank13");
+DB_LLMIME_BlankSkills("Shout_LLMIME_Blank14");
+DB_LLMIME_BlankSkills("Shout_LLMIME_Blank15");
+DB_LLMIME_BlankSkills("Shout_LLMIME_Blank16");
+DB_LLMIME_BlankSkills("Shout_LLMIME_Blank17");
+DB_LLMIME_BlankSkills("Shout_LLMIME_Blank18");
+DB_LLMIME_BlankSkills("Shout_LLMIME_Blank19");
+DB_LLMIME_BlankSkills("Shout_LLMIME_Blank20");
+DB_LLMIME_BlankSkills("Shout_LLMIME_Blank21");
+DB_LLMIME_BlankSkills("Shout_LLMIME_Blank22");
+DB_LLMIME_BlankSkills("Shout_LLMIME_Blank23");
+DB_LLMIME_BlankSkills("Shout_LLMIME_Blank24");
+
+/*
+PROC
+LLMIME_System_InitSettings()
+AND
+NOT DB_LLMIME_DecoyMaskEffects(_,_,_,_)
+THEN
+//SysClear("DB_LLMIME_DecoyMaskEffects", 4);
+DB_LLMIME_DecoyMaskEffects("DWARF", 1, "LLMIME_FX_Dwarves_Female_MimeMask_A", "Dummy_Root");
+DB_LLMIME_DecoyMaskEffects("DWARF", 0, "LLMIME_FX_Dwarves_Male_MimeMask_A", "Dummy_Root");
+DB_LLMIME_DecoyMaskEffects("ELF", 1, "LLMIME_FX_Elves_Female_MimeMask_A", "Dummy_Root");
+DB_LLMIME_DecoyMaskEffects("ELF", 0, "LLMIME_FX_Elves_Male_MimeMask_A", "Dummy_Root");
+DB_LLMIME_DecoyMaskEffects("HUMAN", 1, "LLMIME_FX_Humans_Female_MimeMask_A", "Head_Bone");
+DB_LLMIME_DecoyMaskEffects("HUMAN", 0, "LLMIME_FX_Humans_Male_MimeMask_A", "Dummy_Root");
+DB_LLMIME_DecoyMaskEffects("LIZARD", 1, "LLMIME_FX_Lizards_Female_MimeMask_A", "Dummy_Root");
+DB_LLMIME_DecoyMaskEffects("LIZARD", 0, "LLMIME_FX_Lizards_Male_MimeMask_A", "Dummy_Root");
+*/
+
+PROC
+LLMIME_System_InitEffectFlags()
+AND
+NOT DB_LeaderLib_EffectFlags_Effects("Mimicry_EffectFlags", _, _, _, _)
+THEN
+DB_LeaderLib_EffectFlags_Effects("Mimicry_EffectFlags", "Mimicry_Effects_MaskTaken1", "RS3_FX_Skills_Soul_Cast_Soul_Impact_Root_01", 0, "");
+DB_LeaderLib_EffectFlags_Effects("Mimicry_EffectFlags", "Mimicry_Effects_MusicBoxResurrection1", "LLMIME_FX_Scripted_MusicBox_Resurrection_01", 0, "Dummy_Root");
+DB_LeaderLib_EffectFlags_Effects("Mimicry_EffectFlags", "Mimicry_Effects_MusicBoxResurrection2", "LLMIME_FX_Scripted_MusicBox_Resurrection_02", 0, "Dummy_Root");
+
+PROC
+LLMIME_System_InitTemplates()
+THEN
+SysClear("DB_LLMIME_Templates", 2);
+DB_LLMIME_Templates("Mask_A", "EQ_Armor_LLMIME_Mime_Mask_A_8e66ce79-8c8e-4c22-a8ea-5a99977f4ea8");
+DB_LLMIME_Templates("Mask_A", "EQ_UNIQUE_Armor_LLMIME_Mime_Mask_Origin_A_4afe8cd3-eb9f-4760-9ba4-a0b4433a4c06");
+DB_LLMIME_Templates("Mask_A_Preview", "EQ_Armor_LLMIME_Mime_Mask_Preview_36348beb-6126-42f5-ba26-05acf6b65bae");
+DB_LLMIME_Templates("Mask_A_NoVisual", "EQ_Armor_LLMIME_Mime_Mask_NoVisual_38d7f6c3-ab60-43e5-b20c-f5faf06801dd");
+DB_LLMIME_Templates("BrawlerFist", "WPN_LLMIME_BrawlerFist_e1bda904-93c2-4f6f-8136-1a547279fd1f");
+DB_LLMIME_Templates("MimeManual", "WPN_LLMIME_BrawlerFist_e1bda904-93c2-4f6f-8136-1a547279fd1f");
+DB_LLMIME_Templates("MusicBox", "UNIQUE_LLMIME_MusicBox_fd03b00c-5366-40e2-a8af-1d9f6a904ecb");
+DB_LLMIME_Templates("MusicBox_Cracked", "UNIQUE_LLMIME_MusicBox_Cracked_467b732e-c599-49b1-beb8-06e55f1dd140");
+DB_LLMIME_Templates("MusicBox_Shard", "UNIQUE_LLMIME_MusicBox_Shard_cad615df-323d-49e4-934b-7d4b940b7dac");
+DB_LLMIME_Templates("MimeAmulet", "LOOT_MagicAmulet_LLMIME_SourceBlastImmunity_fcc27ec5-b83e-42e3-976e-90c269a52aed");
+DB_LLMIME_Templates("MimeFollower", "LLMIME_Elves_Male_Mime_d8b7efbb-6e60-4700-af8a-4295b0c1ed41");
+DB_LLMIME_Templates("MimeFollower_NoMask", "LLMIME_Elves_Male_Mime_NoMask_8b69a5c0-1d6a-403c-ae38-e4a8d4297ceb");
+DB_LLMIME_Templates("MimeFollower_Ghost", "S_LLMIME_Ghost_Mime_d699d0e5-250d-4d4d-bacf-96e19e60235c");
+DB_LLMIME_Templates("Decoy", "S_LLMIME_Skill_Decoy_30a42871-15cc-4c97-bad6-4a813d797964");
+//END_REGION
+
+//REGION UPDATING
+PROC
+LeaderUpdater_ModUpdated("Mimicry", "LaughingLeader", (STRING)_OldVersion, (STRING)_NewVersion)
+AND
+LeaderLib_StringExt_QRY_VersionIsLessThan(_OldVersion, 1,0,9,0)
+THEN
+LeaderLog_Log("DEBUG", "[LLMIME:System:Core] Updating settings from version [",_OldVersion,"] to [",_NewVersion,"]");
+DB_LLMIME_DebuffStatuses("Mimicry_MimickingDamageDebuff4_Enabled", "LLMIME_MIMICKING_DEBUFF4");
+DB_LLMIME_DebuffStatuses("Mimicry_MimickingDamageDebuff5_Enabled", "LLMIME_MIMICKING_DEBUFF5");
+//END_REGION
+
+//REGION QUERIES_MISC
+QRY
+LLMIME_QRY_DamageDebuffSet()
+AND
+DB_LLMIME_DebuffStatuses(_Flag, _Status)
+AND
+DB_GlobalFlag(_Flag)
+THEN
+DB_NOOP(1);
+//END_REGION
+
+//REGION MASK_TAG
+PROC
+LLMIME_OnMaskEquipped((CHARACTERGUID)_Mime)
+AND
+LLMIME_QRY_NotADummy(_Mime)
+THEN
+SetTag(_Mime, "Mimicry_WearingMask");
+
+PROC
+LLMIME_OnMaskUnEquipped((CHARACTERGUID)_Mime)
+AND
+LLMIME_QRY_NotADummy(_Mime)
+THEN
+ClearTag(_Mime, "Mimicry_WearingMask");
+//END_REGION
+
+//REGION CLEAR_HELPERS
+IF
+StoryEvent((CHARACTERGUID)_Mime, "Mimicry_RemoveAllMimicryStatuses")
+THEN
+LLMIME_RemoveAllMimicryStatuses(_Mime);
+
+PROC
+LLMIME_RemoveAllMimicryStatuses((CHARACTERGUID)_Character)
+AND
+DB_LLMIME_Statuses(_Status)
+AND
+HasActiveStatus(_Character, _Status, 1)
+THEN
+RemoveStatus(_Character, _Status);
+
+PROC
+LLMIME_RemoveAllMimicryStatuses((CHARACTERGUID)_Character)
+AND
+DB_LLMIME_MimeStatuses(_Status)
+AND
+HasActiveStatus(_Character, _Status, 1)
+THEN
+RemoveStatus(_Character, _Status);
+
+IF
+StoryEvent((CHARACTERGUID)_Mime, "Mimicry_ClearMimeBonuses")
+THEN
+LLMIME_RemoveAllMimeStatuses(_Mime);
+ObjectClearFlag(_Mime, "Mimicry_MimeIsUnarmed");
+
+PROC
+LLMIME_RemoveAllMimeStatuses((CHARACTERGUID)_Character)
+AND
+DB_LLMIME_MimeStatuses(_Status)
+AND
+HasActiveStatus(_Character, _Status, 1)
+THEN
+RemoveStatus(_Character, _Status);
+
+PROC
+LLMIME_RemoveAllMimeStatuses((CHARACTERGUID)_Character)
+AND
+DB_LLMIME_MimickingStatuses(_Status)
+AND
+HasActiveStatus(_Character, _Status, 1)
+THEN
+RemoveStatus(_Character, _Status);
+//END_REGION
+
+//REGION HELPERS
+PROC
+LLMIME_RemoveMask((CHARACTERGUID)_Mime)
+AND
+CharacterFindTaggedItem(_Mime, "LLMIME_ACTIVATE_MIME", _Mask)
+THEN
+CharacterUnequipItem(_Mime, _Mask);
+
+PROC
+LLMIME_RefreshMask((CHARACTERGUID)_Mime)
+THEN
+LLMIME_RefreshMask(_Mime, 1000);
+
+PROC
+LLMIME_RefreshMask((CHARACTERGUID)_Mime, (INTEGER)_Delay)
+AND
+CharacterFindTaggedItem(_Mime, "LLMIME_ACTIVATE_MIME", _Mask)
+AND
+NOT DB_LLMIME_System_Temp_RefreshMask(_Mime, _Mask, _)
+AND
+GetUUID(_Mime, _MimeID)
+AND
+GetUUID(_Mask, _MaskID)
+AND
+LeaderLog_QRY_Log("COMBINE", "LLMIME_Timers_RefreshMask_", _MimeID, "_", _MaskID)
+AND
+DB_LeaderLog_Temp_CombinedString(_TimerName)
+THEN
+NOT DB_LeaderLog_Temp_CombinedString(_TimerName);
+CharacterUnequipItem(_Mime, _Mask);
+DB_LLMIME_System_Temp_RefreshMask(_Mime, _Mask, _TimerName);
+TimerLaunch(_TimerName, _Delay);
+
+IF
+TimerFinished(_TimerName)
+AND
+DB_LLMIME_System_Temp_RefreshMask(_Mime, _Mask, _TimerName)
+THEN
+NOT DB_LLMIME_System_Temp_RefreshMask(_Mime, _Mask, _TimerName);
+CharacterEquipItem(_Mime, _Mask);
+CharacterItemSetEvent(_Mime, _Mask, "Mimicry_MaskRefreshed");
+//END_REGION
+
+//REGION SKILL_DATA
+/*
+IF
+CharacterUsedSkillAtPosition(_,_,_,_, _Skill, _SkillType)
+THEN
+LLMIME_System_UpdateSkillDataType(_Skill, _SkillType);
+
+IF
+CharacterUsedSkillOnTarget(_,_, _Skill, _SkillType)
+THEN
+LLMIME_System_UpdateSkillDataType(_Skill, _SkillType);
+
+IF
+CharacterUsedSkill(_, _Skill, _SkillElement)
+THEN
+LLMIME_System_UpdateSkillDataElement(_Skill, _SkillElement);
+
+IF
+SkillCast(_, _Skill, _SkillElement)
+THEN
+LLMIME_System_UpdateSkillDataElement(_Skill, _SkillElement);
+
+PROC
+LLMIME_System_UpdateSkillDataType((STRING)_Skill, (STRING)_SkillType)
+AND
+DB_LLMIME_SkillData(_Skill, _PastSkillType, _SkillElement)
+AND
+_PastSkillType != _SkillType
+THEN
+NOT DB_LLMIME_SkillData(_Skill, _PastSkillType, _SkillElement);
+DB_LLMIME_SkillData(_Skill, _SkillType, _SkillElement);
+
+PROC
+LLMIME_System_UpdateSkillDataType((STRING)_Skill, (STRING)_SkillType)
+AND
+NOT DB_LLMIME_SkillData(_Skill, _SkillType, _)
+THEN
+DB_LLMIME_SkillData(_Skill, _SkillType, "");
+
+PROC
+LLMIME_System_UpdateSkillDataElement((STRING)_Skill, (STRING)_SkillElement)
+AND
+DB_LLMIME_SkillData(_Skill, _SkillType, _PastSkillElement)
+AND
+_PastSkillElement != _SkillElement
+AND
+_PastSkillElement == ""
+AND
+_SkillElement != ""
+THEN
+NOT DB_LLMIME_SkillData(_Skill, _SkillType, _PastSkillElement);
+DB_LLMIME_SkillData(_Skill, _SkillType, _SkillElement);
+
+PROC
+LLMIME_System_UpdateSkillDataElement((STRING)_Skill, (STRING)_SkillElement)
+AND
+NOT DB_LLMIME_SkillData(_Skill, _, _SkillElement)
+THEN
+DB_LLMIME_SkillData(_Skill, "", _SkillElement);
+
+QRY
+LLMIME_QRY_SkillIsType((STRING)_Skill, (STRING)_CheckType)
+AND
+DB_LLMIME_SkillData(_Skill, _CheckType, _SkillElement)
+THEN
+DB_NOOP(1);
+*/
+//END_REGION
+
+//REGION UNARMED_FLAG_QUERIES
+QRY
+LLMIME_QRY_WeaponIsBrawlerFist((ITEMGUID)_Item)
+AND
+IsTagged(_Item, "UNARMED_WEAPON", 1)
+THEN
+DB_NOOP(1);
+
+QRY
+LLMIME_QRY_WeaponIsBrawlerFist((ITEMGUID)_Item)
+AND
+IsTagged(_Item, "LLMIME_BrawlerFist", 1)
+THEN
+DB_NOOP(1);
+
+QRY
+LLMIME_QRY_WeaponIsBrawlerFistTemplate((STRING)_Template)
+AND
+_Template == "WPN_LLMIME_BrawlerFist_e1bda904-93c2-4f6f-8136-1a547279fd1f"
+THEN
+DB_NOOP(1);
+
+QRY
+LLMIME_QRY_WeaponIsUnarmed((ITEMGUID)_Item)
+AND
+LLMIME_QRY_WeaponIsBrawlerFist(_Item)
+THEN
+DB_NOOP(1);
+
+QRY
+LLMIME_QRY_WeaponIsUnarmed((ITEMGUID)_Item)
+AND
+_Item == NULL_00000000-0000-0000-0000-000000000000
+THEN
+DB_NOOP(1);
+
+QRY
+LLMIME_QRY_WeaponEquippedInMainHand((CHARACTERGUID)_Mime)
+AND
+CharacterGetEquippedItem(_Mime, "Weapon", (ITEMGUID)_Item)
+AND
+NOT LLMIME_QRY_WeaponIsUnarmed(_Item)
+AND
+NOT IsTagged(_Item, "LLMIME_MIMICKED_WEAPON", 1)
+THEN
+DB_NOOP(1);
+
+QRY
+LLMIME_QRY_WeaponEquippedInOffHand((CHARACTERGUID)_Mime)
+AND
+CharacterGetEquippedItem(_Mime, "Shield", (ITEMGUID)_Item)
+AND
+GetTemplate(_Item, _Template)
+AND
+StringContains(_Template, "_Shield_", 0)
+AND
+NOT LLMIME_QRY_WeaponIsBrawlerFist(_Item)
+AND
+NOT IsTagged(_Item, "LLMIME_MIMICKED_WEAPON", 1)
+THEN
+DB_NOOP(1);
+
+QRY
+LLMIME_QRY_NoWeaponsEquipped((CHARACTERGUID)_Mime)
+AND
+NOT LLMIME_QRY_WeaponEquippedInMainHand(_Mime)
+AND
+NOT LLMIME_QRY_WeaponEquippedInOffHand(_Mime)
+THEN
+DB_NOOP(1);
+
+QRY
+LLMIME_QRY_ItemIsWeapon((CHARACTERGUID)_Mime, (ITEMGUID)_Item)
+AND
+CharacterGetEquippedItem(_Mime, "Weapon", _Item)
+AND
+NOT LLMIME_QRY_WeaponIsBrawlerFist(_Item)
+AND
+NOT IsTagged(_Item, "LLMIME_MIMICKED_WEAPON", 1)
+THEN
+DB_NOOP(1);
+
+QRY
+LLMIME_QRY_ItemIsWeapon((CHARACTERGUID)_Mime, (ITEMGUID)_Item)
+AND
+CharacterGetEquippedItem(_Mime, "Shield", _Item)
+AND
+NOT LLMIME_QRY_WeaponIsBrawlerFist(_Item)
+AND
+GetTemplate(_Item, _Template)
+AND
+StringContains(_Template, "_Shield_", 0)
+AND
+NOT IsTagged(_Item, "LLMIME_MIMICKED_WEAPON", 1)
+THEN
+DB_NOOP(1);
+
+QRY
+LLMIME_QRY_ItemIsInWeaponSlot((CHARACTERGUID)_Mime, (ITEMGUID)_Item)
+AND
+CharacterGetEquippedItem(_Mime, "Weapon", _Item)
+THEN
+DB_NOOP(1);
+
+QRY
+LLMIME_QRY_ItemIsInWeaponSlot((CHARACTERGUID)_Mime, (ITEMGUID)_Item)
+AND
+CharacterGetEquippedItem(_Mime, "Shield", _Item)
+THEN
+DB_NOOP(1);
+//END_REGION
+
+//REGION UNARMED_FLAG_EVENTS
+//Item equip/unequip events moved to LLMIME_20_01_General
+
+IF
+CharacterStatusApplied(_Mime, "LLMIME_BRAWLER", _)
+AND
+IsTagged(_Mime, "LLMIME_MimeFollower", 0)
+THEN
+LLMIME_System_FlagForUnarmed(_Mime);
+
+IF
+StoryEvent((CHARACTERGUID)_Mime, "Mimicry_MimeInitialized")
+AND
+IsTagged(_Mime, "LLMIME_MimeFollower", 0)
+THEN
+LLMIME_System_FlagForUnarmed(_Mime);
+//LeaderLib_Timers_StartObjectTimer(_Mime, 200, "LLMIME_Timers_CheckUnarmed_", "Mimicry_CheckUnarmed");
+
+IF
+StoryEvent((CHARACTERGUID)_Mime, "Mimicry_CheckUnarmed")
+THEN
+LLMIME_System_FlagForUnarmed(_Mime);
+
+PROC
+LLMIME_System_FlagForUnarmed((CHARACTERGUID)_Mime)
+AND
+NOT DB_LLMIME_Temp_JustSetUnarmedFlag(_Mime)
+AND
+ObjectGetFlag(_Mime, "Mimicry_MimeIsUnarmed", 0)
+AND
+LLMIME_QRY_NoWeaponsEquipped(_Mime)
+THEN
+ObjectSetFlag(_Mime, "Mimicry_MimeIsUnarmed");
+DB_LLMIME_Temp_JustSetUnarmedFlag(_Mime);
+
+PROC
+LLMIME_System_FlagForUnarmed((CHARACTERGUID)_Mime)
+AND
+NOT DB_LLMIME_Temp_JustSetUnarmedFlag(_Mime)
+AND
+ObjectGetFlag(_Mime, "Mimicry_MimeIsUnarmed", 1)
+AND
+NOT LLMIME_QRY_NoWeaponsEquipped(_Mime)
+THEN
+ObjectClearFlag(_Mime, "Mimicry_MimeIsUnarmed");
+DB_LLMIME_Temp_JustSetUnarmedFlag(_Mime);
+
+PROC
+LLMIME_System_FlagForUnarmed((CHARACTERGUID)_Mime)
+AND
+NOT DB_LLMIME_Temp_JustSetUnarmedFlag(_Mime)
+THEN
+LLMIME_System_CheckUnarmedBonuses(_Mime);
+
+PROC
+LLMIME_System_FlagForUnarmed((CHARACTERGUID)_Mime)
+AND
+DB_LLMIME_Temp_JustSetUnarmedFlag(_Mime)
+THEN
+NOT DB_LLMIME_Temp_JustSetUnarmedFlag(_Mime);
+
+IF
+ObjectFlagSet("Mimicry_MimeIsUnarmed", (CHARACTERGUID)_Mime, _)
+THEN
+LLMIME_System_CheckUnarmedBonuses(_Mime);
+
+IF
+ObjectFlagCleared("Mimicry_MimeIsUnarmed", (CHARACTERGUID)_Mime, _)
+THEN
+LLMIME_System_CheckUnarmedBonuses(_Mime);
+
+IF
+StoryEvent((CHARACTERGUID)_Mime, "Mimicry_MimeInitialized")
+THEN
+LLMIME_System_CheckUnarmedBonuses(_Mime);
+//END_REGION
+
+//REGION UNARMED_BRAWLER_BONUS
+PROC
+LLMIME_System_CheckUnarmedBonuses((CHARACTERGUID)_Mime)
+AND
+ObjectGetFlag(_Mime, "Mimicry_MimeIsUnarmed", 1)
+AND
+LeaderLib_Helper_QRY_HasStatus(_Mime, "LLMIME_BRAWLER")
+AND
+NOT LeaderLib_Helper_QRY_HasStatus(_Mime, "LLMIME_BRAWLER_BONUS")
+THEN
+ApplyStatus(_Mime, "LLMIME_BRAWLER_BONUS", -1.0, 1, _Mime);
+
+PROC
+LLMIME_System_CheckUnarmedBonuses((CHARACTERGUID)_Mime)
+AND
+ObjectGetFlag(_Mime, "Mimicry_MimeIsUnarmed", 0)
+AND
+LeaderLib_Helper_QRY_HasStatus(_Mime, "LLMIME_BRAWLER_BONUS")
+THEN
+RemoveStatus(_Mime, "LLMIME_BRAWLER_BONUS");
+
+IF
+CharacterStatusRemoved(_Mime, "LLMIME_BRAWLER", _)
+AND
+LeaderLib_Helper_QRY_HasStatus(_Mime, "LLMIME_BRAWLER_BONUS")
+THEN
+RemoveStatus(_Mime, "LLMIME_BRAWLER_BONUS");
+//END_REGION
+
+//REGION CONCENTRATION_BONUS
+PROC
+LLMIME_System_CheckUnarmedBonuses((CHARACTERGUID)_Mime)
+AND
+ObjectGetFlag(_Mime, "Mimicry_MimeIsUnarmed", 1)
+AND
+LeaderLib_Helper_QRY_HasStatus(_Mime, "LLMIME_CONCENTRATION")
+AND
+NOT LeaderLib_Helper_QRY_HasStatus(_Mime, "LLMIME_CONCENTRATION_BONUS")
+THEN
+ApplyStatus(_Mime, "LLMIME_CONCENTRATION_BONUS", -1.0, 1, _Mime);
+
+PROC
+LLMIME_System_CheckUnarmedBonuses((CHARACTERGUID)_Mime)
+AND
+ObjectGetFlag(_Mime, "Mimicry_MimeIsUnarmed", 0)
+AND
+LeaderLib_Helper_QRY_HasStatus(_Mime, "LLMIME_CONCENTRATION_BONUS")
+THEN
+RemoveStatus(_Mime, "LLMIME_CONCENTRATION_BONUS");
+
+IF
+CharacterStatusRemoved(_Mime, "LLMIME_CONCENTRATION", _)
+AND
+LeaderLib_Helper_QRY_HasStatus(_Mime, "LLMIME_CONCENTRATION_BONUS")
+THEN
+RemoveStatus(_Mime, "LLMIME_CONCENTRATION_BONUS");
+//END_REGION
+
+//REGION PASSIVE_INFO
+IF
+StoryEvent((CHARACTERGUID)_Mime, "Mimicry_ClearMimeBonuses")
+AND
+DB_LLMIME_PassiveData(_Status, _BonusStatus, _InfoStatus, _DisableFlag)
+THEN
+RemoveStatus(_Mime, _Status);
+RemoveStatus(_Mime, _BonusStatus);
+RemoveStatus(_Mime, _InfoStatus);
+//END_REGION
+
+//REGION CONDITION_QUERIES
+QRY
+LLMIME_QRY_IsUndead((CHARACTERGUID)_Character)
+AND
+CharacterHasTalent(_Character, "Zombie", 1)
+THEN
+DB_NOOP(1);
+
+/*
+QRY
+LLMIME_QRY_IsUndead((CHARACTERGUID)_Character)
+AND
+NOT DB_LLMIME_Temp_UndeadCheckResolved(_Character)
+AND
+CharacterIsPlayer(_Character, 0)
+AND
+IsTagged(_Character, "UNDEAD", 1)
+THEN
+DB_LLMIME_Temp_UndeadCheckResolved(_Character);
+
+QRY
+LLMIME_QRY_IsUndead((CHARACTERGUID)_Character)
+AND
+DB_LLMIME_Temp_UndeadCheckResolved(_Character)
+THEN
+NOT DB_LLMIME_Temp_UndeadCheckResolved(_Character);
+*/
+
+QRY
+LLMIME_QRY_NotADummy((CHARACTERGUID)_Character)
+AND
+NOT IsTagged(_Character, "LLMIME_Dummy", 1)
+AND
+NOT IsTagged(_Character, "LLMIME_Decoy", 1)
+AND
+NOT IsTagged(_Character, "LeaderLib_Dummy", 1)
+AND
+NOT IsTagged(_Character, "ANIMAL", 1)
+THEN
+DB_NOOP(1);
+
+QRY
+LLMIME_QRY_PartyHasSummon()
+AND
+NOT SysCount("DB_LLIME_System_Temp_ActiveSummons", 2, 0)
+THEN
+DB_NOOP(1);
+
+QRY
+LLMIME_QRY_MimeHasParty((CHARACTERGUID)_Mime)
+AND
+NOT DB_LLMIME_System_Temp_MimePartyCheck(_Mime)
+AND
+GetVarInteger(_Mime, "LeaderLib_PartyCount", _Count)
+AND
+_Count > 1
+THEN
+LeaderLog_Log("DEBUG", "[LLMIME_00_System_Core:QRY_MimeIsSolo] Mime has a party (LeaderLib_PartyCount > 1).");
+DB_LLMIME_System_Temp_MimePartyCheck(_Mime);
+
+QRY
+LLMIME_QRY_MimeHasParty((CHARACTERGUID)_Mime)
+AND
+NOT DB_LLMIME_System_Temp_MimePartyCheck(_Mime)
+AND
+LLMIME_QRY_Internal_PartyCountNotSet(_Mime)
+AND
+SysCount("DB_IsPlayer", 1, _Players)
+AND
+_Players > 1
+THEN
+LeaderLog_Log("DEBUG", "[LLMIME_00_System_Core:QRY_MimeIsSolo] Mime has a party (DB_IsPlayer > 1).");
+DB_LLMIME_System_Temp_MimePartyCheck(_Mime);
+
+QRY
+LLMIME_QRY_MimeHasParty((CHARACTERGUID)_Mime)
+AND
+NOT DB_LLMIME_System_Temp_MimePartyCheck(_Mime)
+AND
+DB_GlobalFlag("Mimicry_Mimic_CopySummonedCreatureSkills_Enabled")
+AND
+LLMIME_QRY_PartyHasSummon()
+THEN
+LeaderLog_Log("DEBUG", "[LLMIME_00_System_Core:QRY_MimeIsSolo] Mime has a party (Has Summons).");
+DB_LLMIME_System_Temp_MimePartyCheck(_Mime);
+
+QRY
+LLMIME_QRY_MimeHasParty((CHARACTERGUID)_Mime)
+AND
+DB_LLMIME_System_Temp_MimePartyCheck(_Mime)
+THEN
+NOT DB_LLMIME_System_Temp_MimePartyCheck(_Mime);
+
+QRY
+LLMIME_QRY_Internal_PartyCountNotSet((CHARACTERGUID)_Character)
+AND
+NOT GetVarInteger(_Character, "LeaderLib_PartyCount", _)
+THEN
+DB_NOOP(1);
+
+QRY
+LLMIME_QRY_Internal_PartyCountNotSet((CHARACTERGUID)_Character)
+AND
+GetVarInteger(_Character, "LeaderLib_PartyCount", 0)
+THEN
+DB_NOOP(1);
+
+QRY
+LLMIME_QRY_Internal_PartyCountNotSet((CHARACTERGUID)_Character)
+AND
+GetVarInteger(_Character, "LeaderLib_PartyCount", -1163005939)
+THEN
+DB_NOOP(1);
+
+//Safety check
+QRY
+LLMIME_QRY_Internal_PartyCountNotSet((CHARACTERGUID)_Character)
+AND
+GetVarInteger(_Character, "LeaderLib_PartyCount", 1)
+AND
+DB_IsPlayer(_Player)
+AND
+_Player != _Character
+AND
+CharacterIsInPartyWith(_Player, _Character, 1)
+THEN
+DB_NOOP(1);
+
+QRY
+LLMIME_QRY_Internal_PartyCountFallback((CHARACTERGUID)_Character)
+AND
+LLMIME_QRY_Internal_PartyCountNotSet(_Character)
+AND
+GlobalGetFlag("GEN_SoloPlayer", 0)
+THEN
+DB_NOOP(1);
+
+QRY
+LLMIME_QRY_Internal_PartyCountFallback((CHARACTERGUID)_Character)
+AND
+GetVarInteger(_Character, "LeaderLib_PartyCount", 1)
+AND
+GlobalGetFlag("GEN_SoloPlayer", 0)
+THEN
+DB_NOOP(1);
+
+QRY
+LLMIME_QRY_HasMaskEquipped((CHARACTERGUID)_Mime)
+AND
+CharacterGetEquippedItem(_Mime, "Helmet", _Mask)
+AND
+GetTemplate(_Mask, _Template)
+AND
+LLMIME_QRY_IsMaskTemplate(_Template)
+THEN
+DB_NOOP(1);
+
+QRY
+LLMIME_QRY_IsMaskTemplate((STRING)_Template)
+AND
+DB_LLMIME_Templates("Mask_A", _Template)
+THEN
+DB_NOOP(1);
+
+QRY
+LLMIME_QRY_IsMaskTemplate((STRING)_Template)
+AND
+DB_LLMIME_Templates("Mask_A_NoVisual", _Template)
+THEN
+DB_NOOP(1);
+
+QRY
+LLMIME_QRY_HasMusicBox((CHARACTERGUID)_Char)
+AND
+CharacterFindTaggedItem(_Char, "LLMIME_MimeSummonTool", _MusicBox)
+THEN
+DB_NOOP(1);
+
+QRY
+LLMIME_QRY_HasMimeMask((CHARACTERGUID)_Char)
+AND
+DB_LLMIME_Templates("Mask_A", _Template)
+AND
+ItemTemplateIsInUserInventory(_Char, _Template, 0, _Count)
+AND
+_Count > 0
+THEN
+DB_NOOP(1);
+//END_REGION
+
+//REGION MIME_QUERIES
+QRY
+LLMIME_Mimicking_QRY_IsMimicking((CHARACTERGUID)_Mime)
+AND
+ObjectGetFlag(_Mime, "Mimicry_IsMimicking", _a)
+AND
+HasActiveStatus(_Mime, "LLMIME_MIMICKING_ENEMY", _b)
+AND
+HasActiveStatus(_Mime, "LLMIME_MIMICKING", _c)
+AND
+HasActiveStatus(_Mime, "LLMIME_MIMICKING_FOLLOWER", _d)
+AND
+//LeaderLib_Math_QRY_IsEqualToAny(1, _a, _b, _c, _d)
+IntegerSum(_a, _b, _final1)
+AND
+IntegerSum(_c, _d, _final2)
+AND
+IntegerSum(_final1, _final2, _final)
+AND
+_final > 0
+THEN
+DB_NOOP(1);
+
+QRY
+LLMIME_QRY_CharacterIsAMime((CHARACTERGUID)_Character)
+AND
+LLMIME_QRY_NotADummy(_Character)
+AND
+IsTagged(_Character, "Mimicry_Mime", _IsMime)
+AND
+LLMIME_QRY_Internal_ProcessCharacterIsAMime(_Character, _IsMime)
+THEN
+DB_NOOP(1);
+
+QRY
+LLMIME_QRY_Internal_ProcessCharacterIsAMime((CHARACTERGUID)_Character, 1)
+THEN
+DB_NOOP(1);
+
+QRY
+LLMIME_QRY_Internal_ProcessCharacterIsAMime((CHARACTERGUID)_Character, 0)
+AND
+DB_LLMIME_ActiveMimes(_Character)
+THEN
+DB_NOOP(1);
+
+QRY
+LLMIME_QRY_Internal_ProcessCharacterIsAMime((CHARACTERGUID)_Character, 0)
+AND
+NOT DB_LLMIME_ActiveMimes(_Character)
+AND
+LLMIME_Mimicking_QRY_IsMimicking(_Character)
+THEN
+DB_NOOP(1);
+//END_REGION
+EXITSECTION
+
+ENDEXITSECTION
+ParentTargetEdge "LaughingLeader_Mimicry"

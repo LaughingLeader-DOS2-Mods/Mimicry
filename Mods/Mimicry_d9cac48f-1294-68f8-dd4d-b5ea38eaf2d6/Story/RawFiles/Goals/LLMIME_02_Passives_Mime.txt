@@ -1,0 +1,544 @@
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+LLMIME_Mime_InitSettings();
+
+/*Settings*/
+//DB_LLMIME_Mime_Skills(_Skill)
+//DB_LLMIME_Mime_LearnableSkills(_Skill)
+/*Data*/
+//DB_LLMIME_Mime_MimeSkillMemory(_Mime, _Skill)
+KBSECTION
+//REGION SETTINGS
+PROC
+LLMIME_Mime_InitSettings()
+THEN
+SysClear("DB_LLMIME_Mime_MimeActivatingEquipmentTags", 1);
+DB_LLMIME_Mime_MimeActivatingEquipmentTags("LLMIME_ACTIVATE_MIME");
+
+SysClear("DB_LLMIME_Mime_LearnableSkills", 1);
+DB_LLMIME_Mime_LearnableSkills("Projectile_LLMIME_Decoy");
+DB_LLMIME_Mime_LearnableSkills("Projectile_LLMIME_FinalWish");
+DB_LLMIME_Mime_LearnableSkills("Shout_LLMIME_SourceMimicking");
+DB_LLMIME_Mime_LearnableSkills("Shout_LLMIME_QuakeSlam");
+DB_LLMIME_Mime_LearnableSkills("Target_LLMIME_VitalInfluence");
+//Skill alternatives (muted bypass)
+DB_LLMIME_Mime_LearnableSkills("Shout_LLMIME_EvasiveManeuver");
+DB_LLMIME_Mime_LearnableSkills("MultiStrike_LLMIME_MimeVault");
+DB_LLMIME_Mime_LearnableSkills("Target_LLMIME_SilencingStare");
+DB_LLMIME_Mime_LearnableSkills("Target_LLMIME_KneeBreaker");
+DB_LLMIME_Mime_LearnableSkills("Target_LLMIME_DisarmingBlow");
+DB_LLMIME_Mime_LearnableSkills("Target_LLMIME_SealEvil");
+DB_LLMIME_Mime_LearnableSkills("Target_LLMIME_Fatality");
+
+SysClear("DB_LLMIME_Mime_Skills", 1);
+DB_LLMIME_Mime_Skills("Shout_LLMIME_BrawlerStance");
+DB_LLMIME_Mime_Skills("Shout_LLMIME_OpenMenu");
+DB_LLMIME_Mime_Skills("Shout_LLMIME_DisableMimicking");
+
+LeaderLib_Skills_Register_StatusToggleSkill("Shout_LLMIME_DisableMimicking", "LLMIME_MIMICKING_DISABLED", -1.0, 1);
+
+DB_LLMIME_Mime_NewSkillbookLevels(4);
+DB_LLMIME_Mime_NewSkillbookLevels(6);
+DB_LLMIME_Mime_NewSkillbookLevels(10);
+DB_LLMIME_Mime_NewSkillbookLevels(12);
+DB_LLMIME_Mime_NewSkillbookLevels(14);
+//END_REGION
+
+//REGION UPDATING
+/*
+PROC
+LeaderUpdater_ModUpdated("Mimicry", "LaughingLeader", (STRING)_PastVersion, (STRING)_NewVersion)
+AND
+LeaderLib_StringExt_QRY_VersionIsLessThan(_PastVersion, 0, 9, 9, 37)
+THEN
+LeaderLog_Log("DEBUG", "[LLMIME:Mime] Updating settings from version [",_PastVersion,"] to [",_NewVersion,"].");
+LLMIME_Mime_InitSettings();
+*/
+//END_REGION
+
+//REGION QUERIES
+QRY
+LLMIME_Mime_QRY_IsMimeSkill((STRING)_Skill)
+AND
+DB_LLMIME_Mime_LearnableSkills(_Skill)
+THEN
+DB_NOOP(1);
+
+QRY
+LLMIME_Mime_QRY_IsMimeSkill((STRING)_Skill)
+AND
+DB_LLMIME_Mime_Skills(_Skill)
+THEN
+DB_NOOP(1);
+
+QRY
+LLMIME_Mime_QRY_IsMimeItem((ITEMGUID)_Item)
+AND
+DB_LLMIME_Mime_MimeActivatingEquipmentTags(_Tag)
+AND
+IsTagged(_Item, _Tag, 1)
+THEN
+DB_NOOP(1);
+
+QRY
+LLMIME_Mime_QRY_SafeToSetup((CHARACTERGUID)_Mime, (ITEMGUID)_Item)
+AND
+NOT DB_InCharacterCreation(1)
+THEN
+DB_NOOP(1);
+//END_REGION
+
+//REGION EQUIP_EVENTS
+PROC
+LLMIME_OnMaskUnEquipped((CHARACTERGUID)_Mime)
+THEN
+SetStoryEvent(_Mime, "Mimicry_RemoveMimeJob");
+LeaderLib_Tags_ClearPreservedTag(_Mime, "Mimicry_Mime");
+
+PROC
+LLMIME_OnMaskEquipped((CHARACTERGUID)_Mime)
+THEN
+SetStoryEvent(_Mime, "Mimicry_InitMimeJob");
+LeaderLib_Tags_PreserveTag(_Mime, "Mimicry_Mime");
+//END_REGION
+
+//REGION MIME_INIT
+/*
+IF
+CharacterStatusApplied(_Mime, "LLMIME_MIMICRY_MASK", _)
+AND
+GlobalGetFlag("LeaderLib_Initialized", 1)
+AND
+LLMIME_QRY_NotADummy(_Mime)
+AND
+NOT LLMIME_QRY_CharacterIsAMime(_Mime)
+THEN
+SetStoryEvent(_Mime, "Mimicry_InitMimeJob");
+*/
+
+IF
+CharacterStatusApplied(_Mime, "LLMIME_MIMICRY_MASK", _)
+AND
+NOT GlobalGetFlag("LeaderLib_Initialized", 1)
+AND
+LLMIME_QRY_NotADummy(_Mime)
+AND
+NOT LLMIME_QRY_CharacterIsAMime(_Mime)
+THEN
+LeaderLog_Log("DEBUG", "[Mimicry:Passives:Mime:CharacterStatusApplied(LLMIME_MIMICRY_MASK)] LeaderLib is not initialized yet. Activating mime after the game is started.");
+DB_LLMIME_Temp_ActivateMime(_Mime);
+
+PROC
+PROC_Shared_CharacterCreationFinished()
+AND
+DB_IsPlayer(_Mime)
+AND
+DB_LLMIME_Mime_MimeActivatingEquipmentTags(_Tag)
+AND
+NOT DB_LLMIME_Temp_ActivateMime(_Mime)
+AND
+CharacterFindTaggedItem(_Mime, _Tag, _Mask)
+THEN
+DB_LLMIME_Temp_ActivateMime(_Mime);
+
+IF
+GameStarted(_,_)
+AND
+DB_LLMIME_Temp_ActivateMime(_Mime)
+AND
+DB_LLMIME_Mime_LearnableSkills(_Skill)
+AND
+CharacterHasSkill(_Mime, _Skill, 1)
+AND
+NOT DB_LLMIME_Mime_MimeSkillMemory(_Mime, _Skill)
+THEN
+LeaderLog_Log("DEBUG", "[Mimicry:Passives:Mime:GameStarted] Added skill [",_Skill,"] learned from the mime preset to [DB_LLMIME_Mime_MimeSkillMemory].");
+DB_LLMIME_Mime_MimeSkillMemory(_Mime, _Skill);
+
+IF
+GameStarted(_Level,_)
+AND
+IsGameLevel(_Level, 1)
+AND
+DB_LLMIME_Temp_ActivateMime(_Mime)
+AND
+NOT LLMIME_QRY_CharacterIsAMime(_Mime)
+THEN
+NOT DB_LLMIME_Temp_ActivateMime(_Mime);
+LeaderLog_Log("DEBUG", "[Mimicry:Passives:Mime:GameStarted] Initializing mime from the [DB_LLMIME_Temp_ActivateMime] database.");
+SetStoryEvent(_Mime, "Mimicry_InitMimeJob");
+
+IF
+GameStarted(_,_)
+AND
+DB_LLMIME_Temp_ActivateMime(_Mime)
+THEN
+NOT DB_LLMIME_Temp_ActivateMime(_Mime);
+
+IF
+CharacterResurrected(_Mime)
+AND
+LLMIME_QRY_CharacterIsAMime(_Mime)
+THEN
+SetStoryEvent(_Mime, "Mimicry_InitMimeJob");
+//END_REGION
+
+//REGION INFO_STATUS
+IF
+CharacterStatusRemoved(_Mime, "LLMIME_MIMICRY_MASK", _)
+AND
+IsTagged(_Mime, "LLMIME_MimeFollower", 0)
+AND
+IsTagged(_Mime, "Mimicry_WearingMask", 0)
+THEN
+RemoveStatus(_Mime, "LLMIME_MIMICRY_MASK_INFO");
+
+//RemoveHarmfulStatuses removing everything
+IF
+CharacterStatusRemoved(_Mime, "LLMIME_MIMICRY_MASK_INFO", _)
+AND
+IsTagged(_Mime, "Mimicry_WearingMask", 1)
+AND
+NOT ObjectGetFlag(_Mime, "Mimicry_HideMimicryMaskInfo", 1)
+THEN
+ApplyStatus(_Mime, "LLMIME_MIMICRY_MASK_INFO", -1.0, 1, _Mime);
+
+IF
+CharacterStatusRemoved(_Mime, "LLMIME_MIME", _)
+AND
+IsTagged(_Mime, "LLMIME_MimeFollower", 1)
+AND
+CharacterIsDead(_Mime, 1)
+THEN
+RemoveStatus(_Mime, "LLMIME_MIMICRY_MASK_INFO_FOLLOWER");
+
+IF
+CharacterStatusApplied(_Mime, "LLMIME_MIMICRY_MASK", _)
+AND
+IsTagged(_Mime, "LLMIME_MimeFollower", 0)
+AND
+NOT ObjectGetFlag(_Mime, "Mimicry_HideMimicryMaskInfo", 1)
+AND
+HasActiveStatus(_Mime, "LLMIME_MIMICRY_MASK_INFO", 0)
+THEN
+ApplyStatus(_Mime, "LLMIME_MIMICRY_MASK_INFO", -1.0, 1, _Mime);
+
+IF
+CharacterStatusApplied(_Mime, "LLMIME_MIME", _)
+AND
+IsTagged(_Mime, "LLMIME_MimeFollower", 1)
+AND
+NOT ObjectGetFlag(_Mime, "Mimicry_HideMimicryMaskInfo", 1)
+AND
+HasActiveStatus(_Mime, "LLMIME_MIMICRY_MASK_INFO_FOLLOWER", 0)
+THEN
+ApplyStatus(_Mime, "LLMIME_MIMICRY_MASK_INFO_FOLLOWER", -1.0, 1, _Mime);
+
+IF
+ObjectFlagSet("Mimicry_HideMimicryMaskInfo", (CHARACTERGUID)_Mime, _Instance)
+AND
+IsTagged(_Mime, "LLMIME_MimeFollower", 0)
+THEN
+RemoveStatus(_Mime, "LLMIME_MIMICRY_MASK_INFO");
+
+IF
+ObjectFlagSet("Mimicry_HideMimicryMaskInfo", (CHARACTERGUID)_Mime, _Instance)
+AND
+IsTagged(_Mime, "LLMIME_MimeFollower", 1)
+THEN
+RemoveStatus(_Mime, "LLMIME_MIMICRY_MASK_INFO_FOLLOWER");
+
+IF
+ObjectFlagCleared("Mimicry_HideMimicryMaskInfo", (CHARACTERGUID)_Mime, _Instance)
+AND
+IsTagged(_Mime, "LLMIME_MimeFollower", 0)
+AND
+HasActiveStatus(_Mime, "LLMIME_MIMICRY_MASK", 1)
+AND
+NOT LeaderLib_Helper_QRY_HasStatus(_Mime, "LLMIME_MIMICRY_MASK_INFO")
+THEN
+ApplyStatus(_Mime, "LLMIME_MIMICRY_MASK_INFO", -1.0, 1, _Mime);
+
+IF
+ObjectFlagCleared("Mimicry_HideMimicryMaskInfo", (CHARACTERGUID)_Mime, _Instance)
+AND
+IsTagged(_Mime, "LLMIME_MimeFollower", 1)
+AND
+HasActiveStatus(_Mime, "LLMIME_MIMICRY_MASK", 1)
+AND
+NOT LeaderLib_Helper_QRY_HasStatus(_Mime, "LLMIME_MIMICRY_MASK_INFO_FOLLOWER")
+THEN
+ApplyStatus(_Mime, "LLMIME_MIMICRY_MASK_INFO_FOLLOWER", -1.0, 1, _Mime);
+//END_REGION
+
+//REGION EFFECTS
+//Equipping FX
+PROC
+ProcProcessUseOfItem((CHARACTERGUID)_Character, (ITEMGUID)_Item, (INTEGER)_RequestID)
+AND
+NOT DB_CustomUseItemResponse(_Character, _Item, 0)
+AND
+GetTemplate(_Item, _Template)
+AND
+DB_LLMIME_Templates("Mask_A", _Template)
+THEN
+SetStoryEvent(_Character, "Mimicry_Events_Mime_MaskEquipped");
+
+IF
+ItemUnEquipped(_Item, _Character)
+AND
+GetTemplate(_Item, _Template)
+AND
+DB_LLMIME_Templates("Mask_A", _Template)
+THEN
+SetStoryEvent(_Character, "Mimicry_Events_Mime_MaskUnEquipped");
+//END_REGION
+
+//REGION SOURCE_REGEN
+IF
+CharacterStatusRemoved(_Mime, "LLMIME_SOURCE_REGENERATION_HIDDEN", _)
+THEN
+LeaderLib_Timers_CancelObjectTimer(_Mime, "LLMIME_Timers_ReApplySourceRegen");
+LeaderLib_Timers_StartObjectTimer(_Mime, 500, "LLMIME_Timers_ReApplySourceRegen", "Mimicry_ApplySourceRegen");
+//END_REGION
+
+//REGION LEVELING
+IF
+CharacterLeveledUp(_Mime)
+AND
+LLMIME_QRY_CharacterIsAMime(_Mime)
+THEN
+ProcObjectTimerCancel(_Mime, "LLMIME_Timers_MimeLeveledUp");
+ProcObjectTimer(_Mime, "LLMIME_Timers_MimeLeveledUp", 250);
+
+PROC
+ProcObjectTimerFinished((CHARACTERGUID)_Mime, "LLMIME_Timers_MimeLeveledUp")
+THEN
+SetStoryEvent(_Mime, "Mimicry_MimeLeveledUp");
+
+//Only notify again if the stored _SkillLevel is higher than our last notified level
+IF
+StoryEvent((CHARACTERGUID)_Mime, "Mimicry_MimeLeveledUp")
+AND
+IsTagged(_Mime, "LLMIME_MimeFollower", 0)
+AND
+ObjectGetFlag(_Mime, "LLMIME_NewSkillbooksAvailable", 0)
+AND
+CharacterGetLevel(_Mime, _Level)
+AND
+DB_LLMIME_Mime_NewSkillbookLevels(_SkillLevel)
+AND
+DB_LLMIME_Mime_Temp_LastNotified(_Mime, _LastSkillLevel)
+AND
+_Level >= _SkillLevel
+AND
+_SkillLevel > _LastSkillLevel
+THEN
+NOT DB_LLMIME_Mime_Temp_LastNotified(_Mime, _LastSkillLevel);
+DB_LLMIME_Mime_Temp_LastNotified(_Mime, _Level);
+ObjectSetFlag(_Mime, "LLMIME_NewSkillbooksAvailable", 0);
+
+IF
+StoryEvent((CHARACTERGUID)_Mime, "Mimicry_MimeLeveledUp")
+AND
+IsTagged(_Mime, "LLMIME_MimeFollower", 0)
+AND
+ObjectGetFlag(_Mime, "LLMIME_NewSkillbooksAvailable", 0)
+AND
+NOT DB_LLMIME_Mime_Temp_LastNotified(_Mime, _)
+AND
+CharacterGetLevel(_Mime, _Level)
+AND
+DB_LLMIME_Mime_NewSkillbookLevels(_SkillLevel)
+AND
+_Level >= _SkillLevel
+AND
+NOT DB_LLMIME_Mime_Temp_LastNotified(_Mime, _)
+THEN
+DB_LLMIME_Mime_Temp_LastNotified(_Mime, _Level);
+ObjectSetFlag(_Mime, "LLMIME_NewSkillbooksAvailable");
+
+/* Becoming a mime after you've leveled past a skillbook level may display the message when you've already bought books otherwise */
+IF
+StoryEvent((CHARACTERGUID)_Mime, "Mimicry_MimeInitialized")
+AND
+IsTagged(_Mime, "LLMIME_MimeFollower", 0)
+AND
+DB_IsPlayer(_Mime)
+AND
+NOT DB_LLMIME_Mime_Temp_LastNotified(_Mime, _)
+AND
+CharacterGetLevel(_Mime, _Level)
+AND
+DB_LLMIME_Mime_NewSkillbookLevels(_SkillLevel)
+AND
+_Level >= _SkillLevel
+AND
+NOT DB_LLMIME_Mime_Temp_LastNotified(_Mime, _)
+THEN
+DB_LLMIME_Mime_Temp_LastNotified(_Mime, _Level);
+ObjectSetFlag(_Mime, "LLMIME_NewSkillbooksAvailable");
+
+IF
+TextEventSet("llmime_newskillbookstest")
+AND
+DB_IsPlayer(_Player)
+AND
+LLMIME_QRY_CharacterIsAMime(_Player)
+THEN
+ObjectSetFlag(_Player, "LLMIME_NewSkillbooksAvailable");
+
+IF
+ObjectFlagSet("LLMIME_NewSkillbooksAvailable", (CHARACTERGUID)_Mime, _)
+THEN
+CharacterStatusText(_Mime, "LLMIME_StatusText_NewSkillbooksAvailable");
+
+IF
+DialogStarted("LLMIME_SettingsMenu", _Instance)
+AND
+DialogGetInvolvedPlayer(_Instance, 1, _Mime)
+AND
+ObjectGetFlag(_Mime, "LLMIME_NewSkillbooksAvailable", 1)
+THEN
+DialogSetVariableStringForInstance(_Instance, "LLMIME_Settings_NewSkillbooksText_e73495dd-e972-4213-acc4-7ec9740d3f68", "[SKILLS] <b>(New)</b>");
+//DialogSetVariableTranslatedStringForInstance(_Instance, "LLMIME_Settings_NewSkillbooksText_e73495dd-e972-4213-acc4-7ec9740d3f68", "LLMIME_MenuText_NewSkillbooksAvailable", "Test");
+//DialogSetVariableFixedStringForInstance(_Instance, "LLMIME_Settings_NewSkillbooksText_e73495dd-e972-4213-acc4-7ec9740d3f68", "LLMIME_MenuText_NewSkillbooksAvailable");
+
+IF
+TradeEnds(_Mime, _MimeVendor)
+AND
+DB_LLMIME_Settings_MimeVendor(_MimeVendor)
+AND
+ObjectGetFlag(_Mime, "LLMIME_NewSkillbooksAvailable", 1)
+AND
+DB_DialogName("LLMIME_SettingsMenu", _Instance)
+AND
+DB_DialogPlayers(_Instance, _Mime, _)
+THEN
+ObjectClearFlag(_Mime, "LLMIME_NewSkillbooksAvailable");
+DialogSetVariableStringForInstance(_Instance, "LLMIME_Settings_NewSkillbooksText_e73495dd-e972-4213-acc4-7ec9740d3f68", "[SKILLS]");
+//DialogSetVariableFixedStringForInstance(_OtherInstance, "LLMIME_Settings_NewSkillbooksText_e73495dd-e972-4213-acc4-7ec9740d3f68", "");
+//DialogSetVariableTranslatedStringForInstance(_Instance, "LLMIME_Settings_NewSkillbooksText_e73495dd-e972-4213-acc4-7ec9740d3f68", "", "");
+//END_REGION
+
+//REGION SKILL_MEMORY
+IF
+CharacterLearnedSkill(_Mime, _Skill)
+AND
+DB_LLMIME_Mime_LearnableSkills(_Skill)
+AND
+NOT DB_InCharacterCreation(1)
+AND
+NOT DB_LLMIME_Mime_MimeSkillMemory(_Mime, _Skill)
+THEN
+DB_LLMIME_Mime_MimeSkillMemory(_Mime, _Skill);
+
+IF
+StoryEvent((CHARACTERGUID)_Mime, "Mimicry_MimeInitialized")
+AND
+IsTagged(_Mime, "LLMIME_MimeFollower", 0)
+AND
+DB_LLMIME_Mime_MimeSkillMemory(_Mime, _Skill)
+AND
+CharacterHasSkill(_Mime, _Skill, 0)
+THEN
+CharacterAddSkill(_Mime, _Skill);
+
+IF
+StoryEvent((CHARACTERGUID)_Mime, "Mimicry_MimeJobRemoved")
+AND
+IsTagged(_Mime, "LLMIME_MimeFollower", 0)
+AND
+DB_LLMIME_Mime_MimeSkillMemory(_Mime, _Skill)
+AND
+CharacterHasSkill(_Mime, _Skill, 1)
+THEN
+CharacterRemoveSkill(_Mime, _Skill);
+//END_REGION
+
+//REGION SKILLS
+//This is after the learnable skills, so the menu skills should be further down on the hotbar.
+IF
+StoryEvent((CHARACTERGUID)_Mime, "Mimicry_MimeInitialized")
+AND
+IsTagged(_Mime, "LLMIME_MimeFollower", 0)
+AND
+DB_LLMIME_Mime_Skills(_Skill)
+AND
+CharacterHasSkill(_Mime, _Skill, 0)
+THEN
+CharacterAddSkill(_Mime, _Skill);
+
+IF
+StoryEvent((CHARACTERGUID)_Mime, "Mimicry_MimeJobRemoved")
+AND
+IsTagged(_Mime, "LLMIME_MimeFollower", 0)
+AND
+DB_LLMIME_Mime_Skills(_Skill)
+AND
+CharacterHasSkill(_Mime, _Skill, 1)
+THEN
+CharacterRemoveSkill(_Mime, _Skill);
+//END_REGION
+
+//REGION MIME_STATUS_ATTEMPTS
+IF
+CharacterStatusAttempt(_Character, "LLMIME_MIMICKING", _)
+AND
+NOT LLMIME_QRY_CharacterIsAMime(_Character)
+THEN
+RemoveStatus(_Character, "LLMIME_MIMICKING");
+
+IF
+CharacterStatusAttempt(_Character, "LLMIME_MIMICKING_FOLLOWER", _)
+AND
+NOT LLMIME_QRY_CharacterIsAMime(_Character)
+THEN
+RemoveStatus(_Character, "LLMIME_MIMICKING_FOLLOWER");
+
+IF
+CharacterStatusAttempt(_Character, "LLMIME_MIMICKING_SOURCE", _)
+AND
+NOT LLMIME_QRY_CharacterIsAMime(_Character)
+THEN
+RemoveStatus(_Character, "LLMIME_MIMICKING_SOURCE");
+
+IF
+CharacterStatusAttempt(_Character, "LLMIME_MIMICKING_ENEMY", _)
+AND
+NOT LLMIME_QRY_CharacterIsAMime(_Character)
+THEN
+RemoveStatus(_Character, "LLMIME_MIMICKING_ENEMY");
+//END_REGION
+
+//REGION MIMICKED_SKILL_LEARNING
+IF
+SkillAdded(_Mime, _Skill, 0)
+AND
+ObjectGetFlag(_Mime, "Mimicry_IsMimicking", 1)
+AND
+NOT LLMIME_Mime_QRY_IsMimeSkill(_Skill)
+THEN
+DB_LLMIME_Mime_Temp_AddedSkills(_Mime, _Skill);
+
+IF
+ObjectFlagCleared("Mimicry_IsMimicking", (CHARACTERGUID)_Mime, _)
+AND
+DB_LLMIME_Mime_Temp_AddedSkills(_Mime, _Skill)
+THEN
+NOT DB_LLMIME_Mime_Temp_AddedSkills(_Mime, _Skill);
+LLMIME_Mime_Internal_CheckAddedSkill(_Mime, _Skill);
+
+PROC
+LLMIME_Mime_Internal_CheckAddedSkill((CHARACTERGUID)_Mime, (STRING)_Skill)
+AND
+IsSkillActive(_Mime, _Skill, 0)
+THEN
+CharacterRemoveSkill(_Mime, _Skill);
+//END_REGION
+
+EXITSECTION
+
+ENDEXITSECTION
+ParentTargetEdge "LaughingLeader_Mimicry"

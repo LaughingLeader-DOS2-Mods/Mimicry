@@ -1,0 +1,360 @@
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+LLMIME_ItemSystem_InitSettings();
+KBSECTION
+//REGION SETTINGS
+PROC
+LLMIME_ItemSystem_InitSettings()
+THEN
+LeaderLib_Growth_Items_Clear_ByEntriesID("Mimicry.Brawler.Fist");
+LeaderLib_Growth_Items_Register_DeltaMod("Mimicry.Brawler.Fist", 2, "Boost_LLMIME_BrawlerFist_SkillBoost", "Tag", "LLMIME_BrawlerFist");
+LeaderLib_Growth_Items_Register_DeltaMod("Mimicry.Brawler.Fist", 4, "Boost_Weapon_Damage_ArmourPiercing", "Tag", "LLMIME_BrawlerFist");
+LeaderLib_Growth_Items_Register_DeltaMod("Mimicry.Brawler.Fist", 6, "Boost_LLMIME_BrawlerFist_CritChanceSmall", "Tag", "LLMIME_BrawlerFist");
+LeaderLib_Growth_Items_Register_DeltaMod("Mimicry.Brawler.Fist", 8, "Boost_LLMIME_BrawlerFist_PiercingDamageSmall", "Tag", "LLMIME_BrawlerFist");
+LeaderLib_Growth_Items_Register_DeltaMod("Mimicry.Brawler.Fist", 10, "Boost_LLMIME_BrawlerFist_LifeStealBoost", "Tag", "LLMIME_BrawlerFist");
+LeaderLib_Growth_Items_Register_DeltaMod("Mimicry.Brawler.Fist", 11, "Boost_LLMIME_BrawlerFist_CritDamageSmall", "Tag", "LLMIME_BrawlerFist");
+LeaderLib_Growth_Items_Register_DeltaMod("Mimicry.Brawler.Fist", 12, "Boost_LLMIME_BrawlerFist_WarfareBoost", "Tag", "LLMIME_BrawlerFist");
+LeaderLib_Growth_Items_Register_DeltaMod("Mimicry.Brawler.Fist", 14, "Boost_LLMIME_BrawlerFist_ScoundrelBoost", "Tag", "LLMIME_BrawlerFist");
+LeaderLib_Growth_Items_Register_DeltaMod("Mimicry.Brawler.Fist", 16, "Boost_LLMIME_BrawlerFist_CritDamageLarge", "Tag", "LLMIME_BrawlerFist");
+LeaderLib_Growth_Items_Register_DeltaMod("Mimicry.Brawler.Fist", 18, "Boost_LLMIME_BrawlerFist_DamageBoostMedium", "Tag", "LLMIME_BrawlerFist");
+
+LeaderLib_Growth_Items_Register_Template("Mimicry.MimeEquipment.Mask", "EQ_Armor_LLMIME_Mime_Mask_A_8e66ce79-8c8e-4c22-a8ea-5a99977f4ea8");
+LeaderLib_Growth_Items_Register_Template("Mimicry.MimeEquipment.Mask", "EQ_UNIQUE_Armor_LLMIME_Mime_Mask_Origin_A_4afe8cd3-eb9f-4760-9ba4-a0b4433a4c06");
+LeaderLib_Growth_Items_Clear_ByEntriesID("Mimicry.MimeEquipment.Mask");
+LeaderLib_Growth_Items_Register_DeltaModByID("Mimicry.MimeEquipment.Mask", 2, "Boost_Armor_Helmet_Primary_Memory_PrimaryAsLarge");
+LeaderLib_Growth_Items_Register_DeltaModByID("Mimicry.MimeEquipment.Mask", 7, "Boost_Armor_Helmet_Primary_Wits");
+LeaderLib_Growth_Items_Register_DeltaModByID("Mimicry.MimeEquipment.Mask", 8, "Boost_Armor_Helmet_Armour_Physical_Large");
+LeaderLib_Growth_Items_Register_DeltaModByID("Mimicry.MimeEquipment.Mask", 10, "Boost_Armor_Helmet_Armour_Magical_Large_PlateHelmet");
+LeaderLib_Growth_Items_Register_DeltaModByID("Mimicry.MimeEquipment.Mask", 11, "Boost_Armor_Helmet_Resistance_Air_Medium");
+LeaderLib_Growth_Items_Register_DeltaModByID("Mimicry.MimeEquipment.Mask", 13, "Boost_Armor_Helmet_Resistance_Fire_Medium");
+LeaderLib_Growth_Items_Register_DeltaModByID("Mimicry.MimeEquipment.Mask", 16, "Boost_Armor_Helmet_Ability_Warfare");
+
+LeaderLib_Growth_Items_Register_Template("Mimicry.MimeEquipment.Torso", "EQ_Armor_LLMIME_Mime_UpperBody_A_002d96a6-02c1-4e82-9890-67b86ea01531");
+LeaderLib_Growth_Items_Clear_ByEntriesID("Mimicry.MimeEquipment.Torso");
+LeaderLib_Growth_Items_Register_DeltaModByID("Mimicry.MimeEquipment.Torso", 3, "Boost_Armor_Upperbody_Ability_Warfare");
+LeaderLib_Growth_Items_Register_DeltaModByID("Mimicry.MimeEquipment.Torso", 5, "Boost_Armor_Upperbody_Ability_Death");
+LeaderLib_Growth_Items_Register_DeltaModByID("Mimicry.MimeEquipment.Torso", 8, "Boost_Armor_Upperbody_Primary_Constitution");
+LeaderLib_Growth_Items_Register_DeltaModByID("Mimicry.MimeEquipment.Torso", 10, "Boost_Armor_Upperbody_Ability_Hunting");
+LeaderLib_Growth_Items_Register_DeltaModByID("Mimicry.MimeEquipment.Torso", 11, "Boost_LeaderLib_Armor_UpperBody_EmptyRuneSlot");
+LeaderLib_Growth_Items_Register_DeltaModByID("Mimicry.MimeEquipment.Torso", 13, "Boost_Armor_Upperbody_Armour_Physical_Large");
+LeaderLib_Growth_Items_Register_DeltaModByID("Mimicry.MimeEquipment.Torso", 16, "Boost_Armor_Upperbody_Primary_Constitution_Large");
+LeaderLib_Growth_Items_Register_DeltaModByID("Mimicry.MimeEquipment.Torso", 18, "Boost_LeaderLib_Armor_UpperBody_EmptyRuneSlot2");
+
+LeaderLib_Growth_Items_Register_Template("Mimicry.MimeEquipment.Pants", "EQ_Armor_LLMIME_Mime_LowerBody_A_134cbd6d-c5f5-4e7c-a7ff-a0f17644baab");
+LeaderLib_Growth_Items_Clear_ByEntriesID("Mimicry.MimeEquipment.Pants");
+LeaderLib_Growth_Items_Register_DeltaModByID("Mimicry.MimeEquipment.Pants", 2, "Boost_Armor_Pants_Primary_Constitution_PrimaryAsLarge");
+LeaderLib_Growth_Items_Register_DeltaModByID("Mimicry.MimeEquipment.Pants", 4, "Boost_Armor_Pants_Secondary_MovementSpeed");
+LeaderLib_Growth_Items_Register_DeltaModByID("Mimicry.MimeEquipment.Pants", 7, "Boost_Armor_Pants_Ability_Perseverance");
+LeaderLib_Growth_Items_Register_DeltaModByID("Mimicry.MimeEquipment.Pants", 10, "Boost_Armor_Pants_Ability_Warfare_Large");
+LeaderLib_Growth_Items_Register_DeltaModByID("Mimicry.MimeEquipment.Pants", 12, "Boost_LeaderLib_Armor_LowerBody_EmptyRuneSlot");
+LeaderLib_Growth_Items_Register_DeltaModByID("Mimicry.MimeEquipment.Pants", 14, "Boost_Armor_Pants_Armour_Magical_MagePants");
+LeaderLib_Growth_Items_Register_DeltaModByID("Mimicry.MimeEquipment.Pants", 17, "Boost_Armor_Pants_Immunity_Frozen_And_Chilled");
+LeaderLib_Growth_Items_Register_DeltaModByID("Mimicry.MimeEquipment.Pants", 18, "Boost_LeaderLib_Armor_LowerBody_EmptyRuneSlot2");
+
+LeaderLib_Growth_Items_Register_Template("Mimicry.MimeEquipment.Gloves", "EQ_Armor_LLMIME_Mime_Arms_A_719c05ec-03d1-4910-b709-1ced217cd136");
+LeaderLib_Growth_Items_Clear_ByEntriesID("Mimicry.MimeEquipment.Gloves");
+LeaderLib_Growth_Items_Register_DeltaModByID("Mimicry.MimeEquipment.Gloves", 4, "Boost_Armor_Gloves_Secondary_CriticalChance_Large");
+LeaderLib_Growth_Items_Register_DeltaModByID("Mimicry.MimeEquipment.Gloves", 8, "Boost_LLMIME_BrawlerFist_SkillBoost_Gloves_Large");
+LeaderLib_Growth_Items_Register_DeltaModByID("Mimicry.MimeEquipment.Gloves", 10, "Boost_LeaderLib_Armor_Arms_EmptyRuneSlot");
+LeaderLib_Growth_Items_Register_DeltaModByID("Mimicry.MimeEquipment.Gloves", 13, "Boost_Armor_Gloves_Crafting_Special_Ataraxian");
+LeaderLib_Growth_Items_Register_DeltaModByID("Mimicry.MimeEquipment.Gloves", 15, "Boost_LeaderLib_Armor_Arms_EmptyRuneSlot2");
+LeaderLib_Growth_Items_Register_DeltaModByID("Mimicry.MimeEquipment.Gloves", 19, "Boost_Armor_Gloves_Immunity_Slow_And_Sleeping");
+
+LeaderLib_Growth_Items_Register_Template("Mimicry.MimeEquipment.Boots", "EQ_Armor_LLMIME_Mime_Legs_A_5b2a8469-a1a2-41cf-a861-8b997330f522");
+LeaderLib_Growth_Items_Clear_ByEntriesID("Mimicry.MimeEquipment.Boots");
+LeaderLib_Growth_Items_Register_DeltaModByID("Mimicry.MimeEquipment.Boots", 3, "Boost_LLMIME_Armor_Boots_Tier1");
+LeaderLib_Growth_Items_Register_DeltaModByID("Mimicry.MimeEquipment.Boots", 6, "Boost_Armor_Boots_Secondary_Dodge_Large");
+LeaderLib_Growth_Items_Register_DeltaModByID("Mimicry.MimeEquipment.Boots", 9, "Boost_LLMIME_Armor_Boots_Tier2");
+LeaderLib_Growth_Items_Register_DeltaModByID("Mimicry.MimeEquipment.Boots", 11, "Boost_LeaderLib_Armor_Boots_EmptyRuneSlot");
+LeaderLib_Growth_Items_Register_DeltaModByID("Mimicry.MimeEquipment.Boots", 13, "Boost_Armor_Boots_Secondary_MovementSpeed_Large");
+LeaderLib_Growth_Items_Register_DeltaModByID("Mimicry.MimeEquipment.Boots", 15, "Boost_Armor_Boots_Crafting_Special_Ataraxian");
+LeaderLib_Growth_Items_Register_DeltaModByID("Mimicry.MimeEquipment.Boots", 17, "Boost_LeaderLib_Armor_Boots_EmptyRuneSlot2");
+
+PROC
+LLMIME_ItemSystem_InitSettings()
+AND
+NOT DB_LLMIME_ItemSystem_MimeEquipment(_,_)
+THEN
+DB_LLMIME_ItemSystem_MimeEquipment("Breast", "EQ_Armor_LLMIME_Mime_UpperBody_A_002d96a6-02c1-4e82-9890-67b86ea01531");
+DB_LLMIME_ItemSystem_MimeEquipment("Gloves", "EQ_Armor_LLMIME_Mime_Arms_A_719c05ec-03d1-4910-b709-1ced217cd136");
+DB_LLMIME_ItemSystem_MimeEquipment("Leggings", "EQ_Armor_LLMIME_Mime_LowerBody_A_134cbd6d-c5f5-4e7c-a7ff-a0f17644baab");
+DB_LLMIME_ItemSystem_MimeEquipment("Boots", "EQ_Armor_LLMIME_Mime_Legs_A_5b2a8469-a1a2-41cf-a861-8b997330f522");
+//END_REGION
+
+//REGION UPDATING
+PROC
+LeaderUpdater_ModUpdated("Mimicry", "LaughingLeader", (STRING)_PastVersion, (STRING)_NewVersion)
+AND
+LeaderLib_StringExt_QRY_VersionIsLessThan(_PastVersion, 1,0,4,0)
+THEN
+LeaderLog_Log("DEBUG", "[LLMIME:ItemSystem] Updating settings from version [",_PastVersion,"]");
+LeaderLib_Growth_Items_Clear_ByEntriesID("Mimicry.Mask.A");
+LLMIME_ItemSystem_InitSettings();
+LLMIME_ItemSystem_ResetMimeEquipment();
+
+IF
+TimerFinished("LLMIME_Timers_UpdateMimeEquipmentGrowth")
+AND
+DB_IsPlayer(_Player)
+THEN
+LeaderLib_Growth_Items_CheckEquipmentForMissingDeltamods(_Player);
+
+PROC
+LLMIME_ItemSystem_ResetMimeEquipment()
+AND
+DB_IsPlayer(_Player)
+AND
+GetPosition(_Player, _x, _y, _z)
+AND
+DB_LLMIME_ItemSystem_MimeEquipment(_Slot, _Template)
+AND
+CharacterGetEquippedItem(_Player, _Slot, (ITEMGUID)_Item)
+AND
+GetTemplate(_Item, _Template)
+AND
+LeaderLib_Helper_QRY_RemoveRunes(_Player, _Item)
+AND
+CreateItemTemplateAtPosition(_Template, _x, _y, _z, _NewItem)
+THEN
+ProcObjectTimer(_Item, "LeaderLib_Commands_RemoveItem", 50);
+CharacterEquipItem(_Player, _NewItem);
+
+PROC
+LLMIME_ItemSystem_ResetMimeEquipment()
+AND
+DB_IsPlayer(_Player)
+AND
+GetPosition(_Player, _x, _y, _z)
+AND
+DB_LLMIME_ItemSystem_MimeEquipment(_Slot, _Template)
+AND
+GetItemForItemTemplateInInventory(_Player, _Template, _Item)
+AND
+NOT CharacterGetEquippedItem(_Player, _Slot, (ITEMGUID)_Item)
+AND
+LeaderLib_Helper_QRY_RemoveRunes(_Player, _Item)
+AND
+CreateItemTemplateAtPosition(_Template, _x, _y, _z, _NewItem)
+THEN
+ProcObjectTimer(_Item, "LeaderLib_Commands_RemoveItem", 50);
+ItemToInventory(_NewItem, _Player, 1, 0);
+//END_REGION
+
+//REGION MUSIC_BOX_USAGE
+
+//Resurrection dialog (mask required)
+PROC
+LLMIME_Items_OnMusicBoxUsed((CHARACTERGUID)_Char, (ITEMGUID)_Item)
+AND
+NOT DB_CustomUseItemResponse(_Char, _Item, _)
+AND
+CharacterIsInCombat(_Char, 0)
+AND
+NOT LLMIME_Follower_QRY_CanSummon(_Char)
+AND
+LLMIME_Follower_QRY_CanResurrectMime(_Char)
+THEN
+DB_CustomUseItemResponse(_Char, _Item, 0);
+//LLMIME_Follower_Internal_SetupMusicBoxAttributeCheck(_Char);
+Proc_StartDialog(0, "LLMIME_MusicBox_Resurrection", _Item, _Char);
+
+PROC
+LLMIME_Items_OnMusicBoxUsed((CHARACTERGUID)_Char, (ITEMGUID)_Item)
+AND
+NOT DB_CustomUseItemResponse(_Char, _Item, _)
+AND
+CharacterIsInCombat(_Char, 0)
+AND
+NOT LLMIME_Follower_QRY_CanSummon(_Char)
+AND
+NOT LLMIME_Follower_QRY_CanResurrectMime(_Char)
+THEN
+CharacterStatusText(_Char, "LLMIME_StatusText_MusicBoxBlocked");
+DB_CustomUseItemResponse(_Char, _Item, 0);
+
+PROC
+LLMIME_Items_OnMusicBoxUsed((CHARACTERGUID)_Char, (ITEMGUID)_Item)
+AND
+NOT DB_CustomUseItemResponse(_Char, _Item, _)
+AND
+LLMIME_Follower_QRY_CanSummon(_Char)
+THEN
+CharacterStatusText(_Char, "LLMIME_StatusText_MusicBoxUsed");
+DB_CustomUseItemResponse(_Char, _Item, 1);
+
+PROC
+LLMIME_Items_OnMusicBoxUsed((CHARACTERGUID)_Char, (ITEMGUID)_Item)
+AND
+NOT DB_CustomUseItemResponse(_Char, _Item, _)
+THEN
+CharacterStatusText(_Char, "LLMIME_StatusText_MusicBoxBlocked");
+DB_CustomUseItemResponse(_Char, _Item, 0);
+//END_REGION
+
+//REGION MUSIC_BOX_TRANSFORM
+PROC
+LLMIME_Items_TransformMusicBox((CHARACTERGUID)_Player, (ITEMGUID)_MusicBox)
+AND
+NOT DB_LLMIME_Items_Temp_MusicBoxTransformed(_Player, _MusicBox)
+AND
+DB_LLMIME_Templates("MusicBox", _Template)
+AND
+GetTemplate(_MusicBox, _Template)
+AND
+DB_LLMIME_Templates("MusicBox_Cracked", _TransformTemplate)
+THEN
+Transform(_MusicBox, _TransformTemplate, 1, 0, 1);
+SetTag(_MusicBox, "Mimicry_CrackedMusicBox");
+DB_LLMIME_Items_Temp_MusicBoxTransformed(_Player, _MusicBox);
+
+PROC
+LLMIME_Items_TransformMusicBox((CHARACTERGUID)_Player, (ITEMGUID)_MusicBox)
+AND
+NOT DB_LLMIME_Items_Temp_MusicBoxTransformed(_Player, _MusicBox)
+AND
+DB_LLMIME_Templates("MusicBox_Cracked", _Template)
+AND
+GetTemplate(_MusicBox, _Template)
+AND
+DB_LLMIME_Templates("MusicBox_Shard", _TransformTemplate)
+THEN
+ClearTag(_MusicBox, "Mimicry_CrackedMusicBox");
+Transform(_MusicBox, _TransformTemplate, 1, 1, 1);
+CharacterStatusText(_Player, "LLMIME_StatusText_MusicBoxShatters");
+LeaderLog_SetOneshotTarget(_Player);
+LeaderLog_Log("COMBAT", "LLMIME_StatusText_MusicBoxShatters");
+GlobalSetFlag("Mimicry_MusicBoxShattered");
+DB_LLMIME_Items_Temp_MusicBoxTransformed(_Player, _MusicBox);
+
+PROC
+LLMIME_Items_TransformMusicBox((CHARACTERGUID)_Player, (ITEMGUID)_MusicBox)
+AND
+DB_LLMIME_Items_Temp_MusicBoxTransformed(_Player, _MusicBox)
+THEN
+NOT DB_LLMIME_Items_Temp_MusicBoxTransformed(_Player, _MusicBox);
+//END_REGION
+
+//REGION MUSICBOX_RESURRECTION_DIALOG_ATT_CHECK
+IF
+DialogStarted("LLMIME_MusicBox_Resurrection", _Instance)
+AND
+DialogGetInvolvedPlayer(_Instance, 1, (CHARACTERGUID)_Player)
+AND
+CharacterGetAttribute(_Player, "Intelligence", _Amount)
+AND
+_Amount >= 15
+THEN
+LeaderLog_Log("DEBUG", "[LLMIME:ItemSystem:SetupMusicBoxAttributeCheck] Player's intelligence passes the requirement.");
+ObjectSetDialogFlag(_Player, "Mimicry_CanReadMusicBoxGlyphs", _Instance);
+
+/*
+PROC
+LLMIME_Follower_Internal_SetupMusicBoxAttributeCheck((CHARACTERGUID)_Player)
+AND
+CharacterGetLevel(_Player, _Level)
+AND
+_Level > 2
+AND
+IntegerSubtract(_Level, 1, _CheckLevel)
+THEN
+//This DB is automatically cleared when adding a new entry
+LeaderLog_Log("DEBUG", "[LLMIME:ItemSystem:SetupMusicBoxAttributeCheck] Player's level is greater than 2.");
+DB_GLO_Attribute_Check_AgainstLevel("LLMIME_MusicBox_Resurrection", 1, "Intelligence", "Normal", 1, _CheckLevel);
+
+PROC
+LLMIME_Follower_Internal_SetupMusicBoxAttributeCheck((CHARACTERGUID)_Player)
+AND
+CharacterGetLevel(_Player, _Level)
+AND
+_Level <= 2
+THEN
+LeaderLog_Log("DEBUG", "[LLMIME:ItemSystem:SetupMusicBoxAttributeCheck] Player's level is less than or equal to 2.");
+DB_GLO_Attribute_Check_AgainstLevel("LLMIME_MusicBox_Resurrection", 1, "Intelligence", "Easy", 1, 1);
+*/
+//END_REGION
+
+//REGION DEBUG
+/*
+IF
+ItemEquipped(_Item, _Character)
+AND
+GetTemplate(_Item, _Template)
+AND
+CharacterGetDisplayName(_Character, _, _Name)
+THEN
+LeaderLog_Log("DEBUG", "[LLMIME:Debug:ItemEquipped] [",_Name,"] equipped item [",_Template,"].");
+
+IF
+ItemUnEquipped(_Item, _Character)
+AND
+GetTemplate(_Item, _Template)
+AND
+CharacterGetDisplayName(_Character, _, _Name)
+THEN
+LeaderLog_Log("DEBUG", "[LLMIME:Debug:ItemUnEquipped] [",_Name,"] unequipped item [",_Template,"].");
+
+IF
+CanUseItem(_Mime, _Item, _RequestID)
+AND
+GetTemplate(_Item, _Template)
+AND
+CharacterGetDisplayName(_Mime, _, _Name)
+AND
+IntegertoString(_RequestID, _RequestIDStr)
+THEN
+LeaderLog_Log("DEBUG", "[LLMIME:Debug:CanUseItem] [",_Name,"] is attempting to use item [",_Template,"] with RequestID [",_RequestIDStr,"].");
+
+IF
+CharacterUsedItem(_Mime, _Item)
+AND
+GetTemplate(_Item, _Template)
+AND
+CharacterGetDisplayName(_Mime, _, _Name)
+THEN
+LeaderLog_Log("DEBUG", "[LLMIME:Debug:CharacterUsedItem] [",_Name,"] used item [",_Template,"].");
+
+IF
+CharacterUsedItemTemplate(_Mime, _Template, _Item)
+AND
+CharacterGetDisplayName(_Mime, _, _Name)
+THEN
+LeaderLog_Log("DEBUG", "[LLMIME:Debug:CharacterUsedItemTemplate] [",_Name,"] used item [",_Template,"].");
+
+IF
+CharacterUsedItemFailed(_Mime, _Item)
+AND
+GetTemplate(_Item, _Template)
+AND
+CharacterGetDisplayName(_Mime, _, _Name)
+THEN
+LeaderLog_Log("DEBUG", "[LLMIME:Debug:CharacterUsedItemFailed] [",_Name,"] failed to use item [",_Template,"].");
+
+IF
+ItemDestroying(_Item)
+AND
+GetTemplate(_Item, _Template)
+THEN
+LeaderLog_Log("DEBUG", "[LLMIME:Debug:ItemDestroying] Item [",_Template,"] is being destroyed.");
+
+IF
+ItemDestroyed(_Item)
+AND
+GetTemplate(_Item, _Template)
+THEN
+LeaderLog_Log("DEBUG", "[LLMIME:Debug:ItemDestroying] Item [",_Template,"] was destroyed.");
+
+IF
+CharacterItemEvent(_Mime, _Item, "LLMIME_Events_OnItemUse")
+AND
+GetTemplate(_Item, _Template)
+AND
+CharacterGetDisplayName(_Mime, _, _Name)
+THEN
+LeaderLog_Log("DEBUG", "[LLMIME:Debug:LLMIME_Events_OnItemUse] [",_Name,"] used item [",_Template,"].");
+*/
+//END_REGION
+EXITSECTION
+
+ENDEXITSECTION
+ParentTargetEdge "LaughingLeader_Mimicry"

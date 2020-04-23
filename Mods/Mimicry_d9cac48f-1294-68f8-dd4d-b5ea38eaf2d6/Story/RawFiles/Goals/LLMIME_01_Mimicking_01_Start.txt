@@ -1,0 +1,323 @@
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+
+KBSECTION
+
+//REGION MIMICKING_STATUS
+/*
+We handle applying the mimicking status in this script, rather than Mimicking_Main,
+since it governs the database that we check to determine if 
+he mimicking scripts need to be on or off.
+*/
+
+IF
+ObjectWasTagged((CHARACTERGUID)_Mime, "Mimicry_Mime")
+THEN
+LLMIME_Mimicking_ApplyMimicking(_Mime);
+
+IF
+CharacterStatusApplied(_Mime, "LLMIME_MIME", _)
+THEN
+LLMIME_Mimicking_ApplyMimicking(_Mime);
+
+IF
+CharacterStatusRemoved(_Mime, "LLMIME_MIMICKING_DISABLED", _)
+THEN
+LLMIME_Mimicking_ApplyMimicking(_Mime);
+
+IF
+StoryEvent((CHARACTERGUID)_Mime, "LLMIME_Events_RequestMimicking")
+THEN
+LLMIME_Mimicking_ApplyMimicking(_Mime);
+
+PROC
+LLMIME_Mimicking_ApplyMimicking((CHARACTERGUID)_Mime)
+AND
+NOT LeaderLib_Helper_QRY_HasStatus(_Mime, "LLMIME_MIMICKING")
+AND
+CharacterIsDeadOrFeign(_Mime, 0)
+AND
+IsTagged(_Mime, "LLMIME_MimeFollower", 0)
+AND
+IsTagged(_Mime, "Mimicry_EnemyMime", 0)
+AND
+LLMIME_Mimicking_QRY_MimeShouldBeMimicking(_Mime)
+THEN
+ApplyStatus(_Mime, "LLMIME_MIMICKING", -1.0, 1, _Mime);
+
+PROC
+LLMIME_Mimicking_ApplyMimicking((CHARACTERGUID)_Mime)
+AND
+CharacterIsDeadOrFeign(_Mime, 0)
+AND
+IsTagged(_Mime, "LLMIME_MimeFollower", 1)
+AND
+NOT LeaderLib_Helper_QRY_HasStatus(_Mime, "LLMIME_MIMICKING_FOLLOWER")
+AND
+LLMIME_Mimicking_QRY_FollowerShouldBeMimicking(_Mime)
+THEN
+ApplyStatus(_Mime, "LLMIME_MIMICKING_FOLLOWER", -1.0, 1, _Mime);
+
+PROC
+LLMIME_Mimicking_ApplyMimicking((CHARACTERGUID)_Mime)
+AND
+CharacterIsDeadOrFeign(_Mime, 0)
+AND
+IsTagged(_Mime, "Mimicry_EnemyMime", 1)
+AND
+NOT LeaderLib_Helper_QRY_HasStatus(_Mime, "LLMIME_MIMICKING_ENEMY")
+AND
+LLMIME_Mimicking_QRY_MimeShouldBeMimicking(_Mime)
+THEN
+ApplyStatus(_Mime, "LLMIME_MIMICKING_ENEMY", -1.0, 1, _Mime);
+
+PROC
+LLMIME_Mimicking_OnMimickingApplied((CHARACTERGUID)_Mime)
+AND
+NOT DB_LLMIME_Mimicking_MimicNextAction(_Mime)
+AND
+IsTagged(_Mime, "LLMIME_MimeFollower", _IsFollower)
+THEN
+LeaderLog_LogInt("DEBUG", "[LLMIME_01_Mimicking_01_Start:OnMimickingApplied] Adding mime to [DB_LLMIME_Mimicking_MimicNextAction]. IsFollower[",_IsFollower,"]");
+DB_LLMIME_Mimicking_MimicNextAction(_Mime);
+//LLMIME_Mimicking_Internal_AddToNextAction(_Mime, _IsFollower);
+
+PROC
+LLMIME_Mimicking_Internal_AddToNextAction((CHARACTERGUID)_Mime, 0)
+//AND
+//LLMIME_Mimicking_QRY_MimeShouldBeMimicking(_Mime)
+THEN
+DB_LLMIME_Mimicking_MimicNextAction(_Mime);
+
+PROC
+LLMIME_Mimicking_Internal_AddToNextAction((CHARACTERGUID)_Mime, 1)
+//AND
+//LLMIME_Mimicking_QRY_FollowerShouldBeMimicking(_Mime)
+THEN
+DB_LLMIME_Mimicking_MimicNextAction(_Mime);
+
+IF
+StoryEvent((CHARACTERGUID)_Mime, "LLMIME_Events_RemoveMimicking")
+THEN
+LLMIME_Mimicking_RemoveMimicking(_Mime);
+
+IF
+CharacterStatusApplied(_Mime, "LLMIME_MIMICKING_DISABLED", _)
+THEN
+LLMIME_Mimicking_RemoveMimicking(_Mime);
+
+PROC
+LLMIME_Mimicking_RemoveMimicking((CHARACTERGUID)_Mime)
+AND
+DB_LLMIME_MimickingStatuses(_Status)
+AND
+HasActiveStatus(_Mime, _Status, 1)
+THEN
+ObjectSetFlag(_Mime, "Mimicry_MimickingWasRemoved");
+RemoveStatus(_Mime, _Status);
+
+PROC
+LLMIME_Mimicking_RemoveMimicking((CHARACTERGUID)_Mime)
+THEN
+LLMIME_Mimicking_ClearMimicDataForMime(_Mime);
+
+/*
+PROC
+LLMIME_Mimicking_RemoveMimicking((CHARACTERGUID)_Mime)
+AND
+ObjectGetFlag(_Mime, "Mimicry_MimickingWasRemoved", 1)
+AND
+DB_LeaderLib_Combat_ActiveObject(_, _Mime)
+THEN
+CharacterStatusText(_Mime, "LLMIME_StatusText_MimickingEnded");
+*/
+
+PROC
+LLMIME_Mimicking_RemoveMimicking((CHARACTERGUID)_Mime)
+AND
+ObjectGetFlag(_Mime, "Mimicry_MimickingWasRemoved", 1)
+THEN
+ObjectClearFlag(_Mime, "Mimicry_MimickingWasRemoved");
+
+PROC
+LLMIME_Mimicking_OnMimickingRemoved((CHARACTERGUID)_Mime)
+AND
+DB_LLMIME_Mimicking_MimicNextAction(_Mime)
+THEN
+NOT DB_LLMIME_Mimicking_MimicNextAction(_Mime);
+LLMIME_Mimicking_OnMimickingDisabled(_Mime);
+
+IF
+DB_LLMIME_Mimicking_MimicNextAction(_Mime)
+THEN
+LLMIME_Mimicking_OnMimickingEnabled(_Mime);
+
+PROC
+LLMIME_Mimicking_OnMimickingEnabled((CHARACTERGUID)_Mime)
+THEN
+DB_NOOP(1);
+
+PROC
+LLMIME_Mimicking_OnMimickingDisabled((CHARACTERGUID)_Mime)
+THEN
+DB_NOOP(1);
+//END_REGION
+
+//REGION STATUS_EVENTS
+/*
+DB_LLMIME_MimickingStatuses("LLMIME_MIMICKING");
+DB_LLMIME_MimickingStatuses("LLMIME_MIMICKING_FOLLOWER");
+DB_LLMIME_MimickingStatuses("LLMIME_MIMICKING_SOURCE");
+DB_LLMIME_MimickingStatuses("LLMIME_MIMICKING_ENEMY");
+*/
+
+IF
+CharacterStatusApplied(_Mime, "LLMIME_MIMICKING", _)
+THEN
+LLMIME_Mimicking_Internal_OnApplied_Check(_Mime);
+
+IF
+CharacterStatusApplied(_Mime, "LLMIME_MIMICKING_FOLLOWER", _)
+THEN
+LLMIME_Mimicking_Internal_OnApplied_Check(_Mime);
+
+IF
+CharacterStatusApplied(_Mime, "LLMIME_MIMICKING_SOURCE", _)
+THEN
+LLMIME_Mimicking_Internal_OnApplied_Check(_Mime);
+
+IF
+CharacterStatusApplied(_Mime, "LLMIME_MIMICKING_ENEMY", _)
+THEN
+LLMIME_Mimicking_Internal_OnApplied_Check(_Mime);
+
+PROC
+LLMIME_Mimicking_Internal_OnApplied_Check((CHARACTERGUID)_Mime)
+AND
+LLMIME_QRY_NotADummy(_Mime)
+THEN
+ObjectClearFlag(_Mime, "Mimicry_MimickingWasRemoved");
+LLMIME_Mimicking_OnMimickingApplied(_Mime);
+
+IF
+CharacterStatusRemoved(_Mime, "LLMIME_MIMICKING", _)
+THEN
+LLMIME_Mimicking_Internal_OnRemoved_Check(_Mime);
+
+IF
+CharacterStatusRemoved(_Mime, "LLMIME_MIMICKING_FOLLOWER", _)
+THEN
+LLMIME_Mimicking_Internal_OnRemoved_Check(_Mime);
+
+IF
+CharacterStatusRemoved(_Mime, "LLMIME_MIMICKING_SOURCE", _)
+THEN
+LLMIME_Mimicking_Internal_OnRemoved_Check(_Mime);
+
+IF
+CharacterStatusRemoved(_Mime, "LLMIME_MIMICKING_ENEMY", _)
+THEN
+LLMIME_Mimicking_Internal_OnRemoved_Check(_Mime);
+
+PROC
+LLMIME_Mimicking_Internal_OnRemoved_Check((CHARACTERGUID)_Mime)
+AND
+LLMIME_QRY_NotADummy(_Mime)
+THEN
+LLMIME_Mimicking_OnMimickingRemoved(_Mime);
+//END_REGION
+
+//REGION DAMAGE_DEBUFF
+//Mimicry_MimickingDamageDebuff1_Enabled
+//Mimicry_MimickingDamageDebuff2_Enabled
+//Mimicry_MimickingDamageDebuff3_Enabled
+
+IF
+ObjectFlagSet("Mimicry_IsMimicking", (CHARACTERGUID)_Mime, _)
+AND
+DB_LLMIME_DebuffStatuses(_Flag, _Status)
+AND
+DB_GlobalFlag(_Flag)
+THEN
+ApplyStatus(_Mime, _Status, -1.0, 1, _Mime);
+
+PROC
+LLMIME_Mimicking_OnMimickingRemoved((CHARACTERGUID)_Mime)
+AND
+DB_LLMIME_DebuffStatuses(_Flag, _Status)
+THEN
+RemoveStatus(_Mime, _Status);
+
+IF
+ObjectFlagCleared("Mimicry_IsMimicking", (CHARACTERGUID)_Mime, _)
+AND
+DB_LLMIME_DebuffStatuses(_Flag, _Status)
+THEN
+RemoveStatus(_Mime, _Status);
+//END_REGION
+
+//REGION AUTO_DISABLED_MIMICKING_REENABLE
+//In case mimicking is re-enabled by the skill
+IF
+CharacterStatusRemoved(_Mime, "LLMIME_MIMICKING_DISABLED", _)
+AND
+ObjectGetFlag(_Mime, "LLMIME_MimickingAutoDisabled", 1)
+THEN
+ObjectClearFlag(_Mime, "LLMIME_MimickingAutoDisabled");
+
+QRY
+LLMIME_Mimicking_QRY_HasDisablingStatus((CHARACTERGUID)_Mime)
+AND
+DB_LLMIME_Mimicking_Temp_DisablingStatus(_Mime, _Status)
+AND
+HasActiveStatus(_Mime, _Status, 1)
+THEN
+DB_NOOP(1);
+
+PROC
+LLMIME_Mimicking_OnDisablingStatusRemoved((CHARACTERGUID)_Mime)
+AND
+NOT LLMIME_Mimicking_QRY_HasDisablingStatus(_Mime)
+AND
+ObjectGetFlag(_Mime, "LLMIME_MimickingAutoDisabled", 1)
+THEN
+ObjectClearFlag(_Mime, "LLMIME_MimickingAutoDisabled");
+RemoveStatus(_Mime, "LLMIME_MIMICKING_DISABLED");
+SetStoryEvent(_Mime, "LLMIME_Events_RequestMimicking");
+//END_REGION
+
+//REGION SUMMON_MIMICKING
+PROC
+LLMIME_Mimicking_OnSummonSpawned((CHARACTERGUID)_Owner, (CHARACTERGUID)_Summon)
+AND
+DB_GlobalFlag("Mimicry_Mimic_CopySummonedCreatureSkills_Enabled")
+AND
+DB_LLMIME_ActiveMimes(_Mime)
+AND
+NOT LLMIME_Mimicking_QRY_IsMimicking(_Mime)
+THEN
+LeaderLog_Log("DEBUG", "[LLMIME_10_TS_Mimicking_01_Start:OnSummonSpawned] Applying mimicking to mime.");
+LLMIME_Mimicking_ApplyMimicking(_Mime);
+
+PROC
+LLMIME_Mimicking_OnSummonDied((CHARACTERGUID)_Owner, (CHARACTERGUID)_Summon)
+AND
+DB_GlobalFlag("Mimicry_Mimic_CopySummonedCreatureSkills_Enabled")
+AND
+NOT LLMIME_QRY_PartyHasSummon()
+AND
+DB_IsPlayer(_Player)
+AND
+LLMIME_Mimicking_QRY_IsMimicking(_Player)
+AND
+NOT LLMIME_Mimicking_QRY_MimeShouldBeMimicking(_Player)
+THEN
+LeaderLog_Log("DEBUG", "[LLMIME_10_TS_Mimicking_01_Start:OnSummonDied] No more summons/party members left. Removing mimicking.");
+LLMIME_Mimicking_RemoveMimicking(_Player);
+//END_REGION
+
+EXITSECTION
+
+ENDEXITSECTION
+ParentTargetEdge "LaughingLeader_Mimicry"

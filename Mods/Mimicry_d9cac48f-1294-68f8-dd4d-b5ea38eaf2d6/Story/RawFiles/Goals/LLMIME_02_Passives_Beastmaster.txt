@@ -1,0 +1,530 @@
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+LLMIME_Beastmaster_InitSettings();
+
+//DB_LLMIME_MonsterSkill_Templates(_Template, _Skill, _Type)
+//DB_LLMIME_MonsterSkill_Tags(_Tag, _Skill, _Type)
+//DB_LLMIME_MonsterSkill_Statuses(_Status, _Skill, _Type)
+//DB_LLMIME_MonsterSkill_BadBreathStatus(_Status, _Turns, _Chance)
+//DB_LLMIME_MonsterSkill_SummonRename(_Type, _Value, _CustomName, _Color, _TextSize, _RenameType);
+
+/*Temp*/
+//DB_LLMIME_MonsterSkill_Temp_AddedSkill(_Summon, _Skill)
+//DB_LLMIME_MonsterSkill_Temp_AddedStatus(_Summon, _Status)
+//DB_LLMIME_MonsterSkill_OriginalName(_Summon, _Name, _CustomName)
+KBSECTION
+//REGION SETTINGS
+PROC
+LLMIME_Beastmaster_InitSettings()
+THEN
+SysClear("DB_LLMIME_MonsterSkill_Templates", 3);
+LLMIME_MonsterSkill_RegisterToTemplate("Summons_BloatedCorpse_40c6a905-74c3-4d89-9ffe-d3493a22cabd",	"Target_EnemyShacklesOfPain", 			"Skill");
+LLMIME_MonsterSkill_RegisterToTemplate("Summons_BonePile_2a923cb8-beeb-48be-9a3a-5da981b1e3fe",			"Target_EnemyCripplingBlow", 			"Skill");
+LLMIME_MonsterSkill_RegisterToTemplate("Summons_Cat_4f7cdf30-0d44-44d2-bcf2-91850728107d",			 	"Shout_EnemyFear", 						"Skill");
+LLMIME_MonsterSkill_RegisterToTemplate("Summons_Condor_0441f88d-4a0a-40ec-ac69-3a4fe7906cdf",			"Shout_EnemyFavourableWind", 			"Skill");
+LLMIME_MonsterSkill_RegisterToTemplate("Summons_FireOoze_67a658f4-8312-4993-966a-cd2871da7ee0",			"Projectile_EnemyFireball", 			"Skill");
+LLMIME_MonsterSkill_RegisterToTemplate("Summons_FireSlug_163befcc-d8f6-4c3a-ba1d-536d1f7568bc",			"Projectile_EnemyFireball", 			"Skill");
+//LLMIME_MonsterSkill_RegisterToTemplate("Summons_GiantIncarnate_13f9314d-e744-4dc5-acf2-c6bf77a04892",	"Shout_EnemyOverthrow", 				"Skill");
+//LLMIME_MonsterSkill_RegisterToTemplate("Summons_Incarnate_118d7359-b7d5-41ea-8c55-86ce27afceba",		"Target_SingleHandedAttack", 			"Skill");
+//LLMIME_MonsterSkill_RegisterToTemplate("Summons_Incarnate_118d7359-b7d5-41ea-8c55-86ce27afceba",		"Shout_LLMIME_ForcedEvolution", 		"Skill");
+LLMIME_MonsterSkill_RegisterToTemplate("Summons_OilBlob_e61da3a2-6dfd-4f2e-8f62-6bfbddb5a7f9",			"Target_TargetedOilSurface", 			"Skill");
+LLMIME_MonsterSkill_RegisterToTemplate("Summons_Plant_e63a712f-fc87-4469-8848-fd8941043afd",			"Cone_LLMIME_BadBreath_Plant", 			"Skill");
+LLMIME_MonsterSkill_RegisterToTemplate("Summons_PoisonOoze_7ecb0aa4-376f-4e9a-99d6-6eff900c3c77",		"Projectile_EnemyPoisonDart", 			"Skill");
+LLMIME_MonsterSkill_RegisterToTemplate("Summons_SoulWolf_53f49a2d-36a1-4c47-8cef-91c0f3ae0ef9",			"Rush_EnemyBullRush", 					"Skill");
+LLMIME_MonsterSkill_RegisterToTemplate("Summons_WaterOoze_b4fc88e6-1e7f-425e-b901-0be379f19168",		"ProjectileStrike_EnemyHailStrike", 	"Skill");
+
+SysClear("DB_LLMIME_MonsterSkill_Tags", 3);
+ // Instead of the template, since we're just visually transforming it now
+LLMIME_MonsterSkill_RegisterToTag("INCARNATE_S", "Shout_LLMIME_ForcedEvolution", "Skill");
+LLMIME_MonsterSkill_RegisterToTag("TOTEM", "LLMIME_TOTEMRAGE", "Status");
+//Giant Incarnate
+SysClear("DB_LLMIME_MonsterSkill_Statuses", 3);
+LLMIME_MonsterSkill_RegisterToStatus("INF_FIRE_G", 		"Shout_LLMIME_Explosion", "Skill");
+LLMIME_MonsterSkill_RegisterToStatus("INF_WATER_G", 	"Cone_LLMIME_WaterSpit", "Skill");
+LLMIME_MonsterSkill_RegisterToStatus("INF_BLOOD_G", 	"Target_EnemyInfect", "Skill");
+LLMIME_MonsterSkill_RegisterToStatus("INF_ELECTRIC_G", 	"Storm_LLMIME_IncarnateLightning", "Skill");
+LLMIME_MonsterSkill_RegisterToStatus("INF_POISON_G", 	"Cone_LLMIME_BadBreath_Incarnate", "Skill");
+LLMIME_MonsterSkill_RegisterToStatus("INF_OIL_G", 		"Quake_EnemyEarthquake", "Skill");
+
+SysClear("DB_LLMIME_MonsterSkill_Default", 1);
+DB_LLMIME_MonsterSkill_Default("Target_LLMIME_Wish");
+
+SysClear("DB_LLMIME_MonsterSkill_BadBreathStatus", 4);
+DB_LLMIME_MonsterSkill_BadBreathStatus("SLOWED", 500, 999, 9.0);
+DB_LLMIME_MonsterSkill_BadBreathStatus("POISONED", 600, 799, 9.0);
+DB_LLMIME_MonsterSkill_BadBreathStatus("BLIND", 400, 599, 9.0);
+DB_LLMIME_MonsterSkill_BadBreathStatus("SLEEP", 251, 399, 9.0);
+DB_LLMIME_MonsterSkill_BadBreathStatus("DISARMED", 200, 250, 9.0);
+DB_LLMIME_MonsterSkill_BadBreathStatus("MUTED", 101, 199, 9.0);
+DB_LLMIME_MonsterSkill_BadBreathStatus("LLMIME_FROG", 0, 100, 12.0);
+
+SysClear("DB_LLMIME_MonsterSkill_SummonRename", 6);
+DB_LLMIME_MonsterSkill_SummonRename("Template", "Summons_Plant_e63a712f-fc87-4469-8848-fd8941043afd", "Malboro", "#00FF00", "24", "Full");
+DB_LLMIME_MonsterSkill_SummonRename("Tag", "TOTEM", "Rage Totem", "#DC143C", "24", "Full");
+//Giant Incarnate
+DB_LLMIME_MonsterSkill_SummonRename("Status", "INF_FIRE_G", 		"Ifrit", 		"#fe6e27", "24", "Full");
+DB_LLMIME_MonsterSkill_SummonRename("Status", "INF_WATER_G", 		"Bismarck", 	"#4197e2", "24", "Full");
+DB_LLMIME_MonsterSkill_SummonRename("Status", "INF_BLOOD_G", 		"Blood-Sin", 	"#b823cb", "24", "Full");
+DB_LLMIME_MonsterSkill_SummonRename("Status", "INF_ELECTRIC_G", 	"Ramuh", 		"#7d71d9", "24", "Full");
+DB_LLMIME_MonsterSkill_SummonRename("Status", "INF_POISON_G", 		"Midgardsormr", "#65c900", "24", "Full");
+DB_LLMIME_MonsterSkill_SummonRename("Status", "INF_OIL_G", 			"Titan", 		"#7f3d00", "24", "Full");
+//END_REGION
+
+//REGION UPDATING
+/* 
+PROC
+LeaderUpdater_ModUpdated("Mimicry", "LaughingLeader", (STRING)_PastVersion, (STRING)_NewVersion)
+AND
+LeaderLib_StringExt_QRY_VersionIsLessThan(_PastVersion, 0,9,9,36)
+THEN
+LeaderLog_Log("DEBUG", "[LLMIME:Beastmaster] Updating settings from version [",_PastVersion,"]");
+SysClear("DB_LLMIME_MonsterSkill_BadBreathStatus", 3);
+LLMIME_Beastmaster_InitSettings();
+ */
+//END_REGION
+
+//REGION REGISTER
+PROC
+LLMIME_MonsterSkill_RegisterToTemplate((STRING)_Template, (STRING)_Value, (STRING)_Type)
+AND
+NOT DB_LLMIME_MonsterSkill_Templates(_Template, _Value, _Type)
+THEN
+DB_LLMIME_MonsterSkill_Templates(_Template, _Value, _Type);
+
+PROC
+LLMIME_MonsterSkill_RegisterToTag((STRING)_Tag, (STRING)_Value, (STRING)_Type)
+AND
+NOT DB_LLMIME_MonsterSkill_Tags(_Tag, _Value, _Type)
+THEN
+DB_LLMIME_MonsterSkill_Tags(_Tag, _Value, _Type);
+
+PROC
+LLMIME_MonsterSkill_RegisterToStatus((STRING)_Status, (STRING)_Value, (STRING)_Type)
+AND
+NOT DB_LLMIME_MonsterSkill_Statuses(_Status, _Value, _Type)
+THEN
+DB_LLMIME_MonsterSkill_Statuses(_Status, _Value, _Type);
+//END_REGION
+
+//REGION TYPECHECK_EVENTS
+IF
+CharacterStatusApplied(_Summon, "LLMIME_BEASTMASTER_TYPECHECK", _Mime)
+AND
+CharacterIsSummon(_Summon, 1)
+THEN
+ApplyStatus(_Summon, "LLMIME_BEASTMASTER_MONSTERSKILL", -1.0, 1, _Mime);
+
+IF
+CharacterStatusRemoved(_Summon, "LLMIME_BEASTMASTER_TYPECHECK", _)
+AND
+CharacterIsSummon(_Summon, 1)
+THEN
+RemoveStatus(_Summon, "LLMIME_BEASTMASTER_MONSTERSKILL");
+//END_REGION
+
+//REGION MONSTERSKILL_EVENTS
+IF
+CharacterStatusApplied(_Summon, "LLMIME_BEASTMASTER_MONSTERSKILL", (CHARACTERGUID)_Mime)
+THEN
+LLMIME_Beastmaster_ApplyBeastmasterBonus(_Summon, _Mime);
+
+PROC
+LLMIME_Beastmaster_ApplyBeastmasterBonus((CHARACTERGUID)_Summon, (CHARACTERGUID)_Mime)
+THEN
+SetVarObject(_Summon, "LLMIME_Beastmaster", _Mime);
+LLMIME_Beastmaster_AddMonsterSkill(_Summon);
+LLMIME_Beastmaster_AddMonsterStatus(_Summon);
+LLMIME_Beastmaster_OnMonsterSkillApplied(_Summon);
+
+PROC
+LLMIME_Beastmaster_RemoveBeastmasterBonus((CHARACTERGUID)_Summon)
+THEN
+LLMIME_Beastmaster_RemoveMonsterSkill(_Summon);
+LLMIME_Beastmaster_RemoveMonsterStatus(_Summon);
+LLMIME_Beastmaster_OnMonsterSkillRemoved(_Summon);
+//END_REGION
+
+//REGION REMOVAL_EVENTS
+IF
+CharacterStatusRemoved(_Summon, "LLMIME_BEASTMASTER_MONSTERSKILL", _)
+THEN
+LLMIME_Beastmaster_RemoveBeastmasterBonus(_Summon);
+LLMIME_MonsterSkill_ClearTemporaryDatabases(_Summon);
+
+QRY
+LLMIME_Beastermaster_QRY_Applied((CHARACTERGUID)_Summon)
+AND
+ObjectGetFlag(_Summon, "LLMIME_MonsterSkill_StatusApplied", 1)
+THEN
+DB_NOOP(1);
+
+QRY
+LLMIME_Beastermaster_QRY_Applied((CHARACTERGUID)_Summon)
+AND
+ObjectGetFlag(_Summon, "LLMIME_MonsterSkill_SkillAdded", 1)
+THEN
+DB_NOOP(1);
+
+/*
+IF
+CharacterDied(_Summon)
+AND
+LLMIME_Beastermaster_QRY_Applied(_Summon)
+THEN
+LLMIME_MonsterSkill_ClearTemporaryDatabases(_Summon);
+*/
+
+PROC
+LLMIME_MonsterSkill_ClearTemporaryDatabases((CHARACTERGUID)_Summon)
+AND
+DB_LLMIME_MonsterSkill_Temp_AddedSkill(_Summon, _Skill)
+THEN
+NOT DB_LLMIME_MonsterSkill_Temp_AddedSkill(_Summon, _Skill);
+
+PROC
+LLMIME_MonsterSkill_ClearTemporaryDatabases((CHARACTERGUID)_Summon)
+AND
+DB_LLMIME_MonsterSkill_Temp_AddedStatus(_Summon, _Status)
+THEN
+NOT DB_LLMIME_MonsterSkill_Temp_AddedStatus(_Summon, _Status);
+
+PROC
+LLMIME_MonsterSkill_ClearTemporaryDatabases((CHARACTERGUID)_Summon)
+AND
+DB_LLMIME_MonsterSkill_OriginalName(_Summon, _Name, _CustomName)
+THEN
+NOT DB_LLMIME_MonsterSkill_OriginalName(_Summon, _Name, _CustomName);
+//END_REGION
+
+//REGION MONSTER_SKILLS
+PROC
+LLMIME_Beastmaster_AddMonsterSkill((CHARACTERGUID)_Summon)
+AND
+GetTemplate(_Summon, _Template)
+AND
+DB_LLMIME_MonsterSkill_Templates(_Template, _Skill, "Skill")
+AND
+CharacterHasSkill(_Summon, _Skill, 0)
+THEN
+LeaderLog_Log("DEBUG", "[LLMIME:Beastmaster:AddMonsterSkill] Adding skill [",_Skill,"] to summon via Template [",_Template,"]");
+ObjectSetFlag(_Summon, "LLMIME_MonsterSkill_SkillAdded");
+CharacterAddSkill(_Summon, _Skill);
+DB_LLMIME_MonsterSkill_Temp_AddedSkill(_Summon, _Skill);
+
+PROC
+LLMIME_Beastmaster_AddMonsterSkill((CHARACTERGUID)_Summon)
+AND
+DB_LLMIME_MonsterSkill_Tags(_Tag, _Skill, "Skill")
+AND
+IsTagged(_Summon, _Tag, 1)
+AND
+CharacterHasSkill(_Summon, _Skill, 0)
+THEN
+LeaderLog_Log("DEBUG", "[LLMIME:Beastmaster:AddMonsterSkill] Adding skill [",_Skill,"] to summon via Tag [",_Tag,"]");
+ObjectSetFlag(_Summon, "LLMIME_MonsterSkill_SkillAdded");
+CharacterAddSkill(_Summon, _Skill);
+DB_LLMIME_MonsterSkill_Temp_AddedSkill(_Summon, _Skill);
+
+PROC
+LLMIME_Beastmaster_AddMonsterSkill((CHARACTERGUID)_Summon)
+AND
+DB_LLMIME_MonsterSkill_Statuses(_Status, _Skill, "Skill")
+AND
+HasActiveStatus(_Summon, _Status, 1)
+AND
+CharacterHasSkill(_Summon, _Skill, 0)
+THEN
+LeaderLog_Log("DEBUG", "[LLMIME:Beastmaster:AddMonsterSkill] Adding skill [",_Skill,"] to summon via Status [",_Status,"]");
+ObjectSetFlag(_Summon, "LLMIME_MonsterSkill_SkillAdded");
+CharacterAddSkill(_Summon, _Skill);
+DB_LLMIME_MonsterSkill_Temp_AddedSkill(_Summon, _Skill);
+
+//Default if not matched
+PROC
+LLMIME_Beastmaster_AddMonsterSkill((CHARACTERGUID)_Summon)
+AND
+ObjectGetFlag(_Summon, "LLMIME_MonsterSkill_SkillAdded", 0)
+AND
+DB_LLMIME_MonsterSkill_Default(_Skill)
+AND
+CharacterHasSkill(_Summon, _Skill, 0)
+THEN
+ObjectSetFlag(_Summon, "LLMIME_MonsterSkill_SkillAdded");
+CharacterAddSkill(_Summon, _Skill);
+DB_LLMIME_MonsterSkill_Temp_AddedSkill(_Summon, _Skill);
+
+PROC
+LLMIME_Beastmaster_RemoveMonsterSkill((CHARACTERGUID)_Summon)
+AND
+DB_LLMIME_MonsterSkill_Temp_AddedSkill(_Summon, _Skill)
+THEN
+CharacterRemoveSkill(_Summon, _Skill);
+NOT DB_LLMIME_MonsterSkill_Temp_AddedSkill(_Summon, _Skill);
+
+PROC
+LLMIME_Beastmaster_RemoveMonsterSkill((CHARACTERGUID)_Summon)
+AND
+ObjectGetFlag(_Summon, "LLMIME_MonsterSkill_SkillAdded", 1)
+THEN
+ObjectClearFlag(_Summon, "LLMIME_MonsterSkill_SkillAdded");
+//END_REGION
+
+//REGION MONSTER_STATUS
+PROC
+LLMIME_Beastmaster_AddMonsterStatus((CHARACTERGUID)_Summon)
+AND
+GetTemplate(_Summon, _Template)
+AND
+DB_LLMIME_MonsterSkill_Templates(_Template, _Status, "Status")
+AND
+HasActiveStatus(_Summon, _Status, 0)
+THEN
+ApplyStatus(_Summon, _Status, -1.0, 1, _Summon);
+DB_LLMIME_MonsterSkill_Temp_AddedStatus(_Summon, _Status);
+ObjectSetFlag(_Summon, "LLMIME_MonsterSkill_StatusApplied");
+
+PROC
+LLMIME_Beastmaster_AddMonsterStatus((CHARACTERGUID)_Summon)
+AND
+DB_LLMIME_MonsterSkill_Tags(_Tag, _Status, "Status")
+AND
+IsTagged(_Summon, _Tag, 1)
+AND
+HasActiveStatus(_Summon, _Status, 0)
+THEN
+ApplyStatus(_Summon, _Status, -1.0, 1, _Summon);
+DB_LLMIME_MonsterSkill_Temp_AddedStatus(_Summon, _Status);
+ObjectSetFlag(_Summon, "LLMIME_MonsterSkill_StatusApplied");
+
+PROC
+LLMIME_Beastmaster_AddMonsterStatus((CHARACTERGUID)_Summon)
+AND
+DB_LLMIME_MonsterSkill_Statuses(_CheckStatus, _ApplyStatus, "Status")
+AND
+HasActiveStatus(_Summon, _CheckStatus, 1)
+AND
+HasActiveStatus(_Summon, _ApplyStatus, 0)
+THEN
+ApplyStatus(_Summon, _ApplyStatus, -1.0, 1, _Summon);
+DB_LLMIME_MonsterSkill_Temp_AddedStatus(_Summon, _ApplyStatus);
+ObjectSetFlag(_Summon, "LLMIME_MonsterSkill_StatusApplied");
+
+PROC
+LLMIME_Beastmaster_RemoveMonsterStatus((CHARACTERGUID)_Summon)
+AND
+DB_LLMIME_MonsterSkill_Temp_AddedStatus(_Summon, _Status)
+THEN
+RemoveStatus(_Summon, _Status);
+NOT DB_LLMIME_MonsterSkill_Temp_AddedStatus(_Summon, _Status);
+
+PROC
+LLMIME_Beastmaster_RemoveMonsterStatus((CHARACTERGUID)_Summon)
+AND
+ObjectGetFlag(_Summon, "LLMIME_MonsterSkill_StatusApplied", 1)
+THEN
+ObjectClearFlag(_Summon, "LLMIME_MonsterSkill_StatusApplied");
+//END_REGION
+
+//REGION RENAMING
+QRY
+LLMIME_Beastermaster_QRY_HasCustomName((CHARACTERGUID)_Summon)
+AND
+GetVarString(_Summon, "LLNWIZ_CustomName", _Name)
+AND
+_Name != ""
+THEN
+DB_NOOP(1);
+
+PROC
+LLMIME_Beastmaster_OnMonsterSkillApplied((CHARACTERGUID)_Summon)
+AND
+NOT LLMIME_Beastermaster_QRY_HasCustomName(_Summon)
+AND
+NOT DB_LLMIME_MonsterSkill_OriginalName(_Summon, _, _)
+AND
+DB_LLMIME_MonsterSkill_SummonRename("Tag", _Tag, _CustomName, _Color, _TextSize, _RenameType)
+AND
+IsTagged(_Summon, _Tag, 1)
+THEN
+LLMIME_Beastmaster_RenameMonster(_Summon, _CustomName, _Color, _TextSize, _RenameType);
+
+PROC
+LLMIME_Beastmaster_OnMonsterSkillApplied((CHARACTERGUID)_Summon)
+AND
+NOT LLMIME_Beastermaster_QRY_HasCustomName(_Summon)
+AND
+NOT DB_LLMIME_MonsterSkill_OriginalName(_Summon, _, _)
+AND
+GetTemplate(_Summon, _Template)
+AND
+DB_LLMIME_MonsterSkill_SummonRename("Template", _Template, _CustomName, _Color, _TextSize, _RenameType)
+THEN
+LLMIME_Beastmaster_RenameMonster(_Summon, _CustomName, _Color, _TextSize, _RenameType);
+
+PROC
+LLMIME_Beastmaster_OnMonsterSkillApplied((CHARACTERGUID)_Summon)
+AND
+NOT LLMIME_Beastermaster_QRY_HasCustomName(_Summon)
+AND
+NOT DB_LLMIME_MonsterSkill_OriginalName(_Summon, _, _)
+AND
+DB_LLMIME_MonsterSkill_SummonRename("Status", _Status, _CustomName, _Color, _TextSize, _RenameType)
+AND
+HasActiveStatus(_Summon, _Status, 1)
+THEN
+LLMIME_Beastmaster_RenameMonster(_Summon, _CustomName, _Color, _TextSize, _RenameType);
+
+QRY
+LLMIME_Beastmaster_QRY_DefaultRenameType((STRING)_RenameType)
+AND
+_RenameType == ""
+THEN
+DB_NOOP(1);
+
+QRY
+LLMIME_Beastmaster_QRY_DefaultRenameType((STRING)_RenameType)
+AND
+_RenameType == "Full"
+THEN
+DB_NOOP(1);
+
+PROC
+LLMIME_Beastmaster_RenameMonster((CHARACTERGUID)_Summon, (STRING)_CustomName, (STRING)_Color, (STRING)_TextSize, (STRING)_RenameType)
+AND
+LLMIME_Beastmaster_QRY_DefaultRenameType(_RenameType)
+AND
+NOT DB_LLMIME_MonsterSkill_OriginalName(_Summon, _, _)
+AND
+CharacterGetDisplayName(_Summon, _, _Name)
+THEN
+LeaderLog_SetOneshotTarget(_Summon);
+LeaderLog_SetNextStatusColor(_Summon, _Color, _TextSize);
+LeaderLog_Log("STATUS", _CustomName);
+CharacterSetCustomName(_Summon, _CustomName);
+DB_LLMIME_MonsterSkill_OriginalName(_Summon, _Name, _CustomName);
+
+PROC
+LLMIME_Beastmaster_RenameMonster((CHARACTERGUID)_Summon, (STRING)_CustomName, (STRING)_TextSize, (STRING)_Color, "Prefix")
+AND
+NOT DB_LLMIME_MonsterSkill_OriginalName(_Summon, _, _)
+AND
+CharacterGetDisplayName(_Summon, _, _Name)
+AND
+StringConcatenate(_CustomName, _Name, _FinalCustomName)
+THEN
+LeaderLog_SetOneshotTarget(_Summon);
+LeaderLog_SetNextStatusColor(_Summon, _Color, _TextSize);
+LeaderLog_Log("STATUS", _FinalCustomName);
+CharacterSetCustomName(_Summon, _FinalCustomName);
+DB_LLMIME_MonsterSkill_OriginalName(_Summon, _Name, _FinalCustomName);
+
+PROC
+LLMIME_Beastmaster_RenameMonster((CHARACTERGUID)_Summon, (STRING)_CustomName, (STRING)_TextSize, (STRING)_Color, "Suffix")
+AND
+NOT DB_LLMIME_MonsterSkill_OriginalName(_Summon, _, _)
+AND
+CharacterGetDisplayName(_Summon, _, _Name)
+AND
+StringConcatenate(_Name, _CustomName, _FinalCustomName)
+THEN
+LeaderLog_SetOneshotTarget(_Summon);
+LeaderLog_SetNextStatusColor(_Summon, _Color, _TextSize);
+LeaderLog_Log("STATUS", _FinalCustomName);
+CharacterSetCustomName(_Summon, _FinalCustomName);
+DB_LLMIME_MonsterSkill_OriginalName(_Summon, _Name, _FinalCustomName);
+
+PROC
+LLMIME_Beastmaster_OnMonsterSkillRemoved((CHARACTERGUID)_Summon)
+AND
+DB_LLMIME_MonsterSkill_OriginalName(_Summon, _Name, _CustomName)
+THEN
+LLMIME_Beastmaster_Internal_DisplayOriginalNameIfNotDying(_Summon, _Name);
+CharacterSetCustomName(_Summon, _Name);
+NOT DB_LLMIME_MonsterSkill_OriginalName(_Summon, _Name, _CustomName);
+
+PROC
+LLMIME_Beastmaster_Internal_DisplayOriginalNameIfNotDying((CHARACTERGUID)_Summon, (STRING)_Name)
+AND
+CharacterIsDead(_Summon, 0)
+THEN
+CharacterStatusText(_Summon, _Name);
+//END_REGION
+
+//REGION GIANT_INCARNATE_NO_ELEMENT
+//Giant Incarnate
+PROC
+LLMIME_Beastmaster_AddMonsterSkill((CHARACTERGUID)_Summon)
+AND
+IsTagged(_Summon, "INCARNATE_G", 1)
+AND
+LLMIME_Beastmaster_QRY_NoIncarnateElement(_Summon)
+AND
+CharacterHasSkill(_Summon, "Shout_EnemyOverthrow", 0)
+THEN
+ObjectSetFlag(_Summon, "LLMIME_MonsterSkill_SkillAdded");
+CharacterAddSkill(_Summon, "Shout_EnemyOverthrow");
+DB_LLMIME_MonsterSkill_Temp_AddedSkill(_Summon, "Shout_EnemyOverthrow");
+
+QRY
+LLMIME_Beastmaster_QRY_NoIncarnateElement((CHARACTERGUID)_Incarnate)
+AND
+HasActiveStatus(_Incarnate, "INF_FIRE_G", 0)
+AND
+HasActiveStatus(_Incarnate, "INF_WATER_G", 0)
+AND
+HasActiveStatus(_Incarnate, "INF_BLOOD_G", 0)
+AND
+HasActiveStatus(_Incarnate, "INF_ELECTRIC_G", 0)
+AND
+HasActiveStatus(_Incarnate, "INF_POISON_G", 0)
+AND
+HasActiveStatus(_Incarnate, "INF_OIL_G", 0)
+THEN
+DB_NOOP(1);
+
+PROC
+LLMIME_Beastmaster_OnMonsterSkillApplied((CHARACTERGUID)_Summon)
+AND
+GetTemplate(_Summon, "Summons_GiantIncarnate_13f9314d-e744-4dc5-acf2-c6bf77a04892")
+AND
+LLMIME_Beastmaster_QRY_NoIncarnateElement(_Summon)
+AND
+NOT LLMIME_Beastermaster_QRY_HasCustomName(_Summon)
+AND
+NOT DB_LLMIME_MonsterSkill_OriginalName(_Summon, _, _)
+AND
+CharacterGetDisplayName(_Summon, _, _Name)
+THEN
+LeaderLog_SetOneshotTarget(_Summon);
+LeaderLog_SetNextStatusColor(_Summon, "#f7ba14", "24");
+LeaderLog_Log("STATUS", "Elite");
+CharacterSetCustomName(_Summon, "Elite Giant Incarnate");
+DB_LLMIME_MonsterSkill_OriginalName(_Summon, _Name, "Elite Giant Incarnate");
+//END_REGION
+
+//REGION BAD_BREATH
+IF
+CharacterStatusApplied(_Character, "LLMIME_BAD_BREATH", _Source)
+THEN
+LLMIME_MonsterSkill_RollBadBreath(_Character, _Source);
+
+PROC
+LLMIME_MonsterSkill_RollBadBreath((CHARACTERGUID)_Character, (GUIDSTRING)_Source)
+AND
+DB_LLMIME_MonsterSkill_BadBreathStatus(_Status, _StartRange, _EndRange, _Turns)
+AND
+LeaderLib_Random_QRY(0,999)
+AND
+DB_LeaderLib_Random(_Roll)
+AND
+_Roll >= _StartRange
+AND
+_Roll <= _EndRange
+THEN
+ApplyStatus(_Character, _Status, _Turns, 0, _Source);
+//END_REGION
+EXITSECTION
+
+ENDEXITSECTION
+ParentTargetEdge "LaughingLeader_Mimicry"

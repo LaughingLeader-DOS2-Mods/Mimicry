@@ -1,0 +1,28 @@
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+
+KBSECTION
+
+IF
+GameModeStarted("Campaign", 0)
+THEN
+//Needs to be able to catch initial user events
+SysActivateGoal("LLMIME_21_CC_CCActive");
+
+IF
+RegionStarted(_Level)
+AND
+IsGameLevel(_Level, 1)
+THEN
+GoalCompleted;
+
+IF
+RegionStarted("TestLevel_LL_Mimicry")
+THEN
+GoalCompleted;
+
+EXITSECTION
+
+ENDEXITSECTION
+ParentTargetEdge "LaughingLeader_Mimicry"

@@ -1,0 +1,37 @@
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+
+KBSECTION
+IF
+CharacterStatusAttempt(_Target, "LLMIME_FROG", _Cause)
+THEN
+LLMIME_SFX_PlaySound(_Target, _Cause, LLMIME_SFX_Status_Frog_Applied_A_652f41e3-2463-4e87-b7ec-0b70b3ea1a9a);
+
+IF
+CharacterStatusAttempt(_Target, "LLMIME_SFX_FROGATTACK", _Cause)
+THEN
+LLMIME_SFX_PlaySound(_Target, _Cause, LLMIME_SFX_Skills_FrogAttack_A_2a6caa5e-c2c0-4831-a7fd-0c99d5888e5b);
+
+PROC
+LLMIME_SFX_PlaySound((CHARACTERGUID)_Target, (GUIDSTRING)_Cause, (GUIDSTRING)_Sound)
+AND
+CharacterIsControlled(_Target, 1)
+THEN
+PlaySoundResource(_Target, _Sound);
+
+PROC
+LLMIME_SFX_PlaySound((CHARACTERGUID)_Target, (GUIDSTRING)_Cause, (GUIDSTRING)_Sound)
+AND
+ObjectIsCharacter((CHARACTERGUID)_Cause, 1)
+AND
+_Target != _Cause
+AND
+CharacterIsControlled(_Cause, 1)
+THEN
+PlaySoundResource(_Cause, _Sound);
+
+EXITSECTION
+
+ENDEXITSECTION
+ParentTargetEdge "LaughingLeader_Mimicry"

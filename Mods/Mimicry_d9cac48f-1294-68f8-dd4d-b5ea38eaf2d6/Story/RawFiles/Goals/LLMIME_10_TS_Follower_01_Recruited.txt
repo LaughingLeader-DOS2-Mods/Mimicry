@@ -1,0 +1,193 @@
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+
+KBSECTION
+/*
+This script contains rules that should only be active while the Mime follower is recruited as a follower.
+We deactive this script otherwise.
+*/
+
+IF
+CharacterLeveledUp(_Owner)
+AND
+DB_LeaderLib_PartyFollower(_Owner, _Mime)
+AND
+IsTagged(_Mime, "LLMIME_MimeFollower", 1)
+AND
+CharacterGetLevel(_Owner, _Level)
+AND
+CharacterGetLevel(_Mime, _MimeLevel)
+AND
+_MimeLevel < _Level
+THEN
+//CharacterLevelUp(_Mime);
+LeaderLog_Log("DEBUG", "[LLMIME:Follower_Recruited_Toggled:CharacterLeveledUp] Owner leveled up. Leveling up mime follower.");
+CharacterRemoveFromPlayerCharacter(_Mime, _Owner);
+LeaderLib_Timers_StartCharacterCharacterTimer(_Owner, _Mime, 100, "Mimicry_Timers_Follower_LevelUpDelay_", "Mimicry_Follower_LevelUpAndAttachFollower");
+
+//REGION GHOST_SPAWNING_START
+IF
+CharacterDied(_Mime)
+AND
+DB_LLMIME_Follower_Mime(_Mime)
+THEN
+LLMIME_Follower_Internal_StartSpawningGhost(_Mime);
+
+IF
+CharacterDied(_Mime)
+AND
+DB_LLMIME_Follower_Mime(_Mime)
+AND
+IsTagged(_Mime, "LeaderLib_IsFollower", 1)
+THEN
+CharacterSetCorpseLootable(_Mime, 0);
+
+/*
+IF
+CharacterDied(_Mime)
+AND
+DB_LLMIME_Follower_Mime(_Mime)
+AND
+IsTagged(_Mime, "LeaderLib_IsFollower", 0)
+THEN
+CharacterSetCorpseLootable(_Mime, 1);
+*/
+
+/*
+IF
+ObjectLostTag((CHARACTERGUID)_Mime, "LeaderLib_IsFollower")
+AND
+DB_LLMIME_Follower_Mime(_Mime)
+THEN
+CharacterSetCorpseLootable(_Mime, 1);
+*/
+
+/*
+PROC
+LLMIME_Follower_Internal_StartSpawningGhost((CHARACTERGUID)_Mime)
+AND
+NOT DB_LLMIME_Follower_Temp_SpawnedGhost(_Mime)
+AND
+NOT GlobalGetFlag("Mimicry_MusicBoxShattered", 1)
+AND
+IsTagged(_Mime, "LeaderLib_IsFollower", 1)
+AND
+DB_LeaderLib_PartyFollower(_Owner, _Mime)
+AND
+CharacterIsInCombat(_Owner, 1)
+AND
+CombatGetIDForCharacter(_Owner, _CombatID)
+THEN
+DB_LLMIME_Follower_Temp_SpawnedGhostAfterCombat(_CombatID, _Mime);
+*/
+
+/*
+IF
+CombatEnded(_CombatID)
+AND
+DB_LLMIME_Follower_Temp_SpawnedGhostAfterCombat(_CombatID, _Mime)
+AND
+CharacterIsDead(_Mime, 1)
+THEN
+LLMIME_Follower_Internal_StartSpawningGhost(_Mime);
+
+IF
+CombatEnded(_CombatID)
+AND
+DB_LLMIME_Follower_Temp_SpawnedGhostAfterCombat(_CombatID, _Mime)
+THEN
+NOT DB_LLMIME_Follower_Temp_SpawnedGhostAfterCombat(_CombatID, _Mime);
+*/
+//END_REGION
+
+//REGION SKILLS
+IF
+CharacterCharacterEvent(_Mime, _Target, "Mimicry_OnCharacterMugged")
+AND
+DB_LeaderLib_PartyFollower(_Owner, _Mime)
+THEN
+MoveAllItemsTo(_Mime, _Owner, 0, 0, 1);
+//END_REGION
+
+/*
+//REGION TELEPORT_EVENTS
+
+IF
+CharacterTeleportToFleeWaypoint(_Owner, _)
+AND
+DB_LeaderLib_PartyFollower(_Owner, _Mime)
+AND
+DB_LLMIME_Follower_Mime(_Mime)
+AND
+LLMIME_Follower_QRY_FollowerShouldTeleport(_Owner, _Mime)
+THEN
+LLMIME_Mimicking_RemoveMimicking(_Mime);
+//ApplyStatus(_Follower, "INVISIBLE", 9.0, 1);
+//CharacterUseSkill(_Follower, "Shout_LLMIME_ReturnToOwner", _Follower, 1, 1);
+//LeaveCombat(_Mime);
+TeleportTo(_Mime, _Owner, "Mimicry_Events_Follower_ReturnToOwner_Teleported", 1, 0, 0);
+
+IF
+CharacterTeleportToWaypoint(_Owner, _)
+AND
+DB_LeaderLib_PartyFollower(_Owner, _Mime)
+AND
+DB_LLMIME_Follower_Mime(_Mime)
+AND
+LLMIME_Follower_QRY_FollowerShouldTeleport(_Owner, _Mime)
+THEN
+TeleportTo(_Mime, _Owner, "", 1, 0, 0);
+
+IF
+CharacterTeleported(_Owner, _Cause, _OldX, _OldY, _OldZ, _NewX, _NewY, _NewZ, _Skill)
+AND
+DB_LeaderLib_PartyFollower(_Owner, _Mime)
+AND
+DB_LLMIME_Follower_Mime(_Mime)
+AND
+LLMIME_Follower_QRY_FollowerShouldTeleport(_Owner, _Mime)
+THEN
+TeleportTo(_Mime, _Owner, "", 1, 0, 0);
+//END_REGION
+*/
+
+//REGION ARENA_TELEPORT_EVENTS
+/*
+PROC
+Proc_Arena_Initiate((INTEGER)_Inst)
+AND
+DB_LLMIME_Follower_Mime(_Mime)
+AND
+CharacterIsDead(_Mime, 0)
+AND
+DB_LeaderLib_PartyFollower(_Char, _Mime)
+AND
+DB_Arena_PlayerParticipants(_Arena,_Inst,_Char,_Team)
+AND
+DB_ArenaPresets_Player((STRING)_Arena,(STRING)_Team,(TRIGGERGUID)_Trig)
+AND
+GetFaction(_Mime,_Faction)
+THEN
+DB_Arena_PlayerParticipants(_Arena,_Inst,_Mime,_Team);
+DB_Arena_PreviousFaction(_Mime,_Faction);
+DB_Arena_CharIsAlive(_Team,_Mime);
+TeleportTo(_Mime,_Trig,"",0);
+SetInArena(_Mime,1);
+SetFaction(_Mime,_Team); 
+*/
+/*
+IF
+StoryEvent((CHARACTERGUID)_Player, "Arena_CharacterTeleportedOutOfArena")
+AND
+DB_LeaderLib_PartyFollower(_Player, _Mime)
+AND
+DB_LLMIME_Follower_Mime(_Mime)
+THEN
+TeleportTo(_Mime, _Player, "", 1, 0, 1);
+*/
+//END_REGION
+EXITSECTION
+
+ENDEXITSECTION
+ParentTargetEdge "LLMIME_10_ToggleScripts"

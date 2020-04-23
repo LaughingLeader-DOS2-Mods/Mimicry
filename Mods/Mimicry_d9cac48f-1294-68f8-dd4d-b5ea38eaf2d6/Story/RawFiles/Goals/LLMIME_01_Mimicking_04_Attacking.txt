@@ -1,0 +1,425 @@
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+
+KBSECTION
+//REGION ATTACK_TRACKING
+QRY
+LLMIME_Mimicking_Attack_QRY_IsAttackOfOpportunity((CHARACTERGUID)_Attacker)
+AND
+GetVarObject(_Attacker, "AttackOfOpportunity", _Target)
+AND
+_Target != NULL_00000000-0000-0000-0000-000000000000
+THEN
+DB_NOOP(1);
+
+PROC
+ProcObjectTimerFinished((CHARACTERGUID)_Caster, "Mimicry_Timers_StartAttackPositionDelay")
+AND
+DB_LLMIME_Timers_AttackAtPositionTimer(_Caster, _TargetX, _TargetY, _TargetZ)
+AND
+NOT LLMIME_Mimicking_QRY_PositionActionTypeIsQueued(_Caster, "Attack", _TargetX, _TargetY, _TargetZ)
+THEN
+LLMIME_Mimicking_OnAttackAtPosition(_Caster, _TargetX, _TargetY, _TargetZ);
+
+PROC
+ProcObjectTimerFinished((CHARACTERGUID)_Caster, "Mimicry_Timers_StartAttackPositionDelay")
+AND
+DB_LLMIME_Timers_AttackAtPositionTimer(_Caster, _TargetX, _TargetY, _TargetZ)
+THEN
+NOT DB_LLMIME_Timers_AttackAtPositionTimer(_Caster, _TargetX, _TargetY, _TargetZ);
+
+PROC
+LLMIME_Mimicking_OnAttackAtPosition((CHARACTERGUID)_Caster, (REAL)_TargetX, (REAL)_TargetY, (REAL)_TargetZ)
+AND
+DB_LLMIME_Mimicking_MimicNextAction(_Mime)
+AND
+LLMIME_Mimicking_QRY_CanMimicCharacter(_Caster, _Mime)
+AND
+GetUUID(_Caster, _CasterID)
+AND
+LeaderLog_QRY_RealToIntToString(_CasterID, _TargetX, _TargetY, _TargetZ)
+AND
+DB_LeaderLog_Temp_RealString(_CasterID, _xs, _ys, _zs)
+AND
+StringConcatenate(_xs, _ys, _Str1)
+AND
+StringConcatenate(_Str1, _zs, _Str2)
+AND
+StringConcatenate(_CasterID, _Str2, _Action)
+THEN
+NOT DB_LeaderLog_Temp_RealString(_CasterID, _xs, _ys, _zs);
+LeaderLog_Log("DEBUG", "[LLMIME:Mimicking:OnAttackAtPosition] Queuing up next mimic attack position.");
+LLMIME_Mimicking_QueueNextAction(_Mime, _Caster, _Action, "Attack", _TargetX, _TargetY, _TargetZ, 2);
+LLMIME_Mimicking_StartNextMimic(_Caster, _Action, "Attack", 1000);
+//END_REGION
+
+//REGION ATTACK_MIMIC
+QRY
+LLMIME_Mimicking_QRY_HasEquippedWeaponType((CHARACTERGUID)_Mime, (STRING)_Type)
+AND
+CharacterGetEquippedItem(_Mime, "Weapon", (ITEMGUID)_Weapon)
+AND
+LLMIME_Mimicking_QRY_Internal_WeaponStringMatch(_Weapon, _Type)
+THEN
+DB_NOOP(1);
+
+QRY
+LLMIME_Mimicking_QRY_HasEquippedWeaponType((CHARACTERGUID)_Mime, (STRING)_Type)
+AND
+CharacterGetEquippedItem(_Mime, "Shield", (ITEMGUID)_Weapon)
+AND
+LLMIME_Mimicking_QRY_Internal_WeaponStringMatch(_Weapon, _Type)
+THEN
+DB_NOOP(1);
+
+QRY
+LLMIME_Mimicking_QRY_HasTaggedWeapon((CHARACTERGUID)_Mime, (STRING)_Tag)
+AND
+CharacterGetEquippedItem(_Mime, "Weapon", _Weapon)
+AND
+IsTagged(_Weapon, _Tag, 1)
+THEN
+DB_NOOP(1);
+
+QRY
+LLMIME_Mimicking_QRY_HasTaggedWeapon((CHARACTERGUID)_Mime, (STRING)_Tag)
+AND
+CharacterGetEquippedItem(_Mime, "Shield", _Weapon)
+AND
+IsTagged(_Weapon, _Tag, 1)
+THEN
+DB_NOOP(1);
+
+// [BEGIN_NO_OSITOOLS]
+QRY
+LLMIME_Mimicking_QRY_Internal_WeaponStringMatch((ITEMGUID)_Weapon, (STRING)_Type)
+AND
+GetStatString(_Weapon, _Stat)
+AND
+StringContains(_Stat, _Type, 1)
+THEN
+DB_NOOP(1);
+
+QRY
+LLMIME_Mimicking_QRY_Internal_WeaponStringMatch((ITEMGUID)_Weapon, (STRING)_Type)
+AND
+GetTemplate(_Weapon, _Template)
+AND
+StringContains(_Template, _Type, 1)
+THEN
+DB_NOOP(1);
+// [END_NO_OSITOOLS]
+
+/* [OSITOOLS_ONLY]
+QRY
+LLMIME_Mimicking_QRY_Internal_WeaponStringMatch((ITEMGUID)_Weapon, (STRING)_Type)
+AND
+NRD_ItemGetStatsId(_Weapon, _Stat)
+AND
+NRD_StatGetString(_Stat, "WeaponType", _Type)
+THEN
+DB_NOOP(1);
+*/
+
+QRY
+LLMIME_Mimicking_QRY_HasOffhandWand((CHARACTERGUID)_Mime)
+AND
+CharacterGetEquippedItem(_Mime, "Shield", (ITEMGUID)_Weapon)
+AND
+LLMIME_Mimicking_QRY_Internal_WeaponStringMatch(_Weapon, "Wand")
+THEN
+DB_NOOP(1);
+
+/*
+QRY
+LLMIME_Mimicking_QRY_Debug_EquippedWeaponType((CHARACTERGUID)_Mime, (STRING)_Type)
+AND
+CharacterGetEquippedItem(_Mime, "Weapon", _Weapon)
+AND
+GetStatString(_Weapon, _Stat)
+AND
+GetTemplate(_Weapon, _ID)
+THEN
+LeaderLog_Log("DEBUG", "[LLMIME:HasEquippedWeaponType] Equipped weapon [",_ID,"] stat string is [",_Stat,"].");
+
+QRY
+LLMIME_Mimicking_QRY_Debug_EquippedWeaponType((CHARACTERGUID)_Mime, (STRING)_Type)
+AND
+CharacterGetEquippedItem(_Mime, "Weapon", (ITEMGUID)_Weapon)
+AND
+LLMIME_Mimicking_QRY_Internal_WeaponStringMatch(_Weapon, _Type)
+AND
+GetStatString(_Weapon, _Stat)
+AND
+GetTemplate(_Weapon, _ID)
+THEN
+LeaderLog_Log("DEBUG", "[LLMIME:HasEquippedWeaponType] Equipped weapon [",_ID,"][",_Stat,"] contains [",_Type,"].");
+*/
+
+QRY
+LLMIME_Mimicking_QRY_Debug_EquippedWeaponType((CHARACTERGUID)_Mime, (STRING)_Type)
+THEN
+DB_NOOP(1);
+
+PROC
+LLMIME_Mimicking_MimicAction((CHARACTERGUID)_Caster, (STRING)_Action, "Attack")
+AND
+DB_LLMIME_Mimicking_MimicQueue_Self(_Mime, _Caster, _Action, "Attack")
+AND
+LLMIME_Mimicking_QRY_SetCurrentlyMimicking(_Mime, _Caster, _Action, "Attack")
+THEN
+NOT DB_LLMIME_Mimicking_MimicQueue_Self(_Mime, _Caster, _Action, "Attack");
+CharacterAttack(_Mime, _Mime);
+LLMIME_Mimicking_Attack_StartSuccessTimer(_Mime, _Caster, _Mime, _Action);
+//PlayAnimation(_Mime, "attack1", "LLMIME_Mimicking_Attack_AttackDone");
+
+PROC
+LLMIME_Mimicking_MimicActionOnTarget((CHARACTERGUID)_Mime, (CHARACTERGUID)_Caster, (GUIDSTRING)_Target, (STRING)_Action, "Attack")
+AND
+ObjectIsCharacter(_Target, 1)
+THEN
+ObjectSetFlag(_Mime, "Mimicry_IsMimicking");
+DB_LLMIME_Mimicking_Attacking_Temp_MimicData(_Mime, _Caster, _Target, _Action);
+CharacterCharacterSetEvent(_Mime, (CHARACTERGUID)_Target, "LLMIME_Events_Mimicking_UseBasicAttackSkillOnTarget");
+
+PROC
+LLMIME_Mimicking_MimicActionOnTarget((CHARACTERGUID)_Mime, (CHARACTERGUID)_Caster, (GUIDSTRING)_Target, (STRING)_Action, "Attack")
+AND
+ObjectIsItem(_Target, 1)
+THEN
+ObjectSetFlag(_Mime, "Mimicry_IsMimicking");
+DB_LLMIME_Mimicking_Attacking_Temp_MimicData(_Mime, _Caster, _Target, _Action);
+CharacterItemSetEvent(_Mime, (ITEMGUID)_Target, "LLMIME_Events_Mimicking_UseBasicAttackSkillOnTarget");
+
+/*
+IF
+CharacterCharacterEvent(_Mime, _Target, "LLMIME_Events_Mimicking_UseBasicAttackOnTarget")
+AND
+DB_LLMIME_Mimicking_Attacking_Temp_MimicData(_Mime, _Caster, (GUIDSTRING)_Target, _Action)
+AND
+LLMIME_Mimicking_QRY_StartNextMimic(_Mime, _Caster, _Action, "Attack")
+THEN
+NOT DB_LLMIME_Mimicking_Attacking_Temp_MimicData(_Mime, _Caster, _Target, _Action);
+//CharacterAddActionPoints(_Mime, 2);
+CharacterAttack(_Mime, _Target);
+LLMIME_Mimicking_Attack_StartSuccessTimer(_Mime, _Caster, _Target, _Action);
+
+IF
+CharacterItemEvent(_Mime, _Target, "LLMIME_Events_Mimicking_UseBasicAttackOnTarget")
+AND
+DB_LLMIME_Mimicking_Attacking_Temp_MimicData(_Mime, _Caster, (GUIDSTRING)_Target, _Action)
+AND
+LLMIME_Mimicking_QRY_StartNextMimic(_Mime, _Caster, _Action, "Attack")
+THEN
+NOT DB_LLMIME_Mimicking_Attacking_Temp_MimicData(_Mime, _Caster, _Target, _Action);
+//CharacterAddActionPoints(_Mime, 2);
+CharacterAttack(_Mime, _Target);
+LLMIME_Mimicking_Attack_StartSuccessTimer(_Mime, _Caster, _Target, _Action);
+*/
+
+IF
+CharacterCharacterEvent(_Mime, _Target, "LLMIME_Events_Mimicking_UseBasicAttackSkillOnTarget")
+AND
+DB_LLMIME_Mimicking_Attacking_Temp_MimicData(_Mime, _Caster, (GUIDSTRING)_Target, _Action)
+THEN
+NOT DB_LLMIME_Mimicking_Attacking_Temp_MimicData(_Mime, _Caster, _Target, _Action);
+LLMIME_Mimicking_MimickingStarting(_Mime, _Caster, _Action, "Attack", 2500);
+LLMIME_Mimicking_Attack_UseAttackSkill(_Mime, _Caster, _Target, _Action);
+
+IF
+CharacterItemEvent(_Mime, _Target, "LLMIME_Events_Mimicking_UseBasicAttackSkillOnTarget")
+AND
+DB_LLMIME_Mimicking_Attacking_Temp_MimicData(_Mime, _Caster, (GUIDSTRING)_Target, _Action)
+THEN
+NOT DB_LLMIME_Mimicking_Attacking_Temp_MimicData(_Mime, _Caster, _Target, _Action);
+LLMIME_Mimicking_MimickingStarting(_Mime, _Caster, _Action, "Attack", 2500);
+LLMIME_Mimicking_Attack_UseAttackSkill(_Mime, _Caster, _Target, _Action);
+
+PROC
+LLMIME_Mimicking_Attack_UseAttackSkill((CHARACTERGUID)_Mime, (CHARACTERGUID)_Caster, (GUIDSTRING)_Target, (STRING)_Action)
+THEN
+Mimicry_SetBasicAttackMimickingSkill(_Mime, _Caster, _Target, _Action);
+
+//Set DB_LLMIME_Mimicking_Temp_UseModSkill(_Mime, _Caster, _Target, _Action, _Skill)
+PROC
+Mimicry_SetBasicAttackMimickingSkill((CHARACTERGUID)_Mime, (CHARACTERGUID)_Caster, (GUIDSTRING)_Target, (STRING)_Action)
+THEN
+DB_NOOP(1);
+
+PROC
+LLMIME_Mimicking_Attack_UseAttackSkill((CHARACTERGUID)_Mime, (CHARACTERGUID)_Caster, (GUIDSTRING)_Target, (STRING)_Action)
+AND
+DB_Mimicry_Mimicking_UseModAttackSkill(_Mime, _Caster, _Target, _Action, (STRING)_Skill)
+AND
+NOT DB_LLMIME_Mimicking_Temp_JustAttacked(_Mime, _)
+THEN
+NOT DB_Mimicry_Mimicking_UseModAttackSkill(_Mime, _Caster, _Target, _Action, _Skill);
+DB_LLMIME_Mimicking_Temp_JustAttacked(_Mime, _Skill);
+LeaderLib_Helper_ClearActionQueue(_Mime);
+CharacterUseSkill(_Mime, _Skill, _Target, 1, 1, 1);
+LLMIME_Mimicking_Attack_StartSuccessTimer(_Mime, _Caster, _Target, _Action, _Skill);
+
+PROC
+LLMIME_Mimicking_Attack_UseAttackSkill((CHARACTERGUID)_Mime, (CHARACTERGUID)_Caster, (GUIDSTRING)_Target, (STRING)_Action)
+AND
+DB_Mimicry_Mimicking_UseModAttackSkill(_Mime, _Caster, _Target, _Action, _Skill)
+THEN
+NOT DB_Mimicry_Mimicking_UseModAttackSkill(_Mime, _Caster, _Target, _Action, _Skill);
+
+PROC
+LLMIME_Mimicking_Attack_UseAttackSkill((CHARACTERGUID)_Mime, (CHARACTERGUID)_Caster, (GUIDSTRING)_Target, (STRING)_Action)
+AND
+NOT DB_LLMIME_Mimicking_Temp_JustAttacked(_Mime, _)
+AND
+LLMIME_Mimicking_QRY_HasEquippedWeaponType(_Mime, "Crossbow")
+THEN
+LeaderLib_Helper_ClearActionQueue(_Mime);
+CharacterUseSkill(_Mime, "Projectile_LLMIME_MimicCrossbowAttack", _Target, 1, 1, 1);
+LLMIME_Mimicking_Attack_StartSuccessTimer(_Mime, _Caster, _Target, _Action, "Projectile_LLMIME_MimicCrossbowAttack");
+DB_LLMIME_Mimicking_Temp_JustAttacked(_Mime, "Projectile_LLMIME_MimicCrossbowAttack");
+
+PROC
+LLMIME_Mimicking_Attack_UseAttackSkill((CHARACTERGUID)_Mime, (CHARACTERGUID)_Caster, (GUIDSTRING)_Target, (STRING)_Action)
+AND
+NOT DB_LLMIME_Mimicking_Temp_JustAttacked(_Mime, _)
+AND
+LLMIME_Mimicking_QRY_HasEquippedWeaponType(_Mime, "Bow")
+THEN
+LeaderLib_Helper_ClearActionQueue(_Mime);
+CharacterUseSkill(_Mime, "Projectile_LLMIME_MimicBowAttack", _Target, 1, 1, 1);
+LLMIME_Mimicking_Attack_StartSuccessTimer(_Mime, _Caster, _Target, _Action, "Projectile_LLMIME_MimicBowAttack");
+DB_LLMIME_Mimicking_Temp_JustAttacked(_Mime, "Projectile_LLMIME_MimicBowAttack");
+
+PROC
+LLMIME_Mimicking_Attack_UseAttackSkill((CHARACTERGUID)_Mime, (CHARACTERGUID)_Caster, (GUIDSTRING)_Target, (STRING)_Action)
+AND
+NOT DB_LLMIME_Mimicking_Temp_JustAttacked(_Mime, _)
+AND
+LLMIME_Mimicking_QRY_HasEquippedWeaponType(_Mime, "Wand")
+AND
+LLMIME_Mimicking_QRY_HasOffhandWand(_Mime)
+THEN
+LeaderLib_Helper_ClearActionQueue(_Mime);
+CharacterUseSkill(_Mime, "Projectile_LLMIME_MimicDualWandAttack", _Target, 1, 1, 1);
+LLMIME_Mimicking_Attack_StartSuccessTimer(_Mime, _Caster, _Target, _Action, "Projectile_LLMIME_MimicDualWandAttack");
+DB_LLMIME_Mimicking_Temp_JustAttacked(_Mime, "Projectile_LLMIME_MimicDualWandAttack");
+
+PROC
+LLMIME_Mimicking_Attack_UseAttackSkill((CHARACTERGUID)_Mime, (CHARACTERGUID)_Caster, (GUIDSTRING)_Target, (STRING)_Action)
+AND
+NOT DB_LLMIME_Mimicking_Temp_JustAttacked(_Mime, _)
+AND
+LLMIME_Mimicking_QRY_HasEquippedWeaponType(_Mime, "Wand")
+AND
+NOT LLMIME_Mimicking_QRY_HasOffhandWand(_Mime)
+THEN
+LeaderLib_Helper_ClearActionQueue(_Mime);
+CharacterUseSkill(_Mime, "Projectile_LLMIME_MimicWandAttack", _Target, 1, 1, 1);
+LLMIME_Mimicking_Attack_StartSuccessTimer(_Mime, _Caster, _Target, _Action, "Projectile_LLMIME_MimicWandAttack");
+DB_LLMIME_Mimicking_Temp_JustAttacked(_Mime, "Projectile_LLMIME_MimicWandAttack");
+
+PROC
+LLMIME_Mimicking_Attack_UseAttackSkill((CHARACTERGUID)_Mime, (CHARACTERGUID)_Caster, (GUIDSTRING)_Target, (STRING)_Action)
+AND
+NOT DB_LLMIME_Mimicking_Temp_JustAttacked(_Mime, _)
+THEN
+LeaderLib_Helper_ClearActionQueue(_Mime);
+CharacterUseSkill(_Mime, "Target_LLMIME_MimicAttack", _Target, 1, 1, 1);
+LLMIME_Mimicking_Attack_StartSuccessTimer(_Mime, _Caster, _Target, _Action, "Target_LLMIME_MimicAttack");
+DB_LLMIME_Mimicking_Temp_JustAttacked(_Mime, "Target_LLMIME_MimicAttack");
+
+PROC
+LLMIME_Mimicking_Attack_UseAttackSkill((CHARACTERGUID)_Mime, (CHARACTERGUID)_Caster, (GUIDSTRING)_Target, (STRING)_Action)
+AND
+DB_LLMIME_Mimicking_Temp_JustAttacked(_Mime, _Skill)
+THEN
+NOT DB_LLMIME_Mimicking_Temp_JustAttacked(_Mime, _Skill);
+LeaderLog_Log("DEBUG", "[LLMIME_01_Mimicking_04_Attacking:UseAttackSkill] Mime used attack skill [",_Skill,"].");
+
+PROC
+LLMIME_Mimicking_Attack_StartSuccessTimer((CHARACTERGUID)_Mime, (CHARACTERGUID)_Caster, (GUIDSTRING)_Target, (STRING)_Action)
+THEN
+LLMIME_Mimicking_Attack_StartSuccessTimer(_Mime, _Caster, _Target, _Action, "");
+
+PROC
+LLMIME_Mimicking_Attack_StartSuccessTimer((CHARACTERGUID)_Mime, (CHARACTERGUID)_Caster, (GUIDSTRING)_Target, (STRING)_Action, (STRING)_Skill)
+AND
+DB_LLMIME_Mimicking_MimicFailTimer(_TimerName, _Mime, _Caster, _Action, _ActionType)
+THEN
+NOT DB_LLMIME_Mimicking_MimicFailTimer(_TimerName, _Mime, _Caster, _Action, _ActionType);
+TimerCancel(_TimerName);
+
+PROC
+LLMIME_Mimicking_Attack_StartSuccessTimer((CHARACTERGUID)_Mime, (CHARACTERGUID)_Caster, (GUIDSTRING)_Target, (STRING)_Action, (STRING)_Skill)
+AND
+DB_LLMIME_Timers_AttackSuccessTimer(_TimerName, _Mime, _Caster, _OtherTarget, _OtherAction, _OtherSkill)
+THEN
+NOT DB_LLMIME_Timers_AttackSuccessTimer(_TimerName, _Mime, _Caster, _OtherTarget, _OtherAction, _OtherSkill);
+TimerCancel(_TimerName);
+
+PROC
+LLMIME_Mimicking_Attack_StartSuccessTimer((CHARACTERGUID)_Mime, (CHARACTERGUID)_Caster, (GUIDSTRING)_Target, (STRING)_Action, (STRING)_Skill)
+AND
+GetUUID(_Mime, _MimeID)
+AND
+StringConcatenate("LLMIME_Timers_AttackSuccessTimer_", _MimeID, _TimerName)
+THEN
+DB_LLMIME_Timers_AttackSuccessTimer(_TimerName, _Mime, _Caster, _Target, _Action, _Skill);
+TimerCancel(_TimerName);
+TimerLaunch(_TimerName, 2450);
+
+IF
+CharacterStatusApplied(_Mime, "LLMIME_MIMICKED_WEAPON_CAST", _)
+AND
+DB_LLMIME_Timers_AttackSuccessTimer(_TimerName, _Mime, _Caster, _Target, _Action, _Skill)
+THEN
+TimerCancel(_TimerName);
+TimerLaunch(_TimerName, 800);
+
+IF
+TimerFinished(_TimerName)
+AND
+DB_LLMIME_Timers_AttackSuccessTimer(_TimerName, _Mime, _Caster, _Target, _Action, _Skill)
+THEN
+NOT DB_LLMIME_Timers_AttackSuccessTimer(_TimerName, _Mime, _Caster, _Target, _Action, _Skill);
+LLMIME_Mimicking_Attack_Internal_ResetDummy(_Mime, _Target, _Action);
+LLMIME_Mimicking_OnMimicSuccess(_Mime, _Caster, _Action, "Attack");
+
+PROC
+LLMIME_Mimicking_Attack_Internal_ResetDummy((CHARACTERGUID)_Mime, (GUIDSTRING)_Target, (STRING)_Action)
+AND
+DB_LLMIME_Mimicking_Temp_ResetDummyAfterMimicAction(_Mime, _Target, _Action, "Attack")
+THEN
+NOT DB_LLMIME_Mimicking_Temp_ResetDummyAfterMimicAction(_Mime, _Target, _Action, "Attack");
+LLMIME_Dummy_ResetDummyAfterDelay((GUIDSTRING)_Target, 1000);
+LLMIME_Dummy_MarkForDeletion(_Target, 30000);
+//END_REGION
+
+//REGION CLEAR_MIME
+/*
+IF
+StoryEvent((CHARACTERGUID)_Mime, "Mimicry_ClearMimeBonuses")
+AND
+DB_LLMIME_Timers_AttackAtPositionTimer(_Caster, _TargetX, _TargetY, _TargetZ)
+THEN
+NOT DB_LLMIME_Timers_AttackAtPositionTimer(_Caster, _TargetX, _TargetY, _TargetZ);
+*/
+//END_REGION
+
+//REGION SCRIPT_DISABLED
+PROC
+LLMIME_Mimicking_OnScriptsCompleting()
+THEN
+SysClear("DB_LLMIME_Timers_AttackAtPositionTimer", 5);
+SysClear("DB_LLMIME_Mimicking_Attacking_Temp_MimicData", 4);
+SysClear("DB_LLMIME_Mimicking_Temp_JustAttacked", 2);
+SysClear("DB_LLMIME_Mimicking_MimicFailTimer", 5);
+SysClear("DB_LLMIME_Timers_AttackSuccessTimer", 5);
+SysClear("DB_LLMIME_Mimicking_Temp_ResetDummyAfterMimicAction", 4);
+//END_REGION
+
+EXITSECTION
+
+ENDEXITSECTION
+ParentTargetEdge "LaughingLeader_Mimicry"
