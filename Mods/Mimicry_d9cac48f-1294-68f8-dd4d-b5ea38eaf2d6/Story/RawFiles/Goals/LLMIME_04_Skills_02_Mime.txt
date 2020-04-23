@@ -19,7 +19,47 @@ THEN
 CharacterRemoveSkill(_Mime, _FollowerSkill);
 CharacterAddSkill(_Mime, _FollowerSkill, 0);
 
-//REGION FACING
+//REGION FACING_EXTENDER
+/* [OSITOOLS_ONLY]
+IF
+SkillCast(_Mime, "Target_LLMIME_SetFacingDirection", _, _)
+AND
+GetUUID(_Mime, _UUID)
+THEN
+NRD_ModCall("Mimicry", "SaveFacingDirection", _UUID);
+
+PROC
+LLMIME_Skills_ApplyFacingDirection((CHARACTERGUID)_Mime)
+AND
+CharacterIsDeadOrFeign(_Mime, 0)
+AND
+QRY_CharacterIsNotDisabled(_Mime)
+AND
+NOT LeaderLib_Combat_QRY_IsActiveTurn(_Mime)
+AND
+GetUUID(_Mime, _UUID)
+THEN
+NRD_ModCall("Mimicry", "ApplyFacingDirection", _UUID);
+
+IF
+StoryEvent((CHARACTERGUID)_Mime, "LLMIME_Events_RequestMimicking")
+THEN
+LLMIME_Skills_ApplyFacingDirection(_Mime);
+
+PROC
+LLMIME_Mimicking_MimicDone((CHARACTERGUID)_Mime, (CHARACTERGUID)_Caster, (STRING)_Action, (STRING)_ActionType)
+THEN
+LLMIME_Skills_ApplyFacingDirection(_Mime);
+
+IF
+StoryEvent((CHARACTERGUID)_Mime, "LLMIME_Mime_ReApplyFacingDirection")
+THEN
+LLMIME_Skills_ApplyFacingDirection(_Mime);
+*/
+//END_REGION
+
+//REGION FACING_OLD
+// [BEGIN_NO_OSITOOLS]
 IF
 CharacterUsedSkill(_Mime, "Target_LLMIME_SetFacingDirection", _, _)
 THEN
@@ -89,6 +129,7 @@ AND
 NOT LeaderLib_Combat_QRY_IsActiveTurn(_Mime)
 THEN
 CharacterUseSkillAtPosition(_Mime, "Target_LLMIME_ApplyFacingDirection", _x, _y, _z, 0, 1);
+// [END_NO_OSITOOLS]
 //END_REGION
 
 //REGION QUAKE_SLAM
