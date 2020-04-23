@@ -46,13 +46,6 @@ THEN
 CharacterAddSkill(_Player, _Skill, 1);
 
 IF
-TextEventSet("llmime_freemask")
-AND
-DB_LLMIME_Origin_MaskEquipped(_Mime, _Mask)
-THEN
-ItemLockUnEquip(_Mask, 0);
-
-IF
 TextEventSet("llmime_Tagtest")
 AND
 CharacterGetHostCharacter(_Host)
