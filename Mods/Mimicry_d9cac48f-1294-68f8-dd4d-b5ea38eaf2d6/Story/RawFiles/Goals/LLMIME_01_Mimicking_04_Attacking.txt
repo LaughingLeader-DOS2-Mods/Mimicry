@@ -117,6 +117,8 @@ LLMIME_Mimicking_QRY_Internal_WeaponStringMatch((ITEMGUID)_Weapon, (STRING)_Type
 AND
 NRD_ItemGetStatsId(_Weapon, _Stat)
 AND
+NRD_StatGetType(_Stat, "Weapon")
+AND
 NRD_StatGetString(_Stat, "WeaponType", _Type)
 THEN
 DB_NOOP(1);
