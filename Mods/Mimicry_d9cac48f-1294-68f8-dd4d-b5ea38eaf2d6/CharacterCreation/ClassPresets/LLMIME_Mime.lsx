@@ -64,7 +64,7 @@
                         <node id="EquipmentProperty">
                             <attribute id="RaceName" value="LLMIME_DarkElf" type="22" />
                             <attribute id="PreviewEquipmentSet" value="Origin_LLMIME_Mime_Preview" type="22" />
-                            <attribute id="StartingEquipmentSet" value="Class_LLMIME_Mime_Start" type="22" />
+                            <attribute id="StartingEquipmentSet" value="Class_LLMIME_Mime_Start_DarkElf" type="22" />
                         </node>
                     </children>
                 </node>

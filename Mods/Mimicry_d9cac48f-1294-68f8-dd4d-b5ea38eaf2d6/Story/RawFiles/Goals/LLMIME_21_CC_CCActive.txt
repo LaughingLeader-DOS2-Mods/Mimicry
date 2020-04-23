@@ -1,12 +1,8 @@
 Version 1
 SubGoalCombiner SGC_AND
 INITSECTION
-//ApplyStatus(S_Player_LLMIME_Mime_191f180c-6270-4cd1-a44a-e02454bd846f, "LLMIME_CC_MASK_EFFECT", -1.0, 1, S_Player_LLMIME_Mime_191f180c-6270-4cd1-a44a-e02454bd846f);
-
-
-
 KBSECTION
-
+/*
 //REGION USER_EVENTS
 IF
 DB_AssignedDummyForUser(_UserName, _Dummy)
@@ -76,47 +72,6 @@ _Dummy == S_GLO_CharacterCreationDummy_004_5f93cae7-6c10-4da1-b9a5-0efafc168c8e
 THEN
 DB_LLMIME_CC_Temp_Index(_Dummy, _UserID, 4);
 //END_REGION
-
-PROC
-PROC_SetupOriginCharacters((GUIDSTRING)_Dest)
-AND
-ObjectExists(S_Player_LLMIME_Mime_191f180c-6270-4cd1-a44a-e02454bd846f, 1)
-THEN
-TimerCancel("Timers_LLMIME_CC_SetCustomRaceData");
-TimerLaunch("Timers_LLMIME_CC_SetCustomRaceData", 25);
-
-/* [OSITOOLS_ONLY]
-IF
-TimerFinished("Timers_LLMIME_CC_SetCustomRaceData")
-AND
-CharacterGetRace(S_Player_LLMIME_Mime_191f180c-6270-4cd1-a44a-e02454bd846f, 0, "LLMIME_DarkElf")
-THEN
-NRD_PlayerSetCustomDataString(S_Player_LLMIME_Mime_191f180c-6270-4cd1-a44a-e02454bd846f, "Race", "Elf");
-
-PROC
-LeaderLib_CC_OnPresetChanged((CHARACTERGUID)_Player, (STRING)_LastPreset, (STRING)_NextPreset)
-AND
-CharacterGetRace(_Player, 0, "LLMIME_DarkElf")
-THEN
-NRD_PlayerSetCustomDataString(_Player, "Race", "Elf");
-*/
-
-/*
-PROC
-LeaderLib_CC_OnPresetChanged((CHARACTERGUID)_Player, (STRING)_LastPreset, "LLMIME_Mime")
-AND
-LLMIME_Origin_QRY_IsOriginMime(_Player)
-THEN
-LLMIME_CC_Internal_PlayMaskEffect(_Player, -1.0);
-
-PROC
-LeaderLib_CC_OnPresetChanged((CHARACTERGUID)_Player, "LLMIME_Mime", (STRING)_NextPreset)
-AND
-LLMIME_Origin_QRY_IsOriginMime(_Player)
-AND
-_NextPreset != "LLMIME_Mime"
-THEN
-LLMIME_CC_Internal_StopMaskEffect(_Player);
 */
 
 IF
@@ -124,14 +79,6 @@ TimerFinished("LeaderLib_Timers_PostCC_Finished")
 THEN
 LLMIME_CC_ClearData();
 GoalCompleted;
-
-PROC
-LLMIME_CC_ClearData()
-THEN
-SysClear("DB_LLMIME_CC_Temp_MaskFXHandle", 2);
-SysClear("DB_LLMIME_CC_Temp_ActivePortraitMask", 3);
-SysClear("DB_LLMIME_CC_Temp_Index", 3);
-
 EXITSECTION
 
 ENDEXITSECTION

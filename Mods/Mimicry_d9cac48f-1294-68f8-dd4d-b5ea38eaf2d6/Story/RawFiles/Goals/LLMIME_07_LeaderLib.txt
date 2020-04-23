@@ -3,11 +3,6 @@ SubGoalCombiner SGC_AND
 INITSECTION
 
 KBSECTION
-PROC
-LeaderLib_Settings_SettingsInitialized()
-THEN
-LLMIME_LeaderLib_RegisterSettings();
-
 QRY
 LLMIME_LeaderLib_QRY_HasMimeClassPreset()
 AND
@@ -73,6 +68,33 @@ ItemTemplateAddTo("UNIQUE_LLMIME_MusicBox_fd03b00c-5366-40e2-a8af-1d9f6a904ecb",
 LeaderLib_Treasure_Clear_AllDataForTreasure("LLMIME.LeaderTrader.MusicBox");
 LeaderLog_Log("DEBUG", "[LLMIME:LeaderLib] Updated settings from version [",_PastVersion,"].");
  */
+
+// [BEGIN_NO_OSITOOLS]
+PROC
+LeaderLib_Settings_SettingsInitialized()
+AND
+NOT DB_LLMIME_RegisteredLeaderLibSettings(_)
+THEN
+DB_LLMIME_RegisteredLeaderLibSettings(1);
+LLMIME_LeaderLib_RegisterSettings();
+
+IF
+StoryEvent(_, "LeaderLib_Initialized")
+AND
+NOT DB_LLMIME_RegisteredLeaderLibSettings(_)
+THEN
+DB_LLMIME_RegisteredLeaderLibSettings(1);
+LLMIME_LeaderLib_RegisterSettings();
+// [END_NO_OSITOOLS]
+
+/* [OSITOOLS_ONLY]
+PROC
+LeaderLib_Mods_OnModRegistered(d9cac48f-1294-68f8-dd4d-b5ea38eaf2d6, (INTEGER)_Version, (INTEGER)_Major, (INTEGER)_Minor, (INTEGER)_Revision, (INTEGER)_Build)
+THEN
+DB_LLMIME_RegisteredLeaderLibSettings(1);
+LLMIME_LeaderLib_RegisterSettings();
+*/
+
 PROC
 LLMIME_LeaderLib_RegisterSettings()
 THEN
@@ -80,9 +102,8 @@ DB_LeaderLib_OriginSkills("Mimicry_MimeOrigin", "Target_LLMIME_PerfectDoppelgang
 DB_LeaderLib_RacialSkills("LLMIME_DARKELF", "Shout_LLMIME_ShadowForm");
 DB_LeaderLib_EngineStatus("LLMIME_UNARMED_HIT");
 DB_LeaderLib_EngineStatus("LLMIME_BEASTMASTER_TYPECHECK");
-LeaderLib_Register_ModMenu("LaughingLeader.Mimicry", "[Mimicry] Mime Menu", "LLMIME_SettingsMenu", "Mimicry", "LaughingLeader");
+LeaderLib_Register_ModMenu("d9cac48f-1294-68f8-dd4d-b5ea38eaf2d6", "LLMIME_SettingsMenu", "[Mimicry] Mime Menu");
 LeaderLib_ToggleScripts_EnableScript("LeaderLib_TS_GrowthEvents_Item_Enabled", "Mimicry");
-
 LeaderLib_Trader_Register_Position("LeaderLib.LeaderTrader", "TestLevel_LL_Mimicry", 12.0, 0.0, 8.0);
 LeaderLib_Trader_Register_StartingGold("LeaderLib.LeaderTrader", "TestLevel_LL_Mimicry", 9999);
 //LeaderLib_Trader_Register_PositionObject("LeaderLib.LeaderTrader", "LLNWIZ_DebugLevel", ITEMGUID_WPN_Dwarves_Shield_A_000_ef289002-e5b3-4a3e-8ad5-1d68ac847f67);

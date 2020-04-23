@@ -1266,7 +1266,7 @@ LeaderLog_Log("DEBUG", "[LLMIME_01_Mimicking_02_Main:EquipWeaponsForAction] Dupl
 Mimicry_BlockMimickedWeapon(_Weapon);
 LLMIME_Mimicking_Internal_StartDuplication(_Mime, _Weapon, _Caster, _Action, _ActionType);
 LLMIME_Mimicking_Internal_CompleteDuplication(_Mime, _Weapon, _Caster, _Action, _ActionType);
-//NRD_LuaCall("LeaderLib_Ext_CloneItemForCharacter", _MimeStr, _WeaponStr, "LLMIME_Mimicking_WeaponDuplicated", "No");
+//NRD_ModCall("LeaderLib", "CloneItemForCharacter", _MimeStr, _WeaponStr, "LLMIME_Mimicking_WeaponDuplicated", "No");
 
 PROC
 LLMIME_Mimicking_EquipWeaponsForAction((CHARACTERGUID)_Mime, (CHARACTERGUID)_Caster, (GUIDSTRING)_Target, (STRING)_Action, (STRING)_ActionType)
@@ -1380,7 +1380,7 @@ AND
 DB_LLMIME_Mimicking_DeleteOneTimeUseWeaponsTimer(_Mime, _Caster, _Action, _ActionType, _TimerName)
 THEN
 TimerCancel(_TimerName);
-TimerLaunch(_TimerName, 1325);
+TimerLaunch(_TimerName, 1875);
 
 IF
 TimerFinished(_TimerName)
@@ -1390,7 +1390,7 @@ AND
 LLMIME_Mimicking_QRY_SkipWeaponReset(_Mime, _Caster, _Action, _ActionType)
 THEN
 LeaderLog_Log("DEBUG", "[LLMIME_01_Mimicking_02_Main:LLMIME_Timers_DeleteMimickedWeapons] Skipping delete for [",_Action,"](",_ActionType,").");
-TimerLaunch(_TimerName, 1325);
+//TimerLaunch(_TimerName, 1675);
 
 IF
 TimerFinished(_TimerName)

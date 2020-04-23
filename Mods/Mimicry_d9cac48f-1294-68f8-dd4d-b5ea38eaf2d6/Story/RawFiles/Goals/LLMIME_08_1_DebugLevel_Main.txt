@@ -133,22 +133,6 @@ THEN
 LLMIME_Follower_SpawnGhost(_Mime);
 //END_REGION
 
-//REGION BEHAVIOR_ROT_DIR_TRACE
-IF
-CharacterUsedSkillOnTarget(S_Player_LLMIME_Mime_191f180c-6270-4cd1-a44a-e02454bd846f, _Target, _Skill, _SkillType, _SkillElement)
-AND
-GetPosition(_Target, _x, _y, _z)
-THEN
-SetVarFloat3(S_Player_LLMIME_Mime_191f180c-6270-4cd1-a44a-e02454bd846f, "LLMIME_Debug_SkillTarget", _x, _y, _z);
-SetStoryEvent(S_Player_LLMIME_Mime_191f180c-6270-4cd1-a44a-e02454bd846f, "LLMIME_Debug_TraceDirection");
-
-IF
-CharacterUsedSkillAtPosition(S_Player_LLMIME_Mime_191f180c-6270-4cd1-a44a-e02454bd846f, _x, _y, _z, _Skill, _SkillType, _SkillElement)
-THEN
-SetVarFloat3(S_Player_LLMIME_Mime_191f180c-6270-4cd1-a44a-e02454bd846f, "LLMIME_Debug_SkillTarget", _x, _y, _z);
-SetStoryEvent(S_Player_LLMIME_Mime_191f180c-6270-4cd1-a44a-e02454bd846f, "LLMIME_Debug_TraceDirection");
-//END_REGION
-
 EXITSECTION
 
 ENDEXITSECTION

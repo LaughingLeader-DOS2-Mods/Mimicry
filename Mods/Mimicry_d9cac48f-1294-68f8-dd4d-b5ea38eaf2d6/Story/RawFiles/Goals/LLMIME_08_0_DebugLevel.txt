@@ -6,9 +6,8 @@ KBSECTION
 PROC
 LeaderLib_Debug_RegisterDebugPlayer()
 THEN
-DebugBreak("[LLMIME_08_0_DebugLevel:] LeaderLib_Debug_RegisterDebugPlayer] Adding WeaponMaster to [DB_Origins].");
+DebugBreak("[LLMIME_08_0_DebugLevel:] LeaderLib_Debug_RegisterDebugPlayer] Adding Mime to [DB_Origins].");
 //SysClear("DB_Origins", 1);
-//DB_Origins((CHARACTERGUID)S_Player_LLMIME_Mime_191f180c-6270-4cd1-a44a-e02454bd846f);
 
 IF
 GameModeStarted(_,1)

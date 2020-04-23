@@ -50,7 +50,7 @@ local function apply_overrides(stats)
     end
 end
 
-local ModuleLoad = function ()
+local function ModuleLoading()
 	Ext.Print("[Mimicry:LLMIME_StatOverrides.lua] Module is loading. Applying stat overrides.")
 	apply_overrides(skill_overrides)
 
@@ -60,9 +60,4 @@ local ModuleLoad = function ()
 	end
 end
 
---v36 and higher
-if Ext.RegisterListener ~= nil then
-    Ext.RegisterListener("ModuleLoading", ModuleLoad)
-else
-    Ext.Print("[Mimicry:LLMIME_StatOverrides.lua] [*WARNING*] Extender version is less than v36! Stat overrides ain't happenin', chief.")
-end
+Ext.RegisterListener("ModuleLoading", ModuleLoading)

@@ -1029,6 +1029,7 @@ data "Memory Cost" "0"
 data "Magic Cost" "0"
 data "CanTargetCharacters" "Yes"
 data "CanTargetItems" "Yes"
+data "IgnoreSilence" "Yes"
 
 new entry "Projectile_LLMIME_Status_ShadowForm_BonusDamage"
 type "SkillData"

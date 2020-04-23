@@ -4,30 +4,12 @@ INITSECTION
 
 KBSECTION
 
-/*
-IF
-GameModeStarted("Campaign", 1)
-THEN
-DB_Origins((CHARACTERGUID)S_Player_LLMIME_Mime_191f180c-6270-4cd1-a44a-e02454bd846f);
-*/
-
 IF
 GameModeStarted("Campaign", 0)
 THEN
 //Needs to be able to catch initial user events
 SysActivateGoal("LLMIME_21_CC_CCActive");
 
-/*
-PROC
-Proc_GameModeStarted("Campaign", (INTEGER)_IsEditorMode)
-THEN
-NOT DB_Origins((CHARACTERGUID)S_GLO_CharacterCreationDummy_001_da072fe7-fdd5-42ae-9139-8bd4b9fca406);
-DB_Origins((CHARACTERGUID)S_Player_LLMIME_Mime_191f180c-6270-4cd1-a44a-e02454bd846f);
-DB_Origins_OriginTag((CHARACTERGUID)S_Player_LLMIME_Mime_191f180c-6270-4cd1-a44a-e02454bd846f,"GENERIC");
-DB_OriginProfessionTags((CHARACTERGUID)S_Player_LLMIME_Mime_191f180c-6270-4cd1-a44a-e02454bd846f,"SOLDIER");
-DB_OriginProfessionTags((CHARACTERGUID)S_Player_LLMIME_Mime_191f180c-6270-4cd1-a44a-e02454bd846f,"JESTER");
-DB_OriginIntroductions("LLMIME_MaleMime", "Insane_01_Loop", "Undead_Presentation_Music", "Undead_Presentation_SFX");
-*/
 IF
 RegionStarted(_Level)
 AND
