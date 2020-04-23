@@ -20,7 +20,19 @@ CharacterRemoveSkill(_Mime, _FollowerSkill);
 CharacterAddSkill(_Mime, _FollowerSkill, 0);
 
 //REGION FACING_EXTENDER
-/* [OSITOOLS_ONLY]
+PROC
+LLMIME_Skills_ClearFacingTable((CHARACTERGUID)_Mime)
+AND
+DB_LLMIME_Skills_FacingDirection(_Mime, _x, _y)
+THEN
+DB_LLMIME_Skills_FacingDirection(_Mime, _x, _y);
+
+PROC
+LLMIME_Skills_SaveFacingTable((CHARACTERGUID)_Mime, (REAL)_x, (REAL)_y)
+THEN
+LLMIME_Skills_ClearFacingTable(_Mime);
+DB_LLMIME_Skills_FacingDirection(_Mime, _x, _y);
+
 IF
 SkillCast(_Mime, "Target_LLMIME_SetFacingDirection", _, _)
 AND
@@ -30,6 +42,8 @@ NRD_ModCall("Mimicry", "SaveFacingDirection", _UUID);
 
 PROC
 LLMIME_Skills_ApplyFacingDirection((CHARACTERGUID)_Mime)
+AND
+DB_LLMIME_Skills_FacingDirection(_Mime, _x, _y)
 AND
 CharacterIsDeadOrFeign(_Mime, 0)
 AND
@@ -43,19 +57,22 @@ NRD_ModCall("Mimicry", "ApplyFacingDirection", _UUID);
 
 IF
 StoryEvent((CHARACTERGUID)_Mime, "LLMIME_Events_RequestMimicking")
+AND
+DB_LLMIME_Skills_FacingDirection(_Mime, _x, _y)
 THEN
-LLMIME_Skills_ApplyFacingDirection(_Mime);
+LeaderLib_Timers_StartObjectTimer(_Mime, 500, "Timers_LLMIME_Mime_ReApplyFacingDirection", "LLMIME_Mime_ReApplyFacingDirection");
 
 PROC
 LLMIME_Mimicking_MimicDone((CHARACTERGUID)_Mime, (CHARACTERGUID)_Caster, (STRING)_Action, (STRING)_ActionType)
+AND
+DB_LLMIME_Skills_FacingDirection(_Mime, _x, _y)
 THEN
-LLMIME_Skills_ApplyFacingDirection(_Mime);
+LeaderLib_Timers_StartObjectTimer(_Mime, 500, "Timers_LLMIME_Mime_ReApplyFacingDirection", "LLMIME_Mime_ReApplyFacingDirection");
 
 IF
 StoryEvent((CHARACTERGUID)_Mime, "LLMIME_Mime_ReApplyFacingDirection")
 THEN
 LLMIME_Skills_ApplyFacingDirection(_Mime);
-*/
 //END_REGION
 
 //REGION FACING_OLD
@@ -91,11 +108,6 @@ AND
 ObjectGetFlag(_Mime, "LLMIME_FacingDirectionSet", 1)
 THEN
 SetStoryEvent(_Mime, "LLMIME_Skills_CalculateFacingDirection");
-
-IF
-StoryEvent((CHARACTERGUID)_Mime, "LLMIME_Events_RequestMimicking")
-THEN
-ObjectClearFlag(_Mime, "LLMIME_FacingDirectionSet", 0);
 
 IF
 StoryEvent((CHARACTERGUID)_Mime, "LLMIME_Skills_ApplyFacingDirection")
