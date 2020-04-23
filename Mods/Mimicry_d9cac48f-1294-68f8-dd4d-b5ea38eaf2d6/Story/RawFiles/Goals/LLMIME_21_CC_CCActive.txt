@@ -99,7 +99,7 @@ THEN
 NRD_PlayerSetCustomDataString(_Player, "Race", "Elf");
 */
 
-//Region initial selection
+// Initial Origin Selection
 IF
 ObjectTransformed((CHARACTERGUID)_Player, LLMIME_Elves_Hero_Male_Mime_01acaf9e-866d-450e-9969-49dab771d973)
 THEN
