@@ -134,6 +134,12 @@ SetOnStage(ITEMGUID_S_LLMIME_Debug_Mask_Elves_Male_Portrait_1_22bef3dc-6271-414c
 SetOnStage(ITEMGUID_S_LLMIME_Debug_Mask_Elves_Male_Portrait_2_d0bbd137-7c23-4ffb-98dc-97866a372f5b, 0);
 */
 
+PROC
+LLMIME_CC_ClearData()
+THEN
+SysClear("DB_LLMIME_CC_Temp_MaskFXHandle", 2);
+SysClear("DB_LLMIME_CC_Temp_ActivePortraitMask", 3);
+SysClear("DB_LLMIME_CC_Temp_Index", 3);
 EXITSECTION
 
 ENDEXITSECTION

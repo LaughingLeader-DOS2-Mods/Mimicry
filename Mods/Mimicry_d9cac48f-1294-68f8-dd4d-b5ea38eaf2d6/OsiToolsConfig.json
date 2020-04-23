@@ -1,5 +1,6 @@
 {
-    "RequiredExtensionVersion": 38,
+    "RequiredExtensionVersion": 43,
+    "ModTable":"Mimicry",
     "FeatureFlags": [
         "OsirisExtensions",
         "Lua",
