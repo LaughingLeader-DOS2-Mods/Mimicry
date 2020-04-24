@@ -69,6 +69,7 @@ DB_LLMIME_Mimicking_Blacklist_SkillTypes("teleportation", "", -1);
 DB_LLMIME_Mimicking_Blacklist_SkillElements("shout", "");
 //Special Mime Skills
 DB_LLMIME_Mimicking_Blacklist_Skills("Mimicry", "Target_LLMIME_SetFacingDirection");
+DB_LLMIME_Mimicking_Blacklist_Skills("Mimicry", "Zone_LLMIME_SetFacingDirection");
 DB_LLMIME_Mimicking_Blacklist_Skills("Mimicry", "Target_LLMIME_MimicAttack");
 DB_LLMIME_Mimicking_Blacklist_Skills("Mimicry", "Target_LLMIME_MimicAttack_Ally");
 DB_LLMIME_Mimicking_Blacklist_Skills("Mimicry", "Projectile_LLMIME_MimicBowAttack");
@@ -146,6 +147,12 @@ DB_LLMIME_Mimicking_HarmfulHealingSkills("Target_Restoration");
 //Other Mods
 //Odinblade's Umbra
 DB_LLMIME_Mimicking_Blacklist_Skills("Umbra", "Shout_SHADEShadowstep");
+
+PROC
+LLMIME_Mimicking_InitSettings()
+THEN
+DB_LLMIME_Mimicking_MimicItemSlots("Weapon");
+DB_LLMIME_Mimicking_MimicItemSlots("Shield");
 //END_REGION
 
 //REGION EXTENDER_BLACKLIST
@@ -168,9 +175,18 @@ NOT DB_LLMIME_Mimicking_Blacklist_SkillElements("shout", "");
 //END_REGION
 
 //REGION UPDATING
+PROC
+LeaderUpdater_ModUpdated("Mimicry", "LaughingLeader", (STRING)_PastVersion, (STRING)_NewVersion)
+AND
+NOT DB_LLMIME_Mimicking_MimicItemSlots(_)
+THEN
+DB_LLMIME_Mimicking_MimicItemSlots("Weapon");
+DB_LLMIME_Mimicking_MimicItemSlots("Shield");
+
 /* 
 PROC
 LeaderUpdater_ModUpdated("Mimicry", "LaughingLeader", (STRING)_PastVersion, (STRING)_NewVersion)
+PROC
 AND
 DB_LeaderLib_StringExt_VersionIsLessThan(_PastVersion, 0, 9, 9, 33)
 THEN

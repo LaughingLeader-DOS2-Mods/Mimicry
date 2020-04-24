@@ -53,7 +53,12 @@ THEN
 LLMIME_Skills_ApplyFacingDirection(_Mime);
 
 IF
-CharacterUsedSkill(_Mime, "Target_LLMIME_SetFacingDirection", _, _)
+CharacterStatusApplied(_Mime, "LLMIME_SAVE_FACING", _)
+THEN
+LeaderLib_Timers_StartObjectTimer(_Mime, 250, "Timers_LLMIME_Commands_SaveFacingDirection", "LLMIME_Commands_SaveFacingDirection");
+
+IF
+CharacterUsedSkill(_Mime, "Zone_LLMIME_SetFacingDirection", _, _)
 THEN
 LeaderLib_Timers_StartObjectTimer(_Mime, 250, "Timers_LLMIME_Commands_SaveFacingDirection", "LLMIME_Commands_SaveFacingDirection");
 
