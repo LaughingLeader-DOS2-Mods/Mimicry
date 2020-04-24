@@ -16,7 +16,7 @@ LLMIME_PassiveStatuses_OnPassiveRemoved((CHARACTERGUID)_Mime, "LLMIME_BRAWLER", 
 AND
 IsTagged(_Mime, "LLMIME_MimeFollower", 0)
 THEN
-LLMIME_System_FlagForUnarmed(_Mime);
+LLMIME_System_Internal_StartFlagForUnarmed(_Mime);
 
 PROC
 LLMIME_PassiveStatuses_OnPassiveRemoved((CHARACTERGUID)_Mime, (STRING)_Status, (STRING)_BonusStatus, (STRING)_InfoStatus, (STRING)_DisableFlag)

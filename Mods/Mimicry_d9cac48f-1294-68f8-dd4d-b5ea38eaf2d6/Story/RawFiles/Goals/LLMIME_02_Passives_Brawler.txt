@@ -703,38 +703,6 @@ IF
 CharacterStatusRemoved(_Mime, "LLMIME_BRAWLER_STANCE_CON_FOLLOWER", _)
 THEN
 LLMIME_Brawler_OnStatusRemoved(_Mime, "LLMIME_BRAWLER_STANCE_CON_FOLLOWER");
-
-/*
-IF
-CharacterStatusApplied(_Mime, "LLMIME_BRAWLER_STANCE_CON_INFO", _)
-THEN
-LLMIME_Brawler_OnStatusApplied(_Mime, "LLMIME_BRAWLER_STANCE_CON_INFO");
-
-IF
-CharacterStatusRemoved(_Mime, "LLMIME_BRAWLER_STANCE_CON_INFO", _)
-THEN
-LLMIME_Brawler_OnStatusRemoved(_Mime, "LLMIME_BRAWLER_STANCE_CON_INFO");
-
-IF
-CharacterStatusApplied(_Mime, "LLMIME_BRAWLER_STANCE_FIN_INFO", _)
-THEN
-LLMIME_Brawler_OnStatusApplied(_Mime, "LLMIME_BRAWLER_STANCE_FIN_INFO");
-
-IF
-CharacterStatusRemoved(_Mime, "LLMIME_BRAWLER_STANCE_FIN_INFO", _)
-THEN
-LLMIME_Brawler_OnStatusRemoved(_Mime, "LLMIME_BRAWLER_STANCE_FIN_INFO");
-
-IF
-CharacterStatusApplied(_Mime, "LLMIME_BRAWLER_STANCE_STR_INFO", _)
-THEN
-LLMIME_Brawler_OnStatusApplied(_Mime, "LLMIME_BRAWLER_STANCE_STR_INFO");
-
-IF
-CharacterStatusRemoved(_Mime, "LLMIME_BRAWLER_STANCE_STR_INFO", _)
-THEN
-LLMIME_Brawler_OnStatusRemoved(_Mime, "LLMIME_BRAWLER_STANCE_STR_INFO");
-*/
 //END_REGION
 
 //REGION INFOSTATUSES

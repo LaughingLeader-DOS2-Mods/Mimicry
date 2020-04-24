@@ -14,7 +14,7 @@ LLMIME_QRY_CharacterIsAMime(_Mime)
 AND
 LLMIME_QRY_ItemIsWeapon(_Mime, _Item)
 THEN
-LLMIME_System_FlagForUnarmed(_Mime);
+LLMIME_System_Internal_StartFlagForUnarmed(_Mime);
 
 IF
 ItemUnEquipped(_Item, _Mime)
@@ -27,7 +27,7 @@ ObjectGetFlag(_Mime, "Mimicry_MimeIsUnarmed", 0)
 AND
 LLMIME_QRY_NoWeaponsEquipped(_Mime)
 THEN
-LLMIME_System_FlagForUnarmed(_Mime);
+LLMIME_System_Internal_StartFlagForUnarmed(_Mime);
 //END_REGION
 
 //REGION BRAWLER_STANCE_REMOVAL

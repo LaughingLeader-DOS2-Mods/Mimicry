@@ -57,7 +57,7 @@ function ApplyFacingDirection(uuid)
 	end
 end
 
-local function CloneWeapon(mime,item)
+local function CloneWeapon(mime,item,slot)
 	NRD_ItemCloneBegin(item)
 	local stat = NRD_ItemGetStatsId(item)
 	local statType = NRD_StatGetType(stat)
@@ -73,12 +73,13 @@ local function CloneWeapon(mime,item)
 	local clone = NRD_ItemClone()
 	SetTag(clone, "LLMIME_MIMICKED_WEAPON")
 	ItemSetOriginalOwner(clone, mime)
-	CharacterEquipItem(mime, clone)
+	--CharacterEquipItem(mime, clone)
+	NRD_CharacterEquipItem(mime, clone, slot, 0, 0, 0, 1)
 	ItemSetCanInteract(clone, 0)
 	ItemSetOnlyOwnerCanUse(clone, 1)
 	return clone
 end
-Ext.NewQuery(CloneWeapon, "LLMIME_Ext_QRY_CloneWeapon", "[in](CHARACTERGUID)_Mime, [in](ITEMGUID)_Item, [out](ITEMGUID)_Clone")
+Ext.NewQuery(CloneWeapon, "LLMIME_Ext_QRY_CloneWeapon", "[in](CHARACTERGUID)_Mime, [in](ITEMGUID)_Item, [in](STRING)_Slot, [out](ITEMGUID)_Clone")
 
 local function GetMimeSkillTargetPosition(mimeuuid, caster, x, y, z)
 	local mime = Ext.GetCharacter(mimeuuid)
@@ -97,3 +98,41 @@ local function GetMimeSkillTargetPosition(mimeuuid, caster, x, y, z)
 	return tx, tz
 end
 Ext.NewQuery(GetMimeSkillTargetPosition, "LLMIME_Ext_QRY_GetMimeSkillTargetPosition", "[in](CHARACTERGUID)_Mime, [in](CHARACTERGUID)_Caster, [in](REAL)_x, [in](REAL)_y, [in](REAL)_z, [out](REAL)_tx, [out](REAL)_tz")
+
+
+local brawlerWeaponTags = {
+	"UNARMED_WEAPON",
+	"LLMIME_BrawlerFist",
+}
+
+local function IsUnarmedWeapon(weapon)
+	if weapon == nil then return true end
+	for i,tag in pairs(brawlerWeaponTags) do
+		if IsTagged(weapon, tag) == 1 then
+			return true
+		end
+	end
+	local stat = NRD_ItemGetStatsId(weapon)
+	local statType = NRD_StatGetType(stat)
+	if statType == "Weapon" then
+		if Ext.StatGetAttribute(stat, "AnimType") == "Unarmed" then
+			return true
+		end
+	else
+		return true
+	end
+	return false
+end
+
+function IsUnarmed(character)
+	local weapon = CharacterGetEquippedItem(character, "Weapon")
+	local offhand = CharacterGetEquippedItem(character, "Shield")
+	if weapon == nil and offhand == nil then
+		return true
+	else
+		if IsUnarmedWeapon(weapon) and IsUnarmedWeapon(offhand) then
+			return true
+		end
+	end
+	return false
+end

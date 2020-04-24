@@ -391,26 +391,21 @@ AND
 CharacterGetEquippedItem(_Mime, "Weapon", (ITEMGUID)_Item)
 AND
 NOT LLMIME_QRY_WeaponIsUnarmed(_Item)
-AND
-NOT IsTagged(_Item, "LLMIME_MIMICKED_WEAPON", 1)
 THEN
 DB_NOOP(1);
 
 QRY
 LLMIME_QRY_WeaponEquippedInOffHand((CHARACTERGUID)_Mime)
 AND
+NOT CharacterGetEquippedShield(_Mime, _)
+AND
 CharacterGetEquippedItem(_Mime, "Shield", (ITEMGUID)_Item)
 AND
-GetTemplate(_Item, _Template)
-AND
-StringContains(_Template, "_Shield_", 0)
-AND
 NOT LLMIME_QRY_WeaponIsBrawlerFist(_Item)
-AND
-NOT IsTagged(_Item, "LLMIME_MIMICKED_WEAPON", 1)
 THEN
 DB_NOOP(1);
 
+// [BEGIN_NO_OSITOOLS]
 QRY
 LLMIME_QRY_NoWeaponsEquipped((CHARACTERGUID)_Mime)
 AND
@@ -419,6 +414,18 @@ AND
 NOT LLMIME_QRY_WeaponEquippedInOffHand(_Mime)
 THEN
 DB_NOOP(1);
+// [END_NO_OSITOOLS]
+
+/* [OSITOOLS_ONLY]
+QRY
+LLMIME_QRY_NoWeaponsEquipped((CHARACTERGUID)_Mime)
+AND
+GetUUID(_Mime, _UUID)
+AND
+NRD_ModQuery1("Mimicry", "IsUnarmed", _UUID)
+THEN
+DB_NOOP(1);
+*/
 
 QRY
 LLMIME_QRY_ItemIsWeapon((CHARACTERGUID)_Mime, (ITEMGUID)_Item)
@@ -463,24 +470,33 @@ DB_NOOP(1);
 
 //REGION UNARMED_FLAG_EVENTS
 //Item equip/unequip events moved to LLMIME_20_01_General
-
 IF
 CharacterStatusApplied(_Mime, "LLMIME_BRAWLER", _)
 AND
 IsTagged(_Mime, "LLMIME_MimeFollower", 0)
 THEN
-LLMIME_System_FlagForUnarmed(_Mime);
+LLMIME_System_Internal_StartFlagForUnarmed(_Mime);
 
 IF
 StoryEvent((CHARACTERGUID)_Mime, "Mimicry_MimeInitialized")
 AND
 IsTagged(_Mime, "LLMIME_MimeFollower", 0)
 THEN
-LLMIME_System_FlagForUnarmed(_Mime);
+LLMIME_System_Internal_StartFlagForUnarmed(_Mime);
 //LeaderLib_Timers_StartObjectTimer(_Mime, 200, "LLMIME_Timers_CheckUnarmed_", "Mimicry_CheckUnarmed");
 
 IF
 StoryEvent((CHARACTERGUID)_Mime, "Mimicry_CheckUnarmed")
+THEN
+LLMIME_System_Internal_StartFlagForUnarmed(_Mime);
+
+PROC
+LLMIME_System_Internal_StartFlagForUnarmed((CHARACTERGUID)_Mime)
+THEN
+LeaderLib_Timers_StartObjectTimer(_Mime, 250, "Timers_LLMIME_FlagForUnarmed", "LLMIME_Commands_FlagForUnarmed");
+
+IF
+StoryEvent((CHARACTERGUID)_Mime, "LLMIME_Commands_FlagForUnarmed")
 THEN
 LLMIME_System_FlagForUnarmed(_Mime);
 
