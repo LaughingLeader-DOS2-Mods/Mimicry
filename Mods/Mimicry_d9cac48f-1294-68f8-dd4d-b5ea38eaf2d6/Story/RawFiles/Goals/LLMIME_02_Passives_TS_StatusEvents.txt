@@ -4,14 +4,35 @@ INITSECTION
 
 KBSECTION
 IF
+GameStarted(_,_)
+AND
+DB_LLMIME_ActiveMimes(_Mime)
+AND
+IsTagged(_Mime, "LLMIME_MimeFollower", 0)
+AND
+NOT DB_LLMIME_ActiveBrawlers(_Mime)
+AND
+HasActiveStatus(_Mime, "LLMIME_BRAWLER", 1)
+THEN
+DB_LLMIME_ActiveBrawlers(_Mime);
+
+IF
 CharacterStatusApplied(_Mime, "LLMIME_BRAWLER", _)
 THEN
 LLMIME_PassiveStatuses_OnStatusApplied(_Mime, "LLMIME_BRAWLER");
 
 IF
+CharacterStatusApplied(_Mime, "LLMIME_BRAWLER", _)
+AND
+IsTagged(_Mime, "LLMIME_MimeFollower", 0)
+THEN
+DB_LLMIME_ActiveBrawlers(_Mime);
+
+IF
 CharacterStatusRemoved(_Mime, "LLMIME_BRAWLER", _)
 THEN
 LLMIME_PassiveStatuses_OnStatusRemoved(_Mime, "LLMIME_BRAWLER");
+NOT DB_LLMIME_ActiveBrawlers(_Mime);
 
 IF
 CharacterStatusApplied(_Mime, "LLMIME_BRAWLER_BONUS", _)
@@ -53,6 +74,6 @@ CharacterStatusRemoved(_Mime, "LLMIME_CONCENTRATION_BONUS", _)
 THEN
 LLMIME_PassiveStatuses_OnStatusRemoved(_Mime, "LLMIME_CONCENTRATION_BONUS");
 EXITSECTION
-
+SysClear("DB_LLMIME_ActiveBrawlers", 1);
 ENDEXITSECTION
 ParentTargetEdge "LLMIME_02_Passives__Main"

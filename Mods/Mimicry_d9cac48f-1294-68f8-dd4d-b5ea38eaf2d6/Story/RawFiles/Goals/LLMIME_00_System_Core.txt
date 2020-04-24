@@ -216,7 +216,7 @@ IF
 StoryEvent((CHARACTERGUID)_Mime, "Mimicry_ClearMimeBonuses")
 THEN
 LLMIME_RemoveAllMimeStatuses(_Mime);
-ObjectClearFlag(_Mime, "Mimicry_MimeIsUnarmed");
+ClearTag(_Mime, "LLMIME_UNARMED");
 
 PROC
 LLMIME_RemoveAllMimeStatuses((CHARACTERGUID)_Character)
@@ -420,9 +420,7 @@ DB_NOOP(1);
 QRY
 LLMIME_QRY_NoWeaponsEquipped((CHARACTERGUID)_Mime)
 AND
-GetUUID(_Mime, _UUID)
-AND
-NRD_ModQuery1("Mimicry", "IsUnarmed", _UUID)
+NOT LLMIME_Ext_QRY_IsUnarmed(_Mime, 0)
 THEN
 DB_NOOP(1);
 */
@@ -475,28 +473,17 @@ CharacterStatusApplied(_Mime, "LLMIME_BRAWLER", _)
 AND
 IsTagged(_Mime, "LLMIME_MimeFollower", 0)
 THEN
-LLMIME_System_Internal_StartFlagForUnarmed(_Mime);
+LLMIME_System_FlagForUnarmed(_Mime);
 
 IF
 StoryEvent((CHARACTERGUID)_Mime, "Mimicry_MimeInitialized")
 AND
 IsTagged(_Mime, "LLMIME_MimeFollower", 0)
 THEN
-LLMIME_System_Internal_StartFlagForUnarmed(_Mime);
-//LeaderLib_Timers_StartObjectTimer(_Mime, 200, "LLMIME_Timers_CheckUnarmed_", "Mimicry_CheckUnarmed");
+LLMIME_System_FlagForUnarmed(_Mime);
 
 IF
 StoryEvent((CHARACTERGUID)_Mime, "Mimicry_CheckUnarmed")
-THEN
-LLMIME_System_Internal_StartFlagForUnarmed(_Mime);
-
-PROC
-LLMIME_System_Internal_StartFlagForUnarmed((CHARACTERGUID)_Mime)
-THEN
-LeaderLib_Timers_StartObjectTimer(_Mime, 250, "Timers_LLMIME_FlagForUnarmed", "LLMIME_Commands_FlagForUnarmed");
-
-IF
-StoryEvent((CHARACTERGUID)_Mime, "LLMIME_Commands_FlagForUnarmed")
 THEN
 LLMIME_System_FlagForUnarmed(_Mime);
 
@@ -505,11 +492,11 @@ LLMIME_System_FlagForUnarmed((CHARACTERGUID)_Mime)
 AND
 NOT DB_LLMIME_Temp_JustSetUnarmedFlag(_Mime)
 AND
-ObjectGetFlag(_Mime, "Mimicry_MimeIsUnarmed", 0)
+IsTagged(_Mime, "LLMIME_UNARMED", 0)
 AND
 LLMIME_QRY_NoWeaponsEquipped(_Mime)
 THEN
-ObjectSetFlag(_Mime, "Mimicry_MimeIsUnarmed");
+LeaderLib_Tags_PreserveTag(_Mime, "LLMIME_UNARMED");
 DB_LLMIME_Temp_JustSetUnarmedFlag(_Mime);
 
 PROC
@@ -517,11 +504,11 @@ LLMIME_System_FlagForUnarmed((CHARACTERGUID)_Mime)
 AND
 NOT DB_LLMIME_Temp_JustSetUnarmedFlag(_Mime)
 AND
-ObjectGetFlag(_Mime, "Mimicry_MimeIsUnarmed", 1)
+IsTagged(_Mime, "LLMIME_UNARMED", 1)
 AND
 NOT LLMIME_QRY_NoWeaponsEquipped(_Mime)
 THEN
-ObjectClearFlag(_Mime, "Mimicry_MimeIsUnarmed");
+LeaderLib_Tags_ClearPreservedTag(_Mime, "LLMIME_UNARMED");
 DB_LLMIME_Temp_JustSetUnarmedFlag(_Mime);
 
 PROC
@@ -539,12 +526,12 @@ THEN
 NOT DB_LLMIME_Temp_JustSetUnarmedFlag(_Mime);
 
 IF
-ObjectFlagSet("Mimicry_MimeIsUnarmed", (CHARACTERGUID)_Mime, _)
+ObjectWasTagged((CHARACTERGUID)_Mime, "LLMIME_UNARMED")
 THEN
 LLMIME_System_CheckUnarmedBonuses(_Mime);
 
 IF
-ObjectFlagCleared("Mimicry_MimeIsUnarmed", (CHARACTERGUID)_Mime, _)
+ObjectLostTag((CHARACTERGUID)_Mime, "LLMIME_UNARMED")
 THEN
 LLMIME_System_CheckUnarmedBonuses(_Mime);
 
@@ -558,7 +545,7 @@ LLMIME_System_CheckUnarmedBonuses(_Mime);
 PROC
 LLMIME_System_CheckUnarmedBonuses((CHARACTERGUID)_Mime)
 AND
-ObjectGetFlag(_Mime, "Mimicry_MimeIsUnarmed", 1)
+IsTagged(_Mime, "LLMIME_UNARMED", 1)
 AND
 LeaderLib_Helper_QRY_HasStatus(_Mime, "LLMIME_BRAWLER")
 AND
@@ -569,7 +556,7 @@ ApplyStatus(_Mime, "LLMIME_BRAWLER_BONUS", -1.0, 1, _Mime);
 PROC
 LLMIME_System_CheckUnarmedBonuses((CHARACTERGUID)_Mime)
 AND
-ObjectGetFlag(_Mime, "Mimicry_MimeIsUnarmed", 0)
+IsTagged(_Mime, "LLMIME_UNARMED", 0)
 AND
 LeaderLib_Helper_QRY_HasStatus(_Mime, "LLMIME_BRAWLER_BONUS")
 THEN
@@ -587,7 +574,7 @@ RemoveStatus(_Mime, "LLMIME_BRAWLER_BONUS");
 PROC
 LLMIME_System_CheckUnarmedBonuses((CHARACTERGUID)_Mime)
 AND
-ObjectGetFlag(_Mime, "Mimicry_MimeIsUnarmed", 1)
+IsTagged(_Mime, "LLMIME_UNARMED", 1)
 AND
 LeaderLib_Helper_QRY_HasStatus(_Mime, "LLMIME_CONCENTRATION")
 AND
@@ -598,7 +585,7 @@ ApplyStatus(_Mime, "LLMIME_CONCENTRATION_BONUS", -1.0, 1, _Mime);
 PROC
 LLMIME_System_CheckUnarmedBonuses((CHARACTERGUID)_Mime)
 AND
-ObjectGetFlag(_Mime, "Mimicry_MimeIsUnarmed", 0)
+IsTagged(_Mime, "LLMIME_UNARMED", 0)
 AND
 LeaderLib_Helper_QRY_HasStatus(_Mime, "LLMIME_CONCENTRATION_BONUS")
 THEN

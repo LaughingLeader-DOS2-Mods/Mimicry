@@ -8,43 +8,63 @@ KBSECTION
 IF
 ItemEquipped(_Item, _Mime)
 AND
-IsTagged(_Mime, "LLMIME_MimeFollower", 0)
+NOT DB_LLMIME_Mimicking_Temp_MimickedWeapon(_Mime, _, _Item, _, _)
 AND
-LLMIME_QRY_CharacterIsAMime(_Mime)
-AND
-LLMIME_QRY_ItemIsWeapon(_Mime, _Item)
+DB_LLMIME_ActiveBrawlers(_Mime)
 THEN
-LLMIME_System_Internal_StartFlagForUnarmed(_Mime);
+LeaderLib_Timers_StartObjectTimer(_Mime, 250, "Timers_LLMIME_Brawler_CheckWeapons", "LLMIME_Brawler_CheckWeapons");
 
 IF
 ItemUnEquipped(_Item, _Mime)
 AND
-IsTagged(_Mime, "LLMIME_MimeFollower", 0)
+NOT DB_LLMIME_Mimicking_Temp_MimickedWeapon(_Mime, _, _Item, _, _)
 AND
-LLMIME_QRY_CharacterIsAMime(_Mime)
-AND
-ObjectGetFlag(_Mime, "Mimicry_MimeIsUnarmed", 0)
-AND
-LLMIME_QRY_NoWeaponsEquipped(_Mime)
+DB_LLMIME_ActiveBrawlers(_Mime)
 THEN
-LLMIME_System_Internal_StartFlagForUnarmed(_Mime);
+LeaderLib_Timers_StartObjectTimer(_Mime, 250, "Timers_LLMIME_Brawler_CheckWeapons", "LLMIME_Brawler_CheckWeapons");
+
+IF
+StoryEvent((CHARACTERGUID)_Mime, "LLMIME_Brawler_CheckWeapons")
+THEN
+LLMIME_System_FlagForUnarmed(_Mime);
 //END_REGION
 
 //REGION BRAWLER_STANCE_REMOVAL
+/*
 IF
-ItemUnEquipped(_Item, _Mime)
+ItemTemplateEquipped("WPN_LLMIME_BrawlerFist_e1bda904-93c2-4f6f-8136-1a547279fd1f", _Mime)
 AND
-IsTagged(_Item, "LLMIME_BrawlerFist", 1)
+CharacterGetEquippedWeapon(_Mime, (ITEMGUID)_Fist)
+AND
+IsTagged(_Fist, "LLMIME_BrawlerFist", 1)
 THEN
-ItemRemove(_Item);
-LLMIME_Brawler_RemoveStance(_Mime);
+DB_LLMIME_Brawler_Temp_FistItems(_Mime, _Fist);
+*/
 
 IF
-ItemDropped(_Item)
-AND
-IsTagged(_Item, "LLMIME_BrawlerFist", 1)
+ItemTemplateRemovedFromCharacter("WPN_LLMIME_BrawlerFist_e1bda904-93c2-4f6f-8136-1a547279fd1f", _Fist, _Mime)
 THEN
-ItemRemove(_Item);
+//NOT DB_LLMIME_Brawler_Temp_FistItems(_Mime, _Fist);
+ItemRemove(_Fist);
+LLMIME_Brawler_RemoveStance(_Mime);
+
+/*
+IF
+ItemUnEquipped(_Fist, _Mime)
+AND
+DB_LLMIME_Brawler_Temp_FistItems(_Mime, _Fist)
+THEN
+ItemRemove(_Fist);
+NOT DB_LLMIME_Brawler_Temp_FistItems(_Mime, _Fist);
+
+IF
+ItemDropped(_Fist)
+AND
+DB_LLMIME_Brawler_Temp_FistItems(_Mime, _Fist)
+THEN
+ItemRemove(_Fist);
+NOT DB_LLMIME_Brawler_Temp_FistItems(_Mime, _Fist);
+*/
 //END_REGION
 
 EXITSECTION

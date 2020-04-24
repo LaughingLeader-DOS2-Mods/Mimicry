@@ -579,7 +579,7 @@ LLMIME_Mimicking_MimicActionOnTarget(_Mime, _Caster, _Target, _Action, _ActionTy
 QRY
 LLMIME_Mimicking_QRY_CharacterIsUnarmed((CHARACTERGUID)_Character)
 AND
-ObjectGetFlag(_Character, "Mimicry_MimeIsUnarmed", 1)
+IsTagged(_Character, "LLMIME_UNARMED", 1)
 THEN
 DB_LLMIME_Mimicking_Temp_UnarmedCheck(_Character);
 
@@ -614,17 +614,6 @@ LLMIME_QRY_WeaponIsUnarmed(_Weapon)
 THEN
 DB_LLMIME_Mimicking_Temp_UnarmedCheck(_Character);
 
-/*
-QRY
-LLMIME_Mimicking_QRY_CharacterIsUnarmed((CHARACTERGUID)_Character)
-AND
-NOT DB_LLMIME_Mimicking_Temp_UnarmedCheck(_Character)
-AND
-LLMIME_QRY_NoWeaponsEquipped(_Character)
-THEN
-DB_LLMIME_Mimicking_Temp_UnarmedCheck(_Character);
-*/
-
 QRY
 LLMIME_Mimicking_QRY_CharacterIsUnarmed((CHARACTERGUID)_Character)
 AND
@@ -635,7 +624,7 @@ NOT DB_LLMIME_Mimicking_Temp_UnarmedCheck(_Character);
 QRY
 LLMIME_Mimicking_QRY_CasterAndMimeUnarmed((CHARACTERGUID)_Mime, (CHARACTERGUID)_Caster, (STRING)_ActionType)
 AND
-ObjectGetFlag(_Mime, "Mimicry_MimeIsUnarmed", 1)
+IsTagged(_Mime, "LLMIME_UNARMED", 1)
 AND
 LLMIME_Mimicking_QRY_CharacterIsUnarmed(_Caster) // Not Not... Ugh!
 THEN

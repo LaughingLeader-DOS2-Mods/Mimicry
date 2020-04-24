@@ -114,6 +114,7 @@ local function IsUnarmedWeapon(weapon)
 	end
 	local stat = NRD_ItemGetStatsId(weapon)
 	local statType = NRD_StatGetType(stat)
+	--Ext.Print("[LLMIME_Ext_QRY_IsUnarmed] weapon ("..weapon..") stat("..stat..")")
 	if statType == "Weapon" then
 		if Ext.StatGetAttribute(stat, "AnimType") == "Unarmed" then
 			return true
@@ -124,18 +125,20 @@ local function IsUnarmedWeapon(weapon)
 	return false
 end
 
-function IsUnarmed(character)
+local function IsUnarmed(character)
 	local weapon = CharacterGetEquippedItem(character, "Weapon")
 	local offhand = CharacterGetEquippedItem(character, "Shield")
 	if weapon == nil and offhand == nil then
-		return true
+		return 1
 	else
 		if IsUnarmedWeapon(weapon) and IsUnarmedWeapon(offhand) then
-			return true
+			return 1
 		end
 	end
-	return false
+	--Ext.Print("[LLMIME_Ext_QRY_IsUnarmed] weapon("..tostring(weapon)..") offhand("..tostring(offhand)..")")
+	return 0
 end
+Ext.NewQuery(IsUnarmed, "LLMIME_Ext_QRY_IsUnarmed", "[in](CHARACTERGUID)_Character, [out](INTEGER)_IsUnarmed")
 
 local function SkillRequiresWeapon(skill)
 	local useWeaponDamage = Ext.StatGetAttribute(skill, "UseWeaponDamage")

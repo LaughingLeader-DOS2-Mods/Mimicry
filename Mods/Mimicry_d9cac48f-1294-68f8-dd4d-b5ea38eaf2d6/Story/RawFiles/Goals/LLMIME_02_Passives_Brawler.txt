@@ -767,7 +767,7 @@ LLMIME_Brawler_QRY_BrawlerActive((CHARACTERGUID)_Mime)
 AND
 HasActiveStatus(_Mime, "LLMIME_BRAWLER_BONUS", 1)
 AND
-ObjectGetFlag(_Mime, "Mimicry_MimeIsUnarmed", 1)
+IsTagged(_Mime, "LLMIME_UNARMED", 1)
 THEN
 DB_NOOP(1);
 //END_REGION

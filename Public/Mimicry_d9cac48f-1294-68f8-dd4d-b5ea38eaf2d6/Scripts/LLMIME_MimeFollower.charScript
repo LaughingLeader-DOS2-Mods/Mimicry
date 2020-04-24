@@ -19,9 +19,9 @@ ON
 	OnCharacterEvent(__Me, "Mimicry_MimeInitialized")
 ACTIONS
 IF "!c1"
-	HasFlag(__Me, "Mimicry_MimeIsUnarmed")
+	IsTagged(_Mime, "LLMIME_UNARMED")
 THEN
-	SetFlag(__Me, "Mimicry_MimeIsUnarmed")
+	SetTag(__Me, "LLMIME_UNARMED")
 ENDIF
 IF "c1"
 	IsEqual(%LLMIME_Follower_InitialRefresh, 0)
