@@ -946,6 +946,15 @@ DB_LLMIME_Mimicking_Temp_CasterWeapons(_Caster, NULL_00000000-0000-0000-0000-000
 //END_REGION
 
 //REGION MIMIC_WEAPONS
+/* [OSITOOLS_ONLY]
+QRY
+LLMIME_Mimicking_Skills_QRY_SkipWeaponMimicking((CHARACTERGUID)_Mime, (CHARACTERGUID)_Caster, (STRING)_Action, "Skill")
+AND
+LLMIME_Ext_QRY_SkillRequiresWeapon(_Action, 0)
+THEN
+DB_LLMIME_Mimicking_Temp_SkipWeaponMimicking(_Mime, _Caster, _Action, "Skill");
+*/
+
 QRY
 LLMIME_Mimicking_Skills_QRY_SkipWeaponMimicking((CHARACTERGUID)_Mime, (CHARACTERGUID)_Caster, (STRING)_Action, (STRING)_ActionType)
 AND
@@ -1148,6 +1157,15 @@ ItemSetCanInteract(_Weapon, 0);
 ItemSetOnlyOwnerCanUse(_Weapon, 1);
 //LLMIME_Mimicking_MarkItemForOneTimeUse(_Mime, _Weapon, _Action, _ActionType);
 DB_LLMIME_Mimicking_Temp_MimickedWeapon(_Mime, _Caster, _Weapon, _Action, _ActionType);
+
+PROC
+LLMIME_Mimicking_ClearMimicDataForMime((CHARACTERGUID)_Mime)
+AND
+DB_LLMIME_Mimicking_Temp_WaitForEquipped(_Mime, _Dummy, _Caster, _Target, _Action, _ActionType)
+THEN
+NOT DB_LLMIME_Mimicking_Temp_WaitForEquipped(_Mime, _Dummy, _Caster, _Target, _Action, _ActionType);
+ProcObjectTimerCancel(_Dummy, "LLMIME_Timers_Mimicking_RemoveWeaponDupeDummy");
+RemoveTemporaryCharacter(_Dummy);
 // [END_NO_OSITOOLS]
 //END_REGION
 
@@ -1188,7 +1206,7 @@ Mimicry_QRY_BlockMimickedWeapon(_Caster, _Weapon)
 AND
 NOT DB_Mimicry_BlockWeaponMimicking(_Caster, _Weapon)
 AND
-LLMIME_Ext_QRY_CloneWeapon(_Mime, _Weapon, _Clone)
+LLMIME_Ext_QRY_CloneWeapon(_Mime, _Weapon, _Slot, _Clone)
 THEN
 LeaderLog_Log("DEBUG", "[LLMIME_01_Mimicking_02_Main:EquipWeaponsForAction] Duplicating caster's mainhand via [NRD_ItemCloneBegin].");
 DB_LLMIME_Mimicking_Temp_MimickedWeapon(_Mime, _Caster, _Clone, _Action, _ActionType);
@@ -1446,15 +1464,6 @@ LLMIME_Mimicking_ClearMimicDataForMime((CHARACTERGUID)_Mime)
 THEN
 RemoveStatus(_Mime, "LLMIME_MIMIC_WEAPON_REQUIREMENTS");
 ProcObjectTimerCancel(_Mime, "LLMIME_Timers_RemoveWeaponRequirementStatus");
-
-PROC
-LLMIME_Mimicking_ClearMimicDataForMime((CHARACTERGUID)_Mime)
-AND
-DB_LLMIME_Mimicking_Temp_WaitForEquipped(_Mime, _Dummy, _Caster, _Target, _Action, _ActionType)
-THEN
-NOT DB_LLMIME_Mimicking_Temp_WaitForEquipped(_Mime, _Dummy, _Caster, _Target, _Action, _ActionType);
-ProcObjectTimerCancel(_Dummy, "LLMIME_Timers_Mimicking_RemoveWeaponDupeDummy");
-RemoveTemporaryCharacter(_Dummy);
 
 PROC
 LLMIME_Mimicking_ClearMimicDataForMime((CHARACTERGUID)_Mime)

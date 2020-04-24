@@ -136,3 +136,23 @@ function IsUnarmed(character)
 	end
 	return false
 end
+
+local function SkillRequiresWeapon(skill)
+	local useWeaponDamage = Ext.StatGetAttribute(skill, "UseWeaponDamage")
+	if useWeaponDamage == "Yes" then
+		return true
+	end
+	local requirement = Ext.StatGetAttribute(skill, "Requirement")
+	if (requirement ~= nil and requirement ~= "None" and requirement ~= "") then
+		return true
+	end
+	return false
+end
+
+local function SkillRequiresWeapon_QRY(skill)
+	if SkillRequiresWeapon(skill) then
+		return 1
+	end
+	return 0
+end
+Ext.NewQuery(SkillRequiresWeapon_QRY, "LLMIME_Ext_QRY_SkillRequiresWeapon", "[in](STRING)_Skill, [out](INTEGER)_RequiresWeapon")
