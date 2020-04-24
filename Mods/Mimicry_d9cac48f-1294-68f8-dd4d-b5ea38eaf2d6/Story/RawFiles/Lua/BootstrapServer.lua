@@ -17,21 +17,36 @@ function ApplyFacingDirection(uuid)
 			local character = Ext.GetCharacter(uuid)
 			local pos = character.Stats.Position
 			local distanceMult = 2.0
-			local forwardVector = {
-				-rotx * distanceMult,
-				0,
-				-rotz * distanceMult,
-			}
-			x = pos[1] + forwardVector[1]
-			z = pos[3] + forwardVector[3]
-			--CharacterUseSkillAtPosition(uuid, "Target_LLMIME_ApplyFacingDirection", x, y, z, 0, 1)
-			local target = TemporaryCharacterCreateAtPosition(x, y, z, "LeaderLib_SkillDummy_94668062-11ea-4ecf-807c-4cc225cbb236", 0)
-			CharacterLookAt(uuid, target, 0)
-			RemoveTemporaryCharacter(target)
-			--CharacterFlushQueue(uuid)
-			--PlayEffectAtPosition("RS3_FX_Char_Creatures_Fire_Slug_BatteringRam_Impact_01",x,y,z)
-			Ext.Print("[Mimicry:ApplyFacingDirection] Facing direction: ", x, y, z)
-			--local rot = character.Stats.Rotation
+			local rot = character.Stats.Rotation
+			local diffx = math.abs(rot[7] - rotx)
+			local diffz = math.abs(rot[9] - rotz)
+			Ext.Print("[Mimicry:ApplyFacingDirection] Diff: ", diffx, diffz)
+			if diffx > 1.0 or diffz > 1.0 then
+				local forwardVector = {
+					-rotx * distanceMult,
+					0,
+					-rotz * distanceMult,
+				}
+				x = pos[1] + forwardVector[1]
+				z = pos[3] + forwardVector[3]
+				y = pos[2]
+				--SetStoryEvent("02a77f1f-872b-49ca-91ab-32098c443beb", "LLMIME_Mime_ReApplyFacingDirection")
+				--CharacterUseSkillAtPosition(uuid, "Target_LLMIME_ApplyFacingDirection", x, y, z, 0, 1)
+				local target = TemporaryCharacterCreateAtPosition(x, y, z, "LeaderLib_SkillDummy_94668062-11ea-4ecf-807c-4cc225cbb236", 0)
+				--CharacterSetDetached(target, 1)
+				--TeleportToPosition(target, x, y, z, "", 0, 1)
+				PlayEffect(uuid, "RS3_FX_Skills_Void_Netherswap_Reappear_01", "")
+				CharacterLookAt(uuid, target, 1)
+				Osi.LeaderLib_Timers_StartObjectTimer(target, 500, "LLMIME_Timers_LeaderLib_Commands_RemoveTemporaryDummy", "LeaderLib_Commands_RemoveTemporaryDummy")
+				--RemoveTemporaryCharacter(target)
+				--CharacterFlushQueue(uuid)
+				PlayEffectAtPosition("RS3_FX_Skills_Fire_Haste_Impact_Root_01",x,y,z)
+				PlayEffectAtPosition("RS3_FX_Skills_Earth_Cast_Aoe_Voodoo_Root_01",x,y,z)
+				Ext.Print("[Mimicry:ApplyFacingDirection] Facing direction: ", x, y, z)
+				--local rot = character.Stats.Rotation
+			else
+				Ext.Print("[Mimicry:ApplyFacingDirection] Skipping rotation since character facing is the same.")
+			end
 		else
 			Ext.PrintError("[Mimicry:ApplyFacingDirection] Failed: Saved rotation is null:\n"..tostring(LeaderLib.Common.Dump(dbEntry)))
 		end

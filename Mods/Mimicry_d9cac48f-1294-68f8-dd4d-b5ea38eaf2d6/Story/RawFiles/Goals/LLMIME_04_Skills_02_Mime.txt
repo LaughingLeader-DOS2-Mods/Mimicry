@@ -55,19 +55,19 @@ GetUUID(_Mime, _UUID)
 THEN
 NRD_ModCall("Mimicry", "ApplyFacingDirection", _UUID);
 
-IF
-StoryEvent((CHARACTERGUID)_Mime, "LLMIME_Events_RequestMimicking")
+PROC
+LLMIME_Mimicking_ApplyMimicking((CHARACTERGUID)_Mime)
 AND
 DB_LLMIME_Skills_FacingDirection(_Mime, _x, _y)
 THEN
-LeaderLib_Timers_StartObjectTimer(_Mime, 500, "Timers_LLMIME_Mime_ReApplyFacingDirection", "LLMIME_Mime_ReApplyFacingDirection");
+LeaderLib_Timers_StartObjectTimer(_Mime, 1000, "LLMIME_Timers_ReApplyFacingDirection", "LLMIME_Mime_ReApplyFacingDirection");
 
 PROC
 LLMIME_Mimicking_MimicDone((CHARACTERGUID)_Mime, (CHARACTERGUID)_Caster, (STRING)_Action, (STRING)_ActionType)
 AND
 DB_LLMIME_Skills_FacingDirection(_Mime, _x, _y)
 THEN
-LeaderLib_Timers_StartObjectTimer(_Mime, 500, "Timers_LLMIME_Mime_ReApplyFacingDirection", "LLMIME_Mime_ReApplyFacingDirection");
+LeaderLib_Timers_StartObjectTimer(_Mime, 1000, "LLMIME_Timers_ReApplyFacingDirection", "LLMIME_Mime_ReApplyFacingDirection");
 
 IF
 StoryEvent((CHARACTERGUID)_Mime, "LLMIME_Mime_ReApplyFacingDirection")
