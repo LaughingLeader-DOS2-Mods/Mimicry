@@ -53,8 +53,8 @@ Target_LLMIME_PerfectDoppelganger_DisplayName	<font color='#aa5bfb'>Perfect Dopp
 Target_LLMIME_PerfectDoppelganger_Description	Mimic a target completely, becoming a perfect copy for 2 turns.<br><font color='#188EDE'>Doppelgangers copy the skills, equipment, stats, and abilities of the target.</font>
 ProjectileStrike_LLMIME_Mask_Unholy_DisplayName	<font color='#aa5bfb'>Unholy Darkness</font>
 ProjectileStrike_LLMIME_Mask_Unholy_Description	Release the dark energy within your mask, dealing [1] + [3] in a [2] radius.<br><font color='#7b33f3'>Enemies who die explode in a cursed cloud of darkness.</font><br><font color='#ea3e5f'>Initial damage scales with your maximum vitality.</font><br><font color='#11D77A' size='18'>Shadow Damage bypasses armor and cannot be resisted.</font>
-Target_LLMIME_SetFacingDirection_DisplayName	<font color='#a1f398'>Set Facing</font>
-Target_LLMIME_SetFacingDirection_Description	Set the direction to look when your turn ends.<br><font color='#eb64ff'>Tip: Mimicking factors in the mime's look direction, so facing the right way is important for setting up mimicked actions.</font><br><font color='#ff3838'>Cleared when your turn starts.</font>
+Zone_LLMIME_SetFacingDirection_DisplayName	<font color='#a1f398'>Set Facing</font>
+Zone_LLMIME_SetFacingDirection_Description	Set the direction to look when your turn ends.<br><font color='#eb64ff'>Tip: Mimicking factors in the mime's look direction, so facing the right way is important for setting up mimicked actions.</font><br><font color='#ff3838'>Cleared when your turn starts.</font>
 Cone_LLMIME_WaterSpit_DisplayName	Salty Water
 Cone_LLMIME_WaterSpit_Description	Spray targets in a cone with water, dealing [1], setting Wet, and dousing surfaces.
 Target_LLMIME_Fatality_DisplayName	<font color='#a22aff'>Deathblow</font>
