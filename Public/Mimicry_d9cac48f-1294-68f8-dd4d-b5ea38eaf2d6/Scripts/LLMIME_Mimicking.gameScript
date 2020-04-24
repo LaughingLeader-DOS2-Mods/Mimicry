@@ -2,6 +2,32 @@ INIT
 
 EVENTS
 
+EVENT LLMIME_Mimicking_DetermineTarget
+VARS
+	CHARACTER:_Caster
+	CHARACTER:_Mime
+	FLOAT3:_Target
+	FLOAT3:_Dir
+	FLOAT3:_Pos
+	FLOAT:_Dist
+	FLOAT3:_Forward
+ON
+	OnCharacterCharacterEvent(_Caster, _Mime, "LLMIME_Mimicking_DetermineTarget")
+ACTIONS
+IF "c1&!c2&c3"
+	GetVar(_Target, _Mime, "LLMIME_Mimicking_CasterTarget")
+	IsEqual(_Target, null)
+	GetPosition(_Mime, _Pos)
+THEN
+	GetDirection(_Caster, _Target, _Dir, _Dist)
+	GetForwardDirection(_Mime, _Forward)
+	Multiply(_Forward, _Dist)
+	Add(_Forward, _Pos)
+	SetVar(_Mime, "LLMIME_Mimicking_MimeTarget", _Forward)
+	SetVar(_Mime, "LLMIME_Mimicking_CasterTarget", FLOAT3:null)
+	CharacterCharacterEvent(_Caster, _Mime, "LLMIME_Mimicking_TargetSet")
+ENDIF
+
 EVENT LLMIME_Mimicking_SaveFacingDirection
 VARS
 	CHARACTER:_Mime
