@@ -19,10 +19,9 @@ function ApplyFacingDirection(uuid)
 			local pos = character.Stats.Position
 			local distanceMult = 2.0
 			local rot = character.Stats.Rotation
-			local diffx = math.abs(rot[7] - rotx)
-			local diffz = math.abs(rot[9] - rotz)
-			Ext.Print("[Mimicry:ApplyFacingDirection] Diff: ", diffx, diffz)
-			if diffx > 1.0 or diffz > 1.0 then
+			local diff = math.abs(rot[7] - rotx) + math.abs(rot[9] - rotz)
+			Ext.Print("[Mimicry:ApplyFacingDirection] Diff: ", diff)
+			if diff >= 0.01 then
 				local forwardVector = {
 					-rotx * distanceMult,
 					0,
@@ -31,21 +30,13 @@ function ApplyFacingDirection(uuid)
 				x = pos[1] + forwardVector[1]
 				z = pos[3] + forwardVector[3]
 				y = pos[2]
-				--SetStoryEvent("02a77f1f-872b-49ca-91ab-32098c443beb", "LLMIME_Mime_ReApplyFacingDirection")
-				--local target = TemporaryCharacterCreateAtPosition(x, y, z, "LeaderLib_SkillDummy_94668062-11ea-4ecf-807c-4cc225cbb236", 0)
 				local target = CreateItemTemplateAtPosition("98fa7688-0810-4113-ba94-9a8c8463f830", x, y, z)
-				--CharacterSetDetached(target, 1)
-				--TeleportToPosition(target, x, y, z, "", 0, 1)
-				PlayEffect(uuid, "RS3_FX_Skills_Rogue_Vault_Cast_Overlay_01", "")
 				CharacterLookAt(uuid, target, 1)
+				--PlayEffect(uuid, "RS3_FX_Skills_Rogue_Vault_Cast_Overlay_01", "")
 				Osi.LeaderLib_Timers_StartObjectTimer(target, 250, "LLMIME_Timers_LeaderLib_Commands_RemoveItem", "LeaderLib_Commands_RemoveItem")
-				--Osi.LeaderLib_Timers_StartObjectTimer(target, 500, "LLMIME_Timers_LeaderLib_Commands_RemoveTemporaryDummy", "LeaderLib_Commands_RemoveTemporaryDummy")
-				--RemoveTemporaryCharacter(target)
-				--CharacterFlushQueue(uuid)
-				PlayEffectAtPosition("RS3_FX_Skills_Fire_Haste_Impact_Root_01",x,y,z)
-				PlayEffectAtPosition("RS3_FX_Skills_Earth_Cast_Aoe_Voodoo_Root_01",x,y,z)
 				Ext.Print("[Mimicry:ApplyFacingDirection] Facing direction: ", x, y, z)
-				--local rot = character.Stats.Rotation
+				--PlayEffectAtPosition("RS3_FX_Skills_Fire_Haste_Impact_Root_01",x,y,z)
+				--PlayEffectAtPosition("RS3_FX_Skills_Earth_Cast_Aoe_Voodoo_Root_01",x,y,z)
 			else
 				Ext.Print("[Mimicry:ApplyFacingDirection] Skipping rotation since character facing is the same.")
 			end
