@@ -119,37 +119,6 @@ NOT DB_LLMIME_Skills_Temp_UnholyDarknessTarget(_Mime, _Target);
 CharacterCharacterSetEvent(_Mime, _Target, "LLMIME_Skills_Unholy_DeathExplosion");
 LeaderLog_Log("DEBUG", "[LLMIME_10_TS_Skills_01_MimeSkills:CharacterPrecogDying] Creating Unholy Darkness death explosion.");
 
-//REGION FACING
-// [BEGIN_NO_OSITOOLS]
-IF
-AttackedByObject(_,_,(CHARACTERGUID)_Mime,_,_)
-AND
-ObjectGetFlag(_Mime, "LLMIME_FacingDirectionCalculated", 1)
-AND
-NOT LeaderLib_Combat_QRY_IsActiveTurn(_Mime)
-AND
-CharacterIsInCombat(_Mime, 1)
-AND
-LLMIME_Mimicking_QRY_IsMimicking(_Mime)
-THEN
-LeaderLib_Timers_StartObjectTimer(_Mime, 1000, "LLMIME_Timers_ReApplyFacingDirection", "LLMIME_Mime_ReApplyFacingDirection");
-// [END_NO_OSITOOLS]
-/* [OSITOOLS_ONLY]
-IF
-CharacterPhysicalHitBy(_,(CHARACTERGUID)_Mime,_)
-AND
-DB_LLMIME_Skills_FacingDirection(_Mime, _x, _y)
-AND
-NOT LeaderLib_Combat_QRY_IsActiveTurn(_Mime)
-AND
-CharacterIsInCombat(_Mime, 1)
-AND
-LLMIME_Mimicking_QRY_IsMimicking(_Mime)
-THEN
-LeaderLib_Timers_StartObjectTimer(_Mime, 1000, "LLMIME_Timers_ReApplyFacingDirection", "LLMIME_Mime_ReApplyFacingDirection");
-*/
-//END_REGION
-
 //REGION FATALITY
 IF
 CharacterDying(_Target)

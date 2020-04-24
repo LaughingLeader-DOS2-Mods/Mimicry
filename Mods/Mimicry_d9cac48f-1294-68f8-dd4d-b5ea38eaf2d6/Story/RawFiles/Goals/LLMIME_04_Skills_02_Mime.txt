@@ -21,6 +21,19 @@ CharacterAddSkill(_Mime, _FollowerSkill, 0);
 
 //REGION FACING_EVENTS
 PROC
+LLMIME_Skills_ClearFacingDirection((CHARACTERGUID)_Mime)
+AND
+DB_LLMIME_Skills_FacingDirection(_Mime, _x, _z)
+THEN
+NOT DB_LLMIME_Skills_FacingDirection(_Mime, _x, _z);
+
+PROC
+LLMIME_Skills_SaveFacingDirection((CHARACTERGUID)_Mime, (REAL)_x, (REAL)_z)
+THEN
+LLMIME_Skills_ClearFacingDirection(_Mime);
+DB_LLMIME_Skills_FacingDirection(_Mime, _x, _z);
+
+PROC
 LLMIME_Mimicking_ApplyMimicking((CHARACTERGUID)_Mime)
 AND
 DB_LLMIME_Skills_FacingDirection(_Mime, _x, _z)
@@ -40,29 +53,23 @@ THEN
 LLMIME_Skills_ApplyFacingDirection(_Mime);
 
 IF
-ObjectLeftCombat((CHARACTERGUID)_Mime, _)
+CharacterUsedSkill(_Mime, "Target_LLMIME_SetFacingDirection", _, _)
+THEN
+LeaderLib_Timers_StartObjectTimer(_Mime, 250, "Timers_LLMIME_Commands_SaveFacingDirection", "LLMIME_Commands_SaveFacingDirection");
+
+IF
+ObjectTurnStarted((CHARACTERGUID)_Mime)
 AND
 DB_LLMIME_Skills_FacingDirection(_Mime, _x, _z)
 THEN
 NOT DB_LLMIME_Skills_FacingDirection(_Mime, _x, _z);
 
 IF
-CharacterUsedSkill(_Mime, "Target_LLMIME_SetFacingDirection", _, _)
-THEN
-LeaderLib_Timers_StartObjectTimer(_Mime, 250, "Timers_LLMIME_Commands_SaveFacingDirection", "LLMIME_Commands_SaveFacingDirection");
-
-PROC
-LLMIME_Skills_ClearFacingDirection((CHARACTERGUID)_Mime)
+ObjectLeftCombat((CHARACTERGUID)_Mime, _)
 AND
 DB_LLMIME_Skills_FacingDirection(_Mime, _x, _z)
 THEN
 NOT DB_LLMIME_Skills_FacingDirection(_Mime, _x, _z);
-
-PROC
-LLMIME_Skills_SaveFacingDirection((CHARACTERGUID)_Mime, (REAL)_x, (REAL)_z)
-THEN
-LLMIME_Skills_ClearFacingDirection(_Mime);
-DB_LLMIME_Skills_FacingDirection(_Mime, _x, _z);
 //END_REGION
 
 //REGION FACING_EXTENDER
@@ -99,6 +106,7 @@ AND
 GetVarFloat3(_Mime, "LLMIME_Mimicking_FacingDirection", _x, _, _z)
 THEN
 LLMIME_Skills_SaveFacingDirection(_Mime, _x, _z);
+CharacterStatusText(_Mime, "LLMIME_StatusText_FacingDirectionSaved");
 
 PROC
 LLMIME_Skills_ApplyFacingDirection((CHARACTERGUID)_Mime)

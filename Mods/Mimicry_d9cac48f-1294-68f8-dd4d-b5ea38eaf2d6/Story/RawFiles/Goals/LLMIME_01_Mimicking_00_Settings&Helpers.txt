@@ -69,7 +69,6 @@ DB_LLMIME_Mimicking_Blacklist_SkillTypes("teleportation", "", -1);
 DB_LLMIME_Mimicking_Blacklist_SkillElements("shout", "");
 //Special Mime Skills
 DB_LLMIME_Mimicking_Blacklist_Skills("Mimicry", "Target_LLMIME_SetFacingDirection");
-DB_LLMIME_Mimicking_Blacklist_Skills("Mimicry", "Target_LLMIME_ApplyFacingDirection");
 DB_LLMIME_Mimicking_Blacklist_Skills("Mimicry", "Target_LLMIME_MimicAttack");
 DB_LLMIME_Mimicking_Blacklist_Skills("Mimicry", "Target_LLMIME_MimicAttack_Ally");
 DB_LLMIME_Mimicking_Blacklist_Skills("Mimicry", "Projectile_LLMIME_MimicBowAttack");

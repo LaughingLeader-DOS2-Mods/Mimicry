@@ -32,7 +32,6 @@ function ApplyFacingDirection(uuid)
 				z = pos[3] + forwardVector[3]
 				y = pos[2]
 				--SetStoryEvent("02a77f1f-872b-49ca-91ab-32098c443beb", "LLMIME_Mime_ReApplyFacingDirection")
-				--CharacterUseSkillAtPosition(uuid, "Target_LLMIME_ApplyFacingDirection", x, y, z, 0, 1)
 				--local target = TemporaryCharacterCreateAtPosition(x, y, z, "LeaderLib_SkillDummy_94668062-11ea-4ecf-807c-4cc225cbb236", 0)
 				local target = CreateItemTemplateAtPosition("98fa7688-0810-4113-ba94-9a8c8463f830", x, y, z)
 				--CharacterSetDetached(target, 1)
