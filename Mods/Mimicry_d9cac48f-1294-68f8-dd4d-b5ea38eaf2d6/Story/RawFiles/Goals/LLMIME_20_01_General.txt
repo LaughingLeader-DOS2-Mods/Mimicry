@@ -30,7 +30,26 @@ LLMIME_System_FlagForUnarmed(_Mime);
 //END_REGION
 
 //REGION BRAWLER_STANCE_REMOVAL
-/*
+IF
+ItemTemplateUnEquipped("WPN_LLMIME_BrawlerFist_e1bda904-93c2-4f6f-8136-1a547279fd1f", _Mime)
+THEN
+LLMIME_Brawler_RemoveStance(_Mime);
+
+IF
+ItemTemplateUnEquipped("WPN_LLMIME_BrawlerFist_e1bda904-93c2-4f6f-8136-1a547279fd1f", _Mime)
+AND
+DB_LLMIME_Brawler_Temp_FistItems(_Mime, _Fist)
+THEN
+NOT DB_LLMIME_Brawler_Temp_FistItems(_Mime, _Fist);
+ItemRemove(_Fist);
+
+IF
+ItemTemplateRemovedFromCharacter("WPN_LLMIME_BrawlerFist_e1bda904-93c2-4f6f-8136-1a547279fd1f", _Fist, _Mime)
+THEN
+NOT DB_LLMIME_Brawler_Temp_FistItems(_Mime, _Fist);
+ItemRemove(_Fist);
+LLMIME_Brawler_RemoveStance(_Mime);
+
 IF
 ItemTemplateEquipped("WPN_LLMIME_BrawlerFist_e1bda904-93c2-4f6f-8136-1a547279fd1f", _Mime)
 AND
@@ -39,32 +58,15 @@ AND
 IsTagged(_Fist, "LLMIME_BrawlerFist", 1)
 THEN
 DB_LLMIME_Brawler_Temp_FistItems(_Mime, _Fist);
-*/
 
 IF
-ItemTemplateRemovedFromCharacter("WPN_LLMIME_BrawlerFist_e1bda904-93c2-4f6f-8136-1a547279fd1f", _Fist, _Mime)
-THEN
-//NOT DB_LLMIME_Brawler_Temp_FistItems(_Mime, _Fist);
-ItemRemove(_Fist);
-LLMIME_Brawler_RemoveStance(_Mime);
-
-/*
-IF
-ItemUnEquipped(_Fist, _Mime)
+RegionEnded(_)
 AND
 DB_LLMIME_Brawler_Temp_FistItems(_Mime, _Fist)
-THEN
-ItemRemove(_Fist);
-NOT DB_LLMIME_Brawler_Temp_FistItems(_Mime, _Fist);
-
-IF
-ItemDropped(_Fist)
 AND
-DB_LLMIME_Brawler_Temp_FistItems(_Mime, _Fist)
+ObjectExists(_Fist, 0)
 THEN
-ItemRemove(_Fist);
 NOT DB_LLMIME_Brawler_Temp_FistItems(_Mime, _Fist);
-*/
 //END_REGION
 
 EXITSECTION
