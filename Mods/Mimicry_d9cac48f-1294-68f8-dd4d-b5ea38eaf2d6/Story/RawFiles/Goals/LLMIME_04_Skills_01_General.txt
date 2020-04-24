@@ -83,6 +83,29 @@ LeaderLib_StringExt_QRY_VersionIsLessThan(_PastVersion, 1,2,0,0)
 THEN
 LeaderLog_Log("DEBUG", "[LLMIME:Skills] Updating settings from version [",_PastVersion,"]");
 LLMIME_Skills_InitSettings();
+
+// [BEGIN_NO_OSITOOLS]
+PROC
+LeaderUpdater_ModUpdated("Mimicry", "LaughingLeader", (STRING)_PastVersion, (STRING)_NewVersion)
+AND
+DB_LLMIME_ActiveMimes(_Mime)
+AND
+CharacterHasSkill(_Mime, "Target_LLMIME_SetFacingDirection", 1)
+THEN
+CharacterRemoveSkill(_Mime, "Target_LLMIME_SetFacingDirection");
+// [END_NO_OSITOOLS]
+
+/* [OSITOOLS_ONLY]
+PROC
+LeaderUpdater_ModUpdated("Mimicry", "LaughingLeader", (STRING)_PastVersion, (STRING)_NewVersion)
+AND
+DB_LLMIME_ActiveMimes(_Mime)
+AND
+NRD_SkillBarFindSkill(_Mime, "Target_LLMIME_SetFacingDirection", _Slot)
+THEN
+CharacterRemoveSkill(_Mime, "Target_LLMIME_SetFacingDirection");
+NRD_SkillBarSetSkill(_Mime, _Slot, "Zone_LLMIME_SetFacingDirection");
+*/
 //END_REGION
 
 //REGION QUERIES
