@@ -2,67 +2,30 @@ INIT
 
 EVENTS
 
-EVENT LLMIME_Mimicking_DetermineTarget
+EVENT LLMIME_Mimicking_SaveFacingDirection
 VARS
-	CHARACTER:_Caster
 	CHARACTER:_Mime
-	FLOAT3:_Target
-	FLOAT3:_Dir
-	FLOAT3:_Pos
-	FLOAT:_Dist
 	FLOAT3:_Forward
 ON
-	OnCharacterCharacterEvent(_Caster, _Mime, "LLMIME_Mimicking_DetermineTarget")
+	OnCharacterEvent(_Mime, "LLMIME_Commands_SaveFacingDirection")
 ACTIONS
-IF "c1&!c2&c3"
-	GetVar(_Target, _Mime, "LLMIME_Mimicking_CasterTarget")
-	IsEqual(_Target, null)
-	GetPosition(_Mime, _Pos)
-THEN
-	GetDirection(_Caster, _Target, _Dir, _Dist)
 	GetForwardDirection(_Mime, _Forward)
-	Multiply(_Forward, _Dist)
-	Add(_Forward, _Pos)
-	SetVar(_Mime, "LLMIME_Mimicking_MimeTarget", _Forward)
-	SetVar(_Mime, "LLMIME_Mimicking_CasterTarget", FLOAT3:null)
-	CharacterCharacterEvent(_Caster, _Mime, "LLMIME_Mimicking_TargetSet")
-ENDIF
+	SetVar(_Mime, "LLMIME_Mimicking_FacingDirection", _Forward)
+	CharacterEvent(_Mime, "LLMIME_Commands_GotFacingDirection")
 
-EVENT LLMIME_Mimicking_SetFacingDirection
+EVENT LLMIME_Commands_ApplyFacingDirection
 VARS
 	CHARACTER:_Mime
-	FLOAT3:_Target
-	FLOAT3:_Dir
-ON
-	OnCharacterEvent(_Mime, "LLMIME_Skills_SetFacingDirection")
-ACTIONS
-IF "c1&!c2"
-	GetVar(_Target, _Mime, "LLMIME_Skills_FacingDirection_Target")
-	IsEqual(_Target, null)
-THEN
-	GetDirection(_Mime, _Target, _Dir)
-	SetVar(_Mime, "LLMIME_Skills_FacingDirection_Saved", _Dir)
-	SetVar(_Mime, "LLMIME_Skills_FacingDirection_Target", FLOAT3:null)
-ENDIF
-
-EVENT LLMIME_Mimicking_ApplyFacingDirection
-VARS
-	CHARACTER:_Mime
-	FLOAT3:_Dir
 	FLOAT3:_Pos
+	FLOAT3:_Forward
 ON
-	OnCharacterEvent(_Mime, "LLMIME_Skills_CalculateFacingDirection")
+	OnCharacterEvent(_Mime, "LLMIME_Commands_ApplyFacingDirection")
 ACTIONS
 IF "c1&!c2&c3"
-	GetVar(_Dir, _Mime, "LLMIME_Skills_FacingDirection_Saved")
-	IsEqual(_Dir, null)
+	GetVar(_Forward, _Mime, "LLMIME_Mimicking_FacingDirection")
+	IsEqual(_Forward, null)
 	GetPosition(_Mime, _Pos)
 THEN
-	Add(_Dir, _Pos)
-	SetVar(_Mime, "LLMIME_Skills_FacingDirection_Saved", FLOAT:null)
-	SetVar(_Mime, "LLMIME_Skills_FacingDirection_LookAt", _Dir)
-	CharacterEvent(_Mime, "LLMIME_Skills_ApplyFacingDirection")
-	//CharacterEvent(_Mime, "LLMIME_Skills_LookAtFacingDirection")
-	//SetVar(_Mime, "LookAtChar", _Forward)
-ELSE
+	Multiply(_Forward, 2.0)
+	Add(_Pos, _Forward)
 ENDIF

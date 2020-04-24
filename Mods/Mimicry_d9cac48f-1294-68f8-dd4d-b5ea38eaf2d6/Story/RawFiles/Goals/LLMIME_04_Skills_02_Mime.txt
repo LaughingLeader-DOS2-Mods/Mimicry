@@ -19,22 +19,56 @@ THEN
 CharacterRemoveSkill(_Mime, _FollowerSkill);
 CharacterAddSkill(_Mime, _FollowerSkill, 0);
 
-//REGION FACING_EXTENDER
+//REGION FACING_EVENTS
 PROC
-LLMIME_Skills_ClearFacingTable((CHARACTERGUID)_Mime)
+LLMIME_Mimicking_ApplyMimicking((CHARACTERGUID)_Mime)
 AND
-DB_LLMIME_Skills_FacingDirection(_Mime, _x, _y)
+DB_LLMIME_Skills_FacingDirection(_Mime, _x, _z)
 THEN
-DB_LLMIME_Skills_FacingDirection(_Mime, _x, _y);
+LeaderLib_Timers_StartObjectTimer(_Mime, 150, "LLMIME_Timers_ReApplyFacingDirection", "LLMIME_Mime_ReApplyFacingDirection");
 
 PROC
-LLMIME_Skills_SaveFacingTable((CHARACTERGUID)_Mime, (REAL)_x, (REAL)_y)
+LLMIME_Mimicking_MimicDone((CHARACTERGUID)_Mime, (CHARACTERGUID)_Caster, (STRING)_Action, (STRING)_ActionType)
+AND
+DB_LLMIME_Skills_FacingDirection(_Mime, _x, _z)
 THEN
-LLMIME_Skills_ClearFacingTable(_Mime);
-DB_LLMIME_Skills_FacingDirection(_Mime, _x, _y);
+LeaderLib_Timers_StartObjectTimer(_Mime, 500, "LLMIME_Timers_ReApplyFacingDirection", "LLMIME_Mime_ReApplyFacingDirection");
 
 IF
-SkillCast(_Mime, "Target_LLMIME_SetFacingDirection", _, _)
+StoryEvent((CHARACTERGUID)_Mime, "LLMIME_Mime_ReApplyFacingDirection")
+THEN
+LLMIME_Skills_ApplyFacingDirection(_Mime);
+
+IF
+ObjectLeftCombat((CHARACTERGUID)_Mime, _)
+AND
+DB_LLMIME_Skills_FacingDirection(_Mime, _x, _z)
+THEN
+NOT DB_LLMIME_Skills_FacingDirection(_Mime, _x, _z);
+
+IF
+CharacterUsedSkill(_Mime, "Target_LLMIME_SetFacingDirection", _, _)
+THEN
+LeaderLib_Timers_StartObjectTimer(_Mime, 250, "Timers_LLMIME_Commands_SaveFacingDirection", "LLMIME_Commands_SaveFacingDirection");
+
+PROC
+LLMIME_Skills_ClearFacingDirection((CHARACTERGUID)_Mime)
+AND
+DB_LLMIME_Skills_FacingDirection(_Mime, _x, _z)
+THEN
+NOT DB_LLMIME_Skills_FacingDirection(_Mime, _x, _z);
+
+PROC
+LLMIME_Skills_SaveFacingDirection((CHARACTERGUID)_Mime, (REAL)_x, (REAL)_z)
+THEN
+LLMIME_Skills_ClearFacingDirection(_Mime);
+DB_LLMIME_Skills_FacingDirection(_Mime, _x, _z);
+//END_REGION
+
+//REGION FACING_EXTENDER
+/* [OSITOOLS_ONLY]
+IF
+StoryEvent((CHARACTERGUID)_Mime, "LLMIME_Commands_SaveFacingDirection")
 AND
 GetUUID(_Mime, _UUID)
 THEN
@@ -43,7 +77,7 @@ NRD_ModCall("Mimicry", "SaveFacingDirection", _UUID);
 PROC
 LLMIME_Skills_ApplyFacingDirection((CHARACTERGUID)_Mime)
 AND
-DB_LLMIME_Skills_FacingDirection(_Mime, _x, _y)
+DB_LLMIME_Skills_FacingDirection(_Mime, _x, _z)
 AND
 CharacterIsDeadOrFeign(_Mime, 0)
 AND
@@ -54,93 +88,44 @@ AND
 GetUUID(_Mime, _UUID)
 THEN
 NRD_ModCall("Mimicry", "ApplyFacingDirection", _UUID);
-
-PROC
-LLMIME_Mimicking_ApplyMimicking((CHARACTERGUID)_Mime)
-AND
-DB_LLMIME_Skills_FacingDirection(_Mime, _x, _y)
-THEN
-LeaderLib_Timers_StartObjectTimer(_Mime, 1000, "LLMIME_Timers_ReApplyFacingDirection", "LLMIME_Mime_ReApplyFacingDirection");
-
-PROC
-LLMIME_Mimicking_MimicDone((CHARACTERGUID)_Mime, (CHARACTERGUID)_Caster, (STRING)_Action, (STRING)_ActionType)
-AND
-DB_LLMIME_Skills_FacingDirection(_Mime, _x, _y)
-THEN
-LeaderLib_Timers_StartObjectTimer(_Mime, 1000, "LLMIME_Timers_ReApplyFacingDirection", "LLMIME_Mime_ReApplyFacingDirection");
-
-IF
-StoryEvent((CHARACTERGUID)_Mime, "LLMIME_Mime_ReApplyFacingDirection")
-THEN
-LLMIME_Skills_ApplyFacingDirection(_Mime);
+*/
 //END_REGION
 
-//REGION FACING_OLD
+//REGION FACING_VANILLA
 // [BEGIN_NO_OSITOOLS]
 IF
-CharacterUsedSkill(_Mime, "Target_LLMIME_SetFacingDirection", _, _)
-THEN
-CharacterStatusText(_Mime, "LLMIME_StatusText_FacingDirectionSaved");
-ObjectClearFlag(_Mime, "LLMIME_FacingDirectionCalculated", 0);
-
-IF
-CharacterUsedSkillOnTarget(_Mime, _Target, "Target_LLMIME_SetFacingDirection", _, _)
+StoryEvent((CHARACTERGUID)_Mime, "LLMIME_Commands_GotFacingDirection")
 AND
-GetPosition(_Target, _x, _y, _z)
+GetVarFloat3(_Mime, "LLMIME_Mimicking_FacingDirection", _x, _, _z)
 THEN
-SetVarFloat3(_Mime, "LLMIME_Skills_FacingDirection_Target", _x, _y, _z);
-SetStoryEvent(_Mime, "LLMIME_Skills_SetFacingDirection");
-ObjectSetFlag(_Mime, "LLMIME_FacingDirectionSet", 0);
-
-IF
-CharacterUsedSkillAtPosition(_Mime, _x, _y, _z, "Target_LLMIME_SetFacingDirection", _, _)
-THEN
-SetVarFloat3(_Mime, "LLMIME_Skills_FacingDirection_Target", _x, _y, _z);
-SetStoryEvent(_Mime, "LLMIME_Skills_SetFacingDirection");
-ObjectSetFlag(_Mime, "LLMIME_FacingDirectionSet", 0);
-
-//Turn ended, still in combat
-IF
-StoryEvent((CHARACTERGUID)_Mime, "LLMIME_Events_RequestMimicking")
-AND
-CharacterIsDeadOrFeign(_Mime, 0)
-AND
-ObjectGetFlag(_Mime, "LLMIME_FacingDirectionSet", 1)
-THEN
-SetStoryEvent(_Mime, "LLMIME_Skills_CalculateFacingDirection");
-
-IF
-StoryEvent((CHARACTERGUID)_Mime, "LLMIME_Skills_ApplyFacingDirection")
-AND
-GetVarFloat3(_Mime, "LLMIME_Skills_FacingDirection_LookAt", _x, _y, _z)
-THEN
-ObjectSetFlag(_Mime, "LLMIME_FacingDirectionCalculated", 0);
-CharacterUseSkillAtPosition(_Mime, "Target_LLMIME_ApplyFacingDirection", _x, _y, _z, 0, 1);
-
-PROC
-LLMIME_Mimicking_MimicDone((CHARACTERGUID)_Mime, (CHARACTERGUID)_Caster, (STRING)_Action, (STRING)_ActionType)
-THEN
-LLMIME_Skills_ApplyFacingDirection(_Mime);
-
-IF
-StoryEvent((CHARACTERGUID)_Mime, "LLMIME_Mime_ReApplyFacingDirection")
-THEN
-LLMIME_Skills_ApplyFacingDirection(_Mime);
+LLMIME_Skills_SaveFacingDirection(_Mime, _x, _z);
 
 PROC
 LLMIME_Skills_ApplyFacingDirection((CHARACTERGUID)_Mime)
 AND
-ObjectGetFlag(_Mime, "LLMIME_FacingDirectionCalculated", 1)
+DB_LLMIME_Skills_FacingDirection(_Mime, _sx, _sz)
 AND
 CharacterIsDeadOrFeign(_Mime, 0)
 AND
 QRY_CharacterIsNotDisabled(_Mime)
 AND
-GetVarFloat3(_Mime, "LLMIME_Skills_FacingDirection_LookAt", _x, _y, _z)
-AND
 NOT LeaderLib_Combat_QRY_IsActiveTurn(_Mime)
+AND
+GetPosition(_Mime, _x, _y, _z)
+AND
+RealProduct(_sx, 2.0, _rx)
+AND
+RealProduct(_sz, 2.0, _rz)
+AND
+RealSum(_x, _rx, _tx)
+AND
+RealSum(_z, _rz, _tz)
+AND
+CreateItemTemplateAtPosition("98fa7688-0810-4113-ba94-9a8c8463f830", _tx, _y, _tz, _Item)
 THEN
-CharacterUseSkillAtPosition(_Mime, "Target_LLMIME_ApplyFacingDirection", _x, _y, _z, 0, 1);
+PlayEffect(_Mime, "RS3_FX_Skills_Rogue_Vault_Cast_Overlay_01", "");
+CharacterLookAt(_Mime, _Item, 1);
+LeaderLib_Timers_StartObjectTimer(_Item, 250, "LLMIME_Timers_LeaderLib_Commands_RemoveItem", "LeaderLib_Commands_RemoveItem");
 // [END_NO_OSITOOLS]
 //END_REGION
 
