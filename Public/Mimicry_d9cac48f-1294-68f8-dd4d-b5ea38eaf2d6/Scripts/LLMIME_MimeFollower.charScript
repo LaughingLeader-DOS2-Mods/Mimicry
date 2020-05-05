@@ -19,7 +19,7 @@ ON
 	OnCharacterEvent(__Me, "Mimicry_MimeInitialized")
 ACTIONS
 IF "!c1"
-	IsTagged(_Mime, "LLMIME_UNARMED")
+	IsTagged(__Me, "LLMIME_UNARMED")
 THEN
 	SetTag(__Me, "LLMIME_UNARMED")
 ENDIF
