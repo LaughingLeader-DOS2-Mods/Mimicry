@@ -161,17 +161,6 @@ NOT DB_LeaderLib_Treasure_ItemMaxAmount("LLMIME.LeaderTrader.MimicSkillbooks", _
 THEN
 DB_LeaderLib_Treasure_ItemMaxAmount("LLMIME.LeaderTrader.MimicSkillbooks", _ItemEntry, 1);
 */
-
-PROC
-LeaderLib_LeaderTrader_OnSpawned((CHARACTERGUID)_LeaderTrader, (STRING)_Level)
-AND
-NOT DB_GlobalFlag("Mimicry_MusicBoxSpawned")
-AND
-NOT DB_GlobalFlag("Mimicry_MimeFollowerIsPlayer")
-THEN
-GlobalSetFlag("Mimicry_MusicBoxSpawned");
-ItemTemplateAddTo("UNIQUE_LLMIME_MusicBox_fd03b00c-5366-40e2-a8af-1d9f6a904ecb", S_LeaderLib_LeaderTrader_61ae5acc-1537-4970-82bb-d408a3334574, 1);
-
 //REGION LEADERLIB_EQUIPMENT_COPY_MASKS
 /*
 DB_LLMIME_Templates("Mask_A", "EQ_Armor_LLMIME_Mime_Mask_A_8e66ce79-8c8e-4c22-a8ea-5a99977f4ea8");

@@ -1,0 +1,34 @@
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+KBSECTION
+
+PROC
+LeaderLib_Initialized((STRING)_Region)
+AND
+IsGameLevel(_Region, 1)
+AND
+ObjectExists(S_LeaderLib_LeaderTrader_61ae5acc-1537-4970-82bb-d408a3334574, 1)
+AND
+NOT DB_GlobalFlag("Mimicry_MusicBoxSpawned")
+AND
+NOT DB_GlobalFlag("Mimicry_MimeFollowerIsPlayer")
+THEN
+GlobalSetFlag("Mimicry_MusicBoxSpawned");
+ItemTemplateAddTo("UNIQUE_LLMIME_MusicBox_fd03b00c-5366-40e2-a8af-1d9f6a904ecb", S_LeaderLib_LeaderTrader_61ae5acc-1537-4970-82bb-d408a3334574, 1);
+GoalCompleted;
+
+PROC
+LeaderLib_Initialized((STRING)_Region)
+AND
+GlobalGetFlag("Mimicry_MusicBoxSpawned", _a)
+AND
+GlobalGetFlag("Mimicry_MimeFollowerIsPlayer", _b)
+AND
+IntegerMax(_a, _b, 1)
+THEN
+GoalCompleted;
+
+EXITSECTION
+ENDEXITSECTION
+ParentTargetEdge "LaughingLeader_Mimicry"
