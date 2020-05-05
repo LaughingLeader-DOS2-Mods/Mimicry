@@ -1,7 +1,7 @@
 Version 1
 SubGoalCombiner SGC_AND
 INITSECTION
-LeaderUpdater_Register_Mod("Mimicry", "LaughingLeader", 1,2,2,0);
+LeaderUpdater_Register_Mod("Mimicry", "LaughingLeader", 1,2,3,0);
 LeaderUpdater_Register_ActiveGoal("Mimicry", "LaughingLeader", "LLMIME_ZZZ_Updater");
 LeaderUpdater_Register_Dependency("Mimicry", "LaughingLeader", "AnimationsPlus", "LaughingLeader", 1);
 LeaderUpdater_Register_UUID("Mimicry", "LaughingLeader", d9cac48f-1294-68f8-dd4d-b5ea38eaf2d6);
@@ -10,9 +10,9 @@ KBSECTION
 IF
 GameStarted(_,_)
 AND
-LeaderUpdater_QRY_ModUpdateNeeded("Mimicry", "LaughingLeader", 1,2,2,0)
+LeaderUpdater_QRY_ModUpdateNeeded("Mimicry", "LaughingLeader", 1,2,3,0)
 THEN
-LeaderUpdater_Register_Mod("Mimicry", "LaughingLeader", 1,2,2,0);
+LeaderUpdater_Register_Mod("Mimicry", "LaughingLeader", 1,2,3,0);
 // [END_NO_OSITOOLS]
 
 // Fix for mimicking data not being cleared when failing
