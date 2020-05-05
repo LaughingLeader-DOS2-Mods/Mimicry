@@ -717,7 +717,7 @@ LLMIME_Mimicking_SaveEquippedWeapons((CHARACTERGUID)_Mime, (STRING)_ActionType)
 AND
 LLMIME_Brawler_QRY_StanceIsActive(_Mime)
 THEN
-ObjectSetFlag(_Mime, "LLMIME_BrawlerStanceWasActive");
+ObjectSetFlag(_Mime, "LLMIME_BrawlerStanceWasActive", 0);
 
 PROC
 LLMIME_Mimicking_UnequipWeapons((CHARACTERGUID)_Mime, (STRING)_ActionType)
