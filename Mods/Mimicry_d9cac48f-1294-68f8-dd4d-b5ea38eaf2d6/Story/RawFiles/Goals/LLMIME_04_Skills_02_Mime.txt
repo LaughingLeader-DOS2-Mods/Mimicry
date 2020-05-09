@@ -772,6 +772,26 @@ ApplyStatus(_Mime, "LLMIME_EVADING3", 6.0, 0, _Mime);
 //END_REGION
 
 //REGION HIDDEN_APPROACH_TIMELY_RETREAT
+PROC
+LeaderUpdater_ModUpdated("Mimicry", "LaughingLeader", (STRING)_PastVersion, (STRING)_NewVersion)
+AND
+LeaderLib_StringExt_QRY_VersionIsLessThan(_PastVersion, 1,2,5,0)
+AND
+DB_IsPlayer(_Player)
+AND
+HasActiveStatus(_Player, "LLMIME_ADDSKILL_TIMELY_RETREAT", 1)
+AND
+NOT DB_LLMIME_Skills_Temp_HiddenApproachPosition(_Player, _, _, _)
+THEN
+RemoveStatus(_Player, "LLMIME_ADDSKILL_TIMELY_RETREAT");
+
+IF
+CharacterUsedSkill(_Mime, "Jump_LLMIME_HiddenApproach", _, _)
+AND
+DB_LLMIME_Skills_Temp_HiddenApproachPosition(_Mime, _x, _y, _z)
+THEN
+NOT DB_LLMIME_Skills_Temp_HiddenApproachPosition(_Mime, _x, _y, _z);
+
 IF
 CharacterUsedSkill(_Mime, "Jump_LLMIME_HiddenApproach", _, _)
 AND
@@ -779,9 +799,66 @@ GetPosition(_Mime, _x, _y, _z)
 THEN
 DB_LLMIME_Skills_Temp_HiddenApproachPosition(_Mime, _x, _y, _z);
 
+// [BEGIN_NO_OSITOOLS]
+IF
+SkillCast(_Mime, "Jump_LLMIME_HiddenApproach", _, _)
+AND
+HasActiveStatus(_Mime, "LLMIME_ADDSKILL_TIMELY_RETREAT", 0)
+AND
+CharacterIsInCombat(_Mime, _IsInCombat)
+AND
+IntegerSubtract(1, _IsInCombat, _Mult)
+AND
+IntegerProduct(_Mult, 4, _TurnBonus)
+AND
+IntegerSum(2, _TurnBonus, _Turns)
+AND
+IntegerProduct(_Turns, 6, _DurationInt)
+AND
+Real(_DurationInt, _Duration)
+THEN
+ApplyStatus(_Mime, "LLMIME_ADDSKILL_TIMELY_RETREAT", _Duration, 1, _Mime);
+// [END_NO_OSITOOLS]
+
+/* [OSITOOLS_ONLY]
+IF
+SkillCast(_Mime, "Jump_LLMIME_HiddenApproach", _, _)
+AND
+CharacterIsInCombat(_Mime, _IsInCombat)
+AND
+IntegerSubtract(1, _IsInCombat, _Mult)
+AND
+IntegerProduct(_Mult, 4, _TurnBonus)
+AND
+IntegerSum(2, _TurnBonus, _Turns)
+AND
+IntegerProduct(_Turns, 6, _DurationInt)
+AND
+Real(_DurationInt, _Duration)
+THEN
+LLMIME_Skills_HiddenApproach_AddStatus(_Mime, _Duration);
+
+PROC
+LLMIME_Skills_HiddenApproach_AddStatus((CHARACTERGUID)_Mime, (REAL)_Duration)
+AND
+HasActiveStatus(_Mime, "LLMIME_ADDSKILL_TIMELY_RETREAT", 1)
+AND
+NRD_StatusGetHandle(_Mime, "LLMIME_ADDSKILL_TIMELY_RETREAT", _Handle)
+THEN
+NRD_StatusSetReal(_Mime, _Handle, "CurrentLifeTime", _Duration);
+
+PROC
+LLMIME_Skills_HiddenApproach_AddStatus((CHARACTERGUID)_Mime, (REAL)_Duration)
+AND
+HasActiveStatus(_Mime, "LLMIME_ADDSKILL_TIMELY_RETREAT", 0)
+THEN
+ApplyStatus(_Mime, "LLMIME_ADDSKILL_TIMELY_RETREAT", _Duration, 1, _Mime);
+*/
+
 IF
 CharacterUsedSkill(_Mime, "Shout_LLMIME_TimelyRetreat", _, _)
 THEN
+ProcObjectTimerCancel(_Mime, "LLMIME_Timers_TimelyRetreat_PlayOverlay");
 ProcObjectTimer(_Mime, "LLMIME_Timers_TimelyRetreat_PlayOverlay", 500);
 
 PROC
@@ -792,13 +869,7 @@ PlayEffect(_Mime, "LLMIME_FX_Skills_TimelyRetreat_Cast_Overlay_01");
 IF
 SkillCast(_Mime, "Shout_LLMIME_TimelyRetreat", _, _)
 THEN
-ProcObjectTimer(_Mime, "LLMIME_Timers_TimelyRetreat_TeleportIn", 550);
-
-PROC
-ProcObjectTimerFinished((CHARACTERGUID)_Mime, "LLMIME_Timers_TimelyRetreat_TeleportIn")
-THEN
 LeaderLib_Helper_ClearActionQueue(_Mime);
-PlayAnimation(_Mime, "skill_cast_self_teleport_in_01_cast");
 
 IF
 SkillCast(_Mime, "Shout_LLMIME_TimelyRetreat", _, _)
@@ -807,10 +878,8 @@ DB_LLMIME_Skills_Temp_HiddenApproachPosition(_Mime, _x, _y, _z)
 THEN
 NOT DB_LLMIME_Skills_Temp_HiddenApproachPosition(_Mime, _x, _y, _z);
 TeleportToPosition(_Mime, _x, _y, _z, "LLMIME_Skills_TimelyRetreat_TeleportedIn", 0, 0);
-
-IF
-StoryEvent((CHARACTERGUID)_Mime, "LLMIME_Skills_TimelyRetreat_TeleportedIn")
-THEN
+LeaderLib_Helper_ClearActionQueue(_Mime);
+PlayAnimation(_Mime, "skill_cast_self_teleport_in_01_cast");
 RemoveStatus(_Mime, "LLMIME_ADDSKILL_TIMELY_RETREAT");
 
 IF

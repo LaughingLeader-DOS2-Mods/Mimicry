@@ -1156,13 +1156,9 @@ data "DescriptionRef" "Character has been granted the skill <font color='#a189ec
 data "Icon" "LLMIME_Skills_Return"
 data "Skills" "Shout_LLMIME_TimelyRetreat"
 data "StackId" "Stack_LLMIME_AddSkill_TimelyRetreat"
+data "StackPriority" "1"
 data "ForceOverhead" "No"
 data "FormatColor" "Void"
-
-new entry "LLMIME_DEBUG_SCRIPT"
-type "StatusData"
-using "_LLMIME_HIDDEN_CONSUME_BASE"
-using "_LLMIME_HIDDEN_CONSUME_BASE"
 
 new entry "LLMIME_DOPPELGANGER"
 type "StatusData"
