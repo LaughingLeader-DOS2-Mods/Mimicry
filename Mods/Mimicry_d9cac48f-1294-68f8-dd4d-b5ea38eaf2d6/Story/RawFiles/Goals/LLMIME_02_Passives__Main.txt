@@ -51,6 +51,8 @@ ApplyStatus(_Mime, _InfoStatus, -1.0, 1, _Mime);
 PROC
 LLMIME_PassiveStatuses_OnStatusApplied((CHARACTERGUID)_Mime, (STRING)_BonusStatus)
 AND
+LLMIME_QRY_CharacterIsAMime(_Mime)
+AND
 DB_LLMIME_PassiveData(_Status, _BonusStatus, _InfoStatus, _DisableFlag)
 AND
 NOT ObjectGetFlag(_Mime, _DisableFlag, 1)
@@ -61,6 +63,8 @@ ApplyStatus(_Mime, _InfoStatus, -1.0, 1, _Mime);
 
 PROC
 LLMIME_PassiveStatuses_OnStatusRemoved((CHARACTERGUID)_Mime, (STRING)_Status)
+AND
+LLMIME_QRY_CharacterIsAMime(_Mime)
 AND
 DB_LLMIME_PassiveData(_Status, _BonusStatus, _InfoStatus, _DisableFlag)
 THEN
