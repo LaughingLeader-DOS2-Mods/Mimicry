@@ -154,3 +154,14 @@ local function SkillRequiresWeapon_QRY(skill)
 	return 0
 end
 Ext.NewQuery(SkillRequiresWeapon_QRY, "LLMIME_Ext_QRY_SkillRequiresWeapon", "[in](STRING)_Skill, [out](INTEGER)_RequiresWeapon")
+
+local function SessionLoading()
+	LeaderLib.AddDebugInitCall(function()
+		local host = CharacterGetHostCharacter()
+		CharacterAddSkill(host, "Jump_LLMIME_HiddenApproach", 0)
+	end)
+end
+
+if Ext.IsDeveloperMode() then
+	Ext.RegisterListener("SessionLoading", SessionLoading)
+end
