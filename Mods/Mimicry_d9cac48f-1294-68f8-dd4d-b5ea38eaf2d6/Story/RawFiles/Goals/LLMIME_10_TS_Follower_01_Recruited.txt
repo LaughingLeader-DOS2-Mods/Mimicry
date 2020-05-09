@@ -31,6 +31,8 @@ IF
 CharacterDied(_Mime)
 AND
 DB_LLMIME_Follower_Mime(_Mime)
+AND
+GlobalGetFlag("Mimicry_MimeFollowerFinalDeath", 0)
 THEN
 LLMIME_Follower_Internal_StartSpawningGhost(_Mime);
 
