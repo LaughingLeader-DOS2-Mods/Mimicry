@@ -1195,12 +1195,17 @@ IF
 GameStarted(_,_)
 AND
 DB_LLMIME_FollowerGhost(_Ghost)
-AND
-ObjectExists(_Ghost, 0)
+THEN
+SysClear("DB_LLMIME_FollowerGhost", 1);
+RemoveTemporaryCharacter(_Ghost);
+
+IF
+GameStarted(_,_)
 AND
 DB_LLMIME_Follower_Mime(_Follower)
+AND
+CharacterIsDead(_Follower, 1)
 THEN
-NOT DB_LLMIME_FollowerGhost(_Ghost);
 LLMIME_Follower_SpawnGhost(_Follower);
 
 PROC
