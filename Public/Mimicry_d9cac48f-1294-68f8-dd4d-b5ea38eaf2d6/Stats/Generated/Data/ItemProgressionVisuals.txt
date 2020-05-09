@@ -4,18 +4,6 @@ add levelgroup 0,0,"All"
 add rootgroup "8e66ce79-8c8e-4c22-a8ea-5a99977f4ea8",""
 add namegroup "ARM_UNIQUE_LLMIME_Mime_Mask_A","",""
 
-new itemgroup "ARM_UNIQUE_LLMIME_Mime_Mask_Origin_A"
-
-add levelgroup 0,0,"All"
-add rootgroup "4afe8cd3-eb9f-4760-9ba4-a0b4433a4c06",""
-add namegroup "ARM_UNIQUE_LLMIME_Mime_Mask_Origin_A","",""
-
-new itemgroup "ARM_LLMIME_Mime_Mask_Origin_A_Preview"
-
-add levelgroup 0,0,"All"
-add rootgroup "fe7d25d5-290e-4014-b446-b18437741bd5",""
-add namegroup "ARM_UNIQUE_LLMIME_Mime_Mask_Origin_A","",""
-
 new itemgroup "ARM_LLMIME_Mime_Mask_NoVisual"
 
 add levelgroup 0,0,"All"
@@ -63,27 +51,3 @@ new itemgroup "ARM_LLMIME_Mime_Light_Gloves"
 add levelgroup 0,0,"All"
 add rootgroup "719c05ec-03d1-4910-b709-1ced217cd136","LLMIMEMimeLightArmor"
 add namegroup "LLMIME_Mime_Light_Gloves","",""
-
-new itemgroup "ARM_UNIQUE_LLMIME_Mime_ShadowArmor_Gloves"
-
-add levelgroup 0,0,"All"
-add rootgroup "bb35910a-a8e2-4a6f-aa38-955b0803a102",""
-add namegroup "ARM_UNIQUE_LLMIME_Mime_ShadowArmor_Gloves","",""
-
-new itemgroup "ARM_UNIQUE_LLMIME_Mime_ShadowArmor_UpperBody"
-
-add levelgroup 0,0,"All"
-add rootgroup "ab189632-0769-4201-9e0e-afaa0e71172c",""
-add namegroup "ARM_UNIQUE_LLMIME_Mime_ShadowArmor_UpperBody","",""
-
-new itemgroup "ARM_UNIQUE_LLMIME_Mime_ShadowArmor_LowerBody"
-
-add levelgroup 0,0,"All"
-add rootgroup "177d1408-b39d-4940-9b7b-68f5bfa5f38b",""
-add namegroup "ARM_UNIQUE_LLMIME_Mime_ShadowArmor_LowerBody","",""
-
-new itemgroup "ARM_UNIQUE_LLMIME_Mime_ShadowArmor_Boots"
-
-add levelgroup 0,0,"All"
-add rootgroup "dc5f5ec9-b402-440a-9791-1ed10928fea4",""
-add namegroup "ARM_UNIQUE_LLMIME_Mime_ShadowArmor_Boots","",""
