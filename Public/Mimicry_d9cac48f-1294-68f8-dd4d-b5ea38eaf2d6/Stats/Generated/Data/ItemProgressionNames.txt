@@ -1,17 +1,17 @@
 new namegroup "ARM_UNIQUE_LLMIME_Mime_Mask_A"
-add name "Mask of Mimicry",""
+add name "ARM_UNIQUE_LLMIME_Mime_Mask_A_DisplayName",""
 
 new namegroup "LLMIME_BrawlerFist"
-add name "Brawler's Fist","The iron-hard fist of a Brawler. Strikes true."
+add name "LLMIME_BrawlerFist_DisplayName",""
 
 new namegroup "LLMIME_Mime_Light_UpperBody"
-add name "Mime's Jacket","A spiffy jacket worn by a mime. Fits comfortably, and seems to get stronger as you do."
+add name "LLMIME_Mime_Light_UpperBody_DisplayName",""
 
 new namegroup "LLMIME_Mime_Light_LowerBody"
-add name "Mime's Pants","Spotless pants worn by a mime. The flexible material enables quick movement. Seems to grow as you do."
+add name "LLMIME_Mime_Light_LowerBody_DisplayName",""
 
 new namegroup "LLMIME_Mime_Light_Boots"
-add name "Mime's Boots","Sturdy boots worn by a mime. Steel-toed. As you gain experience, the boots seem to get tougher."
+add name "LLMIME_Mime_Light_Boots_DisplayName",""
 
 new namegroup "LLMIME_Mime_Light_Gloves"
-add name "Mime's Gloves","Tough leather gloves worn by a mime. A solid punch is sure to sting. Seems to grow tougher over time."
+add name "LLMIME_Mime_Light_Gloves_DisplayName",""

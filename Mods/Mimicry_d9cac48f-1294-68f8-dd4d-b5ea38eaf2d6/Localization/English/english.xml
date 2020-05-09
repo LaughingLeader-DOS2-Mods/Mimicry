@@ -6,9 +6,9 @@
 	<content contentuid="h01958164gd7aag46a8g8ccdg375000d2d5bb">Character is wearing the &lt;font color=&apos;#c4aa65&apos;&gt;Mask of Mimicry&lt;/font&gt;, transforming them into a mime.&lt;br&gt;&lt;font color=&apos;#FF0000&apos;&gt;Cannot cast spells in combat&lt;/font&gt;&lt;br&gt;&lt;font color=&apos;#FF00FF&apos;&gt;Mimics the actions of party members while in combat&lt;/font&gt;</content>
 	<content contentuid="h01d56b1fga6d7g4f14g893cg00bd399828c0">Enable Summoned Creature Mimicking - Mimes will mimic skills used by summoned creatures.</content>
 	<content contentuid="h026facf4g90cag4a00g8544g2cf4b1b581a3">[AMULET] *Give the mime the amulet back.*</content>
+	<content contentuid="h0328c6abg20f8g41a5g927eg0122654ef523">Spotless pants worn by a mime. The flexible material enables quick movement. Seems to grow as you do.</content>
 	<content contentuid="h034b6253g0dd2g4bf2g87f0gc02edaf644b1">*Change your mind and nonchalantly shrug, stepping away.*</content>
 	<content contentuid="h0435e886g9390g4f56g9502gfbf6e924b55d">Character&apos;s presence is slipping from reality, providing increased damage resistance.</content>
-	<content contentuid="h046418c6g6510g4374g97f3g0b1921ea0f8d">Shadowstalker&apos;s Pants</content>
 	<content contentuid="h05195251g6fa3g4ddagb93cg8bc93dd6a36a">Character is counter-attacking enemies when dodging.</content>
 	<content contentuid="h05939b6cg78e4g4cd4gb25eg29400472b708">Enabling Mimicking When Invisible</content>
 	<content contentuid="h087a8441gb3eeg48degad21gc7de1c64097f">*A swell of dark energy releases from the music box. Clearly the ritual had a price, as the box looks more worn and cracked than it did before. Additionally, the music box feels lighter, like it did before the mask was placed inside.*</content>
@@ -45,9 +45,11 @@
 	<content contentuid="h19b71415g58b9g4b9dgaac7g818d987478d3">Evading</content>
 	<content contentuid="h19be17c0gca82g4367gb89dg5ca444492021">Character is being granted an extra skill from a nearby Beastmaster.</content>
 	<content contentuid="h1a99b4bbg55c5g4eaega0dfg4f61a47c849d">Mimic a target completely, becoming a perfect copy for 2 turns.&lt;br&gt;&lt;font color=&apos;#188EDE&apos;&gt;Doppelgangers copy the skills, equipment, stats, and abilities of the target.&lt;/font&gt;</content>
+	<content contentuid="h1b1e9a1agc649g4ba7gbc03g2b727c76ea74">Sturdy boots worn by a mime. Steel-toed. As you gain experience, the boots seem to get tougher.</content>
 	<content contentuid="h1b7a4150ge7d0g464cgbd0eg9b7d1bb0dee7">[PREFERENCES] *Give the mime some advice.*</content>
 	<content contentuid="h1b898a33g7c7cg4625g9234g22baf80f7a94">Slam the ground, launching enemies within [1] up into the air.&lt;br&gt;&lt;font color=&apos;#fcd203&apos;&gt;Deals [2] initially, and [3] to [4] when they land (scales with launch height).&lt;/font&gt;&lt;br&gt;&lt;font color=&apos;#ff9600&apos;&gt;Each target hit creates another quake, launching enemies within [5] and dealing [6].&lt;/font&gt;</content>
 	<content contentuid="h1bfbea70g781dg4709gaa7fge691bbc64fa6">&quot;What is done cannot be undone.&quot;</content>
+	<content contentuid="h1c90e251g3cc5g4cf0g916dge5fa8d7b0fd3">Mime&apos;s Jacket</content>
 	<content contentuid="h1cbd67c8gb4dcg4047gb79age3c6834862b3">Disable Item Mimicking</content>
 	<content contentuid="h1d69e33eg5fa8g4538gba00g8f672202d410">A small music box. The key on the side can be turned to wind it up.</content>
 	<content contentuid="h1ed11e2cge524g4cc6g8082g435137ab1db0">*The mime excitedly gives you the amulet, as he eagerly anticipates your supposed joke.*</content>
@@ -67,6 +69,7 @@
 	<content contentuid="h24fdeb54g1610g4575gbed7ga04555e661b8">Disable Mimicking</content>
 	<content contentuid="h2532c945g572cg48e9g8d4dgeef57d152ace">*Smugly take your leave, revenge in hand.*</content>
 	<content contentuid="h256557fbg1d49g45d9g8690gb86b39d2a135">Shadow Damage</content>
+	<content contentuid="h2754d9c9g188bg4f56ga71dg86e15a3521d9">Tough leather gloves worn by a mime. A solid punch is sure to sting. Seems to grow tougher over time.</content>
 	<content contentuid="h2807cb9fg3fdfg46abg9f03gb0ed286f57d5">Stomping Your Way to Victory</content>
 	<content contentuid="h2a7b0b29gcb32g4abfg87b3ge889268c0001"> *The mime waves his hand in a politely dismissive manner. He seems happy to just be alive again.*</content>
 	<content contentuid="h2b67ae14g6631g4351gb0c0g4ffc9510bad2">&lt;font color=&apos;#8A2BE2&apos; size=&apos;24&apos;&gt;Double Strike x[1]!&lt;/font&gt;</content>
@@ -79,7 +82,6 @@
 	<content contentuid="h2df2ec80ge3ffg42e9ga5ebg0336900366a0">See ya.</content>
 	<content contentuid="h2e38cf0bg5a96g4499g9726gda034186bca0">Mime skill. Learn to quiet others with a piercing, cold gaze.</content>
 	<content contentuid="h2ee150dbg5c6cg4beagaa84g3d240c019e34">*Close the panel.*</content>
-	<content contentuid="h2f340fd1g3d99g41eag96a1g85c80aeccc54">Spotless pants worn by a mime. The flexible material enables quick movement. Seems to grow as you do.</content>
 	<content contentuid="h30826241gb09cg41c8g8ea7gfe9ca8aa91d8">[INTELLIGENCE] *Study the symbols around the indentation.*</content>
 	<content contentuid="h30a6477egb1b9g4ac3g9e7cgd0d41dd960ad">Flank &amp; Swap</content>
 	<content contentuid="h31363ba9g0e3fg4834g937ag3f1ee20e07d3">*Disable self-preservation when mimicking specific self-targeting healing spells. If a non-undead casts a spell such as First Aid on themselves, and you&apos;re undead, you will no longer ignore mimicking that action.*</content>
@@ -90,8 +92,6 @@
 	<content contentuid="h32b04478gc031g4a42ga831g73f08a7452d9">Mime skill. Contains a walkthrough for fatal techniques.&lt;br&gt;F, F, B, B, BL&lt;br&gt;F, F, F, HP&lt;br&gt;B, D, F, LP&lt;br&gt;F, B, B, B, HP&lt;br&gt;F, D, F, HP&lt;br&gt;Hold BL U, U</content>
 	<content contentuid="h32d98241g22ffg4569gb114ga361060d390b">[BACK] *Stop thinking about ways to break the universe.*</content>
 	<content contentuid="h337cb8a6g0336g460bg9225g155f52c66756">*Finalize all sacrifices. The Mask of Mimicry will fully consume every sacrificed, non-mime item.*</content>
-	<content contentuid="h36771c92g77d1g4e6bgba1agcc3c7563efad">Shadowstalker&apos;s Boots</content>
-	<content contentuid="h373b5c3bg2223g41bbgb745gb2bca6178c0c">Shadowstalker&apos;s Coat</content>
 	<content contentuid="h37ce8d6eg96b8g48a8ga191ge5ec5f30d734">&lt;font color=&apos;#8A2BE2&apos; size=&apos;24&apos;&gt;Double Strike!&lt;/font&gt;</content>
 	<content contentuid="h37e8de7cgcf8fg435bg802eg91efd2a83d95">Dodging is increased by &lt;font color=&apos;#FF00FF&apos;&gt;[1]%&lt;/font&gt;|&lt;font color=&apos;#EE82EE&apos;&gt;[2]%&lt;/font&gt;|&lt;font color=&apos;#D8BFD8&apos;&gt;[3]%&lt;/font&gt; on turns &lt;font color=&apos;#FF00FF&apos;&gt;1&lt;/font&gt;|&lt;font color=&apos;#EE82EE&apos;&gt;2&lt;/font&gt;|&lt;font color=&apos;#D8BFD8&apos;&gt;3&lt;/font&gt;&lt;br&gt;Movement speed is increased by [4]% on the first turn.&lt;br&gt;&lt;font color=&apos;#00FA9A&apos;&gt;While Counter Throw is active, you have a 90% chance to counter-attack for [5] when dodging.&lt;/font&gt;&lt;br&gt;&lt;font color=&apos;#FFD700&apos;&gt;Weapon Expansion&lt;/font&gt;&lt;br&gt;&lt;font color=&apos;#00FA9A&apos;&gt;When dodging an enemy, you have a 60% chance to counter-attack with a rock.&lt;/font&gt;</content>
 	<content contentuid="h37f49d75g0690g4142gbea1g15b5d9bf6f1a">Vital Influence</content>
@@ -117,9 +117,9 @@
 	<content contentuid="h41f6768cg5e49g402cg9560gd5d3d51b5865">Hidden Approach</content>
 	<content contentuid="h420d3cbcg4e4fg4063g8dc5g630cdd7c4042">Launched</content>
 	<content contentuid="h43c03095ga0a9g4e60gae8cgfb8db78cc54f">*A swell of dark energy releases from the music box once more. The music box then shatters to pieces.*</content>
-	<content contentuid="h4433bb64ga614g4484ga0ddgc40a71981ff3">The mask of a nameless mime without history. Strange power resides within the mask, allowing the wearer to mimic the skills and actions of others.&lt;br&gt;&lt;font color=&apos;#73F6FF&apos;&gt;Automatically grows with its wearer, gaining new bonuses at various levels.&lt;/font&gt;</content>
 	<content contentuid="h443faa9dg5df6g4d6eg9f4cge64bd4430f0a">*Claim the mask.*</content>
 	<content contentuid="h45327ee1gd026g445fg8915g035ba520e203">*Show Mask in Portrait Generation*</content>
+	<content contentuid="h461a63d3g2598g411bg8c35g97fd57d54c74">Mime&apos;s Pants</content>
 	<content contentuid="h46c13dfeg6d0fg450bga00dg88f3de157274">Mime Settings</content>
 	<content contentuid="h46c57a9fgffc6g47c1ga879gf249cdfb8928">Enable a -10% damage debuff while mimicking.</content>
 	<content contentuid="h472529c5gd6e5g4254g866ag0428643da9c3">Disable Source Skill Mimicking (Default)</content>
@@ -183,6 +183,7 @@
 	<content contentuid="h69386820gf1fag41eega36fg5ab8504281c4">*Change your mind.*</content>
 	<content contentuid="h695a2f16g144cg4943g8b05g801919d9725a">&lt;font color=&apos;#a1f398&apos;&gt;Set Facing&lt;/font&gt;</content>
 	<content contentuid="h6baea7a3gdc8bg4345g93f5g11b3fb1c22b7">Constitution Check</content>
+	<content contentuid="h6d7d2994g2238g4830ga889gaa7028b2aa24">Brawler&apos;s Fist</content>
 	<content contentuid="h6ea8d9fag5afeg47fagb4d3gc2948b34fa7b">A warrior who mimics the actions of allies in battle. Mimes are also proficient with unarmed combat, and provide additional skills and bonuses to nearby summoned creatures.</content>
 	<content contentuid="h6ec5f927g2e15g4b9bga6c6g50cff8b255e0">*Let bygones be bygones and part ways.*</content>
 	<content contentuid="h6f00a0bfg9ca5g4034g9af8g2ac8112c3788">Decoy</content>
@@ -195,6 +196,7 @@
 	<content contentuid="h755d9a56g1cb3g4818g9038ge2b98393ff27">*Take your leave.*</content>
 	<content contentuid="h768187afgb241g4fb8gb665g38e048262a05">Mime skill. Learn to dodge with strategic foot placement.</content>
 	<content contentuid="h7724dc51g93ceg47a6g9bd7g9e03007b9a53">Return</content>
+	<content contentuid="h787ad353gfb52g42a6g9af6ga9a1da8c757c">A spiffy jacket worn by a mime. Fits comfortably, and seems to get stronger as you do.</content>
 	<content contentuid="h78e41fc9gc781g4e5dgb804g5072e9db15f5">Learn Skill</content>
 	<content contentuid="h79024bdfg5be6g45dfg956dg25a46cd6b980">Silencing Stare</content>
 	<content contentuid="h791674begd56eg4275gb186geecdfd1f9848">*A haunting voice echoes in your head.* &quot;Non-reversible. No refunds.&quot;</content>
@@ -229,6 +231,7 @@
 	<content contentuid="h8f468b6bg27bcg4388gbf3fgd074a28e6777">Mime</content>
 	<content contentuid="h8f53f57agfe24g4982g8411g908e7668e268">Mimicry Test Level</content>
 	<content contentuid="h8f9517bdg61aag4f48gb26fg6e371fdcf7aa">Disarming Blow</content>
+	<content contentuid="h908e5a7cgdd22g445cg8f8egd4d359ea82ad">Mime&apos;s Boots</content>
 	<content contentuid="h90ef7c9cg1a42g43e8g9b0ag496ac01dce77">[Exit]</content>
 	<content contentuid="h92dd0133g07ecg4459gb086g55eb68b62779">[LLMIME_Settings_BrawlerStance_Str_694fa103-1089-492b-a7db-aef0e5cf0efd]</content>
 	<content contentuid="h93cae4d7ga054g47c1gb773g6fe4ca790c5a">&lt;font color=&apos;#FFC0CB&apos;&gt;*The mime&apos;s amulet shatters!*&lt;/font&gt;</content>
@@ -287,6 +290,7 @@
 	<content contentuid="ha6e178d8gb4e0g4aa9g9c2ag5bf02c3c22ff">Return to your original position before jumping with &lt;font color=&apos;#a189ec&apos;&gt;Hidden Approach&lt;/font&gt;.</content>
 	<content contentuid="ha7ac0207g08deg43e5g85a4g50cd19bb226c">Final Wish</content>
 	<content contentuid="ha822be29g4b9fg4957gbf76g76e342211086">Knee Breaker</content>
+	<content contentuid="ha8282dd9gd801g4f66g8c36g9fbe0eb4d4c3">Mime&apos;s Gloves</content>
 	<content contentuid="ha8a9c08dgdf4bg466ag814ag0b3b58a85f18">*You focus on your inner identity, masked behind the veil of the Mime.*</content>
 	<content contentuid="ha8d9167fgd9f7g44e3g82a6gfb90c2ffe7f1">Shadow Form</content>
 	<content contentuid="ha906844eg171fg4b2ag983ag8791709368d2">Character is increasing their reflexes.</content>
@@ -347,10 +351,10 @@
 	<content contentuid="hcedc320ag7d6eg4879g9f06gb65f9818d8f8">Brawler Stance</content>
 	<content contentuid="hcf23db0fg135fg4669g9009g453d11267026">*The phantom cries out in pain and dissipates. The mask is now yours.*</content>
 	<content contentuid="hd01e2e14g3583g47e8g8605gde1d2b365eb6">Seal Evil</content>
-	<content contentuid="hd12aba1ag3e96g47ccgad2aga7d3fc74dc74">Shadowstalker&apos;s Gauntlets</content>
 	<content contentuid="hd163af0fg9e15g4ce6g9bdfg1fb10ff01612">Mimicking</content>
 	<content contentuid="hd174c228ge497g4abbg9677g9ec636ea1533">*Hide the Mask of Mimicry status.*</content>
 	<content contentuid="hd2da2e11g14aeg46fdg9b30g1d1774f097c3">Belch forth putrid stench to inflict status ailments.&lt;br&gt;Reduces Physical Armour on targets in a cone by [1], and causes &lt;font color=&apos;#EE82EE&apos;&gt;random status ailments&lt;/font&gt; on targets hit.</content>
+	<content contentuid="hd499d9b8gd77fg4f6dga06cg8a08fea7683e">Mask of Mimicry</content>
 	<content contentuid="hd5847679gda4eg4defga142gde39b07443d4">Mimicking</content>
 	<content contentuid="hd5f5f690gd3c1g406fga4b8g27aa98b56de3">Inner Identity</content>
 	<content contentuid="hd64a3b5fg7a4ag406ag9070gf552e2c7626d">Disable Summon Skill Mimicking (Default)</content>
@@ -397,6 +401,7 @@
 	<content contentuid="hee1619deg88e7g4fb0gb9e1gd2c7ef040e07">Character has been enveloped in dark energy.</content>
 	<content contentuid="hee617e2fg20d0g42a3g9130gcef3fe3ad127">Concentration</content>
 	<content contentuid="hee6ea17bg4e86g48b4g8c69gdaf5627d7e38">Enable Item Mimicking (Consumables, Potions, Food) (Default)</content>
+	<content contentuid="hefb4fc81gb0ecg4ab1g88ebgcd2da0a2533d">The iron-hard fist of a Brawler. Strikes true.</content>
 	<content contentuid="hf099c291g94f9g443ag9181g20fde006bfd6">Follow me.</content>
 	<content contentuid="hf3758a8bgd99fg4774gb15dg6a601eee3145">*Tell the mime to reveal their innate abilities (Enable passive status visibility).* (Default)</content>
 	<content contentuid="hf4632a8fg42a7g4d53gbe26gd203f28e3d5e">Shadow</content>
