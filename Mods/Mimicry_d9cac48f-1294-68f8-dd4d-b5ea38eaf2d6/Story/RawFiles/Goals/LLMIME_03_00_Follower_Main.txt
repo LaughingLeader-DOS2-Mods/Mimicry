@@ -1191,6 +1191,18 @@ THEN
 DB_LLMIME_FollowerGhost(_Ghost);
 LLMIME_Follower_Internal_OnGhostAppeared(_Ghost);
 
+IF
+GameStarted(_,_)
+AND
+DB_LLMIME_FollowerGhost(_Ghost)
+AND
+ObjectExists(_Ghost, 0)
+AND
+DB_LLMIME_Follower_Mime(_Follower)
+THEN
+NOT DB_LLMIME_FollowerGhost(_Ghost);
+LLMIME_Follower_SpawnGhost(_Follower);
+
 PROC
 LLMIME_Follower_Internal_OnGhostAppeared((CHARACTERGUID)_Ghost)
 THEN
@@ -1300,9 +1312,16 @@ CharacterDie(_Mime, 1, "KnockedDown", _Player);
 
 IF
 ObjectFlagSet("Mimicry_MaskTakenFromFollower", (CHARACTERGUID)_Player, _Instance)
+AND
+GetPosition(_Player, _x, _y, _z)
+AND
+CreateItemTemplateAtPosition("EQ_Armor_LLMIME_Mime_Mask_A_8e66ce79-8c8e-4c22-a8ea-5a99977f4ea8", _x, _y, _z, _Mask)
 THEN
-//Mime Origin mask
-ItemTemplateAddTo("EQ_UNIQUE_Armor_LLMIME_Mime_Mask_Origin_A_4afe8cd3-eb9f-4760-9ba4-a0b4433a4c06", _Player, 1, 1);
+// EQ_Armor_LLMIME_Mime_Mask_A_8e66ce79-8c8e-4c22-a8ea-5a99977f4ea8
+DB_LLMIME_Follower_Mask(_Mask);
+ItemToInventory(_Mask, _Player, 1, 1, 1);
+//ItemTemplateAddTo("EQ_Armor_LLMIME_Mime_Mask_A_8e66ce79-8c8e-4c22-a8ea-5a99977f4ea8", _Player, 1, 1);
+//ItemTemplateAddTo("EQ_Armor_LLMIME_Mime_Mask_A_Follower_4afe8cd3-eb9f-4760-9ba4-a0b4433a4c06", _Player, 1, 1);
 
 PROC
 LLMIME_Follower_Internal_KillGhost((CHARACTERGUID)_Ghost)
@@ -1377,8 +1396,9 @@ ObjectFlagSet("Mimicry_ResurrectionEvent_RemoveAndDestroyMask", (CHARACTERGUID)_
 AND
 NOT DB_LLMIME_Follower_Temp_RemovedMask(_Player)
 AND
-GetItemForItemTemplateInInventory(_Player, "EQ_UNIQUE_Armor_LLMIME_Mime_Mask_Origin_A_4afe8cd3-eb9f-4760-9ba4-a0b4433a4c06", _Mask)
+DB_LLMIME_Follower_Mask(_Mask)
 THEN
+NOT DB_LLMIME_Follower_Mask(_Mask);
 CharacterUnequipItem(_Player, _Mask);
 ItemRemove(_Mask);
 DB_LLMIME_Follower_Temp_RemovedMask(_Player);
