@@ -165,3 +165,20 @@ end
 if Ext.IsDeveloperMode() then
 	Ext.RegisterListener("SessionLoading", SessionLoading)
 end
+
+local DU_Disabling_Statuses = {
+	"KCE_KNOCKED_DOWN",
+	"KCE_FROZEN",
+	"KCE_STUNNED",
+	"KCE_OSSIFIED",
+}
+function CanMugTarget(uuid)
+	-- Divinity Unleashed
+	if Ext.IsModLoaded("e844229e-b744-4294-9102-a7362a926f71") then
+		for i,status in pairs(DU_Disabling_Statuses) do
+			if HasActiveStatus(uuid, status) == 1 then
+				return true
+			end
+		end
+	end
+end

@@ -123,6 +123,13 @@ AND
 StringConcatenate(_CheckedSkill, "_Follower", _Skill)
 THEN
 DB_NOOP(1);
+
+QRY
+LLMIME_Skills_QRY_CharacterIsDisabled((CHARACTERGUID)_Character)
+AND
+DB_LLMIME_Skills_Temp_DisabledCharacter(_Character, _)
+THEN
+DB_NOOP(1);
 //END_REGION
 
 //REGION WISH
@@ -212,23 +219,41 @@ CharacterCharacterSetEvent(_Caster, _Target, "Mimicry_Events_HealWishTarget");
 
 //REGION MUGGING
 QRY
-LLMIME_Skills_QRY_CharacterIsDisabled((CHARACTERGUID)_Character)
+LLMIME_Skills_QRY_CanMugCharacter((CHARACTERGUID)_Character)
 AND
 DB_LLMIME_Skills_Temp_DisabledCharacter(_Character, _)
 THEN
 DB_NOOP(1);
 
+/* [OSITOOLS_ONLY]
+QRY
+LLMIME_Skills_QRY_CanMugCharacter((CHARACTERGUID)_Character)
+AND
+GetUUID(_Character, _UUID)
+AND
+NRD_ModQuery1("Mimicry", "CanMugTarget", _UUID)
+THEN
+DB_NOOP(1);
+*/
+
 IF
 CharacterStatusApplied(_Target, "LLMIME_MUGGED", (CHARACTERGUID)_Mime)
 AND
-LLMIME_Skills_QRY_CharacterIsDisabled(_Target)
+LLMIME_Skills_QRY_CanMugCharacter(_Target)
 THEN
 LLMIME_Skills_MugCharacter(_Mime, _Target);
 
+/* [OSITOOLS_ONLY]
 PROC
 LLMIME_Skills_MugCharacter((CHARACTERGUID)_Mime, (CHARACTERGUID)_Target)
 AND
-DB_GlobalFlag("WeaponExpansion_IsActive")
+NRD_IsModLoaded(c60718c3-ba22-4702-9c5d-5ad92b41ba5f, 1)
+THEN
+LLMIME_Skills_MugCharacter_WeaponExpansion(_Mime, _Target);
+*/
+
+PROC
+LLMIME_Skills_MugCharacter_WeaponExpansion((CHARACTERGUID)_Mime, (CHARACTERGUID)_Target)
 AND
 NOT DB_LLMIME_Skills_Temp_WeaponMatch(_Target, _Mime)
 AND
@@ -249,9 +274,7 @@ DB_LLMIME_Skills_Temp_WeaponMatch(_Target, _Mime);
 
 //No match
 PROC
-LLMIME_Skills_MugCharacter((CHARACTERGUID)_Mime, (CHARACTERGUID)_Target)
-AND
-DB_GlobalFlag("WeaponExpansion_IsActive")
+LLMIME_Skills_MugCharacter_WeaponExpansion((CHARACTERGUID)_Mime, (CHARACTERGUID)_Target)
 AND
 NOT DB_LLMIME_Skills_Temp_WeaponMatch(_Target, _Mime)
 AND
