@@ -221,7 +221,7 @@ DB_NOOP(1);
 IF
 CharacterStatusApplied(_Target, "LLMIME_MUGGED", (CHARACTERGUID)_Mime)
 AND
-DB_LLMIME_Skills_Temp_DisabledCharacter(_Target, _Status)
+LLMIME_Skills_QRY_CharacterIsDisabled(_Target)
 THEN
 LLMIME_Skills_MugCharacter(_Mime, _Target);
 

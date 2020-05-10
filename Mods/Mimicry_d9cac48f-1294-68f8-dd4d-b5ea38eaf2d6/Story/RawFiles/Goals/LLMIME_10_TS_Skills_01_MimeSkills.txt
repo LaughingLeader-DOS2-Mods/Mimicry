@@ -110,6 +110,20 @@ THEN
 NOT DB_LLMIME_Skills_Temp_DisabledCharacter(_Character, _Status);
 //END_REGION
 
+//REGION DU_SUPPORT
+IF
+CharacterStatusApplied(_Character, "KCE_KNOCKED_DOWN", _)
+THEN
+DB_LLMIME_Skills_Temp_DisabledCharacter(_Character, "KCE_KNOCKED_DOWN");
+
+IF
+CharacterStatusRemoved(_Character, "KCE_KNOCKED_DOWN", _)
+AND
+DB_LLMIME_Skills_Temp_DisabledCharacter(_Character, "KCE_KNOCKED_DOWN")
+THEN
+NOT DB_LLMIME_Skills_Temp_DisabledCharacter(_Character, "KCE_KNOCKED_DOWN");
+//END_REGION
+
 IF
 CharacterStatusAttempt(_Target, "DYING", _)
 AND
