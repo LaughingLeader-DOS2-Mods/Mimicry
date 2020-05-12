@@ -1016,6 +1016,39 @@ LLMIME_Skills_ResetCooldown(_Mime, "Target_LLMIME_Fatality", "Target_LLMIME_Fata
 CharacterStatusText(_Mime, "LLMIME_StatusText_FatalityCooldownReset");
 PlayEffect(_Mime, "LLMIME_FX_DeathblowRefreshed_01");
 //END_REGION
+
+//REGION SYNERGY_STATUSES
+QRY
+LLMIME_Skills_QRY_HasStatus((CHARACTERGUID)_Target, (STRING)_Status)
+AND
+HasActiveStatus(_Target, _Status, 1)
+THEN
+DB_NOOP(1);
+
+// Divinity Unleashed Support
+QRY
+LLMIME_Skills_QRY_HasStatus((CHARACTERGUID)_Target, "CRIPPLED")
+AND
+HasActiveStatus(_Target, "KCE_CRIPPLED", 1)
+THEN
+DB_NOOP(1);
+
+// Target_LLMIME_SilencingStare
+IF
+CharacterStatusAttempt(_Target, "LLMIME_PHYSICAL_SILENCED", _Cause)
+AND
+LLMIME_Skills_QRY_HasStatus(_Target, "CRIPPLED")
+THEN
+ApplyStatus(_Target, "FEAR", 6.0, 0, _Cause);
+
+// Target_LLMIME_KneeBreaker
+IF
+CharacterStatusAttempt(_Target, "LLMIME_BROKEN_KNEE", _Cause)
+AND
+LLMIME_Skills_QRY_HasStatus(_Target, "DISARMED")
+THEN
+ApplyStatus(_Target, "BLEEDING", 18.0, 0, _Cause);
+//END_REGION
 EXITSECTION
 
 ENDEXITSECTION
