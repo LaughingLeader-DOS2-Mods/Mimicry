@@ -3,7 +3,7 @@ Cone_LLMIME_MonsterCorrosiveSpray_Description	Belch forth putrid stench to infli
 Cone_LLMIME_MonsterCorrosiveSpray_DisplayName	Bad Breath
 Cone_LLMIME_QuakeSlam_Description	Slam the ground, launching enemies within [1] up into the air.<br><font color='#fcd203'>Deals [2] initially, and [3] to [4] when they land (scales with launch height).</font><br><font color='#ff9600'>Each target hit creates another quake, launching enemies within [5] and dealing [6].</font>
 Cone_LLMIME_QuakeSlam_DisplayName	Quake Slam
-Jump_LLMIME_HiddenApproach_Description	Jump to a distant position and gain <font color='#a189ec'>Timely Retreat</font> for 2 turns, allowing you to return to your original position before jumping.
+Jump_LLMIME_HiddenApproach_Description	Jump to a distant position and gain <font color='#a189ec'>Timely Retreat</font> for 2 turns (6 turns out of combat), allowing you to return to your original position before jumping.
 Jump_LLMIME_HiddenApproach_DisplayName	Hidden Approach
 MultiStrike_LLMIME_MimeVault_Description	Appear behind an enemy and land a blow for [1] + [2].<br>Before initial damage is dealt, enemies receive <font color='#FF0000'>[3]% Dodge</font> and <font color='#FF0000'>[4]% Physical Resistance</font> from being <font color='#FF0000'>Flanked</font>.<br><font color='#FF00FF'>After flanking the enemy, your positions are <font color='#9a03ff'>Swapped</font>.</font><br><font color='#FF4500'>Grounded targets are immune to being Swapped.</font>
 MultiStrike_LLMIME_MimeVault_DisplayName	Flank & Swap
