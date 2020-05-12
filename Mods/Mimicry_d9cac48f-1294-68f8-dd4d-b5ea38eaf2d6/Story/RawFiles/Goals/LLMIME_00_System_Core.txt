@@ -798,6 +798,36 @@ AND
 _Count > 0
 THEN
 DB_NOOP(1);
+
+QRY
+LLMIME_QRY_ShouldRemoveTemporaryCharacter((CHARACTERGUID)_Char)
+AND
+ObjectExists(_Char, 0)
+THEN
+DB_NOOP(1);
+
+QRY
+LLMIME_QRY_ShouldRemoveTemporaryCharacter((CHARACTERGUID)_Char)
+AND
+ObjectIsOnStage(_Char, 0)
+THEN
+DB_NOOP(1);
+
+QRY
+LLMIME_QRY_ShouldRemoveTemporaryCharacter((CHARACTERGUID)_Char)
+AND
+NOT GetPosition(_Char, _, _, _)
+THEN
+DB_NOOP(1);
+
+QRY
+LLMIME_QRY_ShouldRemoveTemporaryCharacter((CHARACTERGUID)_Char)
+AND
+DB_CurrentLevel(_Region)
+AND
+NOT GetRegion(_Char, _Region)
+THEN
+DB_NOOP(1);
 //END_REGION
 
 //REGION MIME_QUERIES

@@ -479,7 +479,6 @@ HasAppliedStatus(_Decoy, "LLMIME_DECOY_LIFETIME", 0)
 THEN
 LLMIME_Skills_Internal_OnDecoyRemoved(_Decoy);
 
-
 PROC
 LLMIME_Skills_Internal_OnDecoyRemoved((CHARACTERGUID)_Decoy)
 AND
@@ -492,6 +491,10 @@ THEN
 SetOnStage(_Decoy, 0);
 PlayEffectAtPosition("RS3_FX_GP_ScriptedEvent_Ambushers_Smoke_01", _x, _y, _z);
 PROC_StopLoopEffect(_Decoy, "Mimicry.FX.Decoy.Mask");
+
+PROC
+LLMIME_Skills_Internal_OnDecoyRemoved((CHARACTERGUID)_Decoy)
+THEN
 ProcObjectTimer(_Decoy, "LLMIME_Timers_Skills_DeleteDecoy", 1000);
 
 PROC
@@ -505,16 +508,30 @@ AND
 DB_LLMIME_Skills_Temp_Decoy(_Character, _Decoy)
 THEN
 NOT DB_LLMIME_Skills_Temp_Decoy(_Character, _Decoy);
-LLMIME_Skills_Internal_RemoveDecoyStatus(_Character);
 
 PROC
-LLMIME_Skills_Internal_RemoveDecoyStatus((CHARACTERGUID)_Character)
+LLMIME_Skills_Internal_RemoveDecoys((CHARACTERGUID)_Mime)
 AND
-NOT DB_LLMIME_Skills_Temp_Decoy(_Character, _)
-AND
-NOT LeaderLib_Timers_QRY_ObjectTimerStarted(_Character, "LLMIME_Timers_Skills_RemoveDecoyActiveStatus_")
+DB_LLMIME_Skills_Temp_Decoy(_Mime, _Decoy)
 THEN
-LeaderLib_Timers_StartObjectTimer(_Character, 250, "LLMIME_Timers_Skills_RemoveDecoyActiveStatus_", "Mimicry_Events_Skills_Internal_RemoveDecoyActiveStatus");
+LLMIME_Skills_Internal_RemoveDecoy(_Mime, _Decoy);
+
+PROC
+LLMIME_Skills_Internal_RemoveDecoy((CHARACTERGUID)_Mime, (CHARACTERGUID)_Decoy)
+THEN
+NOT DB_LLMIME_Skills_Temp_Decoy(_Mime, _Decoy);
+RemoveTemporaryCharacter(_Decoy);
+
+// Temporary characters can get weird on a save load
+IF
+GameStarted(_,_)
+AND
+DB_LLMIME_Skills_Temp_Decoy(_Mime, _Decoy)
+AND
+LLMIME_QRY_ShouldRemoveTemporaryCharacter(_Decoy)
+THEN
+NOT DB_LLMIME_Skills_Temp_Decoy(_Mime, _Decoy);
+LLMIME_Skills_Internal_RemoveDecoy(_Mime, _Decoy);
 //END_REGION
 
 //REGION VITAL_INFLUENCE

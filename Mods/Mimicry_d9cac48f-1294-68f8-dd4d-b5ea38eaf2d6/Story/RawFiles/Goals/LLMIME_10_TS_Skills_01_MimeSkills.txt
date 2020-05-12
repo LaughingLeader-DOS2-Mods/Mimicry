@@ -61,36 +61,6 @@ AND
 DB_LLMIME_Skills_Temp_Decoy(_Character, _Decoy)
 THEN
 LLMIME_Skills_Internal_OnDecoyRemoved(_Decoy);
-/*
-IF
-StoryEvent((CHARACTERGUID)_Character, "Mimicry_Events_Skills_Internal_RemoveDecoyActiveStatus")
-AND
-NOT DB_LLMIME_Skills_Temp_Decoy(_Character, _)
-AND
-LeaderLib_Helper_QRY_HasStatus(_Character, "LLMIME_DECOY_ACTIVE")
-THEN
-SetStoryEvent(_Character, "Mimicry_Events_Decoy_RemoveInvisibility");
-
-IF
-CharacterStatusApplied(_Character, "HIT", _)
-AND
-DB_LLMIME_Skills_Temp_Decoy(_Character, _Decoy)
-AND
-LeaderLib_Helper_QRY_HasStatus(_Character, "LLMIME_DECOY_ACTIVE")
-THEN
-SetStoryEvent(_Character, "Mimicry_Events_Decoy_RemoveInvisibility");
-
-IF
-CharacterStatusApplied(_Character, _Status, _)
-AND
-DB_LLMIME_Skills_Temp_Decoy(_Character, _Decoy)
-AND
-LeaderLib_Helper_QRY_HasStatus(_Character, "LLMIME_DECOY_ACTIVE")
-AND
-LeaderLib_Helper_QRY_IsStunningStatus(_Status)
-THEN
-SetStoryEvent(_Character, "Mimicry_Events_Decoy_RemoveInvisibility");
-*/
 //END_REGION
 
 //REGION MUGGABLE_FLAG
