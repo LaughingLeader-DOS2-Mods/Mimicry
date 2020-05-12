@@ -199,7 +199,7 @@ VARS
 ON
 	OnCharacterCharacterEvent(_Mime, _Decoy, "Mimicry_Events_Decoy_TauntNearbyEnemies")
 ACTIONS
-	CharacterApplyStatus(_Decoy, LLMIME_APPLY_TAUNTED_AURA, 0, 1, _Mime)
+	CharacterApplyStatus(_Decoy, LLMIME_APPLY_TAUNTED_AURA, 0, 1, _Decoy)
 
 EVENT LLMIME_Decoy_MimickingDisable
 VARS
