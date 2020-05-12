@@ -58,6 +58,16 @@ local function ModuleLoading()
 	if Ext.IsModLoaded("c60718c3-ba22-4702-9c5d-5ad92b41ba5f") then
 		apply_overrides(weaponex_additions)
 	end
+
+	-- Mods like DU may override these status types.
+	Ext.StatSetAttribute("LLMIME_DECOY_DISABLED", "StatusType", "INCAPACITATED")
+	Ext.StatSetAttribute("LLMIME_LAUNCHED_DISABLE", "StatusType", "INCAPACITATED")
+	Ext.StatSetAttribute("LLMIME_DOPPELGANGER", "StatusType", "INCAPACITATED")
+	-- Divinity Unleashed
+	if Ext.IsModLoaded("e844229e-b744-4294-9102-a7362a926f71") then
+		--Ext.StatSetAttribute("Stats_LLMIME_DecoyCharacter", "DodgeBoost", 0)
+		--Ext.StatSetAttribute("Stats_LLMIME_DecoyCharacter", "AccuracyBoost", 0)
+	end
 end
 
 Ext.RegisterListener("ModuleLoading", ModuleLoading)
