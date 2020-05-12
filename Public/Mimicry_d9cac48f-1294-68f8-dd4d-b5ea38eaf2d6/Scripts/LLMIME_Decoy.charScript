@@ -31,13 +31,6 @@ THEN
 	CreateSurfaceAt(__Me, SurfaceNone, 6.0, 0)
 ENDIF
 
-EVENT LLMIME_Decoy_OverrideAnims
-ON
-	//OnCharacterEvent(__Me, "Mimicry_Events_Skills_Internal_SetupDecoy")
-	OnCharacterStatusApplied(__Me, LLMIME_DECOY_LIFETIME)
-ACTIONS
-	SetScriptFrame(__Me, "LLMIME_Decoy_SetAnimationOverride")
-	
 STORY
 
 SCRIPTFRAME LLMIME_Decoy_CopyRotation
@@ -48,11 +41,8 @@ THEN
 	//StatusText(__Me, "Looped anim on apply?")
 	CharacterLookFrom(%LLMIME_Decoy_Caster, 1)
 	CharacterApplyStatus(__Me, LLMIME_DECOY_LIFETIME, 3, 1)
-ENDIF
-
-SCRIPTFRAME LLMIME_Decoy_SetAnimationOverride
-ACTIONS
 	CharacterStopAnimation()
 	CharacterSetAnimationOverride(__Me, %LLMIME_Decoy_LoopedAnimation)
 	//DisplayCombatInfoText(__Me, "Looped anim?", 10.0)
 	CharacterApplyStatus(__Me, LLMIME_DECOY_DISABLED, 3, 1)
+ENDIF

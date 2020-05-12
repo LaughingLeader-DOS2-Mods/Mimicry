@@ -355,7 +355,18 @@ DB_LLMIME_Skills_FinalWish_Target(_Target, _Caster);
 LeaderLog_Log("DEBUG", "[Mimicry:Skills:CharacterStatusAttempt(LLMIME_FINAL_WISH_TARGET)] Final Wish target set.");
 //END_REGION
 
-//REGION DECOY
+//REGION DECOY_EVENTS
+IF
+CharacterStatusApplied(_Decoy, "LLMIME_DECOY_DISABLED", _)
+AND
+DB_LLMIME_Skills_Temp_Decoy(_Mime, _Decoy)
+AND
+CharacterIsInCombat(_Mime, 0)
+THEN
+CharacterCharacterSetEvent(_Mime, _Decoy, "Mimicry_Events_Decoy_TauntNearbyEnemies");
+//END_REGION
+
+//REGION DECOY_CREATION
 IF
 CharacterUsedSkill(_Character, "Projectile_LLMIME_Decoy", _, _)
 THEN
@@ -471,7 +482,9 @@ LeaderLog_Log("DEBUG", "[LLMIME:Skills:SetupDecoy] Setting up decoy.");
 SetFaction(_Decoy, _Faction);
 CharacterDisableAllCrimes(_Decoy);
 CharacterSetCorpseLootable(_Decoy, 0);
+//END_REGION
 
+//REGION DECOY_REMOVAL
 IF
 CharacterStatusRemoved(_Decoy, "LLMIME_DECOY_LIFETIME", _)
 AND
@@ -495,6 +508,7 @@ PROC_StopLoopEffect(_Decoy, "Mimicry.FX.Decoy.Mask");
 PROC
 LLMIME_Skills_Internal_OnDecoyRemoved((CHARACTERGUID)_Decoy)
 THEN
+ProcObjectTimerCancel(_Decoy, "LLMIME_Timers_Skills_DeleteDecoy");
 ProcObjectTimer(_Decoy, "LLMIME_Timers_Skills_DeleteDecoy", 1000);
 
 PROC
@@ -522,16 +536,13 @@ THEN
 NOT DB_LLMIME_Skills_Temp_Decoy(_Mime, _Decoy);
 RemoveTemporaryCharacter(_Decoy);
 
-// Temporary characters can get weird on a save load
 IF
-GameStarted(_,_)
+RegionEnded(_)
 AND
 DB_LLMIME_Skills_Temp_Decoy(_Mime, _Decoy)
-AND
-LLMIME_QRY_ShouldRemoveTemporaryCharacter(_Decoy)
 THEN
 NOT DB_LLMIME_Skills_Temp_Decoy(_Mime, _Decoy);
-LLMIME_Skills_Internal_RemoveDecoy(_Mime, _Decoy);
+RemoveTemporaryCharacter(_Decoy);
 //END_REGION
 
 //REGION VITAL_INFLUENCE

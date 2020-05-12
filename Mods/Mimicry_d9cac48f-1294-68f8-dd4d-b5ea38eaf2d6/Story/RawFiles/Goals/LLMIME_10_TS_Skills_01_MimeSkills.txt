@@ -20,36 +20,35 @@ CharacterSetHitpointsPercentage(_Target, 100.0);
 IF
 CharacterResurrected(_Target)
 AND
-DB_LLMIME_Skills_FinalWish_Target(_Target, _Caster)
+DB_LLMIME_Skills_FinalWish_Target(_Target, _Mime)
 THEN
-NOT DB_LLMIME_Skills_FinalWish_Target(_Target, _Caster);
-CharacterCharacterSetEvent(_Target, _Caster, "Mimicry_Events_RevivedByFinalWish");
-LeaderLog_Log("DEBUG", "[Mimicry:Skills:CharacterResurrected] Final Wish target detected.");
+NOT DB_LLMIME_Skills_FinalWish_Target(_Target, _Mime);
+CharacterCharacterSetEvent(_Target, _Mime, "Mimicry_Events_RevivedByFinalWish");
 
 //Remove [LLMIME_FINAL_WISH_BUFF] after a delay.
 IF
-CharacterReceivedDamage(_Character, _, _)
+CharacterReceivedDamage(_Mime, _, _)
 AND
-HasActiveStatus(_Character, "LLMIME_FINAL_WISH_BUFF", 1)
+HasActiveStatus(_Mime, "LLMIME_FINAL_WISH_BUFF", 1)
 THEN
-SetStoryEvent(_Character, "Mimicry_Events_FinalWish_OnAttacked");
+SetStoryEvent(_Mime, "Mimicry_Events_FinalWish_OnAttacked");
 //END_REGION
 
 //REGION DECOY
 IF
-ObjectTurnEnded((CHARACTERGUID)_Character)
+ObjectTurnEnded((CHARACTERGUID)_Mime)
 AND
-DB_LLMIME_Skills_Temp_Decoy(_Character, _Decoy)
+DB_LLMIME_Skills_Temp_Decoy(_Mime, _Decoy)
 THEN
-CharacterCharacterSetEvent(_Character, _Decoy, "Mimicry_Events_Decoy_TauntNearbyEnemies");
+CharacterCharacterSetEvent(_Mime, _Decoy, "Mimicry_Events_Decoy_TauntNearbyEnemies");
 
 /* Disabled for now - having to stay invisible for 2 turns to get the full use out of the decoy is a little much.
 IF
-CharacterStatusRemoved(_Character, "LLMIME_DECOY_ACTIVE", _)
+CharacterStatusRemoved(_Mime, "LLMIME_DECOY_ACTIVE", _)
 AND
-NOT LeaderLib_Helper_QRY_HasStatus(_Character, "LLMIME_DECOY_ACTIVE")
+NOT LeaderLib_Helper_QRY_HasStatus(_Mime, "LLMIME_DECOY_ACTIVE")
 AND
-DB_LLMIME_Skills_Temp_Decoy(_Character, _Decoy)
+DB_LLMIME_Skills_Temp_Decoy(_Mime, _Decoy)
 THEN
 LLMIME_Skills_Internal_OnDecoyRemoved(_Decoy);
 */
@@ -58,13 +57,23 @@ LLMIME_Skills_Internal_OnDecoyRemoved(_Decoy);
 IF
 CharacterPrecogDying(_Decoy)
 AND
-DB_LLMIME_Skills_Temp_Decoy(_Character, _Decoy)
+DB_LLMIME_Skills_Temp_Decoy(_Mime, _Decoy)
 THEN
 LLMIME_Skills_Internal_OnDecoyRemoved(_Decoy);
+
+// Temporary characters can get weird on a save load
+IF
+GameStarted(_,_)
+AND
+DB_LLMIME_Skills_Temp_Decoy(_Mime, _Decoy)
+AND
+LLMIME_QRY_ShouldRemoveTemporaryCharacter(_Decoy)
+THEN
+NOT DB_LLMIME_Skills_Temp_Decoy(_Mime, _Decoy);
+LLMIME_Skills_Internal_RemoveDecoy(_Mime, _Decoy);
 //END_REGION
 
 //REGION MUGGABLE_FLAG
-
 //DB_LLMIME_Skills_Temp_DisabledCharacter is checked when LLMIME_MUGGING is applied.
 PROC
 LeaderLib_StatusEvents_OnDisablingStatusApplied((CHARACTERGUID)_Character, (GUIDSTRING)_Cause, (STRING)_Status, (STRING)_Type)
