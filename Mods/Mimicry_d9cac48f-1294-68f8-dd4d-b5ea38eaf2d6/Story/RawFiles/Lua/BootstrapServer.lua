@@ -159,6 +159,11 @@ local function SessionLoading()
 	LeaderLib.AddDebugInitCall(function()
 		local host = CharacterGetHostCharacter()
 		CharacterAddSkill(host, "Jump_LLMIME_HiddenApproach", 0)
+		NRD_CharacterSetPermanentBoostTalent("S_FTJ_BeachVw_001_08348b3a-bded-4811-92ce-f127aa4310e0", "AttackOfOpportunity", 1)
+		CharacterAddAttribute("S_FTJ_BeachVw_001_08348b3a-bded-4811-92ce-f127aa4310e0", "Dummy", 0)
+		--CharacterAddAbilityPoint(CharacterGetHostCharacter(), 10)
+		--CharacterStatusText("S_FTJ_BeachVw_001_08348b3a-bded-4811-92ce-f127aa4310e0", "Test")
+		--CharacterSetImmortal(CharacterGetHostCharacter(), 1)
 	end)
 end
 

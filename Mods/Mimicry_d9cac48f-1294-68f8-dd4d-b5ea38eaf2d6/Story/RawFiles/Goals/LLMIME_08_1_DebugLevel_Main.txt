@@ -2,6 +2,7 @@ Version 1
 SubGoalCombiner SGC_AND
 INITSECTION
 GlobalSetFlag("LeaderLog_Trace_Enabled");
+GlobalSetFlag("LeaderLog_DebugStatus_Enabled");
 KBSECTION
 
 

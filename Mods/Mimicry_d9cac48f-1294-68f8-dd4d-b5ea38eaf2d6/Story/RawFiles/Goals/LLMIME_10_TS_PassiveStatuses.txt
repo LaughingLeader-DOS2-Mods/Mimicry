@@ -47,7 +47,6 @@ THEN
 NOT DB_LLMIME_Brawler_TotalHits(_Mime, _Target, _TotalHits);
 LLMIME_Brawler_ClearMimeData(_Mime);
 //END_REGION
-
 EXITSECTION
 
 ENDEXITSECTION
