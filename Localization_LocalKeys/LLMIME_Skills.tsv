@@ -1,7 +1,7 @@
 Key	Content	Handle
 Cone_LLMIME_MonsterCorrosiveSpray_Description	Belch forth putrid stench to inflict status ailments.<br>Reduces Physical Armour on targets in a cone by [1], and causes <font color='#EE82EE'>random status ailments</font> on targets hit.	hd2da2e11g14aeg46fdg9b30g1d1774f097c3
 Cone_LLMIME_MonsterCorrosiveSpray_DisplayName	Bad Breath	h9e3ba000g65d1g417cga6c7g92c95d8e931b
-Shout_LLMIME_QuakeSlam_Description	Slam the ground, launching enemies within [1] up into the air.<br><font color='#fcd203'>Deals [2] initially, and [3] to [4] when they land (scales with launch height).</font><br><font color='#ff9600'>Each target hit creates another quake, launching enemies within [5] and dealing [6].</font>	h1b898a33g7c7cg4625g9234g22baf80f7a94
+Shout_LLMIME_QuakeSlam_Description	Slam the ground, launching enemies within [1] up into the air.<br><font color='#fcd203'>Deals [2] initially, and [3] to [4] when they land (scales with launch height).</font><br><font color='#ff9600'>Each target hit creates another quake, launching enemies within [5] and dealing [6].</font><br><font color='#CCAA00'>Quake Slam will also launch items that can be picked up.</font>	h1b898a33g7c7cg4625g9234g22baf80f7a94
 Shout_LLMIME_QuakeSlam_DisplayName	Quake Slam	ha6c62c83gda3fg4ac9gb38egef2d4f14229c
 Cone_LLMIME_WaterSpit_Description	Spray targets in a cone with water, dealing [1], setting Wet, and dousing surfaces.	h88036ca6gfe8ag4506g966bg192423f68204
 Cone_LLMIME_WaterSpit_DisplayName	Salty Water	h1f5e1249gd598g49f4gb313gf31b9c06775a
