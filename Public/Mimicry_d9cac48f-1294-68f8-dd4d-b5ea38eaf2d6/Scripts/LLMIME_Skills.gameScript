@@ -343,17 +343,14 @@ VARS
 	CHARACTER:_Mime
 	FLOAT3:_Pos
 ON
-	OnCharacterEvent(_Char, "LLMIME_TimelyRetreat_Teleport")
+	OnCharacterEvent(_Mime, "LLMIME_TimelyRetreat_Teleport")
 ACTIONS
-IF "c1&!c2"
-	GetVar(_Pos, _Char, "LLMIME_TimelyRetreat_TargetPosition")
-	IsEqual(_Pos, null)
+IF "c1"
+	GetVar(_Pos, _Mime, "LLMIME_TimelyRetreat_TargetPosition")
 THEN
-	TeleportTo(_Char, _Pos, 1)
-ELSE
-	TeleportTo(_Char, _Char, 1)
+	TeleportTo(_Mime, _Pos, 1)
 ENDIF
-	//CharacterEvent(_Char, "LLMIME_Skills_TimelyRetreat_TeleportedIn")
+	CharacterEvent(_Mime, "LLMIME_Skills_TimelyRetreat_TeleportedIn")
 
 /*
 EVENT LLMIME_Skills_Fatality_SecondHit

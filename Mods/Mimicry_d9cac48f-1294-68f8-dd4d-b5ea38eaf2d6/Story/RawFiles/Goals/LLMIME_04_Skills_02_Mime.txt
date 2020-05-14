@@ -924,7 +924,7 @@ THEN
 NOT DB_LLMIME_Skills_Temp_HiddenApproachPosition(_Mime, _x, _y, _z);
 SetVarFloat3(_Mime, "LLMIME_TimelyRetreat_TargetPosition", _x, _y, _z);
 SetStoryEvent(_Mime, "LLMIME_TimelyRetreat_Teleport");
-LeaderLib_Timers_StartObjectTimer(_Mime, 50, "Timers_LLMIME_Skills_TimelyRetreat_TeleportedIn", "LLMIME_Skills_TimelyRetreat_TeleportedIn");
+//LeaderLib_Timers_StartObjectTimer(_Mime, 50, "Timers_LLMIME_Skills_TimelyRetreat_TeleportedIn", "LLMIME_Skills_TimelyRetreat_TeleportedIn");
 
 IF
 StoryEvent((CHARACTERGUID)_Mime, "LLMIME_Skills_TimelyRetreat_TeleportedIn")
