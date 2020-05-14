@@ -674,6 +674,7 @@ PlayEffect(_Target, "RS3_FX_Skills_Void_Netherswap_Disappear_Overlay_01");
 PlayEffect(_Mime, "RS3_FX_Skills_Void_Netherswap_Disappear_Overlay_01");
 LeaderLib_Timers_StartCharacterCharacterTimer(_Mime, _Target, 500, "Mimicry_Timers_StartSwapping_", "Mimicry_FlankAndSwap_StartSwapping");
 
+/*
 IF
 CharacterCharacterEvent(_Mime, _Target, "Mimicry_FlankAndSwap_StartSwapping")
 AND
@@ -687,6 +688,7 @@ CharacterSetDetached(_Target, 1);
 CharacterSetDetached(_Mime, 1);
 TeleportToPosition(_Target, _mx, _my, _mz, "Mimicry_FlankAndSwap_TargetSwappedPlaces", 0, 1);
 TeleportToPosition(_Mime, _tx, _ty, _tz, "Mimicry_FlankAndSwap_MimeSwappedPlaces", 0, 1);
+*/
 
 //KNOCKED_DOWN gets removed by teleporting for some reason
 IF
@@ -902,10 +904,31 @@ LeaderLib_Helper_ClearActionQueue(_Mime);
 IF
 SkillCast(_Mime, "Shout_LLMIME_TimelyRetreat", _, _)
 AND
+CharacterIsInCombat(_Mime, 0)
+AND
 DB_LLMIME_Skills_Temp_HiddenApproachPosition(_Mime, _x, _y, _z)
 THEN
 NOT DB_LLMIME_Skills_Temp_HiddenApproachPosition(_Mime, _x, _y, _z);
-TeleportToPosition(_Mime, _x, _y, _z, "LLMIME_Skills_TimelyRetreat_TeleportedIn", 0, 0);
+TeleportToPosition(_Mime, _x, _y, _z, "", 0, 0);
+LeaderLib_Helper_ClearActionQueue(_Mime);
+PlayAnimation(_Mime, "skill_cast_self_teleport_in_01_cast");
+RemoveStatus(_Mime, "LLMIME_ADDSKILL_TIMELY_RETREAT");
+
+IF
+SkillCast(_Mime, "Shout_LLMIME_TimelyRetreat", _, _)
+AND
+CharacterIsInCombat(_Mime, 1)
+AND
+DB_LLMIME_Skills_Temp_HiddenApproachPosition(_Mime, _x, _y, _z)
+THEN
+NOT DB_LLMIME_Skills_Temp_HiddenApproachPosition(_Mime, _x, _y, _z);
+SetVarFloat3(_Mime, "LLMIME_TimelyRetreat_TargetPosition", _x, _y, _z);
+SetStoryEvent(_Mime, "LLMIME_TimelyRetreat_Teleport");
+LeaderLib_Timers_StartObjectTimer(_Mime, 50, "Timers_LLMIME_Skills_TimelyRetreat_TeleportedIn", "LLMIME_Skills_TimelyRetreat_TeleportedIn");
+
+IF
+StoryEvent((CHARACTERGUID)_Mime, "LLMIME_Skills_TimelyRetreat_TeleportedIn")
+THEN
 LeaderLib_Helper_ClearActionQueue(_Mime);
 PlayAnimation(_Mime, "skill_cast_self_teleport_in_01_cast");
 RemoveStatus(_Mime, "LLMIME_ADDSKILL_TIMELY_RETREAT");

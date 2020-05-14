@@ -317,6 +317,44 @@ THEN
 	ExplodeAt(_Target, Projectile_LLMIME_Mask_Unholy_DeathBonus, _Level, _Mime)
 ENDIF
 
+EVENT LLMIME_Skills_FlankAndSwap_Teleport
+VARS
+	CHARACTER:_Mime
+	CHARACTER:_Target
+	FLOAT3:_MimePos
+	FLOAT3:_TargetPos
+ON
+	OnCharacterCharacterEvent(_Mime, _Target, "Mimicry_FlankAndSwap_StartSwapping")
+ACTIONS
+IF "c1&c2"
+	GetPosition(_Mime, _MimePos)
+	GetPosition(_Target, _TargetPos)
+THEN
+	PlayEffectAt(_MimePos, "RS3_FX_Skills_Void_Netherswap_Disappear_Root_01")
+	PlayEffectAt(_TargetPos, "RS3_FX_Skills_Void_Netherswap_Disappear_Root_01")
+	TeleportTo(_Mime, _TargetPos, 1)
+	TeleportTo(_Target, _MimePos, 1)
+	CharacterEvent(_Target, "Mimicry_FlankAndSwap_TargetSwappedPlaces")
+	CharacterEvent(_Mime, "Mimicry_FlankAndSwap_MimeSwappedPlaces")
+ENDIF
+
+EVENT LLMIME_Skills_TimelyRetreat_Teleport
+VARS
+	CHARACTER:_Mime
+	FLOAT3:_Pos
+ON
+	OnCharacterEvent(_Char, "LLMIME_TimelyRetreat_Teleport")
+ACTIONS
+IF "c1&!c2"
+	GetVar(_Pos, _Char, "LLMIME_TimelyRetreat_TargetPosition")
+	IsEqual(_Pos, null)
+THEN
+	TeleportTo(_Char, _Pos, 1)
+ELSE
+	TeleportTo(_Char, _Char, 1)
+ENDIF
+	//CharacterEvent(_Char, "LLMIME_Skills_TimelyRetreat_TeleportedIn")
+
 /*
 EVENT LLMIME_Skills_Fatality_SecondHit
 VARS
