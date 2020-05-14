@@ -195,7 +195,7 @@ NOT DB_LLMIME_Skills_Temp_QuakeSlamTarget(_Target, _Caster, _)
 AND
 GetUUID(_Target, _UUID)
 AND
-LeaderLib_Random_QRY(250, 800)
+LeaderLib_Random_QRY(250, 700)
 AND
 DB_LeaderLib_Random(_HeightInt)
 AND
@@ -212,7 +212,7 @@ SetTag(_Target, "LLMIME_Launched");
 ApplyStatus(_Target, "LLMIME_LAUNCHED_DISABLE", 18.0);
 DB_LLMIME_Skills_Temp_QuakeSlamTagged(_Target);
 DB_LLMIME_Skills_Temp_QuakeSlamTarget(_Target, _Caster, _FallDamageInt);
-LeaderLib_Platforms_Launch(_Target, "LLMIME_Skills_QuakeSlamDone", _Height);
+LeaderLib_Platforms_Launch(_Target, "LLMIME_Skills_QuakeSlamDone", _Height, 15.0, 2.0, 0);
 PlayScaledEffectAtPosition("LLMIME_FX_Status_Launched_Apply_Root_01", 0.25, _x, _y, _z);
 
 PROC
