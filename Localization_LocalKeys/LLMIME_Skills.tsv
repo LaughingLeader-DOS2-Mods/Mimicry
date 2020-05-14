@@ -1,63 +1,63 @@
-Key	Content
-Cone_LLMIME_MonsterCorrosiveSpray_Description	Belch forth putrid stench to inflict status ailments.<br>Reduces Physical Armour on targets in a cone by [1], and causes <font color='#EE82EE'>random status ailments</font> on targets hit.
-Cone_LLMIME_MonsterCorrosiveSpray_DisplayName	Bad Breath
-Cone_LLMIME_QuakeSlam_Description	Slam the ground, launching enemies within [1] up into the air.<br><font color='#fcd203'>Deals [2] initially, and [3] to [4] when they land (scales with launch height).</font><br><font color='#ff9600'>Each target hit creates another quake, launching enemies within [5] and dealing [6].</font>
-Cone_LLMIME_QuakeSlam_DisplayName	Quake Slam
-Jump_LLMIME_HiddenApproach_Description	Jump to a distant position and gain <font color='#a189ec'>Timely Retreat</font> for 2 turns (6 turns out of combat), allowing you to return to your original position before jumping.
-Jump_LLMIME_HiddenApproach_DisplayName	Hidden Approach
-MultiStrike_LLMIME_MimeVault_Description	Appear behind an enemy and land a blow for [1] + [2].<br>Before initial damage is dealt, enemies receive <font color='#FF0000'>[3]% Dodge</font> and <font color='#FF0000'>[4]% Physical Resistance</font> from being <font color='#FF0000'>Flanked</font>.<br><font color='#FF00FF'>After flanking the enemy, your positions are <font color='#9a03ff'>Swapped</font>.</font><br><font color='#FF4500'>Grounded targets are immune to being Swapped.</font>
-MultiStrike_LLMIME_MimeVault_DisplayName	Flank & Swap
-Projectile_LLMIME_Decoy_Description	Jump to a distant position under a cloak of shadows, placing a decoy at your initial spot.<br>The decoy <font color='#DC143C'>taunts</font> nearby enemies at the end of your turn.<br><font color='#FFA07A'>Automatically disables mimicking by default.</font>
-Projectile_LLMIME_Decoy_DisplayName	Decoy Ploy
-Projectile_LLMIME_FinalWish_Description	Sacrifice your life to restore the lives of your party members.<br>Restores <font color='#FF0000'>50% Vitality</font>, and applies <font color='#97fbff'>Final Wish</font>, which makes the target <font color='#00FA9A'>resist death until the start of their turn, or they reach 1 Vitality.</font><br><font color='#FF0000'>Perish after casting.</font>
-Projectile_LLMIME_FinalWish_DisplayName	Final Wish
-Shout_LLMIME_BrawlerStance_Description	Toggles the use of the <font color='#FFD700'>Brawler's Fist</font>, an unarmed weapon that scales to your level and chosen attribute.<br><font color='#FF7F50'>Every few levels, the Brawler's Fist gains a new bonus.</font>
-Shout_LLMIME_BrawlerStance_DisplayName	<font color='#FFD700'>Brawler Stance</font>
-Shout_LLMIME_DisableMimicking_Description	<font color='#DC143C'>Prevents mimicking from automatically occuring.</font><br><font color='#188ede'>Using this skill again will cancel the effect.</font><br><font color='#FFA07A'>By default, mimicking is automatically disabled when Invisible.</font><br><font color='#FF00FF'>Mimicking Info:</font><br><font color='#FF69B4'>When in combat, Mimes mimic the skills, basic attacks, and item usage of the party, with the following restrictions:</font><br><font color='#DC143C'>Mimes cannot mimic skills that: require Source Points, are 'Special' Shout skills, directly summon creatures, and skills that are of the Rush/Jump type.</font><br><font color='#00FF7F'>When mimicking, Mimes copy the weapon(s) used.</font>
-Shout_LLMIME_DisableMimicking_DisplayName	Disable Mimicking
-Shout_LLMIME_EvasiveManeuver_Description	Dodging is increased by <font color='#FF00FF'>[1]%</font>|<font color='#EE82EE'>[2]%</font>|<font color='#D8BFD8'>[3]%</font> on turns <font color='#FF00FF'>1</font>|<font color='#EE82EE'>2</font>|<font color='#D8BFD8'>3</font><br>Movement speed is increased by [4]% on the first turn.<br><font color='#00FA9A'>While Counter Throw is active, you have a 90% chance to counter-attack for [5] when dodging.</font>
-Shout_LLMIME_EvasiveManeuver_WeaponExpansion_Description	Dodging is increased by <font color='#FF00FF'>[1]%</font>|<font color='#EE82EE'>[2]%</font>|<font color='#D8BFD8'>[3]%</font> on turns <font color='#FF00FF'>1</font>|<font color='#EE82EE'>2</font>|<font color='#D8BFD8'>3</font><br>Movement speed is increased by [4]% on the first turn.<br><font color='#00FA9A'>While Counter Throw is active, you have a 90% chance to counter-attack for [5] when dodging.</font><br><font color='#FFD700'>Weapon Expansion</font><br><font color='#00FA9A'>When dodging an enemy, you have a 60% chance to counter-attack with a rock.</font>
-Shout_LLMIME_EvasiveManeuver_DisplayName	Uncanny Dodge
-Shout_LLMIME_Explosion_Description	Explode, dealing [1] to enemies in a large area around you. Creates fire surfaces.
-Shout_LLMIME_Explosion_DisplayName	Explosion
-Shout_LLMIME_ForcedEvolution_Description	Force yourself to evolve, transcending into a more powerful form.<br><font color='#FF0000'>Accelerating nature is strains the body, resulting in death after [1] turns.</font><br>Additionally grants a <font color='#00FF00'>[2]% Damage</font> and <font color='#00FF00'>[3]% Critical Chance</font> boost.
-Shout_LLMIME_ForcedEvolution_DisplayName	Evolve
-Shout_LLMIME_OpenMenu_Description	Focus on your inner self behind the mask, diving deep within your mind.<br><font color='#188ede'>Opens the Mimicry menu.</font>
-Shout_LLMIME_OpenMenu_DisplayName	Inner Identity
-Shout_LLMIME_ReturnToOwner_Description	Use the Mask of Mimicry's power to return to your leader.
-Shout_LLMIME_ReturnToOwner_DisplayName	Return
-Shout_LLMIME_SourceMimicking_Description	Surpass your limits, mimicking the next source skill used by a party member.<br><font color='#00FF7F'>While this skill is learned:</font><br><font color='#73f6ff'>Regenerate [1] SP every 60 seconds outside of combat, or 10 turns within combat.</font>
-Shout_LLMIME_SourceMimicking_DisplayName	Mimic Source
-Shout_LLMIME_TimelyRetreat_Description	Return to your original position before jumping with <font color='#a189ec'>Hidden Approach</font>.
-Shout_LLMIME_TimelyRetreat_DisplayName	Timely Retreat
-Storm_LLMIME_IncarnateLightning_Description	Summons a storm to rage upon the target area for 1 turn, dealing [1] per hit.
-Storm_LLMIME_IncarnateLightning_DisplayName	Thunder Storm
-Target_LLMIME_DisarmingBlow_Description	Deal [1] and disarm an enemy for 2 turns.<br>If the target is <font color='#FF0000'>Knocked Down</font>, steal a random amount of gold.
-Target_LLMIME_DisarmingBlow_WeaponExpansion_Description	Deal [1] and disarm an enemy for 2 turns.<br>If the target is <font color='#FF0000'>Knocked Down</font>, steal a random amount of gold.<br><font color='#FFD700'>Weapon Expansion</font><br>When mugging the target, <font color='#FF00FF'>steal a throwable copy of their weapon</font> for 2 turns.
-Target_LLMIME_DisarmingBlow_DisplayName	Disarming Blow
-Target_LLMIME_EyeGouge_Description	Poke an enemy in the eyes, dealing [1] damage and blinding them for 1 turn.<br><font color='#EE82EE'>Blind bypasses armor.</font>
-Target_LLMIME_EyeGouge_DisplayName	Eye Gouge
-Target_LLMIME_KneeBreaker_Description	Deal [1] to target character, breaking their knee with a swift blow. When they try to move, they will take piercing damage.<br>If the target is <font color='#FF0000'>Disarmed</font>, apply <font color='#8A2BE2'>Bleeding</font> for 2 turns.
-Target_LLMIME_KneeBreaker_DisplayName	Knee Breaker
-Target_LLMIME_SealEvil_Description	Petrify the <font color='#40b606'>Undead</font>, dealing [1] and <font color='#a8a8a8'>Sealing</font> the target for 1 turn.<br><font color='#CD5C5C'>Removes Bleeding, Burning, and Poisoned.</font><br><font color='#97fbff'>Clears surfaces within a 2m range around the target.</font>
-Target_LLMIME_SealEvil_DisplayName	Seal Evil
-Target_LLMIME_SilencingStare_Description	Stare at an enemy with cold intensity.<br>If the target is <font color='#FF0000'>Crippled</font>, apply <font color='#8A2BE2'>Terrified</font> for 1 turn.
-Target_LLMIME_SilencingStare_DisplayName	Silencing Stare
-Target_LLMIME_VitalInfluence_Description	If <font color='#cd1f1f '>Constitution</font> is greater, gain <font color='#4197e2'>+[1]% Max Vitality (Strengthened Vitals)</font> and inflict <font color='#FF0000'>[2]% Max Vitality (Weakened Vitals)</font> on target for [3] turns.<br><font color='#FF0000'>Weakened Vitals</font> additionally deals [4] each turn.
-Target_LLMIME_VitalInfluence_DisplayName	Vital Influence
-Target_LLMIME_Wish_Description	Sacrifice <font color='#FF0000'>50% Vitality</font> to <font color='#97fbff'>restore twice as much</font> to an ally.
-Target_LLMIME_Wish_DisplayName	Wish
-Target_LLMIME_FrogAttack_DisplayName	Frog Attack
-Target_LLMIME_FrogAttack_Description	A pitifully weak attack that deals [1].
-Target_LLMIME_PerfectDoppelganger_DisplayName	<font color='#aa5bfb'>Perfect Doppelganger</font>
-Target_LLMIME_PerfectDoppelganger_Description	Mimic a target completely, becoming a perfect copy for 2 turns.<br><font color='#188EDE'>Doppelgangers copy the skills, equipment, stats, and abilities of the target.</font>
-ProjectileStrike_LLMIME_Mask_Unholy_DisplayName	<font color='#aa5bfb'>Unholy Darkness</font>
-ProjectileStrike_LLMIME_Mask_Unholy_Description	Release the dark energy within your mask, dealing [1] + [3] in a [2] radius.<br><font color='#7b33f3'>Enemies who die explode in a cursed cloud of darkness.</font><br><font color='#ea3e5f'>Initial damage scales with your maximum vitality.</font><br><font color='#11D77A' size='18'>Shadow Damage bypasses armor and cannot be resisted.</font>
-Zone_LLMIME_SetFacingDirection_DisplayName	<font color='#a1f398'>Set Facing</font>
-Zone_LLMIME_SetFacingDirection_Description	Set the direction to look when your turn ends.<br><font color='#eb64ff'>Tip: Mimicking factors in the mime's look direction, so facing the right way is important for setting up mimicked actions.</font><br><font color='#ff3838'>Cleared when your turn starts.</font>
-Cone_LLMIME_WaterSpit_DisplayName	Salty Water
-Cone_LLMIME_WaterSpit_Description	Spray targets in a cone with water, dealing [1], setting Wet, and dousing surfaces.
-Target_LLMIME_Fatality_DisplayName	<font color='#a22aff'>Deathblow</font>
-Target_LLMIME_Fatality_Description	Strike a target with a deathblow, dealing [1].<br><font color='#ff2e73'>Damage is doubled if the target is disabled.</font><br><font color='#2effd0'>If this skill kills the target, the cooldown is reset.</font>
-Shout_LLMIME_ShadowForm_DisplayName	<font color='#995bff'>Shadow Form</font>
-Shout_LLMIME_ShadowForm_Description	Let loose the <font color='#995bff'>dark energy</font> within your being, enveloping yourself in a protective veil.<br>While in the <font color='#995bff'>Shadow Form</font>, damage is reduced by [1]% while in a smoke cloud, you gain [2]% increased Dodge, and each attack has a chance to deal [3] to targets.<br><font color='#11D77A' size='18'>Shadow Damage bypasses armor and cannot be resisted.</font>
+Key	Content	Handle
+Cone_LLMIME_MonsterCorrosiveSpray_Description	Belch forth putrid stench to inflict status ailments.<br>Reduces Physical Armour on targets in a cone by [1], and causes <font color='#EE82EE'>random status ailments</font> on targets hit.	hd2da2e11g14aeg46fdg9b30g1d1774f097c3
+Cone_LLMIME_MonsterCorrosiveSpray_DisplayName	Bad Breath	h9e3ba000g65d1g417cga6c7g92c95d8e931b
+Cone_LLMIME_QuakeSlam_Description	Slam the ground, launching enemies within [1] up into the air.<br><font color='#fcd203'>Deals [2] initially, and [3] to [4] when they land (scales with launch height).</font><br><font color='#ff9600'>Each target hit creates another quake, launching enemies within [5] and dealing [6].</font>	h1b898a33g7c7cg4625g9234g22baf80f7a94
+Cone_LLMIME_QuakeSlam_DisplayName	Quake Slam	ha6c62c83gda3fg4ac9gb38egef2d4f14229c
+Cone_LLMIME_WaterSpit_Description	Spray targets in a cone with water, dealing [1], setting Wet, and dousing surfaces.	h88036ca6gfe8ag4506g966bg192423f68204
+Cone_LLMIME_WaterSpit_DisplayName	Salty Water	h1f5e1249gd598g49f4gb313gf31b9c06775a
+Jump_LLMIME_HiddenApproach_Description	Jump to a distant position and gain <font color='#a189ec'>Timely Retreat</font> for 2 turns (6 turns out of combat), allowing you to return to your original position before jumping.	hd6855a8eg3edbg4de7gbd97g15cfd16deabd
+Jump_LLMIME_HiddenApproach_DisplayName	Hidden Approach	h41f6768cg5e49g402cg9560gd5d3d51b5865
+MultiStrike_LLMIME_MimeVault_Description	Appear behind an enemy and land a blow for [1] + [2].<br>Before initial damage is dealt, enemies receive <font color='#FF0000'>[3]% Dodge</font> and <font color='#FF0000'>[4]% Physical Resistance</font> from being <font color='#FF0000'>Flanked</font>.<br><font color='#FF00FF'>After flanking the enemy, your positions are <font color='#9a03ff'>Swapped</font>.</font><br><font color='#FF4500'>Grounded targets are immune to being Swapped.</font>	h2bdeffe5gdd79g4809g839ag5d2c69b063ce
+MultiStrike_LLMIME_MimeVault_DisplayName	Flank & Swap	h30a6477egb1b9g4ac3g9e7cgd0d41dd960ad
+Projectile_LLMIME_Decoy_Description	Jump to a distant position under a cloak of shadows, placing a decoy at your initial spot.<br>The decoy <font color='#DC143C'>taunts</font> nearby enemies at the end of your turn.<br><font color='#FFA07A'>Automatically disables mimicking by default.</font>	haa71b665g2108g46f5g9a2ag37f2e505cf95
+Projectile_LLMIME_Decoy_DisplayName	Decoy Ploy	he9db1e06g0f64g4d38g9f49g063ff7e759b0
+Projectile_LLMIME_FinalWish_Description	Sacrifice your life to restore the lives of your party members.<br>Restores <font color='#FF0000'>50% Vitality</font>, and applies <font color='#97fbff'>Final Wish</font>, which makes the target <font color='#00FA9A'>resist death until the start of their turn, or they reach 1 Vitality.</font><br><font color='#FF0000'>Perish after casting.</font>	h9bd309cdgb826g4dc4g80edg7a18192148ac
+Projectile_LLMIME_FinalWish_DisplayName	Final Wish	ha7ac0207g08deg43e5g85a4g50cd19bb226c
+ProjectileStrike_LLMIME_Mask_Unholy_Description	Release the dark energy within your mask, dealing [1] + [3] in a [2] radius.<br><font color='#7b33f3'>Enemies who die explode in a cursed cloud of darkness.</font><br><font color='#ea3e5f'>Initial damage scales with your maximum vitality.</font><br><font color='#11D77A' size='18'>Shadow Damage bypasses armor and cannot be resisted.</font>	hb9af7d13gfa3dg4a9bga913g7e9681d5cda8
+ProjectileStrike_LLMIME_Mask_Unholy_DisplayName	<font color='#aa5bfb'>Unholy Darkness</font>	h89767521g3be6g4bbbg96d4g511c270178c2
+Shout_LLMIME_BrawlerStance_Description	Toggles the use of the <font color='#FFD700'>Brawler's Fist</font>, an unarmed weapon that scales to your level and chosen attribute.<br><font color='#FF7F50'>Every few levels, the Brawler's Fist gains a new bonus.</font>	h9f990f16g5d20g451dg9c4cga2440ae5530c
+Shout_LLMIME_BrawlerStance_DisplayName	<font color='#FFD700'>Brawler Stance</font>	hebe20773g2007g4494g9155gf74c67b5b10b
+Shout_LLMIME_DisableMimicking_Description	<font color='#DC143C'>Prevents mimicking from automatically occuring.</font><br><font color='#188ede'>Using this skill again will cancel the effect.</font><br><font color='#FFA07A'>By default, mimicking is automatically disabled when Invisible.</font><br><font color='#FF00FF'>Mimicking Info:</font><br><font color='#FF69B4'>When in combat, Mimes mimic the skills, basic attacks, and item usage of the party, with the following restrictions:</font><br><font color='#DC143C'>Mimes cannot mimic skills that: require Source Points, are 'Special' Shout skills, directly summon creatures, and skills that are of the Rush/Jump type.</font><br><font color='#00FF7F'>When mimicking, Mimes copy the weapon(s) used.</font>	h3980dc0cg0fc7g4c3bg9923g449b641e88bb
+Shout_LLMIME_DisableMimicking_DisplayName	Disable Mimicking	h24fdeb54g1610g4575gbed7ga04555e661b8
+Shout_LLMIME_EvasiveManeuver_Description	Dodging is increased by <font color='#FF00FF'>[1]%</font>|<font color='#EE82EE'>[2]%</font>|<font color='#D8BFD8'>[3]%</font> on turns <font color='#FF00FF'>1</font>|<font color='#EE82EE'>2</font>|<font color='#D8BFD8'>3</font><br>Movement speed is increased by [4]% on the first turn.<br><font color='#00FA9A'>While Counter Throw is active, you have a 90% chance to counter-attack for [5] when dodging.</font>	h1491bb2dg5f4cg4055g88eag8c8d470379e9
+Shout_LLMIME_EvasiveManeuver_DisplayName	Uncanny Dodge	h9ba8ed26g73dcg4610g8dedgc29b2e89a766
+Shout_LLMIME_EvasiveManeuver_WeaponExpansion_Description	Dodging is increased by <font color='#FF00FF'>[1]%</font>|<font color='#EE82EE'>[2]%</font>|<font color='#D8BFD8'>[3]%</font> on turns <font color='#FF00FF'>1</font>|<font color='#EE82EE'>2</font>|<font color='#D8BFD8'>3</font><br>Movement speed is increased by [4]% on the first turn.<br><font color='#00FA9A'>While Counter Throw is active, you have a 90% chance to counter-attack for [5] when dodging.</font><br><font color='#FFD700'>Weapon Expansion</font><br><font color='#00FA9A'>When dodging an enemy, you have a 60% chance to counter-attack with a rock.</font>	h37e8de7cgcf8fg435bg802eg91efd2a83d95
+Shout_LLMIME_Explosion_Description	Explode, dealing [1] to enemies in a large area around you. Creates fire surfaces.	h4e5b684dg2326g4c0bgade0gc9036c2851fd
+Shout_LLMIME_Explosion_DisplayName	Explosion	he3674c4aga277g4148gb66ag32c686634eb9
+Shout_LLMIME_ForcedEvolution_Description	Force yourself to evolve, transcending into a more powerful form.<br><font color='#FF0000'>Accelerating nature is strains the body, resulting in death after [1] turns.</font><br>Additionally grants a <font color='#00FF00'>[2]% Damage</font> and <font color='#00FF00'>[3]% Critical Chance</font> boost.	h4d511abeg8364g450dg9185g17a6fa8e0264
+Shout_LLMIME_ForcedEvolution_DisplayName	Evolve	hb3ea8607g6000g4ab8gaae7g94754a0208fa
+Shout_LLMIME_OpenMenu_Description	Focus on your inner self behind the mask, diving deep within your mind.<br><font color='#188ede'>Opens the Mimicry menu.</font>	hc4229129g64b2g476fgb542g0334285f9a40
+Shout_LLMIME_OpenMenu_DisplayName	Inner Identity	hd5f5f690gd3c1g406fga4b8g27aa98b56de3
+Shout_LLMIME_ReturnToOwner_Description	Use the Mask of Mimicry's power to return to your leader.	hb115f7c2g7baeg4a50g9ba2g752b901ef674
+Shout_LLMIME_ReturnToOwner_DisplayName	Return	h7724dc51g93ceg47a6g9bd7g9e03007b9a53
+Shout_LLMIME_ShadowForm_Description	Let loose the <font color='#995bff'>dark energy</font> within your being, enveloping yourself in a protective veil.<br>While in the <font color='#995bff'>Shadow Form</font>, damage is reduced by [1]% while in a smoke cloud, you gain [2]% increased Dodge, and each attack has a chance to deal [3] to targets.<br><font color='#11D77A' size='18'>Shadow Damage bypasses armor and cannot be resisted.</font>	hc2ee917cg954fg4b33gaca4g9629ab0e6e20
+Shout_LLMIME_ShadowForm_DisplayName	<font color='#995bff'>Shadow Form</font>	hdaa6b323g6e8eg4182g855eg47f64d381fab
+Shout_LLMIME_SourceMimicking_Description	Surpass your limits, mimicking the next source skill used by a party member.<br><font color='#00FF7F'>While this skill is learned:</font><br><font color='#73f6ff'>Regenerate [1] SP every 60 seconds outside of combat, or 10 turns within combat.</font>	hc5a8b399g70d9g4b92g94dcg32c7bdadd08b
+Shout_LLMIME_SourceMimicking_DisplayName	Mimic Source	heb1a62dagfdccg49f4gb976gf9834f0015ed
+Shout_LLMIME_TimelyRetreat_Description	Return to your original position before jumping with <font color='#a189ec'>Hidden Approach</font>.	ha6e178d8gb4e0g4aa9g9c2ag5bf02c3c22ff
+Shout_LLMIME_TimelyRetreat_DisplayName	Timely Retreat	hdf4bba77gb11ag4b19gaa33g792283c6e0c6
+Storm_LLMIME_IncarnateLightning_Description	Summons a storm to rage upon the target area for 1 turn, dealing [1] per hit.	hdbc0be21g9b31g4fadgb79aga96a43793bd7
+Storm_LLMIME_IncarnateLightning_DisplayName	Thunder Storm	hebb37299g98a3g4d6bgb5cbgaf75c0b3dc7a
+Target_LLMIME_DisarmingBlow_Description	Deal [1] and disarm an enemy for 2 turns.<br>If the target is <font color='#FF0000'>Knocked Down</font>, steal a random amount of gold.	h8f27e942gb56cg4752gacdagbac3fc9865c5
+Target_LLMIME_DisarmingBlow_DisplayName	Disarming Blow	h8f9517bdg61aag4f48gb26fg6e371fdcf7aa
+Target_LLMIME_DisarmingBlow_WeaponExpansion_Description	Deal [1] and disarm an enemy for 2 turns.<br>If the target is <font color='#FF0000'>Knocked Down</font>, steal a random amount of gold.<br><font color='#FFD700'>Weapon Expansion</font><br>When mugging the target, <font color='#FF00FF'>steal a throwable copy of their weapon</font> for 2 turns.	h700f5eb5gf65ag4231ga516gd0d08b12a532
+Target_LLMIME_EyeGouge_Description	Poke an enemy in the eyes, dealing [1] damage and blinding them for 1 turn.<br><font color='#EE82EE'>Blind bypasses armor.</font>	hded5dc81g8defg4c9dg9eabg86c407902aa9
+Target_LLMIME_EyeGouge_DisplayName	Eye Gouge	he3efb576g7738g4d9bgb0f2g4e59c2c4fd66
+Target_LLMIME_Fatality_Description	Strike a target with a deathblow, dealing [1].<br><font color='#ff2e73'>Damage is doubled if the target is disabled.</font><br><font color='#2effd0'>If this skill kills the target, the cooldown is reset.</font>	hedf59fdege8f9g40dcgbfb0gbf9c80b58d4b
+Target_LLMIME_Fatality_DisplayName	<font color='#a22aff'>Deathblow</font>	h979b432eg7f1cg4ddega780g328225f0dcea
+Target_LLMIME_FrogAttack_Description	A pitifully weak attack that deals [1].	h48a4e26dg9a3eg4524gab65g28658e5c4f15
+Target_LLMIME_FrogAttack_DisplayName	Frog Attack	haf023b46gdd9cg43c8g818ege8b57163d571
+Target_LLMIME_KneeBreaker_Description	Deal [1] to target character, breaking their knee with a swift blow. When they try to move, they will take piercing damage.<br>If the target is <font color='#FF0000'>Disarmed</font>, apply <font color='#8A2BE2'>Bleeding</font> for 2 turns.	hf52172c2ge889g44c0g8ff6g413ab699d454
+Target_LLMIME_KneeBreaker_DisplayName	Knee Breaker	ha822be29g4b9fg4957gbf76g76e342211086
+Target_LLMIME_PerfectDoppelganger_Description	Mimic a target completely, becoming a perfect copy for 2 turns.<br><font color='#188EDE'>Doppelgangers copy the skills, equipment, stats, and abilities of the target.</font>	h1a99b4bbg55c5g4eaega0dfg4f61a47c849d
+Target_LLMIME_PerfectDoppelganger_DisplayName	<font color='#aa5bfb'>Perfect Doppelganger</font>	hb4437b1cg6841g4d19g80a5gf580c6a261b2
+Target_LLMIME_SealEvil_Description	Petrify the <font color='#40b606'>Undead</font>, dealing [1] and <font color='#a8a8a8'>Sealing</font> the target for 1 turn.<br><font color='#CD5C5C'>Removes Bleeding, Burning, and Poisoned.</font><br><font color='#97fbff'>Clears surfaces within a 2m range around the target.</font>	hbe42ef93gd72ag4924g856bgd0daa6004b35
+Target_LLMIME_SealEvil_DisplayName	Seal Evil	hd01e2e14g3583g47e8g8605gde1d2b365eb6
+Target_LLMIME_SilencingStare_Description	Stare at an enemy with cold intensity.<br>If the target is <font color='#FF0000'>Crippled</font>, apply <font color='#8A2BE2'>Terrified</font> for 1 turn.	h59678a31g2369g4335ga9a5gaf85cc06605d
+Target_LLMIME_SilencingStare_DisplayName	Silencing Stare	h79024bdfg5be6g45dfg956dg25a46cd6b980
+Target_LLMIME_VitalInfluence_Description	If <font color='#cd1f1f '>Constitution</font> is greater, gain <font color='#4197e2'>+[1]% Max Vitality (Strengthened Vitals)</font> and inflict <font color='#FF0000'>[2]% Max Vitality (Weakened Vitals)</font> on target for [3] turns.<br><font color='#FF0000'>Weakened Vitals</font> additionally deals [4] each turn.	haea68897g1072g4e85g83cag8d4ada2f36bc
+Target_LLMIME_VitalInfluence_DisplayName	Vital Influence	h37f49d75g0690g4142gbea1g15b5d9bf6f1a
+Target_LLMIME_Wish_Description	Sacrifice <font color='#FF0000'>50% Vitality</font> to <font color='#97fbff'>restore twice as much</font> to an ally.	he3630591g0bf6g44a1g8353g9be79d2349ce
+Target_LLMIME_Wish_DisplayName	Wish	hbfdb1aacg6661g488dgb7b2g88e1fa74fcc3
+Zone_LLMIME_SetFacingDirection_Description	Set the direction to look when your turn ends.<br><font color='#eb64ff'>Tip: Mimicking factors in the mime's look direction, so facing the right way is important for setting up mimicked actions.</font><br><font color='#ff3838'>Cleared when your turn starts.</font>	h70c68e77g9026g4f3ega452ge7c93cf1b85a
+Zone_LLMIME_SetFacingDirection_DisplayName	<font color='#a1f398'>Set Facing</font>	h695a2f16g144cg4943g8b05g801919d9725a
