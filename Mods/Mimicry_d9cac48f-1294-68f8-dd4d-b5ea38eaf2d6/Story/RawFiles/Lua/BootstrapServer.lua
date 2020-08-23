@@ -155,8 +155,8 @@ local function SkillRequiresWeapon_QRY(skill)
 end
 Ext.NewQuery(SkillRequiresWeapon_QRY, "LLMIME_Ext_QRY_SkillRequiresWeapon", "[in](STRING)_Skill, [out](INTEGER)_RequiresWeapon")
 
-local function SessionLoading()
-	LeaderLib.AddDebugInitCall(function()
+if Ext.IsDeveloperMode() then
+	Ext.RegisterConsoleCommand("llmime_testsetup", function(call, ...)
 		local host = CharacterGetHostCharacter()
 		CharacterAddSkill(host, "Jump_LLMIME_HiddenApproach", 0)
 		CharacterAddSkill(host, "Summon_Cat", 0)
@@ -173,10 +173,6 @@ local function SessionLoading()
 		--CharacterStatusText("S_FTJ_BeachVw_001_08348b3a-bded-4811-92ce-f127aa4310e0", "Test")
 		--CharacterSetImmortal(CharacterGetHostCharacter(), 1)
 	end)
-end
-
-if Ext.IsDeveloperMode() then
-	Ext.RegisterListener("SessionLoading", SessionLoading)
 end
 
 local DU_Disabling_Statuses = {
