@@ -641,7 +641,9 @@ NOT LLMIME_Mimicking_QRY_CasterAndMimeUnarmed(_Mime, _Caster, _ActionType)
 THEN
 LeaderLog_Log("DEBUG", "[LLMIME_01_Mimicking_02_Main:LLMIME_Mimicking_Internal_StartWeaponMimicking] Preparing weapon mimicking for [",_Action,"](",_ActionType,").");
 ProcObjectTimerCancel(_Mime, "LLMIME_Timers_RemoveWeaponRequirementStatus");
+// [BEGIN_NO_OSITOOLS]
 LLMIME_Mimicking_ApplyStatRequirementStatus(_Mime, _Caster, _ActionType);
+// [END_NO_OSITOOLS]
 LLMIME_Mimicking_SaveEquippedWeapons(_Mime, _ActionType);
 LLMIME_Mimicking_UnequipWeapons(_Mime, _ActionType);
 DB_LLMIME_Mimicking_Temp_WeaponMimickingReady(_Mime);
@@ -1083,13 +1085,21 @@ MoveAllItemsTo(_Dummy, _Dummy, 1, 1, 0);
 InventoryLaunchIterator(_Dummy, "Mimicry_Iterator_MarkWeapons", "");
 LeaderLib_Timers_StartCharacterCharacterTimer(_Mime, _Dummy, 200, "LLMIME_Timers_TakeDummyMimickedWeapons_", "LLMIME_Mimicking_TakeDummyMimickedWeapons");
 
-IF
-StoryEvent((ITEMGUID)_Item, "Mimicry_Iterator_MarkWeapons")
+QRY
+LLMIME_QRY_BlockMimickedWeapon((ITEMGUID)_Item)
 THEN
 Mimicry_BlockMimickedWeapon(_Item);
 
 IF
-StoryEvent((ITEMGUID)_Item, "Mimicry_Iterator_MarkWeapons")
+CharacterCharacterEvent(_Mime, _Dummy, "LLMIME_WeaponMimicking_IterateDummyInventory")
+AND
+DB_LLMIME_Mimicking_MimicItemSlots(_Slot)
+AND
+CharacterGetEquippedItem(_Dummy, _Slot, (ITEMGUID)_Item)
+AND
+_Item != NULL_00000000-0000-0000-0000-000000000000
+AND
+LLMIME_QRY_BlockMimickedWeapon(_Item)
 AND
 NOT LeaderLib_Helper_QRY_IgnoreItem(_Item)
 AND
@@ -1101,7 +1111,7 @@ StringContains(_Template, "WPN", 1)
 AND
 GetInventoryOwner(_Item, (CHARACTERGUID)_Dummy)
 THEN
-DB_LLMIME_Mimicking_Temp_DuplicatedWeapon(_Dummy, _Item);
+DB_LLMIME_Mimicking_Temp_DuplicatedWeapon(_Dummy, _Item, _Slot);
 
 IF
 StoryEvent((ITEMGUID)_Item, "Mimicry_Iterator_MarkWeapons")
@@ -1134,18 +1144,18 @@ LLMIME_Mimicking_WeaponMimickingDone(_Mime, _Caster, _Target, _Action, _ActionTy
 PROC
 LLMIME_Mimicking_Internal_MoveWeaponsFromDummy((CHARACTERGUID)_Mime, (CHARACTERGUID)_Dummy, (CHARACTERGUID)_Caster, (STRING)_Action, (STRING)_ActionType)
 AND
-DB_LLMIME_Mimicking_Temp_DuplicatedWeapon(_Dummy, _Weapon)
+DB_LLMIME_Mimicking_Temp_DuplicatedWeapon(_Dummy, _Item, _Slot)
 THEN
-NOT DB_LLMIME_Mimicking_Temp_DuplicatedWeapon(_Dummy, _Weapon);
-SetTag(_Weapon, "LLMIME_MIMICKED_WEAPON");
+NOT DB_LLMIME_Mimicking_Temp_DuplicatedWeapon(_Dummy, _Item, _Slot);
+SetTag(_Item, "LLMIME_MIMICKED_WEAPON");
 //ItemLevelUpTo(_Weapon, _Level);
 //ItemClearOwner(_Weapon);
-ItemSetOriginalOwner(_Weapon, _Mime);
-CharacterEquipItem(_Mime, _Weapon);
-ItemSetCanInteract(_Weapon, 0);
-ItemSetOnlyOwnerCanUse(_Weapon, 1);
+ItemSetOriginalOwner(_Item, _Mime);
+CharacterEquipItem(_Mime, _Item);
+ItemSetCanInteract(_Item, 0);
+ItemSetOnlyOwnerCanUse(_Item, 1);
 //LLMIME_Mimicking_MarkItemForOneTimeUse(_Mime, _Weapon, _Action, _ActionType);
-DB_LLMIME_Mimicking_Temp_MimickedWeapon(_Mime, _Caster, _Weapon, _Action, _ActionType);
+DB_LLMIME_Mimicking_Temp_MimickedWeapon(_Mime, _Caster, _Item, _Action, _ActionType);
 
 PROC
 LLMIME_Mimicking_ClearMimicDataForMime((CHARACTERGUID)_Mime)
@@ -1387,7 +1397,12 @@ DB_LLMIME_Mimicking_LastEquipped(_Mime, "Weapon", _Item)
 AND
 NOT CharacterGetEquippedItem(_Mime, "Weapon", _Item)
 THEN
+// [BEGIN_NO_OSITOOLS]
 CharacterEquipItem(_Mime, _Item);
+// [END_NO_OSITOOLS]
+/* [OSITOOLS_ONLY]
+NRD_CharacterEquipItem(_Mime, _Item, "Weapon", 0, 0, 1, 1);
+*/
 NOT DB_LLMIME_Mimicking_LastEquipped(_Mime, "Weapon", _Item);
 
 PROC
@@ -1397,7 +1412,12 @@ DB_LLMIME_Mimicking_LastEquipped(_Mime, "Shield", _Item)
 AND
 NOT CharacterGetEquippedItem(_Mime, "Shield", _Item)
 THEN
+// [BEGIN_NO_OSITOOLS]
 CharacterEquipItem(_Mime, _Item);
+// [END_NO_OSITOOLS]
+/* [OSITOOLS_ONLY]
+NRD_CharacterEquipItem(_Mime, _Item, "Shield", 0, 0, 1, 1);
+*/
 NOT DB_LLMIME_Mimicking_LastEquipped(_Mime, "Shield", _Item);
 
 PROC
@@ -1407,7 +1427,12 @@ DB_LLMIME_Mimicking_LastEquipped(_Mime, _Slot, _Item)
 AND
 NOT CharacterGetEquippedItem(_Mime, _Slot, _Item)
 THEN
+// [BEGIN_NO_OSITOOLS]
 CharacterEquipItem(_Mime, _Item);
+// [END_NO_OSITOOLS]
+/* [OSITOOLS_ONLY]
+NRD_CharacterEquipItem(_Mime, _Item, _Slot, 0, 0, 1, 1);
+*/
 NOT DB_LLMIME_Mimicking_LastEquipped(_Mime, _Slot, _Item);
 
 PROC
