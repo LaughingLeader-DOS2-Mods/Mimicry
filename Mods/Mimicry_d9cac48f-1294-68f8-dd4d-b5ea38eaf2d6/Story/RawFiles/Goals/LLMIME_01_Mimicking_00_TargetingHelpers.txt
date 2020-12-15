@@ -63,8 +63,11 @@ IF
 CharacterCharacterEvent(_Caster, _Mime, "LLMIME_Mimicking_TargetSet")
 AND
 DB_LLMIME_Mimicking_Temp_TargetGet(_Caster, _Mime, _TargetPriority, _Action, _ActionType)
+AND
+GetVarFloat3(_Mime, "LLMIME_Mimicking_MimeTarget", _x, _y, _z)
 THEN
 NOT DB_LLMIME_Mimicking_Temp_TargetGet(_Caster, _Mime, _TargetPriority, _Action, _ActionType);
+LLMIME_Mimic_GetTargetNearPosition(_Caster, _Mime, _x, _y, _z, _TargetPriority, _Action, _ActionType);
 // [END_NO_OSITOOLS]
 
 /* [OSITOOLS_ONLY]
@@ -83,11 +86,11 @@ LLMIME_Mimic_GetTargetNearPosition((CHARACTERGUID)_Caster, (CHARACTERGUID)_Mime,
 AND
 GetUUID(_Mime, _MimeID)
 AND
-LeaderLog_QRY_Log("COMBINE","LLMIME_DummyID_", _MimeID, "_", _ActionType, "_", _Action)
+LeaderLib_StringExt_QRY_SafeCombine("LLMIME_NextDummyID","LLMIME_DummyID_", _MimeID, "_", _ActionType, "_", _Action)
 AND
-DB_LeaderLog_Temp_CombinedString(_DummyTaskID)
+DB_LeaderLib_StringExt_CombineResult("LLMIME_NextDummyID", _DummyTaskID)
 THEN
-NOT DB_LeaderLog_Temp_CombinedString(_DummyTaskID);
+NOT DB_LeaderLib_StringExt_CombineResult("LLMIME_NextDummyID", _DummyTaskID);
 DB_LLMIME_Targeting_Temp_NextDummy(_DummyTaskID, _Caster, _Mime, _TargetX, _TargetY, _TargetZ, _TargetPriority, _Action, _ActionType);
 LLMIME_Dummy_CreateCharacterDummy(_DummyTaskID, _TargetX, _TargetY, _TargetZ);
 LLMIME_Mimicking_ResetFailTimer(_Mime, _Caster, _Action, _ActionType, 1500);
@@ -600,12 +603,12 @@ GetUUID(_Mime, _MimeID)
 AND
 String(_Target, _TargetID)
 AND
-LeaderLog_QRY_Log("COMBINE","LLMIME_EventTimer_TargetAcquired_", _MimeID, "_", _TargetID, "_", _Action, _ActionType)
+LeaderLib_StringExt_QRY_SafeCombine("LLMIME_TargetEventTimerName","LLMIME_EventTimer_TargetAcquired_", _MimeID, "_", _TargetID, "_", _Action, _ActionType)
 AND
-DB_LeaderLog_Temp_CombinedString(_EventTimerName)
+DB_LeaderLib_StringExt_CombineResult("LLMIME_TargetEventTimerName", _EventTimerName)
 THEN
 LeaderLog_Log("DEBUG", "[LLMIME:Mime:Targeting] Launching final timer and then event for [",_ActionType,"][",_Action,"].");
-NOT DB_LeaderLog_Temp_CombinedString(_EventTimerName);
+NOT DB_LeaderLib_StringExt_CombineResult("LLMIME_TargetEventTimerName", _EventTimerName);
 DB_LLMIME_Mimicking_Temp_FinalMimicTarget(_Mime, _Caster, _Target, _Action, _ActionType, _EventTimerName);
 TimerLaunch(_EventTimerName, 5); // Frames for the dummy's position to update
 LLMIME_Dummy_ResetDummyAfterDelay((GUIDSTRING)_Dummy, 8000); // Fallback
@@ -690,11 +693,11 @@ Integer(_zr4, _z4)
 AND
 IntegertoString(_z4, _zstr4)
 AND
-LeaderLog_QRY_Log("COMBINE", _xstr1, ",", _zstr1, " => ", _xstr2, ",", _zstr2)
+LeaderLib_StringExt_QRY_SafeCombine("LLMIME_Debug_PosTrace",_xstr1, ",", _zstr1, " => ", _xstr2, ",", _zstr2)
 AND
-DB_LeaderLog_Temp_CombinedString(_CombinedStr)
+DB_LeaderLib_StringExt_CombineResult("LLMIME_Debug_PosTrace", _CombinedStr)
 THEN
-NOT DB_LeaderLog_Temp_CombinedString(_CombinedStr);
+NOT DB_LeaderLib_StringExt_CombineResult("LLMIME_Debug_PosTrace", _CombinedStr);
 LeaderLog_Log("DEBUG", "[LLMIME:Mimic_Targeting] Caster's target: ", _CombinedStr, " | Mime's target: ", _xstr3, ",", _zstr3, " => ", _xstr4, ",", _zstr4);
 
 /*

@@ -261,11 +261,11 @@ GetUUID(_Mime, _MimeID)
 AND
 GetUUID(_Mask, _MaskID)
 AND
-LeaderLog_QRY_Log("COMBINE", "LLMIME_Timers_RefreshMask_", _MimeID, "_", _MaskID)
+LeaderLib_StringExt_QRY_SafeCombine("LLMIME_RefreshMaskTimerName","LLMIME_Timers_RefreshMask_", _MimeID, "_", _MaskID)
 AND
-DB_LeaderLog_Temp_CombinedString(_TimerName)
+DB_LeaderLib_StringExt_CombineResult("LLMIME_RefreshMaskTimerName", _TimerName)
 THEN
-NOT DB_LeaderLog_Temp_CombinedString(_TimerName);
+NOT DB_LeaderLib_StringExt_CombineResult("LLMIME_RefreshMaskTimerName", _TimerName);
 CharacterUnequipItem(_Mime, _Mask);
 DB_LLMIME_System_Temp_RefreshMask(_Mime, _Mask, _TimerName);
 TimerLaunch(_TimerName, _Delay);
