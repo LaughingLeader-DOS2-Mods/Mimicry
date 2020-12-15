@@ -752,7 +752,7 @@ LLMIME_Mimicking_OnMimicFailed((CHARACTERGUID)_Mime, (CHARACTERGUID)_Caster, (ST
 AND
 CharacterGetDisplayName(_Caster, _, _Name)
 THEN
-LeaderLog_Log("DEBUG", "[LLMIME_01_Mimicking_02_Main:OnMimicSuccess] Mime failed to mimic [",_ActionType,"][",_Action,"] for character [",_Name,"].");
+LeaderLog_Log("DEBUG", "[LLMIME_01_Mimicking_02_Main:OnMimicFailed] Mime failed to mimic [",_ActionType,"][",_Action,"] for character [",_Name,"].");
 
 PROC
 LLMIME_Mimicking_OnMimicFailed((CHARACTERGUID)_Mime, (CHARACTERGUID)_Caster, (STRING)_Action, (STRING)_ActionType)
