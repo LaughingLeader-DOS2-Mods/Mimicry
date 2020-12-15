@@ -540,7 +540,9 @@ IntegertoString(_TargetPriority, _PriorityStr)
 THEN
 LeaderLog_Log("DEBUG", "[LLMIME_01_Mimicking_02_Main:ProcessMimicQueue] Starting target calculation for [",_ActionType,"][",_Action,"] with TargetPriority [",_PriorityStr,"].");
 ObjectSetFlag(_Mime, "Mimicry_IsMimicking");
-LLMIME_Mimicking_Internal_StartWeaponMimicking(_Mime, _Caster, _Action, _ActionType);
+// Failsafe
+LLMIME_Mimicking_ClearAllFailTimers(_Mime);
+LLMIME_Mimicking_StartFailTimer(_Mime, _Caster, _Action, _ActionType, 3000);
 DB_LLMIME_Mimicking_FinalMimicQueue(_Mime, _Caster, _Action, _ActionType, _CastX, _CastRotation, _CastZ, _TargetX, _TargetY, _TargetZ, _TargetPriority, _IsTarget);
 LLMIME_Mimic_CalculateTarget(_Mime, _Caster, _CastX, _CastZ, _TargetX, _TargetY, _TargetZ, _TargetPriority, _Action, _ActionType);
 
@@ -1475,6 +1477,8 @@ LLMIME_Mimicking_ClearMimicDataForMime(_Mime);
 
 PROC
 LLMIME_Mimicking_ClearMimicDataForMime((CHARACTERGUID)_Mime)
+AND
+HasActiveStatus(_Mime, "LLMIME_MIMIC_WEAPON_REQUIREMENTS", 1)
 THEN
 RemoveStatus(_Mime, "LLMIME_MIMIC_WEAPON_REQUIREMENTS");
 ProcObjectTimerCancel(_Mime, "LLMIME_Timers_RemoveWeaponRequirementStatus");
@@ -1555,6 +1559,25 @@ LLMIME_Mimicking_ClearMimicDataForMime((CHARACTERGUID)_Mime)
 THEN
 ProcObjectTimerCancel(_Mime, "LLMIME_Timers_OnMimickingDone");
 LLMIME_Mimicking_CleanupMime(_Mime);
+
+// Failsafe in case mimicking failed/got stuck
+IF
+GameStarted(_,_)
+AND
+DB_LLMIME_ActiveMimes(_Mime)
+AND
+CharacterIsInCombat(_Mime, 0)
+THEN
+LLMIME_Mimicking_ClearMimicDataForMime(_Mime);
+
+PROC
+LeaderUpdater_ModUpdated("Mimicry", "LaughingLeader", (STRING)_OldVersion, (STRING)_NewVersion)
+AND
+LeaderLib_StringExt_QRY_VersionIsLessThan(_OldVersion, 1,2,10,0)
+AND
+DB_LLMIME_ActiveMimes(_Mime)
+THEN
+LLMIME_Mimicking_ClearMimicDataForMime(_Mime);
 //END_REGION
 
 EXITSECTION
