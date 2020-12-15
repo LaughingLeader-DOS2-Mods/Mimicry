@@ -1,5 +1,5 @@
 {
-    "RequiredExtensionVersion": 43,
+    "RequiredExtensionVersion": 52,
     "ModTable":"Mimicry",
     "FeatureFlags": [
         "OsirisExtensions",
