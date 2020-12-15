@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <save>
     <header version="2" />
     <version major="3" minor="6" revision="6" build="0" />
@@ -19,14 +19,14 @@
                             <attribute id="MD5" value="" type="23" />
                             <attribute id="Name" value="Animations Plus" type="22" />
                             <attribute id="UUID" value="326b8784-edd7-4950-86d8-fcae9f5c457c" type="22" />
-                            <attribute id="Version" value="268959744" type="4" />
+                            <attribute id="Version" value="269025280" type="4" />
                         </node>
                     </children>
                 </node>
                 <node id="ModuleInfo">
                     <attribute id="Author" value="LaughingLeader" type="30" />
                     <attribute id="CharacterCreationLevelName" value="" type="22" />
-                    <attribute id="Description" value="Adds a new &quot;class&quot; called the Mime. Mimes can mimic the actions of allies in battle, utilize Mime-only skills, take advantage of Mime-only passives, and pummel enemies with scaled unarmed damage." type="30" />
+                    <attribute id="Description" value='Adds a new &quot;class&quot; called the Mime. Mimes can mimic the actions of allies in battle, utilize Mime-only skills, take advantage of Mime-only passives, and pummel enemies with scaled unarmed damage.' type="30" />
                     <attribute id="DescriptionName" value="LLMIME_Meta_DescriptionName" handle="hcb023662ga0a8g4535g8e1ag8f45f98a6a64" type="28" />
                     <attribute id="DisplayName" value="LLMIME_Meta_DisplayName" handle="heaf6e6f9ga163g41e7g9912g78a4de6e41bf" type="28" />
                     <attribute id="Folder" value="Mimicry_d9cac48f-1294-68f8-dd4d-b5ea38eaf2d6" type="30" />
